@@ -1,479 +1,479 @@
 1
-00:00:00,150 --> 00:00:02,889
+00:00:00,150 --> 00:00:02,883
 Uma televisão de dois mil e quatrocentos reais.
 
 2
-00:00:02,889 --> 00:00:04,229
+00:00:02,883 --> 00:00:04,221
 Doze vezes de duzentos.
 
 3
-00:00:04,229 --> 00:00:04,812
+00:00:04,221 --> 00:00:04,802
 Sem juros.
 
 4
-00:00:04,812 --> 00:00:05,919
+00:00:04,802 --> 00:00:05,907
 Parece um presente.
 
 5
-00:00:05,919 --> 00:00:10,582
+00:00:05,907 --> 00:00:10,560
 Só que ninguém, em lugar nenhum do mundo, empresta dinheiro por um ano de graça.
 
 6
-00:00:11,182 --> 00:00:12,543
+00:00:11,160 --> 00:00:12,525
 Então os juros existem.
 
 7
-00:00:12,543 --> 00:00:14,614
+00:00:12,525 --> 00:00:14,601
 Eles só não aparecem na sua fatura.
 
 8
-00:00:14,614 --> 00:00:18,047
+00:00:14,601 --> 00:00:18,041
 E se não aparecem para você, alguém está pagando por eles.
 
 9
-00:00:18,047 --> 00:00:20,355
+00:00:18,041 --> 00:00:20,355
 A pergunta deste vídeo é simples: quem?
 
 10
-00:00:20,955 --> 00:00:22,731
+00:00:20,955 --> 00:00:22,742
 Eu sou o Por Trás do Dinheiro.
 
 11
-00:00:22,731 --> 00:00:26,757
+00:00:22,742 --> 00:00:26,794
 Hoje a gente vai tratar o parcelado sem juros como uma investigação.
 
 12
-00:00:26,757 --> 00:00:30,960
+00:00:26,794 --> 00:00:31,024
 Tem uma conta sem dono, tem três suspeitos, e no final tem um veredito.
 
 13
-00:00:31,560 --> 00:00:33,190
+00:00:31,624 --> 00:00:33,264
 Primeiro, o tamanho do caso.
 
 14
-00:00:33,190 --> 00:00:45,064
+00:00:33,264 --> 00:00:45,213
 Segundo a Abecs, a associação das empresas de cartão, só no primeiro semestre de dois mil e vinte e seis, as compras parceladas sem juros somaram setecentos e noventa e oito vírgula seis bilhões de reais.
 
 15
-00:00:45,664 --> 00:00:51,559
+00:00:45,814 --> 00:00:51,731
 Isso é quarenta e três por cento de tudo o que os brasileiros gastaram no cartão de crédito no período.
 
 16
-00:00:51,559 --> 00:00:52,303
+00:00:51,731 --> 00:00:52,477
 Quase metade.
 
 17
-00:00:52,303 --> 00:00:58,541
+00:00:52,477 --> 00:00:58,739
 E a maior parte é parcela curta: mais de sessenta por cento dessas compras foram divididas em até seis vezes.
 
 18
-00:00:58,541 --> 00:01:02,432
+00:00:58,739 --> 00:01:02,645
 Parcelar em mais de doze vezes é raro, pouco mais de dois por cento.
 
 19
-00:01:03,032 --> 00:01:05,185
+00:01:03,246 --> 00:01:05,395
 E tem um detalhe que pouca gente sabe.
 
 20
-00:01:05,185 --> 00:01:12,718
+00:01:05,395 --> 00:01:12,917
 Em dois mil e vinte e três, a Febraban, a federação dos bancos, afirmou que um parcelado sem juros desse tamanho só existe no Brasil.
 
 21
-00:01:12,718 --> 00:01:15,493
+00:01:12,917 --> 00:01:15,688
 Lá fora, parcelar costuma significar pagar juros.
 
 22
-00:01:15,493 --> 00:01:17,646
+00:01:15,688 --> 00:01:17,838
 Aqui, virou o jeito normal de comprar.
 
 23
-00:01:18,246 --> 00:01:19,524
+00:01:18,438 --> 00:01:19,723
 E não é coisa de nicho.
 
 24
-00:01:19,524 --> 00:01:29,478
+00:01:19,723 --> 00:01:29,727
 Uma pesquisa Datafolha citada no debate de dois mil e vinte e três apontou que setenta e cinco por cento da população tinha usado o parcelado sem juros em dois mil e vinte e dois.
 
 25
-00:01:29,478 --> 00:01:31,257
+00:01:29,727 --> 00:01:31,515
 Três em cada quatro brasileiros.
 
 26
-00:01:31,257 --> 00:01:35,206
+00:01:31,515 --> 00:01:35,483
 Do celular à geladeira, da roupa ao curso, quase tudo cabe em parcelas.
 
 27
-00:01:35,806 --> 00:01:36,943
+00:01:36,083 --> 00:01:37,215
 Agora, os suspeitos.
 
 28
-00:01:36,943 --> 00:01:37,455
+00:01:37,215 --> 00:01:37,725
 São três.
 
 29
-00:01:37,455 --> 00:01:39,333
+00:01:37,725 --> 00:01:39,593
 O lojista, que vende a televisão.
 
 30
-00:01:39,333 --> 00:01:41,153
+00:01:39,593 --> 00:01:41,404
 O banco que emitiu o seu cartão.
 
 31
-00:01:41,153 --> 00:01:44,510
+00:01:41,404 --> 00:01:44,744
 E o terceiro suspeito, talvez o mais surpreendente, é você.
 
 32
-00:01:45,110 --> 00:01:46,630
+00:01:45,344 --> 00:01:46,871
 Vamos começar pelo lojista.
 
 33
-00:01:46,630 --> 00:01:51,754
+00:01:46,871 --> 00:01:52,018
 Quando você parcela em doze vezes, ele não recebe os dois mil e quatrocentos reais na hora.
 
 34
-00:01:51,754 --> 00:01:55,977
+00:01:52,018 --> 00:01:56,260
 Em regra, ele recebe uma parcela por mês, conforme as faturas vão vencendo.
 
 35
-00:01:55,977 --> 00:01:57,948
+00:01:56,260 --> 00:01:58,239
 A primeira em cerca de trinta dias.
 
 36
-00:01:57,948 --> 00:01:59,638
+00:01:58,239 --> 00:01:59,936
 A última, quase um ano depois.
 
 37
-00:02:00,238 --> 00:02:05,642
+00:02:00,536 --> 00:02:05,941
 Ou seja: a loja entregou a televisão hoje, mas vai levar meses para receber o dinheiro inteiro.
 
 38
-00:02:05,642 --> 00:02:08,430
+00:02:05,941 --> 00:02:08,728
 Na prática, quem está te emprestando é o lojista.
 
 39
-00:02:09,030 --> 00:02:13,039
+00:02:09,328 --> 00:02:13,338
 Só que o lojista tem aluguel, salário e fornecedor para pagar agora.
 
 40
-00:02:13,039 --> 00:02:14,573
+00:02:13,338 --> 00:02:14,871
 Então ele tem duas opções.
 
 41
-00:02:14,573 --> 00:02:15,870
+00:02:14,871 --> 00:02:16,169
 Esperar o ano inteiro.
 
 42
-00:02:15,870 --> 00:02:20,352
+00:02:16,169 --> 00:02:20,650
 Ou antecipar: pedir para receber tudo de uma vez, pagando uma taxa por isso.
 
 43
-00:02:20,352 --> 00:02:22,533
+00:02:20,650 --> 00:02:22,832
 É a famosa antecipação de recebíveis.
 
 44
-00:02:23,133 --> 00:02:24,992
+00:02:23,432 --> 00:02:25,291
 Vamos fazer uma conta ilustrativa.
 
 45
-00:02:24,992 --> 00:02:31,606
+00:02:25,291 --> 00:02:31,904
 Imagine uma taxa da maquininha de quatro por cento no parcelado em doze vezes, que é mais cara do que no crédito à vista.
 
 46
-00:02:31,606 --> 00:02:34,776
+00:02:31,904 --> 00:02:35,074
 Mais uma antecipação de um vírgula cinco por cento ao mês.
 
 47
-00:02:34,776 --> 00:02:40,733
+00:02:35,074 --> 00:02:41,032
 Como, em média, o dinheiro chegaria em seis meses e meio, essa antecipação come quase dez por cento da venda.
 
 48
-00:02:41,333 --> 00:02:45,472
+00:02:41,632 --> 00:02:45,783
 Resultado: de dois mil e quatrocentos reais, sobram uns dois mil e setenta.
 
 49
-00:02:45,472 --> 00:02:48,010
+00:02:45,783 --> 00:02:48,329
 Trezentos e trinta reais ficaram pelo caminho.
 
 50
-00:02:48,010 --> 00:02:49,665
+00:02:48,329 --> 00:02:49,990
 E nenhum lojista faz caridade.
 
 51
-00:02:49,665 --> 00:02:51,651
+00:02:49,990 --> 00:02:51,982
 Esse custo vai parar em algum lugar.
 
 52
-00:02:51,651 --> 00:02:55,072
+00:02:51,982 --> 00:02:55,414
 Guarda essa informação, porque ela volta no terceiro suspeito.
 
 53
-00:02:55,672 --> 00:02:58,410
+00:02:56,014 --> 00:02:58,736
 Segundo suspeito: o banco que emitiu o seu cartão.
 
 54
-00:02:58,410 --> 00:02:59,780
+00:02:58,736 --> 00:03:00,097
 O papel dele é diferente.
 
 55
-00:02:59,780 --> 00:03:02,901
+00:03:00,097 --> 00:03:03,201
 Ele aprova a compra, trava o seu limite e assume o risco.
 
 56
-00:03:02,901 --> 00:03:06,680
+00:03:03,201 --> 00:03:06,957
 Se você parar de pagar no quinto mês, o problema é dele, não da loja.
 
 57
-00:03:07,280 --> 00:03:08,975
+00:03:07,558 --> 00:03:09,252
 E o risco cresce com o prazo.
 
 58
-00:03:08,975 --> 00:03:17,739
+00:03:09,252 --> 00:03:18,017
 Em dois mil e vinte e três, a Febraban disse que a inadimplência nas compras parceladas longas é cerca de duas vezes maior do que nas compras à vista.
 
 59
-00:03:17,739 --> 00:03:20,485
+00:03:18,017 --> 00:03:20,763
 No público de baixa renda, cerca de três vezes.
 
 60
-00:03:21,085 --> 00:03:24,886
+00:03:21,363 --> 00:03:25,156
 Então, como o banco cobre esse risco, se o cliente não paga juros?
 
 61
-00:03:24,886 --> 00:03:26,440
+00:03:25,156 --> 00:03:26,708
 Os bancos dão uma resposta.
 
 62
-00:03:26,440 --> 00:03:31,162
+00:03:26,708 --> 00:03:31,421
 Segundo eles, uma parte desse custo é coberta pelos juros de quem atrasa a fatura.
 
 63
-00:03:31,162 --> 00:03:32,947
+00:03:31,421 --> 00:03:33,203
 Ou seja, pelo crédito rotativo.
 
 64
-00:03:33,547 --> 00:03:34,699
+00:03:33,803 --> 00:03:34,966
 E o rotativo é caro.
 
 65
-00:03:34,699 --> 00:03:35,332
+00:03:34,966 --> 00:03:35,605
 Muito caro.
 
 66
-00:03:35,332 --> 00:03:45,067
+00:03:35,605 --> 00:03:45,430
 Segundo o Banco Central, em setembro de dois mil e vinte e seis, o juro médio do rotativo do cartão chegou a quatrocentos e cinquenta e um vírgula sete por cento ao ano.
 
 67
-00:03:45,667 --> 00:03:59,755
+00:03:46,030 --> 00:04:00,149
 Para comparar: quando o próprio banco parcela uma compra ou a fatura cobrando juros explícitos, o chamado parcelado com juros do cartão, a taxa média foi de cento e noventa e três por cento ao ano em setembro de dois mil e vinte e seis, também segundo o Banco Central.
 
 68
-00:03:59,755 --> 00:04:02,331
+00:04:00,149 --> 00:04:02,731
 É esse o preço do dinheiro quando o juro aparece.
 
 69
-00:04:02,331 --> 00:04:04,696
+00:04:02,731 --> 00:04:05,102
 No sem juros, ele simplesmente muda de lugar.
 
 70
-00:04:05,296 --> 00:04:07,258
+00:04:05,701 --> 00:04:07,685
 E os bancos têm mais uma reclamação.
 
 71
-00:04:07,258 --> 00:04:14,994
+00:04:07,685 --> 00:04:15,508
 Eles dizem que quem ganha de verdade com o parcelado são as empresas de maquininha, que lucram com a antecipação sem correr o risco do calote.
 
 72
-00:04:14,994 --> 00:04:24,475
+00:04:15,508 --> 00:04:25,093
 As credenciadoras discordam e lembram que, com o registro de recebíveis criado pelo Banco Central, o lojista pode antecipar com qualquer instituição, não só com a maquininha.
 
 73
-00:04:25,075 --> 00:04:28,868
+00:04:25,693 --> 00:04:29,512
 Essa ligação entre o parcelado e o rotativo virou briga pública.
 
 74
-00:04:28,868 --> 00:04:38,172
+00:04:29,512 --> 00:04:38,878
 Em agosto de dois mil e vinte e três, o então presidente do Banco Central, Roberto Campos Neto, levantou no Senado a ideia de discutir o parcelado sem juros.
 
 75
-00:04:38,172 --> 00:04:40,009
+00:04:38,878 --> 00:04:40,728
 Teve reação imediata do varejo.
 
 76
-00:04:40,009 --> 00:04:45,876
+00:04:40,728 --> 00:04:46,634
 O ministro da Fazenda, Fernando Haddad, disse que acabar com o parcelado não resolveria o rotativo.
 
 77
-00:04:45,876 --> 00:04:50,498
+00:04:46,634 --> 00:04:51,287
 Depois, o Banco Central chegou a sugerir um limite de doze parcelas sem juros.
 
 78
-00:04:51,098 --> 00:04:53,886
+00:04:51,887 --> 00:04:54,701
 No fim, quem mudou foi o rotativo, não o parcelado.
 
 79
-00:04:53,886 --> 00:05:07,770
+00:04:54,701 --> 00:05:08,711
 A lei catorze mil, seiscentos e noventa, de outubro de dois mil e vinte e três, levou a um teto: desde janeiro de dois mil e vinte e quatro, os juros e encargos do rotativo e do parcelamento da fatura não podem passar de cem por cento da dívida original.
 
 80
-00:05:07,770 --> 00:05:09,957
+00:05:08,711 --> 00:05:10,917
 O parcelado sem juros continuou intacto.
 
 81
-00:05:10,557 --> 00:05:12,618
+00:05:11,517 --> 00:05:13,612
 E aí chegamos ao terceiro suspeito.
 
 82
-00:05:12,618 --> 00:05:12,912
+00:05:13,612 --> 00:05:13,912
 Você.
 
 83
-00:05:12,912 --> 00:05:19,389
+00:05:13,912 --> 00:05:20,498
 E aqui a investigação fica interessante, porque você pode estar pagando a conta mesmo sem nunca parcelar nada.
 
 84
-00:05:19,989 --> 00:05:24,824
+00:05:21,098 --> 00:05:25,968
 Lembra dos trezentos e trinta reais que ficaram pelo caminho na nossa conta ilustrativa?
 
 85
-00:05:24,824 --> 00:05:28,890
+00:05:25,968 --> 00:05:30,063
 A forma mais simples de o lojista recuperar esse custo é colocar no preço.
 
 86
-00:05:28,890 --> 00:05:34,879
+00:05:30,063 --> 00:05:36,096
 E o preço da etiqueta, muitas vezes, é o mesmo para quem parcela em doze vezes e para quem paga tudo à vista.
 
 87
-00:05:35,479 --> 00:05:39,893
+00:05:36,695 --> 00:05:41,139
 Quando isso acontece, quem paga à vista está ajudando a financiar quem parcela.
 
 88
-00:05:39,893 --> 00:05:41,737
+00:05:41,139 --> 00:05:42,996
 É um subsídio escondido no preço.
 
 89
-00:05:41,737 --> 00:05:47,938
+00:05:42,996 --> 00:05:49,239
 Essa é a nossa leitura do mecanismo, e ela não vale para toda loja: depende de como cada uma monta o seu preço.
 
 90
-00:05:48,538 --> 00:05:50,697
+00:05:49,839 --> 00:05:52,008
 Só que existe uma saída prevista em lei.
 
 91
-00:05:50,697 --> 00:05:59,602
+00:05:52,008 --> 00:06:00,955
 Desde dois mil e dezessete, a lei treze mil, quatrocentos e cinquenta e cinco autoriza o comércio a cobrar preços diferentes conforme a forma e o prazo de pagamento.
 
 92
-00:05:59,602 --> 00:06:02,300
+00:06:00,955 --> 00:06:03,666
 É por isso que você vê desconto no Pix ou à vista.
 
 93
-00:06:02,300 --> 00:06:06,671
+00:06:03,666 --> 00:06:08,058
 Esse desconto é, basicamente, o juro que estava escondido aparecendo na etiqueta.
 
 94
-00:06:07,271 --> 00:06:09,738
+00:06:08,658 --> 00:06:11,121
 E dá para ver o tamanho desse juro escondido.
 
 95
-00:06:09,738 --> 00:06:18,126
+00:06:11,121 --> 00:06:19,495
 No nosso exemplo, pagar dois mil e quatrocentos em vez de dois mil, cento e sessenta equivale a pagar juros de cerca de um vírgula sete por cento ao mês.
 
 96
-00:06:18,126 --> 00:06:20,647
+00:06:19,495 --> 00:06:22,013
 Só que ninguém escreveu juros em lugar nenhum.
 
 97
-00:06:21,247 --> 00:06:24,081
+00:06:22,613 --> 00:06:25,490
 E se o parcelado sem juros simplesmente acabasse?
 
 98
-00:06:24,081 --> 00:06:27,378
+00:06:25,490 --> 00:06:28,837
 Aqui entramos no campo das hipóteses, então vale cuidado.
 
 99
-00:06:27,378 --> 00:06:31,253
+00:06:28,837 --> 00:06:32,770
 O varejo diz que venderia bem menos, principalmente produtos caros.
 
 100
-00:06:31,253 --> 00:06:35,186
+00:06:32,770 --> 00:06:36,763
 Os bancos poderiam passar a cobrar juros explícitos no parcelamento.
 
 101
-00:06:35,186 --> 00:06:40,275
+00:06:36,763 --> 00:06:41,930
 E, em tese, os preços à vista poderiam cair, porque o custo do prazo sairia da etiqueta.
 
 102
-00:06:40,275 --> 00:06:42,936
+00:06:41,930 --> 00:06:44,631
 Ninguém sabe ao certo qual efeito seria maior.
 
 103
-00:06:42,936 --> 00:06:46,521
+00:06:44,631 --> 00:06:48,271
 E é exatamente por isso que essa discussão nunca chega ao fim.
 
 104
-00:06:47,121 --> 00:06:48,084
+00:06:48,871 --> 00:06:49,844
 Hora do veredito.
 
 105
-00:06:48,084 --> 00:06:50,405
+00:06:49,844 --> 00:06:52,191
 Quem paga a conta do parcelado sem juros?
 
 106
-00:06:50,405 --> 00:06:52,839
+00:06:52,191 --> 00:06:54,652
 A resposta é: os três, cada um de um jeito.
 
 107
-00:06:53,439 --> 00:06:56,784
+00:06:55,252 --> 00:06:58,582
 O lojista adianta o dinheiro e paga taxa para receber antes.
 
 108
-00:06:56,784 --> 00:07:03,696
+00:06:58,582 --> 00:07:05,464
 O banco assume o risco do calote, e, segundo os próprios bancos, compensa uma parte disso nos juros de quem atrasa a fatura.
 
 109
-00:07:03,696 --> 00:07:07,988
+00:07:05,464 --> 00:07:09,737
 E o consumidor paga o custo embutido no preço, inclusive quem nunca parcelou.
 
 110
-00:07:08,588 --> 00:07:10,810
+00:07:10,337 --> 00:07:12,562
 Isso não quer dizer que parcelar seja ruim.
 
 111
-00:07:10,810 --> 00:07:15,046
+00:07:12,562 --> 00:07:16,803
 Para muita família, é a forma de comprar uma geladeira sem pagar juros explícitos.
 
 112
-00:07:15,046 --> 00:07:19,076
+00:07:16,803 --> 00:07:20,837
 A questão é saber que o sem juros tem um custo, e que ele está em algum lugar.
 
 113
-00:07:19,076 --> 00:07:22,847
+00:07:20,837 --> 00:07:24,613
 Na hora da compra, vale perguntar uma coisa simples: quanto fica à vista?
 
 114
-00:07:22,847 --> 00:07:26,721
+00:07:24,613 --> 00:07:28,492
 Se o preço for igual, o custo do prazo já está na etiqueta para todo mundo.
 
 115
-00:07:27,322 --> 00:07:33,959
+00:07:29,092 --> 00:07:35,720
 E falando em quem atrasa a fatura: segundo a Abecs, oitenta e cinco por cento dos brasileiros pagam a fatura em dia.
 
 116
-00:07:33,959 --> 00:07:37,965
+00:07:35,720 --> 00:07:39,720
 Os outros quinze por cento entram num dos créditos mais caros do país.
 
 117
-00:07:37,965 --> 00:07:41,913
+00:07:39,720 --> 00:07:43,663
 Como é que o rotativo chegou a mais de quatrocentos por cento ao ano?
 
 118
-00:07:42,514 --> 00:07:47,459
+00:07:44,263 --> 00:07:49,208
 Esse é o próximo vídeo do Por Trás do Dinheiro: por que o rotativo do cartão é tão caro.
 
 119
-00:07:47,459 --> 00:07:49,032
+00:07:49,208 --> 00:07:50,781
 Se inscreve para não perder.
 
 120
-00:07:49,032 --> 00:07:49,425
+00:07:50,781 --> 00:07:51,175
 Até lá.
