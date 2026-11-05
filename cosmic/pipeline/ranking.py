@@ -5,6 +5,8 @@ Visual por item:
   vis.type == "orbits": desenho do Sistema Solar (órbitas em escala) com a estrela crescendo no lugar do Sol até raio vis.au (UA);
                         vis.note = texto curto sobre o que ela engole.
   vis.type == "bignum": só o número grande animado.
+  vis.type == "speed": raias de velocidade em escala log (1 km/s -> luz); vis.kms = km/s; item.short = rótulo curto (rank02).
+THEME.hook == "streaks": gancho com rastros de velocidade em vez da estrela gigante (rank02).
 Tudo desenhado por código; narração Kokoro (VOICE, padrão af_heart); legenda grande queimada.
 """
 import sys, os, re, math, json, subprocess, importlib.util, random
@@ -100,6 +102,39 @@ def orbits(img, star_au, prog, col, accent, t):
     # little "Sun" reference marker
     d.text((W - 60, 430), "orbits to scale", font=F(26, "SemiBold"), fill=(150, 160, 190), anchor="rm")
 
+ALL_ITEMS = []
+C_KMS = 299792.458
+def speed_lanes(img, it, th, t, dur):
+    acc = tuple(th["accent"]); acc2 = tuple(th["accent2"])
+    x0, x1 = 120, W - 110
+    lx = lambda kms: x0 + (x1 - x0) * math.log10(max(1, kms)) / math.log10(C_KMS)
+    d = ImageDraw.Draw(img)
+    # light line
+    d.line([(x1, 450), (x1, 1200)], fill=(255, 240, 160), width=4)
+    d.text((x1, 425), "LIGHT", font=F(30, "Black"), fill=(255, 240, 160), anchor="rm")
+    for k, lab in [(1, "1 km/s"), (100, "100"), (10000, "10,000")]:
+        xx = lx(k); d.line([(xx, 1200), (xx, 1215)], fill=(120, 140, 170), width=2)
+        d.text((xx, 1232), lab, font=F(24, "SemiBold"), fill=(120, 140, 170), anchor="mm")
+    d.text((W / 2, 1268), "log scale: each tick = 100x faster", font=F(24, "SemiBold"), fill=(120, 140, 170), anchor="mm")
+    for o in sorted(ALL_ITEMS, key=lambda x: x["rank"]):
+        r = o["rank"]
+        if r < it["rank"]: continue
+        y = 510 + (r - 1) * 145; cur = r == it["rank"]
+        tgt = lx(o["vis"]["kms"])
+        p = ease((t - 0.4) / 1.6) if cur else 1.0
+        xe = lerp(x0, tgt, p)
+        lay = Image.new("RGBA", img.size, (0, 0, 0, 0)); d2 = ImageDraw.Draw(lay)
+        d2.rounded_rectangle([x0, y - 20, x1, y + 20], 20, fill=(20, 40, 70, 150))
+        col = acc if cur else (70, 110, 150)
+        d2.rounded_rectangle([x0, y - 20, max(x0 + 40, xe), y + 20], 20, fill=col + (255 if cur else 190,))
+        if cur:
+            for k in range(10):
+                xx = xe - 26 * k
+                if xx > x0: d2.ellipse([xx - 9, y - 9, xx + 9, y + 9], fill=(255, 255, 255, int(220 * (1 - k / 10))))
+        img.alpha_composite(lay)
+        d = ImageDraw.Draw(img)
+        d.text((x0 + 10, y - 46), f"#{r}  {o.get('short', o['name'])}", font=F(32 if cur else 28, "ExtraBold" if cur else "Bold"), fill=(255, 255, 255) if cur else (150, 170, 200), anchor="lm")
+
 def caption_chunks(say, t0, dur):
     words = say.split(); groups, g = [], []
     for w in words:
@@ -122,6 +157,21 @@ def draw_caption(img, chunks, gt, y=1585):
 
 def seg_hook(img, sc, th, t, dur):
     col = tuple(th["star_col"]); acc = tuple(th["accent"])
+    if th.get("hook") == "streaks":
+        lay = Image.new("RGBA", img.size, (0, 0, 0, 0)); d = ImageDraw.Draw(lay); rng = random.Random(8)
+        for i in range(90):
+            y = rng.uniform(560, 1500); sp = rng.uniform(900, 2600); L = rng.uniform(120, 520)
+            x = (rng.uniform(0, W + L) + t * sp) % (W + L) - L
+            d.line([(x, y), (x + L, y)], fill=col + (int(rng.uniform(60, 200)),), width=rng.choice([2, 3, 5]))
+        img.alpha_composite(lay)
+        bx = W / 2 + 250 * math.sin(t * 0.8); by = 1150
+        R.paste_c(img, R.radial(120, [(0, (255, 255, 255, 255)), (0.3, (200, 240, 255, 200)), (1, (90, 200, 255, 0))]), bx, by)
+        a = ease(t / 0.4)
+        text(img, (W / 2, 250), "TOP 5", 150, acc, a=a)
+        for i, l in enumerate(wrap(sc["top"].upper(), F(84, "Black"), W - 120)):
+            text(img, (W / 2, 390 + i * 96), l, 84, (255, 255, 255), a=ease((t - 0.2) / 0.4))
+        text(img, (W / 2, 1000), sc["sub"], 50, tuple(th["accent2"]), w="ExtraBold", a=ease((t - 0.8) / 0.4))
+        return
     r = 1400 + 30 * math.sin(t)
     R.paste_c(img, star_sprite(220, col).resize((int(r * 2.8), int(r * 2.8)), Image.BILINEAR), W / 2, H + r - 520 + 60 * (1 - ease(t / 1.2)))
     R.paste_c(img, R.sun_sprite(5), W / 2 + 330, 760)
@@ -150,6 +200,8 @@ def seg_item(img, it, th, t, dur):
         orbits(img, v["au"], prog, col, acc, t)
         if prog > 0.98 and v.get("note"):
             text(img, (W / 2, 1300), v["note"], 44, (255, 225, 200), w="ExtraBold", a=ease((prog - 0.98) * 4))
+    if v["type"] == "speed":
+        speed_lanes(img, it, th, t, dur)
     # number
     p = easeio((t - 0.5) / 1.6)
     num = it["num"]
@@ -162,9 +214,17 @@ def seg_item(img, it, th, t, dur):
 
 def seg_outro(img, sc, th, t, dur):
     a = ease(t / 0.5)
-    R.paste_c(img, R.sun_sprite(4), W / 2, 700, a)
-    d = ImageDraw.Draw(img); d.ellipse([W / 2 - 40, 660, W / 2 + 40, 740], outline=(255, 220, 160), width=3)
-    text(img, (W / 2, 800), "our Sun, on the same scale", 44, (255, 230, 190), w="Bold", a=a)
+    if th.get("outro_note"):
+        lay = Image.new("RGBA", img.size, (0, 0, 0, 0)); d = ImageDraw.Draw(lay)
+        xe = lerp(-100, W + 100, (t * 0.9) % 1.0)
+        d.line([(0, 700), (W, 700)], fill=(255, 240, 160, int(90 * a)), width=3)
+        for k in range(14): d.ellipse([xe - 40 * k - 12, 688, xe - 40 * k + 12, 712], fill=(255, 245, 190, int(230 * (1 - k / 14) * a)))
+        img.alpha_composite(lay)
+        text(img, (W / 2, 790), th["outro_note"], 48, (255, 240, 170), w="ExtraBold", a=a)
+    else:
+        R.paste_c(img, R.sun_sprite(4), W / 2, 700, a)
+        d = ImageDraw.Draw(img); d.ellipse([W / 2 - 40, 660, W / 2 + 40, 740], outline=(255, 220, 160), width=3)
+        text(img, (W / 2, 800), "our Sun, on the same scale", 44, (255, 230, 190), w="Bold", a=a)
     R.paste_c(img, R.logo_img(220), W / 2, 1080, ease((t - 0.6) / 0.5))
     text(img, (W / 2, 1260), "SUBSCRIBE", 110, tuple(th["accent"]), a=ease((t - 0.8) / 0.5))
     text(img, (W / 2, 1360), "to Cosmic Scale", 56, (255, 255, 255), w="ExtraBold", a=ease((t - 1.0) / 0.5))
@@ -176,6 +236,7 @@ def chrome(img, th, gt, total):
     d.text((W / 2, 1690), HANDLE, font=F(34, "Bold"), fill=R.CYAN, anchor="mm")
 
 def build(m):
+    ALL_ITEMS[:] = m.ITEMS
     segs = [("hook", m.HOOK)] + [("item", it) for it in sorted(m.ITEMS, key=lambda x: -x["rank"])] + [("outro", m.OUTRO)]
     return segs
 

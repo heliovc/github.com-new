@@ -1,0 +1,507 @@
+1
+00:00:00,200 --> 00:00:03,403
+The universe is thirteen point eight billion years old.
+
+2
+00:00:03,403 --> 00:00:08,354
+So the farthest we can see should be thirteen point eight billion light years, right?
+
+3
+00:00:08,354 --> 00:00:08,704
+Wrong.
+
+4
+00:00:08,704 --> 00:00:14,063
+The edge of what we can see is about forty six billion light years away, in every direction.
+
+5
+00:00:14,063 --> 00:00:17,616
+More than three times farther than light could have traveled.
+
+6
+00:00:17,616 --> 00:00:21,810
+Today we find out how that's possible, and how big everything really is.
+
+7
+00:00:22,510 --> 00:00:25,650
+To feel it, we need a ruler that works out there.
+
+8
+00:00:25,650 --> 00:00:26,611
+Not kilometers.
+
+9
+00:00:26,611 --> 00:00:26,996
+Light.
+
+10
+00:00:26,996 --> 00:00:31,417
+Light moves at almost three hundred thousand kilometers every second.
+
+11
+00:00:31,417 --> 00:00:37,505
+One light year, the distance it covers in a year, is about nine and a half trillion kilometers.
+
+12
+00:00:37,505 --> 00:00:39,555
+Let's climb, one rung at a time.
+
+13
+00:00:40,256 --> 00:00:40,804
+Rung one.
+
+14
+00:00:40,804 --> 00:00:41,353
+The Moon.
+
+15
+00:00:41,353 --> 00:00:46,351
+Light covers the distance from Earth to the Moon in about one point three seconds.
+
+16
+00:00:46,351 --> 00:00:50,069
+Every Moon you have ever seen was a little over a second old.
+
+17
+00:00:50,769 --> 00:00:51,282
+Rung two.
+
+18
+00:00:51,282 --> 00:00:51,739
+The Sun.
+
+19
+00:00:51,739 --> 00:00:53,621
+Eight minutes and twenty seconds.
+
+20
+00:00:53,621 --> 00:00:58,470
+When you feel sunlight on your skin, it left the Sun before you finished your coffee.
+
+21
+00:00:59,170 --> 00:00:59,876
+Rung three.
+
+22
+00:00:59,876 --> 00:01:01,736
+Neptune, the last big planet.
+
+23
+00:01:01,736 --> 00:01:02,827
+About four hours.
+
+24
+00:01:02,827 --> 00:01:08,152
+A message sent to a spacecraft there at breakfast gets its answer back after lunch.
+
+25
+00:01:08,852 --> 00:01:09,487
+Rung four.
+
+26
+00:01:09,487 --> 00:01:14,381
+Voyager one, our most distant spacecraft, launched in nineteen seventy seven.
+
+27
+00:01:14,381 --> 00:01:17,940
+This month, it reaches a distance of one full light day.
+
+28
+00:01:17,940 --> 00:01:24,233
+NASA's signal, moving at the fastest speed there is, will take twenty four hours just to get there.
+
+29
+00:01:24,933 --> 00:01:26,474
+Now the first giant jump.
+
+30
+00:01:26,474 --> 00:01:28,631
+The nearest star, Proxima Centauri.
+
+31
+00:01:28,631 --> 00:01:30,604
+Four point two four light years.
+
+32
+00:01:30,604 --> 00:01:34,610
+Voyager would need more than seventy thousand years to get there.
+
+33
+00:01:34,610 --> 00:01:38,864
+Everything humans have ever built is still sitting at the front door.
+
+34
+00:01:39,564 --> 00:01:40,137
+Rung six.
+
+35
+00:01:40,137 --> 00:01:41,795
+Our galaxy, the Milky Way.
+
+36
+00:01:41,795 --> 00:01:47,340
+About one hundred thousand light years across, with at least one hundred billion stars.
+
+37
+00:01:47,340 --> 00:01:55,435
+Light takes so long to cross it that the starlight arriving from the far side today set off before humans had invented farming.
+
+38
+00:01:56,136 --> 00:01:56,799
+Rung seven.
+
+39
+00:01:56,799 --> 00:02:01,687
+Andromeda, the nearest big galaxy, about two and a half million light years away.
+
+40
+00:02:01,687 --> 00:02:04,764
+On a dark night you can see it with your naked eye.
+
+41
+00:02:04,764 --> 00:02:10,557
+That faint smudge is light that left when our ancestors were first learning to make stone tools.
+
+42
+00:02:11,257 --> 00:02:11,949
+Rung eight.
+
+43
+00:02:11,949 --> 00:02:19,308
+In twenty fourteen, astronomers mapped how galaxies flow through space and drew the borders of our home supercluster.
+
+44
+00:02:19,308 --> 00:02:22,893
+They named it Laniakea, Hawaiian for immeasurable heaven.
+
+45
+00:02:22,893 --> 00:02:29,561
+It spans about five hundred and twenty million light years and holds around one hundred thousand galaxies.
+
+46
+00:02:30,261 --> 00:02:31,438
+And the final rung.
+
+47
+00:02:31,438 --> 00:02:33,669
+The edge of the observable universe.
+
+48
+00:02:33,669 --> 00:02:37,077
+About forty six billion light years in every direction.
+
+49
+00:02:37,077 --> 00:02:40,794
+Ninety three billion light years from one side to the other.
+
+50
+00:02:40,794 --> 00:02:42,963
+Which brings us back to the puzzle.
+
+51
+00:02:42,963 --> 00:02:48,415
+How can anything be that far, in a universe only thirteen point eight billion years old?
+
+52
+00:02:49,115 --> 00:02:50,184
+Here is the trick.
+
+53
+00:02:50,184 --> 00:02:51,788
+Space itself is stretching.
+
+54
+00:02:51,788 --> 00:02:54,282
+Picture a photon leaving a distant galaxy.
+
+55
+00:02:54,282 --> 00:03:03,666
+It races toward us at the speed of light, but the space it crosses keeps growing underneath it, like an ant walking on a balloon that someone keeps inflating.
+
+56
+00:03:03,666 --> 00:03:11,921
+By the time the light finally arrives, after thirteen and a half billion years, the galaxy that sent it has been carried much farther away.
+
+57
+00:03:12,621 --> 00:03:14,052
+This is a real example.
+
+58
+00:03:14,052 --> 00:03:19,964
+In twenty twenty five, the James Webb Space Telescope confirmed a galaxy called MoM z fourteen.
+
+59
+00:03:19,964 --> 00:03:23,511
+Its light is about thirteen and a half billion years old.
+
+60
+00:03:23,511 --> 00:03:30,293
+When that light left, the galaxy was only about two billion light years from the matter that would become us.
+
+61
+00:03:30,293 --> 00:03:37,325
+Today, by our calculation using the standard cosmological model, it's about thirty four billion light years away.
+
+62
+00:03:38,025 --> 00:03:47,620
+The oldest light of all is the cosmic microwave background, the afterglow of the Big Bang, released about three hundred and eighty thousand years after it began.
+
+63
+00:03:47,620 --> 00:03:51,912
+The gas that glowed was then only around forty million light years away.
+
+64
+00:03:51,912 --> 00:03:56,024
+That same matter is now about forty five billion light years from us.
+
+65
+00:03:56,024 --> 00:03:56,978
+That's the edge.
+
+66
+00:03:56,978 --> 00:03:57,633
+Not a wall.
+
+67
+00:03:57,633 --> 00:04:00,852
+Just the farthest light that has had time to reach us.
+
+68
+00:04:01,551 --> 00:04:02,764
+And it gets stranger.
+
+69
+00:04:02,764 --> 00:04:06,516
+The universe is expanding, and the expansion is even speeding up.
+
+70
+00:04:06,516 --> 00:04:13,213
+Today the rate is about seventy kilometers per second for every three point two six million light years of distance.
+
+71
+00:04:13,213 --> 00:04:16,330
+Add enough distance, and the stretching outruns light.
+
+72
+00:04:16,330 --> 00:04:22,507
+Beyond roughly fourteen billion light years, galaxies are moving away from us faster than light, right now.
+
+73
+00:04:22,507 --> 00:04:24,239
+That doesn't break relativity.
+
+74
+00:04:24,239 --> 00:04:26,086
+Nothing is racing through space.
+
+75
+00:04:26,086 --> 00:04:27,472
+Space itself is growing.
+
+76
+00:04:28,171 --> 00:04:30,029
+Here's an embarrassing secret.
+
+77
+00:04:30,029 --> 00:04:32,754
+We don't fully agree on that expansion rate.
+
+78
+00:04:32,754 --> 00:04:39,009
+Measure it from the Big Bang's afterglow, as the Planck satellite did, and you get about sixty seven.
+
+79
+00:04:39,009 --> 00:04:46,750
+Measure it from nearby exploding stars and pulsing stars, as the SH0ES team did with Hubble, and you get about seventy three.
+
+80
+00:04:46,750 --> 00:04:53,438
+Webb has double checked the nearby side, and while teams still debate the details, the gap hasn't gone away.
+
+81
+00:04:53,438 --> 00:05:00,869
+Astronomers call it the Hubble tension, and it might be a clue that something in our picture of the universe is missing.
+
+82
+00:05:01,569 --> 00:05:03,483
+So there are really three borders.
+
+83
+00:05:03,483 --> 00:05:10,010
+The observable universe, at about forty six billion light years, holds everything whose light has reached us so far.
+
+84
+00:05:10,010 --> 00:05:16,143
+But there is a much smaller one, the cosmic event horizon, at roughly sixteen and a half billion light years.
+
+85
+00:05:16,143 --> 00:05:19,801
+Light leaving a galaxy beyond it today will never, ever reach us.
+
+86
+00:05:19,801 --> 00:05:22,952
+We can see galaxies out there, as they were in the past.
+
+87
+00:05:22,952 --> 00:05:26,103
+But whatever they are doing now is gone from us forever.
+
+88
+00:05:26,803 --> 00:05:27,889
+Play that forward.
+
+89
+00:05:27,889 --> 00:05:31,328
+Every year, more distant galaxies slip past that horizon.
+
+90
+00:05:31,328 --> 00:05:44,601
+Physicists Lawrence Krauss and Robert Scherrer worked out that in around a hundred billion years, every galaxy beyond our own local group will have been pushed past that horizon, and later they fade from view completely.
+
+91
+00:05:44,601 --> 00:05:49,850
+By then, the Milky Way and Andromeda will long since have merged into one giant galaxy.
+
+92
+00:05:49,850 --> 00:05:55,943
+Astronomers living there would look out and see a single island of stars in an empty, black universe.
+
+93
+00:05:55,943 --> 00:06:00,348
+They would have no way to discover that the universe is expanding at all.
+
+94
+00:06:00,348 --> 00:06:04,450
+We are lucky to be looking now, while the evidence is still visible.
+
+95
+00:06:05,150 --> 00:06:06,965
+How much is inside that bubble?
+
+96
+00:06:06,965 --> 00:06:10,301
+For years, the headline number was two trillion galaxies.
+
+97
+00:06:10,301 --> 00:06:19,198
+Then in twenty twenty one, NASA's New Horizons spacecraft, far beyond Pluto where the sky is darker, measured how much background light there really is.
+
+98
+00:06:19,198 --> 00:06:22,944
+The verdict: hundreds of billions of galaxies, not two trillion.
+
+99
+00:06:22,944 --> 00:06:30,494
+Still, if you counted one galaxy every second, without sleeping, two hundred billion would take you more than six thousand years.
+
+100
+00:06:31,194 --> 00:06:34,838
+Numbers this big stop meaning anything, so let's shrink it.
+
+101
+00:06:34,838 --> 00:06:38,853
+Squeeze the entire observable universe down to the size of Earth.
+
+102
+00:06:39,553 --> 00:06:43,976
+On that scale, our whole Milky Way would be about fourteen meters across.
+
+103
+00:06:43,976 --> 00:06:47,309
+Roughly a city bus, floating somewhere inside a planet.
+
+104
+00:06:47,309 --> 00:06:51,853
+Andromeda would be a few blocks away, about three hundred and forty meters.
+
+105
+00:06:51,853 --> 00:06:55,731
+Proxima Centauri would sit about half a millimeter from the Sun.
+
+106
+00:06:55,731 --> 00:06:56,882
+And the Sun itself?
+
+107
+00:06:56,882 --> 00:06:58,518
+Smaller than a single atom.
+
+108
+00:06:59,218 --> 00:07:01,095
+So is that the whole universe?
+
+109
+00:07:01,095 --> 00:07:02,409
+Almost certainly not.
+
+110
+00:07:02,409 --> 00:07:06,664
+The observable universe is only the part we can see, centered on us.
+
+111
+00:07:06,664 --> 00:07:08,666
+Every galaxy has its own bubble.
+
+112
+00:07:08,666 --> 00:07:16,925
+An alien astronomer forty billion light years away sees a completely different edge, and would look at us as the ones at the border.
+
+113
+00:07:17,625 --> 00:07:19,299
+What lies past our horizon?
+
+114
+00:07:19,299 --> 00:07:21,532
+The best clue is the shape of space.
+
+115
+00:07:21,532 --> 00:07:26,741
+The Planck satellite measured that space is flat, to within a fraction of a percent.
+
+116
+00:07:26,741 --> 00:07:32,943
+If the universe curves back on itself at all, it must be enormously larger than the part we can see.
+
+117
+00:07:32,943 --> 00:07:37,656
+And if it is perfectly flat, the simplest answer is the most unsettling one.
+
+118
+00:07:37,656 --> 00:07:38,958
+It may go on forever.
+
+119
+00:07:39,658 --> 00:07:41,748
+So, how big is the universe, really?
+
+120
+00:07:41,748 --> 00:07:45,405
+The part we can see is ninety three billion light years across.
+
+121
+00:07:45,405 --> 00:07:47,959
+The part we could ever reach is far smaller.
+
+122
+00:07:47,959 --> 00:07:52,138
+And the whole thing might have no size at all, because it may never end.
+
+123
+00:07:52,838 --> 00:07:55,538
+Next time, we stop looking and start falling.
+
+124
+00:07:55,538 --> 00:07:58,117
+What happens if you fall into a black hole?
+
+125
+00:07:58,117 --> 00:08:01,056
+Spoiler: it depends on which black hole you pick.
+
+126
+00:08:01,056 --> 00:08:03,876
+Subscribe to Cosmic Scale so you don't miss it.
+
+127
+00:08:03,876 --> 00:08:04,956
+See you out there.

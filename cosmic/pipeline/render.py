@@ -1,6 +1,7 @@
 """Cosmic Scale pipeline: script -> voice (Kokoro offline, EN) -> code-drawn space visuals -> MP4 1080p30 + SRT.
 Usage: python3 -I render.py ep01_sun.py out/ep01 [--preview]
 EP02 added scenes: clock, escape, sky, thermo, energy, ocean, galaxy
+EP03 added scenes: zoom, stretch, horizons, deepfield, shrink (violet/magenta palette)
 """
 import sys, os, re, math, subprocess, importlib.util, json, random, hashlib
 import numpy as np
@@ -335,7 +336,8 @@ def sc_bars(img, v, t, dur):
 
 def sc_compare(img, v, t, dur):
     d = ImageDraw.Draw(img)
-    for k, (col, side, x) in enumerate([(RED, v["left"], W * 0.27), (CYAN, v["right"], W * 0.73)]):
+    cl, cr = [tuple(c) for c in v.get("cols", [RED, CYAN])]; strike = v.get("strike", True)
+    for k, (col, side, x) in enumerate([(cl, v["left"], W * 0.27), (cr, v["right"], W * 0.73)]):
         a = ease((t - k * 1.2) / 0.6)
         if a <= 0: continue
         d.rounded_rectangle([x - 380, 200, x + 380, 880], 30, fill=mix(SPACE, (16, 24, 48), a), outline=mix(SPACE, col, a), width=4)
@@ -343,7 +345,7 @@ def sc_compare(img, v, t, dur):
         for i, s in enumerate(side[1:]):
             tc = mix(SPACE, WHITE, a)
             d.text((x, 450 + i * 120), s, font=F(46, "SemiBold"), fill=tc, anchor="mm")
-            if k == 0: d.line([(x - F(46, "SemiBold").getlength(s) / 2, 450 + i * 120), (x + F(46, "SemiBold").getlength(s) / 2, 450 + i * 120)], fill=mix(SPACE, RED, a), width=4)
+            if k == 0 and strike: d.line([(x - F(46, "SemiBold").getlength(s) / 2, 450 + i * 120), (x + F(46, "SemiBold").getlength(s) / 2, 450 + i * 120)], fill=mix(SPACE, RED, a), width=4)
 
 PCOL = {"Mercury": (170, 160, 150), "Venus": (230, 200, 140), "Earth": (70, 130, 230), "Mars": (210, 100, 70), "Jupiter": (215, 175, 130),
         "Saturn": (225, 205, 150), "Uranus": (150, 215, 225), "Neptune": (80, 110, 230)}
@@ -359,7 +361,7 @@ def sc_scale(img, v, t, dur):
     for i, (lab, tm) in enumerate(pts):
         x = lerp(x0, x1, i / (n - 1)); a = ease((t - i * dur * 0.7 / n) / 0.5)
         if a <= 0: continue
-        c = mix(SPACE, GOLD if i == n - 1 else CYAN, a)
+        c = mix(SPACE, GOLD if i == n - 1 else tuple(v.get("col", CYAN)), a)
         d.ellipse([x - 16, y - 16, x + 16, y + 16], fill=c)
         d.text((x, y - 70), lab, font=F(36, "Bold"), fill=mix(SPACE, WHITE, a), anchor="mm")
         d.text((x, y + 70), tm, font=F(38, "Black"), fill=c, anchor="mm")
@@ -689,6 +691,270 @@ def sc_planetsdark(img, v, t, dur):
         paste_c(img, planet_sprite(PRAD[n] * 0.8, tuple(int(c * 0.6) for c in PCOL[n]), light=(0, 0)), ex, ey)
         d = ImageDraw.Draw(img); d.text((ex, ey - PRAD[n] - 24), n, font=F(32, "SemiBold"), fill=WHITE, anchor="mm")
     caption(img, v.get("caption"), ease((t - 0.8) / 0.5))
+
+# ---------------- scenes (EP03: violet / magenta, zoom-out ladder) ----------------
+VIO, MAG = (186, 140, 255), (255, 120, 200)
+LADDER = ["Moon", "Sun", "Neptune", "Voyager 1", "Proxima", "Milky Way", "Andromeda", "Laniakea", "Edge"]
+
+def _cloud(seed, n, rx, ry, cx, cy, col, rmin=1.0, rmax=2.4, clump=0):
+    """procedural point cloud (filaments when clump>0) -> list of (x, y, r, col)"""
+    rng = random.Random(seed); pts = []
+    nodes = [(rng.uniform(-1, 1), rng.uniform(-1, 1)) for _ in range(max(1, clump))]
+    for i in range(n):
+        if clump:
+            a, b = nodes[rng.randrange(len(nodes))], nodes[rng.randrange(len(nodes))]
+            k = rng.random(); x, y = lerp(a[0], b[0], k) + rng.gauss(0, 0.05), lerp(a[1], b[1], k) + rng.gauss(0, 0.05)
+        else:
+            x, y = rng.gauss(0, 0.45), rng.gauss(0, 0.45)
+        if x * x + y * y > 1: continue
+        pts.append((cx + x * rx, cy + y * ry, rng.uniform(rmin, rmax), mix(col, WHITE, rng.random() * 0.5)))
+    return pts
+
+_web = {}
+def web_layer(kind):
+    if kind not in _web:
+        S = 760; im = Image.new("RGBA", (S, S), (0, 0, 0, 0)); d = ImageDraw.Draw(im)
+        if kind == "super":
+            for x, y, r, c in _cloud(7, 2600, 360, 360, S / 2, S / 2, VIO, 0.8, 2.2, clump=14): d.ellipse([x - r, y - r, x + r, y + r], fill=c + (210,))
+        else:  # universe: cosmic web inside a glowing sphere
+            for x, y, r, c in _cloud(9, 5200, 370, 370, S / 2, S / 2, MAG, 0.6, 1.6, clump=40): d.ellipse([x - r, y - r, x + r, y + r], fill=c + (170,))
+            g = radial(S, [(0, (0, 0, 0, 0)), (0.9, (0, 0, 0, 0)), (0.97, MAG + (150,)), (1.0, MAG + (0,))]); im.alpha_composite(g)
+        _web[kind] = im.filter(ImageFilter.GaussianBlur(0.5))
+    return _web[kind]
+
+def zoom_object(img, kind, cx, cy, a, t):
+    d = ImageDraw.Draw(img)
+    if kind == "moon":
+        paste_c(img, earth_sprite(120, light=(-1, -0.2)), cx - 330, cy, a)
+        d.line([(cx - 190, cy), (cx + 290, cy)], fill=mix(SPACE, (110, 120, 160), a), width=2)
+        paste_c(img, planet_sprite(33, (175, 175, 170), light=(-1, -0.2)), cx + 330, cy, a)
+        alpha_text(img, (cx + 330, cy + 80), "Moon", F(32, "SemiBold"), WHITE, a)
+    elif kind == "sun":
+        paste_c(img, sun_sprite(70), cx, cy, a); R = 330
+        for k in range(0, 360, 5): d.arc([cx - R, cy - R, cx + R, cy + R], k, k + 2.5, fill=mix(SPACE, (90, 110, 160), a), width=2)
+        ang = -0.6 + t * 0.03; paste_c(img, earth_sprite(16, light=(-math.cos(ang), -math.sin(ang))), cx + R * math.cos(ang), cy + R * math.sin(ang), a)
+    elif kind in ("solar", "voyager"):
+        paste_c(img, sun_sprite(18 if kind == "solar" else 8), cx, cy, a)
+        sc = 11.5 if kind == "solar" else 2.0
+        for i, (n, au) in enumerate([("Mercury", .39), ("Venus", .72), ("Earth", 1), ("Mars", 1.52), ("Jupiter", 5.2), ("Saturn", 9.54), ("Uranus", 19.2), ("Neptune", 30.07)]):
+            R = au * sc
+            if R < 4: continue
+            d.ellipse([cx - R, cy - R, cx + R, cy + R], outline=mix(SPACE, (70, 90, 140) if n != "Neptune" else VIO, a), width=2 if n == "Neptune" else 1)
+            if kind == "solar" and au > 4:
+                ang = 0.4 + i * 1.1 + t * 0.02 / au
+                paste_c(img, planet_sprite(max(5, PRAD[n] // 3), PCOL[n], light=(-math.cos(ang), -math.sin(ang))), cx + R * math.cos(ang), cy + R * math.sin(ang), a)
+        if kind == "solar": alpha_text(img, (cx + 30.07 * sc * 0.72 + 20, cy - 30.07 * sc * 0.72 - 10), "Neptune's orbit", F(30, "SemiBold"), VIO, a, anchor="lm")
+        else:
+            vx = cx + 169 * sc * 0.94; vy = cy - 169 * sc * 0.34
+            d.line([(cx, cy), (vx, vy)], fill=mix(SPACE, MAG, a * 0.8), width=2)
+            d.ellipse([vx - 7, vy - 7, vx + 7, vy + 7], fill=mix(SPACE, MAG, a))
+            alpha_text(img, (vx, vy - 40), "Voyager 1 — 1 light-day", F(32, "Bold"), MAG, a)
+            alpha_text(img, (cx, cy + 90), "planets", F(26, "Medium"), DIM, a)
+    elif kind == "stars":
+        paste_c(img, sun_sprite(10), cx - 170, cy + 60, a)
+        alpha_text(img, (cx - 170, cy + 110), "Sun", F(30, "SemiBold"), WHITE, a)
+        rng = random.Random(13)
+        for i in range(22):
+            x, y = cx + rng.uniform(-620, 620), cy + rng.uniform(-330, 330); r = rng.uniform(2, 5)
+            d.ellipse([x - r, y - r, x + r, y + r], fill=mix(SPACE, mix((255, 200, 160), (170, 190, 255), rng.random()), a))
+        px, py = cx + 260, cy - 120
+        d.ellipse([px - 7, py - 7, px + 7, py + 7], fill=mix(SPACE, (255, 120, 90), a))
+        d.line([(cx - 160, cy + 55), (px - 8, py + 5)], fill=mix(SPACE, VIO, a), width=2)
+        alpha_text(img, (px + 20, py - 34), "Proxima Centauri", F(34, "Bold"), (255, 160, 130), a, anchor="lm")
+    elif kind == "galaxy":
+        paste_c(img, galaxy_sprite(), cx, cy, a)
+        ex, ey = cx + 250 * math.cos(0.9), cy + 250 * math.sin(0.9) * 0.55
+        d = ImageDraw.Draw(img); d.ellipse([ex - 8, ey - 8, ex + 8, ey + 8], outline=mix(SPACE, MAG, a), width=3)
+        alpha_text(img, (ex + 24, ey + 30), "you are here", F(30, "Bold"), MAG, a, anchor="lm")
+    elif kind == "local":
+        g = galaxy_sprite().resize((300, 300), Image.BILINEAR); paste_c(img, g, cx - 380, cy + 40, a)
+        g2 = galaxy_sprite().resize((380, 380), Image.BILINEAR).rotate(35, resample=Image.BILINEAR); paste_c(img, g2, cx + 380, cy - 60, a)
+        d = ImageDraw.Draw(img)
+        for x in range(int(cx - 210), int(cx + 170), 22): d.line([(x, cy + 30 - (x - cx + 210) * 0.24), (x + 10, cy + 30 - (x + 10 - cx + 210) * 0.24)], fill=mix(SPACE, VIO, a), width=2)
+        alpha_text(img, (cx - 380, cy + 160), "Milky Way", F(32, "Bold"), WHITE, a)
+        alpha_text(img, (cx + 380, cy + 110), "Andromeda", F(32, "Bold"), WHITE, a)
+    elif kind in ("super", "universe"):
+        paste_c(img, web_layer(kind), cx, cy, a)
+        if kind == "super":
+            d = ImageDraw.Draw(img); d.ellipse([cx - 4, cy - 4, cx + 4, cy + 4], fill=mix(SPACE, MAG, a))
+            alpha_text(img, (cx + 14, cy - 26), "Milky Way", F(26, "Bold"), MAG, a, anchor="lm")
+        else:
+            alpha_text(img, (cx, cy), "you", F(28, "Black"), WHITE, a)
+
+def sc_zoom(img, v, t, dur):
+    """zoom-out ladder: previous scale shrinks to a dot, the new scale fades in; vertical ladder + light-time odometer"""
+    cx, cy = 1040, 520; a = ease((t - 0.25) / 0.8)
+    zoom_object(img, v["kind"], cx, cy, a, t)
+    if v.get("prev"):
+        q = ease(t / 1.2); rr = lerp(330, 3, q)
+        lay = Image.new("RGBA", img.size, (0, 0, 0, 0)); d2 = ImageDraw.Draw(lay)
+        d2.ellipse([cx - rr, cy - rr, cx + rr, cy + rr], outline=WHITE + (int(220 * (1 - q * 0.6)),), width=3)
+        img.alpha_composite(lay)
+        if q < 0.9: alpha_text(img, (cx, cy - rr - 30), v["prev"], F(30, "SemiBold"), WHITE, 1 - q)
+    # ladder (left)
+    d = ImageDraw.Draw(img); x, y0, step = 120, 190, 82; rung = v["rung"]
+    d.line([(x, y0), (x, y0 + step * (len(LADDER) - 1))], fill=(60, 60, 100), width=3)
+    d.line([(x, y0 + step * (len(LADDER) - 1)), (x, y0 + step * (len(LADDER) - 1 - rung - ease(t / 0.8) + 1))], fill=VIO, width=5)
+    for i, name in enumerate(LADDER):
+        yy = y0 + step * (len(LADDER) - 1 - i); on = i <= rung; cur = i == rung
+        r = 13 if cur else 8
+        d.ellipse([x - r, yy - r, x + r, yy + r], fill=MAG if cur else (VIO if on else (60, 60, 100)))
+        d.text((x + 30, yy), name, font=F(30 if cur else 26, "Bold" if cur else "Medium"), fill=WHITE if cur else (DIM if on else (80, 85, 115)), anchor="lm")
+    # odometer card (bottom)
+    lay = Image.new("RGBA", img.size, (0, 0, 0, 0)); d2 = ImageDraw.Draw(lay)
+    bx0, by0, bx1, by1 = 560, 840, 1520, 1010
+    d2.rounded_rectangle([bx0, by0, bx1, by1], 26, fill=(14, 8, 30, 225), outline=VIO + (200,), width=3)
+    img.alpha_composite(lay)
+    k = ease((t - 0.3) / 0.6)
+    alpha_text(img, (bx0 + 40, by0 + 42), v["name"].upper(), F(30, "Bold"), VIO, k, anchor="lm", shadow=False)
+    alpha_text(img, (bx1 - 40, by0 + 42), v["dist"], F(30, "SemiBold"), MAG, k, anchor="rm", shadow=False)
+    fl = F(76, "Black"); alpha_text(img, (bx0 + 40, by0 + 112), v["lt"], fl, WHITE, k, anchor="lm", shadow=False)
+    lab = v.get("ltlab", "LIGHT TRAVEL TIME")
+    if fl.getlength(v["lt"]) + F(24, "SemiBold").getlength(lab) < (bx1 - bx0) - 120:
+        alpha_text(img, (bx1 - 40, by0 + 118), lab, F(24, "SemiBold"), DIM, k, anchor="rm", shadow=False)
+
+def sc_stretch(img, v, t, dur):
+    """expanding lattice of galaxies; a photon crawls from the source to us while space stretches under it"""
+    p = easeio((t - 0.3) / (dur * 0.8)); a0 = v.get("a0", 0.1)
+    vis_scale = lerp(0.22, 1.0, p)  # visual scale factor (compressed so it stays readable)
+    ux, uy = 1560, 520; src_c = -1.0  # comoving units: us at 0, source at -1 (screen width ~1300 px at scale 1)
+    S = 1320
+    d = ImageDraw.Draw(img)
+    for i in range(-7, 3):
+        for j in range(-3, 4):
+            x, y = ux + i * 0.18 * S * vis_scale, uy + j * 0.18 * S * vis_scale
+            if -40 < x < W + 40 and 60 < y < 900:
+                rr = 3 + 2 * vis_scale
+                d.ellipse([x - rr, y - rr, x + rr, y + rr], fill=mix((60, 50, 100), VIO, 0.6))
+    for j in range(-3, 4):
+        y = uy + j * 0.18 * S * vis_scale
+        if 60 < y < 900: d.line([(0, y), (W, y)], fill=(40, 34, 70), width=1)
+    sx = ux + src_c * S * vis_scale
+    # photon path: wavy line from source to photon position, wavelength stretches with scale
+    ph = p; px = lerp(sx, ux, ph)
+    pts = []; lam = 18 + 60 * vis_scale
+    for k in range(0, int(max(1, px - sx)), 4):
+        xx = sx + k; pts.append((xx, uy + 14 * math.sin((xx - sx) / lam * 2 * math.pi)))
+    col = mix((130, 170, 255), (255, 90, 80), p)
+    if len(pts) > 1: d.line(pts, fill=col, width=4)
+    d.ellipse([px - 10, uy - 10, px + 10, uy + 10], fill=col)
+    if v.get("cmb"):
+        g = radial(140, [(0, (255, 200, 150, 200)), (1, (255, 160, 100, 0))]); paste_c(img, g, sx, uy, 1 - 0.6 * p)
+    else:
+        g = galaxy_sprite().resize((110, 110), Image.BILINEAR); paste_c(img, g, sx, uy)
+    d = ImageDraw.Draw(img)
+    d.text((sx, uy + 80), v.get("src", "source"), font=F(30, "Bold"), fill=WHITE, anchor="mm")
+    paste_c(img, galaxy_sprite().resize((90, 90), Image.BILINEAR), ux, uy)
+    d.text((ux, uy + 72), "us", font=F(30, "Bold"), fill=MAG, anchor="mm")
+    # counters
+    lay = Image.new("RGBA", img.size, (0, 0, 0, 0)); d2 = ImageDraw.Draw(lay)
+    d2.rounded_rectangle([120, 120, 760, 330], 24, fill=(14, 8, 30, 220), outline=VIO + (190,), width=3)
+    img.alpha_composite(lay)
+    alpha_text(img, (150, 165), "LIGHT HAS TRAVELED", F(26, "SemiBold"), DIM, 1, anchor="lm", shadow=False)
+    alpha_text(img, (150, 225), f"{v['light'] * p:.1f} billion years", F(54, "Black"), WHITE, 1, anchor="lm", shadow=False)
+    now = lerp(v["now"] * a0 * 1.0, v["now"], p)
+    alpha_text(img, (150, 290), f"source is now {now:.1f} billion ly away", F(32, "SemiBold"), MAG, 1, anchor="lm", shadow=False)
+    caption(img, v.get("caption"), ease((t - 1.0) / 0.5), col=None)
+
+def sc_horizons(img, v, t, dur):
+    """nested borders around us: faster-than-light sphere (14), event horizon (16.5), observable (46 bn ly radius)"""
+    cx, cy = 760, 520; k = 9.6  # px per billion ly
+    show = v.get("show", 3); fade = v.get("fade", False)
+    rng = random.Random(17); d = ImageDraw.Draw(img)
+    for i in range(420):
+        ang = rng.uniform(0, 6.283); r0 = 46 * k * math.sqrt(rng.random())
+        r = r0 * (1 + 0.04 * t / max(1, dur))
+        x, y = cx + r * math.cos(ang), cy + r * math.sin(ang)
+        unreachable = r0 > 16.6 * k and show >= 3
+        b = 1.0
+        if fade and r0 > 3 * k: b = max(0.0, 1 - ease((t - 1.0 - (r0 / (46 * k)) * dur * 0.3) / 1.2))
+        if b <= 0: continue
+        c = (110, 110, 140) if unreachable else VIO
+        d.ellipse([x - 2.2, y - 2.2, x + 2.2, y + 2.2], fill=mix(SPACE, c, b))
+    rings = [(46, MAG, "observable universe — 46 bn ly radius", 3), (14.4, (255, 194, 75), "faster than light — beyond ~14 bn ly", 1), (16.6, CYAN, "event horizon — 16.5 bn ly: never reachable", 2)]
+    lab_y = {3: 260, 1: 520, 2: 700}
+    for R, col, lab, need in rings:
+        if show < need and not (need == 3 and show >= 3): continue
+        if need > show: continue
+        a = ease((t - 0.3) / 0.6) if need == show else 1.0
+        rr = R * k
+        lay = Image.new("RGBA", img.size, (0, 0, 0, 0)); d2 = ImageDraw.Draw(lay)
+        d2.ellipse([cx - rr, cy - rr, cx + rr, cy + rr], outline=col + (int(255 * a),), width=4)
+        ly = lab_y[need]; lx = 1290
+        ex = cx + rr * 0.97; ey = cy - rr * 0.25 if need == 3 else cy - rr * 0.6 if need == 1 else cy + rr * 0.7
+        d2.line([(ex, ey), (lx - 20, ly)], fill=col + (int(200 * a),), width=2)
+        img.alpha_composite(lay)
+        words = lab.split(" — ") if " — " in lab else [lab]
+        alpha_text(img, (lx, ly - 20), words[0], F(34, "Bold"), col, a, anchor="lm")
+        if len(words) > 1: alpha_text(img, (lx, ly + 24), words[1], F(28, "SemiBold"), WHITE, a, anchor="lm")
+    d = ImageDraw.Draw(img); d.ellipse([cx - 6, cy - 6, cx + 6, cy + 6], fill=WHITE)
+    d.text((cx, cy + 26), "us", font=F(26, "Bold"), fill=WHITE, anchor="mm")
+    caption(img, v.get("caption"), ease((t - 1.0) / 0.5))
+
+_deep = None
+def deep_sprite():
+    global _deep
+    if _deep is None:
+        S = (2400, 1350); im = Image.new("RGBA", S, (0, 0, 0, 0)); d = ImageDraw.Draw(im); rng = random.Random(31)
+        for i in range(1500):
+            x, y = rng.uniform(0, S[0]), rng.uniform(0, S[1]); sz = rng.random() ** 3 * 26 + 2
+            col = mix((255, 210, 160), (150, 170, 255), rng.random()); col = mix(col, (255, 120, 90), rng.random() ** 4)
+            if sz > 12 and rng.random() < 0.6:
+                sp = Image.new("RGBA", (int(sz * 4), int(sz * 4)), (0, 0, 0, 0)); ds = ImageDraw.Draw(sp)
+                for k in range(160):
+                    r = (k / 160) * sz * 1.6; th = r / sz * 3.2 + (k % 2) * math.pi
+                    ds.ellipse([sz * 2 + r * math.cos(th) - 1.2, sz * 2 + r * math.sin(th) * 0.6 - 1.2, sz * 2 + r * math.cos(th) + 1.2, sz * 2 + r * math.sin(th) * 0.6 + 1.2], fill=col + (180,))
+                ds.ellipse([sz * 2 - sz * 0.3, sz * 2 - sz * 0.2, sz * 2 + sz * 0.3, sz * 2 + sz * 0.2], fill=(255, 235, 210, 230))
+                sp = sp.rotate(rng.uniform(0, 180), resample=Image.BILINEAR); im.alpha_composite(sp, (int(x), int(y)))
+            else:
+                e = rng.uniform(0.4, 1.0)
+                d.ellipse([x - sz / 2, y - sz * e / 2, x + sz / 2, y + sz * e / 2], fill=col + (int(120 + 100 * rng.random()),))
+        _deep = im.filter(ImageFilter.GaussianBlur(0.8))
+    return _deep
+
+def sc_deepfield(img, v, t, dur):
+    """procedural deep field (no real imagery), slow zoom, galaxy counter"""
+    p = t / max(1, dur); z = lerp(1.0, 1.25, p)
+    ds = deep_sprite(); cw, ch = 2400 / z * 0.8, 1350 / z * 0.8
+    ox, oy = (2400 - cw) / 2, (1350 - ch) / 2
+    crop = ds.crop((int(ox), int(oy), int(ox + cw), int(oy + ch))).resize((W, H), Image.BILINEAR)
+    img.alpha_composite(crop)
+    lay = Image.new("RGBA", img.size, (0, 0, 0, 0)); d2 = ImageDraw.Draw(lay)
+    d2.rounded_rectangle([W / 2 - 520, 130, W / 2 + 520, 330], 28, fill=(10, 6, 24, 215), outline=MAG + (200,), width=3)
+    img.alpha_composite(lay)
+    alpha_text(img, (W / 2, 180), "GALAXIES IN THE OBSERVABLE UNIVERSE", F(30, "Bold"), VIO, 1, shadow=False)
+    cnt = int(200e9 * easeio((t - 0.4) / (dur * 0.6)))
+    alpha_text(img, (W / 2, 265), f"{cnt:,}+" if cnt < 200e9 else v.get("count", "200,000,000,000+"), F(78, "Black"), WHITE, 1, shadow=False)
+    caption(img, v.get("caption"), ease((t - dur * 0.55) / 0.5))
+
+def sc_shrink(img, v, t, dur):
+    """shrink the observable universe to the size of Earth"""
+    cx, cy = 470, 540; a = ease(t / 0.6)
+    paste_c(img, earth_sprite(270, glow=MAG), cx, cy, a)
+    alpha_text(img, (cx, cy + 340), "observable universe = Earth", F(36, "Bold"), MAG, a)
+    alpha_text(img, (cx, cy + 385), "93 billion ly → 12,742 km", F(28, "SemiBold"), DIM, a)
+    rows = [("Milky Way", "≈ 14 m", "a city bus"), ("Andromeda", "≈ 340 m away", "a few blocks"), ("Proxima Centauri", "≈ 0.6 mm from the Sun", "a grain of sand"), ("The Sun", "≈ 0.02 nm wide", "smaller than an atom")]
+    n = v.get("rows", 4)
+    if n == 0:
+        alpha_text(img, (1340, 470), "Squeeze it all", F(72, "Black"), WHITE, ease((t - 0.4) / 0.6))
+        alpha_text(img, (1340, 560), "down to one planet", F(56, "ExtraBold"), VIO, ease((t - 0.8) / 0.6))
+        return
+    span = dur * 0.8 / n
+    for i, (nm, val, like) in enumerate(rows[:n]):
+        q = ease((t - 0.4 - i * span) / 0.5)
+        if q <= 0: continue
+        y = 210 + i * 190
+        lay = Image.new("RGBA", img.size, (0, 0, 0, 0)); d2 = ImageDraw.Draw(lay)
+        d2.rounded_rectangle([900, y - 70, 1800, y + 80], 22, fill=(14, 8, 30, int(215 * q)), outline=VIO + (int(170 * q),), width=2)
+        img.alpha_composite(lay)
+        alpha_text(img, (940, y - 28), nm, F(36, "Bold"), VIO, q, anchor="lm", shadow=False)
+        alpha_text(img, (940, y + 30), val, F(48, "Black"), WHITE, q, anchor="lm", shadow=False)
+        alpha_text(img, (1770, y + 30), like, F(32, "SemiBold"), MAG, q, anchor="rm", shadow=False)
+        if i == 0:  # tiny bus icon
+            d = ImageDraw.Draw(img); bx, by = 1560, y - 40
+            d.rounded_rectangle([bx, by, bx + 150, by + 44], 8, fill=mix(SPACE, (255, 194, 75), q))
+            for w in range(5): d.rectangle([bx + 10 + w * 27, by + 8, bx + 30 + w * 27, by + 22], fill=mix(SPACE, (40, 50, 80), q))
+            d.ellipse([bx + 20, by + 36, bx + 40, by + 56], fill=mix(SPACE, (30, 30, 40), q)); d.ellipse([bx + 110, by + 36, bx + 130, by + 56], fill=mix(SPACE, (30, 30, 40), q))
 
 SC = {k[3:]: f for k, f in globals().items() if k.startswith("sc_")}
 
