@@ -462,7 +462,7 @@ def timeline(ep, items):
         start = t; t += 5.0 if ci else 7.0
         for it in [x for x in items if x["ch"] == ci]:
             segs.append(dict(start=t, **it)); t += it["dur"] + float(getattr(ep, "PARA_GAP", 1.3))
-        t = max(t + 3.0, start + INTRO_S + 2)
+        t = max(t + 3.0, start + LOOP_S + 2)
         chapters.append(dict(start=start, end=t, title=ch["title"], scene=ch["scene"]))
     tail = float(getattr(ep, "TAIL_MIN", 10)) * 60
     chapters.append(dict(start=t, end=t + tail, title="Rest", scene=getattr(ep, "TAIL_SCENE", "hills"), tail=True))
@@ -490,7 +490,7 @@ def mix_audio(segs, total, outdir, tail_start):
     from scipy.signal import lfilter
     sr = 24000; N = int(total * sr) + sr; chunk = sr * 30
     rng = np.random.default_rng(3)
-    zi_b = np.zeros(1); zi_l = np.zeros(2)
+    zi_b = np.zeros(1); zi_l = np.zeros(1)
     path = os.path.join(outdir, "mix.wav")
     seg_cache = {}
     with sf.SoundFile(path, "w", sr, 1, "PCM_16") as fo:
@@ -499,7 +499,7 @@ def mix_audio(segs, total, outdir, tail_start):
             w = rng.standard_normal(n)
             brown, zi_b = lfilter([1.0], [1, -0.997], w, zi=zi_b)  # rain/wind bed
             brown, zi_l = lfilter([0.06, 0.06], [1, -0.88], brown, zi=zi_l)
-            bed = brown * 0.012 * (0.85 + 0.15 * np.sin(TAU * tt / 41))
+            bed = brown * 0.0017 * (0.85 + 0.15 * np.sin(TAU * tt / 41))
             pad = np.zeros(n)
             for f, a in ((110.0, 0.5), (164.81, 0.32), (220.0, 0.22), (277.18, 0.12)):  # warm A-major, very soft
                 pad += a * np.sin(TAU * f * tt + f) * (0.6 + 0.4 * np.sin(TAU * tt / (23 + f % 7)))
@@ -610,6 +610,6 @@ if __name__ == "__main__":
     subprocess.run(["ffmpeg", "-y", "-loglevel", "error", "-f", "concat", "-safe", "0", "-i", listf, "-c", "copy", silent], check=True)
     subprocess.run(["ffmpeg", "-y", "-loglevel", "error", "-i", silent, "-i", os.path.join(outdir, "mix.wav"),
                     "-map", "0:v", "-map", "1:a", "-c:v", "copy", "-af", "loudnorm=I=-19:TP=-2:LRA=9", "-ar", "48000",
-                    "-c:a", "aac", "-b:a", "96k", "-ac", "1", "-t", f"{total:.2f}", "-movflags", "+faststart",
+                    "-c:a", "aac", "-b:a", "64k", "-ac", "1", "-t", f"{total:.2f}", "-movflags", "+faststart",
                     os.path.join(outdir, "final.mp4")], check=True)
     print("ok", os.path.getsize(os.path.join(outdir, "final.mp4")) // 1_000_000, "MB")
