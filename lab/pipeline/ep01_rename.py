@@ -1,6 +1,6 @@
 # Shortcut Lab - EP01: Rename hundreds of files with Python (all code run for real; output captured from the actual run)
 TITLE = "Rename Hundreds of Files in Seconds with Python"
-SPEED = 0.95
+SPEED = 0.82
 CODE1 = '''from pathlib import Path
 
 folder = Path("photos")

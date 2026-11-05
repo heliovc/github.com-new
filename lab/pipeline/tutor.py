@@ -101,7 +101,7 @@ def draw_code(img, x, y, lines, chars, lang, hl=(), lh=44, size=26, a=1.0, curso
     for i, ln in enumerate(lines):
         yy = y + i * lh
         if (i + 1) in hl and left > 0:
-            d.rectangle([x - 16, yy - 6, x + 1500, yy + lh - 8], fill=(46, 60, 34))
+            d.rectangle([x - 16, yy - 6, x + 1474, yy + lh - 8], fill=(46, 60, 34))
             d.rectangle([x - 16, yy - 6, x - 10, yy + lh - 8], fill=LIME)
         if numbers: d.text((x - 70, yy), f"{i + 1:>2}", font=f, fill=(78, 86, 102))
         if left <= 0: continue
@@ -134,6 +134,7 @@ def sc_steps(img, v, t, d):
 
 def sc_code(img, v, t, d):
     lines = v["code"].strip("\n").split("\n"); lh = v.get("lh", 46); size = v.get("size", 28)
+    while size > 18 and F(size, "mono").getlength(max(lines, key=len)) > 1440: size -= 1  # keep long lines inside the window
     h = 52 + 50 + len(lines) * lh + 30; y0 = max(150, (H - h) / 2 + 20); box = [160, y0, 1760, y0 + h]
     window(img, box, v.get("file", "rename.py"))
     total = sum(len(l) + 1 for l in lines)
@@ -261,7 +262,7 @@ def tts(scenes, outdir, voice, speed):
         if os.path.exists(p): a, sr = sf.read(p, dtype="float32")
         else:
             a, sr = k.create(s["say"], voice=voice, speed=speed, lang="en-us"); sf.write(p, a, sr)
-        a = np.concatenate([np.zeros(int(sr * 0.25)), a, np.zeros(int(sr * s.get("hold", 0.45)))]).astype(np.float32)
+        a = np.concatenate([np.zeros(int(sr * 0.25)), a, np.zeros(int(sr * s.get("hold", 0.8)))]).astype(np.float32)
         chunks.append(a); durs.append(len(a) / sr); print(f"tts {i + 1}/{len(scenes)} {durs[-1]:.1f}s", flush=True)
     audio = np.concatenate(chunks); audio = audio / max(1e-6, np.abs(audio).max()) * 0.9
     tt = np.arange(len(audio)) / sr  # soft lo-fi bed: two detuned sines + gentle pulse, very low

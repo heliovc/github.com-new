@@ -1,0 +1,351 @@
+1
+00:00:00,250 --> 00:00:07,160
+You have a folder with hundreds of photos, all named like I M G underscore four eight one seven dot J P G.
+
+2
+00:00:07,160 --> 00:00:10,355
+Renaming them one by one would take an afternoon.
+
+3
+00:00:10,355 --> 00:00:14,658
+Today we'll do it in about ten seconds, with nine lines of Python.
+
+4
+00:00:15,358 --> 00:00:17,563
+Here's the folder we're starting with.
+
+5
+00:00:17,563 --> 00:00:21,974
+Six photos with camera names, and one text file that we don't want to touch.
+
+6
+00:00:21,974 --> 00:00:24,295
+On the right is where we want to end up.
+
+7
+00:00:24,295 --> 00:00:27,719
+Clean names, numbered in order, with a lowercase extension.
+
+8
+00:00:28,419 --> 00:00:32,535
+All you need is Python three, installed on Windows, Mac or Linux.
+
+9
+00:00:32,535 --> 00:00:35,005
+Everything we use today comes built in.
+
+10
+00:00:35,005 --> 00:00:36,018
+Here's the plan.
+
+11
+00:00:36,018 --> 00:00:41,590
+Find the files, decide the new names, preview the result, and only then rename for real.
+
+12
+00:00:42,290 --> 00:00:46,281
+One thing trips up almost every beginner, so let's get it right first.
+
+13
+00:00:46,281 --> 00:00:50,328
+The script has to run from the folder that contains your photos folder.
+
+14
+00:00:50,328 --> 00:00:55,915
+On Windows, open that folder in File Explorer, click the address bar, type c m d, and press Enter.
+
+15
+00:00:55,915 --> 00:00:57,569
+A terminal opens right there.
+
+16
+00:00:57,569 --> 00:01:03,269
+On a Mac, open Terminal, type c d and a space, then drag the folder into the window and press Enter.
+
+17
+00:01:03,969 --> 00:01:08,532
+To check you're in the right place, type l s on a Mac, or d i r on Windows.
+
+18
+00:01:08,532 --> 00:01:10,966
+You should see the photos folder listed.
+
+19
+00:01:10,966 --> 00:01:12,426
+If you do, you're ready.
+
+20
+00:01:13,126 --> 00:01:17,848
+Create a file called rename dot p y, in the same place as your photos folder.
+
+21
+00:01:17,848 --> 00:01:19,995
+First, we import Path from pathlib.
+
+22
+00:01:19,995 --> 00:01:23,184
+Path is the modern way to work with files in Python.
+
+23
+00:01:23,184 --> 00:01:28,335
+Then we point it at our folder, and use glob to grab every file ending in dot J P G.
+
+24
+00:01:28,335 --> 00:01:31,524
+We wrap that in sorted, so the order is predictable.
+
+25
+00:01:32,224 --> 00:01:33,999
+Notice what glob does here.
+
+26
+00:01:33,999 --> 00:01:41,627
+The star means anything, so star dot J P G matches every file with that ending, and quietly ignores notes dot t x t.
+
+27
+00:01:41,627 --> 00:01:42,810
+One small warning.
+
+28
+00:01:42,810 --> 00:01:50,174
+On Windows, file names are not case sensitive, so this pattern also catches files ending in lowercase dot j p g.
+
+29
+00:01:50,874 --> 00:01:51,679
+Now the loop.
+
+30
+00:01:51,679 --> 00:01:58,555
+enumerate gives us a counter alongside each file, and start equals one makes it count from one instead of zero.
+
+31
+00:01:58,555 --> 00:02:02,643
+For each old file, with name builds a new path in the same folder.
+
+32
+00:02:02,643 --> 00:02:09,085
+Inside the f string, i colon zero three d pads the number to three digits, so one becomes zero zero one.
+
+33
+00:02:09,085 --> 00:02:11,811
+And suffix dot lower turns J P G into j p g.
+
+34
+00:02:12,511 --> 00:02:15,211
+That zero padding matters more than it looks.
+
+35
+00:02:15,211 --> 00:02:19,231
+Without it, your file explorer would sort trip ten before trip two.
+
+36
+00:02:19,231 --> 00:02:24,871
+With three digits, everything lines up perfectly, all the way to nine hundred and ninety nine.
+
+37
+00:02:25,571 --> 00:02:28,609
+Here's the most important habit in this whole video.
+
+38
+00:02:28,609 --> 00:02:30,829
+Notice the last line is commented out.
+
+39
+00:02:30,829 --> 00:02:33,750
+Right now the script only prints what it would do.
+
+40
+00:02:33,750 --> 00:02:35,210
+This is called a dry run.
+
+41
+00:02:35,210 --> 00:02:35,969
+Let's run it.
+
+42
+00:02:36,669 --> 00:02:39,346
+In the terminal, type python rename dot p y.
+
+43
+00:02:39,346 --> 00:02:40,320
+And there it is.
+
+44
+00:02:40,320 --> 00:02:42,936
+Every old name, an arrow, and the new name.
+
+45
+00:02:42,936 --> 00:02:44,882
+Nothing has changed on disk yet.
+
+46
+00:02:44,882 --> 00:02:49,627
+If something looks wrong, you fix the script and run it again, with zero risk.
+
+47
+00:02:50,327 --> 00:02:51,790
+Happy with the preview?
+
+48
+00:02:51,790 --> 00:02:56,752
+Remove the hash symbol in front of old dot rename, so that line actually runs.
+
+49
+00:02:56,752 --> 00:02:59,296
+Save the file, and run it one more time.
+
+50
+00:02:59,996 --> 00:03:03,098
+Same output as before, but this time it's real.
+
+51
+00:03:03,098 --> 00:03:07,322
+List the folder, and every photo now has a clean, numbered name.
+
+52
+00:03:07,322 --> 00:03:10,489
+And notes dot t x t is exactly where we left it.
+
+53
+00:03:10,489 --> 00:03:15,109
+Six files here, but it would be the same ten seconds for six thousand.
+
+54
+00:03:15,809 --> 00:03:17,016
+Before and after.
+
+55
+00:03:17,016 --> 00:03:20,639
+Seven files, one command, and nothing done by hand.
+
+56
+00:03:21,339 --> 00:03:24,492
+If it didn't work, it's almost always one of three things.
+
+57
+00:03:24,492 --> 00:03:30,147
+If nothing prints at all, the pattern didn't match anything, so check the folder name and the extension.
+
+58
+00:03:30,147 --> 00:03:36,073
+If you see python is not recognized, or command not found, try typing python three instead, or py on Windows.
+
+59
+00:03:36,073 --> 00:03:42,489
+And if you get file not found error, the terminal is open in the wrong folder, so go back and check with l s or d i r.
+
+60
+00:03:43,189 --> 00:03:45,651
+And here's a question people always ask.
+
+61
+00:03:45,651 --> 00:03:46,697
+Is there an undo?
+
+62
+00:03:46,697 --> 00:03:47,558
+Not by itself.
+
+63
+00:03:47,558 --> 00:03:51,313
+Once a file is renamed, Python doesn't remember the old name.
+
+64
+00:03:51,313 --> 00:03:57,405
+That's exactly why we do the dry run first, and why a quick copy of the folder is your best friend.
+
+65
+00:03:58,105 --> 00:04:01,298
+Two quick upgrades make this script safer for real life.
+
+66
+00:04:01,298 --> 00:04:05,174
+First, sorting by name isn't always the order the photos were taken.
+
+67
+00:04:05,174 --> 00:04:12,642
+Add key equals lambda, p dot stat, dot s t underscore m time, and the files are sorted by the time they were last modified instead.
+
+68
+00:04:12,642 --> 00:04:16,176
+Second, before renaming, check if the new name already exists.
+
+69
+00:04:16,176 --> 00:04:19,767
+If it does, skip it, so you never overwrite a file by accident.
+
+70
+00:04:20,467 --> 00:04:24,415
+And because the new name is just an f string, you can make it anything you like.
+
+71
+00:04:24,415 --> 00:04:26,143
+Want the year and a place in front?
+
+72
+00:04:26,143 --> 00:04:29,499
+Write twenty twenty six, dash, lisbon, dash, then the padded number.
+
+73
+00:04:29,499 --> 00:04:31,176
+Want to keep part of the old name?
+
+74
+00:04:31,176 --> 00:04:38,332
+old dot stem gives you the name without the extension, so you could write trip dash, then old dot stem, and keep the camera number for reference.
+
+75
+00:04:39,032 --> 00:04:42,790
+What if your folder mixes J P G, J P E G and P N G files?
+
+76
+00:04:42,790 --> 00:04:52,480
+Instead of glob, use iterdir, which lists everything in the folder, and keep only the files whose lowercase suffix is in a small set of extensions.
+
+77
+00:04:52,480 --> 00:05:01,445
+This one line works the same on every operating system, because we lower the suffix ourselves, so upper and lower case no longer matter.
+
+78
+00:05:01,445 --> 00:05:09,157
+The rest of the loop stays exactly the same, except you keep each file's own extension with old dot suffix dot lower.
+
+79
+00:05:09,857 --> 00:05:10,679
+One last tip.
+
+80
+00:05:10,679 --> 00:05:15,611
+Before you run any script that changes files, make a copy of the folder first.
+
+81
+00:05:15,611 --> 00:05:19,658
+It takes two seconds, and it turns any mistake into a non event.
+
+82
+00:05:20,358 --> 00:05:21,212
+So, to recap.
+
+83
+00:05:21,212 --> 00:05:23,115
+Path and glob find the files.
+
+84
+00:05:23,115 --> 00:05:26,135
+enumerate and an f string build the new names.
+
+85
+00:05:26,135 --> 00:05:28,564
+A dry run shows you the result first.
+
+86
+00:05:28,564 --> 00:05:30,927
+And one line does the actual rename.
+
+87
+00:05:31,627 --> 00:05:39,467
+Next on Shortcut Lab, we'll go one step further, and automatically sort a messy downloads folder into subfolders by file type.
+
+88
+00:05:39,467 --> 00:05:44,009
+If this saved you some time, subscribe, and I'll see you in the next one.

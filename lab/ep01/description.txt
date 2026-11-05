@@ -1,0 +1,48 @@
+Rename hundreds of files in seconds with 9 lines of Python. No extra libraries, beginner friendly, with a safe dry run first.
+
+Chapters
+0:00 The problem
+0:28 What you need
+0:42 Open a terminal in the right folder
+1:12 Step 1: find the files
+1:50 Step 2: build the new names
+2:25 Step 3: dry run
+2:50 Step 4: rename for real
+3:21 If something goes wrong
+3:57 Two upgrades
+4:20 Bonus: your own naming pattern
+4:38 Bonus: more than one file type
+5:20 Recap
+
+The code (rename.py)
+from pathlib import Path
+
+folder = Path("photos")
+files = sorted(folder.glob("*.JPG"))
+
+for i, old in enumerate(files, start=1):
+    new = old.with_name(f"trip-{i:03d}{old.suffix.lower()}")
+    print(old.name, "→", new.name)
+    old.rename(new)
+
+Safer version (sort by date + never overwrite)
+from pathlib import Path
+
+folder = Path("photos")
+files = sorted(folder.glob("*.JPG"), key=lambda p: p.stat().st_mtime)
+
+for i, old in enumerate(files, start=1):
+    new = old.with_name(f"trip-{i:03d}{old.suffix.lower()}")
+    if new.exists():
+        print("skip:", new.name, "already exists")
+        continue
+    old.rename(new)
+
+Tested on Python 3. On Windows, *.JPG also matches .jpg (file names are not case sensitive).
+
+—
+Shortcut Lab: software and AI tutorials that save you hours. A new tutorial every day.
+Subscribe so you don't miss the next shortcut.
+
+Narration uses a synthetic voice. All code shown is run and checked before publishing.
+#python #automation #tutorial
