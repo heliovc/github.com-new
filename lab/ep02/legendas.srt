@@ -1,0 +1,587 @@
+1
+00:00:00,250 --> 00:00:02,374
+This is a messy downloads folder.
+
+2
+00:00:02,374 --> 00:00:05,015
+Fifteen random items, all mixed together.
+
+3
+00:00:05,015 --> 00:00:05,658
+Now watch.
+
+4
+00:00:05,658 --> 00:00:12,162
+One command, and everything lands in Images, Documents, Audio, Video and Archives, in under a second.
+
+5
+00:00:12,862 --> 00:00:16,686
+In the next few minutes, you'll build this exact script from scratch.
+
+6
+00:00:16,686 --> 00:00:21,618
+About thirty lines of Python, nothing to install, and it works on Windows, Mac and Linux.
+
+7
+00:00:21,618 --> 00:00:27,603
+And stay for the second half, because this kind of script can silently destroy a file when you run it twice.
+
+8
+00:00:27,603 --> 00:00:30,983
+I'll show you exactly how, and the one line that prevents it.
+
+9
+00:00:31,683 --> 00:00:32,589
+Here's the plan.
+
+10
+00:00:32,589 --> 00:00:34,684
+First, list everything in the folder.
+
+11
+00:00:34,684 --> 00:00:38,252
+Second, decide where each file belongs, based on its extension.
+
+12
+00:00:38,252 --> 00:00:42,386
+Third, a dry run, which prints what would happen without moving anything.
+
+13
+00:00:42,386 --> 00:00:44,198
+Fourth, move the files for real.
+
+14
+00:00:44,198 --> 00:00:46,860
+And fifth, make it safe to run again and again.
+
+15
+00:00:47,560 --> 00:00:50,113
+Don't start on your real downloads folder.
+
+16
+00:00:50,113 --> 00:00:55,462
+Make a new folder on your desktop called sorter, and copy your downloads folder into it.
+
+17
+00:00:55,462 --> 00:00:57,893
+That way, any mistake happens on a copy.
+
+18
+00:00:57,893 --> 00:01:03,242
+Open a terminal inside sorter, like we did in episode one, and list what's in Downloads.
+
+19
+00:01:03,242 --> 00:01:05,552
+On Windows, type d i r instead of l s.
+
+20
+00:01:06,252 --> 00:01:10,817
+Now create a file called sort downloads dot p y, next to the Downloads folder.
+
+21
+00:01:10,817 --> 00:01:13,861
+Import Path from pathlib, and point it at Downloads.
+
+22
+00:01:13,861 --> 00:01:19,070
+Then loop over iterdir, which hands you everything inside the folder, one item at a time.
+
+23
+00:01:19,070 --> 00:01:22,406
+We wrap it in sorted, so the order is the same every run.
+
+24
+00:01:22,406 --> 00:01:25,098
+For now, just print each name, and its suffix.
+
+25
+00:01:25,798 --> 00:01:28,556
+Run it with python sort downloads dot p y.
+
+26
+00:01:28,556 --> 00:01:31,315
+Every file shows up next to its extension.
+
+27
+00:01:31,315 --> 00:01:33,351
+But look at project dash files.
+
+28
+00:01:33,351 --> 00:01:36,568
+It has no suffix at all, because it's not a file.
+
+29
+00:01:36,568 --> 00:01:37,488
+It's a folder.
+
+30
+00:01:37,488 --> 00:01:40,378
+Remember that, because it's about to matter.
+
+31
+00:01:41,078 --> 00:01:42,592
+A quick note on suffix.
+
+32
+00:01:42,592 --> 00:01:46,740
+It includes the dot, and it keeps the original capital letters.
+
+33
+00:01:46,740 --> 00:01:53,128
+Cameras love capital J P G, so we'll always convert the suffix to lowercase before we compare it.
+
+34
+00:01:53,128 --> 00:01:55,828
+That one detail saves a lot of confusion.
+
+35
+00:01:56,528 --> 00:01:57,522
+Now the rules.
+
+36
+00:01:57,522 --> 00:02:00,433
+Images get J P G, J P E G, P N G and GIF.
+
+37
+00:02:00,433 --> 00:02:03,913
+Documents get P D F, Word, text, Excel and C S V.
+
+38
+00:02:03,913 --> 00:02:05,759
+Audio gets M P 3 and wave.
+
+39
+00:02:05,759 --> 00:02:07,677
+Video gets M P 4 and M O V.
+
+40
+00:02:07,677 --> 00:02:09,452
+Archives get zip and rar.
+
+41
+00:02:09,452 --> 00:02:16,270
+And anything we don't recognize goes into a folder called Other, so nothing is ever left behind.
+
+42
+00:02:16,969 --> 00:02:19,605
+In Python, those rules become a dictionary.
+
+43
+00:02:19,605 --> 00:02:24,876
+Each key is a folder name, and each value is a set of extensions, inside curly braces.
+
+44
+00:02:24,876 --> 00:02:31,496
+A set is perfect here, because checking whether something is in a set is instant, no matter how big it gets.
+
+45
+00:02:31,496 --> 00:02:34,499
+Want a new category, like Ebooks, with dot e pub?
+
+46
+00:02:34,499 --> 00:02:35,602
+Just add one line.
+
+47
+00:02:36,302 --> 00:02:38,683
+Next, a small function called folder for.
+
+48
+00:02:38,683 --> 00:02:44,724
+It takes an extension, walks through the dictionary, and returns the first folder whose set contains it.
+
+49
+00:02:44,724 --> 00:02:47,918
+If the loop finishes without a match, it returns Other.
+
+50
+00:02:47,918 --> 00:02:52,332
+Keeping this in its own function makes the main loop short and easy to read.
+
+51
+00:02:53,032 --> 00:02:54,537
+Remember project dash files?
+
+52
+00:02:54,537 --> 00:02:57,763
+Here's the mistake almost everyone makes on their first try.
+
+53
+00:02:57,763 --> 00:03:01,741
+If you don't check that each item is a file, the script moves folders too.
+
+54
+00:03:01,741 --> 00:03:04,644
+On the first run, project files disappears into Other.
+
+55
+00:03:04,644 --> 00:03:06,633
+And on the second run, it gets worse.
+
+56
+00:03:06,633 --> 00:03:09,375
+Here's what happened when I ran that version twice.
+
+57
+00:03:09,375 --> 00:03:12,869
+Archives, Audio, Documents and Images all get moved inside Other.
+
+58
+00:03:12,869 --> 00:03:15,718
+Then it tries to move Other into itself, and crashes.
+
+59
+00:03:16,418 --> 00:03:18,037
+The fix is a single line.
+
+60
+00:03:18,037 --> 00:03:19,331
+if file dot is file.
+
+61
+00:03:19,331 --> 00:03:26,517
+Only real files get touched, folders stay exactly where they are, and the script is safe to run again tomorrow.
+
+62
+00:03:27,217 --> 00:03:28,405
+Here's the main loop.
+
+63
+00:03:28,405 --> 00:03:31,347
+For each item that's a file, we work out the target.
+
+64
+00:03:31,347 --> 00:03:35,533
+downloads, slash, folder for, gives us a path like Downloads slash Images.
+
+65
+00:03:35,533 --> 00:03:39,775
+Yes, in pathlib, the slash operator joins paths, on every operating system.
+
+66
+00:03:39,775 --> 00:03:41,925
+Then we print where the file would go.
+
+67
+00:03:41,925 --> 00:03:44,640
+And notice the last two lines are commented out.
+
+68
+00:03:44,640 --> 00:03:45,658
+This is a dry run.
+
+69
+00:03:46,358 --> 00:03:46,766
+Run it.
+
+70
+00:03:46,766 --> 00:03:52,302
+Fourteen files, fourteen decisions, and project files isn't on the list, because it's a folder.
+
+71
+00:03:52,302 --> 00:03:53,526
+Read the list slowly.
+
+72
+00:03:53,526 --> 00:03:58,246
+If something is heading to the wrong place, fix the dictionary, and run it again.
+
+73
+00:03:58,246 --> 00:04:00,809
+Nothing has moved yet, so there's zero risk.
+
+74
+00:04:01,509 --> 00:04:02,671
+Happy with the plan?
+
+75
+00:04:02,671 --> 00:04:05,457
+Remove the hash symbols from the last two lines.
+
+76
+00:04:05,457 --> 00:04:11,205
+target dot mkdir creates the folder, and exist ok equals true means no error if it's already there.
+
+77
+00:04:11,205 --> 00:04:13,759
+Then file dot rename moves the file into it.
+
+78
+00:04:13,759 --> 00:04:17,649
+In pathlib, renaming a file into another folder is how you move it.
+
+79
+00:04:17,649 --> 00:04:18,229
+One catch.
+
+80
+00:04:18,229 --> 00:04:22,468
+If you ever move files to a different drive, use shutil dot move instead.
+
+81
+00:04:23,167 --> 00:04:23,958
+Run it again.
+
+82
+00:04:23,958 --> 00:04:26,331
+The same list, but this time it's real.
+
+83
+00:04:26,331 --> 00:04:33,693
+List the Downloads folder, and instead of fifteen loose items, there are six tidy folders, plus project files, untouched.
+
+84
+00:04:34,393 --> 00:04:35,912
+Here's the full picture.
+
+85
+00:04:35,912 --> 00:04:42,743
+Every image in Images, every document in Documents, and the font file we never planned for, safely in Other.
+
+86
+00:04:43,443 --> 00:04:45,784
+Now, the danger I promised at the start.
+
+87
+00:04:45,784 --> 00:04:50,700
+Next week, you download a new version of report dot t x t, and run the script again.
+
+88
+00:04:50,700 --> 00:04:51,519
+Watch closely.
+
+89
+00:04:51,519 --> 00:04:54,854
+Before the run, the report in Documents says version one.
+
+90
+00:04:54,854 --> 00:04:55,732
+Run the script.
+
+91
+00:04:55,732 --> 00:04:57,370
+And now it says version two.
+
+92
+00:04:57,370 --> 00:04:58,716
+The old report is gone.
+
+93
+00:04:58,716 --> 00:05:00,881
+No warning, no error, no recycle bin.
+
+94
+00:05:01,581 --> 00:05:03,480
+And it depends on your system.
+
+95
+00:05:03,480 --> 00:05:07,278
+On Mac and Linux, rename quietly replaces the existing file.
+
+96
+00:05:07,278 --> 00:05:14,556
+On Windows, you get a file exists error instead, and the script stops halfway, with some files sorted and some not.
+
+97
+00:05:14,556 --> 00:05:16,075
+Neither is what we want.
+
+98
+00:05:16,775 --> 00:05:19,116
+The fix is a tiny function called unique.
+
+99
+00:05:19,116 --> 00:05:21,171
+It starts with the destination path.
+
+100
+00:05:21,171 --> 00:05:24,882
+While a file with that name already exists, it builds a new name.
+
+101
+00:05:24,882 --> 00:05:27,907
+The stem, then a number in brackets, then the suffix.
+
+102
+00:05:27,907 --> 00:05:33,444
+So report dot t x t becomes report, one, then report, two, and so on, until it finds a free name.
+
+103
+00:05:33,444 --> 00:05:35,899
+Then we move the file to that path instead.
+
+104
+00:05:36,599 --> 00:05:38,908
+Same test again, with the new version.
+
+105
+00:05:38,908 --> 00:05:43,889
+This time, the new report lands as report, one, and both versions are still there.
+
+106
+00:05:43,889 --> 00:05:48,021
+That's the line that makes this script safe to run every single day.
+
+107
+00:05:48,721 --> 00:05:51,661
+Two more things live in a real downloads folder.
+
+108
+00:05:51,661 --> 00:05:58,152
+Files that are still downloading, which Chrome and Edge name dot c r download, and Firefox names dot part.
+
+109
+00:05:58,152 --> 00:06:00,602
+Move those mid download, and they break.
+
+110
+00:06:00,602 --> 00:06:06,543
+And hidden system files, like dot D S underscore store on a Mac, or desktop dot i n i on Windows.
+
+111
+00:06:06,543 --> 00:06:16,158
+So we add a skip set, and at the top of the loop, if it's not a file, starts with a dot, or has a skipped extension, continue jumps straight to the next one.
+
+112
+00:06:16,858 --> 00:06:17,558
+Final test.
+
+113
+00:06:17,558 --> 00:06:21,628
+A new report, a half finished movie download, and a hidden file.
+
+114
+00:06:21,628 --> 00:06:23,473
+Only the real new file moved.
+
+115
+00:06:23,473 --> 00:06:29,069
+The download in progress and the hidden file were left alone, exactly as they should be.
+
+116
+00:06:29,769 --> 00:06:33,607
+When you're confident, point it at your real downloads folder.
+
+117
+00:06:33,607 --> 00:06:37,011
+Path dot home gives you your user folder on any system.
+
+118
+00:06:37,011 --> 00:06:43,138
+So Path dot home, slash, Downloads, works on Windows, Mac and Linux without changing anything else.
+
+119
+00:06:43,138 --> 00:06:44,748
+Do one more dry run first.
+
+120
+00:06:44,748 --> 00:06:45,181
+Always.
+
+121
+00:06:45,881 --> 00:06:46,262
+Bonus.
+
+122
+00:06:46,262 --> 00:06:49,690
+Some people prefer folders by date instead of by type.
+
+123
+00:06:49,690 --> 00:06:54,642
+A file's last modified time lives in file dot stat, dot s t underscore m time.
+
+124
+00:06:54,642 --> 00:07:05,879
+datetime dot from timestamp turns that number into a date, and s t r f time, with percent capital Y, dash, percent m, gives you a folder name like twenty twenty six dash eleven.
+
+125
+00:07:06,579 --> 00:07:09,565
+Run it, and your downloads are grouped by month.
+
+126
+00:07:09,565 --> 00:07:14,417
+Year first, then month, so the folders also sort in time order, automatically.
+
+127
+00:07:15,117 --> 00:07:18,261
+If something goes wrong, it's usually one of three things.
+
+128
+00:07:18,261 --> 00:07:19,020
+Nothing moves?
+
+129
+00:07:19,020 --> 00:07:22,326
+The two lines at the bottom are probably still commented out.
+
+130
+00:07:22,326 --> 00:07:23,844
+Permission error on Windows?
+
+131
+00:07:23,844 --> 00:07:27,151
+A file is open in another program, so close it and run again.
+
+132
+00:07:27,151 --> 00:07:35,499
+And file not found error means the terminal is open in the wrong folder, or Downloads is spelled differently, and capital letters matter on Mac and Linux.
+
+133
+00:07:36,199 --> 00:07:36,749
+Pro tip.
+
+134
+00:07:36,749 --> 00:07:38,539
+Make the dictionary yours.
+
+135
+00:07:38,539 --> 00:07:40,534
+Download a lot of installers?
+
+136
+00:07:40,534 --> 00:07:45,145
+Add a line for Installers, with dot e x e, dot m s i and dot d m g.
+
+137
+00:07:45,145 --> 00:07:45,902
+Code files?
+
+138
+00:07:45,902 --> 00:07:47,553
+Add dot p y and dot j s.
+
+139
+00:07:47,553 --> 00:07:50,650
+The rest of the script doesn't change at all.
+
+140
+00:07:51,350 --> 00:07:52,120
+Quick recap.
+
+141
+00:07:52,120 --> 00:07:53,723
+iterdir lists the folder.
+
+142
+00:07:53,723 --> 00:07:57,121
+A dictionary of sets maps each extension to a folder.
+
+143
+00:07:57,121 --> 00:08:00,968
+A dry run shows the plan, then mkdir and rename do the work.
+
+144
+00:08:00,968 --> 00:08:03,918
+unique makes sure nothing is ever overwritten.
+
+145
+00:08:03,918 --> 00:08:07,316
+And the skip check leaves unfinished downloads alone.
+
+146
+00:08:08,016 --> 00:08:16,527
+Next on Shortcut Lab, we switch to Excel, with seven formulas that replace hours of manual work, like X lookup, filter, and unique.
+
+147
+00:08:16,527 --> 00:08:18,606
+Subscribe, so you don't miss it.
