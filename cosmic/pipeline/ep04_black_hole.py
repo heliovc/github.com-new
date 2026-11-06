@@ -62,7 +62,7 @@ SCENES = [
   "vis": {"type": "inside", "head": "M87* · 6.5 billion Suns", "timer": 28, "timer_fmt": "{:.0f} hours", "timer_sub": "more than a full day inside"}},
 
  {"say": "And none of this is just equations on a blackboard. In twenty fifteen, the LIGO detectors felt space itself shiver as two black holes, about thirty six and twenty nine times the mass of the Sun, merged one point three billion light years away. Then the Event Horizon Telescope, a network of radio dishes that works like a telescope as wide as the Earth, photographed the glowing rings around M eighty seven star and Sagittarius A star. A dark shadow, wrapped in bent light. Just like the drawing on your screen.",
-  "vis": {"type": "blackhole", "r": 130, "zoom": 0.15, "head": "Not just theory: heard in 2015, photographed in 2019 and 2022", "caption": "drawing, not a photo — the real images show the same shadow and ring"}},
+  "vis": {"type": "blackhole", "r": 130, "zoom": 0.15, "head": "Not just theory: detected and photographed", "caption": "drawing, not a photo — the real images show the same shadow and ring"}},
  {"say": "And if you'd rather wait outside, black holes don't last forever either. In nineteen seventy four, Stephen Hawking showed they should slowly leak away energy, now called Hawking radiation. But slowly is an understatement. A black hole with the mass of our Sun would take around ten to the sixty seventh years to evaporate. That's a one followed by sixty seven zeros. The universe is about fourteen billion years old. It hasn't even started.",
   "vis": {"type": "title", "title": "≈ 10⁶⁷ years", "sub": "to evaporate a black hole with the Sun's mass (Hawking, 1974)", "brand": False, "subcol": PAL}},
 

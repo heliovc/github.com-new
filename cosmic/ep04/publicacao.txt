@@ -1,0 +1,57 @@
+EP04 — Cosmic Scale — publicar 06/11/2026 17:00 (Brasília)
+
+TÍTULO: What Happens If You Fall Into a Black Hole?
+
+DESCRIÇÃO:
+Fall into a small black hole and you're torn apart before you even reach it. Fall into a giant one and you cross the point of no return without feeling a thing. We dive into both, side by side: a 10-Sun black hole and Sagittarius A*, the monster at the center of our galaxy. How strong the stretch gets, what your friends would see from far away, and exactly how much time you'd have left inside each one.
+
+Chapters
+0:00 Small vs giant: two very different endings
+0:46 Black holes don't suck
+1:12 The event horizon and the photon sphere
+1:38 Dive 1: the small black hole (spaghettification)
+2:44 Dive 2: Sagittarius A*
+3:30 What your friend sees: frozen at the edge
+4:18 Crossing the horizon
+4:41 How much time is left inside
+5:39 M87*: a horizon bigger than Pluto's orbit
+6:13 How we know black holes are real
+6:46 Hawking radiation: 10^67 years
+7:12 The nearest black holes
+7:36 So what happens? (and what's next)
+
+Sources
+- NASA Science, 10 Questions You Might Have About Black Holes (spaghettification; a same-mass black hole would not change planetary orbits; Sgr A* about 4 million Suns, 26,000 light-years; M87 black hole 6.5 billion Suns)
+- NASA Goddard Space Flight Center (May 2024), black hole plunge visualization by Jeremy Schnittman: 4.3 million solar masses, horizon about 25 million km, ~3-hour fall, camera torn apart 12.8 s after crossing, a 6-hour trip near the horizon leaves the astronaut 36 minutes younger
+- Event Horizon Telescope, April 10, 2019 (M87*: 55 million light-years, 6.5 billion solar masses) and May 12, 2022 (Sagittarius A*)
+- LIGO Caltech, GW150914 (2015): black holes of about 36 and 29 solar masses merging 1.3 billion light-years away
+- ESA Gaia (April 2024): Gaia BH3, 33 solar masses, about 1,926 light-years
+- El-Badry et al. (2023), MNRAS: Gaia BH1, about 1,560 light-years
+- Hawking (1974), Nature: "Black hole explosions?"
+- Own calculations (Schwarzschild metric): horizon sizes (59 km, 25.4 million km, 38.4 billion km), tidal stretch 2GML/r³ on a 2 m body (1 g at ~8,150 km and 100 g at ~1,760 km from a 10-Sun hole; ~21 million g at its horizon; ~1/9,000 g at the Sgr A* horizon), maximum time from horizon to singularity πGM/c³ (0.15 ms, 66 s, 27.9 h), evaporation time ≈ 2×10^67 years for one solar mass
+
+—
+Cosmic Scale: the universe, measured in a way you can feel.
+Subscribe for a new space video every week.
+Visuals and animations are original. Narration uses a synthetic voice.
+#space #universe #science
+
+TAGS: black hole, falling into a black hole, what happens if you fall into a black hole, spaghettification, event horizon, sagittarius a*, m87 black hole, time dilation, hawking radiation, gaia bh3, nasa black hole simulation, space documentary, cosmic scale, astronomy
+
+SHORT (vertical.mp4, cenas 0,7,10,15 ≈ 78 s) — publicar 06/11 21:00
+TÍTULO: A Small Black Hole Kills You. A Giant One Doesn't. #shorts
+DESCRIÇÃO: Fall into a small black hole and you're spaghetti before the edge. Fall into a giant one and you get about a minute inside, while your friends watch you freeze forever. Full video on the channel: "What Happens If You Fall Into a Black Hole?"
+Visuals are original. Narration uses a synthetic voice.
+#shorts #space #blackhole #science
+TAGS: black hole, spaghettification, event horizon, time dilation, space shorts, cosmic scale
+
+CHECKLIST playbook (seção 7):
+1. 1ª frase cumpre o título em ≤15 palavras ("Fall into a small black hole, and you die before you even reach it") — OK, sem vinheta (título só aos 0:43)
+2. Valor até 15 s: "follow you all the way to the end… what your friends would see" + 0:17 promessa do tempo restante — OK
+3. Loops: (a) quanto tempo resta dentro (fechado 4:41–6:13), (b) o que os amigos veem (fechado 3:30), (c) qual mata primeiro (fechado 2:30/3:06) — todos fechados
+4. Reengaje 1 = 3:30 "two clocks" (paradoxo); Reengaje 2 = 5:39 M87* engole a órbita de Plutão (maior escala) — OK
+5. Nenhum trecho >33 s com o mesmo visual — OK
+6. Sem enchimento: cena LIGO/EHT acrescentada é prova real (não repetição) — OK
+7. Final = payoff + próximo episódio (EP05 Largest Star vs the Sun), sem despedida — OK
+8. Short: gancho falado em ≤2 s ("Fall into a small black hole…"), buraco negro visível no 1º frame — OK
+9. Estrutura nova ("dois mergulhos em paralelo"), 5 cenas novas (blackhole, spaghetti, twoclocks, horizonsize, inside), paleta brasa/ciano, thumb com texto à direita (EP03 era à esquerda) — OK
