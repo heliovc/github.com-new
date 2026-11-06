@@ -7,6 +7,8 @@ Visual por item:
   vis.type == "bignum": só o número grande animado.
   vis.type == "speed": raias de velocidade em escala log (1 km/s -> luz); vis.kms = km/s; item.short = rótulo curto (rank02).
 THEME.hook == "streaks": gancho com rastros de velocidade em vez da estrela gigante (rank02).
+  vis.type == "moons": lua atual grande em escala + contorno tracejado de Mercúrio + fila das 5 em escala (não reveladas = silhueta "?"); vis.moon, vis.km (rank03).
+THEME.hook == "moons": silhueta "?" do nº 1 dentro do contorno de Mercúrio + as 5 luas orbitando (rank03).
 Tudo desenhado por código; narração Kokoro (VOICE, padrão af_heart); legenda grande queimada.
 """
 import sys, os, re, math, json, subprocess, importlib.util, random
@@ -135,6 +137,86 @@ def speed_lanes(img, it, th, t, dur):
         d = ImageDraw.Draw(img)
         d.text((x0 + 10, y - 46), f"#{r}  {o.get('short', o['name'])}", font=F(32 if cur else 28, "ExtraBold" if cur else "Bold"), fill=(255, 255, 255) if cur else (150, 170, 200), anchor="lm")
 
+
+# ---------- rank03: moons to scale ----------
+MOON_LOOK = {  # base colour, spot colour, spot count, spot size range, style
+ "Moon": ((150, 150, 155), (95, 95, 105), 26, (0.05, 0.22), "maria"),
+ "Io": ((225, 200, 95), (160, 70, 30), 60, (0.02, 0.08), "volcano"),
+ "Callisto": ((95, 80, 65), (210, 205, 195), 140, (0.01, 0.05), "craters"),
+ "Titan": ((215, 150, 60), (190, 120, 45), 0, (0, 0), "haze"),
+ "Ganymede": ((140, 128, 112), (185, 175, 160), 40, (0.04, 0.18), "grooves"),
+}
+_moon = {}
+def moon_sprite(name, r, dim=False):
+    r = max(4, int(r)); key = (name, r, dim)
+    if key in _moon: return _moon[key]
+    base, spot, n, (s0, s1), style = MOON_LOOK[name]
+    pad = int(r * 0.25) + 4; size = 2 * r + 2 * pad
+    yy, xx = np.mgrid[0:size, 0:size].astype(np.float32)
+    nx, ny = (xx - size / 2) / r, (yy - size / 2) / r
+    rr = nx ** 2 + ny ** 2; inside = rr <= 1; nz = np.sqrt(np.clip(1 - rr, 0, 1))
+    shade = np.clip((nx * -0.7 + ny * -0.45 + nz * 0.6) / 1.04, 0, 1) * 0.9 + 0.1
+    rgb = np.zeros((size, size, 3), np.float32); rgb[:] = base
+    rng = np.random.default_rng(len(name) * 7 + 3)
+    lo = Image.fromarray((rng.random((24, 24)) * 255).astype(np.uint8)).resize((size, size), Image.BICUBIC)
+    noise = np.asarray(lo, np.float32)[..., None] / 255
+    rgb *= 0.82 + 0.3 * noise
+    for _ in range(n):
+        cx, cy = rng.uniform(-0.9, 0.9, 2); s = rng.uniform(s0, s1)
+        dd = np.hypot(nx - cx, ny - cy)
+        if style == "craters":
+            m = np.clip(1 - dd / s, 0, 1) ** 0.6; rgb = rgb * (1 - m[..., None] * 0.8) + np.array(spot) * m[..., None] * 0.8
+        elif style == "volcano":
+            m = np.clip(1 - dd / s, 0, 1); col = spot if rng.random() < 0.6 else (40, 30, 25)
+            rgb = rgb * (1 - m[..., None]) + np.array(col) * m[..., None]
+        elif style == "grooves":
+            m = np.clip(1 - dd / s, 0, 1) ** 1.5; rgb = rgb * (1 - m[..., None] * 0.55) + np.array(spot) * m[..., None] * 0.55
+        else:
+            m = np.clip(1 - dd / s, 0, 1) ** 1.2; rgb = rgb * (1 - m[..., None] * 0.6) + np.array(spot) * m[..., None] * 0.6
+    if style == "haze":
+        band = (np.sin(ny * 9 + noise[..., 0] * 2) * 0.5 + 0.5)[..., None]
+        rgb = rgb * (0.9 + 0.12 * band)
+    rgb = rgb * shade[..., None]
+    a = np.where(inside, 255, 0).astype(np.float32)
+    if style == "haze":  # thick atmosphere halo
+        dd = np.sqrt(rr); gl = np.clip((1.12 - dd) / 0.12, 0, 1) * (dd > 1)
+        rgb = np.where((dd > 1)[..., None], np.array((235, 170, 80), np.float32), rgb); a = np.maximum(a, gl * 150)
+    if dim: rgb = rgb * 0.0 + 18; a = np.where(inside, 255, 0).astype(np.float32)
+    img = Image.fromarray(np.dstack([np.clip(rgb, 0, 255), a]).astype(np.uint8), "RGBA")
+    _moon[key] = img; return img
+
+MERCURY_KM = 4879
+def dashed_circle(d, cx, cy, r, col, w=3, step=6):
+    for k in range(0, 360, step): d.arc([cx - r, cy - r, cx + r, cy + r], k, k + step * 0.55, fill=col, width=w)
+
+def moons_vis(img, it, th, t, dur):
+    acc = tuple(th["accent"]); acc2 = tuple(th["accent2"])
+    km = it["vis"]["km"]; KM1 = max(o["vis"]["km"] for o in ALL_ITEMS)
+    # big moon (radius proportional to its true size) + Mercury dashed outline as reference
+    cx, cy = W / 2, 700; R1 = 255
+    rr = R1 * km / KM1 * (0.85 + 0.15 * ease((t - 0.2) / 1.2))
+    R.paste_c(img, moon_sprite(it["vis"]["moon"], rr), cx, cy, ease(t / 0.4))
+    d = ImageDraw.Draw(img)
+    rm = R1 * MERCURY_KM / KM1; q = ease((t - 1.0) / 0.6)
+    if q > 0:
+        dashed_circle(d, cx, cy, rm, mix((5, 7, 15), (255, 255, 255), q * 0.85), 3)
+        d.text((cx + rm * 0.72 + 14, cy - rm * 0.72 - 14), "Mercury", font=F(30, "Bold"), fill=mix((5, 7, 15), (230, 230, 240), q), anchor="lb")
+    # lineup to scale (unrevealed = silhouettes with "?")
+    order = sorted(ALL_ITEMS, key=lambda o: o["vis"]["km"]); tot = sum(o["vis"]["km"] for o in order); gap = 34
+    s = (W - 140 - gap * (len(order) - 1)) / tot; x = 70
+    for o in order:
+        r = o["vis"]["km"] * s / 2; xc = x + r; yc = 1190 - r; x += 2 * r + gap
+        revealed = o["rank"] >= it["rank"]; cur = o["rank"] == it["rank"]
+        R.paste_c(img, moon_sprite(o["vis"]["moon"], r, dim=not revealed), xc, yc)
+        d = ImageDraw.Draw(img)
+        if not revealed:
+            d.ellipse([xc - r, yc - r, xc + r, yc + r], outline=(90, 100, 120), width=2)
+            d.text((xc, yc), "?", font=F(int(r * 0.9), "Black"), fill=(110, 120, 140), anchor="mm")
+        if cur: d.ellipse([xc - r - 8, yc - r - 8, xc + r + 8, yc + r + 8], outline=acc, width=5)
+        d.text((xc, 1222), o.get("short", o["name"]) if revealed else f"#{o['rank']}", font=F(26, "ExtraBold" if cur else "Bold"),
+               fill=acc if cur else ((200, 205, 220) if revealed else (110, 120, 140)), anchor="mm")
+    d.line([(70, 1192), (W - 70, 1192)], fill=(70, 80, 100), width=2)
+
 def caption_chunks(say, t0, dur):
     words = say.split(); groups, g = [], []
     for w in words:
@@ -157,6 +239,25 @@ def draw_caption(img, chunks, gt, y=1585):
 
 def seg_hook(img, sc, th, t, dur):
     col = tuple(th["star_col"]); acc = tuple(th["accent"])
+    if th.get("hook") == "moons":
+        order = sorted(ALL_ITEMS, key=lambda o: o["vis"]["km"]); KM1 = order[-1]["vis"]["km"]
+        cx, cy = W / 2, 930; R1 = 280
+        rm = R1 * MERCURY_KM / KM1
+        # Ganymede silhouette "?" pulsing against Mercury outline + slow orbiting lineup
+        for i, o in enumerate(order):
+            ang = t * 0.6 + i * 2 * math.pi / len(order); r = 70 * o["vis"]["km"] / KM1
+            R.paste_c(img, moon_sprite(o["vis"]["moon"], r), cx + 400 * math.cos(ang), cy + 120 * math.sin(ang))
+        R.paste_c(img, moon_sprite(order[-1]["vis"]["moon"], R1 * (0.96 + 0.04 * math.sin(t * 3)), dim=True), cx, cy)
+        d = ImageDraw.Draw(img); d.ellipse([cx - R1, cy - R1, cx + R1, cy + R1], outline=acc, width=5)
+        dashed_circle(d, cx, cy, rm, (235, 235, 245), 4)
+        d.text((cx, cy + rm - 40), "Mercury", font=F(32, "Bold"), fill=(230, 230, 240), anchor="mm")
+        d.text((cx, cy - R1 - 30), "#1 vs the planet Mercury", font=F(36, "Bold"), fill=acc, anchor="mm")
+        d.text((cx, cy), "?", font=F(220, "Black"), fill=acc, anchor="mm")
+        text(img, (W / 2, 210), "TOP 5", 150, acc)
+        for i, l in enumerate(wrap(sc["top"].upper(), F(84, "Black"), W - 120)):
+            text(img, (W / 2, 340 + i * 96), l, 84, (255, 255, 255))
+        text(img, (W / 2, 1320), sc["sub"], 54, tuple(th["accent2"]), w="ExtraBold")
+        return
     if th.get("hook") == "streaks":
         lay = Image.new("RGBA", img.size, (0, 0, 0, 0)); d = ImageDraw.Draw(lay); rng = random.Random(8)
         for i in range(90):
@@ -202,6 +303,8 @@ def seg_item(img, it, th, t, dur):
             text(img, (W / 2, 1300), v["note"], 44, (255, 225, 200), w="ExtraBold", a=ease((prog - 0.98) * 4))
     if v["type"] == "speed":
         speed_lanes(img, it, th, t, dur)
+    if v["type"] == "moons":
+        moons_vis(img, it, th, t, dur)
     # number
     p = easeio((t - 0.5) / 1.6)
     num = it["num"]
@@ -214,7 +317,17 @@ def seg_item(img, it, th, t, dur):
 
 def seg_outro(img, sc, th, t, dur):
     a = ease(t / 0.5)
-    if th.get("outro_note"):
+    if th.get("outro") == "moons":
+        order = sorted(ALL_ITEMS, key=lambda o: o["vis"]["km"]); tot = sum(o["vis"]["km"] for o in order)
+        s = (W - 140) / tot; x = 70; ex = 12742 * s
+        R.paste_c(img, R.earth_sprite(int(ex / 2), glow=None), W / 2, 470, a)
+        text(img, (W / 2, 470 - ex / 2 - 36), "Earth", 40, (200, 225, 255), w="Bold", a=a)
+        p = ease((t - 0.5) / 1.2)
+        for o in order:
+            r = o["vis"]["km"] * s / 2
+            R.paste_c(img, moon_sprite(o["vis"]["moon"], r), lerp(W / 2, x + r, p), 880, ease((t - 0.3) / 0.5)); x += 2 * r
+        if th.get("outro_note"): text(img, (W / 2, 1040), th["outro_note"], 46, tuple(th["accent2"]), w="ExtraBold", a=ease((t - 1.4) / 0.5))
+    elif th.get("outro_note"):
         lay = Image.new("RGBA", img.size, (0, 0, 0, 0)); d = ImageDraw.Draw(lay)
         xe = lerp(-100, W + 100, (t * 0.9) % 1.0)
         d.line([(0, 700), (W, 700)], fill=(255, 240, 160, int(90 * a)), width=3)
@@ -225,7 +338,7 @@ def seg_outro(img, sc, th, t, dur):
         R.paste_c(img, R.sun_sprite(4), W / 2, 700, a)
         d = ImageDraw.Draw(img); d.ellipse([W / 2 - 40, 660, W / 2 + 40, 740], outline=(255, 220, 160), width=3)
         text(img, (W / 2, 800), "our Sun, on the same scale", 44, (255, 230, 190), w="Bold", a=a)
-    R.paste_c(img, R.logo_img(220), W / 2, 1080, ease((t - 0.6) / 0.5))
+    if th.get("outro") != "moons": R.paste_c(img, R.logo_img(220), W / 2, 1080, ease((t - 0.6) / 0.5))
     text(img, (W / 2, 1260), "SUBSCRIBE", 110, tuple(th["accent"]), a=ease((t - 0.8) / 0.5))
     text(img, (W / 2, 1360), "to Cosmic Scale", 56, (255, 255, 255), w="ExtraBold", a=ease((t - 1.0) / 0.5))
 
@@ -269,7 +382,7 @@ def frame(segs, durs, th, gt, chunks):
     {"hook": seg_hook, "item": seg_item, "outro": seg_outro}[kind](img, s, th, t, d)
     chrome(img, th, gt, total)
     draw_caption(img, chunks, gt)
-    if t < 0.2: img = Image.blend(bg(gt, th), img, ease(t / 0.2))
+    if t < 0.2 and gt > 0.5: img = Image.blend(bg(gt, th), img, ease(t / 0.2))
     return img
 
 def main():

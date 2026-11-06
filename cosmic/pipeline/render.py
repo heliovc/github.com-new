@@ -2,6 +2,7 @@
 Usage: python3 -I render.py ep01_sun.py out/ep01 [--preview]
 EP02 added scenes: clock, escape, sky, thermo, energy, ocean, galaxy
 EP03 added scenes: zoom, stretch, horizons, deepfield, shrink (violet/magenta palette)
+EP04 added scenes: blackhole, spaghetti, twoclocks, horizonsize, inside (ember orange / pale cyan palette)
 """
 import sys, os, re, math, subprocess, importlib.util, json, random, hashlib
 import numpy as np
@@ -955,6 +956,250 @@ def sc_shrink(img, v, t, dur):
             d.rounded_rectangle([bx, by, bx + 150, by + 44], 8, fill=mix(SPACE, (255, 194, 75), q))
             for w in range(5): d.rectangle([bx + 10 + w * 27, by + 8, bx + 30 + w * 27, by + 22], fill=mix(SPACE, (40, 50, 80), q))
             d.ellipse([bx + 20, by + 36, bx + 40, by + 56], fill=mix(SPACE, (30, 30, 40), q)); d.ellipse([bx + 110, by + 36, bx + 130, by + 56], fill=mix(SPACE, (30, 30, 40), q))
+
+# ---------------- scenes (EP04: black holes — ember orange / pale cyan) ----------------
+EMBER, HOT, PALE = (255, 138, 61), (255, 214, 150), (159, 232, 255)
+_bh = {}
+def bh_static(rh):
+    """black hole sprite: lensed back of the disk (halo), shadow, photon ring; front disk drawn separately"""
+    rh = int(rh)
+    if rh in _bh: return _bh[rh]
+    S = int(rh * 7); c = S / 2
+    yy, xx = np.mgrid[0:S, 0:S].astype(np.float32); dx, dy = (xx - c) / rh, (yy - c) / rh
+    d = np.sqrt(dx * dx + dy * dy)
+    out = np.zeros((S, S, 4), np.float32)
+    # lensed halo: ring 1.55..2.6 rh, brighter on top and left (beaming)
+    halo = np.clip(1 - np.abs(d - 1.9) / 0.65, 0, 1) ** 1.6 * (0.55 + 0.45 * np.clip(-dy / np.maximum(d, 1e-3), -1, 1) * 0.5 + 0.25 * np.clip(-dx / np.maximum(d, 1e-3), -1, 1))
+    halo = np.clip(halo, 0, 1)
+    col = np.array(EMBER, np.float32) * (1 - halo[..., None] * 0.5) + np.array(HOT, np.float32) * halo[..., None] * 0.5
+    out[..., :3] = col; out[..., 3] = halo * 235
+    # glow
+    gl = np.clip(1 - (d - 1.3) / 2.2, 0, 1) ** 2 * 0.35
+    out[..., 3] = np.maximum(out[..., 3], gl * 255 * (d > 1.3))
+    # photon ring
+    pr = np.clip(1 - np.abs(d - 1.5) / 0.05, 0, 1)
+    out[..., :3] = out[..., :3] * (1 - pr[..., None]) + np.array((255, 245, 225), np.float32) * pr[..., None]
+    out[..., 3] = np.maximum(out[..., 3], pr * 255)
+    # shadow
+    sh = d < 1.42
+    out[sh] = (2, 2, 4, 255)
+    img = Image.fromarray(np.clip(out, 0, 255).astype(np.uint8), "RGBA")
+    _bh[rh] = img; return img
+
+def bh_front_disk(img, cx, cy, rh, t, a=1.0):
+    """front half of the accretion disk (flattened ellipse in front of the shadow) + faint orbiting streaks"""
+    lay = Image.new("RGBA", img.size, (0, 0, 0, 0)); d = ImageDraw.Draw(lay)
+    for k in range(40):
+        f = k / 39; rx = rh * (1.6 + 2.6 * f); ry = rx * 0.16
+        c = mix(HOT, EMBER, f ** 0.7) + (int(235 * (1 - f) ** 1.1 * a),)
+        d.arc([cx - rx, cy - ry, cx + rx, cy + ry], 0, 180, fill=c, width=max(2, int(rh * 0.07)))
+    img.alpha_composite(lay.filter(ImageFilter.GaussianBlur(1.0)))
+    lay = Image.new("RGBA", img.size, (0, 0, 0, 0)); d = ImageDraw.Draw(lay)
+    rng = random.Random(4)
+    for i in range(140):
+        rr = rh * rng.uniform(1.7, 4.0); ph0 = rng.uniform(0, 6.283); w = 1.6 * (2.0 / (rr / rh)) ** 1.5
+        for j in range(5):
+            ph = ph0 + t * w - j * 0.025
+            if math.sin(ph) < 0.05: continue
+            x, y = cx + rr * math.cos(ph), cy + rr * 0.16 * math.sin(ph)
+            beam = 0.35 + 0.65 * (0.5 - 0.5 * math.cos(ph))
+            s_ = rh * 0.012 + 0.8
+            d.ellipse([x - s_ * 2, y - s_, x + s_ * 2, y + s_], fill=(255, 236, 200, int(130 * beam * a * (1 - j / 5))))
+    img.alpha_composite(lay.filter(ImageFilter.GaussianBlur(1.0)))
+
+def draw_bh(img, cx, cy, rh, t, a=1.0):
+    paste_c(img, bh_static(rh), cx, cy, a)
+    bh_front_disk(img, cx, cy, rh, t, a)
+
+_astro = {}
+def astro_base():
+    if "b" in _astro: return _astro["b"]
+    s = Image.new("RGBA", (80, 200), (0, 0, 0, 0)); d = ImageDraw.Draw(s)
+    suit, vis = (235, 238, 245, 255), (60, 120, 200, 255)
+    d.rounded_rectangle([22, 58, 58, 128], 12, fill=suit)          # torso
+    d.rounded_rectangle([8, 64, 22, 116], 7, fill=suit); d.rounded_rectangle([58, 64, 72, 116], 7, fill=suit)  # arms
+    d.rounded_rectangle([24, 124, 38, 190], 7, fill=suit); d.rounded_rectangle([42, 124, 56, 190], 7, fill=suit)  # legs
+    d.ellipse([18, 8, 62, 56], fill=suit); d.ellipse([26, 18, 56, 44], fill=vis)  # helmet + visor
+    d.rectangle([30, 74, 50, 88], fill=(255, 138, 61, 255))
+    _astro["b"] = s; return s
+
+def draw_astro(img, x, y, scale=1.0, sx=1.0, sy=1.0, rot=0, tint=None, a=1.0):
+    s = astro_base()
+    if tint is not None:
+        arr = np.asarray(s, np.float32).copy(); arr[..., :3] = arr[..., :3] * 0.25 + np.array(tint, np.float32) * 0.75
+        s = Image.fromarray(arr.astype(np.uint8), "RGBA")
+    s = s.resize((max(2, int(80 * scale * sx)), max(2, int(200 * scale * sy))), Image.BILINEAR)
+    if rot: s = s.rotate(rot, expand=True, resample=Image.BILINEAR)
+    paste_c(img, s, x, y, a)
+
+def sc_blackhole(img, v, t, dur):
+    """drawn black hole (lensed disk, photon ring, shadow) + optional labels / falling astronaut / headline"""
+    cx, cy = v.get("x", W / 2), v.get("y", H / 2 - 20); rh = v.get("r", 120)
+    zoom = 1 + v.get("zoom", 0.06) * t / max(1, dur)
+    draw_bh(img, cx, cy, int(rh * zoom), t, ease(t / 0.8))
+    if v.get("faller"):
+        p = (t / dur); ang = -0.6 + p * 7.5; rr = rh * zoom * lerp(4.4, 1.45, ease(p * 1.1))
+        draw_astro(img, cx + rr * math.cos(ang), cy + rr * 0.45 * math.sin(ang), 0.32 * (1 - 0.4 * p), rot=-math.degrees(ang) - 90, a=max(0, 1 - max(0, p - 0.85) / 0.15))
+    for i, (lab, frac, side) in enumerate(v.get("labels", [])):
+        q = ease((t - 1.0 - i * 2.5) / 0.6)
+        if q <= 0: continue
+        r = rh * zoom * frac; ex, ey = cx + r * 0.71 * side, cy - r * 0.71
+        lx = cx + side * (rh * zoom * 2.6 + 40); ly = ey - 90 - i * 40
+        lay = Image.new("RGBA", img.size, (0, 0, 0, 0)); d2 = ImageDraw.Draw(lay)
+        d2.line([(ex, ey), (lx, ly)], fill=PALE + (int(220 * q),), width=3); d2.ellipse([ex - 7, ey - 7, ex + 7, ey + 7], fill=PALE + (int(255 * q),))
+        img.alpha_composite(lay)
+        alpha_text(img, (lx + side * 14, ly), lab[0], F(44, "ExtraBold"), PALE, q, anchor="lm" if side > 0 else "rm")
+        if len(lab) > 1: alpha_text(img, (lx + side * 14, ly + 48), lab[1], F(30, "SemiBold"), WHITE, q, anchor="lm" if side > 0 else "rm")
+    if v.get("head"):
+        alpha_text(img, (W / 2, 150), v["head"], F(64, "Black"), WHITE, ease(t / 0.4))
+    caption(img, v.get("caption"), ease((t - 1.2) / 0.5))
+
+G_, C_, MSUN, GE = 6.674e-11, 2.998e8, 1.989e30, 9.81
+def tidal_g(msun, r_km, L=2.0): return 2 * G_ * msun * MSUN * L / (r_km * 1e3) ** 3 / GE
+def fmt_g(g):
+    if g >= 1e6: return f"{g / 1e6:,.0f} million g"
+    if g >= 100: return f"{g:,.0f} g"
+    if g >= 1: return f"{g:,.1f} g"
+    if g >= 0.01: return f"{g:.2f} g"
+    return f"1/{1 / g:,.0f} g"
+
+def sc_spaghetti(img, v, t, dur):
+    """feet-first fall toward a black hole: distance odometer (log) + tidal stretch on a 2 m body, body stretches with it"""
+    M = v["msun"]; r0, r1 = v["r_from"], v["r_to"]; big = v.get("big", False)
+    p = easeio((t - 0.6) / max(1, dur * 0.8))
+    r = math.exp(lerp(math.log(r0), math.log(r1), p)); g = tidal_g(M, r)
+    # black hole on the right: small = whole hole; big = huge curved edge
+    if big:
+        R0 = 2600; bx = W + R0 - 360
+        lay = Image.new("RGBA", img.size, (0, 0, 0, 0)); d2 = ImageDraw.Draw(lay)
+        for k in range(18): d2.ellipse([bx - R0 - 40 - k * 6, H / 2 - R0 - 40 - k * 6, bx + R0 + 40 + k * 6, H / 2 + R0 + 40 + k * 6], outline=EMBER + (int(60 * (1 - k / 18)),), width=6)
+        d2.ellipse([bx - R0, H / 2 - R0, bx + R0, H / 2 + R0], fill=(2, 2, 4, 255), outline=(255, 245, 225, 255), width=4)
+        img.alpha_composite(lay); edge = bx - R0
+    else:
+        draw_bh(img, 1600, H / 2, 80, t); edge = 1600 - 80 * 1.42 - 140
+    # astronaut position (log distance), feet toward the hole
+    x = lerp(560, edge - 90, (math.log(r0) - math.log(r)) / (math.log(r0) - math.log(max(r1, 1))))
+    st = 1 + min(5.5, max(0, math.log10(max(g, 1e-9)) + 0.0) * 0.9) if g > 1 else 1.0
+    draw_astro(img, x, H / 2, 0.9, sx=1 / math.sqrt(st), sy=st, rot=90)
+    # left panel odometer
+    d = ImageDraw.Draw(img)
+    alpha_text(img, (90, 190), v["title"], F(54, "ExtraBold"), EMBER, ease(t / 0.4), anchor="lm")
+    alpha_text(img, (90, 245), v.get("sub", ""), F(32, "SemiBold"), DIM, ease(t / 0.4), anchor="lm")
+    alpha_text(img, (90, 760), "distance to center", F(30, "SemiBold"), DIM, 1, anchor="lm")
+    alpha_text(img, (90, 815), f"{r:,.0f} km", F(64, "Black"), WHITE, 1, anchor="lm")
+    alpha_text(img, (90, 890), "stretch on a 2 m body", F(30, "SemiBold"), DIM, 1, anchor="lm")
+    gc = mix(PALE, (255, 80, 60), min(1, max(0, math.log10(max(g, 1e-9)) / 6)))
+    alpha_text(img, (90, 950), fmt_g(g), F(72, "Black"), gc, 1, anchor="lm")
+    if v.get("verdict") and p > 0.98: caption(img, v["verdict"], ease((t - 0.6 - dur * 0.8) / 0.5))
+
+def sc_twoclocks(img, v, t, dur):
+    """split view: your own watch ticks normally; your friend sees you slow, redden and freeze at the horizon"""
+    a = ease(t / 0.5); d = ImageDraw.Draw(img)
+    d.line([(W / 2, 140), (W / 2, H - 200)], fill=(60, 70, 100), width=2)
+    alpha_text(img, (W / 4, 150), "YOUR WATCH", F(48, "Black"), PALE, a)
+    alpha_text(img, (3 * W / 4, 150), "WHAT YOUR FRIEND SEES", F(48, "Black"), EMBER, a)
+    tau = t  # proper time, seconds
+    # left: analog watch
+    cx, cy, R = W / 4, 520, 210
+    d.ellipse([cx - R, cy - R, cx + R, cy + R], outline=PALE, width=6)
+    for k in range(60):
+        ang = k / 60 * 2 * math.pi; l = 26 if k % 5 == 0 else 10
+        d.line([(cx + (R - 12) * math.sin(ang), cy - (R - 12) * math.cos(ang)), (cx + (R - 12 - l) * math.sin(ang), cy - (R - 12 - l) * math.cos(ang))], fill=WHITE, width=3 if k % 5 == 0 else 1)
+    ang = tau / 60 * 2 * math.pi
+    d.line([(cx, cy), (cx + (R - 40) * math.sin(ang), cy - (R - 40) * math.cos(ang))], fill=EMBER, width=6)
+    d.ellipse([cx - 10, cy - 10, cx + 10, cy + 10], fill=EMBER)
+    alpha_text(img, (cx, cy + R + 70), f"00:{int(tau):02d}", F(64, "Black"), WHITE, a)
+    alpha_text(img, (cx, cy + R + 125), "ticks normally — you cross the horizon", F(30, "SemiBold"), DIM, a)
+    # right: hole edge + astronaut approaching asymptotically, redshifting & fading
+    ex = W - 80
+    lay = Image.new("RGBA", img.size, (0, 0, 0, 0)); d2 = ImageDraw.Draw(lay)
+    d2.rectangle([ex, 200, W, H - 220], fill=(2, 2, 4, 255)); d2.line([(ex, 200), (ex, H - 220)], fill=(255, 245, 225, 255), width=3)
+    for k in range(10): d2.line([(ex - 6 - k * 5, 200), (ex - 6 - k * 5, H - 220)], fill=EMBER + (int(40 * (1 - k / 10)),), width=5)
+    img.alpha_composite(lay)
+    k = v.get("k", 5.0); q = 1 - math.exp(-t / k)
+    x = lerp(W / 2 + 160, ex - 60, q)
+    red = min(1, t / (dur * 0.7)); fade = max(0.05, 1 - max(0, t - dur * 0.45) / (dur * 0.5))
+    tint = mix((240, 240, 250), (200, 30, 20), red)
+    draw_astro(img, x, 520, 0.95, rot=90, tint=tint, a=fade)
+    seen = 12 * q  # the friend sees your watch creep toward a frozen reading
+    alpha_text(img, (3 * W / 4 - 40, 520 + 260), f"00:{seen:05.2f}", F(64, "Black"), mix(WHITE, (255, 80, 60), red), a * max(0.3, fade))
+    alpha_text(img, (3 * W / 4 - 40, 520 + 315), "slows… reddens… freezes at the edge", F(30, "SemiBold"), DIM, a)
+    caption(img, v.get("caption"), ease((t - 2.0) / 0.5))
+
+AU_KM = 1.496e8
+def sc_horizonsize(img, v, t, dur):
+    """event horizon drawn to scale over our solar system ('sun': the Sun crushed to a 6 km hole; 'sgr'; 'm87')"""
+    kind = v["kind"]; cx, cy = 640, 540; d = ImageDraw.Draw(img); g = ease((t - 0.8) / 2.0); TX = 1440
+    def orbit(rpx, name, col=(120, 135, 170), lab_ang=-40):
+        for k in range(0, 360, 5): d.arc([cx - rpx, cy - rpx, cx + rpx, cy + rpx], k, k + 2.5, fill=col, width=2)
+        a = math.radians(lab_ang); d.text((cx + rpx * math.cos(a) + 8, cy + rpx * math.sin(a) - 8), name, font=F(28, "Bold"), fill=col, anchor="lb")
+    if kind == "sun":
+        rs = lerp(230, 3, g)
+        paste_c(img, sun_sprite(int(max(3, rs))), cx, cy, max(0, 1 - g * 1.1))
+        if g > 0.85:
+            q = ease((g - 0.85) / 0.15); d.ellipse([cx - 5, cy - 5, cx + 5, cy + 5], fill=(2, 2, 4), outline=(255, 245, 225), width=2)
+        ang = t * 0.35; ex, ey = cx + 400 * math.cos(ang), cy + 400 * math.sin(ang)
+        orbit(400, "Earth's orbit — unchanged", PALE, 30)
+        paste_c(img, earth_sprite(22, light=(cx - ex, cy - ey), glow=None), ex, ey)
+        alpha_text(img, (1500, 400), "Sun", F(44, "Bold"), GOLD, 1 - g, anchor="mm")
+        alpha_text(img, (1500, 455), "1.39 million km wide", F(36, "SemiBold"), WHITE, 1 - g, anchor="mm")
+        alpha_text(img, (1500, 400), "Same mass, as a black hole", F(40, "Bold"), EMBER, g, anchor="mm")
+        alpha_text(img, (1500, 470), "≈ 6 km wide", F(64, "Black"), WHITE, g, anchor="mm")
+    else:
+        if kind == "sgr":
+            hr = 12.7e6; scale = 400 / 57.9e6
+            orbs = [(57.9e6, "Mercury", -50), (108.2e6, "Venus", -30)]
+            head, sub, cmp = "Sagittarius A*", "4 million Suns · horizon ≈ 25 million km wide", "fits inside Mercury's orbit"
+        else:
+            hr = 19.2e9; scale = 390 / 19.2e9
+            orbs = [(5.2 * AU_KM, "Jupiter", -70), (30.1 * AU_KM, "Neptune", -45), (39.5 * AU_KM, "Pluto", -20)]
+            head, sub, cmp = "M87*", "6.5 billion Suns · horizon ≈ 38 billion km wide", "swallows Pluto's orbit 3 times over"
+        rp = hr * scale * g
+        if rp > 2:
+            lay = Image.new("RGBA", img.size, (0, 0, 0, 0)); d2 = ImageDraw.Draw(lay)
+            for k in range(14): d2.ellipse([cx - rp - k * 4, cy - rp - k * 4, cx + rp + k * 4, cy + rp + k * 4], outline=EMBER + (int(70 * (1 - k / 14)),), width=4)
+            d2.ellipse([cx - rp, cy - rp, cx + rp, cy + rp], fill=(2, 2, 4, 235), outline=(255, 245, 225, 255), width=3)
+            img.alpha_composite(lay); d = ImageDraw.Draw(img)
+        for r_, n_, la in orbs:
+            if r_ * scale < 520: orbit(r_ * scale, n_, (150, 165, 200), la)
+        paste_c(img, sun_sprite(4 if kind == "sgr" else 2), cx, cy)
+        d.text((cx, cy + 18), "Sun", font=F(22, "Bold"), fill=GOLD, anchor="mt")
+        alpha_text(img, (TX, 360), head, F(72, "Black"), EMBER, ease(t / 0.5))
+        alpha_text(img, (TX, 440), sub, F(30, "SemiBold"), WHITE, ease((t - 0.3) / 0.5))
+        alpha_text(img, (TX, 600), "its event horizon…", F(40, "SemiBold"), DIM, ease((t - 1.0) / 0.5))
+        alpha_text(img, (TX, 670), cmp, F(42, "ExtraBold"), PALE, ease((t - 2.8) / 0.5))
+    caption(img, v.get("caption"), ease((t - 3.0) / 0.5))
+
+def sc_inside(img, v, t, dur):
+    """inside the horizon: every possible path (little light cones) tips toward the singularity; clock of time left"""
+    cx, cy, Rh = 640, 540, 400; d = ImageDraw.Draw(img)
+    lay = Image.new("RGBA", img.size, (0, 0, 0, 0)); d2 = ImageDraw.Draw(lay)
+    for k in range(30): d2.ellipse([cx - Rh + k * 6, cy - Rh + k * 6, cx + Rh - k * 6, cy + Rh - k * 6], fill=(40 + k * 2, 8, 6, 20))
+    d2.ellipse([cx - Rh, cy - Rh, cx + Rh, cy + Rh], outline=(255, 245, 225, 255), width=3)
+    img.alpha_composite(lay); d = ImageDraw.Draw(img)
+    rng = random.Random(9)
+    for i in range(46):
+        ang = rng.uniform(0, 6.283); r0 = rng.uniform(0.25, 0.98)
+        r = (r0 - 0.08 * t) % 0.75 + 0.22; x, y = cx + Rh * r * math.cos(ang), cy + Rh * r * math.sin(ang)
+        ux, uy = -math.cos(ang), -math.sin(ang); px, py = -uy, ux; L = 34; wdt = 14 * r
+        tip = (x + ux * L, y + uy * L)
+        d.polygon([tip, (x + px * wdt, y + py * wdt), (x - px * wdt, y - py * wdt)], fill=mix(SPACE, PALE, 0.35 + 0.65 * r))
+    paste_c(img, radial(70, [(0, (255, 255, 255, 255)), (0.3, (255, 200, 150, 220)), (1, (255, 120, 60, 0))]), cx, cy)
+    alpha_text(img, (cx, cy - Rh - 36), "event horizon", F(32, "Bold"), (255, 245, 225), 1)
+    alpha_text(img, (cx, cy + 62), "singularity", F(28, "Bold"), HOT, 1)
+    tx = 1460
+    alpha_text(img, (tx, 260), v.get("head", "Inside, every path points in"), F(48, "ExtraBold"), WHITE, ease(t / 0.5))
+    if v.get("timer") is not None:
+        T = v["timer"]; left = max(0.0, T - max(0, t - 1.0)) if v.get("count", False) else T
+        s = v.get("timer_fmt", "{:.0f} s").format(left)
+        alpha_text(img, (tx, 470), v.get("timer_lab", "max time left (your clock)"), F(34, "SemiBold"), DIM, ease((t - 0.5) / 0.5))
+        alpha_text(img, (tx, 580), s, F(130, "Black"), EMBER, ease((t - 0.7) / 0.5))
+        if v.get("timer_sub"): alpha_text(img, (tx, 690), v["timer_sub"], F(34, "SemiBold"), PALE, ease((t - 1.5) / 0.5))
+    else:
+        for i, l in enumerate(v.get("lines", [])):
+            alpha_text(img, (tx, 420 + i * 90), l, F(44, "Bold"), PALE if i % 2 else WHITE, ease((t - 1.0 - i * 2.2) / 0.5))
+    caption(img, v.get("caption"), ease((t - 1.5) / 0.5))
+
 
 SC = {k[3:]: f for k, f in globals().items() if k.startswith("sc_")}
 
