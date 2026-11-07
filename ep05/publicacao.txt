@@ -1,0 +1,63 @@
+TÍTULO
+A guerra das maquininhas: quem ganhou? (Stone x PagSeguro x Cielo)
+
+DESCRIÇÃO
+Em 2009, o lojista pagava em média 2,99% de taxa no crédito. Hoje paga 2,11%. Quem derrubou esse preço foi uma guerra de mais de 15 anos entre Cielo, Stone, PagSeguro e os grandes bancos — e, no fim, quem ganhou não foi nenhuma maquininha.
+
+Capítulos
+0:00 2,99% → 2,11%: a guerra que derrubou a taxa
+0:37 Antes da guerra: o duopólio VisaNet x Redecard
+1:14 Round 1 (2010): o fim da exclusividade
+2:05 Round 2 (2012–2018): Stone e PagSeguro chegam ao balcão
+3:55 Round 3 (2019): o contra-ataque dos bancos
+5:33 Round 4: o Pix, o inimigo que ninguém esperava
+6:39 O placar: quem tem o mercado hoje
+7:45 Quem ganhou a guerra
+9:14 Próximo vídeo
+
+Fontes
+- Banco Central — Relatório sobre a Indústria de Cartões de Pagamentos, adendo estatístico 2010 (taxa de desconto 2,99% em 2009 e 2,84% em 2010; fim da exclusividade em 01/07/2010; composição acionária)
+- Banco Central — Estatísticas de Pagamentos de Varejo e de Cartões, 1º semestre de 2026 (via TI Inside, 27/10/2026): Pix 55,2% das transações; MDR crédito 2,26%/2,24%/2,11%; intercâmbio 1,64%/1,66%/1,70%
+- Mercado&Consumo (16/08/2024): saída da Cielo da bolsa, OPA a R$ 5,82, leilão de R$ 4,3 bi, margem Ebitda 67,6% (2009) e 29,3% (2T24)
+- InvestNews (26/06/2025): participação histórica de cerca de 50% da Cielo; preço da OPA ~80% abaixo do pico de 2013
+- Capital Aberto, "Guerra das maquininhas ameaça Cielo" (18/01/2019): aluguel R$ 179,90/mês, maquininha PagSeguro a partir de R$ 58,80, Sebrae 86% → 46%, ações -51%, lucro 3T18 -20,1%, volume 3T18 (Cielo R$ 150,7 bi; PagSeguro R$ 20,3 bi), Stelo, GetNet/Santander 2010
+- Renaissance Capital (24/01/2018): IPO da PagSeguro na NYSE, US$ 2,3 bi
+- Seu Dinheiro (16/10/2018): IPO da Stone na Nasdaq e investimento da Berkshire Hathaway; fundação por André Street e Eduardo Pontes
+- IstoÉ Dinheiro (19/04/2019): Rede zera antecipação para clientes Itaú; quedas de Stone (-23,69%), PagSeguro (-9,74%) e Cielo (-7,3%); procedimento do Cade
+- StoneCo — resultado do 2º trimestre de 2026: TPV R$ 142,2 bi; cartões R$ 111,5 bi (-3,1%); Pix QR R$ 30,7 bi (+44,3%); 4,8 mi de clientes; depósitos R$ 10,8 bi
+- PagBank — resultado do 2º trimestre de 2026 (12/08/2026): TPV R$ 133,4 bi; 34,1 mi de clientes
+- Abecs — balanço de 2025 (via Mercado&Consumo, 11/02/2026): crédito +14,5%, débito +0,2%, pré-pago +4,4%
+- UBS BB, dados de janeiro de 2026 (via Let's Money, 21/03/2026): fatias de volume Rede 18%, Cielo 17%, PagBank 17%, Stone 15%, Mercado Pago 9%, GetNet 5%
+Cálculos do canal: divisão aproximada da taxa de R$ 2,11 (sobra ≈ R$ 0,41); queda de ~29% da taxa média do crédito (2,99% → 2,11%).
+
+Aviso: conteúdo explicativo e jornalístico. Não é recomendação financeira nem de investimento, nem indicação de qualquer empresa. Narração com voz sintética; roteiro e visuais produzidos pelo canal.
+
+#maquininha #cielo #stone #pagseguro #pix
+
+TAGS
+guerra das maquininhas, maquininha de cartão, Cielo, Stone, PagSeguro, PagBank, Rede, taxa da maquininha, MDR, intercâmbio, Pix, adquirência, credenciadora, antecipação de recebíveis, fintech, negócios explicados, Por Trás do Dinheiro
+
+CHECKLIST (playbook seção 7)
+1. 1ª frase cumpre a promessa (taxa 2,99% → 2,11%, quem derrubou) sem saudação — OK
+2. Valor até 15 s ("você vai saber quem ganhou... não é nenhuma das três") — OK
+3. Loops: quem ganhou (fecha 7:45), inimigo inesperado (fecha 5:33), quem baixou a taxa (fecha nos rounds/payoff) — OK
+4. Re-engajamentos: ~3:26 (estrago na Cielo, -51%) e ~6:19 (Pix na própria maquininha +44%) — OK
+5. Nenhum visual parado > 30 s — OK
+6. Sem enchimento (1.810 palavras, 9:29) — OK
+7. Final = payoff + próximo episódio, sem despedida — OK
+8. Short: número no 1º frame (2,99% animando), gancho em ≤ 2 s; final emenda na pergunta — OK
+9. Estrutura nova (luta em 4 rounds), 3 cenas novas (round, ticker, scoreboard), thumb nova (ringue/maquininha caída) — OK
+10. Sem persona de especialista, fontes na tela e aqui, avisos — OK
+
+========================================
+VERTICAL (Short do episódio — vertical.mp4, 1:25, cenas 0,25,26,27)
+Título: A taxa da maquininha caiu. Quem ganhou? #shorts
+Descrição: Em 2009 o lojista pagava 2,99% no crédito; hoje paga 2,11%. Mas quem ficou com o dinheiro? Fonte: Banco Central (Estatísticas de Pagamentos de Varejo, 1º sem/2026; Relatório de Cartões 2010). Não é recomendação financeira. Voz sintética. Vídeo completo no canal.
+Legenda curta (TikTok/Reels): A taxa da maquininha caiu quase 30% desde 2009. Quem ganhou essa guerra? 💳 #maquininha #pix #cielo #stone #pagseguro #negocios #financas
+Tags: maquininha, taxa da maquininha, Cielo, Stone, PagSeguro, Pix, intercâmbio, shorts
+
+========================================
+RANKING (ranking.mp4, 1:05) — Short de ranking PTD #3
+Título: 5 jeitos de pegar dinheiro emprestado (o nº 1 cobra 451% ao ano) #shorts
+Descrição: Juros médios para pessoa física em setembro de 2026: consignado 28,5%, crédito pessoal 110,9%, cheque especial 139,0%, parcelado da fatura 193,0% e rotativo do cartão 451,7% ao ano. Fonte: Banco Central (divulgação de 29/10/2026, via O Povo). Não é recomendação financeira. Voz sintética.
+Tags: juros, rotativo do cartão, cheque especial, empréstimo, consignado, crédito pessoal, Banco Central, shorts
