@@ -82,7 +82,7 @@ SCENES = [
 SOURCES = [
  "NOIRLab / Gemini North press release noirlab2523 (July 2025): Betelgeuse radius about 700 times the Sun; companion about 1.5 solar masses at about 4 times the Earth–Sun distance, expected to be destroyed within about 10,000 years",
  "ESO press release (Nov 2024): first close-up image of a star outside our galaxy, WOH G64, Large Magellanic Cloud, ~160,000 light-years, egg-shaped dust cocoon (VLTI GRAVITY)",
- "Muñoz-Sánchez et al. (2025), Nature Astronomy, via Sky & Telescope: WOH G64 from ~1,500 to ~800 solar radii, >1,000 °C hotter, red to yellow",
+ "Muñoz-Sánchez et al. (2025), Nature Astronomy, via Sky & Telescope: WOH G64 from ~1,500 to ~800 solar radii, more than 1,000 °C hotter, red to yellow",
  "Wittkowski et al. (2012), A&A: VY Canis Majoris radius ~1,420 solar radii; NASA/Hubble (2021, Humphreys et al.): arcs and knots of ejected gas",
  "Crowther et al. (2010), MNRAS / University of Sheffield R136a1 FAQ: radius ~35 solar radii; Kalari et al. (2022), Gemini: current mass ~200 solar masses",
  "Stephenson 2-18: radius estimate ~2,150 solar radii (Davies et al. 2012 parameters), considered uncertain",
