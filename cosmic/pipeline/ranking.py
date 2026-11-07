@@ -8,7 +8,7 @@ Visual por item:
   vis.type == "speed": raias de velocidade em escala log (1 km/s -> luz); vis.kms = km/s; item.short = rótulo curto (rank02).
 THEME.hook == "streaks": gancho com rastros de velocidade em vez da estrela gigante (rank02).
   vis.type == "moons": lua atual grande em escala + contorno tracejado de Mercúrio + fila das 5 em escala (não reveladas = silhueta "?"); vis.moon, vis.km (rank03).
-vis.type == "heat" (rank04): termômetro 0–5.600 °C com marcas de referência + planeta brilhando na cor da temperatura; vis.temp, vis.look (venus/lava/football/gas). THEME.hook/outro == "heat".
+vis.type == "thermo" / THEME.hook == "thermo": termômetro vertical 0–6.000 °C com marcas de referência + planeta brilhando na cor da temperatura (rank04).
 THEME.hook == "moons": silhueta "?" do nº 1 dentro do contorno de Mercúrio + as 5 luas orbitando (rank03).
 Tudo desenhado por código; narração Kokoro (VOICE, padrão af_heart); legenda grande queimada.
 """
@@ -218,72 +218,53 @@ def moons_vis(img, it, th, t, dur):
                fill=acc if cur else ((200, 205, 220) if revealed else (110, 120, 140)), anchor="mm")
     d.line([(70, 1192), (W - 70, 1192)], fill=(70, 80, 100), width=2)
 
-# ---------------- rank04: "heat" thermometer ----------------
-TMAX = 5600; TY0, TY1, TX = 1250, 470, 250
-REFS = [(327, "lead melts"), (1200, "lava"), (2862, "iron boils"), (5500, "Sun's surface")]
-def tcol(T):
-    stops = [(0, (90, 30, 20)), (500, (200, 70, 30)), (1500, (255, 120, 40)), (2500, (255, 180, 80)), (3500, (255, 230, 170)), (4500, (230, 240, 255)), (5600, (200, 220, 255))]
+# ---- 07/11: vis "thermo" (vertical thermometer 0–6,000 °C with reference marks + glowing planet) ----
+TH_MAX = 6000
+TH_REF = [(327, "lead melts"), (1200, "lava"), (1538, "iron melts"), (5500, "Sun's surface")]
+def temp_col(c):
+    stops = [(0, (120, 60, 40)), (500, (230, 90, 40)), (2000, (255, 150, 50)), (3500, (255, 220, 140)), (5000, (230, 240, 255))]
     for (a, ca), (b, cb) in zip(stops, stops[1:]):
-        if T <= b: return mix(ca, cb, (T - a) / (b - a))
+        if c <= b: return mix(ca, cb, (c - a) / (b - a))
     return stops[-1][1]
-def ty(T): return TY0 - (TY0 - TY1) * min(T, TMAX) / TMAX
-def thermometer(img, T, items_rev, t):
+
+def thermo(img, temp, th, t, revealed=(), show_q=False):
+    acc = tuple(th["accent"]); x, y0, y1 = 190, 1240, 480
     d = ImageDraw.Draw(img)
-    d.rounded_rectangle([TX - 26, TY1 - 30, TX + 26, TY0 + 10], 26, fill=(25, 20, 30), outline=(200, 190, 200), width=4)
-    d.ellipse([TX - 52, TY0 - 20, TX + 52, TY0 + 84], fill=(25, 20, 30), outline=(200, 190, 200), width=4)
-    c = tcol(T); yt = ty(T)
-    for k in range(int(TY0 + 30), int(yt), -4):
-        d.rectangle([TX - 15, k - 4, TX + 15, k], fill=mix((200, 50, 25), c, (TY0 - k) / max(1, TY0 - yt)))
-    d.ellipse([TX - 40, TY0 - 8, TX + 40, TY0 + 72], fill=(220, 60, 30))
-    for T0, lab in REFS:
-        y = ty(T0); d.line([(TX - 40, y), (TX - 26, y)], fill=(200, 190, 200), width=3)
-        d.text((TX - 50, y - 12), lab, font=F(24, "Bold"), fill=(205, 195, 205), anchor="rm")
-        d.text((TX - 50, y + 16), f"{T0:,} °C", font=F(22, "SemiBold"), fill=(150, 140, 160), anchor="rm")
-    for o in items_rev:
-        y = ty(o["vis"]["temp"]); cc = tcol(o["vis"]["temp"])
-        d.line([(TX + 26, y), (TX + 50, y)], fill=cc, width=4)
-        d.text((TX + 58, y), o.get("short", o["name"]), font=F(26, "ExtraBold"), fill=cc, anchor="lm")
-def hot_planet(img, cx, cy, r, T, look, t, a=1.0):
-    c = tcol(T)
-    lay = Image.new("RGBA", img.size, (0, 0, 0, 0)); d = ImageDraw.Draw(lay)
-    for k in range(4):
-        rr = r + 20 + ((t * 70 + k * 45) % 180); al = int(110 * (1 - (rr - r - 20) / 180) * a)
-        d.ellipse([cx - rr, cy - rr, cx + rr, cy + rr], outline=c + (al,), width=4)
+    d.rounded_rectangle([x - 34, y1 - 30, x + 34, y0 + 20], 34, fill=(25, 22, 30), outline=(200, 200, 215), width=4)
+    d.ellipse([x - 62, y0 - 20, x + 62, y0 + 104], fill=(25, 22, 30), outline=(200, 200, 215), width=4)
+    yt = lerp(y0, y1, min(1, temp / TH_MAX))
+    for k in range(int(y0) + 40, int(yt), -6):
+        c = temp_col(lerp(0, TH_MAX, (y0 - k) / (y0 - y1))); d.rectangle([x - 20, k - 6, x + 20, k], fill=c)
+    d.ellipse([x - 46, y0 - 4, x + 46, y0 + 88], fill=temp_col(temp))
+    for c, lab in TH_REF:
+        yy = lerp(y0, y1, c / TH_MAX); d.line([(x + 40, yy), (x + 70, yy)], fill=(160, 165, 185), width=3)
+        d.text((x + 80, yy), f"{lab} · {c:,} °C", font=F(26, "SemiBold"), fill=(170, 175, 195), anchor="lm")
+    for name, c in revealed:
+        yy = lerp(y0, y1, c / TH_MAX); d.line([(x - 70, yy), (x - 40, yy)], fill=acc, width=4)
+    return yt
+
+def planet_glow(img, cx, cy, r, temp, t):
+    col = temp_col(temp)
+    R.paste_c(img, R.radial(int(r * 3.2), [(0, col + (110,)), (0.5, col + (40,)), (1, col + (0,))]), cx, cy)
+    spr = R.planet_sprite(int(r), col, light=(-0.9, -0.5))
+    R.paste_c(img, spr, cx, cy)
+    lay = Image.new("RGBA", img.size, (0, 0, 0, 0)); d = ImageDraw.Draw(lay); rng = random.Random(int(temp))
+    for i in range(10):  # heat bands
+        yy = cy - r + (i + 0.5) * 2 * r / 10 + 4 * math.sin(t * 2 + i)
+        hw = math.sqrt(max(0, r * r - (yy - cy) ** 2))
+        d.line([(cx - hw, yy), (cx + hw, yy)], fill=mix(col, (255, 255, 255), 0.4) + (40,), width=3)
     img.alpha_composite(lay)
-    if look == "venus":
-        R.paste_c(img, R.planet_sprite(int(r), (235, 200, 130), light=(-1, -0.3), glow=(255, 150, 70)), cx, cy, a)
-    elif look == "lava":
-        spr = R.planet_sprite(int(r), (60, 30, 25), light=(-1, -0.3), glow=c).copy(); dd = ImageDraw.Draw(spr); rng = random.Random(4)
-        sc = spr.width / 2
-        for i in range(26):
-            ang = rng.uniform(0, 6.28); rr_ = rng.uniform(0, r * 0.85); x0, y0 = sc + rr_ * math.cos(ang), sc + rr_ * math.sin(ang)
-            pts = [(x0, y0)]
-            for j in range(4): x0 += rng.uniform(-r * 0.2, r * 0.2); y0 += rng.uniform(-r * 0.2, r * 0.2); pts.append((x0, y0))
-            dd.line(pts, fill=(255, 140 + rng.randint(0, 80), 40, 255), width=rng.choice([3, 4, 6]))
-        mask = Image.new("L", spr.size, 0); ImageDraw.Draw(mask).ellipse([sc - r, sc - r, sc + r, sc + r], fill=255)
-        base = R.planet_sprite(int(r), (60, 30, 25), light=(-1, -0.3), glow=c).copy(); base.paste(spr, (0, 0), mask)
-        R.paste_c(img, base, cx, cy, a)
-    else:
-        sx = 1.25 if look == "football" else 1.0
-        spr = R.planet_sprite(int(r), mix(c, (120, 60, 40), 0.25), light=(-1, -0.1), glow=c)
-        if sx != 1.0: spr = spr.resize((int(spr.width * sx), int(spr.height / sx ** 0.5)), Image.BILINEAR)
-        R.paste_c(img, spr, cx, cy, a)
-        if look == "football":
-            lay = Image.new("RGBA", img.size, (0, 0, 0, 0)); d = ImageDraw.Draw(lay); rng = random.Random(2)
-            for i in range(60):
-                ph = (t * 0.25 + rng.random()) % 1; x = cx + r * sx * 0.9 + ph * 300; y = cy + rng.uniform(-60, 60) - ph * 140
-                d.ellipse([x - 4, y - 4, x + 4, y + 4], fill=(255, 200, 120, int(220 * (1 - ph))))
-            img.alpha_composite(lay)
-def heat_vis(img, it, th, t, dur):
-    T = it["vis"]["temp"]; order = sorted(ALL_ITEMS, key=lambda o: -o["rank"])
-    prev = 0
-    for o in order:
-        if o["rank"] == it["rank"]: break
-        prev = o["vis"]["temp"]
-    p = easeio((t - 0.4) / 1.6); Tn = lerp(prev, T, p)
-    rev = [o for o in order if o["rank"] > it["rank"]] + ([it] if p > 0.95 else [])
-    thermometer(img, Tn, rev, t)
-    hot_planet(img, 700, 860, 200, Tn, it["vis"]["look"], t, ease(t / 0.4))
+
+def thermo_vis(img, it, th, t, dur):
+    temp = it["vis"]["c"] * easeio((t - 0.4) / 1.6)
+    rev = [(o["short"], o["vis"]["c"]) for o in ALL_ITEMS if o["rank"] > it["rank"]]
+    yt = thermo(img, temp, th, t, rev)
+    d = ImageDraw.Draw(img)
+    d.line([(234, yt), (420, yt)], fill=tuple(th["accent"]), width=3)
+    planet_glow(img, 760, 820, it["vis"].get("r", 190), it["vis"]["c"], t)
+    if it["vis"].get("note"):
+        for i, l in enumerate(wrap(it["vis"]["note"], F(36, "ExtraBold"), 440)):
+            text(img, (800, 1085 + i * 46), l, 36, (255, 225, 200), w="ExtraBold", a=ease((t - 1.5) / 0.5))
 
 def caption_chunks(say, t0, dur):
     words = say.split(); groups, g = [], []
@@ -307,16 +288,14 @@ def draw_caption(img, chunks, gt, y=1585):
 
 def seg_hook(img, sc, th, t, dur):
     col = tuple(th["star_col"]); acc = tuple(th["accent"])
-    if th.get("hook") == "heat":
-        T = 600 + 3700 * easeio(t / 2.6)
-        thermometer(img, T, [], t)
-        hot_planet(img, 700, 1000, 190, T, "gas", t)
-        d = ImageDraw.Draw(img); d.text((700, 1000), "?", font=F(200, "Black"), fill=(255, 255, 255), anchor="mm", stroke_width=6, stroke_fill=(0, 0, 0))
-        text(img, (W / 2, 190), "TOP 5", 140, acc)
-        for i, l in enumerate(wrap(sc["top"].upper(), F(80, "Black"), W - 120)):
-            text(img, (W / 2, 305 + i * 88), l, 80, (255, 255, 255))
-        text(img, (700, 1300), f"{T:,.0f} °C", 80, tuple(th["accent2"]))
-        text(img, (W / 2, 1400), sc["sub"], 50, tuple(th["accent2"]), w="ExtraBold")
+    if th.get("hook") == "thermo":
+        thermo(img, TH_MAX * 0.72 * (0.97 + 0.03 * math.sin(t * 4)), th, t)
+        planet_glow(img, 700, 860, 200, 4300, t)
+        d = ImageDraw.Draw(img); d.text((700, 860), "?", font=F(220, "Black"), fill=(40, 20, 10), anchor="mm")
+        text(img, (W / 2, 210), "TOP 5", 150, acc)
+        for i, l in enumerate(wrap(sc["top"].upper(), F(84, "Black"), W - 120)):
+            text(img, (W / 2, 340 + i * 96), l, 84, (255, 255, 255))
+        text(img, (W / 2, 1440), sc["sub"], 50, tuple(th["accent2"]), w="ExtraBold")
         return
     if th.get("hook") == "moons":
         order = sorted(ALL_ITEMS, key=lambda o: o["vis"]["km"]); KM1 = order[-1]["vis"]["km"]
@@ -384,8 +363,8 @@ def seg_item(img, it, th, t, dur):
         speed_lanes(img, it, th, t, dur)
     if v["type"] == "moons":
         moons_vis(img, it, th, t, dur)
-    if v["type"] == "heat":
-        heat_vis(img, it, th, t, dur)
+    if v["type"] == "thermo":
+        thermo_vis(img, it, th, t, dur)
     # number
     p = easeio((t - 0.5) / 1.6)
     num = it["num"]
@@ -398,15 +377,7 @@ def seg_item(img, it, th, t, dur):
 
 def seg_outro(img, sc, th, t, dur):
     a = ease(t / 0.5)
-    if th.get("outro") == "heat":
-        order = sorted(ALL_ITEMS, key=lambda o: -o["rank"])
-        for i, o in enumerate(order):
-            x = 130 + i * 205; T = o["vis"]["temp"]; q = ease((t - 0.2 - i * 0.25) / 0.5)
-            hot_planet(img, x, 640, 62, T, o["vis"]["look"] if o["vis"]["look"] != "football" else "gas", t, q)
-            text(img, (x, 760), o.get("short", o["name"]), 28, tcol(T), w="ExtraBold", a=q)
-            text(img, (x, 800), f"{T:,} °C", 30, (255, 255, 255), w="Black", a=q)
-        text(img, (W / 2, 900), th.get("outro_note", ""), 44, tuple(th["accent2"]), w="ExtraBold", a=ease((t - 1.2) / 0.5))
-    elif th.get("outro") == "moons":
+    if th.get("outro") == "moons":
         order = sorted(ALL_ITEMS, key=lambda o: o["vis"]["km"]); tot = sum(o["vis"]["km"] for o in order)
         s = (W - 140) / tot; x = 70; ex = 12742 * s
         R.paste_c(img, R.earth_sprite(int(ex / 2), glow=None), W / 2, 470, a)
@@ -427,7 +398,7 @@ def seg_outro(img, sc, th, t, dur):
         R.paste_c(img, R.sun_sprite(4), W / 2, 700, a)
         d = ImageDraw.Draw(img); d.ellipse([W / 2 - 40, 660, W / 2 + 40, 740], outline=(255, 220, 160), width=3)
         text(img, (W / 2, 800), "our Sun, on the same scale", 44, (255, 230, 190), w="Bold", a=a)
-    if th.get("outro") not in ("moons", "heat"): R.paste_c(img, R.logo_img(220), W / 2, 1080, ease((t - 0.6) / 0.5))
+    if th.get("outro") != "moons": R.paste_c(img, R.logo_img(220), W / 2, 1080, ease((t - 0.6) / 0.5))
     text(img, (W / 2, 1260), "SUBSCRIBE", 110, tuple(th["accent"]), a=ease((t - 0.8) / 0.5))
     text(img, (W / 2, 1360), "to Cosmic Scale", 56, (255, 255, 255), w="ExtraBold", a=ease((t - 1.0) / 0.5))
 

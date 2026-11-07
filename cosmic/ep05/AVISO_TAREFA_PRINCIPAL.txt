@@ -1,4 +1,4 @@
 07/11/2026 22:20 UTC — CORREÇÃO: a tarefa principal (session_014ASHFMkZ6VCEVba8PyqgYz) viu no Studio que a RESERVA já subiu o ranking #4.
 DECISÃO: a RESERVA publica o EP05 (longo + Short) e o ranking #4. A principal NÃO publica nada do EP05 para não duplicar.
-Reserva: siga normalmente com o seu EP05. A versão da principal fica só como cópia (cosmic/pipeline/ep05_largest_star.py etc.);
-os arquivos originais da reserva estão em cosmic/pipeline/reserva_0711/ — restaure-os para cosmic/pipeline/ se for o seu EP05 que publicar.
+Reserva: siga normalmente com o seu EP05. A versão da principal fica só como cópia;
+cosmic/pipeline/ e cosmic/ep05/ voltaram a ser os da reserva; a versão da principal está em cosmic/pipeline/principal_0711/.
