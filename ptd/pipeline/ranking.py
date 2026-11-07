@@ -3,7 +3,8 @@ Uso: python3 -I ranking.py rankXX_algo.py out/rankXX [--preview]
 Roteiro: TITLE, THEME {accent, accent2, bar_col, hl_col, glow, bar, chart}, HOOK {say, top, sub}, ITEMS [{rank, name, short, tag, num, prefix, suffix, dec, unit, source, say}], OUTRO {say, note}
 Visual: número grande do item + gráfico que vai sendo preenchido (5 -> 1), item atual em destaque.
 THEME["chart"]: "hbars" (padrão, barras horizontais), "vbars" (colunas verticais, criado no rank #2)
-ou "gauge" (termômetro horizontal com escala, criado no rank #3 — bom para taxas/percentuais).
+ou "gauge" (termômetro horizontal com escala, criado no rank #3 — bom para taxas/percentuais)
+ou "bubbles" (bolhas com área proporcional ao valor, criado no rank #4 — bom para tamanhos/bases de clientes).
 Tudo desenhado por código; narração Kokoro (pm_alex, pt-br); legenda grande queimada. Layout seguro p/ UI do Shorts:
 legenda y=1585, @ y=1690, fonte y=1745.
 """
@@ -143,8 +144,38 @@ def chart_g(img, items, th, upto, t, cur_rank):
         d.text((W - 150, yy), val_str(it, it["num"]), font=F(38, "Black"), fill=col, anchor="rm")
     return
 
+def chart_b(img, items, th, upto, t, cur_rank):
+    """Bolhas (rank #4): cada item = círculo com ÁREA proporcional ao valor. 2 em cima (2º e 3º), 3 embaixo (4º, 1º, 5º).
+    Não revelado: contorno tracejado com "?"; atual: cresce do zero com brilho; revelados: preenchidos."""
+    d = ImageDraw.Draw(img); mx = max(i["num"] for i in items); rmax = th.get("bubble_rmax", 220)
+    pos = {1: (540, 1290), 2: (290, 910), 3: (790, 910), 4: (170, 1300), 5: (920, 1300)}
+    for it in sorted(items, key=lambda x: x["rank"]):
+        cx, cy = pos[it["rank"]]; r = rmax * (it["num"] / mx) ** 0.5
+        if it["rank"] < upto:   # ainda escondido
+            n = 40
+            for k in range(n):
+                if k % 2: continue
+                a0, a1 = 360 * k / n, 360 * (k + 1) / n
+                d.arc([cx - r, cy - r, cx + r, cy + r], a0, a1, fill=(80, 96, 120), width=4)
+            d.text((cx, cy), "?", font=F(int(r * 0.7), "Black"), fill=(90, 106, 130), anchor="mm")
+            continue
+        on = it["rank"] == cur_rank
+        p = ease(t / 1.2) if on else 1.0; rr = max(r * p, 2)
+        col = tuple(th["accent"]) if on else tuple(th.get("bar_col", (60, 90, 110)))
+        if on:
+            for g in range(6, 0, -1):
+                gg = rr + g * 7
+                d.ellipse([cx - gg, cy - gg, cx + gg, cy + gg], fill=tuple(int(c * (0.10 + 0.04 * (6 - g))) for c in col))
+        d.ellipse([cx - rr, cy - rr, cx + rr, cy + rr], fill=col, outline=WHITE if on else (20, 30, 40), width=5)
+        if p > 0.6:
+            tc = BG1 if on else WHITE
+            fs = int(min(r * 0.30, 54)); d.text((cx, cy - r * 0.18), it["short"], font=F(fs, "Black"), fill=tc, anchor="mm")
+            d.text((cx, cy + r * 0.22), val_str(it, it["num"]), font=F(int(min(r * 0.26, 48)), "ExtraBold"), fill=tc, anchor="mm")
+        d.text((cx, cy - r - 26), f"{it['rank']}º", font=F(34, "Black"), fill=tuple(th["accent2"]), anchor="mm")
+    return
+
 def chart(img, items, th, upto, t, cur_rank):
-    {"vbars": chart_v, "gauge": chart_g}.get(th.get("chart"), chart_h)(img, items, th, upto, t, cur_rank)
+    {"vbars": chart_v, "gauge": chart_g, "bubbles": chart_b}.get(th.get("chart"), chart_h)(img, items, th, upto, t, cur_rank)
 
 def seg_hook(img, sc, th, t, dur, items):
     ease = lambda x: 1.0  # frame 1 = thumbnail: gancho inteiro visível desde o frame 0 (rank #3)
@@ -159,6 +190,8 @@ def seg_hook(img, sc, th, t, dur, items):
         base, cw, gap = 1480, 150, 46; x0 = W / 2 - (5 * cw + 4 * gap) / 2
         for k in range(5):
             text(img, (x0 + k * (cw + gap) + cw / 2, base - 280), "?", 64, (90, 100, 130), a=ease((t - 0.4 - k * 0.15) / 0.3))
+    elif th.get("chart") == "bubbles":
+        if sc.get("tease"): text(img, (W / 2, 690), sc["tease"], 64, th["accent"], a=1.0)
     elif th.get("chart") == "gauge":
         if sc.get("tease"): text(img, (W / 2, 790), sc["tease"], 72, th["accent"], a=1.0)
         else: text(img, (W / 2, 800), "?", 120, (110, 120, 150), a=1.0)

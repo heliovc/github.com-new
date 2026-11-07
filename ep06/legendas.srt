@@ -1,0 +1,495 @@
+1
+00:00:00,150 --> 00:00:04,181
+Você compra uma coisa de mil e duzentos reais em doze vezes sem juros.
+
+2
+00:00:04,181 --> 00:00:06,081
+A loja não recebe mil e duzentos.
+
+3
+00:00:06,081 --> 00:00:09,536
+Se quiser o dinheiro hoje, pode ficar com pouco mais de mil.
+
+4
+00:00:10,136 --> 00:00:17,706
+Os quase duzentos reais que somem no caminho alimentam um mercado que movimentou mais de seiscentos bilhões de reais no ano passado.
+
+5
+00:00:17,706 --> 00:00:23,555
+E foi uma taxa desse mercado que fez a Stone perder quase um quarto do valor na bolsa em um único dia.
+
+6
+00:00:24,155 --> 00:00:32,209
+Para entender quem fica com esse dinheiro, vamos seguir essa venda de mil e duzentos reais, parada por parada, da maquininha até a conta da loja.
+
+7
+00:00:32,209 --> 00:00:33,153
+São seis paradas.
+
+8
+00:00:33,153 --> 00:00:39,430
+E na última está o motivo de esse mercado estar crescendo três vezes mais rápido que o próprio cartão de crédito.
+
+9
+00:00:40,029 --> 00:00:41,086
+Parada um: a venda.
+
+10
+00:00:41,086 --> 00:00:43,812
+O cliente aproxima o cartão e escolhe doze vezes.
+
+11
+00:00:43,812 --> 00:00:48,595
+Para ele, acabou: a compra está feita e as parcelas vão aparecer na fatura, mês a mês.
+
+12
+00:00:48,595 --> 00:00:50,931
+Para a loja, a história está só começando.
+
+13
+00:00:51,531 --> 00:00:53,911
+Esse jeito de comprar é a regra no Brasil.
+
+14
+00:00:53,911 --> 00:01:05,813
+Segundo a Abecs, a associação das empresas de cartão, o parcelado sem juros respondeu por quarenta e três vírgula dois por cento de todo o valor pago no crédito no primeiro trimestre de dois mil e vinte e seis.
+
+15
+00:01:05,813 --> 00:01:06,549
+Quase metade.
+
+16
+00:01:07,150 --> 00:01:08,583
+E não é só compra grande.
+
+17
+00:01:08,583 --> 00:01:15,234
+Ainda segundo a Abecs, sessenta e dois vírgula quatro por cento das compras parceladas são feitas em até seis vezes.
+
+18
+00:01:15,234 --> 00:01:20,853
+E quase todo o volume parcelado, noventa e sete vírgula oito por cento, fica em até doze parcelas.
+
+19
+00:01:20,853 --> 00:01:24,408
+Ou seja: o país inteiro vende hoje e recebe ao longo de meses.
+
+20
+00:01:25,008 --> 00:01:26,265
+Parada dois: a agenda.
+
+21
+00:01:26,265 --> 00:01:28,208
+A maquininha desconta a taxa dela.
+
+22
+00:01:28,208 --> 00:01:31,809
+No nosso exemplo, três por cento, o que dá trinta e seis reais.
+
+23
+00:01:31,809 --> 00:01:33,923
+Sobram mil cento e sessenta e quatro.
+
+24
+00:01:33,923 --> 00:01:36,038
+Mas esse dinheiro não cai de uma vez.
+
+25
+00:01:36,638 --> 00:01:39,330
+Ele vira doze parcelas de noventa e sete reais.
+
+26
+00:01:39,330 --> 00:01:41,564
+A primeira cai em cerca de trinta dias.
+
+27
+00:01:41,564 --> 00:01:43,454
+A última, perto de um ano depois.
+
+28
+00:01:43,454 --> 00:01:49,011
+Isso é a agenda de recebíveis: um calendário de dinheiro que a loja já ganhou, mas ainda não tem.
+
+29
+00:01:49,611 --> 00:01:52,627
+O problema é que as contas da loja não esperam um ano.
+
+30
+00:01:52,627 --> 00:01:54,582
+O fornecedor quer receber este mês.
+
+31
+00:01:54,582 --> 00:01:55,979
+O aluguel vence este mês.
+
+32
+00:01:55,979 --> 00:01:57,487
+O salário da equipe também.
+
+33
+00:01:57,487 --> 00:01:59,777
+A loja vendeu bem, mas está sem dinheiro.
+
+34
+00:01:59,777 --> 00:02:05,419
+É nesse buraco entre vender e receber que mora um dos negócios mais lucrativos do sistema financeiro.
+
+35
+00:02:06,019 --> 00:02:07,237
+Parada três: o balcão.
+
+36
+00:02:07,237 --> 00:02:08,621
+Alguém oferece um atalho.
+
+37
+00:02:08,621 --> 00:02:11,942
+Pode ser a própria empresa da maquininha, pode ser um banco.
+
+38
+00:02:11,942 --> 00:02:15,818
+A proposta é simples: me passa essas doze parcelas, e eu te pago hoje.
+
+39
+00:02:15,818 --> 00:02:17,091
+Com um desconto, claro.
+
+40
+00:02:17,691 --> 00:02:19,348
+Isso é antecipar recebíveis.
+
+41
+00:02:19,348 --> 00:02:26,330
+Não é um empréstimo comum: a loja não pede dinheiro emprestado, ela vende um dinheiro que já é dela, só que do futuro.
+
+42
+00:02:26,330 --> 00:02:28,697
+E muitas lojas fazem isso no automático.
+
+43
+00:02:28,697 --> 00:02:32,603
+Toda venda já entra antecipada, e a taxa sai sem ninguém perceber.
+
+44
+00:02:33,203 --> 00:02:35,358
+Por que alguém aceitaria pagar adiantado?
+
+45
+00:02:35,358 --> 00:02:36,567
+Porque o risco é baixo.
+
+46
+00:02:36,567 --> 00:02:41,245
+Quem vai pagar essas parcelas não é bem o cliente da loja, é o banco que emitiu o cartão.
+
+47
+00:02:41,245 --> 00:02:44,294
+Se o cliente atrasar a fatura, o problema é do banco dele.
+
+48
+00:02:44,294 --> 00:02:45,818
+A loja recebe do mesmo jeito.
+
+49
+00:02:45,818 --> 00:02:49,971
+Para quem antecipa, é quase como emprestar dinheiro com a garantia de um banco.
+
+50
+00:02:50,571 --> 00:02:51,845
+Parada quatro: o preço.
+
+51
+00:02:51,845 --> 00:02:56,164
+Hora de responder a pergunta do começo: para onde vão os quase duzentos reais?
+
+52
+00:02:56,164 --> 00:03:01,813
+Vamos fazer a conta com uma taxa de antecipação de dois por cento ao mês, um número só para o exemplo.
+
+53
+00:03:02,414 --> 00:03:05,890
+A primeira parcela, que cairia em um mês, perde dois por cento.
+
+54
+00:03:05,890 --> 00:03:08,650
+A segunda, que cairia em dois meses, perde quatro.
+
+55
+00:03:08,650 --> 00:03:12,513
+A última, que só cairia em doze meses, perde vinte e quatro por cento.
+
+56
+00:03:12,513 --> 00:03:16,542
+Somando as doze, a loja paga cento e cinquenta e um reais de antecipação.
+
+57
+00:03:16,542 --> 00:03:18,584
+E fica com mil e treze na conta hoje.
+
+58
+00:03:19,184 --> 00:03:26,272
+Juntando a taxa da maquininha e a antecipação, a venda de mil e duzentos reais perdeu cento e oitenta e sete reais no caminho.
+
+59
+00:03:26,272 --> 00:03:27,960
+Quinze vírgula seis por cento.
+
+60
+00:03:27,960 --> 00:03:34,992
+Numa loja que trabalha com margem de dez ou quinze por cento, isso pode ser a diferença entre lucro e prejuízo naquela venda.
+
+61
+00:03:35,592 --> 00:03:37,321
+Agora multiplica isso pelo país.
+
+62
+00:03:37,321 --> 00:03:51,857
+Segundo a Núclea, uma das empresas que registram esses recebíveis, o volume antecipado no Brasil saltou de quatrocentos e vinte e oito vírgula seis bilhões de reais em dois mil e vinte e quatro para seiscentos e catorze vírgula nove bilhões em dois mil e vinte e cinco.
+
+63
+00:03:51,857 --> 00:03:54,451
+Uma alta de quarenta e três por cento em um ano.
+
+64
+00:03:55,051 --> 00:04:00,317
+No mesmo período, o pagamento com cartão de crédito cresceu catorze vírgula cinco por cento.
+
+65
+00:04:00,317 --> 00:04:02,892
+A antecipação cresceu três vezes mais rápido.
+
+66
+00:04:02,892 --> 00:04:07,700
+E o número de estabelecimentos que usaram esse atalho subiu trinta e três por cento.
+
+67
+00:04:07,700 --> 00:04:11,478
+Cada vez mais lojas vendem o próprio futuro para pagar o presente.
+
+68
+00:04:12,078 --> 00:04:13,482
+Parada cinco: quem lucra.
+
+69
+00:04:13,482 --> 00:04:15,392
+Pensa na posição de quem antecipa.
+
+70
+00:04:15,392 --> 00:04:24,549
+Ele capta dinheiro mais ou menos ao custo da Selic, que o Banco Central manteve em treze vírgula setenta e cinco por cento ao ano na reunião de quatro de novembro.
+
+71
+00:04:24,549 --> 00:04:27,246
+Isso dá perto de um vírgula um por cento ao mês.
+
+72
+00:04:27,846 --> 00:04:35,195
+Se ele cobra dois por cento ao mês, como no nosso exemplo, a diferença é de quase um ponto por mês, emprestando com a garantia de um banco.
+
+73
+00:04:35,195 --> 00:04:38,790
+Em um ano, dois por cento ao mês viram quase vinte e sete por cento.
+
+74
+00:04:38,790 --> 00:04:41,064
+É um negócio de margem gorda e risco baixo.
+
+75
+00:04:41,064 --> 00:04:43,760
+Por isso todo mundo quer ficar no meio dessa conta.
+
+76
+00:04:44,360 --> 00:04:46,947
+Olha o peso disso numa empresa de maquininha.
+
+77
+00:04:46,947 --> 00:04:55,455
+Na Stone, no segundo trimestre de dois mil e vinte e seis, a receita financeira, onde entra a antecipação, somou dois vírgula sete bilhões de reais.
+
+78
+00:04:55,455 --> 00:04:58,674
+Setenta e quatro por cento de toda a receita da empresa.
+
+79
+00:04:58,674 --> 00:05:00,168
+Três de cada quatro reais.
+
+80
+00:05:00,768 --> 00:05:04,719
+Agora dá para entender o tombo de dezoito de abril de dois mil e dezenove.
+
+81
+00:05:04,719 --> 00:05:12,087
+Naquele dia, a Rede, do Itaú, anunciou que ia antecipar de graça, em dois dias, as vendas no crédito à vista de quem tinha conta no banco.
+
+82
+00:05:12,087 --> 00:05:15,451
+E as ações da Stone caíram vinte e três vírgula sete por cento.
+
+83
+00:05:15,451 --> 00:05:18,281
+O mercado não estava com medo de perder a maquininha.
+
+84
+00:05:18,281 --> 00:05:20,416
+Estava com medo de perder a antecipação.
+
+85
+00:05:21,016 --> 00:05:23,968
+Repara num detalhe do balanço mais recente da Stone.
+
+86
+00:05:23,968 --> 00:05:27,657
+A receita com transações caiu trinta e cinco por cento em um ano.
+
+87
+00:05:27,657 --> 00:05:30,155
+A receita financeira subiu dez vírgula sete.
+
+88
+00:05:30,155 --> 00:05:35,036
+A própria empresa fala em ajustes de preço entre a taxa da maquininha e a antecipação.
+
+89
+00:05:35,036 --> 00:05:37,590
+Traduzindo: a taxa que aparece pode até cair.
+
+90
+00:05:37,590 --> 00:05:39,918
+A que fica escondida no prazo pode subir.
+
+91
+00:05:40,517 --> 00:05:41,695
+Parada seis: a porta.
+
+92
+00:05:41,695 --> 00:05:45,900
+Durante anos, a agenda de recebíveis ficava presa na empresa da maquininha.
+
+93
+00:05:45,900 --> 00:05:52,011
+Se a loja quisesse antecipar com outro banco, era difícil, porque ninguém de fora enxergava aquelas parcelas.
+
+94
+00:05:52,011 --> 00:05:54,085
+Quem tinha a agenda, tinha o cliente.
+
+95
+00:05:54,685 --> 00:05:57,618
+Isso mudou em sete de junho de dois mil e vinte e um.
+
+96
+00:05:57,618 --> 00:06:03,927
+Por regra do Banco Central, os recebíveis de cartão passaram a ser registrados em empresas chamadas registradoras.
+
+97
+00:06:03,927 --> 00:06:07,192
+São quatro: Cerc, Núclea, B3 e a TAG, que pertence à Stone.
+
+98
+00:06:07,192 --> 00:06:13,224
+Com o registro, qualquer instituição pode ver a agenda da loja, se ela autorizar, e oferecer um preço melhor.
+
+99
+00:06:13,824 --> 00:06:15,237
+E a concorrência apareceu.
+
+100
+00:06:15,237 --> 00:06:26,702
+Segundo um levantamento da Cerc, com dados do Banco Central, o saldo de antecipação quase dobrou entre dois mil e vinte e dois e dois mil e vinte e três, chegando a noventa e sete vírgula cinco bilhões de reais.
+
+101
+00:06:26,702 --> 00:06:32,896
+E a queda das taxas teria economizado vinte e nove bilhões de reais para o comércio só em dois mil e vinte e três.
+
+102
+00:06:33,496 --> 00:06:36,296
+Esse é o motivo de o mercado crescer tão rápido.
+
+103
+00:06:36,296 --> 00:06:44,637
+Quando a agenda virou uma garantia que qualquer banco pode usar, antecipar ficou mais fácil, mais competitivo e mais barato para quem pesquisa.
+
+104
+00:06:44,637 --> 00:06:46,446
+Só que nem todo mundo pesquisa.
+
+105
+00:06:47,045 --> 00:06:48,161
+E aqui vem a virada.
+
+106
+00:06:48,161 --> 00:06:50,058
+Lembra que a compra foi sem juros?
+
+107
+00:06:50,058 --> 00:06:50,894
+Para você, foi.
+
+108
+00:06:50,894 --> 00:06:54,130
+Mas os cento e oitenta e sete reais saíram de algum lugar.
+
+109
+00:06:54,130 --> 00:06:56,584
+A loja que antecipa sabe que vai pagar isso.
+
+110
+00:06:56,584 --> 00:07:00,656
+E a forma mais simples de não ter prejuízo é embutir esse custo no preço.
+
+111
+00:07:01,256 --> 00:07:02,976
+Aí acontece uma coisa curiosa.
+
+112
+00:07:02,976 --> 00:07:11,346
+Se a loja cobra o mesmo preço à vista e parcelado, quem paga no Pix ou no dinheiro também está pagando, sem saber, a antecipação de quem parcelou.
+
+113
+00:07:11,346 --> 00:07:15,187
+O custo do prazo se espalha por todo mundo que compra naquela loja.
+
+114
+00:07:15,787 --> 00:07:21,401
+E quem mais perde é o pequeno lojista que deixa a antecipação no automático e nunca compara preço.
+
+115
+00:07:21,401 --> 00:07:25,010
+Ele não sente a taxa, porque ela não aparece como uma cobrança.
+
+116
+00:07:25,010 --> 00:07:28,046
+Aparece como um dinheiro que simplesmente veio menor.
+
+117
+00:07:28,046 --> 00:07:30,165
+É a taxa mais silenciosa do comércio.
+
+118
+00:07:30,765 --> 00:07:33,149
+Então, para onde vão os quase duzentos reais?
+
+119
+00:07:33,149 --> 00:07:40,986
+Para quem consegue ficar no meio do caminho entre a venda e o dinheiro: a empresa da maquininha, os bancos e quem tem dinheiro barato para adiantar.
+
+120
+00:07:40,986 --> 00:07:42,946
+O parcelado sem juros não é de graça.
+
+121
+00:07:42,946 --> 00:07:45,805
+É um empréstimo que o lojista faz, e que alguém cobra.
+
+122
+00:07:46,405 --> 00:07:52,708
+Só que existe um meio de pagamento que chega na conta da loja na hora, sem agenda, sem parcela e sem antecipação.
+
+123
+00:07:52,708 --> 00:07:57,226
+Ele já é o jeito mais usado de pagar no Brasil, e mudou a conta de muitos bancos.
+
+124
+00:07:57,226 --> 00:08:01,744
+No próximo episódio: como o Pix mudou os bancos, e quem perdeu dinheiro com isso.

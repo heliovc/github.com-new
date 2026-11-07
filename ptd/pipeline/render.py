@@ -382,9 +382,93 @@ def sc_scoreboard(img, v, t, dur):
         dr.text((cx, base + 50), name, font=F(fs, "ExtraBold"), fill=mix(BG1, WHITE if (hl < 0 or i == hl) else (130, 140, 165), max(p, 0.3)), anchor="mm")
     if v.get("caption"): dr.text((W / 2, H - 70), v["caption"], font=F(28, "Medium"), fill=DIM, anchor="mm")
 
+
+def sc_journey(img, v, t, dur):
+    """Criado no EP06: mapa de paradas ("siga o recebível"). stops = [rótulos curtos]; cur = índice da parada atual;
+    title/sub = nome grande da parada. Paradas já vencidas ficam verdes com check; a moeda R$ viaja até a atual."""
+    dr = ImageDraw.Draw(img); stops = v["stops"]; cur = v["cur"]; n = len(stops)
+    alpha_text(img, (W / 2, 150), v.get("head", "SIGA O RECEBÍVEL"), F(40, "Black"), AMBER, ease(t / 0.4))
+    x0, x1, y = 200, W - 200, 430
+    xs = [x0 + (x1 - x0) * i / (n - 1) for i in range(n)]
+    dr.line([(x0, y), (x1, y)], fill=(44, 60, 92), width=10)
+    pm = ease((t - 0.2) / 1.2)
+    xc = lerp(xs[max(cur - 1, 0)], xs[cur], pm)
+    dr.line([(x0, y), (xc, y)], fill=GREEN, width=10)
+    for i, (x, lab) in enumerate(zip(xs, stops)):
+        if i < cur:
+            dr.ellipse([x - 26, y - 26, x + 26, y + 26], fill=GREEN)
+            dr.line([(x - 11, y + 1), (x - 3, y + 10), (x + 13, y - 9)], fill=BG1, width=6)
+            col = (150, 200, 170)
+        elif i == cur:
+            r = 40 + 5 * math.sin(t * 4)
+            dr.ellipse([x - r - 10, y - r - 10, x + r + 10, y + r + 10], outline=AMBER, width=4)
+            dr.ellipse([x - r, y - r, x + r, y + r], fill=AMBER)
+            dr.text((x, y + 2), str(i + 1), font=F(42, "Black"), fill=BG1, anchor="mm")
+            col = WHITE
+        else:
+            dr.ellipse([x - 22, y - 22, x + 22, y + 22], fill=(30, 42, 66), outline=(70, 86, 118), width=4)
+            dr.text((x, y + 1), str(i + 1), font=F(26, "Bold"), fill=(110, 125, 150), anchor="mm")
+            col = (110, 125, 150)
+        fs = 26
+        while F(fs, "Bold").getlength(lab) > (x1 - x0) / (n - 1) - 12 and fs > 18: fs -= 1
+        dr.text((x, y + 78), lab, font=F(fs, "Bold"), fill=col, anchor="mm")
+    # moeda viajando
+    cy = y - 95 - 18 * math.sin(pm * math.pi)
+    dr.ellipse([xc - 34, cy - 34, xc + 34, cy + 34], fill=AMBER, outline=(255, 215, 120), width=4)
+    dr.text((xc, cy + 1), "R$", font=F(26, "Black"), fill=BG1, anchor="mm")
+    a = ease((t - 0.5) / 0.6)
+    alpha_text(img, (W / 2, 700), v["title"], F(100, "ExtraBold"), WHITE, a, dy=(1 - a) * 30)
+    if v.get("sub"): alpha_text(img, (W / 2, 820), v["sub"], F(44, "SemiBold"), GREEN, ease((t - 0.9) / 0.6))
+    if v.get("caption"): dr.text((W / 2, H - 50), v["caption"], font=F(28, "Medium"), fill=DIM, anchor="mm")
+
+def sc_calendar(img, v, t, dur):
+    """Criado no EP06: agenda de recebíveis. cells = [[rótulo, valor_txt]] (até 12, grade 6x2); caixa HOJE à esquerda.
+    pull=True: as parcelas são "puxadas" para HOJE uma a uma e os contadores today_to / cost_to sobem (antecipação).
+    Sem pull: as parcelas aparecem uma a uma no calendário (today_txt opcional na caixa HOJE)."""
+    dr = ImageDraw.Draw(img); cells = v["cells"]; n = len(cells)
+    alpha_text(img, (W / 2, 150), v["title"], F(60, "ExtraBold"), WHITE, ease(t / 0.5))
+    hx0, hx1, hy0, hy1 = 110, 520, 290, 790
+    a0 = ease((t - 0.1) / 0.5)
+    dr.rounded_rectangle([hx0, hy0, hx1, hy1], 28, fill=mix(BG1, (24, 60, 48), a0), outline=mix(BG1, GREEN, a0), width=5)
+    dr.text(((hx0 + hx1) / 2, hy0 + 60), v.get("today_label", "HOJE"), font=F(48, "Black"), fill=mix(BG1, GREEN, a0), anchor="mm")
+    cols, cw, ch, gap = 6, 190, 210, 14
+    gx0, gy0 = 590, 300
+    pos = [(gx0 + (i % cols) * (cw + gap), gy0 + (i // cols) * (ch + gap + 46)) for i in range(n)]
+    pull = v.get("pull", False)
+    span = max(0.25, (dur * 0.6 - 1.0) / max(n, 1))
+    done = 0.0
+    for i, (lab, val) in enumerate(cells):
+        x, y = pos[i]
+        if pull:
+            p = ease((t - 1.0 - i * span) / 0.6); done += p
+            cx = lerp(x, (hx0 + hx1) / 2 - cw / 2, p); cy = lerp(y, (hy0 + hy1) / 2 - ch / 2, p)
+            al = 1 - p
+            if al <= 0.02: 
+                dr.text((x + cw / 2, y + ch / 2), "—", font=F(40, "Bold"), fill=(60, 74, 100), anchor="mm"); continue
+            ap = 1.0
+        else:
+            ap = ease((t - 0.5 - i * span) / 0.4)
+            if ap <= 0: continue
+            cx, cy, al = x, y, ap
+        fill = mix(BG1, (34, 52, 84), al); out = mix(BG1, AMBER if (v.get("highlight", -1) == i) else BLUE, al)
+        dr.rounded_rectangle([cx, cy, cx + cw, cy + ch], 20, fill=fill, outline=out, width=4)
+        dr.text((cx + cw / 2, cy + 45), lab, font=F(30, "Bold"), fill=mix(BG1, DIM, al), anchor="mm")
+        dr.text((cx + cw / 2, cy + 125), val, font=F(44, "Black"), fill=mix(BG1, WHITE, al), anchor="mm")
+    hc = ((hx0 + hx1) / 2)
+    if pull:
+        frac = done / n
+        dr.text((hc, hy0 + 200), v.get("prefix", "R$ ") + fmt_num(v["today_to"] * frac, 0), font=F(76, "Black"), fill=WHITE, anchor="mm")
+        dr.text((hc, hy0 + 290), "na conta hoje", font=F(32, "SemiBold"), fill=DIM, anchor="mm")
+        dr.text((hc, hy0 + 380), "- " + v.get("prefix", "R$ ") + fmt_num(v["cost_to"] * frac, 0), font=F(58, "Black"), fill=RED, anchor="mm")
+        dr.text((hc, hy0 + 440), v.get("cost_label", "custo da antecipação"), font=F(28, "SemiBold"), fill=DIM, anchor="mm")
+    elif v.get("today_txt"):
+        dr.text((hc, (hy0 + hy1) / 2 + 30), v["today_txt"], font=F(80, "Black"), fill=mix(BG1, WHITE, a0), anchor="mm")
+        if v.get("today_note"): dr.text((hc, (hy0 + hy1) / 2 + 120), v["today_note"], font=F(30, "SemiBold"), fill=mix(BG1, DIM, a0), anchor="mm")
+    if v.get("caption"): dr.text((W / 2, H - 70), v["caption"], font=F(28, "Medium"), fill=DIM, anchor="mm")
+
 SC = {"round": sc_round, "ticker": sc_ticker, "scoreboard": sc_scoreboard, "title": sc_title, "bignumber": sc_bignumber, "flow": sc_flow, "split": sc_split, "bullets": sc_bullets,
       "bars": sc_bars, "compare": sc_compare, "timeline": sc_timeline, "cards": sc_cards, "line": sc_line,
-      "receipt": sc_receipt, "stack": sc_stack}
+      "receipt": sc_receipt, "stack": sc_stack, "journey": sc_journey, "calendar": sc_calendar}
 
 # ---------- voz ----------
 def tts(scenes, outdir, voice="pm_alex", speed=1.05):

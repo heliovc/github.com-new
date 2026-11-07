@@ -1,0 +1,49 @@
+TÍTULO
+Antecipação de recebíveis: o negócio bilionário que ninguém vê (R$ 1.200 viram R$ 1.013)
+
+DESCRIÇÃO
+Você compra algo de R$ 1.200 em 12x sem juros — e a loja que quer o dinheiro hoje pode ficar com pouco mais de R$ 1.000. Seguimos essa venda em 6 paradas, da maquininha até a conta da loja, para mostrar quem fica com a diferença num mercado que antecipou R$ 614,9 bilhões em 2025.
+
+Capítulos
+0:00 Uma venda de R$ 1.200 que vira R$ 1.013
+0:39 Parada 1: a venda (o Brasil parcela)
+1:24 Parada 2: a agenda de recebíveis
+2:05 Parada 3: o balcão da antecipação
+2:50 Parada 4: o preço — e os R$ 614,9 bilhões
+4:11 Parada 5: quem lucra (Selic, Stone e o 18/04/2019)
+5:40 Parada 6: a porta que o Banco Central abriu
+6:46 A virada: "sem juros" para quem?
+7:30 Quem fica com a diferença + próximo episódio
+
+Exemplo ilustrativo: taxa de 3% no parcelado e antecipação a 2% ao mês (desconto linear por mês adiantado). As taxas reais variam por negócio, prazo e instituição.
+
+Fontes
+- Abecs, balanço do 1º trimestre de 2026 (parcelado sem juros = 43,2% do valor no crédito; 62,4% das compras parceladas em até 6x; 97,8% do volume em até 12x): https://uploads.finsidersbrasil.com.br/2026/05/Abecs-Apresentacao-1T26.pdf
+- Núclea, via Valor Econômico — volume antecipado de R$ 428,6 bi (2024) para R$ 614,9 bi (2025), +33,4% estabelecimentos; crédito +14,5% (Abecs): https://letsmoney.com.br/noticias/antecipacao-recebiveis-cartoes-salta-43-2025-nuclea
+- StoneCo, resultados do 2º trimestre de 2026 (formulário 6-K): https://www.sec.gov/Archives/edgar/data/0001745431/000207097926000275/stoneco_earningsrelease2q2.htm
+- Banco Central, Copom de 04/11/2026 (Selic 13,75%): https://www.seudinheiro.com/2026/economia/copom-segura-selic-em-1375-e-interrompe-ciclo-de-cortes-nos-juros-mlim/
+- IstoÉ Dinheiro (19/04/2019) — Rede antecipa de graça; Stone -23,69%, PagSeguro -9,74%
+- Cerc, com dados do Banco Central, via Broadcast (12/06/2024) — saldo de R$ 97,5 bi no fim de 2023; economia de R$ 29 bi: https://investalk.bb.com.br/noticias/mercado/balcao-de-recebiveis-de-cartao-deslancha-apos-desafios-iniciais-e-barateia-credito-a-comerciantes
+- Registro de recebíveis (Res. CMN 4.734/2019, em vigor desde 07/06/2021; registradoras Cerc, Núclea, B3 e TAG) e cancelamento da antecipação automática em 2 dias úteis (Res. BCB 264/2022 e 349/2023): https://finsidersbrasil.com.br/noticias-sobre-fintechs/bc-da-ultimato-a-venda-automatica-de-recebiveis-de-cartoes-com-a-publicacao-da-resolucao-349
+
+Narração com voz sintética; roteiro e gráficos próprios. Conteúdo informativo e jornalístico — não é recomendação financeira nem de investimento.
+
+TAGS
+antecipação de recebíveis, maquininha, parcelado sem juros, cartão de crédito, Stone, recebíveis, fintech, Selic, lojista, taxa de antecipação, finanças, educação financeira, negócios
+
+VERTICAL
+Título: Sem juros? A loja perde R$ 187 #shorts
+Legenda: 12x sem juros pra você. Pra loja que quer receber hoje, R$ 1.200 viram R$ 1.013 (exemplo ilustrativo). Quem paga essa conta? Fonte: Núclea/Abecs. Não é recomendação financeira. Voz sintética.
+Hashtags: #shorts #financas #parceladosemjuros #maquininha #empreendedorismo
+
+CHECKLIST (playbook seção 7)
+1. 1ª frase cumpre a promessa (R$ 1.200 → R$ 1.013) sem saudação — OK
+2. Valor até 15 s (quem fica com os quase R$ 200, mercado de R$ 600+ bi) — OK
+3. Loops: R$ 187 (fecha 3:02–3:35 e payoff), tombo da Stone (fecha 5:00), quem paga (fecha 6:46–7:30) — OK
+4. Reengajes: 3:19–3:54 (R$ 614,9 bi, 3x o crédito); 4:44–5:40 (Stone 74% + 2019); virada 6:46 — OK
+5. Nenhum visual parado > 20 s — OK
+6. Sem enchimento (8:02) — OK
+7. Final = payoff + próximo episódio (Pix), sem despedida — OK
+8. Short: número no 1º frame, gancho falado ≤ 2 s, final em pergunta — OK
+9. Estrutura nova ("siga o recebível"), cenas novas journey + calendar, thumb com agenda de parcelas — OK
+10. Sem persona/conselho; fontes na tela e descrição; avisos — OK
