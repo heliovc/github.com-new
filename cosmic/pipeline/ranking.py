@@ -8,6 +8,7 @@ Visual por item:
   vis.type == "speed": raias de velocidade em escala log (1 km/s -> luz); vis.kms = km/s; item.short = rótulo curto (rank02).
 THEME.hook == "streaks": gancho com rastros de velocidade em vez da estrela gigante (rank02).
   vis.type == "moons": lua atual grande em escala + contorno tracejado de Mercúrio + fila das 5 em escala (não reveladas = silhueta "?"); vis.moon, vis.km (rank03).
+vis.type == "thermo" / THEME.hook == "thermo": termômetro vertical 0–6.000 °C com marcas de referência + planeta brilhando na cor da temperatura (rank04).
 THEME.hook == "moons": silhueta "?" do nº 1 dentro do contorno de Mercúrio + as 5 luas orbitando (rank03).
 Tudo desenhado por código; narração Kokoro (VOICE, padrão af_heart); legenda grande queimada.
 """
@@ -217,6 +218,54 @@ def moons_vis(img, it, th, t, dur):
                fill=acc if cur else ((200, 205, 220) if revealed else (110, 120, 140)), anchor="mm")
     d.line([(70, 1192), (W - 70, 1192)], fill=(70, 80, 100), width=2)
 
+# ---- 07/11: vis "thermo" (vertical thermometer 0–6,000 °C with reference marks + glowing planet) ----
+TH_MAX = 6000
+TH_REF = [(327, "lead melts"), (1200, "lava"), (1538, "iron melts"), (5500, "Sun's surface")]
+def temp_col(c):
+    stops = [(0, (120, 60, 40)), (500, (230, 90, 40)), (2000, (255, 150, 50)), (3500, (255, 220, 140)), (5000, (230, 240, 255))]
+    for (a, ca), (b, cb) in zip(stops, stops[1:]):
+        if c <= b: return mix(ca, cb, (c - a) / (b - a))
+    return stops[-1][1]
+
+def thermo(img, temp, th, t, revealed=(), show_q=False):
+    acc = tuple(th["accent"]); x, y0, y1 = 190, 1240, 480
+    d = ImageDraw.Draw(img)
+    d.rounded_rectangle([x - 34, y1 - 30, x + 34, y0 + 20], 34, fill=(25, 22, 30), outline=(200, 200, 215), width=4)
+    d.ellipse([x - 62, y0 - 20, x + 62, y0 + 104], fill=(25, 22, 30), outline=(200, 200, 215), width=4)
+    yt = lerp(y0, y1, min(1, temp / TH_MAX))
+    for k in range(int(y0) + 40, int(yt), -6):
+        c = temp_col(lerp(0, TH_MAX, (y0 - k) / (y0 - y1))); d.rectangle([x - 20, k - 6, x + 20, k], fill=c)
+    d.ellipse([x - 46, y0 - 4, x + 46, y0 + 88], fill=temp_col(temp))
+    for c, lab in TH_REF:
+        yy = lerp(y0, y1, c / TH_MAX); d.line([(x + 40, yy), (x + 70, yy)], fill=(160, 165, 185), width=3)
+        d.text((x + 80, yy), f"{lab} · {c:,} °C", font=F(26, "SemiBold"), fill=(170, 175, 195), anchor="lm")
+    for name, c in revealed:
+        yy = lerp(y0, y1, c / TH_MAX); d.line([(x - 70, yy), (x - 40, yy)], fill=acc, width=4)
+    return yt
+
+def planet_glow(img, cx, cy, r, temp, t):
+    col = temp_col(temp)
+    R.paste_c(img, R.radial(int(r * 3.2), [(0, col + (110,)), (0.5, col + (40,)), (1, col + (0,))]), cx, cy)
+    spr = R.planet_sprite(int(r), col, light=(-0.9, -0.5))
+    R.paste_c(img, spr, cx, cy)
+    lay = Image.new("RGBA", img.size, (0, 0, 0, 0)); d = ImageDraw.Draw(lay); rng = random.Random(int(temp))
+    for i in range(10):  # heat bands
+        yy = cy - r + (i + 0.5) * 2 * r / 10 + 4 * math.sin(t * 2 + i)
+        hw = math.sqrt(max(0, r * r - (yy - cy) ** 2))
+        d.line([(cx - hw, yy), (cx + hw, yy)], fill=mix(col, (255, 255, 255), 0.4) + (40,), width=3)
+    img.alpha_composite(lay)
+
+def thermo_vis(img, it, th, t, dur):
+    temp = it["vis"]["c"] * easeio((t - 0.4) / 1.6)
+    rev = [(o["short"], o["vis"]["c"]) for o in ALL_ITEMS if o["rank"] > it["rank"]]
+    yt = thermo(img, temp, th, t, rev)
+    d = ImageDraw.Draw(img)
+    d.line([(234, yt), (420, yt)], fill=tuple(th["accent"]), width=3)
+    planet_glow(img, 760, 820, it["vis"].get("r", 190), it["vis"]["c"], t)
+    if it["vis"].get("note"):
+        for i, l in enumerate(wrap(it["vis"]["note"], F(36, "ExtraBold"), 440)):
+            text(img, (800, 1085 + i * 46), l, 36, (255, 225, 200), w="ExtraBold", a=ease((t - 1.5) / 0.5))
+
 def caption_chunks(say, t0, dur):
     words = say.split(); groups, g = [], []
     for w in words:
@@ -239,6 +288,15 @@ def draw_caption(img, chunks, gt, y=1585):
 
 def seg_hook(img, sc, th, t, dur):
     col = tuple(th["star_col"]); acc = tuple(th["accent"])
+    if th.get("hook") == "thermo":
+        thermo(img, TH_MAX * 0.72 * (0.97 + 0.03 * math.sin(t * 4)), th, t)
+        planet_glow(img, 700, 860, 200, 4300, t)
+        d = ImageDraw.Draw(img); d.text((700, 860), "?", font=F(220, "Black"), fill=(40, 20, 10), anchor="mm")
+        text(img, (W / 2, 210), "TOP 5", 150, acc)
+        for i, l in enumerate(wrap(sc["top"].upper(), F(84, "Black"), W - 120)):
+            text(img, (W / 2, 340 + i * 96), l, 84, (255, 255, 255))
+        text(img, (W / 2, 1440), sc["sub"], 50, tuple(th["accent2"]), w="ExtraBold")
+        return
     if th.get("hook") == "moons":
         order = sorted(ALL_ITEMS, key=lambda o: o["vis"]["km"]); KM1 = order[-1]["vis"]["km"]
         cx, cy = W / 2, 930; R1 = 280
@@ -305,6 +363,8 @@ def seg_item(img, it, th, t, dur):
         speed_lanes(img, it, th, t, dur)
     if v["type"] == "moons":
         moons_vis(img, it, th, t, dur)
+    if v["type"] == "thermo":
+        thermo_vis(img, it, th, t, dur)
     # number
     p = easeio((t - 0.5) / 1.6)
     num = it["num"]

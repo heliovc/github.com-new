@@ -3,6 +3,7 @@ Usage: python3 -I render.py ep01_sun.py out/ep01 [--preview]
 EP02 added scenes: clock, escape, sky, thermo, energy, ocean, galaxy
 EP03 added scenes: zoom, stretch, horizons, deepfield, shrink (violet/magenta palette)
 EP04 added scenes: blackhole, spaghetti, twoclocks, horizonsize, inside (ember orange / pale cyan palette)
+EP05 added scenes: inflate, flight, measure, density, heavyvsbig, balance (crimson / cream palette)
 """
 import sys, os, re, math, subprocess, importlib.util, json, random, hashlib
 import numpy as np
@@ -1199,6 +1200,199 @@ def sc_inside(img, v, t, dur):
         for i, l in enumerate(v.get("lines", [])):
             alpha_text(img, (tx, 420 + i * 90), l, F(44, "Bold"), PALE if i % 2 else WHITE, ease((t - 1.0 - i * 2.2) / 0.5))
     caption(img, v.get("caption"), ease((t - 1.5) / 0.5))
+
+
+# ---------------- scenes (EP05: crimson / cream palette) ----------------
+CRIM, CREAM, YEL = (255, 77, 109), (255, 226, 154), (255, 214, 90)
+RSUN_AU = 696000 / 1.496e8
+ORB_AU = [("Mercury", 0.387), ("Venus", 0.723), ("Earth", 1.0), ("Mars", 1.524), ("Jupiter", 5.2), ("Saturn", 9.54)]
+
+def draw_star(img, cx, cy, r, col, a=1.0):
+    """big star drawn with concentric ellipses (limb darkening + soft glow) — cheap at any radius"""
+    if r < 0.6 or a <= 0: return
+    lay = Image.new("RGBA", img.size, (0, 0, 0, 0)); d = ImageDraw.Draw(lay)
+    for k in range(10, 0, -1):
+        rr = r * (1 + 0.05 * k); d.ellipse([cx - rr, cy - rr, cx + rr, cy + rr], fill=col + (int(14 * a),))
+    n = 14 if r > 30 else 5
+    for k in range(n):
+        f = k / n; rr = r * (1 - f * 0.92)
+        c = mix(mix(col, (40, 10, 10), 0.35), mix(col, (255, 250, 235), 0.55), f ** 0.8)
+        d.ellipse([cx - rr, cy - rr, cx + rr, cy + rr], fill=c + (int(255 * a),))
+    img.alpha_composite(lay)
+
+def sc_inflate(img, v, t, dur):
+    """star grows (or shrinks) in the Sun's place, drawn to scale over planetary orbits; odometer of × Sun's width; swallowed list"""
+    cx, cy = v.get("cx", 640), 540
+    r0, r1 = v.get("r0", 1), v["r1"]; c0 = tuple(v.get("col0", v.get("col", CRIM))); c1 = tuple(v.get("col1", v.get("col", CRIM)))
+    maxau = v.get("maxau", max(r0, r1) * RSUN_AU * 1.12); scale = 470 / maxau
+    p = easeio((t - 0.6) / max(1.0, dur * 0.55))
+    rs = math.exp(lerp(math.log(r0), math.log(r1), p)); col = mix(c0, c1, p)
+    rpx = rs * RSUN_AU * scale
+    d = ImageDraw.Draw(img)
+    for name, au in ORB_AU:
+        rp = au * scale
+        if rp > 900 or rp < 6: continue
+        inside = rpx > rp
+        oc = (150, 165, 200)
+        for k in range(0, 360, 5): d.arc([cx - rp, cy - rp, cx + rp, cy + rp], k, k + 2.5, fill=oc, width=2)
+        ang = t * 0.25 / math.sqrt(au) + au * 2.1; px, py = cx + rp * math.cos(ang), cy + rp * math.sin(ang)
+        if not inside:
+            paste_c(img, planet_sprite(9 if name != "Jupiter" and name != "Saturn" else 14, PCOL.get(name, (200, 200, 200)), light=(cx - px, cy - py)), px, py)
+    draw_star(img, cx, cy, max(1.0, rpx), col)
+    if rpx < 8: paste_c(img, sun_sprite(4), cx, cy)
+    d = ImageDraw.Draw(img)
+    prev = -99
+    for name, au in ORB_AU:
+        rp = au * scale
+        if rp > 900 or rp < 6 or rpx > rp or rp - prev < 34: continue
+        prev = rp
+        a = math.radians(-35 - au * 6); lx, ly = cx + rp * math.cos(a) + 8, cy + rp * math.sin(a) - 8
+        if 0 < lx < 1180 and 30 < ly < 1050:
+            ins = rpx > rp
+            alpha_text(img, (lx, ly), name, F(28, "Bold"), (255, 255, 255) if ins else (150, 165, 200), 1, anchor="lb", shadow=True)
+    if v.get("companion"):
+        rp = v["companion"] * scale; ang = t * 0.5
+        for k in range(0, 360, 6): d.arc([cx - rp, cy - rp, cx + rp, cy + rp], k, k + 3, fill=CREAM, width=2)
+        qx, qy = cx + rp * math.cos(ang), cy + rp * math.sin(ang)
+        paste_c(img, radial(40, [(0, (255, 255, 255, 255)), (0.35, (200, 225, 255, 230)), (1, (150, 190, 255, 0))]), qx, qy)
+        alpha_text(img, (qx, qy - 30), "companion", F(26, "Bold"), CREAM, 1)
+    TX = 1500
+    alpha_text(img, (TX, 250), v.get("name", ""), F(66 if len(v.get("name", "")) < 16 else 50, "Black"), col, ease(t / 0.5))
+    if v.get("sub"): alpha_text(img, (TX, 318), v["sub"], F(30, "SemiBold"), DIM, ease((t - 0.3) / 0.5))
+    alpha_text(img, (TX, 470), f"{rs:,.0f}×", F(150, "Black"), WHITE, ease((t - 0.4) / 0.5))
+    alpha_text(img, (TX, 570), "the Sun's width", F(38, "SemiBold"), CREAM, ease((t - 0.4) / 0.5))
+    sw = [n for n, au in ORB_AU if rpx > au * scale]
+    if sw and not v.get("hide_swallowed"):
+        alpha_text(img, (TX, 680), "inside the star:", F(32, "SemiBold"), DIM, 1)
+        line = " · ".join(sw[:3]); alpha_text(img, (TX, 735), line, F(36, "Bold"), CRIM, 1)
+        if len(sw) > 3: alpha_text(img, (TX, 785), " · ".join(sw[3:]), F(36, "Bold"), CRIM, 1)
+    if v.get("head"): alpha_text(img, (W / 2, 120), v["head"], F(48, "ExtraBold"), WHITE, ease((t - 0.2) / 0.5))
+    caption(img, v.get("caption"), ease((t - 2.5) / 0.5))
+
+def sc_flight(img, v, t, dur):
+    """a jet circling a star nonstop at 900 km/h; counter of how long the trip takes"""
+    cx, cy, R0 = 640, 560, 330; col = tuple(v.get("col", CRIM))
+    draw_star(img, cx, cy, R0, col)
+    d = ImageDraw.Draw(img); Rp = R0 + 60
+    for k in range(0, 360, 4): d.arc([cx - Rp, cy - Rp, cx + Rp, cy + Rp], k, k + 2, fill=(200, 210, 235), width=2)
+    ang = -math.pi / 2 + t * 0.9; x, y = cx + Rp * math.cos(ang), cy + Rp * math.sin(ang)
+    ux, uy = -math.sin(ang), math.cos(ang); px, py = -uy, ux
+    pts = [(x + ux * 30, y + uy * 30), (x - ux * 18 + px * 22, y - uy * 18 + py * 22), (x - ux * 8, y - uy * 8), (x - ux * 18 - px * 22, y - uy * 18 - py * 22)]
+    d.polygon(pts, fill=WHITE)
+    for k in range(1, 12):
+        a2 = ang - k * 0.035; d.ellipse([cx + Rp * math.cos(a2) - 3, cy + Rp * math.sin(a2) - 3, cx + Rp * math.cos(a2) + 3, cy + Rp * math.sin(a2) + 3], fill=mix(SPACE, WHITE, 1 - k / 12))
+    alpha_text(img, (cx, cy), v.get("name", ""), F(54, "Black"), (30, 10, 10), 1, shadow=False)
+    TX = 1460
+    alpha_text(img, (TX, 250), "Fly around it nonstop", F(52, "ExtraBold"), WHITE, ease(t / 0.5))
+    alpha_text(img, (TX, 315), "passenger jet · 900 km/h", F(32, "SemiBold"), DIM, ease((t - 0.3) / 0.5))
+    p = easeio((t - 0.8) / max(1.0, dur * 0.45)); val = v["value"] * p
+    alpha_text(img, (TX, 490), f"{val:,.0f}", F(170, "Black"), mix(WHITE, col, p), ease((t - 0.5) / 0.4))
+    alpha_text(img, (TX, 600), v.get("unit", "years"), F(54, "Bold"), CREAM, ease((t - 0.5) / 0.4))
+    for i, l in enumerate(v.get("notes", [])):
+        alpha_text(img, (TX, 720 + i * 62), l, F(34, "SemiBold"), PALE if i % 2 == 0 else WHITE, ease((t - dur * 0.55 - i * 1.2) / 0.5))
+    caption(img, v.get("caption"), ease((t - 3.0) / 0.5))
+
+def sc_measure(img, v, t, dur):
+    """how to measure a dot: linked telescopes (interferometry) + brightness & temperature -> size"""
+    d = ImageDraw.Draw(img); sx, sy = 560, 230
+    paste_c(img, radial(60, [(0, (255, 255, 255, 255)), (0.3, CRIM + (230,)), (1, CRIM + (0,))]), sx, sy)
+    alpha_text(img, (sx, sy - 50), "a dot of light", F(30, "Bold"), CREAM, 1)
+    base = [(200, 860), (440, 880), (680, 880), (920, 860)]
+    for i, (x, y) in enumerate(base):
+        a = ease((t - 0.5 - i * 0.4) / 0.5)
+        if a <= 0: continue
+        d.pieslice([x - 60, y - 60, x + 60, y + 60], 200, 340, fill=mix(SPACE, (200, 210, 235), a))
+        d.rectangle([x - 8, y - 10, x + 8, y + 50], fill=mix(SPACE, (150, 160, 190), a))
+        for k in range(8):
+            f = ((t * 0.6 + k / 8) % 1.0); qx, qy = lerp(sx, x, f), lerp(sy, y - 40, f)
+            d.ellipse([qx - 3, qy - 3, qx + 3, qy + 3], fill=mix(SPACE, CREAM, a * (1 - abs(f - 0.5))))
+    if t > 2.0:
+        q = ease((t - 2.0) / 0.6)
+        d.line([(200, 960), (920, 960)], fill=mix(SPACE, CRIM, q), width=4)
+        alpha_text(img, (560, 1000), "linked telescopes act like one giant mirror", F(30, "SemiBold"), WHITE, q)
+    TX = 1440
+    alpha_text(img, (TX, 220), v.get("head", "How do you measure a dot?"), F(54, "ExtraBold"), WHITE, ease(t / 0.5))
+    for i, l in enumerate(v.get("lines", [])):
+        alpha_text(img, (TX, 380 + i * 90), l, F(42, "Bold"), CREAM if i % 2 else WHITE, ease((t - 1.0 - i * dur * 0.15) / 0.5))
+    if v.get("formula"):
+        q = ease((t - dur * 0.55) / 0.6)
+        lay = Image.new("RGBA", img.size, (0, 0, 0, 0)); d2 = ImageDraw.Draw(lay)
+        d2.rounded_rectangle([TX - 330, 760, TX + 330, 900], 24, fill=(20, 10, 18, int(220 * q)), outline=CRIM + (int(255 * q),), width=3)
+        img.alpha_composite(lay)
+        alpha_text(img, (TX, 810), "L = 4π R² σ T⁴", F(56, "Black"), CRIM, q, shadow=False)
+        alpha_text(img, (TX, 868), "brightness + temperature → size", F(28, "SemiBold"), WHITE, q, shadow=False)
+
+def sc_density(img, v, t, dur):
+    """log ruler of average densities (kg/m³), markers appear one by one"""
+    x0, x1, y = 180, 1740, 600; lo, hi = -6, 4
+    d = ImageDraw.Draw(img)
+    alpha_text(img, (W / 2, 190), v.get("title", "Average density"), F(64, "ExtraBold"), WHITE, ease(t / 0.5))
+    alpha_text(img, (W / 2, 255), "kilograms per cubic meter · each tick = 10× more", F(30, "SemiBold"), DIM, ease((t - 0.2) / 0.5))
+    d.line([(x0, y), (x1, y)], fill=(90, 105, 140), width=4)
+    for e in range(lo, hi + 1):
+        x = lerp(x0, x1, (e - lo) / (hi - lo)); d.line([(x, y - 14), (x, y + 14)], fill=(90, 105, 140), width=3)
+        lab = f"{10.0 ** e:g}" if -3 <= e <= 3 else f"10^{e}"
+        d.text((x, y + 40), lab, font=F(24, "Medium"), fill=DIM, anchor="mm")
+    items = v["items"]; span = dur * 0.6 / len(items)
+    for i, (lab, val, c) in enumerate(items):
+        a = ease((t - 0.8 - i * span) / 0.5)
+        if a <= 0: continue
+        x = lerp(x0, x1, (math.log10(val) - lo) / (hi - lo)); up = i % 2 == 0; c = tuple(c)
+        yy = y - 120 if up else y + 150
+        d = ImageDraw.Draw(img); d.line([(x, y), (x, yy + (30 if up else -30))], fill=mix(SPACE, c, a), width=3)
+        d.ellipse([x - 13, y - 13, x + 13, y + 13], fill=mix(SPACE, c, a))
+        alpha_text(img, (x, yy - (10 if up else -10)), lab, F(36, "ExtraBold"), c, a)
+    if v.get("verdict"):
+        q = ease((t - dur * 0.72) / 0.5)
+        alpha_text(img, (W / 2, 900), v["verdict"], F(60, "Black"), CREAM, q)
+
+def sc_heavyvsbig(img, v, t, dur):
+    """biggest ≠ heaviest: Betelgeuse limb (700 Sun widths) vs R136a1 (≈35) vs the Sun, same scale"""
+    s = 1.05; a1 = ease(t / 0.8); a2 = ease((t - 1.6) / 0.6); a3 = ease((t - 3.0) / 0.6)
+    draw_star(img, -620, 600, 700 * s * a1 + 1, CRIM)
+    alpha_text(img, (150, 170), "Betelgeuse", F(56, "Black"), CRIM, a1, anchor="lm")
+    alpha_text(img, (150, 230), "≈ 700× the Sun's width · ≈ 18 Suns of mass", F(30, "SemiBold"), WHITE, a1, anchor="lm")
+    cx = 1380
+    if a2 > 0:
+        draw_star(img, cx, 520, 35 * s * 2.0, (170, 205, 255), a2)
+        alpha_text(img, (cx, 380), "R136a1", F(56, "Black"), (170, 205, 255), a2)
+        alpha_text(img, (cx, 650), "≈ 35× the Sun's width", F(32, "SemiBold"), WHITE, a2)
+        alpha_text(img, (cx, 700), "≈ 200 Suns of mass", F(44, "ExtraBold"), CREAM, a2)
+    if a3 > 0:
+        paste_c(img, sun_sprite(3), 1700, 520, a3); alpha_text(img, (1700, 560), "Sun", F(26, "Bold"), GOLD, a3)
+        alpha_text(img, (1380, 860), "(R136a1 and Sun drawn 2× for visibility)", F(24, "Medium"), DIM, a3)
+    caption(img, v.get("caption"), ease((t - 3.5) / 0.5))
+
+def sc_balance(img, v, t, dur):
+    """a star as a tug of war: gravity arrows in, pressure arrows out; optional outer layers blowing away"""
+    cx, cy, R0 = 640, 540, 250; draw_star(img, cx, cy, R0 + 6 * math.sin(t * 2), CRIM)
+    d = ImageDraw.Draw(img)
+    for k in range(12):
+        ang = k * math.pi / 6 + 0.26
+        ux, uy = math.cos(ang), math.sin(ang)
+        r1, r2 = R0 + 140, R0 + 40
+        d.line([(cx + ux * r1, cy + uy * r1), (cx + ux * r2, cy + uy * r2)], fill=PALE, width=6)
+        tip = (cx + ux * r2, cy + uy * r2); px, py = -uy, ux
+        d.polygon([tip, (tip[0] + ux * 26 + px * 14, tip[1] + uy * 26 + py * 14), (tip[0] + ux * 26 - px * 14, tip[1] + uy * 26 - py * 14)], fill=PALE)
+        ang2 = ang + math.pi / 12; ux, uy = math.cos(ang2), math.sin(ang2); px, py = -uy, ux
+        a1, a2 = R0 * 0.45, R0 * 0.9; tip = (cx + ux * a2, cy + uy * a2)
+        d.line([(cx + ux * a1, cy + uy * a1), tip], fill=CREAM, width=6)
+        d.polygon([(tip[0] + ux * 22, tip[1] + uy * 22), (tip[0] + px * 13, tip[1] + py * 13), (tip[0] - px * 13, tip[1] - py * 13)], fill=CREAM)
+    if v.get("blow"):
+        rng = random.Random(4); q = ease((t - dur * 0.45) / 1.0)
+        for i in range(140):
+            ang = rng.uniform(0, 6.283); sp = rng.uniform(40, 120); ph = rng.random()
+            r = R0 + ((t * sp + ph * 400) % 420)
+            al = q * max(0, 1 - (r - R0) / 420)
+            x, y = cx + r * math.cos(ang), cy + r * math.sin(ang); c = mix(SPACE, CRIM, al)
+            d.ellipse([x - 3, y - 3, x + 3, y + 3], fill=c)
+    TX = 1460
+    alpha_text(img, (TX, 230), v.get("head", "A star is a tug of war"), F(52, "ExtraBold"), WHITE, ease(t / 0.5))
+    alpha_text(img, (TX, 360), "gravity pulls in", F(42, "Bold"), PALE, ease((t - 0.8) / 0.5))
+    alpha_text(img, (TX, 430), "heat and light push out", F(42, "Bold"), CREAM, ease((t - 1.6) / 0.5))
+    for i, l in enumerate(v.get("lines", [])):
+        alpha_text(img, (TX, 580 + i * 80), l, F(40, "Bold"), CRIM if i == len(v["lines"]) - 1 else WHITE, ease((t - dur * 0.4 - i * dur * 0.12) / 0.5))
+    caption(img, v.get("caption"), ease((t - 3.0) / 0.5))
 
 
 SC = {k[3:]: f for k, f in globals().items() if k.startswith("sc_")}
