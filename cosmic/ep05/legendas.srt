@@ -1,0 +1,499 @@
+1
+00:00:00,200 --> 00:00:05,220
+Put one of the largest stars we know in place of the Sun, and Earth wouldn't orbit it.
+
+2
+00:00:05,220 --> 00:00:06,971
+Earth would be deep inside it.
+
+3
+00:00:06,971 --> 00:00:07,788
+So would Mars.
+
+4
+00:00:07,788 --> 00:00:08,780
+So would Jupiter.
+
+5
+00:00:08,780 --> 00:00:13,392
+A passenger jet flying around it nonstop would need more than a thousand years.
+
+6
+00:00:13,392 --> 00:00:15,026
+And here's the strange part.
+
+7
+00:00:15,026 --> 00:00:18,237
+Astronomers can't agree on which star holds the record.
+
+8
+00:00:18,237 --> 00:00:21,448
+And one of the most famous giants may have just shrunk.
+
+9
+00:00:22,147 --> 00:00:27,357
+So let's grow a star, step by step, from our Sun to the biggest monster ever measured.
+
+10
+00:00:27,357 --> 00:00:38,745
+By the end, you'll know how we measure something that looks like a single dot, why a star can't grow forever, and why the biggest stars in the universe are, in a strange way, almost empty.
+
+11
+00:00:39,445 --> 00:00:41,344
+The Largest Star versus the Sun.
+
+12
+00:00:42,044 --> 00:00:43,192
+Start with our Sun.
+
+13
+00:00:43,192 --> 00:00:46,215
+It's about one point four million kilometers wide.
+
+14
+00:00:46,215 --> 00:00:48,633
+A hundred and nine Earths, side by side.
+
+15
+00:00:48,633 --> 00:00:53,106
+Hollow it out, and you could pour in about one point three million Earths.
+
+16
+00:00:53,106 --> 00:00:59,031
+Now imagine a passenger jet cruising at nine hundred kilometers an hour, flying nonstop around it.
+
+17
+00:00:59,031 --> 00:01:02,477
+By our calculation, one lap takes about two hundred days.
+
+18
+00:01:02,477 --> 00:01:03,686
+Almost seven months.
+
+19
+00:01:03,686 --> 00:01:05,076
+Hold on to that number.
+
+20
+00:01:05,076 --> 00:01:06,406
+It's about to explode.
+
+21
+00:01:07,106 --> 00:01:07,654
+Step one.
+
+22
+00:01:07,654 --> 00:01:12,954
+Betelgeuse, the red shoulder of Orion, roughly five hundred and fifty light years away.
+
+23
+00:01:12,954 --> 00:01:15,573
+You can see it tonight without a telescope.
+
+24
+00:01:15,573 --> 00:01:18,680
+It's around seven hundred times wider than the Sun.
+
+25
+00:01:18,680 --> 00:01:26,903
+Put it in the Sun's place, and its surface would reach past Mercury, past Venus, past Earth, past Mars, and out into the asteroid belt.
+
+26
+00:01:27,603 --> 00:01:34,763
+And in twenty twenty five, astronomers using the Gemini North telescope finally spotted something long suspected.
+
+27
+00:01:34,763 --> 00:01:41,099
+A small companion star, circling Betelgeuse about four times farther out than Earth is from the Sun.
+
+28
+00:01:41,099 --> 00:01:44,330
+That's barely outside Betelgeuse's swollen surface.
+
+29
+00:01:44,330 --> 00:01:45,850
+The companion is doomed.
+
+30
+00:01:45,850 --> 00:01:50,729
+Within about ten thousand years, it's expected to spiral in and be swallowed.
+
+31
+00:01:51,429 --> 00:01:53,516
+Now fly our jet around Betelgeuse.
+
+32
+00:01:53,516 --> 00:01:55,050
+Not seven months anymore.
+
+33
+00:01:55,050 --> 00:01:57,321
+About three hundred and ninety years.
+
+34
+00:01:57,321 --> 00:02:04,933
+If you had taken off in the sixteen thirties, around the time Galileo was put on trial, you would only be landing about now.
+
+35
+00:02:05,633 --> 00:02:07,322
+Betelgeuse is also restless.
+
+36
+00:02:07,322 --> 00:02:12,450
+In late twenty nineteen, it dimmed so much that people noticed it with the naked eye.
+
+37
+00:02:12,450 --> 00:02:14,923
+Some wondered if it was about to explode.
+
+38
+00:02:14,923 --> 00:02:25,602
+Hubble later showed what really happened: the star had blasted a huge chunk of its surface into space, and that material cooled into a dust cloud that blocked part of its light.
+
+39
+00:02:25,602 --> 00:02:31,454
+Betelgeuse will explode one day, as a supernova, probably within the next hundred thousand years.
+
+40
+00:02:31,454 --> 00:02:36,581
+When it does, it should shine in our sky bright enough to see in daylight, for weeks.
+
+41
+00:02:37,281 --> 00:02:37,834
+But wait.
+
+42
+00:02:37,834 --> 00:02:41,272
+Apart from the Sun, every star is just a point of light.
+
+43
+00:02:41,272 --> 00:02:43,788
+So how do you measure the width of a dot?
+
+44
+00:02:43,788 --> 00:02:45,262
+There are two main ways.
+
+45
+00:02:45,262 --> 00:02:47,778
+The first is to link telescopes together.
+
+46
+00:02:47,778 --> 00:02:53,119
+Combine the light from telescopes spread far apart, and they act like one giant mirror.
+
+47
+00:02:53,119 --> 00:03:00,976
+That's how the European Southern Observatory's Very Large Telescope Interferometer has resolved the actual disks of giant stars.
+
+48
+00:03:00,976 --> 00:03:02,695
+The second way is a formula.
+
+49
+00:03:02,695 --> 00:03:11,473
+If you know how much light a star really gives off, and how hot its surface is, physics tells you how much surface it needs to shine like that.
+
+50
+00:03:11,473 --> 00:03:15,648
+A cool, red star that's still blindingly bright has only one option.
+
+51
+00:03:15,648 --> 00:03:16,998
+It has to be enormous.
+
+52
+00:03:17,698 --> 00:03:18,675
+There's a catch.
+
+53
+00:03:18,675 --> 00:03:20,872
+Both methods depend on the distance.
+
+54
+00:03:20,872 --> 00:03:23,924
+Get the distance wrong, and the size is wrong too.
+
+55
+00:03:23,924 --> 00:03:30,333
+UY Scuti was once crowned the largest known star, at around seventeen hundred times the width of the Sun.
+
+56
+00:03:30,333 --> 00:03:37,475
+Then the Gaia space telescope measured its distance more precisely, and the estimate dropped to roughly nine hundred.
+
+57
+00:03:37,475 --> 00:03:41,015
+It lost almost half its width, on paper, almost overnight.
+
+58
+00:03:41,715 --> 00:03:43,451
+So these stars are gigantic.
+
+59
+00:03:43,451 --> 00:03:44,629
+Here's the paradox.
+
+60
+00:03:44,629 --> 00:03:46,365
+They're also almost nothing.
+
+61
+00:03:46,365 --> 00:03:50,085
+Betelgeuse holds roughly eighteen times the mass of the Sun.
+
+62
+00:03:50,085 --> 00:04:01,679
+But spread that over a ball seven hundred times wider, and its average density comes out, by our calculation, about sixteen thousand times thinner than the air you're breathing right now.
+
+63
+00:04:01,679 --> 00:04:03,849
+Its outer layers are thinner still.
+
+64
+00:04:03,849 --> 00:04:11,661
+Fly a spaceship into Betelgeuse, and for a very long way, you'd be crossing a hot, glowing fog, thinner than any air on Earth.
+
+65
+00:04:12,361 --> 00:04:17,226
+Which means the biggest star and the heaviest star are not the same thing at all.
+
+66
+00:04:17,226 --> 00:04:25,334
+The heaviest star known, R one thirty six a one, in a neighboring galaxy, packs somewhere around two hundred times the mass of the Sun.
+
+67
+00:04:25,334 --> 00:04:28,757
+Yet it's only about thirty five times wider than the Sun.
+
+68
+00:04:28,757 --> 00:04:31,760
+Next to Betelgeuse, it's a tiny blue-white marble.
+
+69
+00:04:31,760 --> 00:04:33,562
+Big stars are puffed-up stars.
+
+70
+00:04:33,562 --> 00:04:36,084
+Heavy stars are compact, blazing furnaces.
+
+71
+00:04:36,784 --> 00:04:37,367
+Step two.
+
+72
+00:04:37,367 --> 00:04:41,637
+VY Canis Majoris, about fourteen hundred times wider than the Sun.
+
+73
+00:04:41,637 --> 00:04:47,784
+In our solar system, its surface would swallow the orbit of Jupiter and stop partway to Saturn.
+
+74
+00:04:47,784 --> 00:04:49,272
+And it's falling apart.
+
+75
+00:04:49,272 --> 00:04:58,331
+Hubble images show this star wrapped in huge arcs and knots of gas, thrown off in giant outbursts, as if it can barely hold itself together.
+
+76
+00:04:59,031 --> 00:04:59,510
+Our jet?
+
+77
+00:04:59,510 --> 00:05:02,442
+About seven hundred and ninety years for one lap.
+
+78
+00:05:02,442 --> 00:05:07,947
+And light itself, the fastest thing there is, would need almost six hours to circle it once.
+
+79
+00:05:07,947 --> 00:05:11,298
+Light gets from the Sun to Earth in about eight minutes.
+
+80
+00:05:11,997 --> 00:05:13,140
+So why stop there?
+
+81
+00:05:13,140 --> 00:05:16,695
+Why isn't there a star as big as the whole solar system?
+
+82
+00:05:16,695 --> 00:05:18,917
+Because every star is a tug of war.
+
+83
+00:05:18,917 --> 00:05:20,440
+Gravity squeezes inward.
+
+84
+00:05:20,440 --> 00:05:23,106
+Heat and light from the core push outward.
+
+85
+00:05:23,106 --> 00:05:33,072
+Make a cool supergiant bigger and brighter, and its outer layers get so loosely held that they start drifting off into space, carried away by powerful winds.
+
+86
+00:05:33,072 --> 00:05:40,626
+Studies of large samples of red supergiants point to a ceiling, somewhere around fifteen hundred times the Sun's width.
+
+87
+00:05:40,626 --> 00:05:43,863
+Past that, the star simply can't hold on to itself.
+
+88
+00:05:44,563 --> 00:05:47,022
+And yet, one star seems to break the rule.
+
+89
+00:05:47,022 --> 00:05:53,753
+Stephenson two eighteen, nearly nineteen thousand light years away, hidden behind dust in the constellation Scutum.
+
+90
+00:05:53,753 --> 00:05:59,255
+Some estimates put it at around two thousand one hundred and fifty times the width of the Sun.
+
+91
+00:05:59,255 --> 00:06:04,874
+Drop that into our solar system, and its surface would reach all the way to the orbit of Saturn.
+
+92
+00:06:04,874 --> 00:06:07,625
+You could fit about ten billion Suns inside it.
+
+93
+00:06:08,325 --> 00:06:11,961
+Our jet would need about twelve hundred years to fly around it.
+
+94
+00:06:11,961 --> 00:06:13,982
+Light would need almost nine hours.
+
+95
+00:06:13,982 --> 00:06:15,309
+But remember the catch.
+
+96
+00:06:15,309 --> 00:06:22,178
+That size rests on a distance and a brightness that are both uncertain, and it breaks the ceiling we just talked about.
+
+97
+00:06:22,178 --> 00:06:24,372
+Many astronomers suspect it's smaller.
+
+98
+00:06:24,372 --> 00:06:27,258
+So the honest answer to which star is the largest?
+
+99
+00:06:27,258 --> 00:06:28,527
+We're still measuring.
+
+100
+00:06:29,227 --> 00:06:32,965
+And the most dramatic story played out almost in real time.
+
+101
+00:06:32,965 --> 00:06:41,074
+In twenty twenty four, ESO's Very Large Telescope Interferometer captured the first close-up image of a star outside our galaxy.
+
+102
+00:06:41,074 --> 00:06:47,473
+WOH G sixty four, in the Large Magellanic Cloud, about a hundred and sixty thousand light years away.
+
+103
+00:06:47,473 --> 00:06:54,251
+A red supergiant, around fifteen hundred times wider than the Sun, wrapped in an egg-shaped cocoon of dust.
+
+104
+00:06:54,951 --> 00:07:05,568
+Then, in twenty twenty five, a team led by Gonzalo Muñoz Sánchez looked back at more than thirty years of observations, and published a surprise in Nature Astronomy.
+
+105
+00:07:05,568 --> 00:07:07,820
+WOH G sixty four has been changing.
+
+106
+00:07:07,820 --> 00:07:11,165
+Its surface got more than a thousand degrees hotter.
+
+107
+00:07:11,165 --> 00:07:13,546
+Its color shifted from red to yellow.
+
+108
+00:07:13,546 --> 00:07:18,050
+And its estimated width dropped to around eight hundred times the Sun.
+
+109
+00:07:18,050 --> 00:07:22,618
+One of the biggest stars we knew may be shrinking in front of our eyes.
+
+110
+00:07:22,618 --> 00:07:25,835
+Some think it's a step toward its final explosion.
+
+111
+00:07:25,835 --> 00:07:30,145
+Not everyone agrees, and that's what makes it so exciting to watch.
+
+112
+00:07:30,845 --> 00:07:33,114
+And here's the twist closest to home.
+
+113
+00:07:33,114 --> 00:07:35,567
+Our own Sun will become a red giant too.
+
+114
+00:07:35,567 --> 00:07:42,005
+In about five billion years, it's expected to swell up and swallow Mercury and Venus, and possibly Earth.
+
+115
+00:07:42,005 --> 00:07:46,788
+But even then, it will only reach a couple of hundred times its current width.
+
+116
+00:07:46,788 --> 00:07:51,816
+Betelgeuse, today, is already about three times bigger than our Sun will ever get.
+
+117
+00:07:52,516 --> 00:07:54,649
+So, the largest star versus the Sun?
+
+118
+00:07:54,649 --> 00:08:01,520
+Somewhere between eight hundred and two thousand times wider, depending on which giant you trust, and when you look.
+
+119
+00:08:01,520 --> 00:08:03,297
+Big enough to swallow Jupiter.
+
+120
+00:08:03,297 --> 00:08:05,370
+Thin enough to be emptier than air.
+
+121
+00:08:05,370 --> 00:08:08,865
+And restless enough to change size within a human lifetime.
+
+122
+00:08:08,865 --> 00:08:12,774
+But you don't need a giant star to feel the scale of the universe.
+
+123
+00:08:12,774 --> 00:08:19,053
+Right now, the ground under your feet is spinning at up to sixteen hundred and seventy kilometers an hour.
+
+124
+00:08:19,053 --> 00:08:21,837
+So what would happen if Earth suddenly stopped?
+
+125
+00:08:21,837 --> 00:08:22,547
+That's next.
