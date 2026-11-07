@@ -1,94 +1,103 @@
 # EP05 — The Largest Star vs the Sun
-# Structure NEW: "grow a star" ladder — the Sun -> Betelgeuse -> (how we measure / the distance catch) -> re-engage 1: thinner than air
-# -> biggest isn't heaviest (R136a1) -> VY CMa -> why stars can't grow forever -> re-engage 2: Stephenson 2-18 (Saturn's orbit)
-# -> the twist: WOH G64 shrank (Nature Astronomy 2025) -> our Sun's own red-giant future -> payoff -> EP06 (Earth stops spinning).
-# Palette crimson / cream. New scenes: inflate, flight, measure, density, heavyvsbig, balance.
-# Own calculations (Python, R_sun=696,000 km, 1 AU=1.496e8 km, jet 900 km/h): jet around the Sun 202 days; Betelgeuse 700 R_sun = 3.3 AU,
-# jet 388 yr; VY CMa 1,420 = 6.6 AU, jet 787 yr, light around 5.75 h; Stephenson 2-18 2,150 = 10.0 AU, jet 1,192 yr, light 8.7 h, volume 9.9e9 Suns;
-# Betelgeuse mean density (18 Msun, 700 R) = 7.4e-5 kg/m3 ≈ 16,000x thinner than air (1.2); R136a1 (200 Msun, 35 R) ≈ 6.6 kg/m3; Sun 1,410.
+# Structure NEW: "five ways to feel one giant" — lineup, solar-system test, the flight, the jar, the beam of light,
+# with two interludes (how we measure a star / why a star can't get bigger) and the twist (the record holder changed).
+# Palette: supergiant crimson / mint. New scene types: lineup, engulf, flight, density, interfero, ceiling
+# Own calculations (Python): Sun diameter 1.392 million km; a 1,500x star has radius ~6.98 AU (between Jupiter 5.2 and Saturn 9.5 AU),
+# volume 1500^3 = 3.375 billion Suns = ~4.4 quadrillion Earths (x1.3 million); light crosses the Sun in 4.6 s and the giant in ~1.9 h;
+# a 900 km/h jet circles the Sun in ~202 days and the giant in ~830 years; mean density of a 20-Sun-mass, 1,500x star
+# = 1.41 g/cm3 x 20 / 1500^3 = 8.4e-9 g/cm3, ~150,000x thinner than sea-level air (1.225e-3 g/cm3);
+# Betelgeuse 764 Rsun = 3.55 AU; Michelson-Pease angle 0.047" = a 2 cm coin seen from ~88 km; Earth's equator ~1,670 km/h.
 TITLE = "The Largest Star vs the Sun"
-CRIM = [255, 77, 109]
-CREAM = [255, 226, 154]
-GOLDC = [255, 194, 75]
-YEL = [255, 214, 90]
+RSG = [232, 67, 74]
+MINT = [111, 242, 200]
 
 SCENES = [
  # ---------- HOOK ----------
- {"say": "Put one of the largest stars we know in place of the Sun, and Earth wouldn't orbit it. Earth would be deep inside it. So would Mars. So would Jupiter. A passenger jet flying around it nonstop would need more than a thousand years. And here's the strange part. Astronomers can't agree on which star holds the record. And one of the most famous giants may have just shrunk.",
-  "vis": {"type": "inflate", "r0": 1, "r1": 1500, "maxau": 7.6, "name": "A record giant", "sub": "in place of our Sun", "head": "Earth would be INSIDE it"}},
- {"say": "So let's grow a star, step by step, from our Sun to the biggest monster ever measured. By the end, you'll know how we measure something that looks like a single dot, why a star can't grow forever, and why the biggest stars in the universe are, in a strange way, almost empty.",
-  "vis": {"type": "bullets", "title": "Grow a star, step by step", "items": ["Our Sun", "Betelgeuse", "VY Canis Majoris", "The record holder…", "…and the giant that shrank"], "col": CRIM, "highlight": 4}},
+ {"say": "If the largest stars we know took the Sun's place, you would be living inside one. Earth, Mars, even Jupiter, all orbiting deep inside a single star. And here's the strange part. Most of that star is thinner than the air in your room.",
+  "vis": {"type": "engulf", "r_au": 6.98, "fast": True, "head": "Your home, inside a star"}},
+ {"say": "Today we put our Sun next to the biggest stars ever measured, and we'll feel the difference in five ways. A lineup, a flight, a jar, a beam of light, and a solar system swallowed whole. Then the two questions nobody asks. How do you even measure a star you can't reach? And why can't a star grow any bigger?",
+  "vis": {"type": "bullets", "title": "Five ways to feel a giant", "items": ["The lineup", "The solar-system test", "The flight", "The jar", "The beam of light"], "col": MINT, "highlight": -1}},
  {"say": "The Largest Star versus the Sun.",
-  "vis": {"type": "title", "title": "The Largest Star\nvs the Sun", "sub": "COSMIC SCALE", "brand": True, "subcol": CRIM}},
+  "vis": {"type": "title", "title": "The Largest Star\nvs the Sun", "sub": "COSMIC SCALE", "brand": True, "subcol": RSG}},
 
- # ---------- STEP 0: THE SUN ----------
- {"say": "Start with our Sun. It's about one point four million kilometers wide. A hundred and nine Earths, side by side. Hollow it out, and you could pour in about one point three million Earths. Now imagine a passenger jet cruising at nine hundred kilometers an hour, flying nonstop around it. By our calculation, one lap takes about two hundred days. Almost seven months. Hold on to that number. It's about to explode.",
-  "vis": {"type": "flight", "name": "SUN", "col": GOLDC, "value": 202, "unit": "days", "notes": ["≈ 7 months for one lap", "109 Earths wide"]}},
+ # ---------- THE SUN FIRST ----------
+ {"say": "First, give the Sun some respect. It's about one point four million kilometers across. About one point three million Earths would fit inside it. NASA calls it an average star in size. But most stars in our galaxy are red dwarfs, smaller and dimmer than the Sun. In a random crowd of stars, our Sun would stand out as one of the big ones.",
+  "vis": {"type": "lineup", "stage": 0, "caption": "1.4 million km across · 1.3 million Earths inside"}},
 
- # ---------- STEP 1: BETELGEUSE ----------
- {"say": "Step one. Betelgeuse, the red shoulder of Orion, roughly five hundred and fifty light years away. You can see it tonight without a telescope. It's around seven hundred times wider than the Sun. Put it in the Sun's place, and its surface would reach past Mercury, past Venus, past Earth, past Mars, and out into the asteroid belt.",
-  "vis": {"type": "inflate", "r0": 1, "r1": 700, "maxau": 5.6, "name": "Betelgeuse", "sub": "the red shoulder of Orion"}},
- {"say": "And in twenty twenty five, astronomers using the Gemini North telescope finally spotted something long suspected. A small companion star, circling Betelgeuse about four times farther out than Earth is from the Sun. That's barely outside Betelgeuse's swollen surface. The companion is doomed. Within about ten thousand years, it's expected to spiral in and be swallowed.",
-  "vis": {"type": "inflate", "r0": 700, "r1": 700, "maxau": 5.6, "name": "Betelgeuse", "sub": "+ a doomed companion (Gemini North, 2025)", "companion": 4.0, "hide_swallowed": True, "caption": "companion ≈ 4× the Earth–Sun distance from Betelgeuse"}},
- {"say": "Now fly our jet around Betelgeuse. Not seven months anymore. About three hundred and ninety years. If you had taken off in the sixteen thirties, around the time Galileo was put on trial, you would only be landing about now.",
-  "vis": {"type": "flight", "name": "BETELGEUSE", "col": CRIM, "value": 388, "unit": "years", "notes": ["take off in the 1630s…", "…land about now"]}},
+ # ---------- HOW WE MEASURE ----------
+ {"say": "Now the problem. Every star except the Sun is so far away that, even in the biggest telescopes, it looks like a point of light. So how do you measure the width of a point? In December nineteen twenty, Albert Michelson and Francis Pease tried something clever on the giant telescope at Mount Wilson. They caught the light of Betelgeuse with two small mirrors set several meters apart, and combined the two beams.",
+  "vis": {"type": "interfero", "stage": 0, "head": "Mount Wilson · December 1920"}},
+ {"say": "When the two beams line up, they make a pattern of stripes. Move the mirrors farther apart, and for a star with a real width, the stripes fade away. The distance where they vanish tells you how wide the star looks. For Betelgeuse, about zero point zero four seven arcseconds. That's like spotting the width of a coin from almost ninety kilometers away. It was the first time anyone measured the size of a star other than the Sun.",
+  "vis": {"type": "interfero", "stage": 1, "head": "The stripes vanish → the star has a width", "angle": "0.047″ = a coin seen from ~88 km"}},
+ {"say": "The trick still works today, only much bigger. The European Southern Observatory's Very Large Telescope Interferometer combines four telescopes in Chile. In twenty twenty four, it took the first close up image of a star in another galaxy.",
+  "vis": {"type": "interfero", "stage": 2, "head": "Today: four telescopes combined (ESO VLTI)"}},
 
- {"say": "Betelgeuse is also restless. In late twenty nineteen, it dimmed so much that people noticed it with the naked eye. Some wondered if it was about to explode. Hubble later showed what really happened: the star had blasted a huge chunk of its surface into space, and that material cooled into a dust cloud that blocked part of its light. Betelgeuse will explode one day, as a supernova, probably within the next hundred thousand years. When it does, it should shine in our sky bright enough to see in daylight, for weeks.",
-  "vis": {"type": "bignumber", "from": 0, "to": 100000, "suffix": " yrs", "col": CRIM, "caption": "Betelgeuse will likely go supernova within ~100,000 years (NASA)"}},
+ # ---------- WAY 1: THE LINEUP ----------
+ {"say": "So, way number one. The lineup. Here is the Sun. Next to it, R one three six a one, the most massive star we know, around two hundred times the Sun's mass. You'd expect it to be the biggest. It isn't. It's only a few dozen times wider than the Sun.",
+  "vis": {"type": "lineup", "stage": 1}},
+ {"say": "Now Betelgeuse, the red shoulder of Orion, a star you can see tonight with your own eyes. A 2020 study puts it at about seven hundred and fifty times the radius of the Sun. Then V Y Canis Majoris, measured at around fourteen hundred times. And finally W O H G sixty four, in the Large Magellanic Cloud, which the European Southern Observatory describes as about two thousand times the size of the Sun. At this scale, the Sun is a dot you can barely see.",
+  "vis": {"type": "lineup", "stage": 2}},
 
- # ---------- HOW DO WE KNOW? ----------
- {"say": "But wait. Apart from the Sun, every star is just a point of light. So how do you measure the width of a dot? There are two main ways. The first is to link telescopes together. Combine the light from telescopes spread far apart, and they act like one giant mirror. That's how the European Southern Observatory's Very Large Telescope Interferometer has resolved the actual disks of giant stars. The second way is a formula. If you know how much light a star really gives off, and how hot its surface is, physics tells you how much surface it needs to shine like that. A cool, red star that's still blindingly bright has only one option. It has to be enormous.",
-  "vis": {"type": "measure", "head": "How do you measure a dot?", "lines": ["1. Link telescopes together", "they act like one giant mirror", "2. Use brightness + temperature", "cool but bright = enormous"], "formula": True}},
- {"say": "There's a catch. Both methods depend on the distance. Get the distance wrong, and the size is wrong too. UY Scuti was once crowned the largest known star, at around seventeen hundred times the width of the Sun. Then the Gaia space telescope measured its distance more precisely, and the estimate dropped to roughly nine hundred. It lost almost half its width, on paper, almost overnight.",
-  "vis": {"type": "inflate", "r0": 1700, "r1": 909, "maxau": 8.6, "name": "UY Scuti", "sub": "before vs after a better distance (Gaia)", "caption": "same star, new distance: the size estimate nearly halves"}},
+ # ---------- WAY 2: THE SOLAR-SYSTEM TEST ----------
+ {"say": "Way number two. Drop them into our solar system. Betelgeuse, placed where the Sun is, would swallow Mercury, Venus, Earth, and Mars, with its surface out in the asteroid belt.",
+  "vis": {"type": "engulf", "r_au": 3.55, "head": "Betelgeuse in the Sun's place", "sub": "≈ 750 × the Sun's radius"}},
+ {"say": "V Y Canis Majoris goes further. NASA says it would reach out between the orbits of Jupiter and Saturn. Jupiter would be orbiting inside the star. From here on, let's use one round giant for our tests. A star fifteen hundred times wider than the Sun, the size of the record holders.",
+  "vis": {"type": "engulf", "r_au": 6.98, "head": "A 1,500× star in the Sun's place", "sub": "surface between Jupiter and Saturn"}},
 
- # ---------- RE-ENGAGE 1: THINNER THAN AIR ----------  # REENGAJE (~3:00)
- {"say": "So these stars are gigantic. Here's the paradox. They're also almost nothing. Betelgeuse holds roughly eighteen times the mass of the Sun. But spread that over a ball seven hundred times wider, and its average density comes out, by our calculation, about sixteen thousand times thinner than the air you're breathing right now. Its outer layers are thinner still. Fly a spaceship into Betelgeuse, and for a very long way, you'd be crossing a hot, glowing fog, thinner than any air on Earth.",
-  "vis": {"type": "density", "title": "Average density", "items": [["Betelgeuse ≈ 0.00007", 7.4e-5, CRIM], ["Air 1.2", 1.2, [200, 210, 235]], ["R136a1 ≈ 7", 6.6, [170, 205, 255]], ["Water 1,000", 1000, [91, 141, 239]], ["Sun 1,410", 1410, GOLDC]], "verdict": "≈ 16,000× thinner than air"}},
- {"say": "Which means the biggest star and the heaviest star are not the same thing at all. The heaviest star known, R one thirty six a one, in a neighboring galaxy, packs somewhere around two hundred times the mass of the Sun. Yet it's only about thirty five times wider than the Sun. Next to Betelgeuse, it's a tiny blue-white marble. Big stars are puffed-up stars. Heavy stars are compact, blazing furnaces.",
-  "vis": {"type": "heavyvsbig", "caption": "biggest ≠ heaviest"}},
+ # ---------- WAY 3: THE FLIGHT ----------
+ {"say": "Way number three. Take a passenger jet, cruising at nine hundred kilometers an hour, and fly it once around the Sun's equator without stopping. By our calculation, that trip takes about two hundred and two days. Seven months in a plane, just to go around our star once.",
+  "vis": {"type": "flight", "mult": 1, "head": "Around the Sun by jet", "res": "≈ 202 days"}},
+ {"say": "Now fly around the giant. Same jet, same speed. About eight hundred and thirty years. If a flight had taken off when the first universities were opening in medieval Europe, it would still be in the air today, and it wouldn't have landed yet.",
+  "vis": {"type": "flight", "mult": 1500, "head": "Around the giant by jet", "res": "≈ 830 years"}},
 
- # ---------- STEP 2: VY CANIS MAJORIS ----------
- {"say": "Step two. VY Canis Majoris, about fourteen hundred times wider than the Sun. In our solar system, its surface would swallow the orbit of Jupiter and stop partway to Saturn. And it's falling apart. Hubble images show this star wrapped in huge arcs and knots of gas, thrown off in giant outbursts, as if it can barely hold itself together.",
-  "vis": {"type": "inflate", "r0": 700, "r1": 1420, "maxau": 10.4, "name": "VY Canis Majoris", "sub": "≈ 1,420× the Sun's width"}},
- {"say": "Our jet? About seven hundred and ninety years for one lap. And light itself, the fastest thing there is, would need almost six hours to circle it once. Light gets from the Sun to Earth in about eight minutes.",
-  "vis": {"type": "flight", "name": "VY CMa", "col": CRIM, "value": 787, "unit": "years", "notes": ["light: ≈ 5 h 45 min per lap", "Sun → Earth: 8 min"]}},
+ # ---------- RE-ENGAGE 1: THE PARADOX ----------  # REENGAJE (~3:00)
+ {"say": "But here's the paradox. A star that big must be unimaginably heavy, right? Not really. Our giant has maybe twenty times the mass of the Sun, spread over a volume billions of times larger. Do the math, and its average density is about a hundred and fifty thousand times thinner than the air at sea level.",
+  "vis": {"type": "density", "ratio": 150000, "head": "Average density of the giant"}},
+ {"say": "Astronomers sometimes call the outer layers of a red supergiant a red hot vacuum. Almost all of its mass is packed into a small, dense core, and around it floats a vast, glowing envelope of thin gas, puffing out like steam. That's why these stars are so fragile. Their outer layers are barely held by gravity, and they leak away into space.",
+  "vis": {"type": "density", "ratio": 150000, "core": True, "head": "A tiny dense core, a vast thin envelope"}},
 
- # ---------- WHY NOT BIGGER? ----------
- {"say": "So why stop there? Why isn't there a star as big as the whole solar system? Because every star is a tug of war. Gravity squeezes inward. Heat and light from the core push outward. Make a cool supergiant bigger and brighter, and its outer layers get so loosely held that they start drifting off into space, carried away by powerful winds. Studies of large samples of red supergiants point to a ceiling, somewhere around fifteen hundred times the Sun's width. Past that, the star simply can't hold on to itself.",
-  "vis": {"type": "balance", "head": "Why a star can't grow forever", "lines": ["bigger + brighter →", "outer layers drift away", "ceiling ≈ 1,500× the Sun"], "blow": True}},
+ # ---------- WAY 4: THE JAR ----------
+ {"say": "Way number four. The jar. How many Suns would fit inside our giant? Volume grows with the cube of the width. Fifteen hundred, times fifteen hundred, times fifteen hundred. About three point four billion Suns.",
+  "vis": {"type": "bignumber", "from": 0, "to": 3375000000, "suffix": "", "col": RSG, "caption": "Suns that would fit inside a star 1,500 times wider"}},
+ {"say": "And since one point three million Earths fit in each Sun, that's around four quadrillion Earths. A four followed by fifteen zeros. All inside one star.",
+  "vis": {"type": "bignumber", "from": 0, "to": 4.4, "decimals": 1, "suffix": " quadrillion", "col": MINT, "caption": "Earths inside the giant · 4,400,000,000,000,000"}},
 
- # ---------- RE-ENGAGE 2: THE BIGGEST SCALE ----------  # REENGAJE (~6:00)
- {"say": "And yet, one star seems to break the rule. Stephenson two eighteen, nearly nineteen thousand light years away, hidden behind dust in the constellation Scutum. Some estimates put it at around two thousand one hundred and fifty times the width of the Sun. Drop that into our solar system, and its surface would reach all the way to the orbit of Saturn. You could fit about ten billion Suns inside it.",
-  "vis": {"type": "inflate", "r0": 1, "r1": 2150, "maxau": 10.6, "name": "Stephenson 2-18", "sub": "a contested estimate", "head": "Out to Saturn's orbit"}},
- {"say": "Our jet would need about twelve hundred years to fly around it. Light would need almost nine hours. But remember the catch. That size rests on a distance and a brightness that are both uncertain, and it breaks the ceiling we just talked about. Many astronomers suspect it's smaller. So the honest answer to which star is the largest? We're still measuring.",
-  "vis": {"type": "flight", "name": "St 2-18", "col": CRIM, "value": 1192, "unit": "years", "notes": ["light: ≈ 8 h 40 min per lap", "…if the estimate holds"]}},
+ # ---------- WAY 5: THE BEAM OF LIGHT ----------  # REENGAJE 2 (~5:30)
+ {"say": "Way number five, and the biggest scale of all. Light. The fastest thing there is. A beam of light crosses the Sun, from one side to the other, in about four and a half seconds.",
+  "vis": {"type": "flight", "mult": 1, "light": True, "head": "Light crossing the Sun", "res": "≈ 4.6 seconds"}},
+ {"say": "Across our giant, that same beam needs almost two hours. Light could leave the Moon and reach Earth more than five thousand times in the time it takes to cross one star. Two hours, at the fastest speed in the universe.",
+  "vis": {"type": "flight", "mult": 1500, "light": True, "head": "Light crossing the giant", "res": "≈ 1.9 hours"}},
 
- # ---------- THE TWIST: THE GIANT THAT SHRANK ----------
- {"say": "And the most dramatic story played out almost in real time. In twenty twenty four, ESO's Very Large Telescope Interferometer captured the first close-up image of a star outside our galaxy. WOH G sixty four, in the Large Magellanic Cloud, about a hundred and sixty thousand light years away. A red supergiant, around fifteen hundred times wider than the Sun, wrapped in an egg-shaped cocoon of dust.",
-  "vis": {"type": "inflate", "r0": 1, "r1": 1540, "maxau": 8.0, "name": "WOH G64", "sub": "first close-up of a star in another galaxy (ESO, 2024)"}},
- {"say": "Then, in twenty twenty five, a team led by Gonzalo Muñoz Sánchez looked back at more than thirty years of observations, and published a surprise in Nature Astronomy. WOH G sixty four has been changing. Its surface got more than a thousand degrees hotter. Its color shifted from red to yellow. And its estimated width dropped to around eight hundred times the Sun. One of the biggest stars we knew may be shrinking in front of our eyes. Some think it's a step toward its final explosion. Not everyone agrees, and that's what makes it so exciting to watch.",
-  "vis": {"type": "inflate", "r0": 1540, "r1": 800, "col0": CRIM, "col1": YEL, "maxau": 8.0, "name": "WOH G64", "sub": "red → yellow, ≈ 1,500× → ≈ 800×", "head": "The giant that shrank", "caption": "Nature Astronomy, 2025 — over 30 years of observations"}},
+ # ---------- THE TWIST ----------
+ {"say": "So which star is the largest, exactly? That answer just got complicated. In twenty twenty four, the image of W O H G sixty four showed something odd. The star was wrapped in an egg shaped cocoon of gas and dust, and it had been getting dimmer for a decade.",
+  "vis": {"type": "lineup", "stage": 3, "caption": "WOH G64 · 160,000 light-years away · wrapped in a cocoon"}},
+ {"say": "Then, in twenty twenty six, a team led from the National Observatory of Athens reported in Nature Astronomy that W O H G sixty four had heated up by more than a thousand degrees, and seems to have turned from a red supergiant into a yellow hypergiant. It may have shed part of its outer layers. One of the biggest stars we ever measured is changing while we watch.",
+  "vis": {"type": "lineup", "stage": 4, "caption": "red supergiant → yellow hypergiant (Nature Astronomy, 2026)"}},
 
- # ---------- CLOSER TO HOME ----------
- {"say": "And here's the twist closest to home. Our own Sun will become a red giant too. In about five billion years, it's expected to swell up and swallow Mercury and Venus, and possibly Earth. But even then, it will only reach a couple of hundred times its current width. Betelgeuse, today, is already about three times bigger than our Sun will ever get.",
-  "vis": {"type": "inflate", "r0": 1, "r1": 210, "col0": GOLDC, "col1": [255, 120, 60], "maxau": 1.9, "name": "Our Sun", "sub": "in about 5 billion years"}},
+ # ---------- WHY NOT BIGGER ----------
+ {"say": "That raises the real question. Why do the largest stars all stop around one or two thousand times the Sun? Why not ten thousand? In nineteen seventy nine, astronomers Roberta Humphreys and Kris Davidson noticed an invisible ceiling. Above a certain brightness, cool, bloated supergiants simply don't exist. It's now called the Humphreys Davidson limit.",
+  "vis": {"type": "ceiling", "stage": 0}},
+ {"say": "The likely reason? The heaviest stars shine so fiercely that their own light pushes their gas away. They blow off their outer layers before they can swell into red giants. A 2026 study from Armagh Observatory traced that ceiling to exactly this kind of runaway mass loss. So the most massive stars stay relatively compact, and the biggest stars are the medium heavyweights that puff up and let go.",
+  "vis": {"type": "ceiling", "stage": 1}},
+
+ # ---------- OUR SUN'S TURN ----------
+ {"say": "And our Sun? It will have its own giant phase. In about five billion years, NASA says, it will run out of hydrogen in its core and swell into a red giant, big enough to engulf Mercury and Venus, and possibly Earth. A small red giant, compared to the monsters on this list. Big enough to swallow our world.",
+  "vis": {"type": "engulf", "r_au": 1.0, "sun": True, "head": "The Sun, in about 5 billion years", "sub": "a red giant: Mercury, Venus… maybe Earth"}},
 
  # ---------- PAYOFF + NEXT ----------
- {"say": "So, the largest star versus the Sun? Somewhere between eight hundred and two thousand times wider, depending on which giant you trust, and when you look. Big enough to swallow Jupiter. Thin enough to be emptier than air. And restless enough to change size within a human lifetime. But you don't need a giant star to feel the scale of the universe. Right now, the ground under your feet is spinning at up to sixteen hundred and seventy kilometers an hour. So what would happen if Earth suddenly stopped? That's next.",
-  "vis": {"type": "title", "title": "Next:\nWhat If Earth Stopped Spinning?", "sub": "COSMIC SCALE", "brand": False, "subcol": CRIM}},
+ {"say": "So, the largest star versus the Sun. Two thousand times wider. Billions of Suns of space inside. Eight centuries to fly around it, two hours for light to cross it, and thinner than air. A giant made mostly of glowing almost-nothing. But you don't need a giant star for extreme physics. Our own planet is spinning right now, at about sixteen hundred and seventy kilometers an hour at the equator. So what would happen if Earth suddenly stopped? That's next.",
+  "vis": {"type": "title", "title": "Next:\nWhat If Earth Stopped Spinning?", "sub": "COSMIC SCALE", "brand": False, "subcol": MINT}},
 ]
 
 SOURCES = [
- "NOIRLab / Gemini North press release noirlab2523 (July 2025): Betelgeuse radius about 700 times the Sun; companion about 1.5 solar masses at about 4 times the Earth–Sun distance, expected to be destroyed within about 10,000 years",
- "ESO press release (Nov 2024): first close-up image of a star outside our galaxy, WOH G64, Large Magellanic Cloud, ~160,000 light-years, egg-shaped dust cocoon (VLTI GRAVITY)",
- "Muñoz-Sánchez et al. (2025), Nature Astronomy, via Sky & Telescope: WOH G64 from ~1,500 to ~800 solar radii, >1,000 °C hotter, red to yellow",
- "Wittkowski et al. (2012), A&A: VY Canis Majoris radius ~1,420 solar radii; NASA/Hubble (2021, Humphreys et al.): arcs and knots of ejected gas",
- "Crowther et al. (2010), MNRAS / University of Sheffield R136a1 FAQ: radius ~35 solar radii; Kalari et al. (2022), Gemini: current mass ~200 solar masses",
- "Stephenson 2-18: radius estimate ~2,150 solar radii (Davies et al. 2012 parameters), considered uncertain",
- "UY Scuti: earlier ~1,700 solar radii, revised to ~900 with Gaia distance",
- "Levesque et al. (2005), ApJ: empirical upper limit for red supergiant radii ~1,500 solar radii",
- "NASA / Hubble (Aug 2022, Dupree et al.): Betelgeuse Great Dimming caused by a surface mass ejection; supernova likely within 100,000 years",
- "NASA Science, Sun facts: red giant phase in about 5 billion years",
- "Own calculations (Python): jet laps at 900 km/h, light-travel times, mean densities",
+ "NASA Science, Sun: Facts (about 1.4 million km across; about 1.3 million Earths fit inside; an average star in size; red giant in about 5 billion years could engulf Mercury, Venus and possibly Earth)",
+ "Michelson & Pease (1921), Astrophysical Journal 53: Measurement of the diameter of Alpha Orionis with the interferometer (Mount Wilson, December 1920; 0.047 arcseconds)",
+ "ESO press release eso2417 (Nov 21, 2024), Ohnaka et al., A&A: first close-up image of a star outside our galaxy, WOH G64, about 2,000 times the Sun's size, 160,000 light-years, VLTI/GRAVITY, egg-shaped cocoon, dimming over the past decade",
+ "Muñoz-Sanchez et al. (2026), Nature Astronomy (via Sci.News, March 2026): WOH G64 warmed by more than 1,000 °C and transitioned from red supergiant to yellow hypergiant",
+ "NASA Hubble (March 2021): VY Canis Majoris would extend between the orbits of Jupiter and Saturn; 300,000 times brighter than the Sun",
+ "Wittkowski et al. (2012), A&A: VY CMa radius about 1,420 solar radii",
+ "Joyce et al. (2020), ApJ: Betelgeuse radius about 750 (764) solar radii",
+ "NOIRLab / Gemini South (Aug 2022): R136a1, 170–230 solar masses",
+ "Humphreys & Davidson (1979), ApJ: upper luminosity limit for cool supergiants; Sabhahit & Vink (2026), arXiv:2607.28013, Armagh Observatory: origin of the maximum stellar size in enhanced mass loss",
+ "Own calculations: volume ratio 1500³, light-crossing time, jet circumnavigation at 900 km/h, mean density for 20 solar masses vs sea-level air",
 ]
