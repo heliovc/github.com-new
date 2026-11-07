@@ -4,7 +4,7 @@ Usage:
   python3 -I tutor.py ep01.py out/ep01 --preview        # one still per scene (at 85% of the scene)
   python3 -I tutor.py ep01.py out/ep01                  # full render -> final.mp4, subtitles.srt, chapters.txt
   python3 -I tutor.py ep01.py out/ep01 --vertical "0,3,5" "TITLE"   # Short 1080x1920 from scenes (uses cached voice)
-Scene types: title, steps, code, term, files, tip, keys, compare, chat, outro, tree (EP02), map (EP02)
+Scene types: title, steps, code, term, files, tip, keys, compare, chat, outro, tree (EP02), map (EP02), sheet + args (EP03)
 Identity: charcoal #0F1115, lime #B6F35C, coral #FF7A59, sky #6CC4FF, Poppins + DejaVu Sans Mono.
 """
 import sys, os, re, math, json, hashlib, subprocess, importlib.util
@@ -52,6 +52,7 @@ def chrome(img, prog, label=""):
 
 def text_a(img, xy, s, font, fill, a=1.0, anchor="la"):
     if a <= 0: return
+    if a >= 0.999: ImageDraw.Draw(img).text(xy, s, font=font, fill=fill, anchor=anchor); return  # fast path (EP03)
     lay = Image.new("RGBA", img.size, (0, 0, 0, 0)); ImageDraw.Draw(lay).text(xy, s, font=font, fill=fill + (int(255 * a),), anchor=anchor)
     img.alpha_composite(lay)
 
@@ -124,14 +125,14 @@ def sc_title(img, v, t, d):
 
 def sc_steps(img, v, t, d):
     text_a(img, (160, 190), v["title"], F(60, "Bold"), TXT, ease(t / 0.4))
-    n = len(v["items"]); per = max(0.6, (d * 0.75) / n)
+    n = len(v["items"]); per = max(0.6, (d * 0.75) / n); rh = min(120, 720 / n); bh = rh - 24; y0 = 330 if n <= 5 else 290
     for i, it in enumerate(v["items"]):
-        a = ease((t - 0.4 - i * per) / 0.4); y = 330 + i * 120
+        a = ease((t - 0.4 - i * per) / 0.4); y = y0 + i * rh
         if a <= 0: continue
-        dr = ImageDraw.Draw(img)
-        dr.rounded_rectangle([160, y, 1760, y + 96], 18, fill=mix(BG, PANEL, a), outline=mix(BG, LINE, a), width=2)
-        dr.rounded_rectangle([184, y + 20, 240, y + 76], 12, fill=mix(BG, ACC, a)); dr.text((212, y + 48), str(i + 1), font=F(32, "Bold"), fill=BG, anchor="mm")
-        text_a(img, (272, y + 48), it, F(38, "Medium"), TXT, a, "lm")
+        dr = ImageDraw.Draw(img); m = (bh - 56) / 2
+        dr.rounded_rectangle([160, y, 1760, y + bh], 18, fill=mix(BG, PANEL, a), outline=mix(BG, LINE, a), width=2)
+        dr.rounded_rectangle([184, y + m, 240, y + m + 56], 12, fill=mix(BG, ACC, a)); dr.text((212, y + bh / 2), str(i + 1), font=F(32, "Bold"), fill=BG, anchor="mm")
+        text_a(img, (272, y + bh / 2), it, F(38 if n <= 5 else 34, "Medium"), TXT, a, "lm")
 
 def sc_code(img, v, t, d):
     lines = v["code"].strip("\n").split("\n"); lh = v.get("lh", 46); size = v.get("size", 28)
@@ -315,6 +316,126 @@ def sc_map(img, v, t, d):
         text_a(img, (1230, y + rh / 2 - 6), "→", F(56, "monob"), col, a, "mm")
         dr.rounded_rectangle([1300, y + 8, 1720, y + rh - 20], 18, fill=mix(BG, mix(PANEL, col, 0.18), a), outline=mix(BG, col, a), width=3)
         icon_folder(dr, 1330, y + rh / 2 - 23, col, a); text_a(img, (1384, y + rh / 2 - 6), folder + "/", F(36, "SemiBold"), TXT, a, "lm")
+
+# ---- EP03: spreadsheet (formula bar typing, colored range references, spilled / filled results, #SPILL! demo)
+def _addr(a):
+    m = re.match(r"([A-Z]+)(\d+)", a); return ord(m.group(1)) - 65, int(m.group(2))
+def _rng(r):
+    a, b = (r.split(":") + [r])[:2]; (c0, r0), (c1, r1) = _addr(a), _addr(b); return c0, r0, c1, r1
+REFCOL = [(108, 196, 255), (190, 150, 255), (255, 211, 105), (182, 243, 92), (255, 160, 200)]
+def sc_sheet(img, v, t, d):
+    widths = v.get("widths", [110, 95, 105, 130, 115, 130, 130, 130, 130, 130, 130]); nrows = v.get("rows", 14); rh = v.get("rh", 46)
+    hw, hh = 56, 40; tot = hw + sum(widths); scl = min(1.3, 1560 / tot)
+    widths = [w * scl for w in widths]; x0 = (W - hw - sum(widths)) / 2; xs = [x0 + hw]; fsc = min(1.12, scl)
+    for w in widths: xs.append(xs[-1] + w)
+    gy = 236; ys = [gy + hh + i * rh for i in range(nrows + 1)]; gx1 = xs[-1]; gy1 = ys[-1]
+    a = ease(t / 0.4); dr = ImageDraw.Draw(img)
+    form = v.get("formula", ""); at = v.get("at"); t0 = 0.5 if not v.get("static") else -0.2
+    dur = (min(d * 0.4, max(0.8, len(form) / v.get("cps", 20))) if not v.get("static") else 0.01) if form else 0
+    typed = int(len(form) * max(0, min(1, (t - t0) / dur))) if form else 0; done = form and t >= t0 + dur
+    rv = ease((t - t0 - dur - 0.25) / 0.6) if form else 1  # reveal of results
+    # formula bar
+    fx0, fx1 = min(x0, (W - 1500) / 2), max(gx1, (W + 1500) / 2)
+    dr.rounded_rectangle([fx0, 140, fx1, 200], 10, fill=mix(BG, PANEL, a), outline=mix(BG, LINE, a), width=2)
+    dr.rectangle([fx0 + 2, 142, fx0 + 110, 198], fill=mix(BG, PANEL2, a)); text_a(img, (fx0 + 56, 170), at or "", F(24, "SemiBold"), TXT, a, "mm")
+    text_a(img, (fx0 + 146, 170), "fx", F(26, "Medium"), DIM, a, "mm"); dr.line([fx0 + 180, 150, fx0 + 180, 190], fill=LINE, width=2)
+    refs = []  # (start, end, color, range)
+    for k, rg in enumerate(v.get("ranges", [])):
+        rr = rg[0] if isinstance(rg, tuple) else rg; col = rg[1] if isinstance(rg, tuple) and len(rg) > 1 else REFCOL[k % len(REFCOL)]
+        i = form.find(rr.replace("$", "")) if rr.replace("$", "") in form else form.find(rr)
+        if i >= 0: refs.append((i, i + len(rr), col, rr))
+    fsz = 28
+    while fsz > 16 and F(fsz, "mono").getlength(form) > fx1 - fx0 - 220: fsz -= 1
+    fm = F(fsz, "mono"); cx = fx0 + 200
+    for j, ch in enumerate(form[:typed]):
+        col = TXT
+        for (i0, i1, c, _) in refs:
+            if i0 <= j < i1: col = c
+        text_a(img, (cx, 170), ch, fm, col, a, "lm"); cx += fm.getlength(ch)
+    if form and not done and int(t * 3) % 2 == 0: dr.rectangle([cx + 2, 154, cx + 5, 186], fill=ACC)
+    # grid
+    dr.rectangle([x0, gy, gx1, gy1], fill=mix(BG, (20, 22, 27), a))
+    dr.rectangle([x0, gy, gx1, gy + hh], fill=mix(BG, PANEL2, a)); dr.rectangle([x0, gy, x0 + hw, gy1], fill=mix(BG, PANEL2, a))
+    for rnum in v.get("mark", []):
+        k = rv if form else a; dr.rectangle([xs[0], ys[rnum - 1], gx1, ys[rnum]], fill=mix((20, 22, 27), mix(BG, v.get("markcol", YEL), 0.2), k))
+    for (i0, i1, c, rr) in refs:
+        if i0 >= 0 and typed >= i1 and not done or (done and rv < 1 and i0 >= 0):
+            c0, r0, c1, r1 = _rng(rr); dr.rectangle([xs[c0], ys[r0 - 1], xs[c1 + 1], ys[r1]], fill=mix((20, 22, 27), c, 0.16))
+    for i, x in enumerate(xs): dr.line([x, gy, x, gy1], fill=mix(BG, LINE, a), width=1)
+    for i, y in enumerate([gy] + ys): dr.line([x0, y, gx1, y], fill=mix(BG, LINE, a), width=1)
+    fl, fs, fh = F(22, "SemiBold"), F(23 * fsc, "Regular"), F(23 * fsc, "SemiBold")
+    for c in range(len(widths)): text_a(img, ((xs[c] + xs[c + 1]) / 2, gy + hh / 2), chr(65 + c), fl, DIM, a, "mm")
+    for r in range(1, nrows + 1): text_a(img, (x0 + hw / 2, (ys[r - 1] + ys[r]) / 2), str(r), fl, DIM, a, "mm")
+    def put(c, r, val, col=TXT, font=None, alpha=1.0):
+        if r > nrows or c >= len(widths): return
+        y = (ys[r - 1] + ys[r]) / 2; f = font or (fh if r == 1 else fs); s = str(val)
+        if isinstance(val, (int, float)) and not isinstance(val, bool): text_a(img, (xs[c + 1] - 12, y), s, f, col, a * alpha, "rm")
+        else: text_a(img, (xs[c] + 12, y), s, f, col, a * alpha, "lm")
+    for k, val in v.get("cells", {}).items():
+        c, r = _addr(k); put(c, r, val, ACC if k == v.get("block") else TXT)
+    for (i0, i1, c, rr) in refs:  # range borders while editing (Excel style)
+        if i0 >= 0 and typed >= i1 and (not done or rv < 1):
+            c0, r0, c1, r1 = _rng(rr); dr.rectangle([xs[c0], ys[r0 - 1], xs[c1 + 1], ys[r1]], outline=c, width=3)
+    if at:
+        ac, ar = _addr(at)
+        if v.get("block"):
+            bc, br = _addr(v["block"]); dr.rectangle([xs[bc], ys[br - 1], xs[bc + 1], ys[br]], outline=CORAL, width=3)
+        if form and not done:  # edit mode: formula shown in the cell, overflowing to the right
+            s = form[:typed]; f = F(21 * fsc, "mono"); tw = f.getlength(s) + 24
+            dr.rectangle([xs[ac], ys[ar - 1], max(xs[ac + 1], xs[ac] + tw), ys[ar]], fill=(20, 22, 27))
+            text_a(img, (xs[ac] + 10, (ys[ar - 1] + ys[ar]) / 2), s, f, TXT, a, "lm")
+        elif v.get("error"):
+            put(ac, ar, v["error"], CORAL, F(23 * fsc, "SemiBold"), rv)
+            if v.get("ghost") and rv > 0:
+                c0, r0, c1, r1 = _rng(v["ghost"]); X0, Y0, X1, Y1 = xs[c0], ys[r0 - 1], xs[c1 + 1], ys[r1]
+                for xx in range(int(X0), int(X1), 18): dr.line([xx, Y0, min(xx + 9, X1), Y0], fill=CORAL, width=3); dr.line([xx, Y1, min(xx + 9, X1), Y1], fill=CORAL, width=3)
+                for yy in range(int(Y0), int(Y1), 18): dr.line([X0, yy, X0, min(yy + 9, Y1)], fill=CORAL, width=3); dr.line([X1, yy, X1, min(yy + 9, Y1)], fill=CORAL, width=3)
+        else:
+            res = v.get("result", []); oc, orow = _addr(v.get("out", at)); n = len(res)
+            for i, row in enumerate(res):
+                k = ease((rv * (n + 2) - i) / 2) if n else 0
+                if k <= 0: continue
+                for j, val in enumerate(row if isinstance(row, (list, tuple)) else [row]): put(oc + j, orow + i, val, v.get("rescol", TXT), fs, k)
+            if rv > 0.6 and res and not v.get("fill"):
+                wcols = max(len(r) if isinstance(r, (list, tuple)) else 1 for r in res)
+                dr.rectangle([xs[oc], ys[orow - 1], xs[min(len(widths), oc + wcols)], ys[min(nrows, orow + n - 1)]], outline=SKY, width=2)
+        dr.rectangle([xs[ac] - 1, ys[ar - 1] - 1, xs[ac + 1] + 1, ys[ar] + 1], outline=ACC, width=4)
+    if v.get("note"):
+        k = ease((t - t0 - dur - 0.8) / 0.5) if form else ease((t - 0.8) / 0.5); f = F(32, "SemiBold"); tw = f.getlength(v["note"])
+        if k > 0:
+            ny = min(gy1 + 24, H - 100); dr.rounded_rectangle([W / 2 - tw / 2 - 30, ny, W / 2 + tw / 2 + 30, ny + 62], 31, fill=mix(BG, v.get("notecol", ACC), k))
+            dr.text((W / 2, ny + 31), v["note"], font=f, fill=BG, anchor="mm")
+
+# ---- EP03: function syntax card (argument rows appear one by one, example formula colored by argument)
+def sc_args(img, v, t, d):
+    text_a(img, (160, 175), v.get("title", ""), F(30, "SemiBold"), ACC, ease(t / 0.4))
+    fn = v["fn"]; f0 = F(64, "monob"); text_a(img, (160, 260), "=" + fn + "(", f0, TXT, ease(t / 0.4), "lm")
+    args = v["args"]; n = len(args); per = max(0.5, d * 0.55 / n); rh = min(104, 470 / n); dr = ImageDraw.Draw(img)
+    lx = max(720, max(F(32, "mono").getlength(a[0]) + 48 + (130 if (len(a) > 2 and a[2]) else 0) for a in args) + 250)
+    for i, (name, label, *opt) in enumerate(args):
+        k = ease((t - 0.5 - i * per) / 0.4); col = REFCOL[i % len(REFCOL)]
+        if k <= 0: continue
+        y = 330 + i * rh; optional = bool(opt and opt[0]); f = F(32, "mono"); w = f.getlength(name) + 48
+        dr.rounded_rectangle([200, y, 200 + w, y + rh - 22], 14, fill=mix(BG, mix(PANEL, col, 0.22), k), outline=mix(BG, col, k * (0.5 if optional else 1)), width=3)
+        text_a(img, (224, y + (rh - 22) / 2), name, f, col, k, "lm")
+        text_a(img, (lx, y + (rh - 22) / 2), label, F(34, "Medium"), TXT if not optional else DIM, k, "lm")
+        if optional: text_a(img, (200 + w + 18, y + (rh - 22) / 2), "optional", F(22, "Medium"), DIM, k, "lm")
+    if v.get("example"):
+        k = ease((t - 0.5 - n * per - 0.3) / 0.5)
+        if k > 0:
+            ex = v["example"]; fe = F(34, "mono")
+            while fe.size > 20 and fe.getlength(ex) > 1500: fe = F(fe.size - 1, "mono")
+            yb = 330 + n * rh + 30; dr.rounded_rectangle([160, yb, 1760, yb + 90], 16, fill=mix(BG, PANEL, k), outline=mix(BG, LINE, k), width=2)
+            spans = []
+            for i, part in enumerate(v.get("parts", [])):
+                j = ex.find(part)
+                if j >= 0: spans.append((j, j + len(part), REFCOL[i % len(REFCOL)]))
+            cx = 960 - fe.getlength(ex) / 2
+            for j, ch in enumerate(ex):
+                col = TXT
+                for (a0, a1, c) in spans:
+                    if a0 <= j < a1: col = c
+                text_a(img, (cx, yb + 45), ch, fe, col, k, "lm"); cx += fe.getlength(ch)
 
 SC = {k[3:]: f for k, f in list(globals().items()) if k.startswith("sc_")}
 

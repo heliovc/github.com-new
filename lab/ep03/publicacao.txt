@@ -1,0 +1,68 @@
+=== LONGO (EP03) ===
+TITULO: 7 Excel Formulas That Replace Hours of Work (XLOOKUP, FILTER, UNIQUE & More)
+PUBLICAR: 07/11/2026 (Brasilia) - ja passou das 19:00 -> Publico na hora do upload
+
+DESCRICAO:
+Seven Excel formulas that replace hours of copying, filtering and adding up by hand: XLOOKUP, FILTER, UNIQUE, SORT, SUMIFS, IFS and TEXTSPLIT, step by step with one small practice table. Plus the #SPILL! error explained, and a report that builds itself with one formula.
+
+Chapters
+0:00 The result
+0:31 The 7 formulas
+1:01 The practice table
+1:18 #1 XLOOKUP: find any value
+2:22 #2 FILTER: every matching row
+3:23 The #SPILL! error (and the 2-second fix)
+3:44 #3 UNIQUE: remove duplicates
+4:02 #4 SORT: order by any column
+4:35 #5 SUMIFS: totals with conditions
+5:14 Bonus: a report that builds itself
+5:36 #6 IFS: label rows with rules
+6:24 #7 TEXTSPLIT: split text into cells
+7:07 Common errors
+7:26 Pro tip: turn your data into a Table
+7:43 Recap
+
+The formulas from the video (practice table in A1:E13: Order, Rep, Region, Product, Amount)
+1. XLOOKUP:   =XLOOKUP(G2,A2:A13,E2:E13,"Not found")
+   whole row: =XLOOKUP(G2,A2:A13,B2:E13,"Not found")
+2. FILTER:    =FILTER(A2:E13,C2:C13="West")
+   two conditions (AND): =FILTER(A2:E13,(C2:C13="West")*(E2:E13＞100))
+   with a message: =FILTER(A2:E13,C2:C13="Central","No orders")
+3. UNIQUE:    =UNIQUE(B2:B13)
+4. SORT:      =SORT(A2:E13,5,-1)     and   =SORT(UNIQUE(C2:C13))
+5. SUMIFS:    =SUMIFS(E2:E13,B2:B13,"Ana")
+   two conditions: =SUMIFS(E2:E13,C2:C13,"West",D2:D13,"Laptop")
+   Bonus report: G2 =UNIQUE(B2:B13)  then  H2 =SUMIFS(E2:E13,B2:B13,G2#)
+6. IFS:       =IFS(E2≥1000,"Large",E2≥100,"Medium",TRUE,"Small")
+7. TEXTSPLIT: =TEXTSPLIT(A2," ")     down a column: =TEXTSPLIT(A2,,";")
+(YouTube blocks the greater-than sign in descriptions: retype ＞ as greater-than and ≥ as greater-than + equals in Excel.)
+
+Works in Excel for Microsoft 365, Excel 2021 and Excel 2024. TEXTSPLIT needs Microsoft 365 or Excel 2024. #SPILL! = something is in the way of the results. #CALC! = FILTER found nothing and has no 3rd argument.
+
+—
+Shortcut Lab: software and AI tutorials that save you hours. A new tutorial every day.
+Subscribe so you don't miss the next shortcut.
+
+Narration uses a synthetic voice. All code shown is run and checked before publishing.
+#excel #exceltips #tutorial
+
+TAGS: excel, excel formulas, excel tutorial, excel for beginners, xlookup, filter function excel, unique function, sort function excel, sumifs, ifs function, textsplit, spill error excel, dynamic arrays, excel tips, microsoft excel
+
+=== SHORT ===
+TITULO: Excel FILTER: Every Matching Row in One Formula #shorts
+PROGRAMAR: 07/11/2026 20:30 (Brasilia) (se ja passou: Publico) · cenas 12,9,10 (abre no #SPILL!)
+DESCRICAO:
+One FILTER formula pulls every matching row, and here's why you sometimes get #SPILL! instead.
+Full tutorial on the channel: "7 Excel Formulas That Replace Hours of Work".
+#excel #shorts #exceltips
+
+=== CHECKLIST (playbook secao 7) ===
+1. 1a frase = resultado (relatorio pronto com 1 formula) em <15 palavras: OK
+2. Ate 15 s: "next ten minutes, seven formulas, no experience": OK
+3. Loop aberto: erro que confunde todo mundo (aberto 0:20, fechado 3:23); relatorio do inicio (aberto 0:00, fechado 5:14): OK
+4. Re-engajamentos: 3:23 (#SPILL!), 5:14 (bonus relatorio), 6:24 erro de ordem no IFS: OK
+5. Nenhum visual parado > 40 s: OK (maior cena 30 s, lista animada)
+6. Sem enchimento (8:13, 1.421 palavras): OK
+7. Final = recap + proximo EP, sem despedida: OK
+8. Short: FILTER resultado + 2 condicoes + #SPILL!: OK
+9. Diferente do EP01/EP02: cor coral, cenas novas sheet (planilha c/ barra de formula, referencias coloridas, spill) + args (cartao de sintaxe), thumb layout planilha inclinada: OK
