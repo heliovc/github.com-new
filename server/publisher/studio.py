@@ -7,7 +7,9 @@ no Projeto). O Studio muda de vez em quando: cada passo tira screenshot quando f
 from __future__ import annotations
 
 import logging
+import os
 import re
+import socket
 import time
 from datetime import datetime
 from pathlib import Path
@@ -30,12 +32,35 @@ class LoginNeeded(StudioError):
     pass
 
 
+def _lock_is_stale(lock: Path) -> bool:
+    """SingletonLock aponta para 'host-pid'. Se esse processo não existe mais, é sobra de um
+    Chrome que morreu (OOM, kill, queda) e travaria o robô para sempre."""
+    try:
+        host, _, pid = os.readlink(lock).rpartition("-")
+    except OSError:
+        return False
+    if host != socket.gethostname() or not pid.isdigit():
+        return False
+    try:
+        os.kill(int(pid), 0)
+    except ProcessLookupError:
+        return True
+    except PermissionError:
+        return False
+    return False
+
+
 def open_browser(profile_dir: Path):
     """Abre o Chrome com o perfil já logado. Retorna (playwright, context)."""
     lock = profile_dir / "SingletonLock"
     if lock.exists() or lock.is_symlink():
-        # perfil aberto por outro Chrome (ex.: login.sh esquecido aberto)
-        raise StudioError(f"perfil em uso ({lock}). Feche o Chrome do login.sh antes.")
+        if _lock_is_stale(lock):
+            log.warning("lock de Chrome morto (%s): removendo", os.readlink(lock))
+            for name in ("SingletonLock", "SingletonCookie", "SingletonSocket"):
+                (profile_dir / name).unlink(missing_ok=True)
+        else:
+            # perfil aberto por outro Chrome (ex.: login.sh esquecido aberto)
+            raise StudioError(f"perfil em uso ({lock}). Feche o Chrome do login.sh antes.")
     pw = sync_playwright().start()
     ctx = pw.chromium.launch_persistent_context(
         str(profile_dir),
@@ -48,7 +73,7 @@ def open_browser(profile_dir: Path):
         ignore_default_args=["--enable-automation"],
         args=["--disable-blink-features=AutomationControlled", "--no-first-run", "--no-default-browser-check"],
     )
-    ctx.set_default_timeout(30_000)
+    ctx.set_default_timeout(60_000)  # droplet de 2 GB é lento: 30 s estourava no goto do Studio
     return pw, ctx
 
 
@@ -112,19 +137,36 @@ class Studio:
         m = re.search(r"/channel/(UC[\w-]+)", self.page.url)
         return m.group(1) if m else None
 
+    def _fresh_tab(self):
+        """O Studio guarda o canal ativo na aba: na mesma aba ele continua no canal antigo
+        mesmo depois da troca (provado no droplet em 08/11). Uma aba nova enxerga a troca."""
+        old = self.page
+        self.page = self.ctx.new_page()
+        old.close()
+
     def switch_channel(self, channel_id: str, channel_name: str):
         for attempt in range(2):
             if self.active_channel_id() == channel_id:
                 return
             self.page.goto("https://www.youtube.com/channel_switcher", wait_until="domcontentloaded")
-            self.page.wait_for_timeout(3000)
-            # cartão do canal: link com o nome exato
+            # cartão do canal: link com o nome exato. A lista carrega devagar (~8 s no droplet),
+            # então espera o nome aparecer em vez de um tempo fixo.
             loc = self.page.get_by_text(channel_name, exact=True)
-            if loc.count() == 0:
+            try:
+                loc.first.wait_for(timeout=45_000)
+            except PWTimeout:
                 self.shot(f"switcher-sem-{channel_name}")
                 raise StudioError(f"canal '{channel_name}' não aparece no channel_switcher")
             loc.first.click()
-            self.page.wait_for_timeout(4000)
+            # A troca termina em segundo plano na home do youtube.com. Ir para o Studio cedo demais
+            # interrompe a troca (no droplet, 4 s fixos deixavam o Studio no canal antigo).
+            try:
+                self.page.wait_for_url(lambda u: "channel_switcher" not in u, timeout=30_000)
+                self.page.wait_for_load_state("load", timeout=60_000)
+            except PWTimeout:
+                pass
+            self.page.wait_for_timeout(15_000)
+            self._fresh_tab()
         if self.active_channel_id() == channel_id:
             return
         # plano B (validado em 07/11): youtube.com → avatar → "Mudar de conta" → canal
@@ -136,7 +178,8 @@ class Studio:
             if self.click_text(["Mudar de conta", "Switch account"], timeout=6):
                 self.page.wait_for_timeout(1500)
                 self.page.get_by_text(channel_name, exact=True).first.click()
-                self.page.wait_for_timeout(4000)
+                self.page.wait_for_timeout(15_000)
+                self._fresh_tab()
         except Exception as e:  # noqa: BLE001
             log.warning("plano B de troca de canal falhou: %s", e)
         if self.active_channel_id() != channel_id:
