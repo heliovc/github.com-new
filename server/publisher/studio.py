@@ -349,6 +349,11 @@ class Studio:
         try:
             p.wait_for_selector("ytcp-video-share-dialog, ytcp-uploads-still-processing-dialog", timeout=60_000)
         except PWTimeout:
+            # Visto no droplet em 08/11: o Studio salvou (vídeo apareceu como Privado no Conteúdo) e
+            # fechou o diálogo sem mostrar a confirmação. Diálogo fechado + link já capturado = salvo.
+            if link and not p.locator(DIALOG).first.is_visible():
+                log.warning("Studio fechou o diálogo sem confirmação; considerando salvo: %s", link)
+                return link
             self.shot("sem-confirmacao")
             raise StudioError("Studio não confirmou a publicação")
         share = self.js(
