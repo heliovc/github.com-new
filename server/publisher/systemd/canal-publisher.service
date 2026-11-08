@@ -1,0 +1,14 @@
+[Unit]
+Description=Canal Dark - robô publicador (YouTube Studio)
+After=network-online.target
+
+[Service]
+Type=oneshot
+User=canal
+Group=canal
+WorkingDirectory=/opt/canal-publisher
+EnvironmentFile=/etc/canal-publisher.env
+Environment=HOME=/opt/canal-publisher
+ExecStart=/usr/bin/xvfb-run -a -s "-screen 0 1440x900x24" /opt/canal-publisher/venv/bin/python /opt/canal-publisher/repo/server/publisher/publisher.py run
+TimeoutStartSec=3h
+Nice=10

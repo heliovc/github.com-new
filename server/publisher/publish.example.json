@@ -1,0 +1,41 @@
+{
+  "version": 1,
+  "channel_id": "UCd_BGmJ5gbQ0kECAxmbvQHA",
+  "created_at": "2026-11-08T15:55:00-03:00",
+  "items": [
+    {
+      "key": "ptd-ep07-long",
+      "kind": "long",
+      "video": ["video.mp4"],
+      "title": "Pix: quem paga a conta de um sistema 'grátis'?",
+      "description": "Descrição completa com capítulos, fontes e avisos...",
+      "tags": ["pix", "banco central", "finanças"],
+      "thumbnail": "thumbnail.png",
+      "captions": "legendas.srt",
+      "publish_at": "2026-11-08T18:00:00-03:00",
+      "if_late": "public_now",
+      "made_for_kids": false,
+      "altered_content": true,
+      "done_url": null
+    },
+    {
+      "key": "ptd-ep07-short",
+      "kind": "short",
+      "video": ["vertical.mp4"],
+      "title": "O Pix é grátis? Não pra todo mundo #shorts",
+      "description": "Legenda curta... Fonte: Banco Central. Não é recomendação financeira. Voz sintética.\n#shorts #pix",
+      "tags": ["pix", "shorts"],
+      "captions": null,
+      "publish_at": "2026-11-08T19:00:00-03:00"
+    },
+    {
+      "key": "ptd-rank05",
+      "kind": "short",
+      "video": ["ranking.mp4"],
+      "title": "...",
+      "description": "...",
+      "tags": ["ranking", "shorts"],
+      "publish_at": "2026-11-09T12:00:00-03:00"
+    }
+  ]
+}
