@@ -125,6 +125,20 @@ class Studio:
                 raise StudioError(f"canal '{channel_name}' não aparece no channel_switcher")
             loc.first.click()
             self.page.wait_for_timeout(4000)
+        if self.active_channel_id() == channel_id:
+            return
+        # plano B (validado em 07/11): youtube.com → avatar → "Mudar de conta" → canal
+        try:
+            self.page.goto("https://www.youtube.com/", wait_until="domcontentloaded")
+            self.page.wait_for_timeout(3000)
+            self.page.locator("#avatar-btn, button#avatar-btn").first.click()
+            self.page.wait_for_timeout(1500)
+            if self.click_text(["Mudar de conta", "Switch account"], timeout=6):
+                self.page.wait_for_timeout(1500)
+                self.page.get_by_text(channel_name, exact=True).first.click()
+                self.page.wait_for_timeout(4000)
+        except Exception as e:  # noqa: BLE001
+            log.warning("plano B de troca de canal falhou: %s", e)
         if self.active_channel_id() != channel_id:
             self.shot(f"switch-falhou-{channel_name}")
             raise StudioError(f"não consegui ativar o canal {channel_name} ({channel_id})")
@@ -338,14 +352,22 @@ class Studio:
         p.keyboard.insert_text(date_txt)
         p.keyboard.press("Enter")
         p.wait_for_timeout(800)
+        hhmm = when.strftime("%H:%M")
         time_input = p.locator("#time-of-day-container input, ytcp-form-input-container#time-of-day-container input").first
         time_input.click()
-        p.keyboard.press("Control+A")
-        p.keyboard.insert_text(when.strftime("%H:%M"))
-        p.keyboard.press("Enter")
+        p.wait_for_timeout(800)
+        # o campo de hora abre uma lista (intervalos de 15 min): clicar no item é o caminho validado em 07/11
+        opt = p.locator("tp-yt-paper-item", has_text=re.compile(rf"^\s*{re.escape(hhmm)}\s*$"))
+        if opt.count():
+            opt.first.scroll_into_view_if_needed()
+            opt.first.click()
+        else:
+            p.keyboard.press("Control+A")
+            p.keyboard.insert_text(hhmm)
+            p.keyboard.press("Enter")
         p.wait_for_timeout(800)
         shown = norm(self.js("() => (document.querySelector('#second-container')||{}).innerText || ''"))
-        if when.strftime("%H:%M") not in shown:
+        if hhmm not in shown:
             self.shot("agenda")
             raise StudioError(f"agenda não conferiu (mostrando: {shown[:120]!r})")
 
