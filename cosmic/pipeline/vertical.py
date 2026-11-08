@@ -12,6 +12,7 @@ import render as R
 W, H = 1080, 1920
 FD = R.FONT_DIR
 HANDLE = "@universeinscale"
+HEAD_CUT = 0.32  # 08/11: corta o fade/silêncio inicial para o 1º frame já ter imagem e movimento
 
 def wrap(text, font, maxw):
     words, lines, cur = text.split(" "), [], ""
@@ -63,14 +64,14 @@ def main():
     durs = json.load(open(os.path.join(outdir, "durs.json")))
     starts = [sum(durs[:i]) for i in range(len(durs))]
     chunks, tl = [], 0.0
-    for i in idx:
-        d = durs[i]; words = ep.SCENES[i]["say"].split()
+    for k0, i in enumerate(idx):
+        d = durs[i] - (HEAD_CUT if k0 == 0 else 0); words = ep.SCENES[i]["say"].split()
         groups, g = [], []
         for w in words:
             g.append(w)
             if len(g) >= 4 or re.search(r"[.?!,:]$", w): groups.append(" ".join(g)); g = []
         if g: groups.append(" ".join(g))
-        total = sum(len(x) for x in groups); t = tl + 0.2; usable = d - 0.7
+        total = sum(len(x) for x in groups); t = tl + (0.0 if k0 == 0 else 0.2); usable = d - (0.5 if k0 == 0 else 0.7)
         for x in groups:
             dd = usable * len(x) / total; chunks.append((t, t + dd, x.upper())); t += dd
         tl += d
@@ -79,13 +80,14 @@ def main():
     lst = []
     for k, i in enumerate(idx):
         seg = os.path.join(tmp, f"seg{k:02d}.mp4")
-        subprocess.run(["ffmpeg", "-y", "-loglevel", "error", "-ss", f"{starts[i]:.3f}", "-i", src, "-t", f"{durs[i]:.3f}",
+        off = HEAD_CUT if k == 0 else 0.0  # 1st frame = full picture (no fade, no silent lead-in)
+        subprocess.run(["ffmpeg", "-y", "-loglevel", "error", "-ss", f"{starts[i] + off:.3f}", "-i", src, "-t", f"{durs[i] - off:.3f}",
                         "-c:v", "libx264", "-preset", "veryfast", "-crf", "18", "-c:a", "aac", "-b:a", "192k", seg], check=True)
         lst.append(f"file '{os.path.abspath(seg)}'")
     open(os.path.join(tmp, "list.txt"), "w").write("\n".join(lst))
     cut = os.path.join(tmp, "cut.mp4")
     subprocess.run(["ffmpeg", "-y", "-loglevel", "error", "-f", "concat", "-safe", "0", "-i", os.path.join(tmp, "list.txt"), "-c", "copy", cut], check=True)
-    comp = f"[0:v]scale=1080:-2[sv];[1:v][sv]overlay=0:620[o];[o]ass={os.path.join(tmp, 'cap.ass')}:fontsdir={FD}[outv]"
+    comp = f"[0:v]setpts=PTS-STARTPTS,scale=1080:-2[sv];[1:v][sv]overlay=0:620[o];[o]ass={os.path.join(tmp, 'cap.ass')}:fontsdir={FD}[outv]"
     subprocess.run(["ffmpeg", "-y", "-loglevel", "error", "-i", cut, "-loop", "1", "-i", os.path.join(tmp, "bg.png"),
                     "-filter_complex", comp, "-map", "[outv]", "-map", "0:a", "-shortest",
                     "-c:v", "libx264", "-preset", "veryfast", "-crf", "21", "-pix_fmt", "yuv420p", "-r", "30",

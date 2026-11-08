@@ -4,6 +4,7 @@ EP02 added scenes: clock, escape, sky, thermo, energy, ocean, galaxy
 EP03 added scenes: zoom, stretch, horizons, deepfield, shrink (violet/magenta palette)
 EP04 added scenes: blackhole, spaghetti, twoclocks, horizonsize, inside (ember orange / pale cyan palette)
 EP05 added scenes: inflate, flight, measure, density, heavyvsbig, balance (crimson / cream palette)
+EP06 added scenes: spinglobe (globe + speed by latitude; top=True rings; slow=True), pendulum, fling, bulge, yearday, dayclock (teal / amber palette)
 """
 import sys, os, re, math, subprocess, importlib.util, json, random, hashlib
 import numpy as np
@@ -334,7 +335,8 @@ def sc_bars(img, v, t, dur):
         d.text((160, y), lab, font=F(44, "SemiBold"), fill=mix(SPACE, WHITE, p), anchor="lm")
         bw = 1000 * val / mx * p
         d.rounded_rectangle([640, y - 42, 640 + max(4, bw), y + 42], 14, fill=hexc(c))
-        if p > 0.05: d.text((640 + max(4, bw) + 24, y), f"{val * p:.0f}" + v.get("suffix", ""), font=F(52, "Bold"), fill=WHITE, anchor="lm")
+        sfx = v.get("suffix", ""); sfx = sfx[:-1] if round(val * p) == 1 and sfx.endswith("s") else sfx
+        if p > 0.05: d.text((640 + max(4, bw) + 24, y), f"{val * p:.0f}" + sfx, font=F(52, "Bold"), fill=WHITE, anchor="lm")
 
 def sc_compare(img, v, t, dur):
     d = ImageDraw.Draw(img)
@@ -1393,6 +1395,273 @@ def sc_balance(img, v, t, dur):
     for i, l in enumerate(v.get("lines", [])):
         alpha_text(img, (TX, 580 + i * 80), l, F(40, "Bold"), CRIM if i == len(v["lines"]) - 1 else WHITE, ease((t - dur * 0.4 - i * dur * 0.12) / 0.5))
     caption(img, v.get("caption"), ease((t - 3.0) / 0.5))
+
+
+# ---------------- scenes (EP06: teal / amber) ----------------
+TEAL6, AMB6, SEA6 = (46, 230, 197), (255, 170, 60), (60, 140, 255)
+_land6 = None
+def land_blobs():
+    global _land6
+    if _land6 is None:
+        rng = random.Random(606); _land6 = []
+        for _ in range(9):
+            la0, lo0, rad = rng.uniform(-55, 65), rng.uniform(0, 360), rng.uniform(12, 26)
+            pts = []
+            for k in range(18):
+                a = k / 18 * 2 * math.pi; rr = rad * rng.uniform(0.6, 1.15)
+                pts.append((la0 + rr * math.sin(a) * 0.8, lo0 + rr * math.cos(a) / max(0.3, math.cos(math.radians(la0)))))
+            _land6.append(pts)
+    return _land6
+
+def proj6(lat, lon, rot, R, cx, cy, tilt=0.38):
+    la, lo = math.radians(lat), math.radians(lon + rot)
+    x = math.cos(la) * math.sin(lo); y0 = math.sin(la); z0 = math.cos(la) * math.cos(lo)
+    y = y0 * math.cos(tilt) - z0 * math.sin(tilt); z = z0 * math.cos(tilt) + y0 * math.sin(tilt)
+    return cx + R * x, cy - R * y, z
+
+def arrow6(d, x, y, L, col, w=8):
+    d.line([(x, y), (x + L, y)], fill=col, width=w)
+    d.polygon([(x + L + 22, y), (x + L, y - 14), (x + L, y + 14)], fill=col)
+
+def sc_spinglobe(img, v, t, dur):
+    """rotating globe with speed-by-latitude arrows; top=True: seen from above the pole (speed rings); slow=True: spin winds down"""
+    d = ImageDraw.Draw(img)
+    alpha_text(img, (W / 2, 120), v.get("head", ""), F(60, "ExtraBold"), WHITE, ease(t / 0.5))
+    marks = v.get("marks", [])
+    if v.get("top"):
+        cx, cy, R = 620, 590, 400
+        paste_c(img, planet_sprite(R, (30, 80, 150), light=(-0.6, -0.6)), cx, cy)
+        d = ImageDraw.Draw(img); rot = t * 0.35
+        for k in range(12):
+            a = rot + k * math.pi / 6
+            d.line([(cx, cy), (cx + R * math.cos(a), cy + R * math.sin(a))], fill=(90, 160, 200), width=2)
+        for i, (lat, lab) in enumerate(marks):
+            q = ease((t - 0.8 - i * 1.6) / 0.6)
+            if q <= 0: continue
+            rr = R * math.cos(math.radians(lat)); col = mix(AMB6, TEAL6, i / max(1, len(marks) - 1))
+            if rr > 4:
+                d.ellipse([cx - rr, cy - rr, cx + rr, cy + rr], outline=col + (int(255 * q),), width=4)
+                a = rot * 1.0 - math.pi / 2
+                px, py = cx + rr * math.cos(a), cy + rr * math.sin(a)
+                L = 150 * math.cos(math.radians(lat)) * q; ux, uy = -math.sin(a), math.cos(a)
+                d.line([(px, py), (px - ux * L, py - uy * L)], fill=col, width=7)
+                tip = (px - ux * (L + 20), py - uy * (L + 20)); nx, ny = -uy, ux
+                d.polygon([tip, (px - ux * L + nx * 12, py - uy * L + ny * 12), (px - ux * L - nx * 12, py - uy * L - ny * 12)], fill=col)
+            else:
+                g = 18 + 6 * math.sin(t * 4); d.ellipse([cx - g, cy - g, cx + g, cy + g], fill=TEAL6)
+            y = 330 + i * 120
+            d.line([(1200, y), (1250, y)], fill=col, width=6)
+            alpha_text(img, (1275, y), lab, F(52, "Bold"), col if lat >= 89 else WHITE, q, anchor="lm")
+        alpha_text(img, (cx, cy + R + 50), "North Pole at the center", F(34, "SemiBold"), DIM, ease((t - 1) / 0.5))
+        caption(img, v.get("caption"), ease((t - 2) / 0.5))
+        return
+    cx, cy, R = 640, 600, 380
+    speed = 22.0
+    if v.get("slow"): rot = speed * 2.2 * (1 - math.exp(-t / 2.2)) + 3 * t
+    else: rot = speed * t
+    paste_c(img, planet_sprite(R, (32, 86, 160), light=(-0.9, -0.4), glow=(110, 190, 255)), cx, cy)
+    lay = Image.new("RGBA", img.size, (0, 0, 0, 0)); dl = ImageDraw.Draw(lay)
+    for blob in land_blobs():
+        pp = [proj6(la, lo, rot, R, cx, cy) for la, lo in blob]
+        if sum(1 for p in pp if p[2] > 0.05) == len(pp):
+            dl.polygon([(p[0], p[1]) for p in pp], fill=(70, 140, 85, 200))
+    for lat in range(-60, 90, 30):
+        pts = [proj6(lat, lo, 0, R, cx, cy) for lo in range(-180, 181, 6)]
+        seg = [(p[0], p[1]) for p in pts if p[2] > 0]
+        if len(seg) > 1: dl.line(seg, fill=(150, 220, 255, 110 if lat else 220), width=2 if lat else 4)
+    for lo in range(0, 360, 30):
+        pts = [proj6(la, lo, rot, R, cx, cy) for la in range(-90, 91, 6)]
+        seg = []
+        for p in pts:
+            if p[2] > 0: seg.append((p[0], p[1]))
+            elif len(seg) > 1: dl.line(seg, fill=(150, 220, 255, 90), width=2); seg = []
+            else: seg = []
+        if len(seg) > 1: dl.line(seg, fill=(150, 220, 255, 90), width=2)
+    img.alpha_composite(lay); d = ImageDraw.Draw(img)
+    np_ = proj6(90, 0, 0, R, cx, cy); d.ellipse([np_[0] - 9, np_[1] - 9, np_[0] + 9, np_[1] + 9], fill=WHITE)
+    for i, (lat, lab) in enumerate(marks):
+        q = ease((t - 1.0 - i * min(2.2, dur * 0.6 / max(1, len(marks)))) / 0.6)
+        if q <= 0: continue
+        x, y, z = proj6(lat, 0, 0, R, cx, cy)
+        col = mix(AMB6, TEAL6, i / max(1, len(marks) - 1))
+        L = 190 * math.cos(math.radians(lat)) * q
+        if v.get("slow"): L *= max(0.15, math.exp(-t / 3.0))
+        if L > 6: arrow6(d, x, y, L, col)
+        else: d.ellipse([x - 12, y - 12, x + 12, y + 12], fill=col)
+        ty = 300 + i * 130
+        d.line([(x + max(L, 0) + 30, y), (1180, ty)], fill=col + (140,), width=2)
+        alpha_text(img, (1200, ty), lab, F(50, "Bold"), WHITE, q, anchor="lm")
+    caption(img, v.get("caption"), ease((t - 2.5) / 0.5))
+
+def sc_pendulum(img, v, t, dur):
+    """Foucault pendulum seen from above: the swing plane slowly turns (sped up) while the bob swings"""
+    cx, cy, R = 620, 600, 360
+    d = ImageDraw.Draw(img)
+    alpha_text(img, (W / 2, 120), v.get("head", ""), F(60, "ExtraBold"), WHITE, ease(t / 0.5))
+    d.ellipse([cx - R - 20, cy - R - 20, cx + R + 20, cy + R + 20], fill=(18, 26, 44), outline=(90, 110, 150), width=4)
+    for k in range(0, 360, 10):
+        a = math.radians(k); r1 = R - (26 if k % 30 == 0 else 12)
+        d.line([(cx + r1 * math.cos(a), cy + r1 * math.sin(a)), (cx + R * math.cos(a), cy + R * math.sin(a))], fill=(120, 140, 180), width=3)
+    rate = 0.09  # radians per second of video (sped up)
+    for k in range(1, 9):  # ghost lines of earlier swings
+        th = -(t - k * 0.9) * rate
+        if t - k * 0.9 < 0: break
+        d.line([(cx - R * 0.92 * math.cos(th), cy - R * 0.92 * math.sin(th)), (cx + R * 0.92 * math.cos(th), cy + R * 0.92 * math.sin(th))], fill=mix(SPACE, AMB6, 0.5 - k * 0.05), width=2)
+    th = -t * rate; sw = math.sin(t * 2.2) * R * 0.88
+    bx, by = cx + sw * math.cos(th), cy + sw * math.sin(th)
+    d.line([(cx - R * 0.92 * math.cos(th), cy - R * 0.92 * math.sin(th)), (cx + R * 0.92 * math.cos(th), cy + R * 0.92 * math.sin(th))], fill=AMB6, width=4)
+    d.line([(cx, cy), (bx, by)], fill=(200, 205, 220), width=3)
+    paste_c(img, planet_sprite(34, (180, 170, 150), light=(-0.7, -0.7)), bx, by)
+    d = ImageDraw.Draw(img); d.ellipse([cx - 8, cy - 8, cx + 8, cy + 8], fill=WHITE)
+    alpha_text(img, (cx, cy + R + 60), "seen from above · sped up", F(30, "SemiBold"), DIM, ease((t - 1) / 0.5))
+    for i, (a_, b_) in enumerate(v.get("notes", [])):
+        q = ease((t - dur * 0.45 - i * 2.0) / 0.6)
+        alpha_text(img, (1180, 360 + i * 150), a_, F(40, "SemiBold"), DIM, q, anchor="lm")
+        alpha_text(img, (1180, 412 + i * 150), b_, F(64, "Black"), TEAL6 if i else AMB6, q, anchor="lm")
+
+def house6(d, x, y, s, col):
+    d.rectangle([x - 40 * s, y - 60 * s, x + 40 * s, y], fill=col)
+    d.polygon([(x - 52 * s, y - 60 * s), (x, y - 100 * s), (x + 52 * s, y - 60 * s)], fill=mix(col, (40, 20, 10), 0.4))
+    d.rectangle([x - 10 * s, y - 30 * s, x + 10 * s, y], fill=(30, 30, 40))
+
+def sc_fling(img, v, t, dur):
+    """sudden stop: the ground halts, everything on it keeps flying east; two speed readouts"""
+    d = ImageDraw.Draw(img); gy = 800; ts = v.get("stop_at", 0.1) * dur
+    vpx = 900.0
+    g_off = vpx * min(t, ts); o_off = vpx * t
+    d.rectangle([0, gy, W, H], fill=(28, 34, 30))
+    d.line([(0, gy), (W, gy)], fill=(120, 150, 120), width=4)
+    for k in range(-1, 14):
+        x = (k * 160 + g_off) % (W + 160) - 80
+        d.line([(x, gy + 20), (x - 40, gy + 70)], fill=(70, 85, 70), width=4)
+    after = t >= ts; sh = (t - ts) if after else 0
+    objs = [("house", 0), ("tree", 300), ("car", 520), ("house", 780), ("tree", 1060), ("person", 1250), ("house", 1450), ("tree", 1700)]
+    for kind, x0 in objs:
+        x = (x0 + o_off) % (W + 400) - 200
+        lift = -min(60, sh * 40) * (1 if kind in ("car", "person") else 0.3) if after else 0
+        if after:
+            for k in range(1, 7):
+                d.line([(x - 60 - k * 40, gy - 30 - k * 9 + lift), (x - 60 - k * 40 - 80, gy - 30 - k * 9 + lift)], fill=(200, 220, 230, 90), width=3)
+        if kind == "house": house6(d, x, gy + lift, 1.4, (200, 150, 110))
+        elif kind == "tree":
+            d.rectangle([x - 8, gy - 90 + lift, x + 8, gy + lift], fill=(110, 80, 50))
+            ang = min(0.9, sh * 1.5) if after else 0
+            d.ellipse([x - 50 + ang * 40, gy - 170 + lift + ang * 30, x + 50 + ang * 40, gy - 70 + lift + ang * 30], fill=(60, 150, 90))
+        elif kind == "car":
+            d.rounded_rectangle([x - 70, gy - 50 + lift, x + 70, gy - 12 + lift], 10, fill=(220, 80, 80))
+            d.rounded_rectangle([x - 40, gy - 80 + lift, x + 35, gy - 48 + lift], 10, fill=(190, 60, 60))
+            for wx in (-42, 42): d.ellipse([wx + x - 16, gy - 30 + lift, wx + x + 16, gy + 2 + lift], fill=(20, 20, 25))
+        else:
+            c = TEAL6; hx, hy = x, gy - 150 + lift
+            d.ellipse([hx - 18, hy - 18, hx + 18, hy + 18], fill=c)
+            lean = 30 if after else 0
+            d.line([(hx, hy + 18), (hx - lean * 0.3, hy + 90)], fill=c, width=8)
+            d.line([(hx - lean * 0.3, hy + 90), (hx - 25, gy + lift)], fill=c, width=8); d.line([(hx - lean * 0.3, hy + 90), (hx + 25, gy + lift)], fill=c, width=8)
+            d.line([(hx, hy + 40), (hx + 40, hy + 20 - lean)], fill=c, width=7); d.line([(hx, hy + 40), (hx - 40, hy + 60)], fill=c, width=7)
+    if after and v.get("debris"):
+        rng = random.Random(int(t * 3))
+        for k in range(40):
+            x = (k * 97 + o_off * 1.1) % (W + 200) - 100; y = gy - 20 - (k * 53) % 260
+            s = 6 + k % 10; d.rectangle([x - s, y - s / 2, x + s, y + s / 2], fill=(170, 150, 120))
+    gv = v["speed"] if not after else max(0, v["speed"] * (1 - sh / 0.6))
+    for i, (lab, val, col) in enumerate([("GROUND", gv, AMB6), ("YOU", v["speed"], TEAL6)]):
+        x = W / 2 - 330 + i * 660
+        d.rounded_rectangle([x - 280, 210, x + 280, 400], 24, fill=(10, 16, 30), outline=col, width=4)
+        d.text((x, 250), lab, font=F(38, "Bold"), fill=col, anchor="mm")
+        d.text((x, 330), f"{val:,.0f} km/h", font=F(80, "Black"), fill=WHITE, anchor="mm")
+    alpha_text(img, (W / 2, 120), v.get("head", ""), F(62, "ExtraBold"), WHITE, ease(t / 0.4))
+    if after: caption(img, v.get("label", ""), ease((t - ts - 0.6) / 0.5), y=H - 80)
+
+def sc_bulge(img, v, t, dur):
+    """cross-section: spin bulge (phase 0) -> water runs to the poles, a ring continent rises at the equator (phase 1)"""
+    cx, cy = 600, 610
+    d = ImageDraw.Draw(img)
+    alpha_text(img, (W / 2, 110), v.get("head", ""), F(60, "ExtraBold"), WHITE, ease(t / 0.5))
+    p = easeio((t - 1.5) / (dur * 0.45)) if v.get("phase") == 1 else 0.0
+    lrx, lry = 372, 318
+    wrx, wry = lerp(398, 352, p), lerp(344, 352, p)
+    lay = Image.new("RGBA", img.size, (0, 0, 0, 0)); dl = ImageDraw.Draw(lay)
+    dl.ellipse([cx - wrx - 14, cy - wry - 14, cx + wrx + 14, cy + wry + 14], fill=(110, 180, 255, 40))
+    dl.ellipse([cx - wrx, cy - wry, cx + wrx, cy + wry], fill=(40, 110, 220, 255))
+    dl.ellipse([cx - lrx, cy - lry, cx + lrx, cy + lry], fill=(120, 96, 66, 255))
+    dl.ellipse([cx - 200, cy - 180, cx + 200, cy + 180], fill=(150, 80, 40, 255))
+    dl.ellipse([cx - 110, cy - 100, cx + 110, cy + 100], fill=(250, 190, 90, 255))
+    img.alpha_composite(lay); d = ImageDraw.Draw(img)
+    if p > 0.6:
+        q = (p - 0.6) / 0.4
+        for s in (-1, 1):
+            d.arc([cx - lrx - 6, cy - lry - 6, cx + lrx + 6, cy + lry + 6], (0 if s > 0 else 180) - 14, (0 if s > 0 else 180) + 14, fill=mix(SPACE, (120, 230, 120), q), width=12)
+    d.line([(cx, cy - 395), (cx, cy + 395)], fill=(200, 210, 230), width=3)
+    d.text((cx, cy - 418), "N", font=F(36, "Black"), fill=WHITE, anchor="mm"); d.text((cx, cy + 418), "S", font=F(36, "Black"), fill=WHITE, anchor="mm")
+    for k in range(0, 1100, 30): d.line([(cx - 520 + k, cy), (cx - 505 + k, cy)], fill=(160, 170, 190), width=2)
+    if v.get("phase") == 0:
+        for s, yy in ((1, cy - 380), (-1, cy + 380)):
+            a = (t * 2) % 1
+            d.arc([cx - 90, yy - 22, cx + 90, yy + 22], 200, 340, fill=TEAL6, width=5)
+        d.polygon([(cx + 86, cy - 392), (cx + 60, cy - 410), (cx + 66, cy - 380)], fill=TEAL6)
+        pulse = 1 + 0.04 * math.sin(t * 3)
+        for s in (-1, 1): arrow6(d, cx + s * 0 + (lrx + 40 if s > 0 else -lrx - 40 - 90 * pulse), cy - 40, 90 * pulse if s > 0 else 0, AMB6) if s > 0 else None
+    else:
+        q = ease((t - dur * 0.55) / 0.6)
+        alpha_text(img, (cx, cy - 300), "polar ocean", F(34, "Bold"), (200, 230, 255), q)
+        alpha_text(img, (cx, cy + 300), "polar ocean", F(34, "Bold"), (200, 230, 255), q)
+        alpha_text(img, (cx + lrx + 24, cy + 50), "new land", F(34, "Bold"), (150, 240, 150), q, anchor="lm")
+    alpha_text(img, (cx - lrx - 30, cy - 40), "equator", F(30, "SemiBold"), DIM, 1, anchor="rm")
+    for i, n in enumerate(v.get("notes", [])):
+        alpha_text(img, (1090, 380 + i * 100), n, F(38, "SemiBold"), WHITE if i else AMB6, ease((t - 1.2 - i * dur * 0.2) / 0.6), anchor="lm")
+    alpha_text(img, (W - 60, H - 50), "not to scale — bulge exaggerated", F(26, "Medium"), DIM, ease((t - 1) / 0.5), anchor="rm")
+
+def sc_yearday(img, v, t, dur):
+    """a non-spinning Earth goes around the Sun: one spot gets ~6 months of day, then ~6 months of night"""
+    cx, cy, R = 640, 590, 340
+    d = ImageDraw.Draw(img)
+    alpha_text(img, (W / 2, 120), v.get("head", ""), F(62, "ExtraBold"), WHITE, ease(t / 0.5))
+    for k in range(0, 360, 3): d.arc([cx - R, cy - R * 0.92, cx + R, cy + R * 0.92], k, k + 1.5, fill=(80, 100, 140), width=2)
+    paste_c(img, sun_sprite(80), cx, cy)
+    frac = min(1.0, max(0.0, (t - 0.8) / (dur * 0.8)))
+    ang = math.pi / 2 - frac * 2 * math.pi  # start below the Sun, go counterclockwise
+    ex, ey = cx + R * math.cos(ang), cy + R * 0.92 * math.sin(ang)
+    er = 46
+    lay = Image.new("RGBA", img.size, (0, 0, 0, 0)); dl = ImageDraw.Draw(lay)
+    dl.ellipse([ex - er, ey - er, ex + er, ey + er], fill=(14, 22, 44, 255))
+    sa = math.degrees(math.atan2(cy - ey, cx - ex))
+    dl.pieslice([ex - er, ey - er, ex + er, ey + er], sa - 90, sa + 90, fill=(70, 140, 230, 255))
+    img.alpha_composite(lay); d = ImageDraw.Draw(img)
+    mx, my = ex, ey + er  # fixed spot: always points "down" (no spin)
+    lit = ((cx - ex) * 0 + (cy - ey) * 1) > 0
+    d.ellipse([mx - 11, my - 11, mx + 11, my + 11], fill=AMB6 if lit else (150, 160, 190), outline=WHITE, width=3)
+    dayn = int(frac * 365) + 1
+    TX = 1460
+    alpha_text(img, (TX, 300), "your city", F(40, "SemiBold"), DIM, ease((t - 0.5) / 0.5))
+    alpha_text(img, (TX, 420), "DAYLIGHT" if lit else "NIGHT", F(110, "Black"), AMB6 if lit else (150, 170, 230), ease((t - 0.5) / 0.5))
+    alpha_text(img, (TX, 560), f"day {min(365, dayn)} of 365", F(56, "Bold"), WHITE, ease((t - 0.5) / 0.5))
+    alpha_text(img, (TX, 680), "one sunrise per year", F(40, "SemiBold"), TEAL6, ease((t - dur * 0.5) / 0.5))
+
+def sc_dayclock(img, v, t, dur):
+    """24-hour dial: how long a day lasted at different moments of Earth's history"""
+    cx, cy, R = 600, 600, 300
+    d = ImageDraw.Draw(img)
+    alpha_text(img, (W / 2, 120), v.get("head", ""), F(60, "ExtraBold"), WHITE, ease(t / 0.5))
+    items = v["items"]; n = len(items); seg = max(1.5, dur * 0.85 / n)
+    k = min(n - 1, int(max(0, t - 0.6) // seg)); lt = (max(0, t - 0.6) - k * seg)
+    prev = items[k - 1][1] if k > 0 else 0
+    val = lerp(prev, items[k][1], easeio(lt / 1.4))
+    d.ellipse([cx - R, cy - R, cx + R, cy + R], outline=(50, 64, 96), width=46)
+    for h in range(24):
+        a = math.radians(h * 15 - 90); r1 = R + 34; r2 = R + (52 if h % 6 == 0 else 44)
+        d.line([(cx + r1 * math.cos(a), cy + r1 * math.sin(a)), (cx + r2 * math.cos(a), cy + r2 * math.sin(a))], fill=(140, 150, 180), width=3)
+        if h % 6 == 0: d.text((cx + (R + 84) * math.cos(a), cy + (R + 84) * math.sin(a)), f"{h}h" if h else "24h", font=F(30, "Bold"), fill=DIM, anchor="mm")
+    if val > 0.05:
+        d.arc([cx - R, cy - R, cx + R, cy + R], -90, -90 + val * 15, fill=TEAL6 if k == n - 1 else AMB6, width=46)
+    d.text((cx, cy - 20), f"{val:.1f} h", font=F(120, "Black"), fill=WHITE, anchor="mm")
+    d.text((cx, cy + 80), items[k][0], font=F(36, "SemiBold"), fill=AMB6 if k < n - 1 else TEAL6, anchor="mm")
+    for i, (lab, hrs) in enumerate(items):
+        a = ease((t - 0.6 - i * seg) / 0.5)
+        if a <= 0: continue
+        y = 360 + i * 150
+        alpha_text(img, (1180, y), lab, F(40, "SemiBold"), DIM, a, anchor="lm")
+        alpha_text(img, (1180, y + 52), f"{hrs:g} hours", F(56, "Black"), TEAL6 if i == n - 1 else AMB6, a, anchor="lm")
+    caption(img, v.get("caption"), ease((t - 2) / 0.5))
 
 
 SC = {k[3:]: f for k, f in globals().items() if k.startswith("sc_")}

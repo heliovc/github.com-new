@@ -8,6 +8,7 @@ Visual por item:
   vis.type == "speed": raias de velocidade em escala log (1 km/s -> luz); vis.kms = km/s; item.short = rótulo curto (rank02).
 THEME.hook == "streaks": gancho com rastros de velocidade em vez da estrela gigante (rank02).
   vis.type == "moons": lua atual grande em escala + contorno tracejado de Mercúrio + fila das 5 em escala (não reveladas = silhueta "?"); vis.moon, vis.km (rank03).
+vis.type == "horizons" / THEME.hook/outro == "horizons": horizontes de eventos em escala fixa contra o Sistema Solar e a Voyager 1 (rank05).
 vis.type == "thermo" / THEME.hook == "thermo": termômetro vertical 0–6.000 °C com marcas de referência + planeta brilhando na cor da temperatura (rank04).
 THEME.hook == "moons": silhueta "?" do nº 1 dentro do contorno de Mercúrio + as 5 luas orbitando (rank03).
 Tudo desenhado por código; narração Kokoro (VOICE, padrão af_heart); legenda grande queimada.
@@ -266,6 +267,48 @@ def thermo_vis(img, it, th, t, dur):
         for i, l in enumerate(wrap(it["vis"]["note"], F(36, "ExtraBold"), 440)):
             text(img, (800, 1085 + i * 46), l, 36, (255, 225, 200), w="ExtraBold", a=ease((t - 1.5) / 0.5))
 
+# ---- rank05: event horizons to one fixed scale vs the Solar System ----
+HZ_CX, HZ_CY, HZ_PX = W / 2, 850, 375 / 1974.0
+_bhring = {}
+def bh_disk(img, cx, cy, r, t, a=1.0, col=(255, 170, 90), acc=(185, 140, 255)):
+    r = max(3, r); k = int(r)
+    if k not in _bhring:
+        size = int(r * 2.9) + 8
+        _bhring[k] = R.radial(size, [(0, (0, 0, 0, 255)), (0.98 / 1.45, (0, 0, 0, 255)), (1.0 / 1.45, (255, 235, 200, 255)),
+                                      (1.06 / 1.45, col + (230,)), (1.25 / 1.45, acc + (90,)), (1.0, acc + (0,))])
+    R.paste_c(img, _bhring[k], cx, cy, a)
+    lay = Image.new("RGBA", img.size, (0, 0, 0, 0)); d = ImageDraw.Draw(lay)
+    for i in range(3):  # shimmering photon-ring arcs
+        st = (t * 60 + i * 120) % 360
+        d.arc([cx - r * 1.03, cy - r * 1.03, cx + r * 1.03, cy + r * 1.03], st, st + 50, fill=(255, 250, 235, int(200 * a)), width=max(2, int(r * 0.03)))
+    img.alpha_composite(lay)
+
+def solar_ref(img, t, a=1.0, labels=True, cy=None):
+    d = ImageDraw.Draw(img); cx, cy = HZ_CX, (cy or HZ_CY)
+    rv = 171 * HZ_PX; rn = 30 * HZ_PX
+    for k in range(0, 360, 10): d.arc([cx - rv, cy - rv, cx + rv, cy + rv], k, k + 5, fill=(120, 230, 255, int(255 * a)), width=3)
+    d.ellipse([cx - rn, cy - rn, cx + rn, cy + rn], fill=(255, 200, 90))
+    if labels:
+        d.line([(cx + rv * 0.7, cy - rv * 0.7), (cx + 230, cy - 210)], fill=(120, 230, 255), width=2)
+        d.text((cx + 240, cy - 230), "Voyager 1 · 49 years of flight", font=F(30, "Bold"), fill=(120, 230, 255), anchor="lm")
+        d.line([(cx, cy + rn), (cx - 200, cy + 230)], fill=(255, 200, 90), width=2)
+        d.text((cx - 200, cy + 255), "our whole solar system", font=F(30, "Bold"), fill=(255, 210, 120), anchor="mm")
+
+def horizons_vis(img, it, th, t, dur):
+    acc = tuple(th["accent"]); d = ImageDraw.Draw(img)
+    prev = sorted([o for o in ALL_ITEMS if o["rank"] > it["rank"]], key=lambda o: o["vis"]["au"])
+    r = it["vis"]["au"] * HZ_PX * easeio((t - 0.4) / 1.6)
+    if r > 3: bh_disk(img, HZ_CX, HZ_CY, r, t, col=tuple(th["star_col"]), acc=acc)
+    d = ImageDraw.Draw(img)
+    for o in prev:
+        r = o["vis"]["au"] * HZ_PX
+        for k in range(0, 360, 6): d.arc([HZ_CX - r, HZ_CY - r, HZ_CX + r, HZ_CY + r], k, k + 3, fill=(170, 150, 220), width=3)
+        d.text((HZ_CX, HZ_CY - r + 22), o["short"], font=F(24, "Bold"), fill=(200, 185, 245), anchor="mm")
+    solar_ref(img, t, labels=(it["rank"] >= 4 or t < 3))
+    if it["vis"].get("note"):
+        for i, l in enumerate(wrap(it["vis"]["note"], F(40, "ExtraBold"), W - 160)):
+            text(img, (W / 2, 1300 + i * 50 - 40), l, 40, (235, 225, 255), w="ExtraBold", a=ease((t - 1.8) / 0.5))
+
 def caption_chunks(say, t0, dur):
     words = say.split(); groups, g = [], []
     for w in words:
@@ -288,6 +331,17 @@ def draw_caption(img, chunks, gt, y=1585):
 
 def seg_hook(img, sc, th, t, dur):
     col = tuple(th["star_col"]); acc = tuple(th["accent"])
+    if th.get("hook") == "horizons":
+        r1 = 1974 * HZ_PX * (0.97 + 0.03 * math.sin(t * 3)); hy = 905
+        bh_disk(img, HZ_CX, hy, r1, t, col=col, acc=acc)
+        solar_ref(img, t, labels=False, cy=hy)
+        d = ImageDraw.Draw(img); d.text((HZ_CX, hy - 120), "?", font=F(200, "Black"), fill=acc, anchor="mm")
+        d.text((HZ_CX + 40, hy + 14), "← our solar system", font=F(30, "Bold"), fill=(255, 210, 120), anchor="lm")
+        text(img, (W / 2, 210), "TOP 5", 150, acc)
+        for i, l in enumerate(wrap(sc["top"].upper(), F(84, "Black"), W - 120)):
+            text(img, (W / 2, 340 + i * 96), l, 84, (255, 255, 255))
+        text(img, (W / 2, 1400), sc["sub"], 50, tuple(th["accent2"]), w="ExtraBold")
+        return
     if th.get("hook") == "thermo":
         thermo(img, TH_MAX * 0.72 * (0.97 + 0.03 * math.sin(t * 4)), th, t)
         planet_glow(img, 700, 860, 200, 4300, t)
@@ -365,6 +419,8 @@ def seg_item(img, it, th, t, dur):
         moons_vis(img, it, th, t, dur)
     if v["type"] == "thermo":
         thermo_vis(img, it, th, t, dur)
+    if v["type"] == "horizons":
+        horizons_vis(img, it, th, t, dur)
     # number
     p = easeio((t - 0.5) / 1.6)
     num = it["num"]
@@ -377,6 +433,16 @@ def seg_item(img, it, th, t, dur):
 
 def seg_outro(img, sc, th, t, dur):
     a = ease(t / 0.5)
+    if th.get("outro") == "horizons":
+        d = ImageDraw.Draw(img)
+        for i, o in enumerate(sorted(ALL_ITEMS, key=lambda o: o["vis"]["au"])):
+            r = o["vis"]["au"] * HZ_PX * 0.62 * ease((t - i * 0.15) / 0.5)
+            if r > 2: d.ellipse([W / 2 - r, 640 - r, W / 2 + r, 640 + r], outline=mix((120, 90, 200), tuple(th["accent"]), i / 4), width=5)
+        d.ellipse([W / 2 - 4, 636, W / 2 + 4, 644], fill=(255, 200, 90))
+        if th.get("outro_note"): text(img, (W / 2, 960), th["outro_note"], 44, tuple(th["accent2"]), w="ExtraBold", a=ease((t - 0.6) / 0.5))
+        text(img, (W / 2, 1180), "SUBSCRIBE", 110, tuple(th["accent"]), a=ease((t - 0.8) / 0.5))
+        text(img, (W / 2, 1280), "to Cosmic Scale", 56, (255, 255, 255), w="ExtraBold", a=ease((t - 1.0) / 0.5))
+        return
     if th.get("outro") == "moons":
         order = sorted(ALL_ITEMS, key=lambda o: o["vis"]["km"]); tot = sum(o["vis"]["km"] for o in order)
         s = (W - 140) / tot; x = 70; ex = 12742 * s
