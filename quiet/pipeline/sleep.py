@@ -10,7 +10,7 @@ Env: VOICE (default bm_george), SPEED (default 0.80)
 
 Identity (keep distinct from the other channels): warm candle/moonlight palette, Lora serif, no captions on screen,
 slow loops, quiet mix (-19 LUFS), long ambient tail. Each episode may override PALETTE and pick scene types.
-Scene types: city, road, temple, interior, sea, hills.
+Scene types: city, road, temple, interior, sea, hills, cloister (EP02), nile (EP03).
 """
 import sys, os, re, math, json, hashlib, subprocess, importlib.util, random
 import numpy as np
@@ -317,6 +317,78 @@ class Scene:
         near = hills(H - 120, 40, int(rng.integers(1e6)), p["near"]); dn = ImageDraw.Draw(near)
         stone_pine(dn, W * 0.08, H - 90, 380, p["near"], r2); cypress(dn, W * 0.9, H - 60, 460, p["near"])
         self.near = near; self.fog_y = hy + 120; self.particles = "fireflies"
+
+
+    def build_cloister(self):
+        """Monastery: bell tower and chapel beyond a cloister arcade (foreground arches frame the sky)."""
+        p, rng = self.p, self.rng; hy = int(H * 0.68)
+        self.back = self.sky(hy, (0.66, 0.2), 40)
+        self.back.alpha_composite(hills(hy - 40, 45, int(rng.integers(1e6)), mix(p["far"], p["horizon"], 0.35), blur=3))
+        mid = Image.new("RGBA", (W, H), (0, 0, 0, 0)); d = ImageDraw.Draw(mid); c = p["mid"] + (255,)
+        cx, base = W * 0.5, hy + 60
+        d.rectangle([cx - 260, base - 170, cx + 200, base], fill=c)                       # nave
+        d.polygon([(cx - 275, base - 170), (cx - 30, base - 270), (cx + 215, base - 170)], fill=c)  # roof
+        d.rectangle([cx + 200, base - 330, cx + 290, base], fill=c)                         # bell tower
+        d.polygon([(cx + 190, base - 330), (cx + 245, base - 450), (cx + 300, base - 330)], fill=c)
+        d.rectangle([cx + 232, base - 316, cx + 258, base - 270], fill=(0, 0, 0, 0))        # belfry opening
+        d.pieslice([cx + 232, base - 330, cx + 258, base - 304], 180, 360, fill=(0, 0, 0, 0))
+        for k in range(4): self.windows.append((cx - 210 + k * 110, base - 95, 12, 30, k * 0.9, 1 + k % 2))
+        d.rectangle([cx - 600, base - 90, cx - 290, base], fill=c)                          # dormitory range
+        d.polygon([(cx - 610, base - 90), (cx - 445, base - 140), (cx - 280, base - 90)], fill=c)
+        for k in range(5): self.windows.append((cx - 560 + k * 62, base - 50, 6, 12, k * 1.7, 2))
+        d.rectangle([0, base, W, H], fill=c)
+        r2 = random.Random(int(rng.integers(1e6)))
+        for _ in range(5): cypress(d, r2.uniform(W * 0.62, W), base, r2.uniform(120, 200), p["mid"])
+        self.mid = mid
+        near = Image.new("RGBA", (W, H), (0, 0, 0, 255)); dn = ImageDraw.Draw(near)
+        aw, gap, top = 300, 70, 170                                                          # arcade: carve arches out of a dark wall
+        x = -120
+        while x < W:
+            dn.rectangle([x + gap, top + aw / 2, x + gap + aw, H - 120], fill=(0, 0, 0, 0))
+            dn.pieslice([x + gap, top, x + gap + aw, top + aw], 180, 360, fill=(0, 0, 0, 0))
+            x += aw + gap
+        dn.rectangle([0, H - 120, W, H], fill=p["near"] + (255,))
+        arr = np.array(near); arr[..., :3] = p["near"]; near = Image.fromarray(arr, "RGBA")
+        self.near = near; self.fog_y = base - 10; self.fog_a = 0.14; self.particles = "dust"
+
+    def build_nile(self):
+        """Wide river at night: palms on the near bank, a small boat with a tall sail, pyramids far downriver."""
+        p, rng = self.p, self.rng; hy = int(H * 0.58)
+        self.back = self.sky(hy, (0.7, 0.18), 50)
+        far = Image.new("RGBA", (W, H), (0, 0, 0, 0)); df = ImageDraw.Draw(far); fc = mix(p["far"], p["horizon"], 0.45) + (255,)
+        df.rectangle([0, hy - 14, W, hy + 4], fill=fc)                                      # far bank
+        for px, s in ((W * 0.18, 1.0), (W * 0.27, 0.7), (W * 0.33, 0.45)):                  # pyramids
+            df.polygon([(px - 120 * s, hy - 10), (px, hy - 125 * s), (px + 120 * s, hy - 10)], fill=fc)
+        self.back.alpha_composite(far.filter(ImageFilter.GaussianBlur(1.5)))
+        river = Image.new("RGBA", (W, H), (0, 0, 0, 0)); dr = ImageDraw.Draw(river)
+        for y in range(hy + 4, H):
+            f = (y - hy) / (H - hy); dr.line([(0, y), (W, y)], fill=mix(mix(p["sea"], p["horizon"], 0.3), p["sea"], f ** 0.6) + (255,))
+        self.back.alpha_composite(river)
+        mid = Image.new("RGBA", (W, H), (0, 0, 0, 0)); d = ImageDraw.Draw(mid); c = p["mid"] + (255,)
+        bx, by = W * 0.52, hy + 70                                                           # boat
+        d.polygon([(bx - 110, by - 14), (bx + 120, by - 20), (bx + 80, by + 10), (bx - 80, by + 10)], fill=c)
+        d.line([(bx, by - 14), (bx + 6, by - 230)], fill=c, width=5)
+        d.polygon([(bx + 6, by - 228), (bx + 120, by - 40), (bx - 70, by - 40)], fill=mix(p["mid"], p["far"], 0.35) + (255,))
+        self.windows.append((bx - 40, by - 4, 5, 5, 0.5, 2))
+        self.mid = mid
+        near = Image.new("RGBA", (W, H), (0, 0, 0, 0)); dn = ImageDraw.Draw(near); nc = p["near"] + (255,)
+        dn.polygon([(0, H), (0, H - 190), (W * 0.22, H - 150), (W * 0.36, H - 90), (W * 0.42, H)], fill=nc)
+        r2 = random.Random(int(rng.integers(1e6)))
+        for k in range(6):                                                                    # papyrus reeds
+            x = W * 0.05 + k * 70; dn.line([(x, H - 140), (x + 10, H - 300 - k * 8)], fill=nc, width=4)
+            hx, hy2 = x + 10, H - 300 - k * 8
+            for a in range(-4, 5): dn.line([(hx, hy2), (hx + a * 9, hy2 - 30 + abs(a) * 4)], fill=nc, width=2)
+        for px, h in ((W * 0.86, 420), (W * 0.94, 340)):                                    # date palms on the right bank
+            dn.polygon([(W * 0.72, H), (W * 0.8, H - 120), (W, H - 160), (W, H)], fill=nc)
+            dn.line([(px, H - 110), (px - 18, H - 110 - h)], fill=nc, width=14)
+            tx, ty = px - 18, H - 110 - h
+            for a in range(9):
+                ang = math.pi * (0.05 + a / 8 * 0.9); L = r2.uniform(120, 170)
+                ex, ey = tx + math.cos(ang) * L * (1 if a % 2 else -1), ty + abs(math.sin(ang)) * 40 + r2.uniform(10, 60)
+                dn.line([(tx, ty), ((tx + ex) / 2, ty - 25), (ex, ey)], fill=nc, width=10, joint="curve")
+        self.near = near
+        mx, my, mr = self.moon; self.reflect = (mx, hy + 6, mr)
+        self.fog_y = hy + 10; self.fog_a = 0.12; self.particles = "fireflies"
 
     # --- per-frame
     def prepare(self):

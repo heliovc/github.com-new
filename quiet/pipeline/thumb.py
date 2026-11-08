@@ -1,10 +1,15 @@
-"""Thumbnail 1280x720: python3 -I thumb.py <scene> "<BIG LINE>" "<small line>" out.jpg [seed]"""
+"""Thumbnail 1280x720: python3 -I thumb.py <scene> "<BIG LINE>" "<small line>" out.jpg [seed] [epXX.py for its PALETTE]"""
 import sys
 sys.path.insert(0, ".")
 import sleep as S
 from PIL import Image, ImageDraw, ImageEnhance, ImageFilter
 scene, big, small, out = sys.argv[1:5]; seed = int(sys.argv[5]) if len(sys.argv) > 5 else 7
 P = dict(S.PAL); P.update(sky_mid=(48, 32, 52), horizon=(176, 104, 66), moon=(255, 238, 205))
+if len(sys.argv) > 6:  # optional episode file: use its PALETTE (brightened) so each thumbnail has its own colour
+    import importlib.util as U
+    sp = U.spec_from_file_location("ep", sys.argv[6]); ep = U.module_from_spec(sp); sp.loader.exec_module(ep)
+    P.update(getattr(ep, "PALETTE", {}))
+    P["sky_mid"] = S.mix(P["sky_mid"], (255, 255, 255), 0.08); P["horizon"] = S.mix(P["horizon"], (255, 255, 255), 0.18)
 sc = S.Scene(scene, P, seed)
 im = sc.frame(6.0).convert("RGB")
 im = ImageEnhance.Brightness(im).enhance(1.35); im = ImageEnhance.Contrast(im).enhance(1.12)
