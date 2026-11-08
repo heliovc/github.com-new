@@ -1,0 +1,491 @@
+1
+00:00:00,150 --> 00:00:01,741
+Trezentos e dezoito milhões.
+
+2
+00:00:01,741 --> 00:00:07,313
+Foi o número de Pix feitos no Brasil num único dia, quatro de setembro de dois mil e vinte e seis.
+
+3
+00:00:07,313 --> 00:00:09,929
+Pessoa física não pagou nada por nenhum deles.
+
+4
+00:00:09,929 --> 00:00:12,544
+Então alguém, em algum lugar, perdeu dinheiro.
+
+5
+00:00:13,144 --> 00:00:14,815
+Hoje vamos fazer uma autópsia.
+
+6
+00:00:14,815 --> 00:00:19,995
+Quatro vítimas do Pix, uma por uma: quem morreu, quem ficou ferido e quem ainda está na fila.
+
+7
+00:00:19,995 --> 00:00:23,448
+Uma delas você usa toda semana e nem percebeu que está doente.
+
+8
+00:00:24,048 --> 00:00:29,044
+E no fim, a pergunta que quase ninguém faz: se o Pix é de graça, quem está pagando a conta?
+
+9
+00:00:29,044 --> 00:00:32,667
+A resposta tem a ver com o que os bancos fizeram depois de perder.
+
+10
+00:00:33,267 --> 00:00:34,722
+Antes das vítimas, a arma.
+
+11
+00:00:34,722 --> 00:00:38,806
+Até dois mil e vinte, mandar dinheiro para outro banco tinha duas opções.
+
+12
+00:00:38,806 --> 00:00:41,044
+O DOC, que só caía no dia útil seguinte.
+
+13
+00:00:41,044 --> 00:00:44,346
+E a TED, que caía no mesmo dia, mas só em horário bancário.
+
+14
+00:00:44,346 --> 00:00:46,024
+As duas, em geral, com tarifa.
+
+15
+00:00:46,624 --> 00:00:50,180
+Aí o Banco Central lançou o Pix, em novembro de dois mil e vinte.
+
+16
+00:00:50,180 --> 00:00:53,735
+Cai em segundos, a qualquer hora, inclusive domingo de madrugada.
+
+17
+00:00:53,735 --> 00:00:58,166
+E pela regra do próprio Banco Central, para pessoa física, transferir é de graça.
+
+18
+00:00:58,765 --> 00:01:02,956
+O resultado foi uma das adoções mais rápidas da história dos pagamentos.
+
+19
+00:01:02,956 --> 00:01:07,844
+Em dois mil e vinte e cinco foram setenta e nove vírgula oito bilhões de transações.
+
+20
+00:01:07,844 --> 00:01:16,515
+Cento e quarenta e oito milhões de pessoas usaram o Pix, oitenta e seis por cento dos adultos do país, além de doze vírgula oito milhões de empresas.
+
+21
+00:01:17,115 --> 00:01:25,499
+No segundo semestre de dois mil e vinte e cinco, o Pix já era cinquenta e quatro vírgula sete por cento de todas as transações de pagamento do país.
+
+22
+00:01:25,499 --> 00:01:30,144
+Os cartões, somando crédito, débito e pré-pago, ficaram com trinta vírgula quatro.
+
+23
+00:01:30,144 --> 00:01:35,696
+Mais da metade de tudo que se paga no Brasil passa por um sistema que não existia seis anos atrás.
+
+24
+00:01:36,296 --> 00:01:37,610
+E o ritmo não diminuiu.
+
+25
+00:01:37,610 --> 00:01:46,067
+Só no segundo trimestre de dois mil e vinte e seis foram vinte e dois vírgula nove bilhões de Pix, movimentando dez vírgula cinco trilhões de reais.
+
+26
+00:01:46,067 --> 00:01:51,095
+O segundo colocado, o cartão de crédito, fez seis bilhões de operações no mesmo período.
+
+27
+00:01:51,095 --> 00:01:53,666
+Quase quatro Pix para cada compra no crédito.
+
+28
+00:01:53,666 --> 00:01:58,694
+Quando um meio de pagamento cresce assim, o dinheiro que ele carrega sai de algum lugar.
+
+29
+00:01:58,694 --> 00:02:01,037
+E é exatamente aí que começam as vítimas.
+
+30
+00:02:01,637 --> 00:02:02,634
+Vítima número um.
+
+31
+00:02:02,634 --> 00:02:03,690
+Essa não resistiu.
+
+32
+00:02:03,690 --> 00:02:06,096
+E a data da morte tem um detalhe curioso.
+
+33
+00:02:06,696 --> 00:02:09,332
+O DOC nasceu em mil novecentos e oitenta e cinco.
+
+34
+00:02:09,332 --> 00:02:13,315
+Por quase quarenta anos foi o jeito comum de mandar dinheiro entre bancos.
+
+35
+00:02:13,315 --> 00:02:22,786
+Mas no primeiro semestre de dois mil e vinte e três, segundo a Febraban, sobravam só dezoito vírgula três milhões de DOCs, contra trinta e sete bilhões de operações no período.
+
+36
+00:02:22,786 --> 00:02:24,616
+Zero vírgula zero cinco por cento.
+
+37
+00:02:25,216 --> 00:02:29,473
+A Febraban parou a emissão em quinze de janeiro de dois mil e vinte e quatro.
+
+38
+00:02:29,473 --> 00:02:32,458
+O último agendamento foi em vinte e nove de fevereiro.
+
+39
+00:02:32,458 --> 00:02:35,886
+Repare na data: um dia que só existe de quatro em quatro anos.
+
+40
+00:02:35,886 --> 00:02:37,434
+O DOC não foi morto por lei.
+
+41
+00:02:37,434 --> 00:02:42,410
+Foi abandonado pelos próprios clientes, até não valer mais a pena manter o sistema ligado.
+
+42
+00:02:43,010 --> 00:02:44,161
+Vítima número dois.
+
+43
+00:02:44,161 --> 00:02:46,160
+Essa sobreviveu, mas saiu ferida.
+
+44
+00:02:46,160 --> 00:02:49,794
+E o ferimento aparece no balanço dos maiores bancos do país.
+
+45
+00:02:50,394 --> 00:02:56,268
+Parte do que você pagava no pacote da conta corrente era justamente para ter direito a transferências.
+
+46
+00:02:56,268 --> 00:03:00,011
+Quando a transferência virou grátis, esse argumento perdeu força.
+
+47
+00:03:00,011 --> 00:03:11,931
+Em dois mil e vinte e um, o primeiro ano inteiro com Pix, a receita com conta corrente dos quatro maiores bancos listados caiu de vinte e seis vírgula nove para vinte e cinco vírgula quatro bilhões de reais.
+
+48
+00:03:11,931 --> 00:03:14,004
+Um bilhão e meio a menos, em um ano.
+
+49
+00:03:14,604 --> 00:03:16,637
+Agora o detalhe que ninguém esperava.
+
+50
+00:03:16,637 --> 00:03:19,219
+Quem mais perdeu não foi o banco mais atrasado.
+
+51
+00:03:19,219 --> 00:03:23,669
+Foi o Banco do Brasil, que respondia por quase trinta por cento do volume do Pix.
+
+52
+00:03:23,669 --> 00:03:27,624
+A receita dele com conta corrente caiu dezessete vírgula dois por cento.
+
+53
+00:03:27,624 --> 00:03:29,163
+O Itaú caiu um vírgula oito.
+
+54
+00:03:29,163 --> 00:03:30,866
+O Santander, três vírgula nove.
+
+55
+00:03:30,866 --> 00:03:33,228
+E o Bradesco ainda subiu zero vírgula sete.
+
+56
+00:03:33,828 --> 00:03:35,373
+E por que o Bradesco escapou?
+
+57
+00:03:35,373 --> 00:03:37,771
+Uma pista está no próprio balanço do período.
+
+58
+00:03:37,771 --> 00:03:44,323
+No fim de dois mil e vinte e um, os bancos digitais do grupo, o Next e o Bitz, somavam mais de catorze milhões de clientes.
+
+59
+00:03:44,323 --> 00:03:48,106
+E oitenta e seis por cento deles não tinham conta no banco tradicional.
+
+60
+00:03:48,106 --> 00:03:53,327
+Ou seja: em vez de só perder tarifa para o Pix, o grupo usou o digital para buscar clientes novos.
+
+61
+00:03:53,927 --> 00:03:56,512
+Por que justo o banco que mais movimentou Pix?
+
+62
+00:03:56,512 --> 00:04:02,188
+Uma leitura possível: quanto mais clientes usavam transferência paga, mais receita havia para perder.
+
+63
+00:04:02,188 --> 00:04:03,875
+O Pix não pune quem é pequeno.
+
+64
+00:04:03,875 --> 00:04:07,303
+Pune quem vivia de cobrar pelo caminho que ele tornou grátis.
+
+65
+00:04:07,903 --> 00:04:09,054
+Vítima número três.
+
+66
+00:04:09,054 --> 00:04:11,722
+Essa você conhece bem: está na sua carteira.
+
+67
+00:04:12,322 --> 00:04:16,312
+O débito e o Pix fazem a mesma coisa: tiram o dinheiro da sua conta na hora.
+
+68
+00:04:16,312 --> 00:04:19,882
+E para muita loja, receber por Pix custa menos que a taxa do débito.
+
+69
+00:04:19,882 --> 00:04:21,352
+Os números mostram o efeito.
+
+70
+00:04:21,352 --> 00:04:31,538
+No primeiro semestre de dois mil e vinte e seis, segundo a Abecs, o débito movimentou quatrocentos e oitenta e um vírgula seis bilhões de reais, uma queda de um vírgula oito por cento em um ano.
+
+71
+00:04:31,538 --> 00:04:33,954
+O número de transações caiu zero vírgula oito.
+
+72
+00:04:34,553 --> 00:04:41,040
+Agora compare com o crédito, no mesmo período: um vírgula sete trilhão de reais, alta de doze vírgula um por cento.
+
+73
+00:04:41,040 --> 00:04:42,450
+O Pix não matou o cartão.
+
+74
+00:04:42,450 --> 00:04:45,890
+Ele matou a parte do cartão que só servia para pagar à vista.
+
+75
+00:04:45,890 --> 00:04:50,233
+O crédito sobreviveu por um motivo simples: o Pix não parcela e não dá prazo.
+
+76
+00:04:50,833 --> 00:04:55,074
+E o Banco Central chegou a desenhar um Pix Parcelado com regras próprias.
+
+77
+00:04:55,074 --> 00:05:00,592
+Depois de vários adiamentos, em dezembro de dois mil e vinte e cinco, desistiu de regulamentar.
+
+78
+00:05:00,592 --> 00:05:04,657
+Por enquanto, a última trincheira do cartão de crédito continua de pé.
+
+79
+00:05:05,257 --> 00:05:06,463
+Vítima número quatro.
+
+80
+00:05:06,463 --> 00:05:07,726
+Essa ainda não morreu.
+
+81
+00:05:07,726 --> 00:05:10,655
+Está na fila, e o Banco Central já entregou a arma.
+
+82
+00:05:11,255 --> 00:05:15,577
+Desde dezesseis de junho de dois mil e vinte e cinco existe o Pix Automático.
+
+83
+00:05:15,577 --> 00:05:21,583
+Você autoriza uma vez, e a conta de luz, a escola ou a assinatura passam a ser cobradas sozinhas, todo mês.
+
+84
+00:05:21,583 --> 00:05:30,284
+E desde janeiro de dois mil e vinte e seis, a instituição que já oferece débito automático com outros bancos é obrigada a oferecer o Pix Automático também.
+
+85
+00:05:30,884 --> 00:05:34,919
+É exatamente o terreno do boleto e do débito automático tradicional.
+
+86
+00:05:34,919 --> 00:05:39,844
+Se o Pix repetir aqui o que fez com o DOC, a próxima ficha de autópsia já tem nome.
+
+87
+00:05:40,444 --> 00:05:43,401
+Toda autópsia termina com uma pergunta: quem herdou?
+
+88
+00:05:43,401 --> 00:05:44,936
+O primeiro herdeiro é você.
+
+89
+00:05:44,936 --> 00:05:55,740
+Um levantamento do Movimento Brasil Competitivo estimou que o Pix gerou cento e dezessete bilhões de reais de economia direta em cinco anos, só em tarifas e custos que deixaram de ser pagos.
+
+90
+00:05:56,340 --> 00:05:58,532
+O segundo herdeiro são os bancos digitais.
+
+91
+00:05:58,532 --> 00:06:03,437
+Antes, abrir conta em banco novo era chato porque mandar dinheiro para fora dele custava caro.
+
+92
+00:06:03,437 --> 00:06:06,776
+Com o Pix, o dinheiro entra e sai de qualquer banco em segundos.
+
+93
+00:06:06,776 --> 00:06:10,220
+A troca de banco ficou barata, e isso ajudou quem estava chegando.
+
+94
+00:06:10,220 --> 00:06:16,116
+O Nubank, por exemplo, já passa de cento e dezenove milhões de clientes no Brasil, pelo ranking do Banco Central.
+
+95
+00:06:16,716 --> 00:06:18,202
+Agora a parte que não fecha.
+
+96
+00:06:18,202 --> 00:06:23,405
+Lembra do bilhão e meio que os quatro grandes perderam em conta corrente em dois mil e vinte e um?
+
+97
+00:06:23,405 --> 00:06:27,227
+No mesmo ano, a receita total de serviços desses quatro bancos não caiu.
+
+98
+00:06:27,227 --> 00:06:30,305
+Cresceu, e chegou a cento e vinte e dois bilhões de reais.
+
+99
+00:06:30,905 --> 00:06:33,387
+Então, se o Pix é grátis, quem está pagando?
+
+100
+00:06:33,387 --> 00:06:34,910
+A resposta tem três partes.
+
+101
+00:06:34,910 --> 00:06:38,407
+Primeira: o Pix é grátis para pessoa física, não para empresa.
+
+102
+00:06:38,407 --> 00:06:42,355
+As regras do Banco Central permitem que o banco cobre Pix de empresas.
+
+103
+00:06:42,355 --> 00:06:47,375
+No lançamento, grandes bancos chegaram a cobrar até dez reais por Pix de pessoa jurídica.
+
+104
+00:06:47,975 --> 00:06:50,337
+Segunda: o dinheiro grande ainda não migrou.
+
+105
+00:06:50,337 --> 00:06:59,462
+No segundo semestre de dois mil e vinte e cinco, a TED movimentou trinta e quatro vírgula sete por cento do valor dos pagamentos, contra vinte e oito vírgula seis do Pix.
+
+106
+00:06:59,462 --> 00:07:02,361
+O Pix ganhou na quantidade, no cafezinho e no aluguel.
+
+107
+00:07:02,361 --> 00:07:06,172
+A transferência de empresa grande continua passando pelo trilho antigo.
+
+108
+00:07:06,772 --> 00:07:08,928
+E a terceira parte é a mais importante.
+
+109
+00:07:08,928 --> 00:07:11,857
+O Pix tirou dos bancos a cobrança por mover dinheiro.
+
+110
+00:07:11,857 --> 00:07:14,509
+Mas não tirou a cobrança por emprestar dinheiro.
+
+111
+00:07:14,509 --> 00:07:24,457
+E é aí que o lucro foi parar: no crédito, que cresceu doze por cento em valor no primeiro semestre, no parcelado e nos juros, como vimos nos episódios do rotativo e da antecipação.
+
+112
+00:07:25,057 --> 00:07:27,138
+Então, quem perdeu dinheiro com o Pix?
+
+113
+00:07:27,138 --> 00:07:27,850
+O DOC morreu.
+
+114
+00:07:27,850 --> 00:07:33,051
+A tarifa da conta encolheu, e quem mais dependia dela, como o Banco do Brasil, sentiu primeiro.
+
+115
+00:07:33,051 --> 00:07:34,474
+O débito parou de crescer.
+
+116
+00:07:34,474 --> 00:07:35,788
+E o boleto está na fila.
+
+117
+00:07:36,388 --> 00:07:38,866
+Mas o sistema bancário não ficou mais pobre.
+
+118
+00:07:38,866 --> 00:07:39,993
+Ele trocou de fonte.
+
+119
+00:07:39,993 --> 00:07:45,399
+O Pix é de graça para você porque o banco passou a ganhar em outro ponto da sua vida financeira.
+
+120
+00:07:45,399 --> 00:07:50,468
+Na próxima vez que um app te oferecer crédito logo depois de um Pix, você já sabe por quê.
+
+121
+00:07:51,068 --> 00:07:53,982
+No próximo episódio, outra autópsia, mas de um rombo.
+
+122
+00:07:53,982 --> 00:08:01,238
+Como uma varejista com quase cem anos de história escondeu vinte e cinco bilhões de reais no próprio balanço, e por que ninguém viu.
+
+123
+00:08:01,238 --> 00:08:02,887
+Americanas: o rombo explicado.

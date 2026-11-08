@@ -1,0 +1,56 @@
+import json, sys
+durs = json.load(open(sys.argv[1]))
+def ts(i):
+    s = int(sum(durs[:i])); return f"{s//60}:{s%60:02d}"
+total = sum(durs)
+caps = [(0, "Gancho: 318 milhões de Pix num dia"), (3, "A arma: DOC x TED x Pix"), (8, "Vítima 1: o DOC"), (11, "Vítima 2: a tarifa da conta (BB −17,2%)"),
+        (16, "Vítima 3: o cartão de débito"), (20, "Vítima 4: boleto e Pix Automático"), (23, "Quem herdou"), (25, "A virada: se é grátis, quem paga?"),
+        (29, "O laudo final"), (31, "Próximo episódio")]
+chap = "\n".join(f"{ts(i)} {t}" for i, t in caps)
+txt = f"""TÍTULO
+Como o Pix mudou os bancos (e quem perdeu dinheiro)
+
+DESCRIÇÃO
+Em 4 de setembro de 2026 o Brasil fez 318 milhões de Pix num único dia — e pessoa física não pagou nada. Então quem perdeu dinheiro? Neste episódio fazemos a autópsia do Pix: o DOC (morto em 2024), a tarifa da conta corrente (os 4 maiores bancos perderam R$ 1,5 bi em 2021; BB −17,2%), o cartão de débito (−1,8% no 1º semestre de 2026) e o boleto, que está na fila do Pix Automático. E a virada: se o Pix é grátis, quem está pagando?
+
+Capítulos
+{chap}
+
+Fontes
+- Banco Central (SPI): recorde de 318.073.816 Pix e R$ 186,89 bi em 04/09/2026; 2º tri/2026: 22,93 bi Pix e 6,05 bi operações no crédito — via Metrópoles e Let's Money (set/2026)
+- Banco Central, Relatório de Gestão do Pix 2023–2025: 79,8 bi transações em 2025; 148 mi pessoas (86% dos adultos); 12,8 mi empresas
+- Banco Central, estatísticas de pagamentos de varejo (2º sem/2025), via Finsiders Brasil: Pix 54,7% das transações; cartões 30,4%; em valor TED 34,7%, Pix 28,6%, boleto 7,6%
+- Febraban via InfoMoney (jan/2024): DOC criado em 1985; 18,3 mi DOCs = 0,05% das 37 bi operações do 1º sem/2023; emissão até 15/01/2024, encerramento em 29/02/2024
+- Balanços de BB, Itaú, Bradesco e Santander, via TradeMap e Money Times (fev/2022): receita com conta corrente R$ 26,9 bi → R$ 25,4 bi em 2021; BB −17,2%, Santander −3,9%, Itaú −1,8%, Bradesco +0,7%; receita de serviços dos 4 = R$ 122 bi; Next+Bitz 14 mi clientes (86% sem conta no Bradesco)
+- Abecs, balanço do 1º sem/2026, via Mercado & Consumo (19/08/2026): débito R$ 481,6 bi (−1,8%), 8,1 bi transações (−0,8%); crédito R$ 1,7 tri (+12,1%)
+- O Povo / IstoÉ Dinheiro (04/12/2025): BC desiste de regular o Pix Parcelado
+- Banco Central: Pix Automático disponível desde 16/06/2025
+- Movimento Brasil Competitivo, via BPMoney (16/11/2025): R$ 117 bi de economia direta em 5 anos
+- Banco Central, ranking de clientes 3º tri/2026, via Finsiders (22/10/2026)
+- Tecnoblog: Pix de pessoa jurídica custava até R$ 10 em grandes bancos no lançamento
+
+Conteúdo explicativo e jornalístico. Não é recomendação financeira nem de investimento. Narração com voz sintética; roteiro, pesquisa e visual próprios. "Análise" na tela = interpretação do canal.
+
+#pix #bancos #bancocentral #fintech #financas #portrasdodinheiro
+
+TAGS
+pix, como o pix mudou os bancos, pix bancos, fim do doc, ted doc pix, tarifa bancaria, cartao de debito, pix automatico, pix parcelado, banco do brasil, nubank, bancos digitais, banco central, febraban, abecs, economia, financas, por tras do dinheiro
+
+CHECKLIST (playbook seção 7)
+1. 1ª frase = número do recorde (318 milhões) + promessa (alguém perdeu dinheiro) — ok
+2. Até 15 s: autópsia de 4 vítimas + quem paga — ok
+3. Loops: quem paga (virada) / vítima que você usa (débito) / BB, o maior do Pix, perdeu mais — todos fechados
+4. Re-engajamentos: ~3:00 BB −17,2% (ticker); ~6:00 receita de serviços subiu para R$ 122 bi
+5. Nenhum visual parado > 40 s; 2 cenas novas (obit, race)
+6. Sem enchimento — ok
+7. Final = payoff (o preço mudou de lugar) + próximo (Americanas), sem despedida
+8. Short: número no 1º frame, gancho ≤ 2 s, fim emenda no começo
+9. Estrutura "autópsia" ≠ EP04 extrato / EP05 rounds / EP06 siga o recebível; thumb nova (ficha de autópsia)
+10. Sem persona/conselho; fontes na tela e aqui; avisos ok
+Duração: {int(total//60)}min{int(total%60):02d}
+
+VERTICAL
+Legenda: Pix é grátis pra você. Então quem paga a conta? Os 4 maiores bancos perderam R$ 1,5 bi num ano — e mesmo assim faturaram mais. Fonte: balanços via TradeMap/Money Times. Não é recomendação financeira.
+Hashtags: #pix #bancos #financas #shorts #portrasdodinheiro
+"""
+open(sys.argv[2], "w").write(txt); print(txt[:300])
