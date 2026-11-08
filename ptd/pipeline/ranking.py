@@ -174,8 +174,48 @@ def chart_b(img, items, th, upto, t, cur_rank):
         d.text((cx, cy - r - 26), f"{it['rank']}º", font=F(34, "Black"), fill=tuple(th["accent2"]), anchor="mm")
     return
 
+def chart_p(img, items, th, upto, t, cur_rank):
+    """Buracos (rank #5, rombos): chão em y=830; cada item = um buraco cavado para baixo com PROFUNDIDADE proporcional
+    ao valor (5º à esquerda, 1º à direita). Não revelado: contorno tracejado com "?"; atual: cava do zero com borda brilhante."""
+    d = ImageDraw.Draw(img); mx = max(i["num"] for i in items)
+    ground, hmax, cw, gap = 830, 600, 160, 34
+    x0 = W / 2 - (5 * cw + 4 * gap) / 2
+    soil = tuple(th.get("soil", (70, 40, 52)))
+    d.rectangle([40, ground - 14, W - 40, ground + 10], fill=soil)
+    for k in range(40, W - 40, 26): d.line([(k, ground - 14), (k + 12, ground - 24)], fill=tuple(int(c * 1.3) for c in soil), width=4)
+    order = sorted(items, key=lambda x: -x["rank"])
+    for k, it in enumerate(order):
+        x = x0 + k * (cw + gap); cx = x + cw / 2
+        hh_full = hmax * it["num"] / mx
+        d.text((cx, ground - 60), f"{it['rank']}º", font=F(38, "Black"), fill=tuple(th["accent2"]), anchor="mm")
+        if it["rank"] < upto:
+            yy = ground + 10
+            while yy < ground + hh_full:
+                d.line([(x, yy), (x, min(yy + 16, ground + hh_full))], fill=(90, 70, 85), width=4)
+                d.line([(x + cw, yy), (x + cw, min(yy + 16, ground + hh_full))], fill=(90, 70, 85), width=4); yy += 30
+            d.text((cx, ground + min(hh_full, 300) / 2 + 20), "?", font=F(64, "Black"), fill=(110, 90, 105), anchor="mm")
+            continue
+        on = it["rank"] == cur_rank
+        p = ease(t / 1.3) if on else 1.0; hh = max(hh_full * p, 20)
+        rim = tuple(th["accent"]) if on else tuple(th.get("bar_col", (120, 60, 80)))
+        pts = [(x, ground + 10)]
+        n = 7
+        for j in range(1, n + 1):
+            yy = ground + 10 + hh * j / n; pts.append((x + (6 if j % 2 else -6), yy))
+        pts += [(cx, ground + 10 + hh + 18)]
+        for j in range(n, 0, -1):
+            yy = ground + 10 + hh * j / n; pts.append((x + cw + (-6 if j % 2 else 6), yy))
+        pts.append((x + cw, ground + 10))
+        d.polygon(pts, fill=(6, 4, 8), outline=rim, width=6 if on else 4)
+        fs = 34
+        while F(fs, "Black").getlength(val_str(it, it["num"])) > cw - 10 and fs > 20: fs -= 2
+        d.text((cx, ground + 10 + hh + 58), val_str(it, it["num"] * p), font=F(fs, "Black"), fill=WHITE if on else (220, 200, 210), anchor="mm")
+        fs2 = 30
+        while F(fs2, "ExtraBold").getlength(it["short"]) > cw + 20 and fs2 > 18: fs2 -= 2
+        d.text((cx, ground - 105), it["short"], font=F(fs2, "ExtraBold"), fill=WHITE if on else (190, 180, 195), anchor="mm")
+
 def chart(img, items, th, upto, t, cur_rank):
-    {"vbars": chart_v, "gauge": chart_g, "bubbles": chart_b}.get(th.get("chart"), chart_h)(img, items, th, upto, t, cur_rank)
+    {"vbars": chart_v, "gauge": chart_g, "bubbles": chart_b, "pits": chart_p}.get(th.get("chart"), chart_h)(img, items, th, upto, t, cur_rank)
 
 def seg_hook(img, sc, th, t, dur, items):
     ease = lambda x: 1.0  # frame 1 = thumbnail: gancho inteiro visível desde o frame 0 (rank #3)
@@ -192,6 +232,8 @@ def seg_hook(img, sc, th, t, dur, items):
             text(img, (x0 + k * (cw + gap) + cw / 2, base - 280), "?", 64, (90, 100, 130), a=ease((t - 0.4 - k * 0.15) / 0.3))
     elif th.get("chart") == "bubbles":
         if sc.get("tease"): text(img, (W / 2, 690), sc["tease"], 64, th["accent"], a=1.0)
+    elif th.get("chart") == "pits":
+        if sc.get("tease"): text(img, (W / 2, 650), sc["tease"], 64, th["accent"], a=1.0)
     elif th.get("chart") == "gauge":
         if sc.get("tease"): text(img, (W / 2, 790), sc["tease"], 72, th["accent"], a=1.0)
         else: text(img, (W / 2, 800), "?", 120, (110, 120, 150), a=1.0)

@@ -305,7 +305,9 @@ def sc_stack(img, v, t, dur):
         if p > 0:
             dr.rounded_rectangle([cx + 4, y - 90, cx + 4 + max(8, (w - 8) * p), y + 90], 18, fill=col)
             if p > 0.6:
-                dr.text((cx + w / 2, y), f"{fmt_num(pct, 0)}%", font=F(84, "Black"), fill=BG1, anchor="mm")
+                fsn = 84
+                while F(fsn, "Black").getlength(f"{fmt_num(pct, 0)}%") > w - 30 and fsn > 40: fsn -= 4
+                dr.text((cx + w / 2, y), f"{fmt_num(pct, 0)}%", font=F(fsn, "Black"), fill=BG1, anchor="mm")
                 tc = WHITE if (hl < 0 or i == hl) else (110, 120, 145)
                 dr.text((cx + w / 2, y + 160), lab, font=F(48, "ExtraBold"), fill=tc, anchor="mm")
                 for j, ln in enumerate(note.split("\n")):
@@ -466,9 +468,77 @@ def sc_calendar(img, v, t, dur):
         if v.get("today_note"): dr.text((hc, (hy0 + hy1) / 2 + 120), v["today_note"], font=F(30, "SemiBold"), fill=mix(BG1, DIM, a0), anchor="mm")
     if v.get("caption"): dr.text((W / 2, H - 70), v["caption"], font=F(28, "Medium"), fill=DIM, anchor="mm")
 
+def sc_obit(img, v, t, dur):
+    """Criado no EP07: ficha de autópsia de uma receita. case, name, born, died, cause, note; stamp (texto) + stamp_col (hex).
+    Papel claro entra; linhas são preenchidas uma a uma; carimbo bate inclinado no fim."""
+    dr = ImageDraw.Draw(img)
+    a = ease(t / 0.5)
+    px0, px1, py0, py1 = 430, 1490, 110 + (1 - a) * 60, 980 + (1 - a) * 60
+    paper = (232, 228, 214); ink, ink2 = (28, 30, 40), (110, 105, 95)
+    dr.rounded_rectangle([px0, py0, px1, py1], 18, fill=mix(BG1, paper, a))
+    if a < 0.4: return
+    dr.rectangle([px0, py0, px1, py0 + 90], fill=(40, 44, 58))
+    dr.text((px0 + 40, py0 + 45), "FICHA DE AUTÓPSIA", font=F(40, "Black"), fill=paper, anchor="lm")
+    dr.text((px1 - 40, py0 + 45), v.get("case", ""), font=F(34, "Bold"), fill=AMBER, anchor="rm")
+    rows = [("VÍTIMA", v["name"]), ("NASCIMENTO", v.get("born", "")), ("ÓBITO", v.get("died", "")), ("CAUSA", v.get("cause", ""))]
+    span = max(0.5, dur * 0.4) / len(rows)
+    for i, (lab, val) in enumerate(rows):
+        p = ease((t - 0.5 - i * span) / 0.5)
+        y = py0 + 160 + i * 110
+        dr.text((px0 + 50, y), lab, font=F(28, "Bold"), fill=ink2, anchor="lm")
+        for xx in range(int(px0 + 330), int(px1 - 50), 18): dr.line([(xx, y + 34), (xx + 9, y + 34)], fill=(190, 184, 170), width=2)
+        if p > 0:
+            fs = 56 if i == 0 else 44
+            while F(fs, "ExtraBold").getlength(val) > px1 - px0 - 400 and fs > 26: fs -= 2
+            dr.text((px0 + 330, y), val, font=F(fs, "ExtraBold"), fill=mix(paper, ink, p), anchor="lm")
+    if v.get("note"):
+        p = ease((t - 0.5 - len(rows) * span) / 0.5)
+        dr.text(((px0 + px1) / 2, py1 - 50), v["note"], font=F(32, "SemiBold"), fill=mix(paper, ink2, p), anchor="mm")
+    if v.get("stamp"):
+        ts = 0.7 + len(rows) * span
+        p = ease((t - ts) / 0.25)
+        if p > 0:
+            sc = 1.6 - 0.6 * p
+            col = hexc(v.get("stamp_col", "#C0392B"))
+            txt = v["stamp"]; f = F(int(66 * sc), "Black")
+            tw = f.getlength(txt) + 60 * sc; th = 120 * sc
+            lay = Image.new("RGBA", (int(tw) + 20, int(th) + 20), (0, 0, 0, 0)); d2 = ImageDraw.Draw(lay)
+            d2.rounded_rectangle([10, 10, 10 + tw, 10 + th], int(14 * sc), outline=col + (int(230 * p),), width=max(4, int(9 * sc)))
+            d2.text((10 + tw / 2, 10 + th / 2), txt, font=f, fill=col + (int(230 * p),), anchor="mm")
+            lay = lay.rotate(-12, expand=True, resample=Image.BICUBIC)
+            img.alpha_composite(lay, (int(px1 - 30 - lay.width), int(py0 + 650 - lay.height / 2)))
+    if v.get("caption"): dr.text((W / 2, H - 50), v["caption"], font=F(28, "Medium"), fill=DIM, anchor="mm")
+
+def sc_race(img, v, t, dur):
+    """Criado no EP07: corrida de transferências. lanes = [[nome, rótulo_tempo, fração_de_velocidade (1=mais rápido), cor_hex]].
+    Cada raia avança uma moeda R$ até a chegada; a mais rápida chega primeiro e acende 'CHEGOU'."""
+    dr = ImageDraw.Draw(img); lanes = v["lanes"]; n = len(lanes)
+    alpha_text(img, (W / 2, 160), v["title"], F(64, "ExtraBold"), WHITE, ease(t / 0.5))
+    x0, x1 = 470, W - 260
+    for xx in range(x1, x1 + 30, 15):
+        for yy in range(260, 260 + n * 190, 30):
+            c = WHITE if ((xx - x1) // 15 + (yy - 260) // 30) % 2 == 0 else (40, 50, 70)
+            dr.rectangle([xx, yy, xx + 15, yy + 30], fill=c)
+    T = max(1.5, dur * 0.55)
+    for i, (name, lab, spd, c) in enumerate(lanes):
+        y = 340 + i * 190 + (3 - n) * 95
+        col = hexc(c)
+        dr.text((140, y), name, font=F(60, "Black"), fill=col, anchor="lm")
+        dr.rounded_rectangle([x0, y - 14, x1, y + 14], 14, fill=(30, 42, 66))
+        p = ease(max(0.0, t - 0.6) * spd / T) if spd > 0 else 0
+        p = min(p, v.get("cap", [1] * n)[i]) if v.get("cap") else p
+        xc = lerp(x0, x1, p)
+        dr.rounded_rectangle([x0, y - 14, max(x0 + 28, xc), y + 14], 14, fill=col)
+        dr.ellipse([xc - 36, y - 36, xc + 36, y + 36], fill=AMBER, outline=(255, 215, 120), width=4)
+        dr.text((xc, y + 1), "R$", font=F(26, "Black"), fill=BG1, anchor="mm")
+        dr.text((x0, y + 62), lab, font=F(32, "SemiBold"), fill=DIM if p < 0.999 else col, anchor="lm")
+        if p >= 0.999:
+            dr.text((x1 + 60, y), "✓", font=F(56, "Black"), fill=col, anchor="lm") if False else dr.text((x1 - 10, y - 60), "CHEGOU", font=F(30, "Black"), fill=col, anchor="rm")
+    if v.get("caption"): alpha_text(img, (W / 2, H - 90), v["caption"], F(34, "SemiBold"), GREEN, ease((t - T) / 0.6))
+
 SC = {"round": sc_round, "ticker": sc_ticker, "scoreboard": sc_scoreboard, "title": sc_title, "bignumber": sc_bignumber, "flow": sc_flow, "split": sc_split, "bullets": sc_bullets,
       "bars": sc_bars, "compare": sc_compare, "timeline": sc_timeline, "cards": sc_cards, "line": sc_line,
-      "receipt": sc_receipt, "stack": sc_stack, "journey": sc_journey, "calendar": sc_calendar}
+      "receipt": sc_receipt, "stack": sc_stack, "journey": sc_journey, "calendar": sc_calendar, "obit": sc_obit, "race": sc_race}
 
 # ---------- voz ----------
 def tts(scenes, outdir, voice="pm_alex", speed=1.05):
