@@ -4,7 +4,7 @@ Usage:
   python3 -I tutor.py ep01.py out/ep01 --preview        # one still per scene (at 85% of the scene)
   python3 -I tutor.py ep01.py out/ep01                  # full render -> final.mp4, subtitles.srt, chapters.txt
   python3 -I tutor.py ep01.py out/ep01 --vertical "0,3,5" "TITLE"   # Short 1080x1920 from scenes (uses cached voice)
-Scene types: title, steps, code, term, files, tip, keys, compare, chat, outro, tree (EP02), map (EP02), sheet + args (EP03)
+Scene types: title, steps, code, term, files, tip, keys, compare, chat, outro, tree (EP02), map (EP02), sheet + args (EP03), prompt + flow (EP04)
 Identity: charcoal #0F1115, lime #B6F35C, coral #FF7A59, sky #6CC4FF, Poppins + DejaVu Sans Mono.
 """
 import sys, os, re, math, json, hashlib, subprocess, importlib.util
@@ -232,19 +232,24 @@ def sc_compare(img, v, t, d):
 def sc_chat(img, v, t, d):
     box = [260, 150, 1660, 960]; window(img, box, v.get("title", "AI assistant"), kind="term")
     dr = ImageDraw.Draw(img); y = 240
+    if v.get("badge"):  # EP04: honest label on illustrated replies
+        fb = F(22, "SemiBold"); bw = fb.getlength(v["badge"]) + 36
+        dr.rounded_rectangle([box[2] - 30 - bw, box[3] - 62, box[2] - 30, box[3] - 22], 20, fill=mix(PANEL, ACC, 0.25), outline=ACC, width=2)
+        dr.text((box[2] - 30 - bw / 2, box[3] - 42), v["badge"], font=fb, fill=TXT, anchor="mm")
     for k, (who, msg) in enumerate(v["msgs"]):
-        start = k * d * 0.35; a = ease((t - start) / 0.4)
+        start = k * d * v.get("gap", 0.35); a = ease((t - start) / 0.4)
         if a <= 0: break
-        f = F(30, "Regular"); lines = wrap(msg, f, 980)
+        f = F(v.get("size", 30), "Regular"); lines = [l for p in msg.split("\n") for l in (wrap(p, f, 980) or [" "])]
         if who == "ai":
             n = int(sum(len(l) for l in lines) * min(1, (t - start) / max(0.5, d * 0.3))); show = []
             for l in lines:
                 show.append(l[:max(0, n)]); n -= len(l)
             lines = [l for l in show if l]
-        bw = max(f.getlength(l) for l in lines) + 60 if lines else 100; bh = 40 + 44 * max(1, len(lines))
+        lh = int(f.size * 1.45)
+        bw = max(f.getlength(l) for l in lines) + 60 if lines else 100; bh = 40 + lh * max(1, len(lines))
         x = box[2] - 50 - bw if who == "you" else box[0] + 50
-        dr.rounded_rectangle([x, y, x + bw, y + bh], 22, fill=mix(PANEL, (54, 70, 36) if who == "you" else PANEL2, a))
-        for i, l in enumerate(lines): text_a(img, (x + 30, y + 22 + i * 44), l, f, TXT, a)
+        dr.rounded_rectangle([x, y, x + bw, y + bh], 22, fill=mix(PANEL, mix(PANEL2, ACC, 0.22) if who == "you" else PANEL2, a))
+        for i, l in enumerate(lines): text_a(img, (x + 30, y + 22 + i * lh), l, f, TXT, a)
         y += bh + 30
 
 def sc_outro(img, v, t, d):
@@ -436,6 +441,95 @@ def sc_args(img, v, t, d):
                 for (a0, a1, c) in spans:
                     if a0 <= j < a1: col = c
                 text_a(img, (cx, yb + 45), ch, fe, col, k, "lm"); cx += fe.getlength(ch)
+
+# ---- EP04: prompt anatomy (a vague "before" prompt, then the better prompt growing segment by segment, each part colored + labeled)
+def sc_prompt(img, v, t, d):
+    dr = ImageDraw.Draw(img); segs = v["segs"]; n = len(segs)
+    if "_oy" not in v:  # vertical centering, computed once per scene (layout estimate)
+        f0 = F(v.get("size", 36), "Regular"); words = sum(f0.getlength(sg[0] + " ") for sg in segs); nl = words / (1290 - 160 - 80) + (n * 0.5 if v.get("breaks") else 0.5)
+        bh0 = max(70 + int(nl + 0.5) * int(v.get("size", 36) * 1.55) + 30, 20 + n * 76)
+        tot = 55 + (135 if v.get("before") else 0) + bh0 + (92 if v.get("note") else 0); v["_oy"] = max(0, (H - 150 - 60 - tot) / 2 - 20)
+    oy = v["_oy"]
+    text_a(img, (160, 150 + oy), v.get("title", ""), F(30, "SemiBold"), ACC, ease(t / 0.4))
+    y = 205 + oy
+    if v.get("before"):
+        a = ease(t / 0.4); fb = F(34, "Regular")
+        dr.rounded_rectangle([160, y, 1760, y + 100], 18, fill=mix(BG, PANEL, a), outline=mix(BG, CORAL, a * 0.7), width=2)
+        dr.rounded_rectangle([190, y + 30, 330, y + 70], 20, fill=mix(BG, CORAL, a)); text_a(img, (260, y + 50), v.get("hdr1", "BEFORE"), F(22, "Bold"), BG, a, "mm")
+        text_a(img, (360, y + 50), v["before"], fb, mix(BG, TXT, a), 1, "lm")
+        if v.get("strike") and t > v["strike"]:
+            k = ease((t - v["strike"]) / 0.4); dr.line([360, y + 52, 360 + fb.getlength(v["before"]) * k, y + 52], fill=CORAL, width=4)
+        y += 135
+    size = v.get("size", 36); f = F(size, "Regular"); lh = int(size * 1.55); bx0, bx1 = 160, 1290; maxw = bx1 - bx0 - 80
+    toks = []
+    for i, seg in enumerate(segs):
+        for w in seg[0].split(" "):
+            if w: toks.append((w, i))
+        if v.get("breaks"): toks.append(("\n", i))
+    lines, cur, cw = [], [], 0
+    for w, i in toks:
+        if w == "\n":
+            if cur: lines.append(cur)
+            cur, cw = [], 0; continue
+        ww = f.getlength(w + " ")
+        if cw + ww > maxw and cur: lines.append(cur); cur, cw = [], 0
+        cur.append((w, i)); cw += ww
+    if cur: lines.append(cur)
+    grow = v.get("grow", True); per = max(0.5, d * v.get("span", 0.6) / n); t0 = v.get("delay", 0.6 if v.get("before") else 0.3)
+    ks = [ease((t - t0 - i * per) / 0.45) if grow else ease(t / 0.4) for i in range(n)]
+    bh = 70 + len(lines) * lh + 30; bh = max(bh, 10 + n * 76 + 10)
+    dr.rounded_rectangle([bx0, y, bx1, y + bh], 18, fill=PANEL, outline=mix(LINE, ACC, 0.6), width=2)
+    hdr = v.get("hdr2", "PROMPT"); fh = F(22, "Bold"); hw = fh.getlength(hdr) + 40
+    dr.rounded_rectangle([bx0 + 30, y + 24, bx0 + 30 + hw, y + 62], 19, fill=ACC); dr.text((bx0 + 30 + hw / 2, y + 43), hdr, font=fh, fill=BG, anchor="mm")
+    cols = [s[2] if len(s) > 2 else REFCOL[i % len(REFCOL)] for i, s in enumerate(segs)]
+    stop = False
+    for li, ln in enumerate(lines):
+        cx = bx0 + 40; yy = y + 84 + li * lh
+        for w, i in ln:
+            if ks[i] <= 0: stop = True; break
+            dr.text((cx, yy), w, font=f, fill=mix(PANEL, cols[i], ks[i]))
+            dr.line([cx, yy + size + 10, cx + f.getlength(w + " "), yy + size + 10], fill=mix(PANEL, cols[i], ks[i] * 0.55), width=3)
+            cx += f.getlength(w + " ")
+        if stop: break
+    for i, s in enumerate(segs):  # label chips on the right
+        k = ks[i]
+        if k <= 0 or not s[1]: continue
+        ly = y + 10 + i * 76; fl = F(28, "SemiBold")
+        dr.rounded_rectangle([1330, ly, 1760, ly + 60], 16, fill=mix(BG, mix(PANEL, cols[i], 0.2), k), outline=mix(BG, cols[i], k), width=2)
+        dr.ellipse([1352, ly + 20, 1372, ly + 40], fill=mix(BG, cols[i], k)); text_a(img, (1392, ly + 30), s[1], fl, mix(BG, TXT, k), 1, "lm")
+    if v.get("note"):
+        k = ease((t - t0 - n * per - 0.3) / 0.5) if grow else ease((t - 0.8) / 0.5); fn = F(32, "SemiBold"); tw = fn.getlength(v["note"])
+        if k > 0:
+            ny = min(y + bh + 30, H - 100); dr.rounded_rectangle([W / 2 - tw / 2 - 30, ny, W / 2 + tw / 2 + 30, ny + 62], 31, fill=mix(BG, v.get("notecol", ACC), k))
+            dr.text((W / 2, ny + 31), v["note"], font=fn, fill=BG, anchor="mm")
+
+# ---- EP04: flow (a big task split into small steps; boxes + arrows appear in order, a check mark between steps)
+def sc_flow(img, v, t, d):
+    text_a(img, (W / 2, 210), v.get("title", ""), F(52, "Bold"), TXT, ease(t / 0.4), "mm")
+    st = v["steps"]; n = len(st); gap = 90; bw = (1640 - gap * (n - 1)) / n; y0, y1 = 400, 700; dr = ImageDraw.Draw(img)
+    per = max(0.6, d * 0.65 / n); cols = v.get("cols", [SKY, VIO, YEL, LIME, CORAL])
+    for i, s in enumerate(st):
+        k = ease((t - 0.5 - i * per) / 0.45)
+        if k <= 0: continue
+        x = 140 + i * (bw + gap); c = cols[i % len(cols)]; lift = (1 - k) * 30
+        dr.rounded_rectangle([x, y0 + lift, x + bw, y1 + lift], 22, fill=mix(BG, PANEL, k), outline=mix(BG, c, k), width=3)
+        dr.ellipse([x + bw / 2 - 34, y0 - 34 + lift, x + bw / 2 + 34, y0 + 34 + lift], fill=mix(BG, c, k)); dr.text((x + bw / 2, y0 + lift), str(i + 1), font=F(36, "Bold"), fill=BG, anchor="mm")
+        fs = 34; ls = wrap(s, F(fs, "SemiBold"), bw - 50)
+        while len(ls) > 4 and fs > 24: fs -= 2; ls = wrap(s, F(fs, "SemiBold"), bw - 50)
+        for j, l in enumerate(ls): text_a(img, (x + bw / 2, (y0 + y1) / 2 + 10 + lift + (j - (len(ls) - 1) / 2) * fs * 1.4), l, F(fs, "SemiBold"), mix(BG, TXT, k), 1, "mm")
+        if i < n - 1:
+            ka = ease((t - 0.5 - i * per - per * 0.6) / 0.3)
+            if ka > 0:
+                ax = x + bw + gap / 2; text_a(img, (ax, (y0 + y1) / 2), "→", F(56, "monob"), mix(BG, c, ka), 1, "mm")
+                if v.get("check"):
+                    text_a(img, (ax, y1 + 70), "✓", F(44, "monob"), mix(BG, LIME, ka), 1, "mm")
+    if v.get("check"):
+        k = ease((t - 0.5 - per) / 0.5)
+        if k > 0: text_a(img, (W / 2, y1 + 140), "✓ = you check the result before the next step", F(28, "mono"), mix(BG, DIM, k), 1, "mm")
+    if v.get("note"):
+        k = ease((t - 0.5 - n * per) / 0.5); fn = F(32, "SemiBold"); tw = fn.getlength(v["note"])
+        if k > 0:
+            dr.rounded_rectangle([W / 2 - tw / 2 - 30, 920, W / 2 + tw / 2 + 30, 982], 31, fill=mix(BG, ACC, k)); dr.text((W / 2, 951), v["note"], font=fn, fill=BG, anchor="mm")
 
 SC = {k[3:]: f for k, f in list(globals().items()) if k.startswith("sc_")}
 

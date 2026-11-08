@@ -1,0 +1,71 @@
+=== LONGO (EP04) ===
+TITULO: Write Better AI Prompts: 5 Techniques That Actually Work (ChatGPT, Claude, Gemini)
+PUBLICAR: 08/11/2026 19:00 (Brasilia) (se ja passou: Publico)
+
+DESCRICAO:
+Five prompt techniques from the official prompting guides by OpenAI, Anthropic and Google, shown step by step on one real task: context, format, examples, breaking tasks into steps, and letting the AI ask you questions. Plus the mistake almost everyone makes, and a reusable prompt template.
+
+Chapters
+0:00 The result
+0:32 The 5 techniques
+0:51 #1 Give it context
+2:04 #2 Say exactly what you want back
+2:45 The mistake almost everyone makes
+3:19 #3 Show an example
+4:05 #4 Break big tasks into steps
+4:57 #5 Let the AI ask you questions
+5:40 Bonus: a prompt template you can reuse
+5:56 The template on a new task
+6:29 Common mistakes
+6:59 Pro tip: Shift + Enter
+7:14 Recap
+
+The prompts from the video
+1. Context (the new-coworker test):
+   I sell handmade soy candles on Etsy. Write a product description for my lavender candle. It burns for 40 hours and comes in a reusable glass jar. Most buyers get it as a gift.
+   Role (optional): You are an experienced copywriter for small online shops.
+2. Format:
+   Under 80 words. Warm, calm tone. Format: a title line, two short sentences, then three bullet points.
+   Comparing things? "...in a table with columns: price, battery life, weight."
+   Say what to DO, not what to avoid: "Use words a 12-year-old knows" / "Three sentences maximum" / "Start with a surprising fact".
+3. Example (few-shot):
+   Here is a description I wrote that I love: "Cedar & Smoke. Like a campfire, without the smoke in your hair. 45 hours of slow, even burn." Write the lavender candle in the same style and length.
+   Tip: wrap pasted text in quotes or in simple tags.
+4. Steps: list 10 name ideas, pick one, write the description, write 3 listing titles. One prompt per step.
+   Math or logic: "Work through it step by step, then give the final answer."
+5. Questions: Before you start, ask me up to 3 questions about anything you need to know.
+
+Reusable template:
+I am a [who you are]. Write a [what] for [who it's for]. Format: [length], [tone], [structure]. Match this example: "[paste it]". Before you start, ask me up to 3 questions.
+
+Remember: AI can sound sure and still be wrong. Check numbers, dates, names and quotes, and never paste passwords or private data.
+The AI replies shown in the video are illustrations; real replies vary every time. Shift + Enter adds a new line without sending in most chat apps.
+
+—
+Shortcut Lab: software and AI tutorials that save you hours. A new tutorial every day.
+Subscribe so you don't miss the next shortcut.
+
+Narration uses a synthetic voice. All code shown is run and checked before publishing.
+#ai #chatgpt #promptengineering
+
+TAGS: ai prompts, prompt engineering, how to write prompts, chatgpt prompts, chatgpt tutorial, claude ai, gemini ai, copilot, ai for beginners, prompt tips, few shot prompting, better ai answers, prompt template, ai tutorial, artificial intelligence
+
+=== SHORT ===
+TITULO: The One Line That Fixes Bad AI Answers #shorts
+PROGRAMAR: 08/11/2026 20:30 (Brasilia) (se ja passou: Publico) · cenas 0,18,19,20 (57,4 s)
+DESCRICAO:
+End your prompt with one line, and let the AI ask you what it needs to know.
+Full tutorial on the channel: "Write Better AI Prompts: 5 Techniques That Actually Work".
+#ai #chatgpt #shorts
+
+=== CHECKLIST (playbook secao 7) ===
+1. 1a frase = mesmo AI, prompt vago vs bom (resultado na tela: before riscado / after colorido) <15 palavras: OK
+2. Ate 15 s: "five simple techniques, work in any chatbot" + 0:20 "next eight minutes... official guides": OK
+3. Loops: "mistake almost everyone makes" (aberto 0:25, fechado 2:45); a resposta melhora a cada passo (aberto 0:40, fechado no #5/template): OK
+4. Re-engajamentos: 2:45 (erro do "don't"), 4:57-5:56 (tecnica favorita + template + caso novo): OK
+5. Nenhum visual parado > 40 s (prompt cresce por partes; chats digitam): OK
+6. Sem enchimento: 7:40, 1.405 palavras (caso extra util: template numa tarefa nova): OK
+7. Final = recap + proximo EP (Git), sem despedida: OK
+8. Short: frase-gancho na tela + linha magica + perguntas da IA: OK
+9. Diferente do EP01-03: cor violeta, cenas novas prompt (anatomia do prompt, partes coloridas + etiquetas, before riscado) + flow (tarefa quebrada em passos com setas e checks), chat com selo "Illustration"; thumb layout before/after: OK
+Autenticidade: sem codigo neste EP; respostas de IA = ilustracao (selo na tela + falado + descricao). Tecnicas conferidas nos guias oficiais (OpenAI best practices, Anthropic prompt engineering, Google Gemini prompting strategies).

@@ -2,6 +2,7 @@
 python3 -I lab_brand.py brand
 python3 -I lab_brand.py thumbfolders "LINE ONE" "LINE TWO" "Images|Docs|Audio|Video|Zips|Other" out.jpg sky
 python3 -I lab_brand.py thumbsheet "LINE ONE" "LINE TWO" "=FORMULA" out.jpg coral   (EP03: mini spreadsheet card)
+python3 -I lab_brand.py thumbprompt "LINE ONE" "LINE TWO" "vague prompt" out.jpg violet   (EP04: before/after prompt card)
 python3 -I lab_brand.py thumb "LINE ONE" "LINE TWO" "code snippet line" out.jpg [accent: lime|coral|sky]"""
 import sys; sys.path.insert(0, ".")
 import tutor as T
@@ -19,7 +20,7 @@ if sys.argv[1] == "brand":
     d.text((bw/2, 840), "$ new tutorial every day", font=T.F(40, "mono"), fill=T.LIME, anchor="mm")
     b.convert("RGB").save("out/banner.jpg", quality=90); print("brand ok")
 elif sys.argv[1] == "thumbfolders":  # EP02 layout: big text left, grid of colored folders right
-    l1, l2, labels, out = sys.argv[2:6]; acc = {"lime": T.LIME, "coral": T.CORAL, "sky": T.SKY}[sys.argv[6] if len(sys.argv) > 6 else "sky"]
+    l1, l2, labels, out = sys.argv[2:6]; acc = {"lime": T.LIME, "coral": T.CORAL, "sky": T.SKY, "violet": T.VIO, "yellow": T.YEL}[sys.argv[6] if len(sys.argv) > 6 else "sky"]
     T.ACC = acc; img = T.make_bg(1280, 720); d = ImageDraw.Draw(img)
     cols = [T.SKY, T.YEL, T.VIO, T.CORAL, T.LIME, T.DIM]
     for i, lab in enumerate(labels.split("|")):
@@ -34,7 +35,7 @@ elif sys.argv[1] == "thumbfolders":  # EP02 layout: big text left, grid of color
     d.text((54, 600), "$ python sort_downloads.py", font=T.F(30, "mono"), fill=T.LIME)
     img.convert("RGB").save(out, quality=92); print("thumb ok")
 elif sys.argv[1] == "thumbsheet":  # EP03 layout: text left, tilted mini spreadsheet with a spilled result right
-    l1, l2, form, out = sys.argv[2:6]; acc = {"lime": T.LIME, "coral": T.CORAL, "sky": T.SKY}[sys.argv[6] if len(sys.argv) > 6 else "coral"]
+    l1, l2, form, out = sys.argv[2:6]; acc = {"lime": T.LIME, "coral": T.CORAL, "sky": T.SKY, "violet": T.VIO, "yellow": T.YEL}[sys.argv[6] if len(sys.argv) > 6 else "coral"]
     T.ACC = acc; img = T.make_bg(1280, 720)
     card = Image.new("RGBA", (600, 560), (0, 0, 0, 0)); c = ImageDraw.Draw(card)
     c.rounded_rectangle([0, 0, 599, 559], 22, fill=T.PANEL, outline=T.LINE, width=3)
@@ -59,8 +60,28 @@ elif sys.argv[1] == "thumbsheet":  # EP03 layout: text left, tilted mini spreads
         d.text((50, 260 + i * 160), txt, font=T.F(fs, "Bold"), fill=col, anchor="lm", stroke_width=4, stroke_fill=T.BG)
     d.text((54, 600), "Excel 365 · 2021 · 2024", font=T.F(30, "Medium"), fill=T.DIM)
     img.convert("RGB").save(out, quality=92); print("thumb ok")
+elif sys.argv[1] == "thumbprompt":  # EP04 layout: text left, before (struck) / after (colored parts) prompt cards right
+    l1, l2, vague, out = sys.argv[2:6]; acc = {"lime": T.LIME, "coral": T.CORAL, "sky": T.SKY, "violet": T.VIO, "yellow": T.YEL}[sys.argv[6] if len(sys.argv) > 6 else "violet"]
+    T.ACC = acc; img = T.make_bg(1280, 720); d = ImageDraw.Draw(img)
+    x0, x1 = 690, 1240
+    d.rounded_rectangle([x0, 70, x1, 170], 18, fill=T.PANEL, outline=T.CORAL, width=3)
+    d.rounded_rectangle([x0 + 20, 86, x0 + 130, 118], 16, fill=T.CORAL); d.text((x0 + 75, 102), "BEFORE", font=T.F(20, "Bold"), fill=T.BG, anchor="mm")
+    fv = T.F(30, "Medium"); d.text((x0 + 22, 145), vague, font=fv, fill=T.DIM, anchor="lm"); d.line([x0 + 22, 147, x0 + 22 + fv.getlength(vague), 147], fill=T.CORAL, width=4)
+    d.rounded_rectangle([x0, 200, x1, 650], 18, fill=T.PANEL, outline=acc, width=4)
+    d.rounded_rectangle([x0 + 20, 218, x0 + 120, 250], 16, fill=acc); d.text((x0 + 70, 234), "AFTER", font=T.F(20, "Bold"), fill=T.BG, anchor="mm")
+    parts = [("Who you are", T.SKY), ("The task", T.VIO), ("The details", T.YEL), ("Who it's for", T.LIME), ("The format", (255, 160, 200))]
+    for i, (lab, col) in enumerate(parts):
+        y = 275 + i * 74; d.rounded_rectangle([x0 + 22, y, x1 - 22, y + 58], 14, fill=T.mix(T.PANEL, col, 0.22), outline=col, width=3)
+        d.ellipse([x0 + 42, y + 19, x0 + 62, y + 39], fill=col); d.text((x0 + 80, y + 29), lab, font=T.F(32, "Bold"), fill=T.TXT, anchor="lm")
+    d.rounded_rectangle([40, 40, 300, 92], 26, fill=acc); d.text((170, 66), "SHORTCUT LAB", font=T.F(26, "Bold"), fill=T.BG, anchor="mm")
+    for i, (txt, col) in enumerate([(l1, T.TXT), (l2, acc)]):
+        fs = 124
+        while T.F(fs, "Bold").getlength(txt) > 600: fs -= 4
+        d.text((50, 270 + i * 160), txt, font=T.F(fs, "Bold"), fill=col, anchor="lm", stroke_width=4, stroke_fill=T.BG)
+    d.text((54, 600), "ChatGPT · Claude · Gemini · Copilot", font=T.F(28, "Medium"), fill=T.DIM)
+    img.convert("RGB").save(out, quality=92); print("thumb ok")
 else:
-    l1, l2, code, out = sys.argv[2:6]; acc = {"lime": T.LIME, "coral": T.CORAL, "sky": T.SKY}[sys.argv[6] if len(sys.argv) > 6 else "lime"]
+    l1, l2, code, out = sys.argv[2:6]; acc = {"lime": T.LIME, "coral": T.CORAL, "sky": T.SKY, "violet": T.VIO, "yellow": T.YEL}[sys.argv[6] if len(sys.argv) > 6 else "lime"]
     img = T.make_bg(1280, 720); d = ImageDraw.Draw(img)
     # code card on the right, tilted look via offset shadow
     T.W, T.H = 1280, 720

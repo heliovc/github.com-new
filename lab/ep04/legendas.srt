@@ -1,0 +1,655 @@
+1
+00:00:00,250 --> 00:00:01,655
+Same AI, same question.
+
+2
+00:00:01,655 --> 00:00:04,161
+This prompt gets a bland, generic answer.
+
+3
+00:00:04,161 --> 00:00:07,462
+This one gets exactly what you need, on the first try.
+
+4
+00:00:07,462 --> 00:00:09,662
+The difference isn't a secret trick.
+
+5
+00:00:09,662 --> 00:00:13,208
+It's five simple techniques, and they work in any chatbot.
+
+6
+00:00:13,907 --> 00:00:21,738
+In the next eight minutes, you'll learn five prompt techniques that come straight from the official guides by OpenAI, Anthropic and Google.
+
+7
+00:00:21,738 --> 00:00:25,174
+They work with ChatGPT, Claude, Gemini, Copilot, any of them.
+
+8
+00:00:25,174 --> 00:00:26,357
+No experience needed.
+
+9
+00:00:26,357 --> 00:00:32,497
+And around the middle, I'll show you the mistake almost everyone makes, that quietly makes the answers worse.
+
+10
+00:00:33,198 --> 00:00:33,997
+Here they are.
+
+11
+00:00:33,997 --> 00:00:35,197
+One, give it context.
+
+12
+00:00:35,197 --> 00:00:37,255
+Two, say exactly what you want back.
+
+13
+00:00:37,255 --> 00:00:38,569
+Three, show an example.
+
+14
+00:00:38,569 --> 00:00:40,454
+Four, break big tasks into steps.
+
+15
+00:00:40,454 --> 00:00:42,683
+And five, let the AI ask you questions.
+
+16
+00:00:42,683 --> 00:00:51,254
+We'll use one real-life task the whole way through, a product description for a small online shop, so you can see the answer get better at every step.
+
+17
+00:00:51,954 --> 00:00:53,198
+Technique one, context.
+
+18
+00:00:53,198 --> 00:00:56,445
+The AI knows nothing about you, your business, or your goal.
+
+19
+00:00:56,445 --> 00:00:57,743
+So here's a simple test.
+
+20
+00:00:57,743 --> 00:01:02,179
+Imagine you're handing this task to a smart new coworker, on their very first day.
+
+21
+00:01:02,179 --> 00:01:03,748
+What would they need to know?
+
+22
+00:01:03,748 --> 00:01:04,397
+Who you are.
+
+23
+00:01:04,397 --> 00:01:05,750
+What exactly the task is.
+
+24
+00:01:05,750 --> 00:01:06,940
+The important details.
+
+25
+00:01:06,940 --> 00:01:08,347
+And who the result is for.
+
+26
+00:01:09,047 --> 00:01:12,878
+So instead of, write a description for my candle, you write this.
+
+27
+00:01:12,878 --> 00:01:15,000
+I sell handmade soy candles on Etsy.
+
+28
+00:01:15,000 --> 00:01:18,006
+Write a product description for my lavender candle.
+
+29
+00:01:18,006 --> 00:01:21,483
+It burns for forty hours and comes in a reusable glass jar.
+
+30
+00:01:21,483 --> 00:01:23,192
+Most buyers get it as a gift.
+
+31
+00:01:23,192 --> 00:01:27,082
+Four short sentences, and each one answers one of those questions.
+
+32
+00:01:27,782 --> 00:01:30,277
+And here's the kind of answer you get now.
+
+33
+00:01:30,277 --> 00:01:34,732
+It mentions the forty hours, the reusable jar, and it talks to gift buyers.
+
+34
+00:01:34,732 --> 00:01:35,386
+Quick note.
+
+35
+00:01:35,386 --> 00:01:38,000
+The replies in this video are illustrations.
+
+36
+00:01:38,000 --> 00:01:43,108
+Real answers change every time you ask, but this is the kind of difference you'll see.
+
+37
+00:01:43,808 --> 00:01:44,334
+Pro move.
+
+38
+00:01:44,334 --> 00:01:46,205
+You can also give the AI a role.
+
+39
+00:01:46,205 --> 00:01:51,115
+Start with something like, you are an experienced copywriter for small online shops.
+
+40
+00:01:51,115 --> 00:01:53,863
+Google's guide for Gemini calls this a persona.
+
+41
+00:01:53,863 --> 00:02:00,819
+It sets the vocabulary and the level of detail, so the answer sounds like it came from someone who does this every day.
+
+42
+00:02:00,819 --> 00:02:03,742
+Just keep it realistic, and still add the context.
+
+43
+00:02:04,442 --> 00:02:05,279
+Technique two.
+
+44
+00:02:05,279 --> 00:02:07,132
+Say exactly what you want back.
+
+45
+00:02:07,132 --> 00:02:11,077
+If you don't, the AI guesses the length, the tone, and the layout.
+
+46
+00:02:11,077 --> 00:02:11,734
+So tell it.
+
+47
+00:02:11,734 --> 00:02:12,870
+Under eighty words.
+
+48
+00:02:12,870 --> 00:02:13,826
+Warm, calm tone.
+
+49
+00:02:13,826 --> 00:02:14,902
+And the structure.
+
+50
+00:02:14,902 --> 00:02:18,488
+A title line, two short sentences, then three bullet points.
+
+51
+00:02:19,188 --> 00:02:22,162
+Now the answer has exactly the shape you asked for.
+
+52
+00:02:22,162 --> 00:02:26,185
+You can paste it straight into your shop, without rewriting anything.
+
+53
+00:02:26,185 --> 00:02:31,549
+And because you asked for bullets, it's easy to scan on a phone, where a lot of people shop.
+
+54
+00:02:32,249 --> 00:02:32,785
+Pro move.
+
+55
+00:02:32,785 --> 00:02:36,839
+When you're comparing things, ask for a table, and name the columns.
+
+56
+00:02:36,839 --> 00:02:42,859
+For example, compare these three laptops in a table, with columns for price, battery life and weight.
+
+57
+00:02:42,859 --> 00:02:44,588
+One look, and you can decide.
+
+58
+00:02:45,288 --> 00:02:47,558
+Now, the mistake almost everyone makes.
+
+59
+00:02:47,558 --> 00:02:51,457
+When the answer isn't right, we pile on rules about what not to do.
+
+60
+00:02:51,457 --> 00:02:52,388
+Don't be boring.
+
+61
+00:02:52,388 --> 00:02:53,377
+Don't use jargon.
+
+62
+00:02:53,377 --> 00:02:54,483
+Don't make it long.
+
+63
+00:02:54,483 --> 00:02:57,741
+The problem is, a don't only tells the AI what to avoid.
+
+64
+00:02:57,741 --> 00:02:59,953
+It doesn't tell it what to do instead.
+
+65
+00:03:00,653 --> 00:03:03,001
+OpenAI's own guide gives this exact advice.
+
+66
+00:03:03,001 --> 00:03:05,294
+Say what to do, instead of what not to do.
+
+67
+00:03:05,294 --> 00:03:09,444
+So, don't use jargon, becomes, use words a twelve year old would understand.
+
+68
+00:03:09,444 --> 00:03:12,339
+Don't make it long, becomes, three sentences maximum.
+
+69
+00:03:12,339 --> 00:03:15,560
+And don't be boring, becomes, start with a surprising fact.
+
+70
+00:03:15,560 --> 00:03:17,308
+Every rule now points somewhere.
+
+71
+00:03:17,308 --> 00:03:19,328
+By the way, this works on people too.
+
+72
+00:03:20,028 --> 00:03:21,887
+Technique three, show an example.
+
+73
+00:03:21,887 --> 00:03:23,915
+Describing a style in words is hard.
+
+74
+00:03:23,915 --> 00:03:24,985
+Showing it is easy.
+
+75
+00:03:24,985 --> 00:03:29,492
+If you already have something you like, paste it in, and ask the AI to match it.
+
+76
+00:03:29,492 --> 00:03:35,632
+This is called few-shot prompting, and it's one of the most reliable techniques in all three official guides.
+
+77
+00:03:36,332 --> 00:03:38,421
+And the answer copies the rhythm.
+
+78
+00:03:38,421 --> 00:03:39,244
+A short name.
+
+79
+00:03:39,244 --> 00:03:40,194
+A playful line.
+
+80
+00:03:40,194 --> 00:03:41,397
+Then the burn time.
+
+81
+00:03:41,397 --> 00:03:45,386
+One good example often beats a whole paragraph of instructions.
+
+82
+00:03:46,086 --> 00:03:46,693
+Quick tip.
+
+83
+00:03:46,693 --> 00:03:53,556
+When you paste text into a prompt, put it between quotes, or between simple tags, like example in angle brackets.
+
+84
+00:03:53,556 --> 00:03:58,961
+That way the AI knows exactly where your instructions end, and where the material begins.
+
+85
+00:03:58,961 --> 00:04:02,484
+This matters most when you paste long emails or documents.
+
+86
+00:04:02,484 --> 00:04:04,974
+Both OpenAI and Anthropic recommend this.
+
+87
+00:04:05,674 --> 00:04:06,475
+Technique four.
+
+88
+00:04:06,475 --> 00:04:07,915
+Break big tasks into steps.
+
+89
+00:04:07,915 --> 00:04:13,038
+If you ask for everything in one giant prompt, you usually get an average result for every part.
+
+90
+00:04:13,038 --> 00:04:16,186
+Instead, ask for one step, check it, then ask for the next.
+
+91
+00:04:16,186 --> 00:04:18,533
+For our shop, step one, list ten name ideas.
+
+92
+00:04:18,533 --> 00:04:20,294
+Step two, you pick your favorite.
+
+93
+00:04:20,294 --> 00:04:22,108
+Step three, write the description.
+
+94
+00:04:22,108 --> 00:04:24,563
+Step four, write three titles for the listing.
+
+95
+00:04:25,263 --> 00:04:26,275
+It looks like this.
+
+96
+00:04:26,275 --> 00:04:30,273
+Give me ten name ideas for a lavender soy candle, just the names, numbered.
+
+97
+00:04:30,273 --> 00:04:35,229
+Then you pick one, and in your next message, you say, write the description for number three.
+
+98
+00:04:35,229 --> 00:04:39,280
+The chat remembers the conversation, so you don't need to repeat everything.
+
+99
+00:04:39,280 --> 00:04:43,383
+And if one step goes wrong, you fix just that step, instead of starting over.
+
+100
+00:04:44,084 --> 00:04:47,130
+And for anything with logic or math, add one line.
+
+101
+00:04:47,130 --> 00:04:50,602
+Work through it step by step, then give the final answer.
+
+102
+00:04:50,602 --> 00:04:56,572
+The official guides call this giving the model time to think, and it helps it make fewer mistakes.
+
+103
+00:04:57,272 --> 00:05:00,784
+Technique five, my favorite, and the one almost nobody uses.
+
+104
+00:05:00,784 --> 00:05:04,412
+Instead of guessing what to include, let the AI interview you.
+
+105
+00:05:04,412 --> 00:05:06,460
+Just end your prompt with one line.
+
+106
+00:05:06,460 --> 00:05:11,084
+Before you start, ask me up to three questions about anything you need to know.
+
+107
+00:05:11,783 --> 00:05:13,778
+Now the AI asks for what's missing.
+
+108
+00:05:13,778 --> 00:05:14,746
+What's the price?
+
+109
+00:05:14,746 --> 00:05:15,715
+Is the wax vegan?
+
+110
+00:05:15,715 --> 00:05:17,310
+Where will this text appear?
+
+111
+00:05:17,310 --> 00:05:22,438
+You answer in a few words, and the result fits your situation, instead of a generic guess.
+
+112
+00:05:22,438 --> 00:05:26,597
+It also shows you what you forgot to mention, which is useful on its own.
+
+113
+00:05:27,298 --> 00:05:30,528
+And remember, the first answer is a draft, not the final.
+
+114
+00:05:30,528 --> 00:05:32,285
+Don't just say, make it better.
+
+115
+00:05:32,285 --> 00:05:35,176
+Give specific feedback, like you would to a person.
+
+116
+00:05:35,176 --> 00:05:36,536
+Keep the first sentence.
+
+117
+00:05:36,536 --> 00:05:37,953
+Make the bullets shorter.
+
+118
+00:05:37,953 --> 00:05:40,277
+Swap the word cozy for something fresher.
+
+119
+00:05:40,977 --> 00:05:41,317
+Bonus.
+
+120
+00:05:41,317 --> 00:05:46,597
+Put all five together, and you get a template you can save in a note, and reuse for anything.
+
+121
+00:05:46,597 --> 00:05:47,051
+Context.
+
+122
+00:05:47,051 --> 00:05:47,561
+The task.
+
+123
+00:05:47,561 --> 00:05:48,186
+The format.
+
+124
+00:05:48,186 --> 00:05:48,810
+An example.
+
+125
+00:05:48,810 --> 00:05:50,513
+And the magic line at the end.
+
+126
+00:05:50,513 --> 00:05:52,557
+Fill in the blanks, and you're done.
+
+127
+00:05:52,557 --> 00:05:56,473
+I keep mine in a notes app, and paste it whenever I start a new chat.
+
+128
+00:05:57,173 --> 00:06:00,360
+Let's try the template on something completely different.
+
+129
+00:06:00,360 --> 00:06:01,925
+Say you want to learn Excel.
+
+130
+00:06:01,925 --> 00:06:04,552
+I'm a total beginner with thirty minutes a day.
+
+131
+00:06:04,552 --> 00:06:07,012
+Create a two week study plan to learn Excel.
+
+132
+00:06:07,012 --> 00:06:10,925
+Format, a table with three columns, day, topic, and one practice task.
+
+133
+00:06:10,925 --> 00:06:11,987
+And the magic line.
+
+134
+00:06:11,987 --> 00:06:14,615
+Before you start, ask me up to three questions.
+
+135
+00:06:14,615 --> 00:06:16,404
+Same five parts, brand new task.
+
+136
+00:06:17,103 --> 00:06:21,574
+The AI asks what version of Excel you have, and what you want to use it for.
+
+137
+00:06:21,574 --> 00:06:26,162
+You answer, and you get a plan that fits your week, in a table you can follow.
+
+138
+00:06:26,162 --> 00:06:27,220
+Same AI as before.
+
+139
+00:06:27,220 --> 00:06:28,632
+The prompt did the work.
+
+140
+00:06:29,332 --> 00:06:31,084
+Four quick mistakes to avoid.
+
+141
+00:06:31,084 --> 00:06:32,715
+First, trusting every fact.
+
+142
+00:06:32,715 --> 00:06:38,635
+AI can sound completely sure and still be wrong, so always check numbers, dates, names and quotes.
+
+143
+00:06:38,635 --> 00:06:40,809
+Second, pasting private information.
+
+144
+00:06:40,809 --> 00:06:44,313
+Never paste passwords, bank details, or confidential work.
+
+145
+00:06:44,313 --> 00:06:46,669
+Third, asking ten things in one prompt.
+
+146
+00:06:46,669 --> 00:06:47,937
+One step per message.
+
+147
+00:06:47,937 --> 00:06:50,474
+And fourth, giving up after the first try.
+
+148
+00:06:50,474 --> 00:06:52,286
+The magic is in the follow-up.
+
+149
+00:06:52,286 --> 00:06:58,689
+And when the answer really matters, ask where the information comes from, then check that source yourself.
+
+150
+00:06:59,389 --> 00:06:59,829
+Pro tip.
+
+151
+00:06:59,829 --> 00:07:03,348
+In most chat apps, pressing Enter sends your message right away.
+
+152
+00:07:03,348 --> 00:07:06,811
+Press Shift and Enter together instead, and you get a new line.
+
+153
+00:07:06,811 --> 00:07:13,627
+That's how you write a clean prompt, with context, format and example on separate lines, without sending it halfway through.
+
+154
+00:07:14,327 --> 00:07:15,052
+Quick recap.
+
+155
+00:07:15,052 --> 00:07:17,708
+Give it context, with the new coworker test.
+
+156
+00:07:17,708 --> 00:07:19,579
+Say exactly what you want back.
+
+157
+00:07:19,579 --> 00:07:20,545
+Show an example.
+
+158
+00:07:20,545 --> 00:07:22,175
+Break big tasks into steps.
+
+159
+00:07:22,175 --> 00:07:24,167
+And let the AI ask you questions.
+
+160
+00:07:24,167 --> 00:07:26,582
+Plus, say what to do, not what to avoid.
+
+161
+00:07:26,582 --> 00:07:29,781
+Five techniques, and better answers on the first try.
+
+162
+00:07:30,481 --> 00:07:33,001
+Next on Shortcut Lab, Git in ten minutes.
+
+163
+00:07:33,001 --> 00:07:38,039
+How to save every version of your work, and go back in time when something breaks.
+
+164
+00:07:38,039 --> 00:07:40,005
+Subscribe, so you don't miss it.
