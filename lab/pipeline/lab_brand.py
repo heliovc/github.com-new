@@ -3,6 +3,7 @@ python3 -I lab_brand.py brand
 python3 -I lab_brand.py thumbfolders "LINE ONE" "LINE TWO" "Images|Docs|Audio|Video|Zips|Other" out.jpg sky
 python3 -I lab_brand.py thumbsheet "LINE ONE" "LINE TWO" "=FORMULA" out.jpg coral   (EP03: mini spreadsheet card)
 python3 -I lab_brand.py thumbprompt "LINE ONE" "LINE TWO" "vague prompt" out.jpg violet   (EP04: before/after prompt card)
+python3 -I lab_brand.py thumbgit "LINE ONE" "LINE TWO" "hash msg|hash msg|hash msg" out.jpg yellow   (EP05: commit history + "go back" arc)
 python3 -I lab_brand.py thumb "LINE ONE" "LINE TWO" "code snippet line" out.jpg [accent: lime|coral|sky]"""
 import sys; sys.path.insert(0, ".")
 import tutor as T
@@ -79,6 +80,30 @@ elif sys.argv[1] == "thumbprompt":  # EP04 layout: text left, before (struck) / 
         while T.F(fs, "Bold").getlength(txt) > 600: fs -= 4
         d.text((50, 270 + i * 160), txt, font=T.F(fs, "Bold"), fill=col, anchor="lm", stroke_width=4, stroke_fill=T.BG)
     d.text((54, 600), "ChatGPT · Claude · Gemini · Copilot", font=T.F(28, "Medium"), fill=T.DIM)
+    img.convert("RGB").save(out, quality=92); print("thumb ok")
+elif sys.argv[1] == "thumbgit":  # EP05 layout: text left, vertical commit history right, newest on top, dashed arc back to the oldest
+    l1, l2, commits, out = sys.argv[2:6]; acc = {"lime": T.LIME, "coral": T.CORAL, "sky": T.SKY, "violet": T.VIO, "yellow": T.YEL}[sys.argv[6] if len(sys.argv) > 6 else "yellow"]
+    T.ACC = acc; img = T.make_bg(1280, 720); d = ImageDraw.Draw(img)
+    cs = commits.split("|"); x = 800; ys = [170 + i * 170 for i in range(len(cs))]
+    d.rounded_rectangle([700, 90, 1240, 640], 24, fill=T.PANEL, outline=T.LINE, width=2)
+    for i, c in enumerate(cs):
+        h, msg = c.split(" ", 1); y = ys[i]; bad = i == 0; col = T.CORAL if bad else acc
+        if i: d.line([x, ys[i - 1] + 34, x, y - 34], fill=T.LINE, width=8)
+        d.ellipse([x - 32, y - 32, x + 32, y + 32], fill=col, outline=T.BG, width=5)
+        d.text((x + 60, y - 22), h, font=T.F(28, "monob"), fill=col, anchor="lm"); d.text((x + 60, y + 20), msg, font=T.F(30, "SemiBold"), fill=T.TXT, anchor="lm")
+    import math
+    ya, yb = ys[0], ys[-1]; cx = x - 40
+    for k in range(0, 40, 2):
+        a0, a1 = math.pi / 2 + math.pi * k / 40, math.pi / 2 + math.pi * (k + 1) / 40
+        r = (yb - ya) / 2; my = (ya + yb) / 2
+        d.line([cx + 70 * math.cos(a0) - 0, my - r * math.sin(a0), cx + 70 * math.cos(a1), my - r * math.sin(a1)], fill=T.YEL if acc != T.YEL else T.SKY, width=6)
+    d.text((cx - 4, yb + 4), "▶", font=T.F(34, "monob"), fill=T.YEL if acc != T.YEL else T.SKY, anchor="mm")
+    d.rounded_rectangle([40, 40, 300, 92], 26, fill=acc); d.text((170, 66), "SHORTCUT LAB", font=T.F(26, "Bold"), fill=T.BG, anchor="mm")
+    for i, (txt, col) in enumerate([(l1, T.TXT), (l2, acc)]):
+        fs = 124
+        while T.F(fs, "Bold").getlength(txt) > 600: fs -= 4
+        d.text((50, 270 + i * 160), txt, font=T.F(fs, "Bold"), fill=col, anchor="lm", stroke_width=4, stroke_fill=T.BG)
+    d.text((54, 600), "Windows · Mac · Linux", font=T.F(30, "Medium"), fill=T.DIM)
     img.convert("RGB").save(out, quality=92); print("thumb ok")
 else:
     l1, l2, code, out = sys.argv[2:6]; acc = {"lime": T.LIME, "coral": T.CORAL, "sky": T.SKY, "violet": T.VIO, "yellow": T.YEL}[sys.argv[6] if len(sys.argv) > 6 else "lime"]

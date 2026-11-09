@@ -1,0 +1,58 @@
+{
+  "version": 1,
+  "channel_id": "UCXGqR8k1RMbfYdVleIuJKzA",
+  "created_at": "2026-11-09T12:32:04-03:00",
+  "items": [
+    {
+      "key": "lab-ep05-long",
+      "kind": "long",
+      "video": "video.mp4",
+      "title": "Git in 10 Minutes: Save Every Version of Your Work (Beginner Tutorial)",
+      "description": "Learn Git from zero in about 10 minutes: save every version of your work, see exactly what changed, and go back in time when something breaks. Every command is run for real on one tiny project: init, add, commit, diff, log, restore, revert, .gitignore and your first branch.\n\nChapters\n0:00 The result\n0:29 What Git actually does\n0:59 Install and check\n1:33 Tell Git who you are\n2:05 Step 1: git init\n2:46 Step 2: add and commit\n3:43 Step 3: see what changed\n4:11 Step 4: the history\n4:49 Undo: get back a broken file\n5:28 Go back to any version\n5:58 Undo a bad commit\n6:45 Ignore files with .gitignore\n7:19 Bonus: try ideas on a branch\n8:03 Common mistakes\n8:34 Pro tip: commit small, commit often\n8:50 Recap\n\nCommands from the video (all run for real, git 2.43):\ngit --version\ngit config --global user.name \"Your Name\"\ngit config --global user.email you@example.com\ngit config --global init.defaultBranch main\ngit init\ngit status\ngit add budget.py\ngit commit -m \"First version of budget\"\ngit status --short\ngit diff\ngit log --oneline\ngit restore budget.py                      (throw away uncommitted changes)\ngit restore --source=HASH budget.py      (load an older version of the file)\ngit revert HEAD                            (undo the last commit with a new commit)\ngit switch -c savings                      (new branch)\ngit commit -am \"Try a savings goal\"        (add tracked files + commit)\ngit switch main\ngit merge savings\n\n.gitignore used in the video:\nnotes.log\n__pycache__/\n\nbudget.py (first version):\nincome = 3000\nrent = 1200\nfood = 450\n\nleft = income - rent - food\nprint(\"Left this month:\", left)\n\nInstall Git for free from the official site: git-scm.com\n\n—\nShortcut Lab: software and AI tutorials that save you hours. A new tutorial every day.\nSubscribe so you don't miss the next shortcut.\n\nNarration uses a synthetic voice. All code shown is run and checked before publishing.\n#git #programming #beginners",
+      "tags": [
+        "git tutorial",
+        "git for beginners",
+        "learn git",
+        "git basics",
+        "git commands",
+        "version control",
+        "git commit",
+        "git restore",
+        "git revert",
+        "git branch",
+        "gitignore",
+        "git init",
+        "programming for beginners",
+        "git in 10 minutes",
+        "how to use git"
+      ],
+      "thumbnail": "thumbnail.jpg",
+      "captions": "legendas.srt",
+      "publish_at": "2026-11-09T19:00:00-03:00",
+      "if_late": "public_now",
+      "made_for_kids": false,
+      "altered_content": true,
+      "pinned_comment": "What's the worst file you ever lost before you knew about Git?"
+    },
+    {
+      "key": "lab-ep05-short",
+      "kind": "short",
+      "video": "vertical.mp4",
+      "title": "Broke Your File? One Git Command Brings It Back #shorts",
+      "description": "git restore brings back the last saved version of a file in one second.\nFull tutorial on the channel: \"Git in 10 Minutes: Save Every Version of Your Work\".\n#git #coding #shorts",
+      "tags": [
+        "git",
+        "git restore",
+        "coding tips",
+        "shorts"
+      ],
+      "captions": null,
+      "publish_at": "2026-11-09T20:30:00-03:00",
+      "if_late": "public_now",
+      "made_for_kids": false,
+      "altered_content": true,
+      "related_key": "lab-ep05-long",
+      "pinned_comment": "Which Git command confused you the most? Full tutorial: Git in 10 Minutes: Save Every Version of Your Work"
+    }
+  ]
+}

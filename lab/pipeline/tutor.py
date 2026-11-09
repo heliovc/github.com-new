@@ -4,7 +4,7 @@ Usage:
   python3 -I tutor.py ep01.py out/ep01 --preview        # one still per scene (at 85% of the scene)
   python3 -I tutor.py ep01.py out/ep01                  # full render -> final.mp4, subtitles.srt, chapters.txt
   python3 -I tutor.py ep01.py out/ep01 --vertical "0,3,5" "TITLE"   # Short 1080x1920 from scenes (uses cached voice)
-Scene types: title, steps, code, term, files, tip, keys, compare, chat, outro, tree (EP02), map (EP02), sheet + args (EP03), prompt + flow (EP04)
+Scene types: title, steps, code, term, files, tip, keys, compare, chat, outro, tree (EP02), map (EP02), sheet + args (EP03), prompt + flow (EP04), stage + timeline (EP05: Git areas and commit history), term colors diff +/- lines and errors (EP05)
 Identity: charcoal #0F1115, lime #B6F35C, coral #FF7A59, sky #6CC4FF, Poppins + DejaVu Sans Mono.
 """
 import sys, os, re, math, json, hashlib, subprocess, importlib.util
@@ -86,6 +86,10 @@ def colorize(line, lang="py"):
     out = []
     if lang == "sh":
         if line.startswith("$ "): return [("$ ", LIME), (line[2:], TXT)]
+        if line[:1] == "+" and not line.startswith("+++"): return [(line, LIME)]  # EP05: diff / error colors
+        if line[:1] == "-" and not line.startswith("---"): return [(line, CORAL)]
+        if line.startswith("@@"): return [(line, VIO)]
+        if re.match(r"(fatal:|error:|\w+Error:|Author identity unknown)", line): return [(line, CORAL)]
         return [(line, DIM if line.startswith("#") else (200, 206, 216))]
     for m in TOK.finditer(line):
         com, st, num, word, sp, other = m.groups()
@@ -530,6 +534,88 @@ def sc_flow(img, v, t, d):
         k = ease((t - 0.5 - n * per) / 0.5); fn = F(32, "SemiBold"); tw = fn.getlength(v["note"])
         if k > 0:
             dr.rounded_rectangle([W / 2 - tw / 2 - 30, 920, W / 2 + tw / 2 + 30, 982], 31, fill=mix(BG, ACC, k)); dr.text((W / 2, 951), v["note"], font=fn, fill=BG, anchor="mm")
+
+# ---- EP05: stage (Git's three areas: your folder -> staging area -> history; file chips slide across on "git add" / "git commit")
+def sc_stage(img, v, t, d):
+    text_a(img, (W / 2, 190), v.get("title", ""), F(52, "Bold"), TXT, ease(t / 0.4), "mm")
+    names = v.get("areas", ["Your folder", "Staging area", "History"]); subs = v.get("subs", ["where you edit", "what goes in the next save", "saved versions (commits)"])
+    cols = [SKY, YEL, LIME]; bw, gap, y0, y1 = 420, 200, 300, 820; x0 = (W - 3 * bw - 2 * gap) / 2; dr = ImageDraw.Draw(img)
+    for i in range(3):
+        a = ease((t - 0.2 - i * 0.25) / 0.45); x = x0 + i * (bw + gap); c = cols[i]
+        if a <= 0: continue
+        dr.rounded_rectangle([x, y0, x + bw, y1], 24, fill=mix(BG, PANEL, a), outline=mix(BG, c, a if i == v.get("focus", i) else a * 0.45), width=3)
+        text_a(img, (x + bw / 2, y0 + 50), names[i], F(36, "Bold"), c, a, "mm")
+        text_a(img, (x + bw / 2, y0 + 95), subs[i], F(24, "Regular"), DIM, a, "mm")
+    for j, lab in enumerate(v.get("arrows", ["git add", "git commit"])):
+        a = ease((t - 0.9 - j * 0.3) / 0.4)
+        if a <= 0 or not lab: continue
+        ax = x0 + (j + 1) * bw + j * gap + gap / 2; on = v.get("hl") in (None, j)
+        text_a(img, (ax, (y0 + y1) / 2 - 10), "→", F(64, "monob"), cols[j + 1] if on else DIM, a, "mm")
+        fl = F(24, "monob"); lw = fl.getlength(lab) + 28
+        dr.rounded_rectangle([ax - lw / 2, (y0 + y1) / 2 + 40, ax + lw / 2, (y0 + y1) / 2 + 84], 22, fill=mix(BG, cols[j + 1] if on else LINE, a))
+        text_a(img, (ax, (y0 + y1) / 2 + 62), lab, fl, BG if on else TXT, a, "mm")
+    per = max(0.8, d * 0.6 / max(1, len(v.get("chips", []))))
+    for k, ch in enumerate(v.get("chips", [])):  # (label, from_area, to_area)
+        lab, fa, ta = ch[:3]; m = ease((t - 1.5 - k * per) / 0.9) if fa != ta else 1
+        a = ease((t - 1.0) / 0.4)
+        if a <= 0: continue
+        cx = x0 + bw / 2 + (fa + (ta - fa) * m) * (bw + gap); cy = y0 + 180 + k * 92 - math.sin(math.pi * m) * 40 * (fa != ta)
+        c = cols[int(round(fa + (ta - fa) * m))]; f = F(26, "mono"); w2 = f.getlength(lab) / 2 + 26
+        dr.rounded_rectangle([cx - w2, cy, cx + w2, cy + 64], 14, fill=mix(BG, mix(PANEL2, c, 0.25), a), outline=mix(BG, c, a), width=2)
+        text_a(img, (cx, cy + 32), lab, f, TXT, a, "mm")
+    if v.get("note"):
+        k = ease((t - d * 0.55) / 0.5); fn = F(32, "SemiBold"); tw = fn.getlength(v["note"])
+        if k > 0:
+            dr.rounded_rectangle([W / 2 - tw / 2 - 30, 880, W / 2 + tw / 2 + 30, 942], 31, fill=mix(BG, ACC, k)); dr.text((W / 2, 911), v["note"], font=fn, fill=BG, anchor="mm")
+
+# ---- EP05: timeline (commit history as save points on a line; HEAD/branch pill, optional "go back" arc and a side branch)
+def sc_timeline(img, v, t, d):
+    text_a(img, (W / 2, 180), v.get("title", ""), F(52, "Bold"), TXT, ease(t / 0.4), "mm")
+    cm = v["commits"]; n = len(cm); br = v.get("branch"); ly = v.get("y", 600 if not br else 680)
+    sp = min(340, 1500 / max(1, n - 1 + (len(br[1]) if br else 0))); x0 = (W - sp * (n - 1 + (len(br[1]) if br else 0))) / 2; dr = ImageDraw.Draw(img)
+    per = max(0.35, d * v.get("span", 0.4) / n); fh, fm = F(24, "monob"), F(26, "Medium")
+    pts = []
+    for i, (h, msg) in enumerate(cm):
+        a = ease((t - 0.4 - i * per) / 0.4); x = x0 + i * sp; pts.append(x)
+        if a <= 0: continue
+        if i: dr.line([x - sp + 30, ly, x - 30, ly], fill=mix(BG, LINE, a), width=6)
+        bad = i in v.get("bad", ()); c = CORAL if bad else ACC
+        r = 26 + 6 * math.sin(math.pi * min(1, (t - 0.4 - i * per) / 0.4))
+        dr.ellipse([x - r, ly - r, x + r, ly + r], fill=mix(BG, c, a), outline=BG, width=4)
+        text_a(img, (x, ly - 62), h, fh, mix(BG, c, a), 1, "mm")
+        for j, l in enumerate(wrap(msg, fm, sp - 30)[:3]): text_a(img, (x, ly + 62 + j * 36), l, fm, mix(BG, TXT, a), 1, "mm")
+    if br:
+        fi, bc, bname = br; ky = ly - 230
+        for k, (h, msg) in enumerate(bc):
+            a = ease((t - 0.4 - (n + k) * per) / 0.4); x = x0 + (fi + 1 + k) * sp
+            if a <= 0: continue
+            px, py = (x0 + fi * sp, ly) if k == 0 else (x - sp, ky)
+            dr.line([px + 20, py - (20 if k == 0 else 0), x - 28, ky], fill=mix(BG, VIO, a), width=6)
+            dr.ellipse([x - 26, ky - 26, x + 26, ky + 26], fill=mix(BG, VIO, a), outline=BG, width=4)
+            text_a(img, (x, ky - 96), h, fh, mix(BG, VIO, a), 1, "mm"); text_a(img, (x, ky - 54), msg, fm, mix(BG, TXT, a), 1, "mm")
+            if k == len(bc) - 1:
+                fl = F(24, "Bold"); lw = fl.getlength(bname) + 30
+                dr.rounded_rectangle([x - lw / 2, ky - 174, x + lw / 2, ky - 134], 20, fill=mix(BG, VIO, a)); text_a(img, (x, ky - 154), bname, fl, BG, a, "mm")
+    hi = v.get("head", n - 1); a = ease((t - 0.4 - n * per) / 0.4)
+    if a > 0 and hi is not None and hi < len(pts):
+        x = pts[hi]; fl = F(24, "Bold"); lab = v.get("label", "main"); lw = fl.getlength(lab) + 30
+        dr.rounded_rectangle([x - lw / 2, ly - 150, x + lw / 2, ly - 110], 20, fill=mix(BG, SKY, a)); text_a(img, (x, ly - 130), lab, fl, BG, a, "mm")
+    if v.get("back") is not None:  # dashed arc from the head commit back to an older one
+        k = ease((t - 0.6 - n * per) / 0.9)
+        if k > 0:
+            xa, xb = pts[hi], pts[v["back"]]; cy = ly + 250; ay = ly + 150; rx = (xa - xb) / 2; mx = (xa + xb) / 2
+            steps = int(60 * k)
+            for s in range(0, steps, 2):
+                th0, th1 = math.pi * s / 60, math.pi * (s + 1) / 60
+                dr.line([mx + rx * math.cos(th0), ay + (cy - ay) * math.sin(th0), mx + rx * math.cos(th1), ay + (cy - ay) * math.sin(th1)], fill=YEL, width=5)
+            if k >= 1:
+                text_a(img, (xb, ay - 4), "▲", F(30, "monob"), YEL, 1, "mm")
+                fl = F(28, "monob"); lab = v.get("back_label", ""); lw = fl.getlength(lab) + 36
+                dr.rounded_rectangle([mx - lw / 2, cy + 30, mx + lw / 2, cy + 84], 27, fill=mix(BG, YEL, 0.25), outline=YEL, width=2); text_a(img, (mx, cy + 57), lab, fl, TXT, 1, "mm")
+    if v.get("note"):
+        k = ease((t - d * 0.6) / 0.5); fn = F(32, "SemiBold"); tw = fn.getlength(v["note"])
+        if k > 0:
+            dr.rounded_rectangle([W / 2 - tw / 2 - 30, 930, W / 2 + tw / 2 + 30, 992], 31, fill=mix(BG, v.get("notecol", ACC), k)); dr.text((W / 2, 961), v["note"], font=fn, fill=BG, anchor="mm")
 
 SC = {k[3:]: f for k, f in list(globals().items()) if k.startswith("sc_")}
 

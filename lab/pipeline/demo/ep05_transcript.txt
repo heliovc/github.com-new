@@ -1,0 +1,176 @@
+### S1
+$ git --version
+git version 2.43.0
+### S2
+$ git status
+fatal: not a git repository (or any of the parent directories): .git
+### S3
+$ git config --global user.name "Sam Rivera"
+$ git config --global user.email sam@example.com
+$ git config --global init.defaultBranch main
+### S4
+$ git init
+Initialized empty Git repository in /home/sam/budget/.git/
+$ git status
+On branch main
+
+No commits yet
+
+Untracked files:
+  (use "git add <file>..." to include in what will be committed)
+	budget.py
+
+nothing added to commit but untracked files present (use "git add" to track)
+### S5
+$ git add budget.py
+$ git status
+On branch main
+
+No commits yet
+
+Changes to be committed:
+  (use "git rm --cached <file>..." to unstage)
+	new file:   budget.py
+
+### S6
+$ git commit -m "First version of budget"
+[main (root-commit) 2ff2d59] First version of budget
+ 1 file changed, 6 insertions(+)
+ create mode 100644 budget.py
+$ python3 budget.py
+Left this month: 1350
+### S7
+$ git status --short
+ M budget.py
+$ git diff
+diff --git a/budget.py b/budget.py
+index a171073..bd1134c 100644
+--- a/budget.py
++++ b/budget.py
+@@ -1,6 +1,7 @@
+ income = 3000
+ rent = 1200
+ food = 450
++transport = 120
+ 
+-left = income - rent - food
++left = income - rent - food - transport
+ print("Left this month:", left)
+### S8
+$ git add budget.py
+$ git commit -m "Add transport costs"
+[main 751d5c0] Add transport costs
+ 1 file changed, 2 insertions(+), 1 deletion(-)
+$ git add budget.py
+$ git commit -m "Add fun money"
+[main 6ee9108] Add fun money
+ 1 file changed, 2 insertions(+), 1 deletion(-)
+### S9
+$ git log --oneline
+6ee9108 Add fun money
+751d5c0 Add transport costs
+2ff2d59 First version of budget
+### S10
+$ python3 budget.py
+Traceback (most recent call last):
+  File "/home/sam/budget/budget.py", line 6, in <module>
+    left = income - rent - food - transport - fun
+                           ^^^^
+NameError: name 'food' is not defined
+$ git status --short
+ M budget.py
+### S11
+$ git restore budget.py
+$ python3 budget.py
+Left this month: 1030
+### S12
+$ git restore --source=2ff2d59 budget.py
+$ python3 budget.py
+Left this month: 1350
+$ git restore budget.py
+$ python3 budget.py
+Left this month: 1030
+### S13
+$ python3 budget.py
+Left this month: -3020
+$ git log --oneline
+4cc90e7 Update food budget
+6ee9108 Add fun money
+751d5c0 Add transport costs
+2ff2d59 First version of budget
+### S14
+$ git revert --no-edit HEAD
+[main 2661866] Revert "Update food budget"
+ Date: Mon Nov 9 14:59:24 2026 +0000
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+$ python3 budget.py
+Left this month: 1030
+$ git log --oneline
+2661866 Revert "Update food budget"
+4cc90e7 Update food budget
+6ee9108 Add fun money
+751d5c0 Add transport costs
+2ff2d59 First version of budget
+### S15
+$ git status --short
+?? __pycache__/
+?? notes.log
+$ cat .gitignore
+notes.log
+__pycache__/
+$ git status --short
+?? .gitignore
+$ git add .gitignore
+$ git commit -m "Ignore logs and cache"
+[main bbbe43e] Ignore logs and cache
+ 1 file changed, 2 insertions(+)
+ create mode 100644 .gitignore
+### S16
+$ git switch -c savings
+Switched to a new branch 'savings'
+$ git commit -am "Try a savings goal"
+[savings 4753a38] Try a savings goal
+ 1 file changed, 2 insertions(+), 1 deletion(-)
+$ python3 budget.py
+Left this month: 730
+$ git switch main
+Switched to branch 'main'
+$ python3 budget.py
+Left this month: 1030
+$ git merge savings
+Updating bbbe43e..4753a38
+Fast-forward
+ budget.py | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
+$ python3 budget.py
+Left this month: 730
+$ git log --oneline --graph
+* 4753a38 Try a savings goal
+* bbbe43e Ignore logs and cache
+* 2661866 Revert "Update food budget"
+* 4cc90e7 Update food budget
+* 6ee9108 Add fun money
+* 751d5c0 Add transport costs
+* 2ff2d59 First version of budget
+### MIST1
+$ git commit -m "oops"
+fatal: not a git repository (or any of the parent directories): .git
+### MIST2
+$ git commit -m "nothing new"
+On branch main
+nothing to commit, working tree clean
+### MIST3
+$ git commit -m "First"
+Author identity unknown
+
+*** Please tell me who you are.
+
+Run
+
+  git config --global user.email "you@example.com"
+  git config --global user.name "Your Name"
+
+to set your account's default identity.
+Omit --global to set the identity only in this repository.
+
+fatal: unable to auto-detect email address (got 'root@vm.(none)')

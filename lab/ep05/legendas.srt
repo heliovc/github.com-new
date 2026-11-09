@@ -1,0 +1,783 @@
+1
+00:00:00,250 --> 00:00:03,717
+You changed a file, something broke, and now nothing works.
+
+2
+00:00:03,717 --> 00:00:04,363
+Watch this.
+
+3
+00:00:04,363 --> 00:00:07,419
+One command, and the file is back exactly as it was.
+
+4
+00:00:07,419 --> 00:00:10,944
+No backup copies, no final version two, final version three.
+
+5
+00:00:10,944 --> 00:00:15,234
+That's Git, and in the next ten minutes you'll learn to use it from zero.
+
+6
+00:00:15,934 --> 00:00:19,963
+Git saves every version of your work, so you can always go back.
+
+7
+00:00:19,963 --> 00:00:24,180
+Programmers use it every day, but it works for any folder of files.
+
+8
+00:00:24,180 --> 00:00:25,754
+Scripts, notes, websites.
+
+9
+00:00:25,754 --> 00:00:27,076
+No experience needed.
+
+10
+00:00:27,076 --> 00:00:29,468
+Just a terminal and about ten minutes.
+
+11
+00:00:30,168 --> 00:00:32,771
+Think of Git like save points in a video game.
+
+12
+00:00:32,771 --> 00:00:35,204
+Every time you reach a good spot, you save.
+
+13
+00:00:35,204 --> 00:00:37,184
+Each save point is called a commit.
+
+14
+00:00:37,184 --> 00:00:41,315
+It has a short code, called a hash, and a message that says what changed.
+
+15
+00:00:41,315 --> 00:00:44,200
+If you mess up later, you load an older save point.
+
+16
+00:00:44,200 --> 00:00:45,558
+Your work is never lost.
+
+17
+00:00:46,258 --> 00:00:47,232
+Here's the plan.
+
+18
+00:00:47,232 --> 00:00:49,117
+Install Git and check it works.
+
+19
+00:00:49,117 --> 00:00:50,395
+Tell Git who you are.
+
+20
+00:00:50,395 --> 00:00:51,855
+Start tracking a folder.
+
+21
+00:00:51,855 --> 00:00:53,923
+Save versions with add and commit.
+
+22
+00:00:53,923 --> 00:00:55,262
+And then the fun part.
+
+23
+00:00:55,262 --> 00:00:59,216
+Go back in time, undo mistakes, and try ideas safely on a branch.
+
+24
+00:00:59,916 --> 00:01:03,594
+To install Git, go to git dash s c m dot com, the official site.
+
+25
+00:01:03,594 --> 00:01:07,558
+On Windows, download Git for Windows and click through the installer.
+
+26
+00:01:07,558 --> 00:01:09,225
+The default options are fine.
+
+27
+00:01:09,225 --> 00:01:11,810
+It also gives you a terminal called Git Bash.
+
+28
+00:01:11,810 --> 00:01:15,315
+On a Mac, open Terminal and type git space dash dash version.
+
+29
+00:01:15,315 --> 00:01:18,820
+If Git isn't there yet, the Mac offers to install it for you.
+
+30
+00:01:18,820 --> 00:01:20,832
+On Linux, use your package manager.
+
+31
+00:01:21,532 --> 00:01:24,261
+Either way, check it with git dash dash version.
+
+32
+00:01:24,261 --> 00:01:26,649
+If you see a version number, you're ready.
+
+33
+00:01:26,649 --> 00:01:28,412
+Mine says two point four three.
+
+34
+00:01:28,412 --> 00:01:30,572
+Yours might be newer, and that's fine.
+
+35
+00:01:30,572 --> 00:01:32,847
+Everything in this video works the same.
+
+36
+00:01:33,547 --> 00:01:35,065
+Next, tell Git who you are.
+
+37
+00:01:35,065 --> 00:01:37,033
+You only do this once per computer.
+
+38
+00:01:37,033 --> 00:01:41,081
+Type git config dash dash global user dot name, and your name in quotes.
+
+39
+00:01:41,081 --> 00:01:42,992
+Then the same with user dot email.
+
+40
+00:01:42,992 --> 00:01:47,827
+Git writes this name and email into every commit, so you always know who changed what.
+
+41
+00:01:47,827 --> 00:01:52,606
+The third line makes your main timeline be called main, which is the modern standard.
+
+42
+00:01:53,306 --> 00:01:56,093
+These commands print nothing, and that's normal.
+
+43
+00:01:56,093 --> 00:01:57,777
+In Git, no news is good news.
+
+44
+00:01:57,777 --> 00:01:59,693
+Use your own name and email here.
+
+45
+00:01:59,693 --> 00:02:04,685
+If you plan to put your projects on GitHub later, use the same email you'll use there.
+
+46
+00:02:05,386 --> 00:02:09,159
+Our project is a tiny budget script in a folder called budget.
+
+47
+00:02:09,159 --> 00:02:12,142
+It adds up rent and food, and prints what's left.
+
+48
+00:02:12,142 --> 00:02:14,089
+It doesn't matter what's inside.
+
+49
+00:02:14,089 --> 00:02:16,402
+This could be any file you care about.
+
+50
+00:02:17,102 --> 00:02:19,043
+Open a terminal in that folder.
+
+51
+00:02:19,043 --> 00:02:23,114
+If you type git status right now, Git says, not a git repository.
+
+52
+00:02:23,114 --> 00:02:26,308
+That just means Git isn't watching this folder yet.
+
+53
+00:02:26,308 --> 00:02:29,313
+Don't worry, that's what the next command fixes.
+
+54
+00:02:30,014 --> 00:02:30,897
+Type git init.
+
+55
+00:02:30,897 --> 00:02:35,755
+Git creates a hidden folder called dot git, where it will keep every version.
+
+56
+00:02:35,755 --> 00:02:37,080
+Now git status works.
+
+57
+00:02:37,080 --> 00:02:42,001
+It says we're on branch main, no commits yet, and budget dot p y is untracked.
+
+58
+00:02:42,001 --> 00:02:45,724
+Untracked means Git sees the file, but isn't saving it yet.
+
+59
+00:02:46,424 --> 00:02:48,765
+Here's the one idea that makes Git click.
+
+60
+00:02:48,765 --> 00:02:50,021
+There are three areas.
+
+61
+00:02:50,021 --> 00:02:51,963
+Your folder, where you edit files.
+
+62
+00:02:51,963 --> 00:02:56,703
+The staging area, which is like a box where you put the changes for your next save.
+
+63
+00:02:56,703 --> 00:02:59,388
+And the history, where the saved versions live.
+
+64
+00:02:59,388 --> 00:03:01,158
+git add puts a file in the box.
+
+65
+00:03:01,158 --> 00:03:03,328
+git commit seals the box and saves it.
+
+66
+00:03:04,028 --> 00:03:05,916
+So, git add budget dot p y.
+
+67
+00:03:05,916 --> 00:03:07,455
+Then git status again.
+
+68
+00:03:07,455 --> 00:03:12,490
+Now the file is green in a real terminal, under changes to be committed.
+
+69
+00:03:12,490 --> 00:03:14,938
+It's in the box, ready to be saved.
+
+70
+00:03:15,638 --> 00:03:16,267
+Now commit.
+
+71
+00:03:16,267 --> 00:03:20,894
+git commit, dash m, and a short message in quotes that says what this version is.
+
+72
+00:03:20,894 --> 00:03:22,265
+First version of budget.
+
+73
+00:03:22,265 --> 00:03:27,120
+Git answers with the branch, the hash of the new commit, and how many lines it saved.
+
+74
+00:03:27,120 --> 00:03:27,692
+That's it.
+
+75
+00:03:27,692 --> 00:03:29,748
+You just made your first save point.
+
+76
+00:03:30,448 --> 00:03:33,369
+Write messages your future self will understand.
+
+77
+00:03:33,369 --> 00:03:36,533
+Add transport costs tells you exactly what happened.
+
+78
+00:03:36,533 --> 00:03:39,271
+Update, or stuff, or asdf, tells you nothing.
+
+79
+00:03:39,271 --> 00:03:40,002
+A good rule.
+
+80
+00:03:40,002 --> 00:03:43,470
+Finish the sentence, this commit will, and keep it short.
+
+81
+00:03:44,170 --> 00:03:45,557
+Let's change something.
+
+82
+00:03:45,557 --> 00:03:48,995
+I add a transport line, and subtract it from what's left.
+
+83
+00:03:48,995 --> 00:03:49,839
+Save the file.
+
+84
+00:03:49,839 --> 00:03:51,708
+Now, what exactly did I change?
+
+85
+00:03:51,708 --> 00:03:52,734
+Git can tell you.
+
+86
+00:03:53,433 --> 00:03:57,306
+git status dash dash short shows an M next to budget dot p y.
+
+87
+00:03:57,306 --> 00:03:58,385
+M means modified.
+
+88
+00:03:58,385 --> 00:04:00,607
+And git diff shows the exact lines.
+
+89
+00:04:00,607 --> 00:04:03,019
+Lines starting with a plus were added.
+
+90
+00:04:03,019 --> 00:04:05,050
+Lines with a minus were removed.
+
+91
+00:04:05,050 --> 00:04:10,573
+Here, one new line for transport, and the total line was replaced with the new version.
+
+92
+00:04:11,273 --> 00:04:12,067
+Happy with it?
+
+93
+00:04:12,067 --> 00:04:13,485
+Same two steps as before.
+
+94
+00:04:13,485 --> 00:04:15,753
+git add, then git commit with a message.
+
+95
+00:04:15,753 --> 00:04:16,887
+Add transport costs.
+
+96
+00:04:16,887 --> 00:04:20,687
+And I'll do it once more after adding some fun money to the budget.
+
+97
+00:04:20,687 --> 00:04:21,368
+Add, commit.
+
+98
+00:04:21,368 --> 00:04:23,466
+That's the whole daily rhythm of Git.
+
+99
+00:04:23,466 --> 00:04:24,487
+Edit, add, commit.
+
+100
+00:04:25,187 --> 00:04:27,393
+Now type git log dash dash oneline.
+
+101
+00:04:27,393 --> 00:04:29,913
+Here's your whole history, newest first.
+
+102
+00:04:29,913 --> 00:04:33,254
+Each line is a commit, with its hash and its message.
+
+103
+00:04:33,254 --> 00:04:35,396
+These hashes are your save points.
+
+104
+00:04:35,396 --> 00:04:38,547
+And notice, budget dot p y is still a single file.
+
+105
+00:04:38,547 --> 00:04:39,745
+No copies anywhere.
+
+106
+00:04:40,445 --> 00:04:42,491
+As a picture, it looks like this.
+
+107
+00:04:42,491 --> 00:04:46,956
+Three save points in a row, and the label main points at the newest one.
+
+108
+00:04:46,956 --> 00:04:49,499
+Every new commit adds a dot on the right.
+
+109
+00:04:50,199 --> 00:04:52,079
+Now the scary part, made easy.
+
+110
+00:04:52,079 --> 00:04:55,213
+Say I accidentally delete the food line, and save.
+
+111
+00:04:55,213 --> 00:04:57,281
+I run the script, and it crashes.
+
+112
+00:04:57,281 --> 00:04:59,287
+Name error, food is not defined.
+
+113
+00:04:59,287 --> 00:05:01,920
+And git status shows the file is modified.
+
+114
+00:05:02,620 --> 00:05:09,206
+To throw away those changes and get the last saved version back, type git restore budget dot p y.
+
+115
+00:05:09,206 --> 00:05:10,089
+Run it again.
+
+116
+00:05:10,089 --> 00:05:11,990
+Left this month, ten thirty.
+
+117
+00:05:11,990 --> 00:05:15,386
+The file is exactly how it was at the last commit.
+
+118
+00:05:16,086 --> 00:05:16,843
+One warning.
+
+119
+00:05:16,843 --> 00:05:21,134
+git restore throws away your unsaved changes in that file, for good.
+
+120
+00:05:21,134 --> 00:05:23,848
+Git can only bring back what was committed.
+
+121
+00:05:23,848 --> 00:05:27,572
+So use it when you really want the last saved version back.
+
+122
+00:05:28,271 --> 00:05:31,232
+You can also go back further, to any save point.
+
+123
+00:05:31,232 --> 00:05:34,440
+Take the hash of the very first commit from git log.
+
+124
+00:05:34,440 --> 00:05:39,128
+Then type git restore, dash dash source equals that hash, and the file name.
+
+125
+00:05:39,128 --> 00:05:42,829
+The file now looks exactly like it did in the first version.
+
+126
+00:05:43,529 --> 00:05:49,249
+Run the script, and it prints thirteen fifty, the original number, before transport and fun money.
+
+127
+00:05:49,249 --> 00:05:50,824
+Your history is still safe.
+
+128
+00:05:50,824 --> 00:05:51,991
+Nothing was deleted.
+
+129
+00:05:51,991 --> 00:05:58,002
+When you're done looking, git restore budget dot p y brings you back to the latest version, ten thirty.
+
+130
+00:05:58,702 --> 00:06:01,168
+What if the mistake was already committed?
+
+131
+00:06:01,168 --> 00:06:06,157
+Here, I typed food equals forty five hundred instead of four fifty, and committed it.
+
+132
+00:06:06,157 --> 00:06:09,210
+Now the budget says minus three thousand and twenty.
+
+133
+00:06:09,210 --> 00:06:09,503
+Oops.
+
+134
+00:06:09,503 --> 00:06:12,791
+And the bad commit is right there at the top of the log.
+
+135
+00:06:13,491 --> 00:06:18,840
+The safe fix is git revert, then the hash, or just the word HEAD, which means the latest commit.
+
+136
+00:06:18,840 --> 00:06:21,904
+Git creates a brand new commit that undoes the bad one.
+
+137
+00:06:21,904 --> 00:06:23,743
+The budget is back to ten thirty.
+
+138
+00:06:23,743 --> 00:06:25,247
+And the history shows both.
+
+139
+00:06:25,247 --> 00:06:26,640
+The mistake, and the fix.
+
+140
+00:06:26,640 --> 00:06:31,654
+Nothing is rewritten, which is exactly what you want when other people share your project.
+
+141
+00:06:32,354 --> 00:06:34,020
+So remember the difference.
+
+142
+00:06:34,020 --> 00:06:40,006
+git restore is for changes you haven't committed yet, or for peeking at an old version of a file.
+
+143
+00:06:40,006 --> 00:06:45,312
+git revert is for a commit that was already saved, and it undoes it with a new commit.
+
+144
+00:06:46,012 --> 00:06:48,053
+Some files should never be saved.
+
+145
+00:06:48,053 --> 00:06:51,455
+Logs, temporary files, the cache folder Python creates.
+
+146
+00:06:51,455 --> 00:06:55,475
+Git status shows them with two question marks, meaning untracked.
+
+147
+00:06:55,475 --> 00:07:00,980
+To make Git ignore them, create a file called dot gitignore, and list them, one per line.
+
+148
+00:07:00,980 --> 00:07:02,959
+A folder name ends with a slash.
+
+149
+00:07:03,659 --> 00:07:06,479
+Run git status again, and the clutter is gone.
+
+150
+00:07:06,479 --> 00:07:08,993
+Only the new dot gitignore file shows up.
+
+151
+00:07:08,993 --> 00:07:12,732
+Add it and commit it, so the rule is saved with your project.
+
+152
+00:07:12,732 --> 00:07:18,985
+This is also where you list files with passwords or secret keys, so they never end up in your history.
+
+153
+00:07:19,685 --> 00:07:20,026
+Bonus.
+
+154
+00:07:20,026 --> 00:07:23,259
+Want to try an idea without risking your working version?
+
+155
+00:07:23,259 --> 00:07:23,996
+Use a branch.
+
+156
+00:07:23,996 --> 00:07:28,761
+git switch dash c savings creates a new branch called savings and moves you onto it.
+
+157
+00:07:28,761 --> 00:07:30,633
+I add a savings goal, and commit.
+
+158
+00:07:30,633 --> 00:07:31,824
+Little shortcut here.
+
+159
+00:07:31,824 --> 00:07:35,624
+Dash a m adds every file Git already tracks and commits, in one go.
+
+160
+00:07:35,624 --> 00:07:38,403
+On this branch, the budget now says seven thirty.
+
+161
+00:07:39,103 --> 00:07:43,804
+git switch main takes me back, and there the budget still says ten thirty.
+
+162
+00:07:43,804 --> 00:07:47,615
+The experiment lives on its own line, and main is untouched.
+
+163
+00:07:47,615 --> 00:07:49,203
+Like a parallel timeline.
+
+164
+00:07:49,903 --> 00:07:50,712
+Like the idea?
+
+165
+00:07:50,712 --> 00:07:53,197
+Switch to main, and type git merge savings.
+
+166
+00:07:53,197 --> 00:07:57,589
+The savings commit becomes part of main, and the script prints seven thirty.
+
+167
+00:07:57,589 --> 00:07:58,398
+Don't like it?
+
+168
+00:07:58,398 --> 00:08:00,826
+Just switch back to main and keep working.
+
+169
+00:08:00,826 --> 00:08:02,733
+The branch stays out of your way.
+
+170
+00:08:03,433 --> 00:08:05,569
+Three errors you'll almost certainly see.
+
+171
+00:08:05,569 --> 00:08:07,028
+Fatal, not a git repository.
+
+172
+00:08:07,028 --> 00:08:10,362
+Your terminal is in the wrong folder, or you never ran git init.
+
+173
+00:08:10,362 --> 00:08:12,341
+Nothing to commit, working tree clean.
+
+174
+00:08:12,341 --> 00:08:17,447
+You haven't changed anything since the last commit, or you forgot to save the file in your editor.
+
+175
+00:08:17,447 --> 00:08:18,906
+And author identity unknown.
+
+176
+00:08:18,906 --> 00:08:23,751
+You skipped the one-time setup, so run the two git config lines from the start of this video.
+
+177
+00:08:24,451 --> 00:08:26,374
+Here's that last one, for real.
+
+178
+00:08:26,374 --> 00:08:29,166
+Git even tells you which two commands to run.
+
+179
+00:08:29,166 --> 00:08:31,027
+Read the error message slowly.
+
+180
+00:08:31,027 --> 00:08:33,633
+In Git, it almost always contains the fix.
+
+181
+00:08:34,333 --> 00:08:34,794
+Pro tip.
+
+182
+00:08:34,794 --> 00:08:36,583
+Commit small, and commit often.
+
+183
+00:08:36,583 --> 00:08:39,179
+One change, one commit, with a clear message.
+
+184
+00:08:39,179 --> 00:08:44,141
+Then, when something breaks, you go back one small step instead of losing a whole day.
+
+185
+00:08:44,141 --> 00:08:47,083
+And type git status before and after every command.
+
+186
+00:08:47,083 --> 00:08:50,256
+It always tells you where you are, and what to do next.
+
+187
+00:08:50,956 --> 00:08:51,657
+Quick recap.
+
+188
+00:08:51,657 --> 00:08:53,116
+git init once per folder.
+
+189
+00:08:53,116 --> 00:08:56,152
+git add to pick what to save, git commit to save it.
+
+190
+00:08:56,152 --> 00:08:57,786
+git log to see your history.
+
+191
+00:08:57,786 --> 00:09:01,464
+git restore to undo unsaved changes, or to load an old version.
+
+192
+00:09:01,464 --> 00:09:03,332
+And git revert to undo a commit.
+
+193
+00:09:03,332 --> 00:09:06,367
+Six commands, and you'll never lose your work again.
+
+194
+00:09:07,067 --> 00:09:11,164
+Next on Shortcut Lab, turn a spreadsheet into charts with Python.
+
+195
+00:09:11,164 --> 00:09:15,513
+A few lines of pandas and matplotlib, and your data becomes pictures.
+
+196
+00:09:15,513 --> 00:09:17,529
+Subscribe, so you don't miss it.
