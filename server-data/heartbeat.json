@@ -1,8 +1,13 @@
 {
- "last_run": "2026-11-09T19:00:23.699426-03:00",
+ "last_run": "2026-11-09T19:15:44.315136-03:00",
  "pending": 0,
- "post_tasks": 0,
+ "post_tasks": 3,
  "errors": [
   "/opt/canal-publisher/repo/cosmic/ep07/publish.json: version deve ser 1"
+ ],
+ "published_now": [
+  "ptd-ep08-short: comment comentário fixado",
+  "lab-ep05-long: comment comentário fixado",
+  "lab-ep05-short: related vinculado a D-fNvDYD_lI"
  ]
 }

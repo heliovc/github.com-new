@@ -80,7 +80,9 @@
   "related_key": "ptd-ep08-long",
   "pinned_comment": "Você já tinha ouvido falar em risco sacado? Vídeo completo: Americanas: como esconder R$ 25 bilhões no balanço (e por que ninguém viu)",
   "related_attempts": 1,
-  "related_done": "2026-11-09T18:14:45.883933-03:00"
+  "related_done": "2026-11-09T18:14:45.883933-03:00",
+  "comment_attempts": 1,
+  "comment_done": "2026-11-09T19:11:45.593658-03:00"
  },
  "ptd-rank06-short": {
   "attempts": 1,
@@ -162,7 +164,9 @@
   "title": "Git in 10 Minutes: Save Every Version of Your Work (Beginner Tutorial)",
   "kind": "long",
   "publish_at": "2026-11-09T19:00:00-03:00",
-  "pinned_comment": "What's the worst file you ever lost before you knew about Git?"
+  "pinned_comment": "What's the worst file you ever lost before you knew about Git?",
+  "comment_attempts": 1,
+  "comment_done": "2026-11-09T19:13:58.678380-03:00"
  },
  "lab-ep05-short": {
   "attempts": 1,
@@ -178,6 +182,8 @@
   "kind": "short",
   "publish_at": "2026-11-09T20:30:00-03:00",
   "related_key": "lab-ep05-long",
-  "pinned_comment": "Which Git command confused you the most? Full tutorial: Git in 10 Minutes: Save Every Version of Your Work"
+  "pinned_comment": "Which Git command confused you the most? Full tutorial: Git in 10 Minutes: Save Every Version of Your Work",
+  "related_attempts": 1,
+  "related_done": "2026-11-09T19:15:39.546546-03:00"
  }
 }
