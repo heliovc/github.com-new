@@ -242,21 +242,22 @@ class Studio:
     def open_upload_dialog(self, channel_id: str):
         self.page.goto(f"https://studio.youtube.com/channel/{channel_id}/videos/upload?d=ud", wait_until="domcontentloaded")
         sel = "ytcp-uploads-file-picker input[type=file]"
+        # 09/11: com 1 vCPU e vários envios seguidos o Studio demora a montar a página; 15 s não bastava
         try:
-            self.page.wait_for_selector(sel, state="attached", timeout=15_000)
+            self.page.wait_for_selector(sel, state="attached", timeout=60_000)
             return
         except PWTimeout:
             pass
         # plano B: botão de upload do Painel
         self.page.goto(f"https://studio.youtube.com/channel/{channel_id}", wait_until="domcontentloaded")
-        self.page.wait_for_timeout(3000)
+        self.page.wait_for_timeout(10_000)
         for s in ("#upload-icon", "ytcp-icon-button#upload-icon", "#create-icon"):
             if self.page.locator(s).count():
                 self.page.locator(s).first.click()
                 break
-        self.click_text(["Enviar vídeos", "Upload videos"], timeout=5)
+        self.click_text(["Enviar vídeos", "Upload videos"], timeout=15)
         try:
-            self.page.wait_for_selector(sel, state="attached", timeout=15_000)
+            self.page.wait_for_selector(sel, state="attached", timeout=60_000)
         except PWTimeout as e:
             self.shot("upload-dialog")
             raise StudioError("diálogo de upload não abriu") from e
