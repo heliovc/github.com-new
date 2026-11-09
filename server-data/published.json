@@ -1,0 +1,32 @@
+{
+ "lab-ep04-long": {
+  "status": "published",
+  "url": "https://youtu.be/MMEl_clcFQw",
+  "by": "rotina",
+  "at": "2026-11-09T12:00:39.947343-03:00",
+  "channel_id": "UCXGqR8k1RMbfYdVleIuJKzA",
+  "title": "Write Better AI Prompts: 5 Techniques That Actually Work (ChatGPT, Claude, Gemini)",
+  "kind": "long",
+  "publish_at": "2026-11-08T19:00:00-03:00"
+ },
+ "lab-ep04-short": {
+  "status": "published",
+  "url": "https://youtube.com/shorts/XlDenMhia8g",
+  "by": "rotina",
+  "at": "2026-11-09T12:00:39.947343-03:00",
+  "channel_id": "UCXGqR8k1RMbfYdVleIuJKzA",
+  "title": "The One Line That Fixes Bad AI Answers #shorts",
+  "kind": "short",
+  "publish_at": "2026-11-08T20:30:00-03:00"
+ },
+ "quiet-ep03-long": {
+  "status": "published",
+  "url": "https://youtu.be/XA6Qm3qeh5g",
+  "by": "rotina",
+  "at": "2026-11-09T12:00:39.947343-03:00",
+  "channel_id": "UCNrw11y7QKt0fWCrJ84QZ-g",
+  "title": "An Evening Beside the Nile | Ancient Egypt | Calm History for Sleep",
+  "kind": "long",
+  "publish_at": "2026-11-07T22:00:00-03:00"
+ }
+}
