@@ -28,5 +28,89 @@
   "title": "An Evening Beside the Nile | Ancient Egypt | Calm History for Sleep",
   "kind": "long",
   "publish_at": "2026-11-07T22:00:00-03:00"
+ },
+ "cosmic-rank07-short": {
+  "attempts": 1,
+  "screenshot": "20261109-125752-erro-cosmic-rank07-short.png",
+  "at": "2026-11-09T12:57:56.632664-03:00",
+  "status": "error",
+  "error": "Page.goto: Timeout 60000ms exceeded.\nCall log:\n  - navigating to \"https://www.youtube.com/channel_switcher\", waiting until \"domcontentloaded\"\n"
+ },
+ "ptd-ep08-long": {
+  "attempts": 1,
+  "screenshot": "20261109-124055-erro-ptd-ep08-long.png",
+  "at": "2026-11-09T12:45:59.916938-03:00",
+  "status": "published",
+  "url": "https://youtu.be/NLmY0IJlPzE",
+  "by": "robo",
+  "visibility": "schedule",
+  "when": "2026-11-09T18:00:00-03:00",
+  "error": null,
+  "channel_id": "UCd_BGmJ5gbQ0kECAxmbvQHA",
+  "title": "Americanas: como esconder R$ 25 bilhões no balanço (e por que ninguém viu)",
+  "kind": "long",
+  "publish_at": "2026-11-09T18:00:00-03:00",
+  "pinned_comment": "Na sua opinião, quem deveria ter percebido primeiro o rombo da Americanas: auditoria, bancos, conselho ou o mercado?"
+ },
+ "ptd-ep08-short": {
+  "attempts": 1,
+  "status": "published",
+  "url": "https://youtu.be/mvNF0YIr7Lg",
+  "by": "robo",
+  "visibility": "schedule",
+  "when": "2026-11-09T19:00:00-03:00",
+  "at": "2026-11-09T12:49:26.598948-03:00",
+  "error": null,
+  "channel_id": "UCd_BGmJ5gbQ0kECAxmbvQHA",
+  "title": "Como a Americanas escondeu R$ 25 bilhões numa linha do balanço #shorts",
+  "kind": "short",
+  "publish_at": "2026-11-09T19:00:00-03:00",
+  "related_key": "ptd-ep08-long",
+  "pinned_comment": "Você já tinha ouvido falar em risco sacado? Vídeo completo: Americanas: como esconder R$ 25 bilhões no balanço (e por que ninguém viu)"
+ },
+ "ptd-rank06-short": {
+  "attempts": 1,
+  "status": "published",
+  "url": "https://youtube.com/shorts/5NDtgj_5gwc",
+  "by": "robo",
+  "visibility": "schedule",
+  "when": "2026-11-10T12:00:00-03:00",
+  "at": "2026-11-09T12:56:16.258968-03:00",
+  "error": null,
+  "channel_id": "UCd_BGmJ5gbQ0kECAxmbvQHA",
+  "title": "As 5 maiores recuperações judiciais do Brasil (a nº 1 devia quase R$ 100 bilhões) #shorts",
+  "kind": "short",
+  "publish_at": "2026-11-10T12:00:00-03:00",
+  "related_key": "ptd-ep08-long",
+  "pinned_comment": "Qual dessas cinco quebras mais te surpreendeu? Vídeo completo: Americanas: como esconder R$ 25 bilhões no balanço (e por que ninguém viu)"
+ },
+ "cosmic-ep08-long": {
+  "attempts": 1,
+  "status": "published",
+  "url": "https://youtu.be/q8HdvqZT6OQ",
+  "by": "robo",
+  "visibility": "schedule",
+  "when": "2026-11-10T17:00:00-03:00",
+  "at": "2026-11-09T13:07:59.680699-03:00",
+  "error": null,
+  "channel_id": "UCsYYjUbmq4n3lAKgw2F2IJw",
+  "title": "What If the Moon Crashed Into Earth? You'd Have 4 Days",
+  "kind": "long",
+  "publish_at": "2026-11-10T17:00:00-03:00",
+  "pinned_comment": "If you had 4 days before the Moon hit, what would you do first?"
+ },
+ "cosmic-scale01-short": {
+  "attempts": 1,
+  "status": "error",
+  "error": "diálogo de upload não abriu",
+  "screenshot": "20261109-131055-erro-cosmic-scale01-short.png",
+  "at": "2026-11-09T13:10:57.879532-03:00"
+ },
+ "cosmic-ep08-short": {
+  "attempts": 1,
+  "status": "error",
+  "error": "diálogo de upload não abriu",
+  "screenshot": "20261109-131433-erro-cosmic-ep08-short.png",
+  "at": "2026-11-09T13:14:35.813951-03:00"
  }
 }
