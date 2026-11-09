@@ -1,0 +1,87 @@
+{
+ "version": 1,
+ "channel_id": "UCd_BGmJ5gbQ0kECAxmbvQHA",
+ "created_at": "2026-11-09T12:25:42-03:00",
+ "items": [
+  {
+   "key": "ptd-ep08-long",
+   "kind": "long",
+   "video": "video.mp4",
+   "title": "Americanas: como esconder R$ 25 bilhões no balanço (e por que ninguém viu)",
+   "description": "Em 12 de janeiro de 2023 a ação da Americanas caiu 77,33% em um único dia. O motivo: um rombo que começou em R$ 20 bilhões e passou de R$ 25 bilhões. Neste episódio desmontamos o truque em 4 atos: o número que a plateia via, o segredo (risco sacado e VPC falso), por que auditores, bancos e mercado não viram, e o que aconteceu quando as luzes acenderam — da recuperação judicial (encerrada em 19/10/2026) aos 12 ex-executivos que viraram réus.\n\nCapítulos\n0:00 Gancho: −77% em um dia\n0:44 Ato 1: o número que a plateia via\n1:42 Ato 2: o segredo — risco sacado\n2:47 O truque maior: VPC (R$ 21,7 bi)\n3:51 Por que montar um truque desses\n4:12 Ato 3: por que ninguém viu\n5:42 Ato 4: as luzes acendem\n6:08 Operação Disclosure: R$ 287 mi em ações\n7:09 1.369 dias e 12 réus\n7:42 Quem pagou o ingresso\n8:02 O truque, desmontado\n8:32 Próximo episódio\n\nFontes\n- B3 (Bora Investir) e Forbes Brasil (12/01/2023): AMER3 −77,33%, de R$ 12,00 para R$ 2,72; TradeMap: perda de ~R$ 8,4 bi em valor de mercado\n- Fato relevante de 11/01/2023, via InfoMoney: inconsistências de ~R$ 20 bi; saída de Sergio Rial e André Covre\n- Forbes Brasil (19/01/2023): dívida informada de ~R$ 20,8 bi no 3º tri/2022; pedido de recuperação judicial com R$ 43 bi e 16,3 mil credores\n- Fato relevante de 13/06/2023, via Mercado & Consumo e Suno: resultado inflado em R$ 25,3 bi (VPC artificial R$ 21,7 bi; juros não contabilizados R$ 3,6 bi); risco sacado R$ 18,4 bi registrado de forma inadequada\n- Depoimento do presidente da Americanas à CPI (jun/2023), via Folha de Pernambuco\n- Americanas, comunicado de 17/07/2024 sobre o comitê independente, via Mercado & Consumo\n- Polícia Federal / MPF, Operação Disclosure (27/06/2024), via Mercado & Consumo, InfoMoney e IstoÉ Dinheiro: R$ 287 mi em ações vendidas antes do anúncio; bloqueio de mais de R$ 500 mi\n- Plano aprovado em 19/12/2023 e homologado em fev/2024; aumento de capital de ~R$ 24,5 bi a R$ 1,30 por ação (Mercado & Consumo, 27/07/2024)\n- Agência Brasil (out/2026): fim da recuperação judicial em 19/10/2026 (contagem de 1.369 dias feita pelo canal)\n- Band (out/2026): Justiça Federal do RJ torna réus 12 ex-executivos; denúncia do MPF de mar/2025. Ser réu não é ser condenado; as defesas negam os crimes.\n- Exemplos com R$ 100 são ilustrativos.\n\nEste vídeo é informativo e não é recomendação financeira. Narração com voz sintética; roteiro, pesquisa e visual próprios. \"Análise\" na tela = interpretação do canal.\n\n#americanas #fraude #balanço #financas #portrasdodinheiro",
+   "tags": [
+    "americanas",
+    "fraude americanas",
+    "rombo americanas",
+    "risco sacado",
+    "vpc",
+    "verba de propaganda cooperada",
+    "fraude contabil",
+    "recuperacao judicial",
+    "americanas recuperacao judicial",
+    "operacao disclosure",
+    "miguel gutierrez",
+    "sergio rial",
+    "amer3",
+    "balanço",
+    "contabilidade",
+    "economia",
+    "financas",
+    "por tras do dinheiro"
+   ],
+   "thumbnail": "thumbnail.jpg",
+   "captions": "legendas.srt",
+   "publish_at": "2026-11-09T18:00:00-03:00",
+   "if_late": "public_now",
+   "made_for_kids": false,
+   "altered_content": true,
+   "pinned_comment": "Na sua opinião, quem deveria ter percebido primeiro o rombo da Americanas: auditoria, bancos, conselho ou o mercado?"
+  },
+  {
+   "key": "ptd-ep08-short",
+   "kind": "short",
+   "video": "vertical.mp4",
+   "title": "Como a Americanas escondeu R$ 25 bilhões numa linha do balanço #shorts",
+   "description": "Dívida de banco escondida em fornecedores e verba que nunca existiu virando lucro: o truque de R$ 25,3 bilhões da Americanas. Fonte: fato relevante da Americanas (13/06/2023), via Mercado & Consumo. Vídeo completo no canal: \"Americanas: como esconder R$ 25 bilhões no balanço (e por que ninguém viu)\". Este vídeo é informativo e não é recomendação financeira. Voz sintética.\n#shorts #americanas #fraude #financas",
+   "tags": [
+    "americanas",
+    "fraude",
+    "risco sacado",
+    "vpc",
+    "balanço",
+    "shorts",
+    "por tras do dinheiro"
+   ],
+   "publish_at": "2026-11-09T19:00:00-03:00",
+   "if_late": "public_now",
+   "made_for_kids": false,
+   "altered_content": true,
+   "related_key": "ptd-ep08-long",
+   "pinned_comment": "Você já tinha ouvido falar em risco sacado? Vídeo completo: Americanas: como esconder R$ 25 bilhões no balanço (e por que ninguém viu)"
+  },
+  {
+   "key": "ptd-rank06-short",
+   "kind": "short",
+   "video": "ranking.mp4",
+   "title": "As 5 maiores recuperações judiciais do Brasil (a nº 1 devia quase R$ 100 bilhões) #shorts",
+   "description": "As 5 maiores recuperações judiciais do Brasil pela dívida declarada no pedido (valores da época, sem correção): 5) Sete Brasil (2016) R$ 19,3 bi; 4) Americanas (2023) R$ 43 bi; 3) Samarco (2021) ~R$ 50 bi; 2) Oi (2016) R$ 65 bi; 1) Odebrecht (2019) R$ 98,5 bi. Fonte: Forbes Brasil, fev/2023. Este vídeo é informativo e não é recomendação financeira. Voz sintética.\n#shorts #recuperacaojudicial #americanas #odebrecht #financas",
+   "tags": [
+    "recuperacao judicial",
+    "maiores recuperacoes judiciais",
+    "odebrecht",
+    "oi",
+    "samarco",
+    "americanas",
+    "sete brasil",
+    "shorts",
+    "por tras do dinheiro"
+   ],
+   "publish_at": "2026-11-10T12:00:00-03:00",
+   "if_late": "public_now",
+   "made_for_kids": false,
+   "altered_content": true,
+   "related_key": "ptd-ep08-long",
+   "pinned_comment": "Qual dessas cinco quebras mais te surpreendeu? Vídeo completo: Americanas: como esconder R$ 25 bilhões no balanço (e por que ninguém viu)"
+  }
+ ]
+}

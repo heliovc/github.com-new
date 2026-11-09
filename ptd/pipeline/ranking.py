@@ -4,7 +4,8 @@ Roteiro: TITLE, THEME {accent, accent2, bar_col, hl_col, glow, bar, chart}, HOOK
 Visual: número grande do item + gráfico que vai sendo preenchido (5 -> 1), item atual em destaque.
 THEME["chart"]: "hbars" (padrão, barras horizontais), "vbars" (colunas verticais, criado no rank #2)
 ou "gauge" (termômetro horizontal com escala, criado no rank #3 — bom para taxas/percentuais)
-ou "bubbles" (bolhas com área proporcional ao valor, criado no rank #4 — bom para tamanhos/bases de clientes).
+ou "bubbles" (bolhas com área proporcional ao valor, criado no rank #4 — bom para tamanhos/bases de clientes)
+ou "pits" (buracos, rank #5) ou "piles" (pilhas de notas, criado no rank #6 — bom para dívidas/valores em R$).
 Tudo desenhado por código; narração Kokoro (pm_alex, pt-br); legenda grande queimada. Layout seguro p/ UI do Shorts:
 legenda y=1585, @ y=1690, fonte y=1745.
 """
@@ -214,8 +215,46 @@ def chart_p(img, items, th, upto, t, cur_rank):
         while F(fs2, "ExtraBold").getlength(it["short"]) > cw + 20 and fs2 > 18: fs2 -= 2
         d.text((cx, ground - 105), it["short"], font=F(fs2, "ExtraBold"), fill=WHITE if on else (190, 180, 195), anchor="mm")
 
+def chart_n(img, items, th, upto, t, cur_rank):
+    """Pilhas de notas (rank #6, recuperações judiciais): 5º à esquerda, 1º à direita, base y=1400; cada pilha = notas
+    empilhadas, altura proporcional à dívida. Não revelado: silhueta tracejada com "?"; atual: notas caem uma a uma."""
+    d = ImageDraw.Draw(img); mx = max(i["num"] for i in items)
+    order = sorted(items, key=lambda x: -x["rank"])
+    base, hmax, cw, gap, bh = 1400, 560, 160, 32, 20
+    x0 = W / 2 - (5 * cw + 4 * gap) / 2
+    d.rectangle([50, base + 4, W - 50, base + 16], fill=(60, 72, 100))
+    paper = tuple(th.get("bill", (96, 160, 110))); dark = tuple(int(c * 0.62) for c in paper)
+    for k, it in enumerate(order):
+        x = x0 + k * (cw + gap); cx = x + cw / 2
+        full = hmax * it["num"] / mx; nb = max(1, int(full / bh))
+        d.text((cx, base + 52), f"{it['rank']}º", font=F(40, "Black"), fill=tuple(th["accent2"]), anchor="mm")
+        if it["rank"] < upto:
+            yy = base
+            while yy > base - full:
+                d.line([(x, yy), (x, max(yy - 14, base - full))], fill=(70, 82, 110), width=3)
+                d.line([(x + cw, yy), (x + cw, max(yy - 14, base - full))], fill=(70, 82, 110), width=3); yy -= 28
+            d.line([(x, base - full), (x + cw, base - full)], fill=(70, 82, 110), width=3)
+            d.text((cx, base - min(full, 300) / 2), "?", font=F(64, "Black"), fill=(100, 112, 140), anchor="mm")
+            continue
+        on = it["rank"] == cur_rank
+        p = ease(t / 1.4) if on else 1.0; shown = max(1, int(round(nb * p)))
+        for j in range(shown):
+            y1 = base - j * bh; y0 = y1 - bh + 3; jit = (6 if j % 3 == 0 else -4 if j % 3 == 1 else 2)
+            col = paper if on else tuple(int(c * 0.7) for c in paper)
+            d.rounded_rectangle([x + jit, y0, x + cw + jit, y1], 5, fill=col, outline=dark, width=2)
+            d.ellipse([cx + jit - 7, (y0 + y1) / 2 - 6, cx + jit + 7, (y0 + y1) / 2 + 6], outline=dark, width=2)
+        top = base - shown * bh
+        if on:
+            d.rounded_rectangle([x - 6, top - 6, x + cw + 12, base + 4], 10, outline=tuple(th["accent"]), width=5)
+        fs = 34
+        while F(fs, "Black").getlength(val_str(it, it["num"])) > cw + 30 and fs > 20: fs -= 2
+        d.text((cx, top - 34), val_str(it, it["num"] * p), font=F(fs, "Black"), fill=WHITE if on else (200, 205, 220), anchor="mm")
+        fs2 = 30
+        while F(fs2, "ExtraBold").getlength(it["short"]) > cw + 24 and fs2 > 18: fs2 -= 2
+        d.text((cx, top - 80), it["short"], font=F(fs2, "ExtraBold"), fill=WHITE if on else (180, 186, 205), anchor="mm")
+
 def chart(img, items, th, upto, t, cur_rank):
-    {"vbars": chart_v, "gauge": chart_g, "bubbles": chart_b, "pits": chart_p}.get(th.get("chart"), chart_h)(img, items, th, upto, t, cur_rank)
+    {"vbars": chart_v, "gauge": chart_g, "bubbles": chart_b, "pits": chart_p, "piles": chart_n}.get(th.get("chart"), chart_h)(img, items, th, upto, t, cur_rank)
 
 def seg_hook(img, sc, th, t, dur, items):
     ease = lambda x: 1.0  # frame 1 = thumbnail: gancho inteiro visível desde o frame 0 (rank #3)
@@ -232,6 +271,8 @@ def seg_hook(img, sc, th, t, dur, items):
             text(img, (x0 + k * (cw + gap) + cw / 2, base - 280), "?", 64, (90, 100, 130), a=ease((t - 0.4 - k * 0.15) / 0.3))
     elif th.get("chart") == "bubbles":
         if sc.get("tease"): text(img, (W / 2, 690), sc["tease"], 64, th["accent"], a=1.0)
+    elif th.get("chart") == "piles":
+        if sc.get("tease"): text(img, (W / 2, 780), sc["tease"], 64, th["accent"], a=1.0)
     elif th.get("chart") == "pits":
         if sc.get("tease"): text(img, (W / 2, 650), sc["tease"], 64, th["accent"], a=1.0)
     elif th.get("chart") == "gauge":

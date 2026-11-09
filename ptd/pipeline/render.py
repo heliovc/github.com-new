@@ -536,9 +536,90 @@ def sc_race(img, v, t, dur):
             dr.text((x1 + 60, y), "✓", font=F(56, "Black"), fill=col, anchor="lm") if False else dr.text((x1 - 10, y - 60), "CHEGOU", font=F(30, "Black"), fill=col, anchor="rm")
     if v.get("caption"): alpha_text(img, (W / 2, H - 90), v["caption"], F(34, "SemiBold"), GREEN, ease((t - T) / 0.6))
 
+def sc_act(img, v, t, dur):
+    """Criado no EP08: abertura de ato num palco. n (número do ato), title, sub. Cortinas vermelhas abrem dos lados,
+    um holofote acende no centro e o título sobe."""
+    dr = ImageDraw.Draw(img)
+    p = ease((t - 0.15) / 1.0)
+    # holofote
+    lay = Image.new("RGBA", img.size, (0, 0, 0, 0)); d2 = ImageDraw.Draw(lay)
+    a = int(70 * p)
+    d2.polygon([(W / 2 - 90, 0), (W / 2 + 90, 0), (W / 2 + 520, H), (W / 2 - 520, H)], fill=(255, 236, 190, a))
+    d2.ellipse([W / 2 - 560, H - 170, W / 2 + 560, H + 70], fill=(255, 236, 190, int(55 * p)))
+    img.alpha_composite(lay)
+    # cortinas
+    cw = lerp(W / 2 + 10, 300, p)
+    for side in (0, 1):
+        lay = Image.new("RGBA", img.size, (0, 0, 0, 0)); d3 = ImageDraw.Draw(lay)
+        x0, x1 = (0, cw) if side == 0 else (W - cw, W)
+        d3.rectangle([x0, 0, x1, H], fill=(120, 18, 30, 255))
+        k = 0; xx = x0
+        while xx < x1:
+            d3.rectangle([xx, 0, xx + 22, H], fill=(150, 28, 42, 255) if k % 2 == 0 else (96, 12, 22, 255)); xx += 46; k += 1
+        img.alpha_composite(lay)
+    dr = ImageDraw.Draw(img)
+    dr.rectangle([0, 0, W, 70], fill=(90, 10, 20))
+    for xx in range(0, W, 60): dr.pieslice([xx, 40, xx + 60, 100], 0, 180, fill=(90, 10, 20))
+    a1 = ease((t - 0.7) / 0.5); a2 = ease((t - 1.0) / 0.5); a3 = ease((t - 1.3) / 0.5)
+    alpha_text(img, (W / 2, 330), f"ATO {v['n']}", F(70, "Black"), AMBER, a1, dy=(1 - a1) * 30)
+    lines = v["title"].split("\n")
+    for i, l in enumerate(lines):
+        alpha_text(img, (W / 2, 470 + i * 120 - (len(lines) - 1) * 60), l, F(108, "ExtraBold"), WHITE, a2, dy=(1 - a2) * 30)
+    if v.get("sub"): alpha_text(img, (W / 2, 690), v["sub"], F(46, "SemiBold"), (255, 226, 170), a3)
+    if v.get("caption"): dr.text((W / 2, H - 50), v["caption"], font=F(28, "Medium"), fill=DIM, anchor="mm")
+
+def sc_ledger(img, v, t, dur):
+    """Criado no EP08: folha de balanço com linhas [[rótulo, valor_txt]]. move = [de, para, rótulo_da_ficha]: uma ficha
+    sai da linha 'de' e desliza até a linha 'para' (ex.: dívida com banco escondida em fornecedores). stamp opcional."""
+    dr = ImageDraw.Draw(img)
+    alpha_text(img, (W / 2, 150), v["title"], F(58, "ExtraBold"), WHITE, ease(t / 0.5))
+    a = ease((t - 0.1) / 0.5)
+    rows = v["rows"]; n = len(rows)
+    px0, px1, py0 = 360, 1560, 240
+    py1 = py0 + 110 + n * 120 + 30
+    paper, ink, ink2 = (236, 240, 246), (20, 30, 48), (95, 105, 125)
+    dr.rounded_rectangle([px0, py0, px1, py1], 22, fill=mix(BG1, paper, a))
+    if a < 0.3: return
+    dr.rectangle([px0, py0, px1, py0 + 80], fill=(34, 48, 74))
+    dr.text((px0 + 40, py0 + 40), v.get("head", "BALANÇO PATRIMONIAL — PASSIVO"), font=F(34, "Black"), fill=paper, anchor="lm")
+    ys = [py0 + 150 + i * 120 for i in range(n)]
+    mv = v.get("move"); hl_to = mv[1] if mv else -1
+    for i, (lab, val) in enumerate(rows):
+        p = ease((t - 0.4 - i * 0.25) / 0.4)
+        if p <= 0: continue
+        y = ys[i]
+        if i > 0: dr.line([(px0 + 40, y - 60), (px1 - 40, y - 60)], fill=(205, 210, 220), width=2)
+        dr.text((px0 + 50, y), lab, font=F(44, "SemiBold"), fill=mix(paper, ink, p), anchor="lm")
+        dr.text((px1 - 50, y), val, font=F(48, "Black"), fill=mix(paper, ink, p), anchor="rm")
+    if mv:
+        t0 = 0.6 + n * 0.25; T = max(1.2, dur * 0.35)
+        p = ease((t - t0 - 0.6) / T)
+        if t > t0:
+            fy = lerp(ys[mv[0]], ys[mv[1]], p)
+            f = F(40, "Black"); tw = f.getlength(mv[2]) + 60
+            x0 = px0 + 680 - tw / 2
+            col = RED if p < 0.999 else AMBER
+            dr.rounded_rectangle([x0, fy - 38, x0 + tw, fy + 38], 38, fill=col)
+            dr.text((x0 + tw / 2, fy), mv[2], font=f, fill=BG1 if p >= 0.999 else WHITE, anchor="mm")
+            if p > 0.02 and p < 0.999:
+                dr.line([(x0 - 30, ys[mv[0]]), (x0 - 30, fy)], fill=RED, width=5)
+    if v.get("stamp"):
+        ts = 0.6 + n * 0.25 + (max(1.2, dur * 0.35) + 0.8 if mv else 0.3)
+        p = ease((t - ts) / 0.25)
+        if p > 0:
+            sc = 1.6 - 0.6 * p; col = hexc(v.get("stamp_col", "#C0392B"))
+            txt = v["stamp"]; f = F(int(60 * sc), "Black")
+            tw = f.getlength(txt) + 60 * sc; th = 110 * sc
+            lay = Image.new("RGBA", (int(tw) + 20, int(th) + 20), (0, 0, 0, 0)); d2 = ImageDraw.Draw(lay)
+            d2.rounded_rectangle([10, 10, 10 + tw, 10 + th], int(14 * sc), outline=col + (int(230 * p),), width=max(4, int(9 * sc)))
+            d2.text((10 + tw / 2, 10 + th / 2), txt, font=f, fill=col + (int(230 * p),), anchor="mm")
+            lay = lay.rotate(10, expand=True, resample=Image.BICUBIC)
+            img.alpha_composite(lay, (int(px1 - 40 - lay.width), int(py1 - lay.height + 30)))
+    if v.get("caption"): dr.text((W / 2, H - 50), v["caption"], font=F(28, "Medium"), fill=DIM, anchor="mm")
+
 SC = {"round": sc_round, "ticker": sc_ticker, "scoreboard": sc_scoreboard, "title": sc_title, "bignumber": sc_bignumber, "flow": sc_flow, "split": sc_split, "bullets": sc_bullets,
       "bars": sc_bars, "compare": sc_compare, "timeline": sc_timeline, "cards": sc_cards, "line": sc_line,
-      "receipt": sc_receipt, "stack": sc_stack, "journey": sc_journey, "calendar": sc_calendar, "obit": sc_obit, "race": sc_race}
+      "receipt": sc_receipt, "stack": sc_stack, "journey": sc_journey, "calendar": sc_calendar, "obit": sc_obit, "race": sc_race, "act": sc_act, "ledger": sc_ledger}
 
 # ---------- voz ----------
 def tts(scenes, outdir, voice="pm_alex", speed=1.05):

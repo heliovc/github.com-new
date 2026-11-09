@@ -1,0 +1,519 @@
+1
+00:00:00,150 --> 00:00:02,690
+Doze de janeiro de dois mil e vinte e três.
+
+2
+00:00:02,690 --> 00:00:07,889
+A ação de uma das varejistas mais conhecidas do Brasil abre o pregão valendo doze reais.
+
+3
+00:00:07,889 --> 00:00:10,015
+Fecha valendo dois e setenta e dois.
+
+4
+00:00:10,015 --> 00:00:13,206
+Uma queda de setenta e sete por cento em um único dia.
+
+5
+00:00:13,806 --> 00:00:17,747
+O motivo cabia numa frase: faltavam vinte bilhões de reais no balanço.
+
+6
+00:00:17,747 --> 00:00:22,477
+Depois, a própria empresa refez a conta, e o número passou de vinte e cinco bilhões.
+
+7
+00:00:22,477 --> 00:00:24,674
+E isso não foi um assalto de uma noite.
+
+8
+00:00:24,674 --> 00:00:29,742
+Foi um número de mágica apresentado durante anos, diante de auditores, bancos e analistas.
+
+9
+00:00:30,341 --> 00:00:32,998
+Hoje vamos desmontar esse truque em quatro atos.
+
+10
+00:00:32,998 --> 00:00:40,691
+Como o lucro aparecia, onde ficava o segredo, por que a plateia inteira aplaudiu sem ver nada, e o que aconteceu quando as luzes acenderam.
+
+11
+00:00:40,691 --> 00:00:43,845
+E o segredo principal cabe em uma única linha do balanço.
+
+12
+00:00:44,445 --> 00:00:44,820
+Ato um.
+
+13
+00:00:44,820 --> 00:00:45,301
+O número.
+
+14
+00:00:45,301 --> 00:00:49,096
+Para entender um truque, primeiro você precisa ver o que a plateia viu.
+
+15
+00:00:49,696 --> 00:00:53,165
+A Americanas nasceu em mil novecentos e vinte e nove, em Niterói.
+
+16
+00:00:53,165 --> 00:00:58,074
+Virou sinônimo de loja de bairro, de chocolate na Páscoa e, depois, de compra pela internet.
+
+17
+00:00:58,074 --> 00:01:03,036
+Em dois mil e vinte e um, juntou a rede de lojas com o braço digital e formou uma só empresa.
+
+18
+00:01:03,036 --> 00:01:10,347
+Por trás dela estavam três dos homens mais ricos do país: Jorge Paulo Lemann, Marcel Telles e Beto Sicupira, os acionistas de referência.
+
+19
+00:01:10,947 --> 00:01:18,317
+O número que a plateia via era o de uma varejista que vendia muito, crescia no online e tinha uma dívida considerada administrável.
+
+20
+00:01:18,317 --> 00:01:26,926
+No fim do terceiro trimestre de dois mil e vinte e dois, segundo a Forbes Brasil, a empresa informava dever cerca de vinte vírgula oito bilhões de reais.
+
+21
+00:01:27,526 --> 00:01:28,558
+Guarde esse número.
+
+22
+00:01:28,558 --> 00:01:39,210
+Porque, uma semana depois do escândalo, quando a empresa pediu proteção na Justiça, a lista de dívidas tinha mais que o dobro: quarenta e três bilhões de reais, com mais de dezesseis mil credores.
+
+23
+00:01:39,210 --> 00:01:41,819
+A diferença entre esses dois números é o truque.
+
+24
+00:01:42,419 --> 00:01:42,946
+Ato dois.
+
+25
+00:01:42,946 --> 00:01:43,531
+O segredo.
+
+26
+00:01:43,531 --> 00:01:46,633
+Todo truque de mágica depende de desviar o seu olhar.
+
+27
+00:01:46,633 --> 00:01:49,502
+E aqui o desvio aconteceu dentro de uma planilha.
+
+28
+00:01:50,102 --> 00:01:53,024
+O primeiro truque tem um nome estranho: risco sacado.
+
+29
+00:01:53,024 --> 00:01:55,230
+Funciona assim, num exemplo ilustrativo.
+
+30
+00:01:55,230 --> 00:01:59,586
+A Americanas compra cem reais de um fornecedor e combina pagar em noventa dias.
+
+31
+00:01:59,586 --> 00:02:01,902
+Só que o fornecedor quer o dinheiro agora.
+
+32
+00:02:01,902 --> 00:02:07,638
+Então um banco paga o fornecedor hoje, e a Americanas passa a dever esses cem reais ao banco, com juros.
+
+33
+00:02:08,237 --> 00:02:09,612
+Até aqui, nada de ilegal.
+
+34
+00:02:09,612 --> 00:02:11,151
+Muitas varejistas usam isso.
+
+35
+00:02:11,151 --> 00:02:13,240
+O problema é onde essa dívida aparece.
+
+36
+00:02:13,240 --> 00:02:17,802
+Se a empresa agora deve a um banco, com juros, isso parece muito com um empréstimo.
+
+37
+00:02:17,802 --> 00:02:24,728
+Mas no balanço da Americanas essa dívida continuava escrita na linha de fornecedores, como se fosse uma simples conta a pagar.
+
+38
+00:02:25,328 --> 00:02:26,885
+Parece só uma troca de lugar.
+
+39
+00:02:26,885 --> 00:02:28,227
+Mas faz toda a diferença.
+
+40
+00:02:28,227 --> 00:02:32,306
+Analistas e bancos medem o risco de uma empresa olhando a dívida financeira.
+
+41
+00:02:32,306 --> 00:02:38,049
+Ao esconder a dívida com bancos entre os fornecedores, a empresa parecia muito menos endividada do que era.
+
+42
+00:02:38,049 --> 00:02:40,572
+E os juros dessa dívida também sumiam da conta.
+
+43
+00:02:40,572 --> 00:02:47,173
+Segundo a própria Americanas, o risco sacado registrado de forma inadequada somava dezoito vírgula quatro bilhões de reais.
+
+44
+00:02:47,774 --> 00:02:49,788
+Mas esse ainda não é o truque maior.
+
+45
+00:02:49,788 --> 00:02:53,257
+O maior tem outra sigla: V P C, verba de propaganda cooperada.
+
+46
+00:02:53,257 --> 00:02:55,327
+É um dinheiro real e comum no varejo.
+
+47
+00:02:55,327 --> 00:03:00,979
+O fornecedor paga para a loja dar destaque ao produto dele, num encarte, numa vitrine, numa campanha.
+
+48
+00:03:01,579 --> 00:03:02,421
+Agora o truque.
+
+49
+00:03:02,421 --> 00:03:06,798
+Segundo a empresa, foram criados contratos de VPC que não existiam de verdade.
+
+50
+00:03:06,798 --> 00:03:09,324
+Era uma verba que nenhum fornecedor ia pagar.
+
+51
+00:03:09,324 --> 00:03:14,207
+Mas ela entrava na contabilidade, diminuía a conta de fornecedores e engordava o lucro.
+
+52
+00:03:14,207 --> 00:03:20,885
+Pela conta da Americanas, esses contratos artificiais inflaram o resultado em vinte e um vírgula sete bilhões de reais.
+
+53
+00:03:21,485 --> 00:03:35,629
+Some a isso três vírgula seis bilhões em juros que não foram contabilizados, e você chega ao valor total que a empresa anunciou em junho de dois mil e vinte e três: vinte e cinco vírgula três bilhões de reais de resultado que, na prática, não existia.
+
+54
+00:03:36,229 --> 00:03:38,505
+Repare na elegância sombria do esquema.
+
+55
+00:03:38,505 --> 00:03:41,539
+Os dois truques mexiam na mesma linha: fornecedores.
+
+56
+00:03:41,539 --> 00:03:44,456
+O risco sacado enfiava dívida de banco ali dentro.
+
+57
+00:03:44,456 --> 00:03:47,315
+O VPC falso tirava valor de lá, para virar lucro.
+
+58
+00:03:47,315 --> 00:03:50,758
+Quem olhasse só o resultado final via uma empresa saudável.
+
+59
+00:03:51,357 --> 00:03:53,690
+E por que alguém montaria um truque desses?
+
+60
+00:03:53,690 --> 00:03:57,052
+A Polícia Federal descreveu o objetivo como enganar o mercado.
+
+61
+00:03:57,052 --> 00:04:07,574
+A lógica, numa análise do canal, é direta: um lucro maior deixa a ação mais cara, a dívida menor deixa o crédito mais barato, e os executivos com ações e bônus ligados ao resultado ganham junto.
+
+62
+00:04:07,574 --> 00:04:11,859
+Enquanto o número do show continuasse de pé, todo mundo no palco saía ganhando.
+
+63
+00:04:12,459 --> 00:04:12,965
+Ato três.
+
+64
+00:04:12,965 --> 00:04:13,528
+A plateia.
+
+65
+00:04:13,528 --> 00:04:16,624
+Essa é a pergunta que todo mundo fez: como ninguém viu?
+
+66
+00:04:16,624 --> 00:04:19,608
+Auditores, bancos, conselho, analistas, investidores.
+
+67
+00:04:19,608 --> 00:04:21,803
+Tinha muita gente olhando para o palco.
+
+68
+00:04:22,403 --> 00:04:23,721
+Primeiro, a auditoria.
+
+69
+00:04:23,721 --> 00:04:27,077
+Uma auditoria independente não confere cada nota fiscal.
+
+70
+00:04:27,077 --> 00:04:33,430
+Ela trabalha por amostragem e confia em documentos, como cartas enviadas por bancos confirmando os saldos.
+
+71
+00:04:33,430 --> 00:04:41,820
+Na CPI da Americanas, em junho de dois mil e vinte e três, o atual presidente da empresa falou em números maquiados e em assinaturas falsas.
+
+72
+00:04:41,820 --> 00:04:46,674
+Se o documento que chega ao auditor já vem montado, a amostra confirma a mentira.
+
+73
+00:04:47,274 --> 00:04:49,169
+Segundo, a própria forma do truque.
+
+74
+00:04:49,169 --> 00:04:51,388
+Ele não aparecia como um buraco no caixa.
+
+75
+00:04:51,388 --> 00:04:56,313
+A empresa dizia, no próprio fato relevante de janeiro, que o efeito no caixa seria pequeno.
+
+76
+00:04:56,313 --> 00:04:58,153
+O dinheiro não sumiu de uma conta.
+
+77
+00:04:58,153 --> 00:05:02,591
+O que sumiu foi a verdade sobre quanto a empresa devia e quanto realmente lucrava.
+
+78
+00:05:03,191 --> 00:05:04,404
+Terceiro, a confiança.
+
+79
+00:05:04,404 --> 00:05:10,248
+Uma empresa quase centenária, com acionistas bilionários e auditada todo ano, ganha o benefício da dúvida.
+
+80
+00:05:10,248 --> 00:05:13,831
+Ninguém revisa o truque de um mágico que se apresenta há décadas.
+
+81
+00:05:13,831 --> 00:05:23,202
+E o relatório do comitê independente, em dois mil e vinte e quatro, apontou a participação da antiga diretoria, mas disse não ter identificado participação dos conselhos.
+
+82
+00:05:23,802 --> 00:05:26,821
+E é aqui que entra o personagem que quebrou o feitiço.
+
+83
+00:05:26,821 --> 00:05:31,517
+Sergio Rial assumiu como presidente no começo de janeiro de dois mil e vinte e três.
+
+84
+00:05:31,517 --> 00:05:37,443
+Em nove dias de gestão, ele e o novo diretor financeiro, André Covre, encontraram as tais inconsistências.
+
+85
+00:05:37,443 --> 00:05:42,362
+Na noite de onze de janeiro, a empresa publicou o fato relevante, e os dois renunciaram.
+
+86
+00:05:42,962 --> 00:05:43,614
+Ato quatro.
+
+87
+00:05:43,614 --> 00:05:44,620
+As luzes acendem.
+
+88
+00:05:44,620 --> 00:05:49,298
+E quando as luzes acendem num truque desse tamanho, tudo acontece muito rápido.
+
+89
+00:05:49,898 --> 00:05:59,810
+No dia seguinte ao anúncio, a ação desabou setenta e sete por cento, e a empresa perdeu cerca de oito vírgula quatro bilhões de reais em valor de mercado em um único pregão.
+
+90
+00:05:59,810 --> 00:06:06,055
+Sete dias depois, em dezenove de janeiro, pediu recuperação judicial, com quarenta e três bilhões em dívidas.
+
+91
+00:06:06,055 --> 00:06:07,946
+O pedido foi aceito no mesmo dia.
+
+92
+00:06:08,546 --> 00:06:11,291
+Mas teve um detalhe que mudou a história de vez.
+
+93
+00:06:11,291 --> 00:06:16,036
+Em junho de dois mil e vinte e quatro, a Polícia Federal fez a Operação Disclosure.
+
+94
+00:06:16,036 --> 00:06:24,098
+Segundo a investigação, ex-executivos venderam duzentos e oitenta e sete milhões de reais em ações da empresa antes de o rombo ser anunciado.
+
+95
+00:06:24,698 --> 00:06:33,652
+A operação teve mandados de prisão contra o ex-presidente Miguel Gutierrez e a ex-diretora Anna Saicali, e o bloqueio de mais de quinhentos milhões de reais em bens.
+
+96
+00:06:33,652 --> 00:06:38,590
+Gutierrez, que estava na Espanha, chegou a ser detido em Madri e foi solto no dia seguinte.
+
+97
+00:06:38,590 --> 00:06:42,389
+A investigação usou a delação de dois ex-diretores da área financeira.
+
+98
+00:06:42,389 --> 00:06:44,559
+As defesas negam participação na fraude.
+
+99
+00:06:45,159 --> 00:06:47,719
+Enquanto isso, a empresa tentava sobreviver.
+
+100
+00:06:47,719 --> 00:06:51,732
+Os credores aprovaram o plano em dezembro de dois mil e vinte e três.
+
+101
+00:06:51,732 --> 00:06:55,339
+A Justiça homologou em fevereiro de dois mil e vinte e quatro.
+
+102
+00:06:55,339 --> 00:07:02,726
+E, em julho, veio um aumento de capital de cerca de vinte e quatro vírgula cinco bilhões de reais, a um real e trinta por ação.
+
+103
+00:07:02,726 --> 00:07:05,460
+Quase metade veio dos acionistas de referência.
+
+104
+00:07:05,460 --> 00:07:08,833
+A outra metade, de credores que trocaram dívida por ações.
+
+105
+00:07:09,433 --> 00:07:13,222
+E chegamos a outubro de dois mil e vinte e seis, há três semanas.
+
+106
+00:07:13,222 --> 00:07:17,884
+No dia dezenove, a Justiça do Rio encerrou a recuperação judicial da Americanas.
+
+107
+00:07:17,884 --> 00:07:22,255
+Pelas nossas contas, mil trezentos e sessenta e nove dias depois do pedido.
+
+108
+00:07:22,855 --> 00:07:25,557
+Só que o fim da recuperação não é o fim do caso.
+
+109
+00:07:25,557 --> 00:07:34,454
+No mesmo mês, a Justiça Federal no Rio aceitou a denúncia do Ministério Público e tornou réus doze ex-executivos, entre eles o ex-presidente Miguel Gutierrez.
+
+110
+00:07:34,454 --> 00:07:38,789
+As acusações incluem manipulação de mercado e uso de informação privilegiada.
+
+111
+00:07:38,789 --> 00:07:42,055
+Ser réu não é ser condenado, e as defesas negam os crimes.
+
+112
+00:07:42,655 --> 00:07:44,572
+E quem pagou o ingresso desse show?
+
+113
+00:07:44,572 --> 00:07:48,790
+Quem tinha a ação viu o papel perder mais de três quartos do valor em um dia.
+
+114
+00:07:48,790 --> 00:07:52,734
+Mais de dezesseis mil credores entraram na fila da recuperação judicial.
+
+115
+00:07:52,734 --> 00:07:56,514
+Fornecedores, bancos e investidores de títulos tiveram de renegociar.
+
+116
+00:07:56,514 --> 00:08:01,663
+E parte dos credores aceitou virar sócia de uma empresa que tinha acabado de mentir para eles.
+
+117
+00:08:02,263 --> 00:08:05,282
+Então, como se escondem vinte e cinco bilhões de reais?
+
+118
+00:08:05,282 --> 00:08:06,215
+Não com um cofre.
+
+119
+00:08:06,215 --> 00:08:07,588
+Com uma linha do balanço.
+
+120
+00:08:07,588 --> 00:08:10,058
+Dívida de banco que vira conta de fornecedor.
+
+121
+00:08:10,058 --> 00:08:12,199
+Verba que nunca ia chegar e vira lucro.
+
+122
+00:08:12,199 --> 00:08:14,615
+E uma plateia que confiava demais no mágico.
+
+123
+00:08:15,215 --> 00:08:18,368
+A lição para quem acompanha empresas é simples e incômoda.
+
+124
+00:08:18,368 --> 00:08:19,945
+Lucro é uma opinião contábil.
+
+125
+00:08:19,945 --> 00:08:21,304
+Caixa e dívida são fatos.
+
+126
+00:08:21,304 --> 00:08:27,447
+Quando o lucro sobe e a dívida parece pequena demais para o tamanho do negócio, vale perguntar onde está o resto.
+
+127
+00:08:27,447 --> 00:08:29,404
+Isso não é conselho de investimento.
+
+128
+00:08:29,404 --> 00:08:32,068
+É só o jeito de olhar o palco sem cair no truque.
+
+129
+00:08:32,668 --> 00:08:35,836
+No próximo episódio, outro rombo, mas desta vez num banco.
+
+130
+00:08:35,836 --> 00:08:46,706
+Como o Banco Master conseguia pagar tão acima do mercado nos seus investimentos, o que a Polícia Federal diz que encontrou, e quem paga a conta quando um banco quebra: o Fundo Garantidor de Créditos.
