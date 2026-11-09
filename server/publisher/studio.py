@@ -221,6 +221,9 @@ class Studio:
                   const norm = s => (s||'').toLowerCase().replace(/\\s+/g,' ').trim();
                   for (const row of document.querySelectorAll('ytcp-video-row')) {
                     const t = row.querySelector('#video-title');
+                    // rascunho = upload que não terminou (ex.: falha no meio): não conta como publicado
+                    const vis = norm((row.querySelector('.tablecell-visibility') || {}).innerText);
+                    if (vis.startsWith('rascunho') || vis.startsWith('draft')) continue;
                     if (t && norm(t.textContent).startsWith(needle)) {
                       const a = row.querySelector('a#thumbnail-anchor, a[href*="/video/"]');
                       const m = a && (a.href||'').match(/\\/video\\/([\\w-]{11})/);
@@ -433,10 +436,14 @@ class Studio:
             p.keyboard.insert_text(hhmm)
             p.keyboard.press("Enter")
         p.wait_for_timeout(800)
+        # 09/11: a hora fica no VALOR do campo (não aparece no innerText do bloco); a data aparece como texto
         shown = norm(self.js("() => (document.querySelector('#second-container')||{}).innerText || ''"))
-        if hhmm not in shown:
+        tval = norm(self.js(
+            "() => { const i = document.querySelector('#time-of-day-container input'); return i ? i.value : ''; }") or "")
+        day_ok = re.search(rf"\b{when.day}\b", shown) is not None
+        if not day_ok or (hhmm not in shown and tval != hhmm):
             self.shot("agenda")
-            raise StudioError(f"agenda não conferiu (mostrando: {shown[:120]!r})")
+            raise StudioError(f"agenda não conferiu (mostrando: {shown[:120]!r}, hora no campo: {tval!r})")
 
     def close_popups(self):
         for sel in ("ytcp-video-share-dialog #close-button", "ytcp-uploads-still-processing-dialog #close-button",
