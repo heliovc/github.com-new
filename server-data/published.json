@@ -30,11 +30,21 @@
   "publish_at": "2026-11-07T22:00:00-03:00"
  },
  "cosmic-rank07-short": {
-  "attempts": 1,
+  "attempts": 2,
   "screenshot": "20261109-125752-erro-cosmic-rank07-short.png",
-  "at": "2026-11-09T12:57:56.632664-03:00",
-  "status": "error",
-  "error": "Page.goto: Timeout 60000ms exceeded.\nCall log:\n  - navigating to \"https://www.youtube.com/channel_switcher\", waiting until \"domcontentloaded\"\n"
+  "at": "2026-11-09T13:30:02.547197-03:00",
+  "status": "published",
+  "error": null,
+  "url": "https://youtu.be/ThPT6GQV2a4",
+  "by": "robo",
+  "visibility": "schedule",
+  "when": "2026-11-10T13:00:00-03:00",
+  "channel_id": "UCsYYjUbmq4n3lAKgw2F2IJw",
+  "title": "Top 5 Closest Stars to the Sun (#1 Is 40 Trillion km Away) #shorts",
+  "kind": "short",
+  "publish_at": "2026-11-10T13:00:00-03:00",
+  "related_key": "cosmic-ep08-long",
+  "pinned_comment": "Which star should we put next? Full video: What If the Moon Crashed Into Earth? You'd Have 4 Days"
  },
  "ptd-ep08-long": {
   "attempts": 1,
@@ -100,17 +110,68 @@
   "pinned_comment": "If you had 4 days before the Moon hit, what would you do first?"
  },
  "cosmic-scale01-short": {
-  "attempts": 1,
-  "status": "error",
-  "error": "diálogo de upload não abriu",
+  "attempts": 2,
+  "status": "published",
+  "error": null,
   "screenshot": "20261109-131055-erro-cosmic-scale01-short.png",
-  "at": "2026-11-09T13:10:57.879532-03:00"
+  "at": "2026-11-09T13:33:34.113015-03:00",
+  "url": "https://youtu.be/bJOczwhAes4",
+  "by": "robo",
+  "visibility": "schedule",
+  "when": "2026-11-10T19:00:00-03:00",
+  "channel_id": "UCsYYjUbmq4n3lAKgw2F2IJw",
+  "title": "Every Planet Fits Between Earth and the Moon (But Only Sometimes) #shorts",
+  "kind": "short",
+  "publish_at": "2026-11-10T19:00:00-03:00",
+  "related_key": "cosmic-ep08-long",
+  "pinned_comment": "Which planet surprised you most? Full video: What If the Moon Crashed Into Earth? You'd Have 4 Days"
  },
  "cosmic-ep08-short": {
-  "attempts": 1,
-  "status": "error",
-  "error": "diálogo de upload não abriu",
+  "attempts": 2,
+  "status": "published",
+  "error": null,
   "screenshot": "20261109-131433-erro-cosmic-ep08-short.png",
-  "at": "2026-11-09T13:14:35.813951-03:00"
+  "at": "2026-11-09T13:37:25.433485-03:00",
+  "url": "https://youtu.be/jzzQGH0l9OU",
+  "by": "robo",
+  "visibility": "schedule",
+  "when": "2026-11-10T21:00:00-03:00",
+  "channel_id": "UCsYYjUbmq4n3lAKgw2F2IJw",
+  "title": "If the Moon Fell, You'd Have 4 Days. The Last 10 Minutes Look Like This #shorts",
+  "kind": "short",
+  "publish_at": "2026-11-10T21:00:00-03:00",
+  "related_key": "cosmic-ep08-long",
+  "pinned_comment": "Would you rather see the fast ending or Earth with rings? Full video: What If the Moon Crashed Into Earth? You'd Have 4 Days"
+ },
+ "lab-ep05-long": {
+  "attempts": 1,
+  "status": "published",
+  "url": "https://youtu.be/D-fNvDYD_lI",
+  "by": "robo",
+  "visibility": "schedule",
+  "when": "2026-11-09T19:00:00-03:00",
+  "at": "2026-11-09T13:21:08.324885-03:00",
+  "error": null,
+  "channel_id": "UCXGqR8k1RMbfYdVleIuJKzA",
+  "title": "Git in 10 Minutes: Save Every Version of Your Work (Beginner Tutorial)",
+  "kind": "long",
+  "publish_at": "2026-11-09T19:00:00-03:00",
+  "pinned_comment": "What's the worst file you ever lost before you knew about Git?"
+ },
+ "lab-ep05-short": {
+  "attempts": 1,
+  "status": "published",
+  "url": "https://youtu.be/unPxL0NSEr0",
+  "by": "robo",
+  "visibility": "schedule",
+  "when": "2026-11-09T20:30:00-03:00",
+  "at": "2026-11-09T13:24:45.995506-03:00",
+  "error": null,
+  "channel_id": "UCXGqR8k1RMbfYdVleIuJKzA",
+  "title": "Broke Your File? One Git Command Brings It Back #shorts",
+  "kind": "short",
+  "publish_at": "2026-11-09T20:30:00-03:00",
+  "related_key": "lab-ep05-long",
+  "pinned_comment": "Which Git command confused you the most? Full tutorial: Git in 10 Minutes: Save Every Version of Your Work"
  }
 }
