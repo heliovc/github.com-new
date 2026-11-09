@@ -7,6 +7,7 @@ Comandos:
   check     testa login + troca de canal em todos os canais (screenshots em LOG_DIR)
   plan      mostra o que seria feito agora, sem abrir o navegador
   test-upload --key K   publica um item como PRIVADO (teste do fluxo)
+  test-post related|comment ...   roda o vínculo Short→longo ou o comentário fixado num vídeo (teste)
 
 Config por variáveis de ambiente (arquivo /etc/canal-publisher.env):
   REPO_DIR, PROFILE_DIR, STATE_DIR, LOG_DIR, GRACE_MINUTES, NOTIFY_URL, GIT_PUSH (1/0)
@@ -18,12 +19,13 @@ import fcntl
 import json
 import logging
 import os
+import re
 import subprocess
 import sys
 import tempfile
 import time
 import urllib.request
-from datetime import timedelta
+from datetime import datetime, timedelta
 from pathlib import Path
 
 HERE = Path(__file__).resolve().parent
@@ -177,6 +179,76 @@ def joined_video(item) -> tuple[Path, bool]:
     return Path(tmp), True
 
 
+# ------------------------------------------------- tarefas pós-publicação
+POST_MAX_AGE = timedelta(days=7)   # vínculo/comentário só para vídeos recentes
+PUBLIC_MARGIN = timedelta(minutes=5)
+
+
+def video_id(url: str | None) -> str | None:
+    m = re.search(r"(?:youtu\.be/|/shorts/|[?&]v=|/video/)([\w-]{11})", url or "")
+    return m.group(1) if m else None
+
+
+def remember(state: dict, it) -> None:
+    """Copia para o estado o que as tarefas pós-publicação precisam: a pasta do episódio
+    some do repositório no dia seguinte, mas o vínculo/comentário pode ficar para depois."""
+    rec = state.get(it.key)
+    if not rec or rec.get("status") != "published":
+        return
+    rec["channel_id"] = it.channel_id
+    rec["title"] = it.clean_title()
+    rec["kind"] = it.kind
+    if it.publish_at:
+        rec["publish_at"] = it.publish_at.isoformat()
+    else:
+        rec.setdefault("publish_at", rec.get("at"))
+    if it.related_key:
+        rec["related_key"] = it.related_key
+    if it.pinned_comment:
+        rec["pinned_comment"] = it.pinned_comment
+
+
+def _dt(value: str | None) -> datetime | None:
+    try:
+        return datetime.fromisoformat(value) if value else None
+    except ValueError:
+        return None
+
+
+def is_public(rec: dict, now) -> bool:
+    t = _dt(rec.get("publish_at"))
+    return t is None or now >= t + PUBLIC_MARGIN
+
+
+def post_tasks(state: dict, now) -> list[tuple[str, str]]:
+    """(tipo, key) para fazer agora: 'related' (Short → longo) e 'comment' (comentário fixado)."""
+    out = []
+    for key, rec in state.items():
+        if rec.get("status") != "published" or not video_id(rec.get("url")):
+            continue
+        at = _dt(rec.get("publish_at")) or _dt(rec.get("at"))
+        if at and now - at > POST_MAX_AGE:
+            continue
+        rk = rec.get("related_key")
+        if rk and not rec.get("related_done") and rec.get("related_attempts", 0) < 3:
+            target = state.get(rk) or {}
+            if target.get("status") == "published" and video_id(target.get("url")) and is_public(target, now):
+                out.append(("related", key))
+        if rec.get("pinned_comment") and not rec.get("comment_done") and rec.get("comment_attempts", 0) < 3 \
+                and is_public(rec, now):
+            out.append(("comment", key))
+    return out
+
+
+def run_post_task(st, state: dict, kind: str, key: str) -> str:
+    rec = state[key]
+    st.switch_channel(rec["channel_id"], channel_name(rec["channel_id"]))
+    if kind == "related":
+        target = state[rec["related_key"]]
+        return st.set_related_video(video_id(rec["url"]), video_id(target["url"]), target.get("title", ""))
+    return st.post_pinned_comment(video_id(rec["url"]), rec["pinned_comment"], channel_name(rec["channel_id"]))
+
+
 # ----------------------------------------------------------------- comandos
 def cmd_plan(_args):
     git_pull()
@@ -187,6 +259,8 @@ def cmd_plan(_args):
     for it in items:
         d = mf.decide(it, state, now, GRACE)
         print(f"{d.action:7} {it.key:28} {d.visibility:8} {d.when or ''} — {d.reason}")
+    for kind, key in post_tasks(state, now):
+        print(f"{kind:7} {key}")
 
 
 def cmd_run(args):
@@ -208,8 +282,10 @@ def cmd_run(args):
                 log.error("%s: arquivos faltando %s", it.key, miss)
                 continue
             todo.append((it, d))
-    summary = {"pending": len(todo), "errors": errors}
-    if not todo:
+        remember(state, it)
+    later = post_tasks(state, now)
+    summary = {"pending": len(todo), "post_tasks": len(later), "errors": errors}
+    if not todo and not later:
         save_state(state)
         write_heartbeat(summary)
         if heartbeat_due():
@@ -242,6 +318,7 @@ def cmd_run(args):
                         video.unlink(missing_ok=True)
                 rec.update(status="published", url=url, by="robo", visibility=d.visibility,
                            when=d.when.isoformat() if d.when else None, at=mf.now_sp().isoformat(), error=None)
+                remember(state, it)
                 published.append(f"{it.key}: {url}")
                 log.info("PUBLICADO %s → %s", it.key, url)
             except LoginNeeded:
@@ -253,6 +330,28 @@ def cmd_run(args):
                 st.close_popups()
                 if rec["attempts"] >= 3:
                     notify(f"{it.key}: 3 falhas seguidas — {str(e)[:150]}")
+            finally:
+                save_state(state)
+        # vínculo do Short ao longo e comentário fixado: só quando o vídeo já está público
+        for kind, key in post_tasks(state, mf.now_sp()):
+            rec = state[key]
+            field = "related" if kind == "related" else "comment"
+            rec[f"{field}_attempts"] = rec.get(f"{field}_attempts", 0) + 1
+            try:
+                result = run_post_task(st, state, kind, key)
+                rec[f"{field}_done"] = mf.now_sp().isoformat()
+                rec.pop(f"{field}_error", None)
+                published.append(f"{key}: {field} {result}")
+                log.info("%s %s: %s", field.upper(), key, result)
+            except LoginNeeded:
+                raise
+            except Exception as e:  # noqa: BLE001
+                shot = st.shot(f"erro-{field}-{key}")
+                rec[f"{field}_error"] = f"{str(e)[:250]} ({shot.name})"
+                log.exception("falha (%s) em %s", field, key)
+                st.close_popups()
+                if rec[f"{field}_attempts"] >= 3:
+                    notify(f"{key}: {field} falhou 3 vezes — {str(e)[:150]}")
             finally:
                 save_state(state)
     except LoginNeeded as e:
@@ -344,6 +443,24 @@ def cmd_test_upload(args):
         pw.stop()
 
 
+def cmd_test_post(args):
+    """Roda uma tarefa pós-publicação avulsa (sem mexer no estado), para testar no Studio real."""
+    from studio import Studio, open_browser
+
+    pw, ctx = open_browser(PROFILE)
+    try:
+        st = Studio(ctx, LOG_DIR)
+        st.ensure_logged_in()
+        st.switch_channel(args.channel, channel_name(args.channel))
+        if args.kind == "related":
+            print("RESULTADO:", st.set_related_video(args.video, args.target, args.title or ""))
+        else:
+            print("RESULTADO:", st.post_pinned_comment(args.video, args.text, channel_name(args.channel)))
+    finally:
+        ctx.close()
+        pw.stop()
+
+
 def main():
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     sub = ap.add_subparsers(dest="cmd", required=True)
@@ -354,11 +471,18 @@ def main():
     sub.add_parser("plan")
     t = sub.add_parser("test-upload")
     t.add_argument("--key", required=True)
+    tp = sub.add_parser("test-post")
+    tp.add_argument("kind", choices=["related", "comment"])
+    tp.add_argument("--channel", required=True)
+    tp.add_argument("--video", required=True, help="ID do Short (related) ou do vídeo (comment)")
+    tp.add_argument("--target", help="related: ID do longo")
+    tp.add_argument("--title", help="related: título do longo")
+    tp.add_argument("--text", help="comment: texto do comentário")
     args = ap.parse_args()
     setup_logging()
     _lock = single_instance(0 if args.cmd in ("run", "plan") else 45)
     {"run": cmd_run, "metrics": cmd_metrics, "check": cmd_check, "plan": cmd_plan,
-     "test-upload": cmd_test_upload}[args.cmd](args)
+     "test-upload": cmd_test_upload, "test-post": cmd_test_post}[args.cmd](args)
 
 
 if __name__ == "__main__":

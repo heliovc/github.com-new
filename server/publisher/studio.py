@@ -129,13 +129,32 @@ class Studio:
             raise LoginNeeded("Google pediu login — rode login.sh e entre na conta de novo")
 
     def active_channel_id(self) -> str | None:
-        self.page.goto("https://studio.youtube.com/", wait_until="domcontentloaded")
+        """Canal ativo no Studio. Com o droplet carregado o redirecionamento para /channel/UC… pode
+        passar de 20 s (09/11: Painel já mostrava o canal certo e a URL ainda não tinha o ID), então
+        espera até 60 s e, se a URL não trouxer o ID, lê dos links do menu lateral."""
         try:
-            self.page.wait_for_url(re.compile(r"/channel/UC"), timeout=20_000)
+            self.page.goto("https://studio.youtube.com/", wait_until="domcontentloaded")
         except PWTimeout:
-            return None
-        m = re.search(r"/channel/(UC[\w-]+)", self.page.url)
-        return m.group(1) if m else None
+            log.warning("Studio demorou para abrir; tentando ler o canal assim mesmo")
+        end = time.time() + 60
+        while time.time() < end:
+            m = re.search(r"/channel/(UC[\w-]+)", self.page.url)
+            if m:
+                return m.group(1)
+            try:
+                cid = self.js("""() => {
+                  for (const a of document.querySelectorAll('ytcp-navigation-drawer a[href*="/channel/UC"], a[href*="studio.youtube.com/channel/UC"]')) {
+                    const m = (a.getAttribute('href') || '').match(/\\/channel\\/(UC[\\w-]+)/);
+                    if (m) return m[1];
+                  }
+                  return null;
+                }""")
+            except Exception:  # noqa: BLE001  (página navegando)
+                cid = None
+            if cid:
+                return cid
+            self.page.wait_for_timeout(2000)
+        return None
 
     def _fresh_tab(self):
         """O Studio guarda o canal ativo na aba: na mesma aba ele continua no canal antigo
@@ -428,6 +447,159 @@ class Studio:
                     self.page.wait_for_timeout(800)
             except Exception:  # noqa: BLE001
                 pass
+
+    # ------------------------------------------------- pós-publicação: vínculo
+    def set_related_video(self, short_id: str, long_id: str, long_title: str) -> str:
+        """Campo "Vídeo relacionado" do Short → o longo (só aceita vídeo já público do canal).
+        Caminho visto no Studio em 09/11: Detalhes → #linked-video-editor-link → ytcp-video-pick-dialog
+        (cartões com miniatura i.ytimg.com/vi/<id>/ e busca #search-yours) → Salvar."""
+        p = self.page
+        p.goto(f"https://studio.youtube.com/video/{short_id}/edit", wait_until="domcontentloaded")
+        field = p.locator("#linked-video-editor-link")
+        field.wait_for(state="attached", timeout=90_000)
+        p.wait_for_timeout(3000)
+        want = norm(long_title)[:30]
+        current = norm(field.inner_text())
+        if want and want in current:
+            return "já estava vinculado"
+        field.scroll_into_view_if_needed()
+        field.locator("ytcp-dropdown-trigger").first.click()
+        dlg = p.locator("ytcp-video-pick-dialog")
+        dlg.wait_for(state="visible", timeout=30_000)
+        p.wait_for_timeout(2500)
+        if long_title:
+            box = dlg.locator("#search-yours")
+            if box.count():
+                box.first.click()
+                p.keyboard.insert_text(long_title[:60])
+                p.wait_for_timeout(4000)
+        clicked = self.js(
+            """([vid, want]) => {
+              const norm = s => (s || '').toLowerCase().replace(/\\s+/g, ' ').trim();
+              const d = document.querySelector('ytcp-video-pick-dialog');
+              if (!d) return 'sem-dialogo';
+              const cards = [...d.querySelectorAll('ytcp-entity-card, ytcp-video-pick-dialog-contents [role=button], ytcp-video-pick-dialog-contents [tabindex]')];
+              const visible = cards.filter(c => c.offsetParent !== null);
+              let hit = visible.find(c => [...c.querySelectorAll('img')].some(i => (i.src || '').includes('/vi/' + vid + '/')));
+              if (!hit && want) hit = visible.find(c => norm(c.innerText).startsWith(want));
+              if (!hit) {  // cartão genérico: sobe a partir da miniatura
+                const img = [...d.querySelectorAll('img')].find(i => (i.src || '').includes('/vi/' + vid + '/'));
+                if (img) hit = img.closest('[role=button], [tabindex], ytcp-entity-card') || img;
+              }
+              if (!hit) return 'nao-achei';
+              hit.scrollIntoView({block: 'center'});
+              hit.click();
+              return 'ok';
+            }""",
+            [long_id, want],
+        )
+        if clicked != "ok":
+            self.shot("relacionado-dialogo")
+            p.keyboard.press("Escape")
+            raise StudioError(f"vídeo {long_id} não apareceu na lista do 'Vídeo relacionado' ({clicked})")
+        p.wait_for_timeout(2500)
+        if want and want not in norm(field.inner_text()):
+            self.shot("relacionado-nao-marcou")
+            raise StudioError("cliquei no vídeo mas o campo não mostrou o título")
+        save = p.locator("ytcp-button#save, #save").first
+        save.click()
+        p.wait_for_timeout(5000)
+        # confere recarregando a página
+        p.goto(f"https://studio.youtube.com/video/{short_id}/edit", wait_until="domcontentloaded")
+        p.locator("#linked-video-editor-link").wait_for(state="attached", timeout=90_000)
+        p.wait_for_timeout(3000)
+        if want and want not in norm(p.locator("#linked-video-editor-link").inner_text()):
+            self.shot("relacionado-nao-salvou")
+            raise StudioError("o vínculo não ficou salvo")
+        return f"vinculado a {long_id}"
+
+    # ---------------------------------------------- pós-publicação: comentário
+    def post_pinned_comment(self, video_id: str, text: str, channel_name: str) -> str:
+        """Posta o comentário como o canal (o ativo no youtube.com) e fixa. Só funciona com o vídeo
+        público. Se o comentário não sair como dono do canal, apaga e falha (não deixa comentário
+        de outra identidade)."""
+        p = self.page
+        p.goto(f"https://www.youtube.com/watch?v={video_id}", wait_until="domcontentloaded")
+        p.wait_for_timeout(6000)
+        self.js("() => { const v = document.querySelector('video'); if (v) v.pause(); }")
+        for _ in range(8):  # comentários carregam sob demanda
+            p.mouse.wheel(0, 900)
+            p.wait_for_timeout(1500)
+            if p.locator("ytd-comments #simplebox-placeholder").count():
+                break
+        thread = self._find_comment(text)
+        if thread is None:
+            ph = p.locator("ytd-comments #simplebox-placeholder").first
+            ph.wait_for(state="visible", timeout=30_000)
+            ph.scroll_into_view_if_needed()
+            ph.click()
+            box = p.locator("ytd-comments #contenteditable-root").first
+            box.wait_for(state="visible", timeout=15_000)
+            box.click()
+            p.keyboard.insert_text(text)
+            p.wait_for_timeout(800)
+            p.locator("ytd-comments #submit-button").first.click()
+            p.wait_for_timeout(5000)
+            thread = self._find_comment(text)
+            if thread is None:
+                self.shot("comentario-nao-apareceu")
+                raise StudioError("o comentário não apareceu depois de enviar")
+        if not thread.locator("ytd-author-comment-badge-renderer, #author-comment-badge ytd-author-comment-badge-renderer").count():
+            self._delete_comment(thread)
+            self.shot("comentario-identidade")
+            raise StudioError(f"comentário saiu com outra identidade (não {channel_name}); apaguei")
+        if self._is_pinned(thread):
+            return "já estava fixado"
+        thread.locator("#action-menu button, #action-menu yt-icon-button").first.click()
+        p.wait_for_timeout(1500)
+        # menu visto em 09/11: "Fixar no topo" / "Editar" / "Excluir"
+        if not self.click_text(["Fixar no topo", "Fixar", "Pin"], timeout=8):
+            self.shot("comentario-menu")
+            raise StudioError("opção 'Fixar' não apareceu no menu do comentário")
+        p.wait_for_timeout(1500)
+        for sel in ("yt-confirm-dialog-renderer #confirm-button", "#confirm-button"):
+            if p.locator(sel).count() and p.locator(sel).first.is_visible():
+                p.locator(sel).first.click()
+                break
+        p.wait_for_timeout(4000)
+        thread = self._find_comment(text)
+        if thread is None or not self._is_pinned(thread):
+            self.shot("comentario-nao-fixou")
+            raise StudioError("comentário postado mas não ficou fixado")
+        return "comentário fixado"
+
+    @staticmethod
+    def _is_pinned(thread) -> bool:
+        # 09/11: o selo é só texto "Fixado por @handle" acima do autor (sem elemento próprio)
+        try:
+            txt = norm(thread.inner_text())
+        except Exception:  # noqa: BLE001
+            return False
+        return "fixado por" in txt or "pinned by" in txt
+
+    def _find_comment(self, text: str):
+        want = norm(text)[:60]
+        threads = self.page.locator("ytd-comment-thread-renderer")
+        for i in range(min(threads.count(), 20)):
+            t = threads.nth(i)
+            try:
+                body = norm(t.locator("#content-text").first.inner_text())
+            except Exception:  # noqa: BLE001
+                continue
+            if body.startswith(want):
+                return t
+        return None
+
+    def _delete_comment(self, thread):
+        try:
+            thread.locator("#action-menu button, #action-menu yt-icon-button").first.click()
+            self.page.wait_for_timeout(1200)
+            if self.click_text(["Excluir", "Delete"], timeout=6):
+                self.page.wait_for_timeout(1200)
+                self.page.locator("#confirm-button").first.click()
+                self.page.wait_for_timeout(2000)
+        except Exception as e:  # noqa: BLE001
+            log.warning("não consegui apagar o comentário: %s", e)
 
     # -------------------------------------------------------------- métricas
     EXPLORE = ("https://studio.youtube.com/channel/{cid}/analytics/tab-overview/period-default/explore?"

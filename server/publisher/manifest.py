@@ -20,7 +20,9 @@ Cada pasta de episódio no repositório pode ter um publish.json. Formato (v1):
       "if_late": "public_now",            # public_now | skip   (se publish_at já passou)
       "made_for_kids": false,
       "altered_content": true,
-      "done_url": null                    # se a rotina já publicou por outro caminho, preencha e o robô pula
+      "done_url": null,                   # se a rotina já publicou por outro caminho, preencha e o robô pula
+      "related_key": "cosmic-ep08-long",  # só Shorts: key do longo para o campo "Vídeo relacionado"
+      "pinned_comment": "Which star ..."  # opcional: comentário fixado (postado quando o vídeo ficar público)
     }
   ]
 }
@@ -61,6 +63,8 @@ class Item:
     made_for_kids: bool = False
     altered_content: bool = True
     done_url: str | None = None
+    related_key: str | None = None
+    pinned_comment: str | None = None
     created_at: datetime | None = None
     manifest_path: Path | None = None
 
@@ -144,6 +148,8 @@ def load_manifest(path: Path) -> list[Item]:
             made_for_kids=bool(raw.get("made_for_kids", False)),
             altered_content=bool(raw.get("altered_content", True)),
             done_url=raw.get("done_url"), created_at=created, manifest_path=path,
+            related_key=raw.get("related_key") or None,
+            pinned_comment=(raw.get("pinned_comment") or "").strip() or None,
         ))
     return items
 
