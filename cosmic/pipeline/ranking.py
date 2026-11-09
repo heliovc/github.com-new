@@ -11,6 +11,7 @@ THEME.hook == "streaks": gancho com rastros de velocidade em vez da estrela giga
 vis.type == "horizons" / THEME.hook/outro == "horizons": horizontes de eventos em escala fixa contra o Sistema Solar e a Voyager 1 (rank05).
 vis.type == "thermo" / THEME.hook == "thermo": termômetro vertical 0–6.000 °C com marcas de referência + planeta brilhando na cor da temperatura (rank04).
 THEME.hook == "moons": silhueta "?" do nº 1 dentro do contorno de Mercúrio + as 5 luas orbitando (rank03).
+vis.type == "daylight" / THEME.hook/outro == "daylight": planeta com dia/noite e Sol girando em volta (1 volta = 1 dia solar) + contador de dias terrestres + régua linear 0–180 dias com os mundos revelados (rank06).
 Tudo desenhado por código; narração Kokoro (VOICE, padrão af_heart); legenda grande queimada.
 """
 import sys, os, re, math, json, subprocess, importlib.util, random
@@ -309,6 +310,85 @@ def horizons_vis(img, it, th, t, dur):
         for i, l in enumerate(wrap(it["vis"]["note"], F(40, "ExtraBold"), W - 160)):
             text(img, (W / 2, 1300 + i * 50 - 40), l, 40, (235, 225, 255), w="ExtraBold", a=ease((t - 1.8) / 0.5))
 
+
+# ---------------- rank06: "daylight" (length of a solar day) ----------------
+_tex = {}
+def world_tex(name, r, col):
+    key = (name, int(r))
+    if key not in _tex:
+        r = int(r); size = 2 * r + 4
+        yy, xx = np.mgrid[0:size, 0:size].astype(np.float32)
+        nx, ny = (xx - size / 2) / r, (yy - size / 2) / r; rr = nx ** 2 + ny ** 2
+        rng = np.random.default_rng(sum(map(ord, name)))
+        def noise(n, blur):
+            im = Image.fromarray((rng.random((n, n)) * 255).astype(np.uint8)).resize((size, size), Image.BICUBIC).filter(ImageFilter.GaussianBlur(blur))
+            return np.asarray(im, np.float32) / 255 - 0.5
+        base = np.zeros((size, size, 3), np.float32); base[:] = col
+        if name == "Venus":   # cloud bands
+            band = np.sin(ny * 9 + noise(8, 3) * 5) * 0.12
+            base *= (1 + band)[..., None]
+        elif name == "Iapetus":  # two-tone: dark leading half
+            dark = (nx + noise(10, 4) * 0.6) < -0.1
+            base[dark] = (52, 40, 30)
+        else:  # cratered rock / ice
+            n2 = noise(24, 1.5) * 0.35 + noise(8, 4) * 0.25
+            base *= (1 + n2)[..., None]
+            for _ in range(int(r / 6)):
+                cx, cy, cr = rng.uniform(-0.8, 0.8), rng.uniform(-0.8, 0.8), rng.uniform(0.03, 0.12)
+                m = ((nx - cx) ** 2 + (ny - cy) ** 2) < cr ** 2; base[m] *= 0.82
+        nz = np.sqrt(np.clip(1 - rr, 0, 1))
+        _tex[key] = (np.clip(base, 0, 255), nx, ny, nz, rr <= 1)
+    return _tex[key]
+
+def day_planet(img, name, cx, cy, r, col, ang, a=1.0):
+    """planet lit by a Sun at angle ang (radians, screen plane, slightly from the viewer) -> day/night terminator"""
+    base, nx, ny, nz, inside = world_tex(name, r, col)
+    lx, ly, lz = math.cos(ang), math.sin(ang), 0.25; ln = math.sqrt(lx * lx + ly * ly + lz * lz)
+    sh = np.clip((nx * lx + ny * ly + nz * lz) / ln, 0, 1)
+    sh = np.clip(sh * 1.6, 0, 1) ** 0.7 * 0.94 + 0.06
+    rgb = base * sh[..., None]
+    al = np.where(inside, 255 * a, 0)
+    spr = Image.fromarray(np.dstack([rgb, al]).astype(np.uint8), "RGBA")
+    img.alpha_composite(spr, (int(cx - spr.width / 2), int(cy - spr.height / 2)))
+
+DL_CX, DL_CY, DL_R = W / 2, 760, 230
+DL_X0, DL_X1, DL_Y, DL_MAX = 110, W - 110, 1215, 180.0
+
+def day_ruler(img, th, cur=None, prog=1.0, a=1.0):
+    d = ImageDraw.Draw(img); acc = tuple(th["accent"])
+    d.line([(DL_X0, DL_Y), (DL_X1, DL_Y)], fill=(110, 118, 130), width=4)
+    for k in range(0, 181, 30):
+        x = lerp(DL_X0, DL_X1, k / DL_MAX); d.line([(x, DL_Y - 10), (x, DL_Y + 10)], fill=(140, 148, 160), width=3)
+        d.text((x, DL_Y + 34), f"{k}", font=F(26, "Bold"), fill=(150, 158, 170), anchor="mm")
+    d.text((DL_X1, DL_Y - 34), "Earth days", font=F(26, "Bold"), fill=(150, 158, 170), anchor="rm")
+    for j, o in enumerate(sorted(ALL_ITEMS, key=lambda o: o["vis"]["days"])):
+        if cur is not None and o["rank"] < cur["rank"]: continue
+        v = o["vis"]; days = v["days"] * (prog if o is cur else 1)
+        x = lerp(DL_X0, DL_X1, days / DL_MAX); c = tuple(v["col"]) if o is cur else (150, 158, 170)
+        d.rounded_rectangle([DL_X0, DL_Y - 7, x, DL_Y + 7], 7, fill=c if o is cur else None)
+        d.ellipse([x - 13, DL_Y - 13, x + 13, DL_Y + 13], fill=c, outline=(20, 22, 26), width=3)
+        if o is not cur: d.text((x, DL_Y - 34 - 28 * (j % 2)), o["short"], font=F(22, "Bold"), fill=(170, 176, 188), anchor="mm")
+
+def sun_around(img, ang, rad, a=1.0):
+    sx, sy = DL_CX + rad * math.cos(ang), DL_CY + rad * math.sin(ang)
+    R.paste_c(img, R.sun_sprite(16), sx, sy, a)
+    return sx, sy
+
+def daylight_vis(img, it, th, t, dur):
+    v = it["vis"]; acc = tuple(th["accent"])
+    p = easeio((t - 0.5) / max(1.5, dur * 0.7))          # one full Sun loop = one solar day, over the segment
+    ang = -math.pi / 2 + p * 2 * math.pi
+    d = ImageDraw.Draw(img); orb = DL_R + 95
+    for k in range(0, 360, 8): d.arc([DL_CX - orb, DL_CY - orb, DL_CX + orb, DL_CY + orb], k, k + 4, fill=(90, 96, 110), width=2)
+    d.arc([DL_CX - orb, DL_CY - orb, DL_CX + orb, DL_CY + orb], -90, -90 + 360 * p, fill=acc, width=6)
+    sun_around(img, ang, orb)
+    day_planet(img, it["short"], DL_CX, DL_CY, DL_R, tuple(v["col"]), ang)
+    d = ImageDraw.Draw(img)
+    d.text((DL_CX, DL_CY - orb - 46), "sunrise → sunrise", font=F(30, "Bold"), fill=(205, 210, 220), anchor="mm")
+    day_ruler(img, th, it, prog=p)
+    if v.get("note"):
+        text(img, (W / 2, 1300), v["note"], 40, tuple(th["accent2"]), w="ExtraBold", a=ease((t - 1.6) / 0.5))
+
 def caption_chunks(say, t0, dur):
     words = say.split(); groups, g = [], []
     for w in words:
@@ -331,6 +411,24 @@ def draw_caption(img, chunks, gt, y=1585):
 
 def seg_hook(img, sc, th, t, dur):
     col = tuple(th["star_col"]); acc = tuple(th["accent"])
+    if th.get("hook") == "daylight":
+        # tiny Earth spinning madly vs the #1 world barely turning: frame 0 already has both + the claim
+        ang = -math.pi / 2 + t * 0.12
+        d = ImageDraw.Draw(img); orb = DL_R + 95
+        for k in range(0, 360, 8): d.arc([DL_CX - orb, 860 - orb, DL_CX + orb, 860 + orb], k, k + 4, fill=(90, 96, 110), width=2)
+        R.paste_c(img, R.sun_sprite(16), DL_CX + orb * math.cos(ang), 860 + orb * math.sin(ang))
+        day_planet(img, "Mercury", DL_CX, 860, DL_R, (150, 140, 130), ang)
+        d = ImageDraw.Draw(img); d.text((DL_CX, 860), "?", font=F(220, "Black"), fill=tuple(th["accent"]), anchor="mm")
+        ea = t * 9.0; ex, ey = 190, 1210
+        R.paste_c(img, R.earth_sprite(34, glow=None), ex, ey)
+        d.arc([ex - 60, ey - 60, ex + 60, ey + 60], math.degrees(ea) % 360, math.degrees(ea) % 360 + 300, fill=(120, 200, 255), width=5)
+        d.text((ex + 90, ey - 18), "Earth: 1 day", font=F(34, "Bold"), fill=(120, 200, 255), anchor="lm")
+        d.text((ex + 90, ey + 24), "#1: 176 Earth days", font=F(34, "Bold"), fill=tuple(th["accent"]), anchor="lm")
+        text(img, (W / 2, 210), "TOP 5", 150, tuple(th["accent"]))
+        for i, l in enumerate(wrap(sc["top"].upper(), F(84, "Black"), W - 120)):
+            text(img, (W / 2, 340 + i * 96), l, 84, (255, 255, 255))
+        text(img, (W / 2, 1400), sc["sub"], 50, tuple(th["accent2"]), w="ExtraBold")
+        return
     if th.get("hook") == "horizons":
         r1 = 1974 * HZ_PX * (0.97 + 0.03 * math.sin(t * 3)); hy = 905
         bh_disk(img, HZ_CX, hy, r1, t, col=col, acc=acc)
@@ -421,11 +519,13 @@ def seg_item(img, it, th, t, dur):
         thermo_vis(img, it, th, t, dur)
     if v["type"] == "horizons":
         horizons_vis(img, it, th, t, dur)
+    if v["type"] == "daylight":
+        daylight_vis(img, it, th, t, dur)
     # number
     p = easeio((t - 0.5) / 1.6)
     num = it["num"]
     if isinstance(num, (int, float)):
-        val = num * p; s = f"{val:,.0f}" + it.get("suffix", "")
+        val = num * p; s = f"{val:,.{it.get('dec', 0)}f}" + it.get("suffix", "")
     else: s = num
     text(img, (W / 2, 1395), s, 130, acc, a=ease((t - 0.4) / 0.4))
     text(img, (W / 2, 1472), it["unit"], 40, (235, 235, 245), w="Bold", a=ease((t - 0.6) / 0.4))
@@ -433,6 +533,18 @@ def seg_item(img, it, th, t, dur):
 
 def seg_outro(img, sc, th, t, dur):
     a = ease(t / 0.5)
+    if th.get("outro") == "daylight":
+        order = sorted(ALL_ITEMS, key=lambda o: o["vis"]["days"])
+        d = ImageDraw.Draw(img); x0, x1 = 110, W - 110
+        for i, o in enumerate(order):
+            y = 420 + i * 120; p = ease((t - i * 0.15) / 0.6); x = lerp(x0, x1, o["vis"]["days"] / DL_MAX * p)
+            d.rounded_rectangle([x0, y - 26, max(x0 + 52, x), y + 26], 26, fill=tuple(o["vis"]["col"]))
+            d.text((x0 + 16, y - 52), o["short"], font=F(32, "ExtraBold"), fill=(230, 232, 238), anchor="lm")
+            d.text((x1, y - 52), f'{o["vis"]["days"]:g} days', font=F(32, "ExtraBold"), fill=tuple(th["accent"]), anchor="rm")
+        if th.get("outro_note"): text(img, (W / 2, 1060), th["outro_note"], 44, tuple(th["accent2"]), w="ExtraBold", a=ease((t - 0.6) / 0.5))
+        text(img, (W / 2, 1220), "SUBSCRIBE", 110, tuple(th["accent"]), a=ease((t - 0.8) / 0.5))
+        text(img, (W / 2, 1320), "to Cosmic Scale", 56, (255, 255, 255), w="ExtraBold", a=ease((t - 1.0) / 0.5))
+        return
     if th.get("outro") == "horizons":
         d = ImageDraw.Draw(img)
         for i, o in enumerate(sorted(ALL_ITEMS, key=lambda o: o["vis"]["au"])):

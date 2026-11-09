@@ -4,6 +4,7 @@ EP02 added scenes: clock, escape, sky, thermo, energy, ocean, galaxy
 EP03 added scenes: zoom, stretch, horizons, deepfield, shrink (violet/magenta palette)
 EP04 added scenes: blackhole, spaghetti, twoclocks, horizonsize, inside (ember orange / pale cyan palette)
 EP05 added scenes: inflate, flight, measure, density, heavyvsbig, balance (crimson / cream palette)
+EP07 added scenes: teaspoon, pulsechart, crush, ladder (log scale), layers, lensing, pulsar, merger (electric blue / coral palette)
 EP06 added scenes: spinglobe (globe + speed by latitude; top=True rings; slow=True), pendulum, fling, bulge, yearday, dayclock (teal / amber palette)
 """
 import sys, os, re, math, subprocess, importlib.util, json, random, hashlib
@@ -1663,6 +1664,283 @@ def sc_dayclock(img, v, t, dur):
         alpha_text(img, (1180, y + 52), f"{hrs:g} hours", F(56, "Black"), TEAL6 if i == n - 1 else AMB6, a, anchor="lm")
     caption(img, v.get("caption"), ease((t - 2) / 0.5))
 
+
+# ---------------- scenes (EP07: neutron star) ----------------
+NSB, CORAL7, PALE7, GOLD7 = (91, 140, 255), (255, 111, 145), (200, 220, 255), (255, 200, 80)
+def ns_sprite(r, hot=True):
+    return radial(int(r * 3.2) + 8, [(0, (255, 255, 255, 255)), (0.5 / 1.6, (225, 238, 255, 255)), (0.98 / 1.6, (150, 185, 255, 255)),
+                                     (1.0 / 1.6, (120, 160, 255, 255)), (1.12 / 1.6, (91, 140, 255, 120)), (1.0, (91, 140, 255, 0))])
+_ns = {}
+def ns(r):
+    r = max(3, int(r))
+    if r not in _ns: _ns[r] = ns_sprite(r)
+    return _ns[r]
+
+def draw_spoon(d, x, y, s, col=(200, 206, 220)):
+    d.ellipse([x - 170 * s, y - 95 * s, x + 170 * s, y + 95 * s], fill=col)
+    d.ellipse([x - 150 * s, y - 78 * s, x + 150 * s, y + 70 * s], fill=(130, 136, 152))
+    d.polygon([(x + 160 * s, y - 20 * s), (x + 560 * s, y - 50 * s), (x + 570 * s, y - 20 * s), (x + 165 * s, y + 18 * s)], fill=col)
+
+def sc_teaspoon(img, v, t, dur):
+    alpha_text(img, (W / 2, 120), v.get("head", ""), F(64, "ExtraBold"), WHITE, ease(t / 0.4))
+    d = ImageDraw.Draw(img); sx, sy = 640, 560
+    if v.get("phase", 0) == 0:
+        # industrial scale + spoon + glowing matter; readout counts up; humanity bar for comparison
+        d.rounded_rectangle([300, 680, 980, 760], 18, fill=(40, 48, 70), outline=(110, 120, 150), width=3)
+        d.rectangle([330, 640, 950, 680], fill=(70, 80, 105))
+        draw_spoon(d, sx - 120, sy, 0.9)
+        paste_c(img, ns(60 + 4 * math.sin(t * 5)), sx - 120, sy - 6)
+        d = ImageDraw.Draw(img)
+        p = easeio((t - 0.2) / 2.4); tons = 2e9 * p
+        d.rounded_rectangle([300, 780, 980, 880], 14, fill=(8, 14, 10), outline=(80, 255, 140), width=3)
+        d.text((640, 830), f"{tons:,.0f} t", font=F(56, "Black"), fill=(120, 255, 170), anchor="mm")
+        # comparison bars
+        x0 = 1120; bw = 470
+        alpha_text(img, (x0, 380), "1 teaspoon", F(44, "Bold"), PALE7, ease((t - 1.0) / 0.5), anchor="lm")
+        alpha_text(img, (x0, 560), "all 8 billion humans", F(44, "Bold"), CORAL7, ease((t - 1.6) / 0.5), anchor="lm")
+        a1 = ease((t - 1.0) / 1.0); a2 = ease((t - 1.6) / 1.0)
+        if a1 > 0: d.rounded_rectangle([x0, 420, x0 + bw * a1, 480], 12, fill=NSB)
+        if a2 > 0: d.rounded_rectangle([x0, 600, x0 + bw * 0.26 * a2, 660], 12, fill=CORAL7)
+        alpha_text(img, (x0 + bw + 20, 450), "≈ 2 billion t", F(36, "Bold"), WHITE, a1, anchor="lm", shadow=False)
+        alpha_text(img, (x0 + bw * 0.26 + 20, 630), "≈ 0.5 billion t", F(36, "Bold"), WHITE, a2, anchor="lm", shadow=False)
+        caption(img, "our calculation: average density ≈ 400 million tonnes per cm³", ease((t - 3) / 0.5))
+    else:
+        # the teaspoon "at home" vs on Earth: matter expands violently
+        draw_spoon(d, sx - 120, sy, 0.9)
+        te = max(2.0, dur * 0.45); p = max(0.0, t - te)
+        if p <= 0:
+            paste_c(img, ns(60), sx - 120, sy - 6)
+            alpha_text(img, (sx, 820), "held together only by its star's gravity", F(42, "SemiBold"), PALE7, ease(t / 0.5))
+        else:
+            r = 60 + 900 * (1 - math.exp(-p * 1.4))
+            lay = Image.new("RGBA", img.size, (0, 0, 0, 0)); dl = ImageDraw.Draw(lay)
+            fa = max(0.18, 1 - p / 3)
+            dl.ellipse([sx - 120 - r, sy - r, sx - 120 + r, sy + r], fill=(220, 235, 255, int(150 * fa)))
+            for k in range(3):
+                rr = r * (0.6 + 0.2 * k); dl.ellipse([sx - 120 - rr, sy - rr, sx - 120 + rr, sy + rr], outline=CORAL7 + (int(220 * fa),), width=6)
+            rng = random.Random(7)
+            for _ in range(160):
+                ang = rng.uniform(0, 2 * math.pi); sp = rng.uniform(200, 900)
+                x, y = sx - 120 + math.cos(ang) * sp * p, sy + math.sin(ang) * sp * p
+                dl.ellipse([x - 4, y - 4, x + 4, y + 4], fill=(255, 230, 200, int(255 * fa)))
+            img.alpha_composite(lay)
+        alpha_text(img, (1420, 400), "In the star:", F(46, "Bold"), DIM, ease((t - 0.4) / 0.5))
+        alpha_text(img, (1420, 470), "gravity wins", F(64, "ExtraBold"), NSB, ease((t - 0.4) / 0.5))
+        alpha_text(img, (1420, 600), "On Earth:", F(46, "Bold"), DIM, ease((t - te + 0.8) / 0.5))
+        alpha_text(img, (1420, 670), "pressure wins", F(64, "ExtraBold"), CORAL7, ease((t - te + 0.8) / 0.5))
+
+def sc_pulsechart(img, v, t, dur):
+    alpha_text(img, (W / 2, 120), v.get("head", ""), F(64, "ExtraBold"), WHITE, ease(t / 0.4))
+    x0, x1, y0, y1 = 140, W - 140, 260, 820
+    lay = Image.new("RGBA", img.size, (0, 0, 0, 0)); d = ImageDraw.Draw(lay)
+    d.rectangle([x0, y0, x1, y1], fill=(236, 228, 205, 245))
+    off = (t * 120) % 60
+    for gx in np.arange(x0 - off + 60, x1, 60): d.line([(gx, y0), (gx, y1)], fill=(210, 180, 170, 255), width=1)
+    for gy in range(y0 + 40, y1, 56): d.line([(x0, gy), (x1, gy)], fill=(210, 180, 170, 255), width=1)
+    img.alpha_composite(lay); d = ImageDraw.Draw(img)
+    pxs = 360.0  # px per second of signal
+    ph = v.get("phase", 0); per = v.get("period", 1.33); cy = (y0 + y1) / 2 + 60
+    rng = np.random.default_rng(3)
+    noise = rng.normal(0, 1, 4000)
+    pts = []
+    for x in range(x0, x1, 3):
+        ts = (x - x0) / pxs + t * 0.33 * (1 + ph)
+        n = noise[int(ts * 60) % 4000] * (14 if ph == 0 else 6)
+        pk = math.exp(-((ts % per) - 0.05) ** 2 / 0.0012) * (70 if ph == 0 else 240)
+        pts.append((x, cy - n - pk))
+    d.line(pts, fill=(40, 40, 120), width=3)
+    if ph == 1:
+        # dimension marker between two peaks
+        base = (t * 0.66) % per; xa = x0 + (per - base + 0.05) * pxs
+        if xa + per * pxs < x1:
+            d.line([(xa, y0 + 50), (xa + per * pxs, y0 + 50)], fill=(200, 40, 70), width=4)
+            d.text((xa + per * pxs / 2, y0 + 28), f"{per} s", font=F(40, "ExtraBold"), fill=(200, 40, 70), anchor="mm")
+        a = ease((t - 1.5) / 0.4)
+        if a > 0:
+            st = Image.new("RGBA", (520, 150), (0, 0, 0, 0)); ds = ImageDraw.Draw(st)
+            ds.rounded_rectangle([6, 6, 514, 144], 16, outline=(200, 30, 60, int(230 * a)), width=8)
+            ds.text((260, 75), "LGM-1 ?", font=F(84, "Black"), fill=(200, 30, 60, int(230 * a)), anchor="mm")
+            st = st.rotate(8, expand=True, resample=Image.BICUBIC); img.alpha_composite(st, (W - 760, y1 - 260))
+    else:
+        a = ease((t - 2) / 0.5)
+        if a > 0: d.ellipse([x0 + 600, cy - 140, x0 + 900, cy + 60], outline=(200, 40, 70), width=int(1 + 4 * a))
+        alpha_text(img, (x0 + 750, cy - 175), "\"scruff\"", F(44, "ExtraBold"), (200, 40, 70), a, shadow=False)
+    caption(img, v.get("caption", "radio chart recorder, Cambridge"), ease((t - 1) / 0.5))
+
+def sc_crush(img, v, t, dur):
+    alpha_text(img, (W / 2, 120), v.get("head", ""), F(64, "ExtraBold"), WHITE, ease(t / 0.4))
+    cx, cy = 760, 570; R0 = 300
+    if v.get("phase", 0) == 0:
+        pl = planet_sprite(R0, (150, 120, 100), light=(-0.8, -0.5))
+        paste_c(img, pl, cx, cy, ease(t / 0.6))
+        d = ImageDraw.Draw(img)
+        for k in range(0, 360, 12):
+            a0 = k + t * 6; d.arc([cx - R0 - 40, cy - R0 - 40, cx + R0 + 40, cy + R0 + 40], a0, a0 + 6, fill=(255, 150, 80), width=4)
+        alpha_text(img, (1480, 430), "iron core", F(48, "Bold"), DIM, ease((t - 0.8) / 0.5))
+        alpha_text(img, (1480, 510), "≈ Earth-sized", F(64, "ExtraBold"), (255, 170, 110), ease((t - 0.8) / 0.5))
+        alpha_text(img, (1480, 640), "mass", F(48, "Bold"), DIM, ease((t - 1.6) / 0.5))
+        alpha_text(img, (1480, 720), "≈ 1.5 Suns", F(64, "ExtraBold"), (255, 170, 110), ease((t - 1.6) / 0.5))
+        caption(img, "iron can't be burned for energy", ease((t - 3) / 0.5))
+    else:
+        p = easeio((t - 0.6) / 3.0)
+        diam = math.exp(lerp(math.log(12700), math.log(30), p)); r = max(4, R0 * diam / 12700 * (1 if p < 1 else 1))
+        rr = max(8, r)
+        if p < 1: paste_c(img, planet_sprite(int(max(6, r)), (150, 120, 100), light=(-0.8, -0.5)), cx, cy)
+        else: paste_c(img, ns(10), cx, cy)
+        q = max(0.0, (t - 3.8) / 3.0)
+        if q > 0:
+            lay = Image.new("RGBA", img.size, (0, 0, 0, 0)); dl = ImageDraw.Draw(lay)
+            for k in range(3):
+                R2 = (q * 500 + k * 60) % 560
+                dl.ellipse([cx - R2, cy - R2, cx + R2, cy + R2], outline=(255, 160, 90, int(200 * max(0, 1 - R2 / 560))), width=10 - 2 * k)
+            img.alpha_composite(lay)
+        d = ImageDraw.Draw(img)
+        d.text((1480, 430), "diameter", font=F(46, "Bold"), fill=DIM, anchor="mm")
+        d.text((1480, 510), f"{diam:,.0f} km", font=F(84, "Black"), fill=NSB if p > 0.95 else WHITE, anchor="mm")
+        d.text((1480, 640), "time", font=F(46, "Bold"), fill=DIM, anchor="mm")
+        d.text((1480, 720), f"{0.5 * p:.2f} s", font=F(84, "Black"), fill=CORAL7, anchor="mm")
+        alpha_text(img, (cx, 980), "collapse speed ≈ 1/4 of light speed" if q <= 0 else "the rest of the star blasts out: supernova", F(42, "SemiBold"), PALE7, 1.0)
+
+def sc_ladder(img, v, t, dur):
+    """log-scale ladder: items [[label, exp_lo, exp_hi, col]]"""
+    alpha_text(img, (160, 200), v["title"], F(64, "ExtraBold"), WHITE, ease(t / 0.5), anchor="lm")
+    x0, x1, mx = 640, 1780, v.get("max", 15); d = ImageDraw.Draw(img)
+    for k in range(0, mx + 1, 3):
+        x = lerp(x0, x1, k / mx); d.line([(x, 320), (x, 880)], fill=(40, 50, 75), width=2)
+        d.text((x, 290), "1" if k == 0 else f"10{''.join('⁰¹²³⁴⁵⁶⁷⁸⁹'[int(c)] for c in str(k))}", font=F(36, "Bold"), fill=DIM, anchor="mm")
+    for i, (lab, lo, hi, c) in enumerate(v["items"]):
+        p = ease((t - 0.5 - i * 1.0) / 1.2); y = 410 + i * 180
+        d.text((160, y), lab, font=F(46, "SemiBold"), fill=mix(SPACE, WHITE, p), anchor="lm")
+        if p <= 0: continue
+        xa = lerp(x0, x1, lo / mx * p); xb = lerp(x0, x1, hi / mx * p)
+        d.rounded_rectangle([x0, y - 34, max(x0 + 12, xb), y + 34], 14, fill=hexc(c) if lo == hi else mix(SPACE, hexc(c), 0.45))
+        if hi > lo: d.rounded_rectangle([xa, y - 34, max(xa + 12, xb), y + 34], 14, fill=hexc(c))
+        if v.get("notes") and i < len(v["notes"]): alpha_text(img, (max(x0 + 12, xb) + 20 if xb < 1500 else xb - 20, y), v["notes"][i], F(36, "Bold"), WHITE, p, anchor="lm" if xb < 1500 else "rm")
+    caption(img, v.get("caption"), ease((t - 3) / 0.5))
+
+def sc_layers(img, v, t, dur):
+    alpha_text(img, (W / 2, 110), v.get("head", ""), F(64, "ExtraBold"), WHITE, ease(t / 0.4))
+    cx, cy, R0 = 640, 620, 360
+    lays = v["items"]  # [label, frac_outer_radius, col, note]
+    glow = ns(R0); paste_c(img, glow, cx, cy)
+    d = ImageDraw.Draw(img)
+    for i, (lab, fr, c, *_) in enumerate(lays):
+        r = R0 * fr; d.pieslice([cx - r, cy - r, cx + r, cy + r], -90, 90, fill=hexc(c))
+    d.line([(cx, cy - R0), (cx, cy + R0)], fill=(255, 255, 255), width=3)
+    n = len(lays); span = max(1.0, dur * 0.7) / n
+    for i, (lab, fr, c, *rest) in enumerate(lays):
+        a = ease((t - 0.5 - i * span) / 0.5)
+        if a <= 0: continue
+        nxt = lays[i + 1][1] if i + 1 < n else 0
+        rm = R0 * (fr + nxt) / 2; ang = math.radians(-50 + i * 30)
+        px, py = cx + rm * math.cos(ang), cy + rm * math.sin(ang)
+        ly = 330 + i * 150; tc = hexc(c) if sum(hexc(c)) > 250 else (150, 165, 220)
+        d.line([(px, py), (1150, ly), (1190, ly)], fill=tc, width=3); d.ellipse([px - 8, py - 8, px + 8, py + 8], fill=WHITE)
+        alpha_text(img, (1210, ly), lab, F(50, "ExtraBold"), tc, a, anchor="lm")
+        if rest: alpha_text(img, (1210, ly + 52), rest[0], F(34, "SemiBold"), DIM, a, anchor="lm")
+    caption(img, v.get("caption"), ease((t - 3) / 0.5))
+
+def sc_lensing(img, v, t, dur):
+    alpha_text(img, (W / 2, 110), v.get("head", ""), F(64, "ExtraBold"), WHITE, ease(t / 0.4))
+    cx, cy, r = 760, 580, 190
+    lay = Image.new("RGBA", img.size, (0, 0, 0, 0)); d = ImageDraw.Draw(lay)
+    ex, ey = 1640, 580
+    # bent rays from the far side to the eye
+    for k in range(-5, 6):
+        if k == 0: continue
+        ang = math.radians(180 - k * 15); sxp, syp = cx + r * math.cos(ang), cy + r * math.sin(ang)
+        bend = 1 if k > 0 else -1
+        pts = []
+        p = ease((t - 0.4 - abs(k) * 0.12) / 1.4)
+        for j in range(41):
+            u = j / 40 * p
+            bx = (1 - u) ** 2 * sxp + 2 * (1 - u) * u * cx + u ** 2 * ex
+            by = (1 - u) ** 2 * syp + 2 * (1 - u) * u * (cy - bend * (r + 120 + abs(k) * 22)) + u ** 2 * ey
+            pts.append((bx, by))
+        if len(pts) > 1: d.line(pts, fill=(255, 210, 120, 170), width=3)
+    img.alpha_composite(lay)
+    paste_c(img, ns(r), cx, cy)
+    d = ImageDraw.Draw(img)
+    for k, (a0, a1) in enumerate([(200, 235), (40, 70)]):
+        st = (t * 40) % 360
+        d.arc([cx - r * 0.9, cy - r * 0.9, cx + r * 0.9, cy + r * 0.9], a0 + st, a1 + st, fill=(255, 150, 120), width=16)
+    # eye
+    d.ellipse([ex - 60, ey - 30, ex + 60, ey + 30], outline=WHITE, width=5); d.ellipse([ex - 16, ey - 16, ex + 16, ey + 16], fill=NSB)
+    d.text((ex, ey + 70), "you", font=F(40, "Bold"), fill=WHITE, anchor="mm")
+    alpha_text(img, (W / 2, 200), "you see more than half of the surface at once", F(44, "SemiBold"), PALE7, ease((t - 1.8) / 0.5))
+    caption(img, "NICER (NASA): PSR J0030+0451 ≈ 26 km wide, ≈ 1.4 Suns", ease((t - 4) / 0.5))
+
+def sc_pulsar(img, v, t, dur):
+    alpha_text(img, (W / 2, 110), v.get("head", ""), F(64, "ExtraBold"), WHITE, ease(t / 0.4))
+    cx, cy = 700, 560; ang = t * 2 * math.pi * 0.45
+    lay = Image.new("RGBA", img.size, (0, 0, 0, 0)); d = ImageDraw.Draw(lay)
+    for s in (0, math.pi):
+        a = ang + s; L = 900; wdt = 0.12
+        pts = [(cx, cy), (cx + L * math.cos(a - wdt), cy + 0.55 * L * math.sin(a - wdt)), (cx + L * math.cos(a + wdt), cy + 0.55 * L * math.sin(a + wdt))]
+        d.polygon(pts, fill=(160, 200, 255, 70))
+        pts2 = [(cx, cy), (cx + L * math.cos(a - wdt / 3), cy + 0.55 * L * math.sin(a - wdt / 3)), (cx + L * math.cos(a + wdt / 3), cy + 0.55 * L * math.sin(a + wdt / 3))]
+        d.polygon(pts2, fill=(230, 240, 255, 110))
+    img.alpha_composite(lay.filter(ImageFilter.GaussianBlur(6)))
+    paste_c(img, ns(70), cx, cy)
+    d = ImageDraw.Draw(img)
+    d.text((cx, cy + 300), "animation slowed about 1,600×", font=F(32, "SemiBold"), fill=DIM, anchor="mm")
+    pl = Image.new("RGBA", img.size, (0, 0, 0, 0)); ImageDraw.Draw(pl).rounded_rectangle([1150, 340, 1850, 850], 30, fill=(8, 10, 24, 225), outline=NSB + (160,), width=3)
+    img.alpha_composite(pl); d = ImageDraw.Draw(img)
+    turns = max(0.0, t - 0.5) * v.get("hz", 716)
+    d.text((1500, 420), "turns so far", font=F(44, "Bold"), fill=DIM, anchor="mm")
+    d.text((1500, 510), f"{turns:,.0f}", font=F(110, "Black"), fill=NSB, anchor="mm")
+    # pulse train: one tick per turn (dense)
+    y = 760; d.line([(1180, y), (1820, y)], fill=(60, 70, 100), width=2)
+    for k in range(0, 640, 9):
+        x = 1180 + (k - (t * 300) % 9); d.line([(x, y), (x, y - 70)], fill=CORAL7, width=3)
+    d.text((1500, 810), "one pulse per turn", font=F(32, "SemiBold"), fill=DIM, anchor="mm")
+    caption(img, v.get("sub"), ease((t - 1.5) / 0.5))
+
+def sc_merger(img, v, t, dur):
+    alpha_text(img, (W / 2, 110), v.get("head", ""), F(64, "ExtraBold"), WHITE, ease(t / 0.4))
+    cx, cy = W / 2, 560
+    if v.get("phase", 0) == 0:
+        T = max(1.0, dur - 1.5); u = min(1.0, t / T)
+        sep = 300 * (1 - u) ** 0.25 if u < 1 else 0
+        ph = 2 * math.pi * (1 - (1 - min(u, 0.999)) ** 0.62) * 9
+        lay = Image.new("RGBA", img.size, (0, 0, 0, 0)); d = ImageDraw.Draw(lay)
+        for k in range(8):
+            R2 = ((t * 160 + k * 110) % 880)
+            d.ellipse([cx - R2, cy - R2 * 0.6, cx + R2, cy + R2 * 0.6], outline=(120, 160, 255, int(120 * (1 - R2 / 880))), width=4)
+        img.alpha_composite(lay)
+        if u < 1:
+            for s in (0, math.pi):
+                paste_c(img, ns(34), cx + sep * math.cos(ph + s), cy + 0.6 * sep * math.sin(ph + s))
+        else:
+            paste_c(img, radial(500, [(0, (255, 255, 255, 255)), (0.3, (255, 230, 170, 230)), (1, (255, 180, 80, 0))]), cx, cy)
+        # chirp waveform
+        d = ImageDraw.Draw(img); pts = []
+        for x in range(260, W - 260, 3):
+            q = (x - 260) / (W - 520) * u
+            amp = 10 + 110 * q ** 3; f = 6 + 120 * q ** 3
+            pts.append((x, 930 + amp * math.sin(f * q * 6)))
+        if len(pts) > 2: d.line(pts, fill=CORAL7, width=4)
+        d.text((W / 2, 1010), "gravitational waves: the 'chirp'", font=F(34, "SemiBold"), fill=DIM, anchor="mm")
+        alpha_text(img, (W / 2, 205), "NGC 4993 · ≈ 130 million light-years away", F(40, "SemiBold"), PALE7, ease((t - 1) / 0.5))
+    else:
+        fb = 220 + 30 * math.sin(t * 2)
+        paste_c(img, radial(int(fb * 3), [(0, (255, 250, 230, 255)), (0.25, (255, 210, 120, 230)), (0.6, (255, 120, 80, 120)), (1, (255, 80, 60, 0))]), 560, cy)
+        lay = Image.new("RGBA", img.size, (0, 0, 0, 0)); dl = ImageDraw.Draw(lay); rng = random.Random(4)
+        for _ in range(140):
+            a = rng.uniform(0, 2 * math.pi); sp = rng.uniform(40, 260); ph = (t * rng.uniform(0.2, 0.6) + rng.random()) % 1
+            x, y = 560 + math.cos(a) * sp * (1 + ph * 2), cy + math.sin(a) * sp * (1 + ph * 2)
+            dl.ellipse([x - 4, y - 4, x + 4, y + 4], fill=GOLD7 + (int(230 * (1 - ph)),))
+        img.alpha_composite(lay)
+        n = 10; k = int(min(n, max(0, (t - 0.8) / 0.35)))
+        for i in range(n):
+            x = 1150 + (i % 5) * 130; y = 470 + (i // 5) * 150
+            if i < k: paste_c(img, planet_sprite(48, (255, 196, 70), light=(-0.7, -0.6)), x, y)
+            else:
+                d = ImageDraw.Draw(img); d.ellipse([x - 48, y - 48, x + 48, y + 48], outline=(90, 90, 110), width=3)
+        d = ImageDraw.Draw(img)
+        d.text((1410, 340), "Earth masses of gold + platinum", font=F(38, "Bold"), fill=GOLD7, anchor="mm")
+        d.text((1410, 760), f"≈ {k}", font=F(96, "Black"), fill=GOLD7, anchor="mm")
+        caption(img, "estimate: Edo Berger (Harvard), GW170817", ease((t - 3) / 0.5))
 
 SC = {k[3:]: f for k, f in globals().items() if k.startswith("sc_")}
 

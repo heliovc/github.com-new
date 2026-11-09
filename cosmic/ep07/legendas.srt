@@ -1,0 +1,471 @@
+1
+00:00:00,200 --> 00:00:03,878
+One teaspoon of this star would weigh about two billion tonnes.
+
+2
+00:00:03,878 --> 00:00:08,725
+That's more than every human being on Earth, all eight billion of us, put together.
+
+3
+00:00:08,725 --> 00:00:10,360
+And here's the strange part.
+
+4
+00:00:10,360 --> 00:00:15,207
+If you could actually bring that teaspoon home, it wouldn't sit quietly on a scale.
+
+5
+00:00:15,207 --> 00:00:16,200
+It would explode.
+
+6
+00:00:16,899 --> 00:00:19,285
+So today we're flying to a neutron star.
+
+7
+00:00:19,285 --> 00:00:22,923
+First, the signal that made astronomers whisper about aliens.
+
+8
+00:00:22,923 --> 00:00:26,502
+Then how a star gets crushed into a ball the size of a city.
+
+9
+00:00:26,502 --> 00:00:27,754
+Then we'll get close.
+
+10
+00:00:27,754 --> 00:00:39,086
+Close enough to see why that teaspoon explodes, why mountains there are smaller than a grain of sand, and why some of the gold on your finger may have come from two of these stars colliding.
+
+11
+00:00:39,786 --> 00:00:41,600
+A Teaspoon of a Neutron Star.
+
+12
+00:00:42,300 --> 00:00:44,895
+Cambridge, England, nineteen sixty seven.
+
+13
+00:00:44,895 --> 00:00:54,518
+A graduate student named Jocelyn Bell is checking the output of a new radio telescope, a field of wires and poles the size of fifty seven tennis courts.
+
+14
+00:00:54,518 --> 00:00:59,203
+It prints its data on paper, about two hundred meters of chart every week.
+
+15
+00:00:59,203 --> 00:01:03,825
+And in one corner of the sky, she notices a bit of what she calls scruff.
+
+16
+00:01:04,525 --> 00:01:06,767
+The scruff turns out to be pulses.
+
+17
+00:01:06,767 --> 00:01:07,954
+Perfectly regular.
+
+18
+00:01:07,954 --> 00:01:12,240
+One every one point three three seconds, like a cosmic metronome.
+
+19
+00:01:12,240 --> 00:01:18,637
+Nothing natural was known to tick that precisely, so the team half jokingly labeled it L G M one.
+
+20
+00:01:18,637 --> 00:01:19,758
+Little green men.
+
+21
+00:01:19,758 --> 00:01:24,703
+But then she found a second one, in a completely different part of the sky.
+
+22
+00:01:24,703 --> 00:01:28,924
+Two alien civilizations, signaling on the same kind of schedule?
+
+23
+00:01:28,924 --> 00:01:29,517
+Unlikely.
+
+24
+00:01:29,517 --> 00:01:31,429
+The real answer was stranger.
+
+25
+00:01:31,429 --> 00:01:33,540
+These were spinning, dead stars.
+
+26
+00:01:33,540 --> 00:01:34,067
+Pulsars.
+
+27
+00:01:34,067 --> 00:01:41,980
+Today we know a few thousand of them, and NASA estimates our galaxy hides tens to hundreds of millions of neutron stars.
+
+28
+00:01:42,680 --> 00:01:44,021
+So how do you make one?
+
+29
+00:01:44,021 --> 00:01:47,520
+Start with a star at least eight times heavier than the Sun.
+
+30
+00:01:47,520 --> 00:01:55,274
+At the end of its life, its core is a ball of iron about the size of Earth, holding roughly one and a half times the mass of the Sun.
+
+31
+00:01:55,274 --> 00:01:57,140
+Iron can't be burned for energy.
+
+32
+00:01:57,140 --> 00:02:00,813
+So when the fuel around it runs out, nothing holds the core up.
+
+33
+00:02:01,513 --> 00:02:02,327
+It collapses.
+
+34
+00:02:02,327 --> 00:02:06,267
+The core falls inward at about a quarter of the speed of light.
+
+35
+00:02:06,267 --> 00:02:12,521
+In half a second or less, a ball the size of a planet becomes a ball about thirty kilometers across.
+
+36
+00:02:12,521 --> 00:02:16,399
+Electrons are forced into protons, turning them into neutrons.
+
+37
+00:02:16,399 --> 00:02:23,029
+The outer layers of the star bounce off this new, ultra hard core and blast out into space as a supernova.
+
+38
+00:02:23,029 --> 00:02:25,343
+What's left behind is a neutron star.
+
+39
+00:02:26,043 --> 00:02:27,574
+Here's how small that is.
+
+40
+00:02:27,574 --> 00:02:33,882
+A typical neutron star holds more mass than the Sun, packed into a sphere about twenty kilometers wide.
+
+41
+00:02:33,882 --> 00:02:35,046
+The size of a city.
+
+42
+00:02:35,046 --> 00:02:38,844
+Our own Sun is about one point four million kilometers across.
+
+43
+00:02:38,844 --> 00:02:46,989
+And if you squeezed the whole Earth to the same density, by our calculation it would become a ball about three hundred meters across.
+
+44
+00:02:46,989 --> 00:02:48,827
+Shorter than the Eiffel Tower.
+
+45
+00:02:49,527 --> 00:02:51,213
+Now, back to that teaspoon.
+
+46
+00:02:51,213 --> 00:02:57,581
+By our calculation, an average neutron star is about four hundred million tonnes per cubic centimeter.
+
+47
+00:02:57,581 --> 00:03:01,640
+A sugar cube of it, NASA says, would weigh around a billion tons.
+
+48
+00:03:01,640 --> 00:03:03,700
+So why would it explode on Earth?
+
+49
+00:03:03,700 --> 00:03:06,572
+Because that density isn't natural for matter.
+
+50
+00:03:06,572 --> 00:03:07,322
+It's forced.
+
+51
+00:03:07,322 --> 00:03:11,880
+The star's own gravity is the only thing holding those neutrons together.
+
+52
+00:03:11,880 --> 00:03:14,564
+Scoop out a teaspoon and that grip is gone.
+
+53
+00:03:14,564 --> 00:03:19,372
+The pressure inside takes over all at once, and the matter expands violently.
+
+54
+00:03:19,372 --> 00:03:28,863
+As one astronomer put it, a spoonful of neutron star appearing on Earth would cause a giant explosion, and probably vaporize a good chunk of the planet.
+
+55
+00:03:28,863 --> 00:03:31,548
+The teaspoon is only heavy while it's home.
+
+56
+00:03:32,247 --> 00:03:35,218
+So let's leave the teaspoon and go there instead.
+
+57
+00:03:35,218 --> 00:03:37,522
+Long before you arrive, you'd feel it.
+
+58
+00:03:37,522 --> 00:03:39,402
+Not the gravity, the magnetism.
+
+59
+00:03:39,402 --> 00:03:43,706
+When the star collapsed, its magnetic field was squeezed along with it.
+
+60
+00:03:43,706 --> 00:03:49,648
+NASA says neutron stars have magnetic fields billions to trillions of times stronger than Earth's.
+
+61
+00:03:49,648 --> 00:03:54,498
+And a special kind, called a magnetar, is about a thousand times stronger still.
+
+62
+00:03:55,198 --> 00:03:56,363
+How strong is that?
+
+63
+00:03:56,363 --> 00:04:03,473
+On December twenty seventh, two thousand four, a magnetar called S G R eighteen oh six minus twenty had a starquake.
+
+64
+00:04:03,473 --> 00:04:10,645
+In about a fifth of a second, it released as much energy as our Sun puts out in two hundred and fifty thousand years.
+
+65
+00:04:10,645 --> 00:04:15,427
+It was roughly fifty thousand light years away, on the far side of the galaxy.
+
+66
+00:04:15,427 --> 00:04:18,430
+And it still squeezed Earth's own magnetic field.
+
+67
+00:04:19,130 --> 00:04:20,767
+Now get close to the surface.
+
+68
+00:04:20,767 --> 00:04:26,071
+The gravity here is, by our calculation, about a hundred billion times what you feel on Earth.
+
+69
+00:04:26,071 --> 00:04:32,053
+Drop a pen from one meter up, and it would hit the ground at around sixteen hundred kilometers per second.
+
+70
+00:04:32,053 --> 00:04:35,778
+To escape, you'd need to fly at more than half the speed of light.
+
+71
+00:04:35,778 --> 00:04:38,035
+Gravity this strong flattens everything.
+
+72
+00:04:38,035 --> 00:04:45,541
+Researchers at the University of Southampton calculated that the tallest mountains on a neutron star are less than a millimeter high.
+
+73
+00:04:46,241 --> 00:04:48,460
+And the view would break your brain.
+
+74
+00:04:48,460 --> 00:04:50,432
+Gravity this strong bends light.
+
+75
+00:04:50,432 --> 00:04:55,240
+Light leaving the far side of the star curves around it and reaches your eyes.
+
+76
+00:04:55,240 --> 00:05:01,280
+So from one spot, you would see more than half of the surface at once, including part of the back.
+
+77
+00:05:01,280 --> 00:05:06,519
+NASA's NICER telescope, on the International Space Station, uses exactly this effect.
+
+78
+00:05:06,519 --> 00:05:15,025
+In twenty nineteen, it mapped hot spots on a pulsar called J zero zero three zero, eleven hundred light years away, and measured its size.
+
+79
+00:05:15,025 --> 00:05:20,325
+About twenty six kilometers wide, with about one point four times the mass of the Sun.
+
+80
+00:05:21,026 --> 00:05:22,807
+And underneath that surface?
+
+81
+00:05:22,807 --> 00:05:26,305
+Nobody has ever seen it, but physicists have a picture.
+
+82
+00:05:26,305 --> 00:05:30,122
+On top, a thin crust of atomic nuclei locked into a crystal.
+
+83
+00:05:30,122 --> 00:05:36,356
+Deeper down, the nuclei are squeezed so tightly that they merge into long strands and flat sheets.
+
+84
+00:05:36,356 --> 00:05:41,890
+Physicists actually call it nuclear pasta, with shapes nicknamed spaghetti and lasagna.
+
+85
+00:05:41,890 --> 00:05:51,749
+Computer simulations published in twenty eighteen suggest it could be the strongest material in the universe, around ten billion times stronger than steel.
+
+86
+00:05:51,749 --> 00:05:53,658
+Below that, a sea of neutrons.
+
+87
+00:05:53,658 --> 00:05:55,121
+And at the very center?
+
+88
+00:05:55,121 --> 00:05:56,202
+Nobody knows yet.
+
+89
+00:05:56,202 --> 00:06:00,337
+The matter there is crushed beyond anything we can make in a lab.
+
+90
+00:06:01,037 --> 00:06:02,164
+And it's spinning.
+
+91
+00:06:02,164 --> 00:06:07,614
+A collapsing star spins faster as it shrinks, like a figure skater pulling in her arms.
+
+92
+00:06:07,614 --> 00:06:11,685
+The first pulsar turned once every one point three three seconds.
+
+93
+00:06:11,685 --> 00:06:20,392
+The fastest one known, discovered in two thousand five in the star cluster Terzan five, turns seven hundred and sixteen times every second.
+
+94
+00:06:20,392 --> 00:06:23,586
+Its beams sweep past us like a lighthouse gone mad.
+
+95
+00:06:24,286 --> 00:06:30,044
+NASA compares it to forty three thousand turns per minute, twice as fast as a kitchen blender.
+
+96
+00:06:30,044 --> 00:06:32,922
+Except this blender has more mass than the Sun.
+
+97
+00:06:32,922 --> 00:06:38,802
+By our calculation, a point on its equator moves at around fifty thousand kilometers per second.
+
+98
+00:06:38,802 --> 00:06:41,558
+That's roughly a fifth of the speed of light.
+
+99
+00:06:41,558 --> 00:06:45,662
+Spin it much faster, and the star would start to tear itself apart.
+
+100
+00:06:46,362 --> 00:06:48,061
+Now the biggest scale of all.
+
+101
+00:06:48,061 --> 00:06:50,697
+Sometimes two neutron stars orbit each other.
+
+102
+00:06:50,697 --> 00:06:55,792
+They slowly spiral together, and when they finally hit, the universe rings like a bell.
+
+103
+00:06:55,792 --> 00:07:01,474
+On August seventeenth, twenty seventeen, gravitational wave detectors on Earth felt that ringing.
+
+104
+00:07:01,474 --> 00:07:09,264
+Two neutron stars had collided in a galaxy called N G C forty nine ninety three, about a hundred and thirty million light years away.
+
+105
+00:07:09,264 --> 00:07:12,837
+The ripple had been traveling since the age of the dinosaurs.
+
+106
+00:07:13,537 --> 00:07:18,664
+Within hours, telescopes around the world turned to look, and they saw the fireball.
+
+107
+00:07:18,664 --> 00:07:21,289
+It was full of freshly made heavy elements.
+
+108
+00:07:21,289 --> 00:07:29,468
+Harvard astronomer Edo Berger estimated that this one collision produced about ten times the mass of Earth in gold and platinum alone.
+
+109
+00:07:29,468 --> 00:07:33,985
+Collisions like this are now thought to forge much of the universe's gold.
+
+110
+00:07:33,985 --> 00:07:40,089
+Billions of years ago, some of that gold drifted into the cloud of gas that became our solar system.
+
+111
+00:07:40,089 --> 00:07:45,765
+So if you're wearing gold, some of it may have been made by two dead stars smashing together.
+
+112
+00:07:46,466 --> 00:07:47,887
+So that's a neutron star.
+
+113
+00:07:47,887 --> 00:07:57,840
+A city sized ball, heavier than the Sun, spinning hundreds of times a second, where a teaspoon outweighs all of humanity, and only stays that way because it never leaves home.
+
+114
+00:07:57,840 --> 00:08:01,821
+Now picture something much closer, and much heavier than any teaspoon.
+
+115
+00:08:01,821 --> 00:08:05,177
+Our Moon weighs about seventy three billion billion tonnes.
+
+116
+00:08:05,177 --> 00:08:07,679
+In the last episode we saw it drifting away.
+
+117
+00:08:07,679 --> 00:08:10,466
+But what if it came back, and crashed into Earth?
+
+118
+00:08:10,466 --> 00:08:11,148
+That's next.
