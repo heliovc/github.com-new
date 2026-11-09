@@ -264,9 +264,9 @@ def cmd_plan(_args):
 
 
 def cmd_run(args):
-    from studio import LoginNeeded, Studio, StudioError, open_browser
-
     git_pull()
+    # importa DEPOIS do pull: senão a rodada usa o studio.py antigo (visto em 09/11)
+    from studio import LoginNeeded, Studio, StudioError, open_browser  # noqa: F401
     items, errors = mf.discover(REPO)
     for e in errors:
         log.error(e)
@@ -368,9 +368,8 @@ def cmd_run(args):
 
 
 def cmd_metrics(_args):
-    from studio import Studio, open_browser
-
     git_pull()
+    from studio import Studio, open_browser
     pw, ctx = open_browser(PROFILE)
     result = {"collected_at": mf.now_sp().isoformat(), "channels": []}
     try:
