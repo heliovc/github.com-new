@@ -10,8 +10,9 @@ if [ "$(id -u)" != 0 ] && command -v sudo >/dev/null 2>&1; then SUDO="sudo"; fi
 TMP=$(mktemp -d)
 
 # ---------------------------------------------------------------- Python
-pip install --break-system-packages -q kokoro-onnx soundfile numpy pillow 2>/dev/null \
-  || pip install -q kokoro-onnx soundfile numpy pillow
+# "python3 -m pip": no container da nuvem o comando pip é de outro Python (3.13) e o python3 é o 3.11
+python3 -m pip install --break-system-packages -q kokoro-onnx soundfile numpy pillow 2>/dev/null \
+  || python3 -m pip install -q kokoro-onnx soundfile numpy pillow
 python3 -c "import kokoro_onnx, soundfile, numpy, PIL" && log "python OK" || log "ERRO: pacotes python"
 
 # ---------------------------------------------------------------- ffmpeg
@@ -22,7 +23,7 @@ apt_install() {
 }
 command -v ffmpeg >/dev/null 2>&1 || apt_install ffmpeg
 if ! command -v ffmpeg >/dev/null 2>&1; then
-  pip install --break-system-packages -q imageio-ffmpeg 2>/dev/null || pip install -q imageio-ffmpeg
+  python3 -m pip install --break-system-packages -q imageio-ffmpeg 2>/dev/null || python3 -m pip install -q imageio-ffmpeg
   FF=$(python3 -c "import imageio_ffmpeg; print(imageio_ffmpeg.get_ffmpeg_exe())" 2>/dev/null)
   [ -n "$FF" ] && $SUDO ln -sf "$FF" /usr/local/bin/ffmpeg
 fi
