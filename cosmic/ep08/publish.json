@@ -1,0 +1,104 @@
+{
+ "version": 1,
+ "channel_id": "UCsYYjUbmq4n3lAKgw2F2IJw",
+ "created_at": "2026-11-09T12:14:46-03:00",
+ "items": [
+  {
+   "key": "cosmic-ep08-long",
+   "kind": "long",
+   "video": "video.mp4",
+   "title": "What If the Moon Crashed Into Earth? You'd Have 4 Days",
+   "description": "If the Moon stopped in its orbit tonight, it would fall, and you'd have about 4 days and 20 hours. For three days the sky would look almost normal. Then the Moon would swell to 20 times its width, the oceans would rise toward it, and 22 minutes before impact it would start to crack. We run the countdown to scale, put the impact on an energy ladder, look at the slow ending where Earth gets rings (Mars is about to do this with Phobos), and finish with the twist: the Moon was born from a crash.\n\nChapters\n0:00 You'd have 4 days and 20 hours\n0:40 What exactly is falling\n1:09 The Moon is always falling\n1:26 Day 0 to day 3\n2:03 Day 4: people notice\n2:41 The oceans (and the rocks) notice\n3:30 The final hours\n3:49 The Roche limit\n4:15 The last minutes\n4:39 Impact, on an energy ladder\n5:21 Would Earth survive?\n5:45 The slow ending: Earth gets rings\n6:28 The twist: it already happened\n7:17 Why it can't happen\n7:48 Next episode\n\nSources\n- NASA Moon fact sheet (NSSDCA): mass 7.346 × 10^22 kg, equatorial radius 1,738 km (diameter about 3,474 km), mean distance 384,400 km, mean orbital speed 1.022 km/s; Earth mass 5.972 × 10^24 kg, radius 6,371 km\n- NASA Science, Moon: the Moon is moving away from Earth by about 3.8 cm (1.5 inches) per year, measured with Apollo laser retroreflectors\n- NASA Science / Lunar and Planetary Institute: Apollo samples have oxygen isotope ratios nearly identical to Earth's, unlike Mars and most meteorites (evidence for the giant impact)\n- Tidal braking: Earth's day lengthens by roughly 2 milliseconds per century (lunar laser ranging and historical eclipse records)\n- Speed of sound in air about 0.34 km/s\n- NASA Science, Io: the most volcanically active world in the solar system, heated by tidal flexing\n- Black & Mittal (2015), Nature Geoscience, \"The demise of Phobos and development of a Martian ring system\"; NASA Goddard (2015): Phobos falls about 2 m per century and is expected to break up in about 30 to 50 million years\n- NASA Ames / Durham University, Kegerreis et al. (2022), The Astrophysical Journal Letters: the Moon may have formed within hours of a giant impact; giant impact hypothesis (Theia, roughly Mars-sized, about 4.5 billion years ago)\n- Chicxulub impact energy about 100 million megatons of TNT (about 4.2 × 10^23 J); Tsar Bomba (1961) about 50 megatons\n- Own calculations (Python): numeric free fall from rest at 384,400 km → impact after 4.82 days (about 4 days 20 hours); 10,300 km fallen after one day; 283,700 km on day 3; 105,600 km and 2.35 km/s at day 4.5; fluid Roche limit ≈ 18,400 km, crossed 22 minutes before contact, where the Moon would appear about 10.8° wide (≈ 21× today); tidal pull ∝ 1/d³ (×48 at day 4.5, ×9,000 at the Roche limit); impact speed ≈ 9.9 km/s; seen from directly below: ≈ 29° wide 10 minutes before impact, ≈ 46° at 5 minutes, ≈ 97° in the final minute; energy ≈ 3.5 × 10^30 J ≈ 8 million Chicxulubs ≈ 960× the energy to heat and boil all oceans (1.4 × 10^21 kg) ≈ 2.6 hours of the Sun's total output (3.83 × 10^26 W); Earth's gravitational binding energy ≈ 2.2 × 10^32 J (about 63× the impact)\n\n—\nCosmic Scale: the universe, measured in a way you can feel.\nSubscribe for a new space video every week.\nVisuals and animations are original. Narration uses a synthetic voice.\n#space #universe #science",
+   "tags": [
+    "moon crash",
+    "what if the moon crashed into earth",
+    "moon falling",
+    "roche limit",
+    "earth rings",
+    "theia",
+    "giant impact",
+    "phobos",
+    "tides",
+    "space facts",
+    "astronomy",
+    "cosmic scale",
+    "universe",
+    "what if"
+   ],
+   "thumbnail": "thumbnail.jpg",
+   "captions": "legendas.srt",
+   "publish_at": "2026-11-10T17:00:00-03:00",
+   "if_late": "public_now",
+   "made_for_kids": false,
+   "altered_content": true,
+   "pinned_comment": "If you had 4 days before the Moon hit, what would you do first?"
+  },
+  {
+   "key": "cosmic-rank07-short",
+   "kind": "short",
+   "video": "ranking.mp4",
+   "title": "Top 5 Closest Stars to the Sun (#1 Is 40 Trillion km Away) #shorts",
+   "description": "The five nearest stars, placed at their real distances, and the year their light left them. Full video on the channel: \"What If the Moon Crashed Into Earth? You'd Have 4 Days\".\n\nSources\n- NASA Imagine the Universe, \"The Nearest Star\": Proxima Centauri about 4.2 light-years; at Voyager's speed the trip would take over 73,000 years\n- NASA Science, Alpha Centauri: Alpha Centauri A and B about 4.37 light-years, third-brightest star in the night sky\n- RECONS (Research Consortium on Nearby Stars) / NASA nearest-stars lists: Barnard's Star 5.96 ly, Wolf 359 7.86 ly, Lalande 21185 8.31 ly\n- Barnard's Star has the largest proper motion of any star (Barnard, 1916)\n- Wolf 359: about 0.11 solar masses; Lalande 21185: apparent magnitude about 7.5 (binoculars needed)\n- Own calculations: 1 light-year = 9.46 trillion km (4.24 ly ≈ 40 trillion km); year the light left = November 2026 minus distance\n\nVisuals and animations are original. Narration uses a synthetic voice.\n#shorts #space #stars #astronomy",
+   "tags": [
+    "closest stars",
+    "proxima centauri",
+    "alpha centauri",
+    "barnard's star",
+    "light-year",
+    "space facts",
+    "shorts",
+    "cosmic scale"
+   ],
+   "publish_at": "2026-11-10T13:00:00-03:00",
+   "if_late": "public_now",
+   "made_for_kids": false,
+   "altered_content": true,
+   "related_key": "cosmic-ep08-long",
+   "pinned_comment": "Which star should we put next? Full video: What If the Moon Crashed Into Earth? You'd Have 4 Days"
+  },
+  {
+   "key": "cosmic-scale01-short",
+   "kind": "short",
+   "video": "scale.mp4",
+   "title": "Every Planet Fits Between Earth and the Moon (But Only Sometimes) #shorts",
+   "description": "All 7 other planets, side by side and to scale, in the gap between Earth and the Moon: 387,941 km of planets. Full video on the channel: \"What If the Moon Crashed Into Earth? You'd Have 4 Days\".\n\nSources\n- NASA Planetary Fact Sheets: diameters Mercury 4,879 km, Venus 12,104 km, Mars 6,792 km, Jupiter 142,984 km, Saturn 120,536 km, Uranus 51,118 km, Neptune 49,528 km; Earth radius 6,371 km; Moon radius 1,737 km\n- NASA Moon fact sheet: Earth–Moon distance 384,400 km on average, about 405,500 km at apogee\n- Own calculation: planets side by side 387,941 km; surface-to-surface gap 397,392 km at apogee (fits, about 9,450 km spare) and 376,292 km on average (about 11,650 km too long)\n\nVisuals and animations are original. Narration uses a synthetic voice.\n#shorts #space #planets #moon",
+   "tags": [
+    "planets between earth and moon",
+    "solar system to scale",
+    "moon distance",
+    "jupiter",
+    "saturn",
+    "space facts",
+    "shorts",
+    "cosmic scale"
+   ],
+   "publish_at": "2026-11-10T19:00:00-03:00",
+   "if_late": "public_now",
+   "made_for_kids": false,
+   "altered_content": true,
+   "related_key": "cosmic-ep08-long",
+   "pinned_comment": "Which planet surprised you most? Full video: What If the Moon Crashed Into Earth? You'd Have 4 Days"
+  },
+  {
+   "key": "cosmic-ep08-short",
+   "kind": "short",
+   "video": "vertical.mp4",
+   "title": "If the Moon Fell, You'd Have 4 Days. The Last 10 Minutes Look Like This #shorts",
+   "description": "If the Moon stopped in its orbit, it would fall in about 4 days and 20 hours, and in the last minutes it would fill half the sky. Full video on the channel: \"What If the Moon Crashed Into Earth? You'd Have 4 Days\".\n\nSources\n- NASA Moon fact sheet: mass, size and distance of the Moon\n- Own calculations (Python): numeric free fall from 384,400 km, Roche limit about 18,400 km, angular size of the Moon in the final minutes\n\nVisuals and animations are original. Narration uses a synthetic voice.\n#shorts #space #moon #whatif",
+   "tags": [
+    "moon crash",
+    "what if the moon fell",
+    "moon falling to earth",
+    "space facts",
+    "shorts",
+    "cosmic scale"
+   ],
+   "publish_at": "2026-11-10T21:00:00-03:00",
+   "if_late": "public_now",
+   "made_for_kids": false,
+   "altered_content": true,
+   "related_key": "cosmic-ep08-long",
+   "pinned_comment": "Would you rather see the fast ending or Earth with rings? Full video: What If the Moon Crashed Into Earth? You'd Have 4 Days"
+  }
+ ]
+}

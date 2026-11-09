@@ -11,6 +11,8 @@ THEME.hook == "streaks": gancho com rastros de velocidade em vez da estrela giga
 vis.type == "horizons" / THEME.hook/outro == "horizons": horizontes de eventos em escala fixa contra o Sistema Solar e a Voyager 1 (rank05).
 vis.type == "thermo" / THEME.hook == "thermo": termômetro vertical 0–6.000 °C com marcas de referência + planeta brilhando na cor da temperatura (rank04).
 THEME.hook == "moons": silhueta "?" do nº 1 dentro do contorno de Mercúrio + as 5 luas orbitando (rank03).
+vis.type == "lightyears" / THEME.hook/outro == "lightyears": régua vertical em anos-luz (Sol embaixo, 0–9 a.l.), pulso de luz descendo, estrela grande
+  + "a luz que você vê hoje saiu em AAAA" (rank07). HOOK.big = número grande no 1º frame.
 vis.type == "daylight" / THEME.hook/outro == "daylight": planeta com dia/noite e Sol girando em volta (1 volta = 1 dia solar) + contador de dias terrestres + régua linear 0–180 dias com os mundos revelados (rank06).
 Tudo desenhado por código; narração Kokoro (VOICE, padrão af_heart); legenda grande queimada.
 """
@@ -389,6 +391,45 @@ def daylight_vis(img, it, th, t, dur):
     if v.get("note"):
         text(img, (W / 2, 1300), v["note"], 40, tuple(th["accent2"]), w="ExtraBold", a=ease((t - 1.6) / 0.5))
 
+
+# ---- rank07: "lightyears" — vertical light-year ruler from the Sun (bottom) up to 9 ly; light pulse climbing; year the light left
+LY_X, LY_Y0, LY_Y1, LY_MAX = 250, 1190, 480, 9.0
+def ly_y(d): return lerp(LY_Y0, LY_Y1, d / LY_MAX)
+def ly_ruler(img, th, shown, cur=None, t=0.0, pulse=None, labels=True):
+    acc = tuple(th["accent"]); d = ImageDraw.Draw(img)
+    d.line([(LY_X, LY_Y0), (LY_X, LY_Y1 - 20)], fill=(110, 120, 150), width=4)
+    for k in range(0, 10):
+        y = ly_y(k); d.line([(LY_X - 18, y), (LY_X, y)], fill=(110, 120, 150), width=3)
+        d.text((LY_X - 30, y), f"{k}", font=F(30, "Bold"), fill=(150, 160, 190), anchor="rm")
+    d.text((LY_X - 30, LY_Y1 - 60), "light-years", font=F(28, "Bold"), fill=(150, 160, 190), anchor="lm")
+    R.paste_c(img, R.sun_sprite(14), LY_X, LY_Y0)
+    d = ImageDraw.Draw(img)
+    if labels: d.text((LY_X + 40, LY_Y0 + 4), "the Sun (you are here)", font=F(30, "Bold"), fill=(255, 220, 160), anchor="lm")
+    if pulse is not None:
+        lay = Image.new("RGBA", img.size, (0, 0, 0, 0)); dl = ImageDraw.Draw(lay); y = ly_y(pulse)
+        for k in range(16): dl.ellipse([LY_X - 9, y + k * 9 - 9, LY_X + 9, y + k * 9 + 9], fill=acc + (int(220 * (1 - k / 16)),))
+        img.alpha_composite(lay)
+    for o in shown:
+        y = ly_y(o["vis"]["ly"]); c = tuple(o["vis"]["col"]); big = cur is not None and o is cur
+        d = ImageDraw.Draw(img); d.line([(LY_X, y), (LY_X + 60, y)], fill=c, width=3)
+        R.paste_c(img, star_sprite(13 if big else 8, c), LY_X + 80, y)
+        d = ImageDraw.Draw(img); ly = o["vis"]["ly"]; yo = 16 if 4.2 < ly < 4.3 else (-14 if 4.3 <= ly < 4.4 else 0)
+        if labels: d.text((LY_X + 110, y + yo), f'{o["short"]}  {o["vis"]["ly"]:g}', font=F(34 if big else 28, "ExtraBold" if big else "Bold"), fill=acc if big else (200, 205, 220), anchor="lm")
+
+def lightyears_vis(img, it, th, t, dur):
+    v = it["vis"]; order = sorted(ALL_ITEMS, key=lambda o: -o["rank"])
+    shown = order[:order.index(it) + 1]
+    p = easeio((t - 0.4) / max(1.2, dur * 0.6))
+    ly_ruler(img, th, shown, cur=it, t=t, pulse=v["ly"] * (1 - p))
+    cx, cy = 850, 760; rr = v.get("r", 120) * (0.97 + 0.03 * math.sin(t * 3))
+    R.paste_c(img, star_sprite(int(rr), tuple(v["col"])), cx, cy)
+    if v.get("pair"):
+        cx -= 50; R.paste_c(img, star_sprite(int(rr * 0.75), tuple(v["pair"])), cx + rr * 0.95, cy + rr * 0.75)
+    yr = 2026.86 - v["ly"]
+    text(img, (cx, cy + 260), "the light you see tonight", 34, (205, 210, 225), w="Bold", a=ease((t - 1.0) / 0.4))
+    text(img, (cx, cy + 320), f"left it in {int(yr)}", 58, tuple(th["accent"]), a=ease((t - 1.2) / 0.4))
+    if v.get("note"): text(img, (W / 2, 1300), v["note"], 38, tuple(th["accent2"]), w="ExtraBold", a=ease((t - 1.8) / 0.5))
+
 def caption_chunks(say, t0, dur):
     words = say.split(); groups, g = [], []
     for w in words:
@@ -411,6 +452,17 @@ def draw_caption(img, chunks, gt, y=1585):
 
 def seg_hook(img, sc, th, t, dur):
     col = tuple(th["star_col"]); acc = tuple(th["accent"])
+    if th.get("hook") == "lightyears":
+        # frame 0: the big distance + a "?" star at 4.24 ly with light crawling down toward the Sun
+        order = sorted(ALL_ITEMS, key=lambda o: o["rank"])
+        ly_ruler(img, th, [], pulse=4.24 * (1 - (t * 0.35) % 1))
+        y = ly_y(4.24); R.paste_c(img, star_sprite(60, (255, 120, 90)), 760, y)
+        d = ImageDraw.Draw(img); d.line([(LY_X, y), (700, y)], fill=(255, 120, 90), width=3)
+        d.text((760, y), "?", font=F(90, "Black"), fill=(30, 10, 10), anchor="mm")
+        text(img, (W / 2, 200), sc.get("big", ""), 118, tuple(th["accent"]))
+        text(img, (W / 2, 300), sc["top"].upper(), 60, (255, 255, 255))
+        text(img, (W / 2, 1400), sc["sub"], 50, tuple(th["accent2"]), w="ExtraBold")
+        return
     if th.get("hook") == "daylight":
         # tiny Earth spinning madly vs the #1 world barely turning: frame 0 already has both + the claim
         ang = -math.pi / 2 + t * 0.12
@@ -521,6 +573,8 @@ def seg_item(img, it, th, t, dur):
         horizons_vis(img, it, th, t, dur)
     if v["type"] == "daylight":
         daylight_vis(img, it, th, t, dur)
+    if v["type"] == "lightyears":
+        lightyears_vis(img, it, th, t, dur)
     # number
     p = easeio((t - 0.5) / 1.6)
     num = it["num"]
@@ -533,6 +587,14 @@ def seg_item(img, it, th, t, dur):
 
 def seg_outro(img, sc, th, t, dur):
     a = ease(t / 0.5)
+    if th.get("outro") == "lightyears":
+        ly_ruler(img, th, sorted(ALL_ITEMS, key=lambda o: -o["rank"]), pulse=4.24 * (1 - (t * 0.35) % 1), labels=False)
+        if th.get("outro_note"): text(img, (W / 2 + 120, 640), th["outro_note"], 44, tuple(th["accent2"]), w="ExtraBold", a=a)
+        text(img, (W / 2 + 120, 860), "WHICH STAR", 90, (255, 255, 255), a=ease((t - 0.3) / 0.5))
+        text(img, (W / 2 + 120, 960), "SHOULD WE PUT NEXT?", 54, tuple(th["accent"]), a=ease((t - 0.5) / 0.5))
+        text(img, (W / 2 + 120, 1180), "SUBSCRIBE", 100, tuple(th["accent"]), a=ease((t - 0.8) / 0.5))
+        text(img, (W / 2 + 120, 1270), "to Cosmic Scale", 50, (255, 255, 255), w="ExtraBold", a=ease((t - 1.0) / 0.5))
+        return
     if th.get("outro") == "daylight":
         order = sorted(ALL_ITEMS, key=lambda o: o["vis"]["days"])
         d = ImageDraw.Draw(img); x0, x1 = 110, W - 110

@@ -5,6 +5,10 @@ EP03 added scenes: zoom, stretch, horizons, deepfield, shrink (violet/magenta pa
 EP04 added scenes: blackhole, spaghetti, twoclocks, horizonsize, inside (ember orange / pale cyan palette)
 EP05 added scenes: inflate, flight, measure, density, heavyvsbig, balance (crimson / cream palette)
 EP07 added scenes: teaspoon, pulsechart, crush, ladder (log scale), layers, lensing, pulsar, merger (electric blue / coral palette)
+EP08 added scenes: skyline (Moon seen from a coastal town, angular size grows; tide), fallpath (radial fall TO SCALE with day/distance/speed
+  from a numeric free-fall table), tides (ocean bulge + 1/d³ multiplier), roche (top-down: "fall" = crosses in 22 min / "ring" = smears into a ring),
+  theia (giant impact -> debris disk -> Moon). Palette moon silver / ultramarine / magma. Structure NEW: countdown (day counter) + 2 endings + twist.
+  Learned: setup script pip may target another python -> use python3 -m pip.
 EP06 added scenes: spinglobe (globe + speed by latitude; top=True rings; slow=True), pendulum, fling, bulge, yearday, dayclock (teal / amber palette)
 """
 import sys, os, re, math, subprocess, importlib.util, json, random, hashlib
@@ -1941,6 +1945,237 @@ def sc_merger(img, v, t, dur):
         d.text((1410, 340), "Earth masses of gold + platinum", font=F(38, "Bold"), fill=GOLD7, anchor="mm")
         d.text((1410, 760), f"≈ {k}", font=F(96, "Black"), fill=GOLD7, anchor="mm")
         caption(img, "estimate: Edo Berger (Harvard), GW170817", ease((t - 3) / 0.5))
+
+# ---------------- scenes (EP08: Moon crash — moon silver / ultramarine / magma) ----------------
+SILVER8, SEA8, MAGMA8, ICE8 = (222, 226, 236), (46, 112, 255), (255, 96, 44), (150, 200, 255)
+_moon8 = {}
+def moon8(r, light=(-0.9, -0.35), cracked=0.0):
+    """grey Moon with maria + craters (procedural); cracked: 0..1 glowing fracture lines"""
+    r = max(3, int(r)); key = (r, light, round(cracked, 2))
+    if key in _moon8: return _moon8[key]
+    base = planet_sprite(r, (178, 178, 182), light=light).copy()
+    if r >= 12:
+        a = np.asarray(base, np.float32).copy(); s = a.shape[0]
+        yy, xx = np.mgrid[0:s, 0:s].astype(np.float32); nx, ny = (xx - s / 2) / r, (yy - s / 2) / r
+        rng = np.random.default_rng(8)
+        for (mx, my, mr) in [(-0.25, -0.3, 0.32), (0.2, -0.15, 0.22), (-0.1, 0.25, 0.26), (0.35, 0.3, 0.15)]:
+            m = np.exp(-(((nx - mx) ** 2 + (ny - my) ** 2) / (2 * mr * mr)))
+            a[..., :3] *= (1 - 0.32 * m)[..., None]
+        for _ in range(26):
+            cx, cy, cr = rng.uniform(-0.85, 0.85), rng.uniform(-0.85, 0.85), rng.uniform(0.03, 0.11)
+            dd = np.hypot(nx - cx, ny - cy)
+            a[..., :3] *= (1 - 0.22 * ((dd < cr) & (dd > cr * 0.7)))[..., None]
+        base = Image.fromarray(np.clip(a, 0, 255).astype(np.uint8), "RGBA")
+    if cracked > 0 and r >= 12:
+        lay = Image.new("RGBA", base.size, (0, 0, 0, 0)); d = ImageDraw.Draw(lay); rng = random.Random(5); c = base.width / 2
+        for k in range(int(4 + 10 * cracked)):
+            x, y = c + rng.uniform(-0.5, 0.5) * r, c + rng.uniform(-0.5, 0.5) * r; pts = [(x, y)]
+            ang = rng.uniform(0, 2 * math.pi)
+            for _ in range(9):
+                ang += rng.uniform(-0.6, 0.6); x += math.cos(ang) * 0.09 * r; y += math.sin(ang) * 0.09 * r
+                if math.hypot(x - c, y - c) > r * 0.97: break
+                pts.append((x, y))
+            if len(pts) > 1:
+                d.line(pts, fill=MAGMA8 + (int(110 * min(1, cracked * 1.4)),), width=max(3, r // 22))
+                d.line(pts, fill=(255, 210, 150, int(255 * min(1, cracked * 1.4))), width=max(1, r // 90))
+        m = Image.new("L", base.size, 0); ImageDraw.Draw(m).ellipse([c - r, c - r, c + r, c + r], fill=255)
+        lay.putalpha(Image.fromarray(np.minimum(np.asarray(lay.getchannel("A")), np.asarray(m))))
+        base.alpha_composite(lay)
+    _moon8[key] = base
+    return base
+
+def _fall_table():
+    G, M, RE8, RM8, D = 6.674e-11, 5.972e24 + 7.346e22, 6.371e6, 1.7374e6, 3.844e8
+    r, vv, tt, dt, out = D, 0.0, 0.0, 30.0, []
+    while r > RE8 + RM8:
+        out.append((tt / 86400, r / 1e3, -vv / 1e3)); vv -= G * M / r ** 2 * dt; r += vv * dt; tt += dt
+    out.append((tt / 86400, (RE8 + RM8) / 1e3, -vv / 1e3)); return out
+FALL8 = None
+def fall_at(day):
+    global FALL8
+    if FALL8 is None: FALL8 = _fall_table(); FALL8.append(np.array([x[0] for x in FALL8[:-0 or None]]))
+    i = min(len(FALL8) - 2, max(0, int(np.searchsorted(FALL8[-1], day))))
+    return FALL8[i]
+
+def landscape8(img, glow, t, tide=0.0):
+    """night horizon: hills + city + sea; glow 0..1 moonlight; tide raises the sea line (px)"""
+    lay = Image.new("RGBA", img.size, (0, 0, 0, 0)); d = ImageDraw.Draw(lay)
+    sky = mix((6, 9, 22), (40, 52, 90), glow)
+    d.rectangle([0, 0, W, H], fill=sky + (int(170 * glow),))
+    img.alpha_composite(lay)
+    d = ImageDraw.Draw(img); rng = random.Random(81)
+    pts = [(0, H)] + [(x, 800 - 70 * math.sin(x / 260) - 40 * math.sin(x / 97 + 1)) for x in range(0, W + 40, 40)] + [(W, H)]
+    d.polygon(pts, fill=mix((10, 12, 20), (34, 38, 56), glow))
+    x = 1100
+    while x < 1700:
+        bw, bh = rng.randint(30, 70), rng.randint(60, 190)
+        d.rectangle([x, 820 - bh, x + bw, 900], fill=mix((14, 16, 28), (38, 42, 62), glow))
+        for wy in range(int(830 - bh), 890, 22):
+            for wx in range(x + 8, x + bw - 8, 16):
+                if rng.random() < 0.35: d.rectangle([wx, wy, wx + 6, wy + 9], fill=(255, 214, 140))
+        x += bw + rng.randint(4, 16)
+    sea = 905 - tide
+    d.rectangle([0, sea, W, H], fill=mix((8, 16, 40), (30, 60, 120), glow))
+    for k in range(14):
+        y = sea + 12 + k * 13; ww = 30 + k * 10 + 10 * math.sin(t * 2 + k)
+        d.line([(W * 0.62 - ww, y), (W * 0.62 + ww, y)], fill=mix((40, 50, 80), SILVER8, glow * 0.8), width=3)
+
+_halo8 = {}
+def sc_skyline(img, v, t, dur):
+    """the Moon as seen from a coastal town, angular size deg0 -> deg1 (60° field of view)"""
+    p = easeio((t - 0.4) / max(1.0, dur * v.get("speed", 0.8)))
+    deg = v["deg0"] * (v["deg1"] / v["deg0"]) ** p
+    pxdeg = W / 60.0; r = min(deg * pxdeg / 2, 760)
+    glow = min(1.0, (deg / 10.8) ** 0.8)
+    if r > 20:
+        hk = (min(int(r), 240) // 6, int(glow * 20))
+        if hk not in _halo8: _halo8[hk] = radial(hk[0] * 30, [(0, (200, 210, 235, int(6 * hk[1]))), (0.4, (160, 175, 210, int(2.5 * hk[1]))), (1, (120, 130, 170, 0))])
+        paste_c(img, _halo8[hk], W * 0.62, 420)
+    landscape8(img, glow, t, v.get("tide", 0) * p)
+    cr = round(v.get("cracked", 0) * p, 1)
+    if r <= 220: spr = moon8(max(4, r), light=(-0.2, -0.1), cracked=cr)
+    else:
+        spr = moon8(220, light=(-0.2, -0.1), cracked=cr); k = r / 220; spr = spr.resize((int(spr.width * k), int(spr.height * k)), Image.BILINEAR)
+    paste_c(img, spr, W * 0.62, 420 + max(0, r - 300) * 0.5)
+    d = ImageDraw.Draw(img)
+    box = Image.new("RGBA", img.size, (0, 0, 0, 0)); ImageDraw.Draw(box).rounded_rectangle([90, 140, 640, 420], 26, fill=(6, 10, 26, 210), outline=SILVER8 + (120,), width=2); img.alpha_composite(box)
+    d = ImageDraw.Draw(img)
+    d.text((130, 200), v.get("head", "Tonight"), font=F(52, "ExtraBold"), fill=SILVER8, anchor="lm")
+    d.text((130, 290), f"{deg / 0.518:.0f}× wider" if deg > 5 else f"{deg / 0.518:.1f}× wider", font=F(70, "Black"), fill=MAGMA8 if deg > 3 else WHITE, anchor="lm")
+    d.text((130, 370), "than the Moon you know", font=F(34, "SemiBold"), fill=DIM, anchor="lm")
+    caption(img, v.get("caption"), ease((t - 2.5) / 0.5))
+
+def sc_fallpath(img, v, t, dur):
+    """side view TO SCALE: Earth at left, Moon falling from 384,400 km; day counter, distance, speed"""
+    x0, x1, cy = 230, 1730, 560
+    k = (x1 - x0) / 384400.0
+    u = easeio((t - 0.3) / max(1.0, dur - 1.5)); day = lerp(v["d0"], v["d1"], u)
+    dd, dist, sp = fall_at(day)
+    d = ImageDraw.Draw(img)
+    for i in range(0, 8):
+        dk = 50000 * i; x = x0 + dk * k
+        d.line([(x, cy + 120), (x, cy + 140)], fill=(80, 90, 120), width=2)
+        d.text((x, cy + 170), f"{dk // 1000:,}k km" if i else "0", font=F(26, "SemiBold"), fill=DIM, anchor="mm")
+    d.line([(x0, cy + 130), (x1, cy + 130)], fill=(80, 90, 120), width=2)
+    rr = 18400 * k
+    for a in range(0, 360, 12): d.arc([x0 - rr, cy - rr, x0 + rr, cy + rr], a, a + 6, fill=MAGMA8, width=2)
+    paste_c(img, earth_sprite(int(6371 * k) + 1, light=(1, -0.2)), x0, cy)
+    # trail of daily positions
+    for dd2 in range(0, 5):
+        if dd2 <= day:
+            xx = x0 + fall_at(dd2)[1] * k; d.line([(xx, cy - 40), (xx, cy + 40)], fill=(90, 110, 160), width=2)
+            d.text((xx, cy - 60), f"day {dd2}", font=F(24, "SemiBold"), fill=DIM, anchor="mm")
+    mx = x0 + dist * k
+    paste_c(img, radial(60, [(0, (255, 255, 255, 200)), (1, (200, 210, 240, 0))]), mx, cy)
+    paste_c(img, moon8(max(4, int(1737 * k)) + 2), mx, cy)
+    d = ImageDraw.Draw(img)
+    d.text((W / 2, 140), v.get("head", "The fall, to scale"), font=F(60, "ExtraBold"), fill=WHITE, anchor="mm")
+    cols = [("DAY", f"{day:.1f}", SILVER8), ("DISTANCE", f"{dist:,.0f} km", ICE8), ("SPEED", f"{sp:.2f} km/s", MAGMA8)]
+    for i, (lab, val, c) in enumerate(cols):
+        x = 420 + i * 540
+        d.text((x, 830), lab, font=F(32, "Bold"), fill=DIM, anchor="mm"); d.text((x, 910), val, font=F(74, "Black"), fill=c, anchor="mm")
+    d.text((x0 + rr + 14, cy - rr - 6), "Roche limit", font=F(24, "Bold"), fill=MAGMA8, anchor="lm")
+    d.text((x1, 250), "Earth and Moon drawn to scale", font=F(28, "SemiBold"), fill=DIM, anchor="rm")
+
+def sc_tides(img, v, t, dur):
+    """ocean bulge pulled toward the Moon; tidal pull multiplier counts up (log)"""
+    p = easeio((t - 0.4) / max(1.0, dur * 0.7))
+    mult = v["m0"] * (v["m1"] / v["m0"]) ** p
+    cx, cy, R0 = 600, 580, 230
+    ex = R0 * (0.06 + 0.10 * math.log10(max(1, mult)))
+    lay = Image.new("RGBA", img.size, (0, 0, 0, 0)); dl = ImageDraw.Draw(lay)
+    dl.ellipse([cx - R0 - ex, cy - R0 + ex * 0.4, cx + R0 + ex, cy + R0 - ex * 0.4], fill=SEA8 + (200,))
+    img.alpha_composite(lay.filter(ImageFilter.GaussianBlur(3)))
+    paste_c(img, earth_sprite(R0 - 4, light=(1, -0.2)), cx, cy)
+    mr = 30 + 40 * p
+    paste_c(img, moon8(int(mr)), cx + 640 - 120 * p, cy)
+    d = ImageDraw.Draw(img)
+    for s in (-1, 1):
+        x = cx + s * (R0 + ex + 30); d.line([(x, cy), (x + s * 50, cy)], fill=WHITE, width=5)
+        d.polygon([(x + s * 60, cy), (x + s * 40, cy - 12), (x + s * 40, cy + 12)], fill=WHITE)
+    d.text((W / 2, 130), v.get("head", "The oceans notice"), font=F(62, "ExtraBold"), fill=WHITE, anchor="mm")
+    d.text((1480, 400), "tidal pull vs today", font=F(40, "Bold"), fill=DIM, anchor="mm")
+    d.text((1480, 520), f"×{mult:,.0f}" if mult >= 10 else f"×{mult:.1f}", font=F(140, "Black"), fill=SEA8 if mult < 100 else MAGMA8, anchor="mm")
+    d.text((1480, 640), "tides grow with 1 / distance³", font=F(38, "SemiBold"), fill=ICE8, anchor="mm")
+    d.text((1480, 700), "half the distance = 8× the tide", font=F(34, "SemiBold"), fill=DIM, anchor="mm")
+    d.text((cx, cy + R0 + 80), "bulge exaggerated", font=F(26, "SemiBold"), fill=DIM, anchor="mm")
+    caption(img, v.get("caption"), ease((t - 3) / 0.5))
+
+def sc_roche(img, v, t, dur):
+    """top-down: Moon crosses the Roche limit and smears into a ring (mode 'ring') or crosses fast (mode 'fall')"""
+    cx, cy, RE_ = 700, 560, 110
+    rl = RE_ * 18400 / 6371; mr = RE_ * 1737 / 6371
+    d = ImageDraw.Draw(img)
+    for a in range(0, 360, 8): d.arc([cx - rl, cy - rl, cx + rl, cy + rl], a, a + 4, fill=MAGMA8, width=3)
+    d.text((cx, cy - rl - 26), "Roche limit ≈ 18,000 km", font=F(30, "Bold"), fill=MAGMA8, anchor="mm")
+    paste_c(img, earth_sprite(RE_, light=(-1, -0.2)), cx, cy)
+    mode = v.get("mode", "ring"); rng = random.Random(9)
+    if mode == "fall":
+        u = min(1.0, max(0.0, (t - 0.5) / max(1.0, dur - 2.5)))
+        x = cx + lerp(rl + 330, RE_ + mr, u ** 1.6)
+        inside = x < cx + rl
+        sx = 1.0 + (0.5 * (1 - (x - cx - RE_) / (rl - RE_)) if inside else 0)
+        spr = moon8(int(mr), cracked=0.8 if inside else 0)
+        spr = spr.resize((int(spr.width * sx), int(spr.height / sx ** 0.5)))
+        if u < 1: paste_c(img, spr, x, cy)
+        else:
+            fl = max(0.0, 1 - (t - 0.5 - (dur - 2.5)) / 1.5)
+            paste_c(img, radial(500, [(0, (255, 250, 220, 255)), (0.3, MAGMA8 + (220,)), (1, MAGMA8 + (0,))]), cx + RE_, cy, fl)
+        d = ImageDraw.Draw(img)
+        d.text((1500, 420), "inside the line", font=F(40, "Bold"), fill=DIM, anchor="mm")
+        d.text((1500, 520), "22 min", font=F(130, "Black"), fill=MAGMA8, anchor="mm")
+        d.text((1500, 620), "before impact", font=F(40, "Bold"), fill=WHITE, anchor="mm")
+        d.text((1500, 700), "no time to fall apart", font=F(34, "SemiBold"), fill=DIM, anchor="mm")
+    else:
+        u = easeio((t - 0.4) / max(1.0, dur * 0.6))
+        orb = lerp(rl * 1.25, rl * 0.85, min(1, u * 1.4))
+        ang0 = -0.6 + t * 0.35
+        spread = max(0.0, (u - 0.35) / 0.65) * 2 * math.pi
+        if u < 0.4:
+            paste_c(img, moon8(int(mr), cracked=max(0, (u - 0.25) / 0.15)), cx + orb * math.cos(ang0), cy + orb * math.sin(ang0))
+        lay = Image.new("RGBA", img.size, (0, 0, 0, 0)); dl = ImageDraw.Draw(lay)
+        if u >= 0.3:
+            for i in range(900):
+                f = rng.random(); a = ang0 - f * spread + rng.gauss(0, 0.04); rr = orb + rng.gauss(0, 10 + 30 * u)
+                s = rng.choice([1.5, 2, 2.5, 3.5]); c = mix((150, 150, 160), (235, 230, 220), rng.random())
+                x, y = cx + rr * math.cos(a), cy + rr * math.sin(a)
+                dl.ellipse([x - s, y - s, x + s, y + s], fill=c + (int(230 * min(1, (u - 0.3) * 5)),))
+        img.alpha_composite(lay)
+        d = ImageDraw.Draw(img)
+        d.text((1480, 420), v.get("big", "Earth gets rings"), font=F(70, "Black"), fill=SILVER8, anchor="mm")
+        d.text((1480, 510), v.get("sub", "the slow ending"), font=F(40, "SemiBold"), fill=DIM, anchor="mm")
+    caption(img, v.get("caption"), ease((t - 3) / 0.5))
+
+def sc_theia(img, v, t, dur):
+    """giant impact: Mars-sized Theia hits the molten young Earth; debris disk clumps into the Moon"""
+    cx, cy, R0 = 820, 580, 210
+    tc = 2.2
+    d = ImageDraw.Draw(img)
+    d.text((W / 2, 120), v.get("head", "4.5 billion years ago"), font=F(62, "ExtraBold"), fill=WHITE, anchor="mm")
+    hot = planet_sprite(R0, (200, 80, 40), light=(-0.8, -0.3), glow=(255, 120, 60))
+    paste_c(img, hot, cx, cy)
+    if t < tc:
+        u = t / tc; tx, ty = lerp(1800, cx + R0 * 1.2, u ** 1.5), lerp(180, cy - R0 * 0.7, u ** 1.5)
+        paste_c(img, planet_sprite(R0 // 2, (150, 140, 130), light=(-0.8, -0.3)), tx, ty)
+        d.text((tx, ty - R0 // 2 - 40), "Theia (≈ Mars size)", font=F(34, "Bold"), fill=SILVER8, anchor="mm")
+    else:
+        s = t - tc
+        fl = max(0.0, 1 - s / 1.2)
+        if fl > 0: paste_c(img, radial(900, [(0, (255, 255, 240, 255)), (0.25, (255, 200, 120, 220)), (1, (255, 120, 50, 0))]), cx + R0 * 0.8, cy - R0 * 0.5, fl)
+        lay = Image.new("RGBA", img.size, (0, 0, 0, 0)); dl = ImageDraw.Draw(lay); rng = random.Random(12)
+        clump = min(1.0, max(0.0, (s - 3.0) / 4.0))
+        mang = s * 0.25; mx, my = cx + 470 * math.cos(mang), cy + 470 * 0.42 * math.sin(mang)
+        for i in range(700):
+            a = rng.uniform(0, 2 * math.pi) + s * 0.25 * (470 / rng.uniform(300, 600)); rr = rng.uniform(R0 * 1.3, R0 * 2.9) * min(1, s / 1.5)
+            x, y = cx + rr * math.cos(a), cy + rr * 0.42 * math.sin(a)
+            x, y = lerp(x, mx, clump * rng.uniform(0.7, 1)), lerp(y, my, clump * rng.uniform(0.7, 1))
+            c = mix(MAGMA8, (200, 190, 180), min(1, s / 6)); r2 = rng.choice([1.5, 2, 3])
+            dl.ellipse([x - r2, y - r2, x + r2, y + r2], fill=c + (220,))
+        img.alpha_composite(lay)
+        if clump > 0.6: paste_c(img, moon8(int(60 * (clump - 0.6) / 0.4) + 4), mx, my)
+        d = ImageDraw.Draw(img)
+        if clump > 0.8: d.text((mx, my + 90), "the Moon", font=F(40, "Black"), fill=SILVER8, anchor="mm")
+    caption(img, v.get("caption"), ease((t - 3) / 0.5))
 
 SC = {k[3:]: f for k, f in globals().items() if k.startswith("sc_")}
 
