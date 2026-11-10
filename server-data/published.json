@@ -45,8 +45,8 @@
   "publish_at": "2026-11-10T13:00:00-03:00",
   "related_key": "cosmic-ep08-long",
   "pinned_comment": "Which star should we put next? Full video: What If the Moon Crashed Into Earth? You'd Have 4 Days",
-  "comment_attempts": 1,
-  "comment_error": "Page.goto: Timeout 60000ms exceeded.\nCall log:\n  - navigating to \"https://www.youtube.com/watch?v=ThPT6GQV2a4\", waiting until \"domcontentloaded\"\n (20261110-131523-erro-comment-cosmic-rank07-short.png)"
+  "comment_attempts": 2,
+  "comment_done": "2026-11-10T13:21:50.539247-03:00"
  },
  "ptd-ep08-long": {
   "attempts": 1,
