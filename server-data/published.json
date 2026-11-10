@@ -46,7 +46,9 @@
   "related_key": "cosmic-ep08-long",
   "pinned_comment": "Which star should we put next? Full video: What If the Moon Crashed Into Earth? You'd Have 4 Days",
   "comment_attempts": 2,
-  "comment_done": "2026-11-10T13:21:50.539247-03:00"
+  "comment_done": "2026-11-10T13:21:50.539247-03:00",
+  "related_attempts": 1,
+  "related_done": "2026-11-10T17:12:33.558530-03:00"
  },
  "ptd-ep08-long": {
   "attempts": 1,
@@ -119,7 +121,9 @@
   "title": "What If the Moon Crashed Into Earth? You'd Have 4 Days",
   "kind": "long",
   "publish_at": "2026-11-10T17:00:00-03:00",
-  "pinned_comment": "If you had 4 days before the Moon hit, what would you do first?"
+  "pinned_comment": "If you had 4 days before the Moon hit, what would you do first?",
+  "comment_attempts": 1,
+  "comment_done": "2026-11-10T17:13:40.661044-03:00"
  },
  "cosmic-scale01-short": {
   "attempts": 2,
@@ -136,7 +140,9 @@
   "kind": "short",
   "publish_at": "2026-11-10T19:00:00-03:00",
   "related_key": "cosmic-ep08-long",
-  "pinned_comment": "Which planet surprised you most? Full video: What If the Moon Crashed Into Earth? You'd Have 4 Days"
+  "pinned_comment": "Which planet surprised you most? Full video: What If the Moon Crashed Into Earth? You'd Have 4 Days",
+  "related_attempts": 1,
+  "related_done": "2026-11-10T17:15:35.078409-03:00"
  },
  "cosmic-ep08-short": {
   "attempts": 2,
@@ -153,7 +159,9 @@
   "kind": "short",
   "publish_at": "2026-11-10T21:00:00-03:00",
   "related_key": "cosmic-ep08-long",
-  "pinned_comment": "Would you rather see the fast ending or Earth with rings? Full video: What If the Moon Crashed Into Earth? You'd Have 4 Days"
+  "pinned_comment": "Would you rather see the fast ending or Earth with rings? Full video: What If the Moon Crashed Into Earth? You'd Have 4 Days",
+  "related_attempts": 1,
+  "related_done": "2026-11-10T17:17:38.595900-03:00"
  },
  "lab-ep05-long": {
   "attempts": 1,

@@ -1,8 +1,14 @@
 {
- "last_run": "2026-11-10T16:10:22.510340-03:00",
+ "last_run": "2026-11-10T17:17:41.596633-03:00",
  "pending": 0,
- "post_tasks": 0,
+ "post_tasks": 4,
  "errors": [
   "/opt/canal-publisher/repo/cosmic/ep07/publish.json: version deve ser 1"
+ ],
+ "published_now": [
+  "cosmic-rank07-short: related vinculado a q8HdvqZT6OQ",
+  "cosmic-ep08-long: comment comentário fixado",
+  "cosmic-scale01-short: related vinculado a q8HdvqZT6OQ",
+  "cosmic-ep08-short: related vinculado a q8HdvqZT6OQ"
  ]
 }
