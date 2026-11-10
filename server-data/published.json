@@ -187,5 +187,52 @@
   "related_done": "2026-11-09T19:15:39.546546-03:00",
   "comment_attempts": 1,
   "comment_done": "2026-11-09T20:42:26.046571-03:00"
+ },
+ "ptd-ep09-long": {
+  "attempts": 1,
+  "status": "published",
+  "url": "https://youtu.be/hn1vNNW4nrE",
+  "by": "robo",
+  "visibility": "schedule",
+  "when": "2026-11-10T18:00:00-03:00",
+  "at": "2026-11-10T07:44:45.338624-03:00",
+  "error": null,
+  "channel_id": "UCd_BGmJ5gbQ0kECAxmbvQHA",
+  "title": "Banco Master: o banco que pagava demais (e quem pagou a conta de R$ 40 bilhões)",
+  "kind": "long",
+  "publish_at": "2026-11-10T18:00:00-03:00",
+  "pinned_comment": "Você colocaria dinheiro num CDB pagando 140% do CDI só porque tem a garantia do FGC? Conta aqui por quê."
+ },
+ "ptd-ep09-short": {
+  "attempts": 1,
+  "status": "published",
+  "url": "https://youtu.be/vjLjFhXC_wk",
+  "by": "robo",
+  "visibility": "schedule",
+  "when": "2026-11-10T19:00:00-03:00",
+  "at": "2026-11-10T07:48:05.385843-03:00",
+  "error": null,
+  "channel_id": "UCd_BGmJ5gbQ0kECAxmbvQHA",
+  "title": "Como o Banco Master pagava 140% do CDI (e por que caiu) #shorts",
+  "kind": "short",
+  "publish_at": "2026-11-10T19:00:00-03:00",
+  "related_key": "ptd-ep09-long",
+  "pinned_comment": "Taxa alta demais te dá vontade de investir ou te deixa desconfiado? Vídeo completo: Banco Master: o banco que pagava demais (e quem pagou a conta de R$ 40 bilhões)"
+ },
+ "ptd-rank07-short": {
+  "attempts": 1,
+  "status": "published",
+  "url": "https://youtu.be/UhChEt7XJ4o",
+  "by": "robo",
+  "visibility": "schedule",
+  "when": "2026-11-11T12:00:00-03:00",
+  "at": "2026-11-10T07:51:07.298669-03:00",
+  "error": null,
+  "channel_id": "UCd_BGmJ5gbQ0kECAxmbvQHA",
+  "title": "Os 5 maiores bancos do Brasil (o nº 1 tem mais de R$ 2,6 trilhões) #shorts",
+  "kind": "short",
+  "publish_at": "2026-11-11T12:00:00-03:00",
+  "related_key": "ptd-ep09-long",
+  "pinned_comment": "Em qual desses bancos você tem conta? Vídeo completo: Banco Master: o banco que pagava demais (e quem pagou a conta de R$ 40 bilhões)"
  }
 }

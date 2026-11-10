@@ -1,8 +1,13 @@
 {
- "last_run": "2026-11-10T07:20:41.665668-03:00",
- "pending": 0,
+ "last_run": "2026-11-10T07:51:09.790402-03:00",
+ "pending": 3,
  "post_tasks": 0,
  "errors": [
   "/opt/canal-publisher/repo/cosmic/ep07/publish.json: version deve ser 1"
+ ],
+ "published_now": [
+  "ptd-ep09-long: https://youtu.be/hn1vNNW4nrE",
+  "ptd-ep09-short: https://youtu.be/vjLjFhXC_wk",
+  "ptd-rank07-short: https://youtu.be/UhChEt7XJ4o"
  ]
 }
