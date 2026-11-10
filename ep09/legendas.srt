@@ -1,0 +1,495 @@
+1
+00:00:00,150 --> 00:00:04,811
+Dezessete de novembro de dois mil e vinte e cinco, noite, aeroporto de Guarulhos.
+
+2
+00:00:04,811 --> 00:00:11,947
+O dono de um banco que tinha crescido mais de vinte vezes em cinco anos está prestes a embarcar num jatinho para o exterior.
+
+3
+00:00:11,947 --> 00:00:14,422
+A Polícia Federal chega antes da decolagem.
+
+4
+00:00:15,022 --> 00:00:19,090
+Na manhã seguinte, o Banco Central decreta a liquidação do Banco Master.
+
+5
+00:00:19,090 --> 00:00:28,526
+E começa a maior operação de resgate da história do Fundo Garantidor de Créditos: cerca de quarenta bilhões de reais para devolver a mais de um milhão de investidores.
+
+6
+00:00:29,125 --> 00:00:33,483
+Hoje vamos fazer o que se faz depois de todo acidente aéreo: abrir a caixa-preta.
+
+7
+00:00:33,483 --> 00:00:38,916
+Ouvir a decolagem, os alarmes que tocaram e ninguém desligou, a tentativa de pouso forçado e a queda.
+
+8
+00:00:38,916 --> 00:00:44,080
+E, no fim, responder a pergunta que interessa para você: quando um banco cai, quem paga a conta?
+
+9
+00:00:44,680 --> 00:00:49,171
+E já adianto uma coisa: o paraquedas que salvou os investidores não é do governo.
+
+10
+00:00:49,171 --> 00:00:53,107
+Ele é pago, todo mês, por um grupo de que você provavelmente faz parte.
+
+11
+00:00:53,707 --> 00:00:54,324
+Trecho um.
+
+12
+00:00:54,324 --> 00:00:55,064
+A decolagem.
+
+13
+00:00:55,064 --> 00:00:57,717
+Toda investigação começa pelo plano de voo.
+
+14
+00:00:58,317 --> 00:01:06,947
+Em dois mil e dezenove, o empresário mineiro Daniel Vorcaro já comandava um banco pequeno chamado Banco Máxima, que depois ganharia o nome de Banco Master.
+
+15
+00:01:06,947 --> 00:01:11,290
+Naquele ano, a instituição tinha três vírgula sete bilhões de reais em ativos.
+
+16
+00:01:11,290 --> 00:01:14,575
+Em dois mil e vinte e quatro, tinha oitenta e dois bilhões.
+
+17
+00:01:14,575 --> 00:01:18,861
+Saiu da nonagésima para a vigésima terceira posição entre os maiores do país.
+
+18
+00:01:19,462 --> 00:01:22,702
+Um crescimento de mais de dois mil por cento em cinco anos.
+
+19
+00:01:22,702 --> 00:01:27,590
+Para comparar, um banco médio saudável costuma crescer alguns pontos percentuais por ano.
+
+20
+00:01:27,590 --> 00:01:31,984
+Então a primeira pergunta do investigador é: qual era o combustível desse avião?
+
+21
+00:01:32,584 --> 00:01:34,361
+O combustível tinha nome: CDB.
+
+22
+00:01:34,361 --> 00:01:40,286
+O Master captava dinheiro vendendo certificados de depósito bancário em plataformas de investimento.
+
+23
+00:01:40,286 --> 00:01:41,174
+E pagava muito.
+
+24
+00:01:41,174 --> 00:01:50,120
+Havia papéis rendendo até cento e quarenta por cento do CDI, quando bancos parecidos costumavam pagar algo entre cento e dez e cento e vinte por cento.
+
+25
+00:01:50,720 --> 00:01:59,115
+Num exemplo ilustrativo, com o CDI a quinze por cento ao ano: dez mil reais a cem por cento do CDI rendem mil e quinhentos reais brutos em um ano.
+
+26
+00:01:59,115 --> 00:02:02,105
+A cento e quarenta por cento, rendem dois mil e cem.
+
+27
+00:02:02,105 --> 00:02:06,245
+Seiscentos reais a mais, no mesmo produto, com o mesmo selo de garantia.
+
+28
+00:02:06,245 --> 00:02:08,832
+É fácil entender por que tanta gente comprou.
+
+29
+00:02:09,432 --> 00:02:12,081
+Mas aqui está o problema que todo piloto conhece.
+
+30
+00:02:12,081 --> 00:02:15,163
+Combustível caro precisa de um motor que gere ainda mais.
+
+31
+00:02:15,163 --> 00:02:21,706
+Se você paga vinte e um por cento ao ano pelo dinheiro, precisa aplicar esse dinheiro em algo que renda mais do que isso.
+
+32
+00:02:21,706 --> 00:02:25,923
+E coisas que rendem muito, quase sempre, são arriscadas ou difíceis de vender.
+
+33
+00:02:26,523 --> 00:02:29,659
+Foi o que aconteceu, segundo reportagens e investigações.
+
+34
+00:02:29,659 --> 00:02:41,323
+Boa parte do dinheiro foi parar em ativos de difícil venda: precatórios, que são dívidas do governo reconhecidas pela Justiça e que podem levar anos para ser pagas, participações em empresas e créditos a receber.
+
+35
+00:02:41,323 --> 00:02:47,429
+A Polícia Federal e o Ministério Público ainda investigam suspeitas de compra de precatórios a preços inflados.
+
+36
+00:02:48,029 --> 00:02:49,037
+Repare no desenho.
+
+37
+00:02:49,037 --> 00:02:54,352
+De um lado, o investidor podia pedir o dinheiro de volta no vencimento do CDB, em datas certas.
+
+38
+00:02:54,352 --> 00:02:59,219
+Do outro, o banco tinha aplicado esse dinheiro em coisas que não viram dinheiro rápido.
+
+39
+00:02:59,219 --> 00:03:02,408
+É como um avião que decola com combustível só para a ida.
+
+40
+00:03:03,008 --> 00:03:03,713
+Trecho dois.
+
+41
+00:03:03,713 --> 00:03:04,360
+Os alarmes.
+
+42
+00:03:04,360 --> 00:03:08,708
+Em quase todo acidente, a caixa-preta mostra que algum alarme tocou antes.
+
+43
+00:03:08,708 --> 00:03:09,941
+Aqui, tocaram vários.
+
+44
+00:03:10,541 --> 00:03:13,456
+O primeiro alarme veio de dentro do próprio sistema.
+
+45
+00:03:13,456 --> 00:03:25,056
+Segundo um relatório da Diretoria de Fiscalização do Banco Central, revelado pelo Correio Braziliense, as irregularidades e a piora da liquidez do conglomerado estavam no radar desde dois mil e vinte e dois.
+
+46
+00:03:25,056 --> 00:03:28,419
+O Banco Central mandou trinta e um ofícios exigindo ajustes.
+
+47
+00:03:29,019 --> 00:03:30,898
+O segundo alarme tocou no mercado.
+
+48
+00:03:30,898 --> 00:03:38,251
+Em agosto de dois mil e vinte e três, a corretora Warren enviou um relatório aos clientes desaconselhando a compra de CDBs do Master.
+
+49
+00:03:38,251 --> 00:03:48,091
+E, em outubro daquele ano, o Banco Central mudou a forma como precatórios contam no cálculo de risco dos bancos, apertando justamente o tipo de ativo que o Master tinha de sobra.
+
+50
+00:03:48,691 --> 00:03:50,503
+O terceiro alarme é o mais grave.
+
+51
+00:03:50,503 --> 00:03:59,236
+Segundo uma nota técnica do Banco Central, citada pela Band, em novembro de dois mil e vinte e quatro o modelo de negócios do banco teria ficado insustentável.
+
+52
+00:03:59,236 --> 00:04:04,179
+Ou seja: um ano antes da queda, o avião já estaria sem combustível para chegar ao destino.
+
+53
+00:04:04,779 --> 00:04:06,654
+E por que o avião continuou voando?
+
+54
+00:04:06,654 --> 00:04:09,278
+Aqui entra a peça mais importante desta história.
+
+55
+00:04:09,278 --> 00:04:14,045
+O próprio banco usava como argumento de venda a garantia do Fundo Garantidor de Créditos.
+
+56
+00:04:14,045 --> 00:04:20,098
+Para o investidor, a conta parecia simples: se o banco quebrar, o FGC devolve até duzentos e cinquenta mil reais.
+
+57
+00:04:20,098 --> 00:04:22,187
+Então, para que olhar o risco do banco?
+
+58
+00:04:22,787 --> 00:04:25,093
+Os economistas chamam isso de risco moral.
+
+59
+00:04:25,093 --> 00:04:29,267
+Quando alguém sabe que vai ser protegido da perda, passa a tomar mais risco.
+
+60
+00:04:29,267 --> 00:04:32,562
+O FGC existe para proteger o pequeno poupador, e isso é bom.
+
+61
+00:04:32,562 --> 00:04:35,198
+Mas um banco pode usar essa proteção como motor.
+
+62
+00:04:35,198 --> 00:04:42,008
+E foi exatamente essa a suspeita que a investigação levantou: um modelo de negócio fortemente apoiado na cobertura do fundo.
+
+63
+00:04:42,608 --> 00:04:43,309
+Trecho três.
+
+64
+00:04:43,309 --> 00:04:44,243
+O pouso forçado.
+
+65
+00:04:44,243 --> 00:04:47,456
+Quando o combustível acaba, o piloto procura uma pista.
+
+66
+00:04:47,456 --> 00:04:53,296
+A pista do Master tinha nome: BRB, o Banco de Brasília, controlado pelo governo do Distrito Federal.
+
+67
+00:04:53,896 --> 00:05:04,073
+Em vinte e oito de março de dois mil e vinte e cinco, o BRB anunciou que ia comprar cinquenta e oito por cento do Master, num negócio avaliado em cerca de dois bilhões de reais.
+
+68
+00:05:04,073 --> 00:05:06,717
+Faltava só uma assinatura: a do Banco Central.
+
+69
+00:05:07,317 --> 00:05:12,659
+Durante cinco meses, a operação virou novela em Brasília, com pressão política dos dois lados.
+
+70
+00:05:12,659 --> 00:05:15,842
+Na noite de três de setembro, o Banco Central disse não.
+
+71
+00:05:15,842 --> 00:05:19,024
+Rejeitou a compra, sem detalhar publicamente os motivos.
+
+72
+00:05:19,024 --> 00:05:20,331
+A pista estava fechada.
+
+73
+00:05:20,931 --> 00:05:25,119
+Só que, segundo a investigação, o BRB já tinha embarcado antes do pouso.
+
+74
+00:05:25,119 --> 00:05:35,416
+A Polícia Federal e o Ministério Público apontam que o Master vendeu ao banco de Brasília doze vírgula dois bilhões de reais em carteiras de crédito que não existiam de verdade.
+
+75
+00:05:35,416 --> 00:05:37,336
+As defesas negam irregularidades.
+
+76
+00:05:37,936 --> 00:05:38,784
+Trecho quatro.
+
+77
+00:05:38,784 --> 00:05:39,269
+A queda.
+
+78
+00:05:39,269 --> 00:05:43,205
+E, como em todo acidente, os últimos minutos são os mais rápidos.
+
+79
+00:05:43,805 --> 00:05:50,882
+Na noite de dezessete de novembro, Vorcaro foi preso em Guarulhos, quando se preparava para embarcar num jatinho rumo ao exterior.
+
+80
+00:05:50,882 --> 00:05:57,468
+Na manhã seguinte, a Polícia Federal deflagrou a Operação Compliance Zero, contra a emissão de títulos de crédito falsos.
+
+81
+00:05:57,468 --> 00:06:01,768
+E, no mesmo dia, o Banco Central decretou a liquidação extrajudicial do Master.
+
+82
+00:06:02,368 --> 00:06:05,381
+Liquidação extrajudicial é o fim da linha para um banco.
+
+83
+00:06:05,381 --> 00:06:09,847
+O Banco Central afasta os donos, nomeia um liquidante, e o banco para de funcionar.
+
+84
+00:06:09,847 --> 00:06:12,483
+A partir daí, quem tinha dinheiro lá vira credor.
+
+85
+00:06:12,483 --> 00:06:14,635
+E é nesse momento que abre o paraquedas.
+
+86
+00:06:15,235 --> 00:06:20,581
+Uma nota importante: Vorcaro foi solto cerca de dez dias depois, com tornozeleira eletrônica.
+
+87
+00:06:20,581 --> 00:06:26,215
+Em março de dois mil e vinte e seis, numa nova fase da operação, foi preso de novo, e segue preso.
+
+88
+00:06:26,215 --> 00:06:27,480
+Ele nega as acusações.
+
+89
+00:06:28,080 --> 00:06:29,226
+Agora, o paraquedas.
+
+90
+00:06:29,226 --> 00:06:31,976
+O Fundo Garantidor de Créditos não é do governo.
+
+91
+00:06:31,976 --> 00:06:37,705
+É uma entidade privada, sem fins lucrativos, mantida pelos próprios bancos e financeiras associados.
+
+92
+00:06:37,705 --> 00:06:43,205
+Todo mês, cada um deles deposita no fundo uma pequena parte do dinheiro que guarda dos clientes.
+
+93
+00:06:43,805 --> 00:06:48,950
+Quem tinha até duzentos e cinquenta mil reais no Master recebe tudo de volta pelo fundo.
+
+94
+00:06:48,950 --> 00:06:54,562
+Quem tinha mais recebe o teto e entra na fila dos credores pelo resto, sem prazo e sem garantia.
+
+95
+00:06:54,562 --> 00:06:58,654
+O FGC estimou uma base de cerca de um vírgula seis milhão de credores.
+
+96
+00:06:58,654 --> 00:07:09,527
+Os pagamentos começaram dois meses depois, e, em janeiro de dois mil e vinte e seis, o fundo já tinha pago trinta e dois vírgula cinco bilhões de reais a setenta e cinco por cento deles.
+
+97
+00:07:10,127 --> 00:07:12,883
+Um paraquedas desse tamanho faz um buraco no fundo.
+
+98
+00:07:12,883 --> 00:07:26,767
+O patrimônio do FGC, que era de cento e quarenta vírgula quatro bilhões em dois mil e vinte e quatro, fechou dois mil e vinte e cinco em cento e vinte e três vírgula dois bilhões, já descontada uma provisão de dezessete vírgula um bilhões para as garantias.
+
+99
+00:07:27,367 --> 00:07:29,827
+E aí vem a resposta para a pergunta do começo.
+
+100
+00:07:29,827 --> 00:07:39,239
+Para recompor o fundo, foi aprovado em fevereiro de dois mil e vinte e seis um plano com uma contribuição extra de cinquenta por cento sobre o valor mensal que os bancos pagam.
+
+101
+00:07:39,239 --> 00:07:43,517
+Ou seja: os bancos que não quebraram estão pagando a conta do banco que quebrou.
+
+102
+00:07:44,117 --> 00:07:45,306
+E quem paga os bancos?
+
+103
+00:07:45,306 --> 00:07:48,657
+Numa análise do canal, a resposta mais honesta é: os clientes.
+
+104
+00:07:48,657 --> 00:07:56,710
+Custo maior para captar dinheiro tende a aparecer em algum lugar, seja num CDB que rende um pouco menos, seja numa tarifa ou num juro um pouco maior.
+
+105
+00:07:56,710 --> 00:07:58,926
+O paraquedas do Master não saiu de graça.
+
+106
+00:07:58,926 --> 00:08:01,845
+Ele está sendo costurado, devagar, por todo o sistema.
+
+107
+00:08:02,445 --> 00:08:04,316
+O sistema também mudou as regras.
+
+108
+00:08:04,316 --> 00:08:15,032
+A partir de primeiro de junho de dois mil e vinte e seis, o Conselho Monetário Nacional dobrou a contribuição adicional cobrada de bancos que dependem demais de captação garantida pelo FGC.
+
+109
+00:08:15,032 --> 00:08:19,341
+O limite de duzentos e cinquenta mil reais por pessoa e por banco não mudou.
+
+110
+00:08:19,941 --> 00:08:21,150
+E o laudo do acidente?
+
+111
+00:08:21,150 --> 00:08:34,886
+Em vinte e oito de outubro de dois mil e vinte e seis, há menos de duas semanas, a Polícia Federal indiciou Daniel Vorcaro e mais catorze pessoas, entre elas o ex-presidente do BRB, por gestão fraudulenta, organização criminosa e lavagem de dinheiro.
+
+112
+00:08:34,886 --> 00:08:39,226
+O relatório foi para a Procuradoria-Geral da República, que decide se denuncia.
+
+113
+00:08:39,826 --> 00:08:41,675
+Indiciamento não é condenação.
+
+114
+00:08:41,675 --> 00:08:47,162
+A defesa de Vorcaro chama o indiciamento de precipitado e diz que faltam provas técnicas.
+
+115
+00:08:47,162 --> 00:08:51,538
+O caso deve chegar ao Supremo Tribunal Federal e ainda pode levar anos.
+
+116
+00:08:52,138 --> 00:08:54,473
+Então, o que a caixa-preta do Master ensina?
+
+117
+00:08:54,473 --> 00:09:02,858
+Primeiro: quando um banco paga muito mais que os outros pelo mesmo produto, a pergunta não é quanto eu ganho, e sim por que ele precisa tanto do meu dinheiro.
+
+118
+00:09:02,858 --> 00:09:06,679
+Segundo: o FGC protege o poupador, mas tem limite, tem fila e tem custo.
+
+119
+00:09:06,679 --> 00:09:09,227
+E terceiro: os alarmes quase sempre tocam antes.
+
+120
+00:09:09,227 --> 00:09:11,509
+O difícil é alguém ter coragem de ouvi-los.
+
+121
+00:09:12,109 --> 00:09:14,491
+Isso não é recomendação de investimento.
+
+122
+00:09:14,491 --> 00:09:17,826
+É só o jeito de ler o painel do avião antes de embarcar.
+
+123
+00:09:18,426 --> 00:09:21,151
+No próximo episódio, o juro mais caro do Brasil.
+
+124
+00:09:21,151 --> 00:09:31,141
+Por que o rotativo do cartão de crédito chegou a passar de quatrocentos por cento ao ano, o que mudou com o teto criado pela lei, e quem ganha com cada parcela que você atrasa.

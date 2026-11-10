@@ -617,9 +617,81 @@ def sc_ledger(img, v, t, dur):
             img.alpha_composite(lay, (int(px1 - 40 - lay.width), int(py1 - lay.height + 30)))
     if v.get("caption"): dr.text((W / 2, H - 50), v["caption"], font=F(28, "Medium"), fill=DIM, anchor="mm")
 
+def sc_blackbox(img, v, t, dur):
+    """Criado no EP09: abertura de trecho como caixa-preta de avião. n (trecho), title, sub, time (rótulo de época).
+    A caixa laranja entra pela esquerda, o título surge à direita e uma onda de áudio 'tocando' corre embaixo."""
+    dr = ImageDraw.Draw(img)
+    p = ease((t - 0.1) / 0.8)
+    bx, by, bw, bh = lerp(-600, 210, p), 300, 560, 420
+    OR, ORD = (240, 128, 30), (180, 86, 14)
+    lay = Image.new("RGBA", (bw + 40, bh + 40), (0, 0, 0, 0)); d2 = ImageDraw.Draw(lay)
+    d2.rounded_rectangle([20, 20, 20 + bw, 20 + bh], 34, fill=OR)
+    for k in range(0, bw, 70):
+        d2.polygon([(20 + k, 20 + bh - 60), (60 + k, 20 + bh - 60), (20 + k + 20, 20 + bh), (20 + k - 20, 20 + bh)], fill=(30, 30, 30))
+    d2.rectangle([20, 20 + bh - 60, 20 + bw, 20 + bh - 56], fill=ORD)
+    d2.text((20 + bw / 2, 110), "GRAVADOR DE VOO", font=F(44, "Black"), fill=(30, 22, 12), anchor="mm")
+    d2.text((20 + bw / 2, 170), "NÃO ABRIR", font=F(34, "Bold"), fill=(70, 40, 10), anchor="mm")
+    d2.rounded_rectangle([80, 225, bw - 40, 330], 16, fill=(30, 22, 12))
+    d2.text((20 + bw / 2, 278), v.get("time", ""), font=F(48, "Black"), fill=OR, anchor="mm")
+    lay = lay.rotate(-4, expand=True, resample=Image.BICUBIC)
+    img.alpha_composite(lay, (int(bx), int(by - 30)))
+    a1 = ease((t - 0.7) / 0.5); a2 = ease((t - 1.0) / 0.5); a3 = ease((t - 1.3) / 0.5)
+    x = 900
+    alpha_text(img, (x, 330), f"TRECHO {v['n']}", F(64, "Black"), OR, a1, anchor="lm", dy=(1 - a1) * 30)
+    lines = v["title"].split("\n")
+    for i, l in enumerate(lines):
+        alpha_text(img, (x, 450 + i * 110), l, F(100, "ExtraBold"), WHITE, a2, anchor="lm", dy=(1 - a2) * 30)
+    if v.get("sub"): alpha_text(img, (x, 450 + len(lines) * 110 + 20), v["sub"], F(44, "SemiBold"), (255, 200, 150), a3, anchor="lm")
+    # onda de áudio
+    yb = 900
+    for i in range(0, W - 200, 14):
+        xx = 100 + i
+        if xx > 100 + (W - 200) * ease(t / max(1.0, dur * 0.8)): break
+        hgt = 10 + 34 * abs(math.sin(i * 0.07 + t * 5) * math.sin(i * 0.013))
+        dr.line([(xx, yb - hgt), (xx, yb + hgt)], fill=OR if i % 28 == 0 else (150, 90, 40), width=6)
+    if v.get("caption"): dr.text((W / 2, H - 50), v["caption"], font=F(28, "Medium"), fill=DIM, anchor="mm")
+
+def sc_flight(img, v, t, dur):
+    """Criado no EP09: rota de voo. points = [[rótulo, altitude 0-100], ...]; alerts = [[posição (índice, pode ser
+    fracionário), texto], ...] viram triângulos vermelhos quando o avião passa; crash=True pinta o fim de vermelho."""
+    dr = ImageDraw.Draw(img); pts = v["points"]; n = len(pts)
+    alpha_text(img, (160, 170), v["title"], F(60, "ExtraBold"), WHITE, ease(t / 0.5), anchor="lm")
+    x0, x1, y0, y1 = 220, W - 220, 860, 330
+    for k in range(5):
+        yy = lerp(y0, y1, k / 4)
+        for xx in range(x0, x1, 36): dr.line([(xx, yy), (xx + 16, yy)], fill=(36, 50, 76), width=2)
+    dr.line([(x0, y0), (x1, y0)], fill=(70, 85, 110), width=4)
+    def P(i):
+        i = max(0.0, min(n - 1.0, i)); k = min(int(i), n - 2); f = i - k
+        return (lerp(x0, x1, i / (n - 1)), y0 - (y0 - y1) * lerp(pts[k][1], pts[k + 1][1], f) / 100)
+    for i, (lab, _) in enumerate(pts):
+        dr.text((lerp(x0, x1, i / (n - 1)), y0 + 44), lab, font=F(30, "SemiBold"), fill=DIM, anchor="mm")
+    prog = ease((t - 0.3) / max(1.2, dur * 0.7)) * (n - 1)
+    steps = max(2, int(prog * 30) + 2)
+    xy = [P(prog * j / (steps - 1)) for j in range(steps)]
+    crash_from = v.get("crash_from", n - 2) if v.get("crash") else 99
+    good = [q for j, q in enumerate(xy) if prog * j / (steps - 1) <= crash_from + 1e-6]
+    bad = [q for j, q in enumerate(xy) if prog * j / (steps - 1) >= crash_from - 1e-6]
+    if len(good) >= 2: dr.line(good, fill=hexc("#5B8DEF"), width=8, joint="curve")
+    if len(bad) >= 2: dr.line(bad, fill=RED, width=8, joint="curve")
+    for pos, txt in v.get("alerts", []):
+        if prog + 1e-6 < pos: continue
+        a = ease((prog - pos) / 0.3 + 0.2)
+        x, y = P(pos)
+        dr.polygon([(x, y - 70), (x - 26, y - 26), (x + 26, y - 26)], fill=mix(BG1, RED, a))
+        dr.text((x, y - 42), "!", font=F(30, "Black"), fill=mix(BG1, WHITE, a), anchor="mm")
+        for j, ln in enumerate(txt.split("\n")):
+            dr.text((x, y - 110 - (len(txt.split("\n")) - 1 - j) * 38), ln, font=F(30, "Bold"), fill=mix(BG1, (255, 170, 150), a), anchor="mm")
+    x, y = xy[-1]; xb, yb = xy[-2] if len(xy) > 1 else (x - 1, y)
+    ang = math.atan2(y - yb, x - xb) if (x, y) != (xb, yb) else 0
+    ca, sa = math.cos(ang), math.sin(ang)
+    pl = [(34, 0), (-22, -20), (-12, 0), (-22, 20)]
+    dr.polygon([(x + px * ca - py * sa, y + px * sa + py * ca) for px, py in pl], fill=WHITE)
+    if v.get("caption"): dr.text((W / 2, H - 70), v["caption"], font=F(28, "Medium"), fill=DIM, anchor="mm")
+
 SC = {"round": sc_round, "ticker": sc_ticker, "scoreboard": sc_scoreboard, "title": sc_title, "bignumber": sc_bignumber, "flow": sc_flow, "split": sc_split, "bullets": sc_bullets,
       "bars": sc_bars, "compare": sc_compare, "timeline": sc_timeline, "cards": sc_cards, "line": sc_line,
-      "receipt": sc_receipt, "stack": sc_stack, "journey": sc_journey, "calendar": sc_calendar, "obit": sc_obit, "race": sc_race, "act": sc_act, "ledger": sc_ledger}
+      "receipt": sc_receipt, "stack": sc_stack, "journey": sc_journey, "calendar": sc_calendar, "obit": sc_obit, "race": sc_race, "act": sc_act, "ledger": sc_ledger, "blackbox": sc_blackbox, "flight": sc_flight}
 
 # ---------- voz ----------
 def tts(scenes, outdir, voice="pm_alex", speed=1.05):
