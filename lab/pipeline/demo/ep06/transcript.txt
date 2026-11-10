@@ -1,0 +1,24 @@
+### line_chart
+### line_all
+### bar_chart
+Coffee    26130
+Tea        9280
+Cakes      9390
+dtype: int64
+### pie_chart
+### total
+   Month  Coffee   Tea  Cakes  Total
+9    Oct    2480   850    740   4070
+10   Nov    2610   990    820   4420
+11   Dec    2950  1120   1040   5110
+Best month: Dec 5110
+### charts
+Saved dashboard.png
+### typo
+              ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/dist-packages/pandas/core/indexes/base.py", line 3823, in get_loc
+    raise KeyError(key) from err
+KeyError: 'coffee'
+### nofile
+FileNotFoundError: [Errno 2] No such file or directory: 'sales.xlsx'
+line1.png  line_all.png

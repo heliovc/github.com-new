@@ -4,7 +4,7 @@ Usage:
   python3 -I tutor.py ep01.py out/ep01 --preview        # one still per scene (at 85% of the scene)
   python3 -I tutor.py ep01.py out/ep01                  # full render -> final.mp4, subtitles.srt, chapters.txt
   python3 -I tutor.py ep01.py out/ep01 --vertical "0,3,5" "TITLE"   # Short 1080x1920 from scenes (uses cached voice)
-Scene types: title, steps, code, term, files, tip, keys, compare, chat, outro, tree (EP02), map (EP02), sheet + args (EP03), prompt + flow (EP04), stage + timeline (EP05: Git areas and commit history), term colors diff +/- lines and errors (EP05)
+Scene types: title, steps, code, term, files, tip, keys, compare, chat, outro, tree (EP02), map (EP02), sheet + args (EP03), prompt + flow (EP04), stage + timeline (EP05: Git areas and commit history), term colors diff +/- lines and errors (EP05), figure (EP06: real matplotlib PNG in a plot window, left-to-right wipe + numbered callouts)
 Identity: charcoal #0F1115, lime #B6F35C, coral #FF7A59, sky #6CC4FF, Poppins + DejaVu Sans Mono.
 """
 import sys, os, re, math, json, hashlib, subprocess, importlib.util
@@ -616,6 +616,40 @@ def sc_timeline(img, v, t, d):
         k = ease((t - d * 0.6) / 0.5); fn = F(32, "SemiBold"); tw = fn.getlength(v["note"])
         if k > 0:
             dr.rounded_rectangle([W / 2 - tw / 2 - 30, 930, W / 2 + tw / 2 + 30, 992], 31, fill=mix(BG, v.get("notecol", ACC), k)); dr.text((W / 2, 961), v["note"], font=fn, fill=BG, anchor="mm")
+
+# ---- EP06: figure window - shows a REAL chart PNG produced by the episode's code, wiped in left to right, then numbered callouts
+_imc = {}
+def sc_figure(img, v, t, d):
+    if v["img"] not in _imc: _imc[v["img"]] = Image.open(v["img"]).convert("RGBA")
+    src = _imc[v["img"]]; maxw, maxh = v.get("maxw", 1440), v.get("maxh", 720)
+    sc = min(maxw / src.width, maxh / src.height); iw, ih = int(src.width * sc), int(src.height * sc)
+    top = 150 if v.get("title") is None else 210
+    bw, bh = iw + 60, ih + 52 + 60; x0 = (W - bw) // 2; y0 = top + max(0, (H - 60 - top - bh) // 2)
+    if v.get("title"): text_a(img, (W / 2, 175), v["title"], F(44, "Bold"), TXT, ease(t / 0.4), "mm")
+    window(img, [x0, y0, x0 + bw, y0 + bh], v.get("win", "Figure 1"), kind="term")
+    pic = src.resize((iw, ih), Image.LANCZOS); px, py = x0 + 30, y0 + 52 + 30
+    k = ease((t - 0.3) / max(0.6, d * v.get("wipe", 0.35)))
+    if v.get("fade"): pic.putalpha(int(255 * k)); img.alpha_composite(pic, (px, py))
+    elif k > 0:
+        cw = max(1, int(iw * k)); img.alpha_composite(pic.crop((0, 0, cw, ih)), (px, py))
+        if k < 1: ImageDraw.Draw(img).rectangle([px + cw - 2, py, px + cw + 2, py + ih], fill=ACC)
+    dr = ImageDraw.Draw(img)
+    for i, co in enumerate(v.get("callouts", [])):  # (fx, fy, label[, side]) fx, fy = fraction of the picture; side "l"/"r" forces the label side
+        fx, fy, lab = co[:3]; side = co[3] if len(co) > 3 else ("r" if fx < 0.6 else "l")
+        a = ease((t - 0.5 - d * v.get("wipe", 0.35) - i * 0.9) / 0.4)
+        if a <= 0: continue
+        cx, cy = px + fx * iw, py + fy * ih; r = 26
+        dr.ellipse([cx - r, cy - r, cx + r, cy + r], outline=mix(BG, ACC, a), width=5)
+        fl = F(28, "SemiBold"); lw = fl.getlength(lab) + 70; lx = cx + 40 if side == "r" else cx - 40 - lw; ly = cy - 80 if fy > 0.25 else cy + 40
+        dr.line([cx, cy, lx + (0 if side == "r" else lw), ly + 22], fill=mix(BG, ACC, a), width=3)
+        dr.rounded_rectangle([lx, ly, lx + lw, ly + 44], 22, fill=mix(BG, ACC, a))
+        dr.ellipse([lx + 8, ly + 6, lx + 40, ly + 38], fill=BG); dr.text((lx + 24, ly + 22), str(i + 1), font=F(22, "Bold"), fill=ACC, anchor="mm")
+        dr.text((lx + 52, ly + 22), lab, font=fl, fill=BG, anchor="lm")
+    if v.get("note"):
+        a = ease((t - d * 0.6) / 0.5); fn = F(32, "SemiBold"); tw = fn.getlength(v["note"])
+        if a > 0:
+            ny = min(H - 80, y0 + bh + 20)
+            dr.rounded_rectangle([W / 2 - tw / 2 - 30, ny, W / 2 + tw / 2 + 30, ny + 60], 30, fill=mix(BG, ACC, a)); dr.text((W / 2, ny + 30), v["note"], font=fn, fill=BG, anchor="mm")
 
 SC = {k[3:]: f for k, f in list(globals().items()) if k.startswith("sc_")}
 

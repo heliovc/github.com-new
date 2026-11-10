@@ -4,6 +4,7 @@ python3 -I lab_brand.py thumbfolders "LINE ONE" "LINE TWO" "Images|Docs|Audio|Vi
 python3 -I lab_brand.py thumbsheet "LINE ONE" "LINE TWO" "=FORMULA" out.jpg coral   (EP03: mini spreadsheet card)
 python3 -I lab_brand.py thumbprompt "LINE ONE" "LINE TWO" "vague prompt" out.jpg violet   (EP04: before/after prompt card)
 python3 -I lab_brand.py thumbgit "LINE ONE" "LINE TWO" "hash msg|hash msg|hash msg" out.jpg yellow   (EP05: commit history + "go back" arc)
+python3 -I lab_brand.py thumbchart "LINE ONE" "LINE TWO" "df.plot(kind=\"bar\")" out.jpg mint   (EP06: dark chart card, bars + trend line)
 python3 -I lab_brand.py thumb "LINE ONE" "LINE TWO" "code snippet line" out.jpg [accent: lime|coral|sky]"""
 import sys; sys.path.insert(0, ".")
 import tutor as T
@@ -104,6 +105,28 @@ elif sys.argv[1] == "thumbgit":  # EP05 layout: text left, vertical commit histo
         while T.F(fs, "Bold").getlength(txt) > 600: fs -= 4
         d.text((50, 270 + i * 160), txt, font=T.F(fs, "Bold"), fill=col, anchor="lm", stroke_width=4, stroke_fill=T.BG)
     d.text((54, 600), "Windows · Mac · Linux", font=T.F(30, "Medium"), fill=T.DIM)
+    img.convert("RGB").save(out, quality=92); print("thumb ok")
+elif sys.argv[1] == "thumbchart":  # EP06 layout: text left, dark chart card right (rising bars + trend line with dots), code chip under it
+    l1, l2, code, out = sys.argv[2:6]; acc = {"lime": T.LIME, "coral": T.CORAL, "sky": T.SKY, "violet": T.VIO, "yellow": T.YEL, "mint": (80, 220, 190)}[sys.argv[6] if len(sys.argv) > 6 else "mint"]
+    T.ACC = acc; img = T.make_bg(1280, 720); d = ImageDraw.Draw(img)
+    d.rounded_rectangle([690, 100, 1240, 560], 24, fill=T.PANEL, outline=T.LINE, width=2)
+    for k in range(4): d.line([740, 180 + k * 85, 1200, 180 + k * 85], fill=T.LINE, width=2)
+    vals = [0.35, 0.5, 0.42, 0.68, 0.9]; cols = [T.SKY, T.VIO, T.CORAL, T.YEL, acc]; bx = 750; bw = 70; base = 510
+    pts = []
+    for i, v in enumerate(vals):
+        x = bx + i * 90; top = base - v * 320
+        d.rounded_rectangle([x, top, x + bw, base], 10, fill=cols[i]); pts.append((x + bw / 2, top - 40))
+    d.line(pts, fill=T.TXT, width=6)
+    for (x, y) in pts: d.ellipse([x - 11, y - 11, x + 11, y + 11], fill=T.TXT, outline=T.BG, width=3)
+    d.line([740, base, 1200, base], fill=T.DIM, width=3)
+    fc = T.F(30, "mono"); cw = fc.getlength(code) + 50
+    d.rounded_rectangle([965 - cw / 2, 590, 965 + cw / 2, 650], 30, fill=T.BG, outline=acc, width=3); d.text((965, 620), code, font=fc, fill=acc, anchor="mm")
+    d.rounded_rectangle([40, 40, 300, 92], 26, fill=acc); d.text((170, 66), "SHORTCUT LAB", font=T.F(26, "Bold"), fill=T.BG, anchor="mm")
+    for i, (txt, col) in enumerate([(l1, T.TXT), (l2, acc)]):
+        fs = 124
+        while T.F(fs, "Bold").getlength(txt) > 600: fs -= 4
+        d.text((50, 270 + i * 160), txt, font=T.F(fs, "Bold"), fill=col, anchor="lm", stroke_width=4, stroke_fill=T.BG)
+    d.text((54, 600), "pandas + matplotlib · free", font=T.F(30, "Medium"), fill=T.DIM)
     img.convert("RGB").save(out, quality=92); print("thumb ok")
 else:
     l1, l2, code, out = sys.argv[2:6]; acc = {"lime": T.LIME, "coral": T.CORAL, "sky": T.SKY, "violet": T.VIO, "yellow": T.YEL}[sys.argv[6] if len(sys.argv) > 6 else "lime"]

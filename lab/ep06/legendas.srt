@@ -1,0 +1,691 @@
+1
+00:00:00,250 --> 00:00:03,215
+This is a whole year of sales from a spreadsheet.
+
+2
+00:00:03,215 --> 00:00:06,544
+And this dashboard was drawn by twenty lines of Python.
+
+3
+00:00:06,544 --> 00:00:09,691
+No clicking through chart menus, no dragging ranges.
+
+4
+00:00:09,691 --> 00:00:15,682
+Change the numbers in the spreadsheet, run the script again, and every chart updates in one second.
+
+5
+00:00:16,382 --> 00:00:25,553
+In the next ten minutes, you'll go from a plain Excel file to a line chart, a bar chart, a pie chart and a full dashboard, saved as an image you can paste anywhere.
+
+6
+00:00:25,553 --> 00:00:27,510
+Step by step, no experience needed.
+
+7
+00:00:27,510 --> 00:00:34,332
+And I'll show you the three errors that stop almost every beginner, with the real error messages, and how to fix each one.
+
+8
+00:00:35,032 --> 00:00:35,960
+Here's the plan.
+
+9
+00:00:35,960 --> 00:00:37,932
+First, install two free libraries.
+
+10
+00:00:37,932 --> 00:00:40,135
+Then read the spreadsheet into Python.
+
+11
+00:00:40,135 --> 00:00:43,267
+Then draw a line chart, and make it look professional.
+
+12
+00:00:43,267 --> 00:00:45,180
+Then a bar chart and a pie chart.
+
+13
+00:00:45,180 --> 00:00:49,356
+And finally, put everything into one dashboard and save it as a picture.
+
+14
+00:00:50,055 --> 00:00:52,779
+You might be thinking, Excel already makes charts.
+
+15
+00:00:52,779 --> 00:00:53,051
+True.
+
+16
+00:00:53,051 --> 00:00:58,879
+But every month you click through the same menus, select the same ranges, and fix the same titles, by hand.
+
+17
+00:00:58,879 --> 00:01:00,948
+With Python, you write the steps once.
+
+18
+00:01:00,948 --> 00:01:06,612
+Next month, you run one command, and every chart is rebuilt, exactly the same way, from the new numbers.
+
+19
+00:01:06,612 --> 00:01:09,499
+And it works the same with ten rows, or ten thousand.
+
+20
+00:01:10,199 --> 00:01:11,653
+You need Python installed.
+
+21
+00:01:11,653 --> 00:01:14,896
+If you don't have it yet, get it free from python dot org.
+
+22
+00:01:14,896 --> 00:01:18,754
+Then open a terminal and type pip install pandas matplotlib openpyxl.
+
+23
+00:01:18,754 --> 00:01:20,655
+Pandas reads and organizes tables.
+
+24
+00:01:20,655 --> 00:01:22,221
+Matplotlib draws the charts.
+
+25
+00:01:22,221 --> 00:01:25,855
+And openpyxl is the small helper pandas uses to open Excel files.
+
+26
+00:01:25,855 --> 00:01:28,707
+To check that everything worked, run this one line.
+
+27
+00:01:28,707 --> 00:01:29,993
+It prints the versions.
+
+28
+00:01:29,993 --> 00:01:32,565
+If you see numbers and no error, you're ready.
+
+29
+00:01:33,265 --> 00:01:35,822
+Here's our practice file, sales dot xlsx.
+
+30
+00:01:35,822 --> 00:01:38,816
+A small café, twelve months, and three products.
+
+31
+00:01:38,816 --> 00:01:40,188
+Coffee, tea and cakes.
+
+32
+00:01:40,188 --> 00:01:42,371
+The first row has the column names.
+
+33
+00:01:42,371 --> 00:01:47,174
+That matters, because pandas uses that first row as the names of the columns.
+
+34
+00:01:47,174 --> 00:01:50,105
+Put the file in the same folder as your script.
+
+35
+00:01:50,805 --> 00:01:51,324
+Step one.
+
+36
+00:01:51,324 --> 00:01:53,456
+Create a file called step one dot py.
+
+37
+00:01:53,456 --> 00:01:56,107
+Import pandas, and give it the short name p d.
+
+38
+00:01:56,107 --> 00:01:59,333
+Everybody does this, so you'll see it in every tutorial.
+
+39
+00:01:59,333 --> 00:02:01,984
+Then read excel, with the file name in quotes.
+
+40
+00:02:01,984 --> 00:02:05,960
+The whole sheet lands in a variable called d f, short for data frame.
+
+41
+00:02:05,960 --> 00:02:08,092
+That's just pandas' word for a table.
+
+42
+00:02:08,092 --> 00:02:08,841
+And print it.
+
+43
+00:02:09,541 --> 00:02:11,687
+Run it with python step one dot py.
+
+44
+00:02:11,687 --> 00:02:13,894
+On a Mac, it's usually python three.
+
+45
+00:02:13,894 --> 00:02:16,592
+And there's your spreadsheet, inside Python.
+
+46
+00:02:16,592 --> 00:02:17,328
+Twelve rows.
+
+47
+00:02:17,328 --> 00:02:21,865
+The numbers on the left are the row numbers pandas adds, starting at zero.
+
+48
+00:02:21,865 --> 00:02:23,337
+Your data didn't change.
+
+49
+00:02:23,337 --> 00:02:24,440
+It's just a label.
+
+50
+00:02:25,140 --> 00:02:26,528
+Two quick variations.
+
+51
+00:02:26,528 --> 00:02:31,549
+If your workbook has several tabs, add sheet name, with the name of the tab.
+
+52
+00:02:31,549 --> 00:02:35,051
+And if your data is a CSV file, use read csv instead.
+
+53
+00:02:35,051 --> 00:02:38,817
+Everything else in this video works exactly the same way.
+
+54
+00:02:38,817 --> 00:02:43,773
+Print d f dot columns any time, to see the exact column names pandas found.
+
+55
+00:02:44,473 --> 00:02:46,223
+Step two, your first chart.
+
+56
+00:02:46,223 --> 00:02:48,685
+Import matplotlib dot pyplot as p l t.
+
+57
+00:02:48,685 --> 00:02:50,889
+That's another name everyone uses.
+
+58
+00:02:50,889 --> 00:02:52,185
+Read the file again.
+
+59
+00:02:52,185 --> 00:02:54,000
+Then one line does the work.
+
+60
+00:02:54,000 --> 00:02:56,981
+d f dot plot, x equals Month, y equals Coffee.
+
+61
+00:02:56,981 --> 00:02:59,962
+The x is the horizontal axis, y is the values.
+
+62
+00:02:59,962 --> 00:03:05,666
+Then plt dot savefig saves the picture to a file, and plt dot show opens it in a window.
+
+63
+00:03:06,366 --> 00:03:07,624
+Run it, and here it is.
+
+64
+00:03:07,624 --> 00:03:09,156
+Coffee sales month by month.
+
+65
+00:03:09,156 --> 00:03:13,313
+You can see the dip in the summer, and the big climb at the end of the year.
+
+66
+00:03:13,313 --> 00:03:17,143
+That's something you'd never notice by staring at a column of numbers.
+
+67
+00:03:17,143 --> 00:03:19,058
+It works, but it looks a bit plain.
+
+68
+00:03:19,058 --> 00:03:19,878
+Let's fix that.
+
+69
+00:03:20,578 --> 00:03:21,226
+Step three.
+
+70
+00:03:21,226 --> 00:03:22,346
+Five small changes.
+
+71
+00:03:22,346 --> 00:03:28,476
+First, give y a list of columns, Coffee, Tea and Cakes, and you get three lines, with a legend for free.
+
+72
+00:03:28,476 --> 00:03:30,892
+Marker equals o puts a dot on each month.
+
+73
+00:03:30,892 --> 00:03:34,192
+Figsize sets the size in inches, ten wide and five tall.
+
+74
+00:03:34,192 --> 00:03:36,078
+Then set title, and set y label.
+
+75
+00:03:36,078 --> 00:03:39,084
+Tight layout stops the labels from getting cut off.
+
+76
+00:03:39,084 --> 00:03:42,326
+And d p i equals one fifty makes the saved image sharp.
+
+77
+00:03:43,026 --> 00:03:43,722
+Run it again.
+
+78
+00:03:43,722 --> 00:03:46,026
+Now that's a chart you can put in a report.
+
+79
+00:03:46,026 --> 00:03:49,402
+Three products, a title, labeled axes, and dots on every month.
+
+80
+00:03:49,402 --> 00:03:51,010
+And look at what it tells you.
+
+81
+00:03:51,010 --> 00:03:54,976
+Tea sinks in the summer, cakes climb, and coffee takes off from September.
+
+82
+00:03:54,976 --> 00:04:00,549
+Notice that matplotlib shows every other month on the bottom, so the labels don't crash into each other.
+
+83
+00:04:01,249 --> 00:04:03,009
+So where did the pictures go?
+
+84
+00:04:03,009 --> 00:04:05,193
+Into the same folder as your script.
+
+85
+00:04:05,193 --> 00:04:12,899
+List the folder, and there they are, line one dot png and line all dot png, ready to paste into an email, a slide, or a report.
+
+86
+00:04:12,899 --> 00:04:14,356
+Want a P D F, for print?
+
+87
+00:04:14,356 --> 00:04:19,028
+Just change the end of the file name to dot p d f, and savefig does the rest.
+
+88
+00:04:19,728 --> 00:04:21,084
+Step four, a bar chart.
+
+89
+00:04:21,084 --> 00:04:23,502
+First we need the total for each product.
+
+90
+00:04:23,502 --> 00:04:27,925
+Pick the three columns, with two pairs of square brackets, and add dot sum.
+
+91
+00:04:27,925 --> 00:04:30,048
+Pandas adds up every column for you.
+
+92
+00:04:30,048 --> 00:04:32,289
+Then totals dot plot, kind equals bar.
+
+93
+00:04:32,289 --> 00:04:34,529
+Color takes a list, one color per bar.
+
+94
+00:04:34,529 --> 00:04:36,770
+Rot equals zero keeps the labels flat.
+
+95
+00:04:36,770 --> 00:04:40,131
+And bar label writes the exact number on top of each bar.
+
+96
+00:04:40,832 --> 00:04:42,709
+The print shows the real totals.
+
+97
+00:04:42,709 --> 00:04:45,641
+Twenty six thousand one hundred thirty for coffee.
+
+98
+00:04:45,641 --> 00:04:49,220
+Ninety two eighty for tea, and ninety three ninety for cakes.
+
+99
+00:04:49,220 --> 00:04:51,038
+And the chart makes it obvious.
+
+100
+00:04:51,038 --> 00:04:54,323
+Coffee sells almost three times more than anything else.
+
+101
+00:04:55,023 --> 00:04:56,204
+Here's the picture.
+
+102
+00:04:56,204 --> 00:05:01,425
+Three bars, the exact number on top of each one, and colors that match the products.
+
+103
+00:05:01,425 --> 00:05:04,098
+This is the chart your boss actually reads.
+
+104
+00:05:04,798 --> 00:05:06,299
+Step five, a pie chart.
+
+105
+00:05:06,299 --> 00:05:08,453
+Same totals, but kind equals pie.
+
+106
+00:05:08,453 --> 00:05:10,541
+Auto p c t adds the percentages.
+
+107
+00:05:10,541 --> 00:05:18,307
+That little code, percent one point zero f, percent percent, just means a number with no decimals, then a percent sign.
+
+108
+00:05:18,307 --> 00:05:22,940
+And set y label with empty quotes removes a leftover label on the side.
+
+109
+00:05:23,640 --> 00:05:26,183
+Coffee is fifty eight percent of the year.
+
+110
+00:05:26,183 --> 00:05:28,544
+Tea and cakes, twenty one percent each.
+
+111
+00:05:28,544 --> 00:05:30,482
+One honest tip about pie charts.
+
+112
+00:05:30,482 --> 00:05:32,480
+They only work with a few slices.
+
+113
+00:05:32,480 --> 00:05:35,628
+With more than five or six, use a bar chart instead.
+
+114
+00:05:35,628 --> 00:05:37,324
+It's much easier to compare.
+
+115
+00:05:38,024 --> 00:05:41,119
+Now, the three errors that stop almost everyone.
+
+116
+00:05:41,119 --> 00:05:41,764
+Error one.
+
+117
+00:05:41,764 --> 00:05:44,988
+You run the script and get Import openpyxl failed.
+
+118
+00:05:44,988 --> 00:05:47,825
+That means the Excel helper isn't installed.
+
+119
+00:05:47,825 --> 00:05:49,954
+The fix is in the message itself.
+
+120
+00:05:49,954 --> 00:05:53,307
+Run pip install openpyxl, and run your script again.
+
+121
+00:05:54,007 --> 00:05:54,589
+Error two.
+
+122
+00:05:54,589 --> 00:05:55,463
+File not found.
+
+123
+00:05:55,463 --> 00:06:01,926
+Python looks for the file in the folder your terminal is in, not in the folder where you saved it in your head.
+
+124
+00:06:01,926 --> 00:06:07,690
+Use c d to move the terminal into the folder with the script and the spreadsheet, and run it again.
+
+125
+00:06:08,390 --> 00:06:09,133
+Error three.
+
+126
+00:06:09,133 --> 00:06:10,248
+Key error, coffee.
+
+127
+00:06:10,248 --> 00:06:11,053
+Look closely.
+
+128
+00:06:11,053 --> 00:06:15,573
+I typed coffee with a small c, but the column is Coffee with a capital C.
+
+129
+00:06:15,573 --> 00:06:18,545
+Column names must match the spreadsheet exactly.
+
+130
+00:06:18,545 --> 00:06:20,774
+Capital letters, spaces, everything.
+
+131
+00:06:20,774 --> 00:06:23,993
+Print d f dot columns, and copy the name from there.
+
+132
+00:06:24,694 --> 00:06:27,180
+And one more, that's not an error at all.
+
+133
+00:06:27,180 --> 00:06:32,394
+If you run the script and no window appears, check that plt dot show is the last line.
+
+134
+00:06:32,394 --> 00:06:35,365
+And always call savefig before show, never after.
+
+135
+00:06:35,365 --> 00:06:39,913
+Once the window closes, the figure is gone, and you'd save a blank picture.
+
+136
+00:06:40,613 --> 00:06:41,380
+Quick bonus.
+
+137
+00:06:41,380 --> 00:06:42,659
+Want the best month?
+
+138
+00:06:42,659 --> 00:06:43,810
+Make a new column.
+
+139
+00:06:43,810 --> 00:06:47,839
+d f, Total, equals the three columns, dot sum, axis equals one.
+
+140
+00:06:47,839 --> 00:06:51,931
+Axis one means add across each row, instead of down each column.
+
+141
+00:06:51,931 --> 00:06:55,128
+Then idx max finds the row with the biggest total.
+
+142
+00:06:55,828 --> 00:06:56,251
+Run it.
+
+143
+00:06:56,251 --> 00:07:01,082
+Every month now has a total, and the best month is December, with fifty one ten.
+
+144
+00:07:01,082 --> 00:07:05,672
+Two lines of code, and you'd never have to scroll and compare by hand again.
+
+145
+00:07:06,372 --> 00:07:08,390
+Now, the dashboard from the start.
+
+146
+00:07:08,390 --> 00:07:14,685
+plt dot subplots, one comma two, creates one figure with two empty charts side by side, ax one and ax two.
+
+147
+00:07:14,685 --> 00:07:16,347
+Then the trick is ax equals.
+
+148
+00:07:16,347 --> 00:07:18,841
+You tell each plot which space to draw in.
+
+149
+00:07:18,841 --> 00:07:20,742
+The line chart goes into ax one.
+
+150
+00:07:20,742 --> 00:07:22,582
+The bar chart goes into ax two.
+
+151
+00:07:22,582 --> 00:07:25,730
+And one savefig saves the whole thing as one picture.
+
+152
+00:07:26,430 --> 00:07:28,525
+Run it, and the dashboard is saved.
+
+153
+00:07:28,525 --> 00:07:31,758
+Monthly sales on the left, yearly totals on the right.
+
+154
+00:07:31,758 --> 00:07:37,805
+Next month, paste the new numbers into the spreadsheet, run the same command, and the report is done.
+
+155
+00:07:37,805 --> 00:07:39,302
+That's the real shortcut.
+
+156
+00:07:40,002 --> 00:07:40,501
+Pro tip.
+
+157
+00:07:40,501 --> 00:07:44,114
+That word kind is all you change to try a different chart.
+
+158
+00:07:44,114 --> 00:07:47,479
+Bar h gives you horizontal bars, great for long names.
+
+159
+00:07:47,479 --> 00:07:49,784
+Area fills the space under the lines.
+
+160
+00:07:49,784 --> 00:07:51,591
+Scatter compares two columns.
+
+161
+00:07:51,591 --> 00:07:53,896
+Hist shows how values are spread out.
+
+162
+00:07:53,896 --> 00:07:56,950
+Same data, same line of code, one word different.
+
+163
+00:07:57,650 --> 00:07:58,418
+Quick recap.
+
+164
+00:07:58,418 --> 00:08:00,979
+Install pandas, matplotlib and openpyxl.
+
+165
+00:08:00,979 --> 00:08:02,900
+Read the file with read excel.
+
+166
+00:08:02,900 --> 00:08:04,949
+Draw with d f dot plot, x and y.
+
+167
+00:08:04,949 --> 00:08:06,422
+Add a title and labels.
+
+168
+00:08:06,422 --> 00:08:09,496
+Use sum for totals, and kind for the chart type.
+
+169
+00:08:09,496 --> 00:08:11,481
+Save with savefig, before show.
+
+170
+00:08:11,481 --> 00:08:14,554
+And subplots puts everything into one dashboard.
+
+171
+00:08:15,254 --> 00:08:19,494
+Next on Shortcut Lab, the command line basics everyone should know.
+
+172
+00:08:19,494 --> 00:08:23,798
+The ten commands that make the terminal feel easy, instead of scary.
+
+173
+00:08:23,798 --> 00:08:25,823
+Subscribe, so you don't miss it.
