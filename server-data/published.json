@@ -142,7 +142,9 @@
   "related_key": "cosmic-ep08-long",
   "pinned_comment": "Which planet surprised you most? Full video: What If the Moon Crashed Into Earth? You'd Have 4 Days",
   "related_attempts": 1,
-  "related_done": "2026-11-10T17:15:35.078409-03:00"
+  "related_done": "2026-11-10T17:15:35.078409-03:00",
+  "comment_attempts": 1,
+  "comment_done": "2026-11-10T19:13:22.646124-03:00"
  },
  "cosmic-ep08-short": {
   "attempts": 2,
@@ -233,7 +235,9 @@
   "related_key": "ptd-ep09-long",
   "pinned_comment": "Taxa alta demais te dá vontade de investir ou te deixa desconfiado? Vídeo completo: Banco Master: o banco que pagava demais (e quem pagou a conta de R$ 40 bilhões)",
   "related_attempts": 1,
-  "related_done": "2026-11-10T18:17:58.007663-03:00"
+  "related_done": "2026-11-10T18:17:58.007663-03:00",
+  "comment_attempts": 1,
+  "comment_done": "2026-11-10T19:16:07.821790-03:00"
  },
  "ptd-rank07-short": {
   "attempts": 1,
@@ -266,7 +270,9 @@
   "title": "Turn a Spreadsheet into Charts with Python (pandas + matplotlib) | Beginner Tutorial",
   "kind": "long",
   "publish_at": "2026-11-10T19:00:00-03:00",
-  "pinned_comment": "Which report do you still build by hand every month? Tell me and it might be the next tutorial."
+  "pinned_comment": "Which report do you still build by hand every month? Tell me and it might be the next tutorial.",
+  "comment_attempts": 1,
+  "comment_done": "2026-11-10T19:18:15.926074-03:00"
  },
  "lab-ep06-short": {
   "attempts": 1,
@@ -282,6 +288,8 @@
   "kind": "short",
   "publish_at": "2026-11-10T20:30:00-03:00",
   "related_key": "lab-ep06-long",
-  "pinned_comment": "Line, bar or pie: which chart do you use the most? Full tutorial: Turn a Spreadsheet into Charts with Python"
+  "pinned_comment": "Line, bar or pie: which chart do you use the most? Full tutorial: Turn a Spreadsheet into Charts with Python",
+  "related_attempts": 1,
+  "related_done": "2026-11-10T19:19:54.717075-03:00"
  }
 }
