@@ -214,8 +214,8 @@
   "kind": "long",
   "publish_at": "2026-11-10T18:00:00-03:00",
   "pinned_comment": "Você colocaria dinheiro num CDB pagando 140% do CDI só porque tem a garantia do FGC? Conta aqui por quê.",
-  "comment_attempts": 1,
-  "comment_error": "Page.goto: Timeout 60000ms exceeded.\nCall log:\n  - navigating to \"https://www.youtube.com/watch?v=hn1vNNW4nrE\", waiting until \"domcontentloaded\"\n (20261110-181424-erro-comment-ptd-ep09-long.png)"
+  "comment_attempts": 2,
+  "comment_done": "2026-11-10T18:23:27.259819-03:00"
  },
  "ptd-ep09-short": {
   "attempts": 1,
