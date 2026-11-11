@@ -312,7 +312,9 @@
   "kind": "short",
   "publish_at": "2026-11-11T13:00:00-03:00",
   "related_key": "cosmic-ep09-long",
-  "pinned_comment": "Which star should we put next? Full video: Why Is Space Black If There Are Billions of Stars? (Olbers' Paradox)"
+  "pinned_comment": "Which star should we put next? Full video: Why Is Space Black If There Are Billions of Stars? (Olbers' Paradox)",
+  "comment_attempts": 1,
+  "comment_done": "2026-11-11T13:12:37.908054-03:00"
  },
  "cosmic-ep09-long": {
   "attempts": 1,
