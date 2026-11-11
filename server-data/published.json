@@ -351,7 +351,9 @@
   "related_key": "cosmic-ep09-long",
   "pinned_comment": "Will the storm still fit Earth in 50 years? Full video: Why Is Space Black If There Are Billions of Stars? (Olbers' Paradox)",
   "related_attempts": 1,
-  "related_done": "2026-11-11T17:15:54.830360-03:00"
+  "related_done": "2026-11-11T17:15:54.830360-03:00",
+  "comment_attempts": 1,
+  "comment_done": "2026-11-11T19:12:51.061014-03:00"
  },
  "cosmic-ep09-short": {
   "attempts": 1,
@@ -405,7 +407,9 @@
   "related_key": "ptd-ep10-long",
   "pinned_comment": "Você sabia que o teto limita o total e não a taxa? Vídeo completo: Rotativo do cartão: o juro de 451% ao ano (e quem ganha com ele)",
   "related_attempts": 1,
-  "related_done": "2026-11-11T18:15:08.671514-03:00"
+  "related_done": "2026-11-11T18:15:08.671514-03:00",
+  "comment_attempts": 1,
+  "comment_done": "2026-11-11T19:15:32.062285-03:00"
  },
  "ptd-rank08-short": {
   "attempts": 1,
@@ -438,7 +442,9 @@
   "title": "Command Line Basics Everyone Should Know | Terminal Tutorial for Beginners",
   "kind": "long",
   "publish_at": "2026-11-11T19:00:00-03:00",
-  "pinned_comment": "Which command was new to you? And what would you like to learn to do from the terminal next?"
+  "pinned_comment": "Which command was new to you? And what would you like to learn to do from the terminal next?",
+  "comment_attempts": 1,
+  "comment_done": "2026-11-11T19:17:53.586239-03:00"
  },
  "lab-ep07-short": {
   "attempts": 2,
@@ -455,6 +461,8 @@
   "kind": "short",
   "publish_at": "2026-11-11T20:30:00-03:00",
   "related_key": "lab-ep07-long",
-  "pinned_comment": "Mouse or keyboard: which one are you? Full tutorial: Command Line Basics Everyone Should Know"
+  "pinned_comment": "Mouse or keyboard: which one are you? Full tutorial: Command Line Basics Everyone Should Know",
+  "related_attempts": 1,
+  "related_done": "2026-11-11T19:19:32.435713-03:00"
  }
 }
