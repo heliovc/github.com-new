@@ -1,14 +1,12 @@
 {
- "last_run": "2026-11-11T06:53:44.693062-03:00",
- "pending": 4,
+ "last_run": "2026-11-11T08:01:58.564659-03:00",
+ "pending": 3,
  "post_tasks": 0,
  "errors": [
   "/opt/canal-publisher/repo/cosmic/ep07/publish.json: version deve ser 1"
  ],
  "published_now": [
-  "cosmic-rank08-short: https://youtu.be/UYguhn8elhE",
-  "cosmic-ep09-long: https://youtu.be/x95nTQ4UxuA",
-  "cosmic-scale02-short: https://youtu.be/9R9Q-Hxy8ho",
-  "cosmic-ep09-short: https://youtu.be/hL8y7pKAFas"
+  "ptd-ep10-short: https://youtube.com/shorts/3A46AXHLryw",
+  "ptd-rank08-short: https://youtube.com/shorts/YRMSIVSjMR4"
  ]
 }

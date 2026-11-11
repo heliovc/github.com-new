@@ -358,5 +358,44 @@
   "publish_at": "2026-11-11T21:00:00-03:00",
   "related_key": "cosmic-ep09-long",
   "pinned_comment": "Did you ever see that TV static yourself? Full video: Why Is Space Black If There Are Billions of Stars? (Olbers' Paradox)"
+ },
+ "ptd-ep10-long": {
+  "attempts": 1,
+  "status": "error",
+  "error": "Page.goto: Timeout 60000ms exceeded.\nCall log:\n  - navigating to \"https://www.youtube.com/channel_switcher\", waiting until \"domcontentloaded\"\n",
+  "screenshot": "20261111-074517-erro-ptd-ep10-long.png",
+  "at": "2026-11-11T07:45:51.528017-03:00"
+ },
+ "ptd-ep10-short": {
+  "attempts": 1,
+  "status": "published",
+  "url": "https://youtube.com/shorts/3A46AXHLryw",
+  "by": "robo",
+  "visibility": "schedule",
+  "when": "2026-11-11T19:00:00-03:00",
+  "at": "2026-11-11T07:53:42.095276-03:00",
+  "error": null,
+  "channel_id": "UCd_BGmJ5gbQ0kECAxmbvQHA",
+  "title": "Por que o rotativo cobra 451% se a lei limita a 100%? #shorts",
+  "kind": "short",
+  "publish_at": "2026-11-11T19:00:00-03:00",
+  "related_key": "ptd-ep10-long",
+  "pinned_comment": "Você sabia que o teto limita o total e não a taxa? Vídeo completo: Rotativo do cartão: o juro de 451% ao ano (e quem ganha com ele)"
+ },
+ "ptd-rank08-short": {
+  "attempts": 1,
+  "status": "published",
+  "url": "https://youtube.com/shorts/YRMSIVSjMR4",
+  "by": "robo",
+  "visibility": "schedule",
+  "when": "2026-11-12T12:00:00-03:00",
+  "at": "2026-11-11T08:01:52.515684-03:00",
+  "error": null,
+  "channel_id": "UCd_BGmJ5gbQ0kECAxmbvQHA",
+  "title": "Os 5 maiores recordes do Pix em um dia (o nº 1 foi semana passada) #shorts",
+  "kind": "short",
+  "publish_at": "2026-11-12T12:00:00-03:00",
+  "related_key": "ptd-ep10-long",
+  "pinned_comment": "Hoje você paga mais com Pix ou com cartão? Vídeo completo: Rotativo do cartão: o juro de 451% ao ano (e quem ganha com ele)"
  }
 }
