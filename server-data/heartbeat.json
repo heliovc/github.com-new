@@ -1,11 +1,8 @@
 {
- "last_run": "2026-11-11T12:13:07.672653-03:00",
+ "last_run": "2026-11-11T12:30:45.996943-03:00",
  "pending": 0,
- "post_tasks": 1,
+ "post_tasks": 0,
  "errors": [
   "/opt/canal-publisher/repo/cosmic/ep07/publish.json: version deve ser 1"
- ],
- "published_now": [
-  "ptd-rank07-short: comment comentário fixado"
  ]
 }
