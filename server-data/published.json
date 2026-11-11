@@ -406,5 +406,27 @@
   "publish_at": "2026-11-12T12:00:00-03:00",
   "related_key": "ptd-ep10-long",
   "pinned_comment": "Hoje você paga mais com Pix ou com cartão? Vídeo completo: Rotativo do cartão: o juro de 451% ao ano (e quem ganha com ele)"
+ },
+ "lab-ep07-long": {
+  "attempts": 1,
+  "status": "published",
+  "url": "https://youtu.be/N9Dv0E4G6pk",
+  "by": "robo",
+  "visibility": "schedule",
+  "when": "2026-11-11T19:00:00-03:00",
+  "at": "2026-11-11T08:39:11.916100-03:00",
+  "error": null,
+  "channel_id": "UCXGqR8k1RMbfYdVleIuJKzA",
+  "title": "Command Line Basics Everyone Should Know | Terminal Tutorial for Beginners",
+  "kind": "long",
+  "publish_at": "2026-11-11T19:00:00-03:00",
+  "pinned_comment": "Which command was new to you? And what would you like to learn to do from the terminal next?"
+ },
+ "lab-ep07-short": {
+  "attempts": 1,
+  "status": "error",
+  "error": "Page.goto: Timeout 60000ms exceeded.\nCall log:\n  - navigating to \"https://studio.youtube.com/channel/UCXGqR8k1RMbfYdVleIuJKzA/videos/short\", waiting until \"domcontentloaded\"\n",
+  "screenshot": "20261111-084115-erro-lab-ep07-short.png",
+  "at": "2026-11-11T08:41:48.178752-03:00"
  }
 }
