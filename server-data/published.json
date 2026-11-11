@@ -385,7 +385,9 @@
   "title": "Rotativo do cartão: o juro de 451% ao ano (e quem ganha com ele)",
   "kind": "long",
   "publish_at": "2026-11-11T18:00:00-03:00",
-  "pinned_comment": "Na sua opinião, quem deveria pagar a conta do parcelado sem juros: quem usa o rotativo, o lojista ou ninguém? Conta aqui."
+  "pinned_comment": "Na sua opinião, quem deveria pagar a conta do parcelado sem juros: quem usa o rotativo, o lojista ou ninguém? Conta aqui.",
+  "comment_attempts": 1,
+  "comment_done": "2026-11-11T18:13:07.897351-03:00"
  },
  "ptd-ep10-short": {
   "attempts": 1,
@@ -401,7 +403,9 @@
   "kind": "short",
   "publish_at": "2026-11-11T19:00:00-03:00",
   "related_key": "ptd-ep10-long",
-  "pinned_comment": "Você sabia que o teto limita o total e não a taxa? Vídeo completo: Rotativo do cartão: o juro de 451% ao ano (e quem ganha com ele)"
+  "pinned_comment": "Você sabia que o teto limita o total e não a taxa? Vídeo completo: Rotativo do cartão: o juro de 451% ao ano (e quem ganha com ele)",
+  "related_attempts": 1,
+  "related_done": "2026-11-11T18:15:08.671514-03:00"
  },
  "ptd-rank08-short": {
   "attempts": 1,
@@ -417,7 +421,9 @@
   "kind": "short",
   "publish_at": "2026-11-12T12:00:00-03:00",
   "related_key": "ptd-ep10-long",
-  "pinned_comment": "Hoje você paga mais com Pix ou com cartão? Vídeo completo: Rotativo do cartão: o juro de 451% ao ano (e quem ganha com ele)"
+  "pinned_comment": "Hoje você paga mais com Pix ou com cartão? Vídeo completo: Rotativo do cartão: o juro de 451% ao ano (e quem ganha com ele)",
+  "related_attempts": 1,
+  "related_done": "2026-11-11T18:17:03.356670-03:00"
  },
  "lab-ep07-long": {
   "attempts": 1,
