@@ -13,6 +13,8 @@ vis.type == "thermo" / THEME.hook == "thermo": termômetro vertical 0–6.000 °
 THEME.hook == "moons": silhueta "?" do nº 1 dentro do contorno de Mercúrio + as 5 luas orbitando (rank03).
 vis.type == "lightyears" / THEME.hook/outro == "lightyears": régua vertical em anos-luz (Sol embaixo, 0–9 a.l.), pulso de luz descendo, estrela grande
   + "a luz que você vê hoje saiu em AAAA" (rank07). HOOK.big = número grande no 1º frame.
+vis.type == "glow" / THEME.hook/outro == "glow": horizonte noturno com a estrela no brilho aparente (magnitude) + régua log "quão potente é de verdade" (× Sol);
+  vis.lum, vis.ly, vis.col (rank08).
 vis.type == "daylight" / THEME.hook/outro == "daylight": planeta com dia/noite e Sol girando em volta (1 volta = 1 dia solar) + contador de dias terrestres + régua linear 0–180 dias com os mundos revelados (rank06).
 Tudo desenhado por código; narração Kokoro (VOICE, padrão af_heart); legenda grande queimada.
 """
@@ -430,6 +432,42 @@ def lightyears_vis(img, it, th, t, dur):
     text(img, (cx, cy + 320), f"left it in {int(yr)}", 58, tuple(th["accent"]), a=ease((t - 1.2) / 0.4))
     if v.get("note"): text(img, (W / 2, 1300), v["note"], 38, tuple(th["accent2"]), w="ExtraBold", a=ease((t - 1.8) / 0.5))
 
+# ---- rank08: "glow" — night horizon with the star shining at its apparent brightness + two meters: LOOKS (magnitude) vs REALLY IS (× Sun, log)
+GL_LMAX = 5.0  # log10 of 100,000 × Sun
+def horizon(img, t, col=(14, 12, 30)):
+    d = ImageDraw.Draw(img)
+    pts = [(0, H)] + [(x, 1120 - 40 * math.sin(x / 170 + 1.2) - 18 * math.sin(x / 61)) for x in range(0, W + 30, 30)] + [(W, H)]
+    d.polygon(pts, fill=col)
+    for tx in (140, 175, 930):
+        d.polygon([(tx, 1110), (tx - 22, 1110), (tx - 11, 1020)], fill=col)
+def lum_meter(img, th, items, cur=None, prog=1.0, y=1220, a=1.0):
+    d = ImageDraw.Draw(img); x0, x1 = 90, W - 90
+    d.rounded_rectangle([x0, y - 14, x1, y + 14], 14, fill=(40, 44, 70))
+    for k in range(0, 6):
+        x = lerp(x0, x1, k / GL_LMAX); d.line([(x, y + 18), (x, y + 34)], fill=(150, 160, 190), width=3)
+        d.text((x, y + 56), ["1", "10", "100", "1,000", "10,000", "100,000"][k] + ("× Sun" if k == 0 else ""), font=F(26, "Bold"), fill=(150, 160, 190), anchor="mm")
+    for o in items:
+        L = o["vis"]["lum"] if o is not cur else 10 ** (math.log10(o["vis"]["lum"]) * prog)
+        x = lerp(x0, x1, max(0, math.log10(L)) / GL_LMAX); c = tuple(o["vis"]["col"]); big = o is cur
+        d.ellipse([x - (20 if big else 12), y - (20 if big else 12), x + (20 if big else 12), y + (20 if big else 12)], fill=c, outline=(255, 255, 255) if big else None, width=3)
+        if not big: d.text((x, y - 36), o["short"], font=F(24, "Bold"), fill=(200, 205, 220), anchor="mm")
+    d.text((x0, y - 60), "HOW POWERFUL IT REALLY IS", font=F(30, "ExtraBold"), fill=tuple(th["accent2"]), anchor="lm")
+def glow_vis(img, it, th, t, dur):
+    v = it["vis"]; order = sorted(ALL_ITEMS, key=lambda o: -o["rank"]); shown = order[:order.index(it) + 1]
+    horizon(img, t)
+    flux = 10 ** (-0.4 * (it["num"] - 0.03))   # relative to Vega
+    rr = 30 + 46 * flux ** 0.5; tw = 1 + 0.05 * math.sin(t * 7) + 0.03 * math.sin(t * 11.3)
+    halo = R.radial(int(rr * 8), [(0, tuple(v["col"]) + (120,)), (0.3, tuple(v["col"]) + (40,)), (1, tuple(v["col"]) + (0,))])
+    R.paste_c(img, halo, W / 2, 720); R.paste_c(img, star_sprite(int(rr * tw), tuple(v["col"])), W / 2, 720)
+    d = ImageDraw.Draw(img)
+    for k in range(4):
+        ang = math.pi / 4 * k * 2 + math.pi / 4; L = rr * 3.2 * tw
+        d.line([(W / 2 - L * math.cos(ang), 720 - L * math.sin(ang)), (W / 2 + L * math.cos(ang), 720 + L * math.sin(ang))], fill=tuple(v["col"]), width=2)
+    text(img, (W / 2, 470), f'{v["ly"]:g} light-years away', 42, (220, 225, 240), w="ExtraBold", a=ease((t - 0.6) / 0.4))
+    p = easeio((t - 1.0) / max(1.2, dur * 0.5))
+    lum_meter(img, th, shown, cur=it, prog=p)
+    text(img, (W / 2, 1060), f'{v["lum"] * 1:,.0f}× the Sun' if p > 0.98 else "", 60, tuple(th["accent"]), a=ease((t - 1.0 - dur * 0.5) / 0.3))
+
 def caption_chunks(say, t0, dur):
     words = say.split(); groups, g = [], []
     for w in words:
@@ -452,6 +490,20 @@ def draw_caption(img, chunks, gt, y=1585):
 
 def seg_hook(img, sc, th, t, dur):
     col = tuple(th["star_col"]); acc = tuple(th["accent"])
+    if th.get("hook") == "glow":
+        # frame 0: the big claim + five unnamed stars over a dark horizon, #2 pulsing
+        horizon(img, t)
+        rng = random.Random(8)
+        for i, o in enumerate(sorted(ALL_ITEMS, key=lambda o: o["rank"])):
+            x, y = 180 + i * 180, 640 + 110 * math.sin(i * 1.7)
+            f = 10 ** (-0.4 * (o["num"] - 0.03)); r = 14 + 20 * f ** 0.5
+            if o["rank"] == 2: r *= 1 + 0.25 * (0.5 + 0.5 * math.sin(t * 5))
+            R.paste_c(img, star_sprite(int(r), tuple(o["vis"]["col"])), x, y)
+            text(img, (x, y + 70), "?", 54, (200, 205, 230))
+        text(img, (W / 2, 210), sc.get("big", ""), 104, tuple(th["accent"]))
+        text(img, (W / 2, 315), sc["top"].upper(), 54, (255, 255, 255))
+        text(img, (W / 2, 1370), sc["sub"], 46, tuple(th["accent2"]), w="ExtraBold")
+        return
     if th.get("hook") == "lightyears":
         # frame 0: the big distance + a "?" star at 4.24 ly with light crawling down toward the Sun
         order = sorted(ALL_ITEMS, key=lambda o: o["rank"])
@@ -575,6 +627,8 @@ def seg_item(img, it, th, t, dur):
         daylight_vis(img, it, th, t, dur)
     if v["type"] == "lightyears":
         lightyears_vis(img, it, th, t, dur)
+    if v["type"] == "glow":
+        glow_vis(img, it, th, t, dur)
     # number
     p = easeio((t - 0.5) / 1.6)
     num = it["num"]
@@ -587,6 +641,15 @@ def seg_item(img, it, th, t, dur):
 
 def seg_outro(img, sc, th, t, dur):
     a = ease(t / 0.5)
+    if th.get("outro") == "glow":
+        horizon(img, t)
+        lum_meter(img, th, ALL_ITEMS, cur=None, y=640)
+        if th.get("outro_note"): text(img, (W / 2, 820), th["outro_note"], 44, tuple(th["accent2"]), w="ExtraBold", a=a)
+        text(img, (W / 2, 960), "WHICH STAR", 96, (255, 255, 255), a=ease((t - 0.3) / 0.5))
+        text(img, (W / 2, 1050), "SHOULD WE PUT NEXT?", 58, tuple(th["accent"]), a=ease((t - 0.5) / 0.5))
+        text(img, (W / 2, 1330), "SUBSCRIBE", 100, tuple(th["accent"]), a=ease((t - 0.8) / 0.5))
+        text(img, (W / 2, 1420), "to Cosmic Scale", 50, (255, 255, 255), w="ExtraBold", a=ease((t - 1.0) / 0.5))
+        return
     if th.get("outro") == "lightyears":
         ly_ruler(img, th, sorted(ALL_ITEMS, key=lambda o: -o["rank"]), pulse=4.24 * (1 - (t * 0.35) % 1), labels=False)
         if th.get("outro_note"): text(img, (W / 2 + 120, 640), th["outro_note"], 44, tuple(th["accent2"]), w="ExtraBold", a=a)

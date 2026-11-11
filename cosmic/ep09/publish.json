@@ -1,0 +1,103 @@
+{
+ "version": 1,
+ "channel_id": "UCsYYjUbmq4n3lAKgw2F2IJw",
+ "created_at": "2026-11-11T06:27:17-03:00",
+ "items": [
+  {
+   "key": "cosmic-ep09-long",
+   "kind": "long",
+   "video": "video.mp4",
+   "title": "Why Is Space Black If There Are Billions of Stars? (Olbers' Paradox)",
+   "description": "Our galaxy alone has hundreds of billions of stars, and there are hundreds of billions of galaxies. So every direction you look should end on a star, and the night sky should blaze like the surface of the Sun. It doesn't. We treat this 400-year-old puzzle, Olbers' paradox, as a case file: four suspects, two cleared, two guilty, and a twist. The sky isn't actually black. The wall of light is still out there, stretched into microwaves.\n\nChapters\n0:00 The sky should be blinding\n0:36 The forest problem\n1:00 A 400-year-old cold case\n1:20 How bright would it be?\n1:43 Why the daytime sky is blue\n2:08 Suspect 1: far stars are too faint\n2:47 Suspect 2: dust\n3:22 Suspect 3: the universe has a birthday\n4:13 The forest is deeper than we can see\n4:32 Stars burn out (and a poet saw it first)\n5:21 Suspect 4: space is stretching\n6:19 The twist: the sky isn't black\n7:20 The darkness is growing\n7:50 The verdict\n8:10 Next episode\n\nSources\n- NASA Science, Milky Way: 100 to 400 billion stars; NASA / Hubble: hundreds of billions of galaxies in the observable universe\n- Olbers' paradox: Heinrich Wilhelm Olbers (1823); Johannes Kepler (1610); Edgar Allan Poe, \"Eureka\" (1848); Lord Kelvin (1901); Edward Harrison, \"Darkness at Night: A Riddle of the Universe\" (Harvard University Press, 1987)\n- Dust argument fails: absorbed starlight would heat dust until it re-radiates (thermodynamics; see Harrison 1987)\n- NASA Science, Andromeda: light takes about 2.5 million years to reach us\n- ESA / Planck collaboration: age of the universe about 13.8 billion years; observable universe radius about 46.5 billion light-years\n- NASA Science, the Sun: total lifetime about 10 billion years; surface (photosphere) about 5,500 °C\n- Edwin Hubble (1929): galaxies recede faster the farther away they are; NASA James Webb Space Telescope observes in infrared to see redshifted distant galaxies\n- NASA WMAP / COBE: cosmic microwave background, released about 380,000 years after the Big Bang at about 3,000 K, today 2.725 K; discovered by Penzias and Wilson (1965); roughly 1% of the static on an untuned analog TV\n- NASA Apollo: the lunar sky is black at noon because the Moon has no atmosphere; Earth's daytime sky is blue from Rayleigh scattering of sunlight\n- NASA / ESA / CSA JWST, JADES-GS-z14-0 (Carniani et al. 2024): redshift about 14.3, light emitted about 290 million years after the Big Bang\n- Krauss & Scherrer (2007), General Relativity and Gravitation, \"The return of a static universe and the end of cosmology\"\n- Own calculations (Python): the Sun covers 6.8 × 10^-5 steradians → about 92,500 Suns to tile the half-sky above you; line-of-sight mean free path 1/(nσ) with 10^22 to 10^24 stars in the observable universe → roughly 10^22 to 10^24 light-years; CMB stretch 3,000 K / 2.725 K ≈ 1,100; light stretch 1 + z ≈ 15.3 for z = 14.3\n\n—\nCosmic Scale: the universe, measured in a way you can feel.\nSubscribe for a new space video every week.\nVisuals and animations are original. Narration uses a synthetic voice.\n#space #universe #science",
+   "tags": [
+    "why is space black",
+    "olbers paradox",
+    "why is the night sky dark",
+    "cosmic microwave background",
+    "age of the universe",
+    "redshift",
+    "james webb",
+    "space documentary",
+    "cosmic scale"
+   ],
+   "thumbnail": "thumbnail.jpg",
+   "captions": "legendas.srt",
+   "publish_at": "2026-11-11T17:00:00-03:00",
+   "if_late": "public_now",
+   "made_for_kids": false,
+   "altered_content": true,
+   "pinned_comment": "Before this video, what did you think made space black? Be honest."
+  },
+  {
+   "key": "cosmic-rank08-short",
+   "kind": "short",
+   "video": "ranking.mp4",
+   "title": "Top 5 Brightest Stars in the Night Sky (#2 Is 10,000 Suns) #shorts",
+   "description": "The five brightest stars at night, and how powerful each one really is. Brightest-looking is not most powerful. Full video on the channel: \"Why Is Space Black If There Are Billions of Stars? (Olbers' Paradox)\".\n\nSources\n- Hipparcos catalogue (ESA) / NASA: apparent magnitudes Sirius −1.46, Canopus −0.74, Alpha Centauri A+B −0.27, Arcturus −0.05, Vega +0.03\n- NASA Science / NASA Imagine the Universe: distances Sirius 8.6 ly, Alpha Centauri 4.37 ly, Vega 25 ly, Arcturus about 37 ly, Canopus about 310 ly\n- Luminosities (approximate, stellar catalogues): Sirius A about 25 Suns, Canopus about 10,000 Suns, Arcturus about 170 Suns, Vega about 40 Suns, Alpha Centauri A+B about 2 Suns\n- Own calculation: Canopus is about 310 / 8.6 ≈ 36 times farther away than Sirius\n\nVisuals and animations are original. Narration uses a synthetic voice.\n#shorts #space #stars #astronomy",
+   "tags": [
+    "brightest stars",
+    "sirius",
+    "canopus",
+    "alpha centauri",
+    "arcturus",
+    "vega",
+    "night sky",
+    "space facts",
+    "shorts",
+    "cosmic scale"
+   ],
+   "publish_at": "2026-11-11T13:00:00-03:00",
+   "if_late": "public_now",
+   "made_for_kids": false,
+   "altered_content": true,
+   "related_key": "cosmic-ep09-long",
+   "pinned_comment": "Which star should we put next? Full video: Why Is Space Black If There Are Billions of Stars? (Olbers' Paradox)"
+  },
+  {
+   "key": "cosmic-scale02-short",
+   "kind": "short",
+   "video": "scale.mp4",
+   "title": "Earth Fits Inside a Storm on Jupiter. Barely. #shorts",
+   "description": "Jupiter's Great Red Spot, drawn to scale: about 16,000 km wide, 1.3 Earths. In the 1800s it held about 3. Full video on the channel: \"Why Is Space Black If There Are Billions of Stars? (Olbers' Paradox)\".\n\nSources\n- NASA / JPL (Juno, 2017): the Great Red Spot measured about 16,000 km (10,159 miles) wide, about 1.3 times Earth's width\n- NASA / Hubble (2014): historic observations from the late 1800s gauged the storm as large as about 41,000 km (25,500 miles) on its long axis; observed continuously since at least the 1870s (Simon et al. 2018, Astronomical Journal)\n- NASA Planetary Fact Sheets: Jupiter diameter 142,984 km, Earth 12,742 km (Jupiter ≈ 11 Earths wide)\n- Own calculation: 16,000 / 12,742 ≈ 1.3 Earths; 41,000 / 12,742 ≈ 3.2 Earths\n\nVisuals and animations are original. Narration uses a synthetic voice.\n#shorts #space #jupiter #planets",
+   "tags": [
+    "great red spot",
+    "jupiter",
+    "earth vs jupiter",
+    "jupiter storm",
+    "planets to scale",
+    "space facts",
+    "shorts",
+    "cosmic scale"
+   ],
+   "publish_at": "2026-11-11T19:00:00-03:00",
+   "if_late": "public_now",
+   "made_for_kids": false,
+   "altered_content": true,
+   "related_key": "cosmic-ep09-long",
+   "pinned_comment": "Will the storm still fit Earth in 50 years? Full video: Why Is Space Black If There Are Billions of Stars? (Olbers' Paradox)"
+  },
+  {
+   "key": "cosmic-ep09-short",
+   "kind": "short",
+   "video": "vertical.mp4",
+   "title": "The Night Sky Isn't Actually Black. You Just Can't See It #shorts",
+   "description": "About 380,000 years after the Big Bang, the whole sky was a wall of light. It's still there, stretched about 1,100 times into microwaves. Full video on the channel: \"Why Is Space Black If There Are Billions of Stars? (Olbers' Paradox)\".\n\nSources\n- NASA WMAP / COBE: cosmic microwave background, released about 380,000 years after the Big Bang at about 3,000 K, today 2.725 K; discovered in 1965 (Penzias and Wilson)\n- Own calculation: 3,000 K / 2.725 K ≈ 1,100× stretch\n\nVisuals and animations are original. Narration uses a synthetic voice.\n#shorts #space #universe #bigbang",
+   "tags": [
+    "cosmic microwave background",
+    "why is space black",
+    "olbers paradox",
+    "big bang",
+    "tv static",
+    "space facts",
+    "shorts",
+    "cosmic scale"
+   ],
+   "publish_at": "2026-11-11T21:00:00-03:00",
+   "if_late": "public_now",
+   "made_for_kids": false,
+   "altered_content": true,
+   "related_key": "cosmic-ep09-long",
+   "pinned_comment": "Did you ever see that TV static yourself? Full video: Why Is Space Black If There Are Billions of Stars? (Olbers' Paradox)"
+  }
+ ]
+}

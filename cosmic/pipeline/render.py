@@ -9,6 +9,10 @@ EP08 added scenes: skyline (Moon seen from a coastal town, angular size grows; t
   from a numeric free-fall table), tides (ocean bulge + 1/d³ multiplier), roche (top-down: "fall" = crosses in 22 min / "ring" = smears into a ring),
   theia (giant impact -> debris disk -> Moon). Palette moon silver / ultramarine / magma. Structure NEW: countdown (day counter) + 2 endings + twist.
   Learned: setup script pip may target another python -> use python3 -m pip.
+EP09 added scenes: sightlines (top-down star "forest", rays stop at first star; limit= light-travel bubble), blaze (night sky fills
+  with star discs into a white wall + Suns counter), suspects (case-board cards with CLEARED/GUILTY stamps), shells (onion shells: k² stars × 1/k²
+  brightness = same light), lightbubble (light-travel bubble grows with a cosmic clock; lit vs grey galaxies), stretchwave (wave slides UV->visible
+  ->IR->microwave, optional K counter). Palette starlight white / infrared crimson / microwave teal / indigo. Structure NEW: "case file" with 4 suspects.
 EP06 added scenes: spinglobe (globe + speed by latitude; top=True rings; slow=True), pendulum, fling, bulge, yearday, dayclock (teal / amber palette)
 """
 import sys, os, re, math, subprocess, importlib.util, json, random, hashlib
@@ -2176,6 +2180,227 @@ def sc_theia(img, v, t, dur):
         d = ImageDraw.Draw(img)
         if clump > 0.8: d.text((mx, my + 90), "the Moon", font=F(40, "Black"), fill=SILVER8, anchor="mm")
     caption(img, v.get("caption"), ease((t - 3) / 0.5))
+
+# ---------------- scenes (EP09: why is space black) ----------------
+STAR9, IR9, MW9, INK9 = (246, 244, 255), (255, 70, 110), (60, 230, 190), (120, 128, 255)
+
+def _forest9(seed=9, n=420, rmin=60, rmax=1300):
+    rng = random.Random(seed); out = []
+    while len(out) < n:
+        a = rng.uniform(0, 2 * math.pi); r = math.sqrt(rng.uniform(rmin ** 2, rmax ** 2))
+        out.append((r * math.cos(a), r * math.sin(a), rng.uniform(6, 13)))
+    return np.array(out, np.float32)
+FOREST9 = None
+
+def sc_sightlines(img, v, t, dur):
+    """top-down 'forest' of stars around you: lines of sight run outward and stop at the first star they hit.
+    reach grows (fraction of the forest); limit (px) = edge of the light-travel bubble: rays stop there unlit."""
+    global FOREST9
+    if FOREST9 is None: FOREST9 = _forest9()
+    cx, cy = W * 0.40, H * 0.52
+    reach = lerp(v.get("r0", 120), v.get("r1", 1300), easeio((t - 0.3) / max(1.0, dur * 0.7)))
+    limit = v.get("limit")
+    lay = Image.new("RGBA", img.size, (0, 0, 0, 0)); d = ImageDraw.Draw(lay)
+    sx, sy, sr = FOREST9[:, 0], FOREST9[:, 1], FOREST9[:, 2]
+    dist = np.hypot(sx, sy)
+    nray, hits = 180, 0
+    for k in range(nray):
+        a = 2 * math.pi * k / nray; ux, uy = math.cos(a), math.sin(a)
+        proj = sx * ux + sy * uy; perp = np.abs(-sx * uy + sy * ux)
+        ok = (proj > 0) & (perp < sr)
+        tt = np.where(ok, proj - np.sqrt(np.maximum(0, sr ** 2 - perp ** 2)), 1e9)
+        tmin = float(tt.min()); L = min(reach, limit or 1e9)
+        hit = tmin <= L
+        end = tmin if hit else L
+        col = (255, 236, 170, 120) if hit else (120, 130, 170, 60)
+        d.line([(cx, cy), (cx + ux * end, cy + uy * end)], fill=col, width=2)
+        hits += hit
+    img.alpha_composite(lay)
+    d = ImageDraw.Draw(img)
+    vis_r = min(reach, limit or 1e9)
+    for (x, y, r), dd in zip(FOREST9, dist):
+        X, Y = cx + x, cy + y
+        if -40 < X < W + 40 and -40 < Y < H + 40:
+            lit = dd <= vis_r + r
+            c = (255, 230, 160) if lit else (70, 76, 100)
+            d.ellipse([X - r, Y - r, X + r, Y + r], fill=c)
+    if limit:
+        lay = Image.new("RGBA", img.size, (0, 0, 0, 0)); dl = ImageDraw.Draw(lay)
+        for k in range(0, 360, 6):
+            dl.arc([cx - limit, cy - limit, cx + limit, cy + limit], k, k + 3, fill=MW9 + (220,), width=4)
+        img.alpha_composite(lay); d = ImageDraw.Draw(img)
+        d.text((cx, cy - limit - 30), v.get("limit_label", "light has had time to reach us"), font=F(34, "Bold"), fill=MW9, anchor="mm")
+    paste_c(img, earth_sprite(16, glow=None), cx, cy)
+    d.text((cx, cy + 40), "you", font=F(32, "Bold"), fill=WHITE, anchor="mm")
+    frac = hits / nray
+    box = Image.new("RGBA", img.size, (0, 0, 0, 0)); ImageDraw.Draw(box).rounded_rectangle([1330, 300, 1840, 640], 26, fill=(8, 8, 26, 220), outline=STAR9 + (110,), width=2); img.alpha_composite(box)
+    d = ImageDraw.Draw(img)
+    d.text((1585, 360), v.get("head", "Lines of sight"), font=F(40, "ExtraBold"), fill=STAR9, anchor="mm")
+    d.text((1585, 470), f"{frac * 100:.0f}%", font=F(110, "Black"), fill=mix(WHITE, (255, 214, 120), frac), anchor="mm")
+    d.text((1585, 580), "end on a star", font=F(36, "SemiBold"), fill=DIM, anchor="mm")
+    caption(img, v.get("caption"), ease((t - 2.0) / 0.5))
+
+def sc_blaze(img, v, t, dur):
+    """a night horizon whose sky fills with star discs until it is a white wall; counter of Suns needed to tile the sky"""
+    p = easeio((t - 0.3) / max(1.0, dur * v.get("speed", 0.75)))
+    if v.get("reverse"): p = 1 - p
+    rng = random.Random(19); lay = Image.new("RGBA", img.size, (0, 0, 0, 0)); d = ImageDraw.Draw(lay)
+    n = int(40 + 2600 * p ** 2)
+    for i in range(n):
+        x, y = rng.uniform(0, W), rng.uniform(0, 820); r = rng.uniform(2, 5) + 70 * p ** 3 * rng.random()
+        c = mix((255, 236, 200), (255, 250, 240), rng.random())
+        d.ellipse([x - r, y - r, x + r, y + r], fill=c + (int(120 + 135 * p),))
+    img.alpha_composite(lay)
+    wash = Image.new("RGBA", img.size, (255, 246, 228, int(235 * max(0, p - 0.55) / 0.45)) if p > 0.55 else (0, 0, 0, 0)); img.alpha_composite(wash)
+    d = ImageDraw.Draw(img)
+    pts = [(0, H)] + [(x, 850 - 60 * math.sin(x / 300 + 0.6) - 25 * math.sin(x / 83)) for x in range(0, W + 40, 40)] + [(W, H)]
+    d.polygon(pts, fill=mix((8, 9, 18), (60, 40, 30), p))
+    for tx in (300, 360, 1500):
+        d.polygon([(tx, 860), (tx - 26, 860), (tx - 13, 760)], fill=mix((6, 6, 12), (30, 20, 16), p))
+    if v.get("count"):
+        val = v["count"] * p
+        lay = Image.new("RGBA", img.size, (0, 0, 0, 0)); ImageDraw.Draw(lay).rounded_rectangle([W / 2 - 430, 330, W / 2 + 430, 620], 30, fill=(6, 6, 20, 225)); img.alpha_composite(lay)
+        d = ImageDraw.Draw(img)
+        d.text((W / 2, 440), f"{val:,.0f}", font=F(150, "Black"), fill=(255, 200, 90), anchor="mm")
+        d.text((W / 2, 560), v.get("unit", "Suns to tile the sky above you"), font=F(40, "Bold"), fill=WHITE, anchor="mm")
+    if v.get("head"): alpha_text(img, (W / 2, 190), v["head"], F(70, "Black"), WHITE if p < 0.6 else (40, 30, 30), ease(t / 0.5), shadow=p < 0.6)
+    caption(img, v.get("caption"), ease((t - 2.5) / 0.5))
+
+def sc_suspects(img, v, t, dur):
+    """case board: suspect cards; 'focus' glows, 'cleared' get a stamp CLEARED, 'guilty' a red stamp GUILTY"""
+    items = v["items"]; n = len(items); cw, ch, gap = 400, 520, 36
+    x0 = W / 2 - (n * cw + (n - 1) * gap) / 2; y0 = 300
+    alpha_text(img, (W / 2, 170), v.get("title", "THE SUSPECTS"), F(72, "Black"), STAR9, ease(t / 0.5))
+    foc = v.get("focus", -1); cleared = v.get("cleared", []); guilty = v.get("guilty", []); new = v.get("new", [])
+    for i, (num, name, note) in enumerate(items):
+        a = ease((t - 0.2 - i * 0.25) / 0.5)
+        if a <= 0: continue
+        x = x0 + i * (cw + gap); lift = -24 * ease((t - 0.6) / 0.5) if i == foc else 0
+        lay = Image.new("RGBA", img.size, (0, 0, 0, 0)); d = ImageDraw.Draw(lay)
+        oc = (255, 214, 120) if i == foc else (110, 118, 160)
+        if i == foc:
+            d.rounded_rectangle([x - 10, y0 - 10 + lift, x + cw + 10, y0 + ch + 10 + lift], 30, fill=(255, 214, 120, int(50 * a)))
+        d.rounded_rectangle([x, y0 + lift, x + cw, y0 + ch + lift], 24, fill=(14, 14, 34, int(235 * a)), outline=oc + (int(255 * a),), width=4)
+        img.alpha_composite(lay); d = ImageDraw.Draw(img)
+        d.text((x + cw / 2, y0 + 80 + lift), num, font=F(110, "Black"), fill=oc, anchor="mm")
+        f = F(46, "ExtraBold"); words = name.split(); lines, cur = [], ""
+        for w_ in words:
+            tt = (cur + " " + w_).strip()
+            if f.getlength(tt) < cw - 50: cur = tt
+            else: lines.append(cur); cur = w_
+        lines.append(cur)
+        for k, l in enumerate(lines): d.text((x + cw / 2, y0 + 210 + k * 58 + lift), l, font=f, fill=WHITE, anchor="mm")
+        stamp = "CLEARED" if i in cleared else ("GUILTY" if i in guilty else None)
+        if not stamp: d.text((x + cw / 2, y0 + ch - 60 + lift), note, font=F(30, "SemiBold"), fill=DIM, anchor="mm")
+        if stamp:
+            sa = 1.0 if i not in new else ease((t - 1.2) / 0.3)
+            if sa > 0:
+                col = (120, 220, 150) if stamp == "CLEARED" else IR9
+                s = Image.new("RGBA", (380, 120), (0, 0, 0, 0)); ds = ImageDraw.Draw(s)
+                ds.rounded_rectangle([4, 4, 376, 116], 14, outline=col + (int(255 * sa),), width=8)
+                ds.text((190, 62), stamp, font=F(70, "Black"), fill=col + (int(255 * sa),), anchor="mm")
+                s = s.rotate(-14, expand=True, resample=Image.BICUBIC)
+                k = 1 + 0.6 * (1 - sa); s = s.resize((int(s.width * k), int(s.height * k)))
+                img.alpha_composite(s, (int(x + cw / 2 - s.width / 2), int(y0 + ch * 0.80 - s.height / 2 + lift)))
+    caption(img, v.get("caption"), ease((t - 2.0) / 0.5))
+
+def sc_shells(img, v, t, dur):
+    """onion shells around you: shell k has k² stars, each 1/k² as bright -> equal light per shell; stacked light bars at right"""
+    cx, cy = 620, H / 2 + 20; n = v.get("n", 5); d = ImageDraw.Draw(img)
+    per = max(0.8, dur * 0.7) / n
+    for k in range(1, n + 1):
+        a = ease((t - 0.3 - (k - 1) * per) / 0.5)
+        if a <= 0: continue
+        R_ = 80 * k
+        lay = Image.new("RGBA", img.size, (0, 0, 0, 0)); dl = ImageDraw.Draw(lay)
+        dl.ellipse([cx - R_, cy - R_, cx + R_, cy + R_], outline=INK9 + (int(150 * a),), width=3)
+        m = 6 * k * k if k < 4 else 6 * k * k
+        rng = random.Random(k)
+        bright = 1.0 / (k * k)
+        for j in range(min(m, 160)):
+            ang = 2 * math.pi * (j + rng.random() * 0.5) / min(m, 160)
+            x, y = cx + R_ * math.cos(ang), cy + R_ * math.sin(ang)
+            r = max(1.6, 9 / k); c = mix((60, 60, 90), (255, 236, 180), 0.35 + 0.65 * bright ** 0.5)
+            dl.ellipse([x - r, y - r, x + r, y + r], fill=c + (int(255 * a),))
+        img.alpha_composite(lay); d = ImageDraw.Draw(img)
+        # bar
+        bx, by = 1180, 860 - (k - 1) * 120
+        d.rounded_rectangle([bx, by - 46, bx + 560 * a, by + 46], 16, fill=mix((40, 40, 70), (255, 214, 120), 0.4 + 0.12 * k))
+        d.text((bx + 20, by), f"shell {k}:  {k*k}× stars  ·  1/{k*k} as bright", font=F(32, "Bold"), fill=(20, 16, 30), anchor="lm")
+    paste_c(img, earth_sprite(14, glow=None), cx, cy)
+    d = ImageDraw.Draw(img)
+    d.text((1460, 200), v.get("head", "Every shell adds the same light"), font=F(48, "ExtraBold"), fill=STAR9, anchor="mm")
+    caption(img, v.get("caption"), ease((t - 2.5) / 0.5))
+
+def sc_lightbubble(img, v, t, dur):
+    """the light-travel bubble grows with a cosmic clock; galaxies inside are lit, outside are grey outlines (light still on its way)"""
+    cx, cy = W * 0.42, H * 0.53
+    p = easeio((t - 0.3) / max(1.0, dur * 0.7))
+    yrs = lerp(v.get("y0", 0.0), v.get("y1", 13.8), p)
+    Rb = 470 * yrs / 13.8
+    lay = Image.new("RGBA", img.size, (0, 0, 0, 0)); dl = ImageDraw.Draw(lay)
+    if Rb > 2:
+        for k in range(10, 0, -1):
+            rr = Rb * k / 10; dl.ellipse([cx - rr, cy - rr, cx + rr, cy + rr], fill=INK9 + (int(10 + 3 * (10 - k)),))
+        dl.ellipse([cx - Rb, cy - Rb, cx + Rb, cy + Rb], outline=MW9 + (230,), width=4)
+    img.alpha_composite(lay)
+    rng = random.Random(41); d = ImageDraw.Draw(img)
+    for i in range(170):
+        a = rng.uniform(0, 2 * math.pi); r = 30 + 900 * math.sqrt(rng.random()); x, y = cx + r * math.cos(a), cy + r * 0.62 * math.sin(a) * 1.4
+        if not (0 < x < W - 560 and 120 < y < H - 160): continue
+        ang = rng.uniform(0, math.pi); s = rng.uniform(8, 18)
+        inside = math.hypot(x - cx, y - cy) < Rb
+        col = mix((255, 220, 170), (170, 190, 255), rng.random()) if inside else (60, 64, 88)
+        bb = [x - s, y - s * 0.4, x + s, y + s * 0.4]
+        if inside: d.ellipse(bb, fill=col)
+        else: d.ellipse(bb, outline=col, width=2)
+    paste_c(img, earth_sprite(12, glow=None), cx, cy)
+    box = Image.new("RGBA", img.size, (0, 0, 0, 0)); ImageDraw.Draw(box).rounded_rectangle([1380, 280, 1860, 640], 26, fill=(8, 10, 26, 225), outline=MW9 + (120,), width=2); img.alpha_composite(box)
+    d = ImageDraw.Draw(img)
+    d.text((1620, 340), v.get("head", "Time since the beginning"), font=F(34, "Bold"), fill=DIM, anchor="mm")
+    d.text((1620, 450), f"{yrs:.1f}", font=F(120, "Black"), fill=MW9, anchor="mm")
+    d.text((1620, 560), "billion years", font=F(44, "ExtraBold"), fill=WHITE, anchor="mm")
+    d.text((1620, 720), "lit = its light has reached us", font=F(30, "SemiBold"), fill=(255, 220, 170), anchor="mm")
+    d.text((1620, 770), "grey = light still on its way", font=F(30, "SemiBold"), fill=(130, 136, 165), anchor="mm")
+    caption(img, v.get("caption"), ease((t - 2.5) / 0.5))
+
+BANDS9 = [("ULTRAVIOLET", (170, 110, 255)), ("VISIBLE", (255, 255, 255)), ("INFRARED", IR9), ("MICROWAVE", MW9)]
+def sc_stretchwave(img, v, t, dur):
+    """a light wave stretching as space expands: wavelength slides across UV->visible->IR->microwave; temperature or stretch counter"""
+    p = easeio((t - 0.3) / max(1.0, dur * 0.75))
+    s0, s1 = v.get("s0", 0.3), v.get("s1", 3.6)
+    s = lerp(s0, s1, p)                      # position on the band ruler 0..4
+    lay = Image.new("RGBA", img.size, (0, 0, 0, 0)); d = ImageDraw.Draw(lay)
+    x0, x1, by = 160, W - 160, 830; bw = (x1 - x0) / 4
+    for i, (name, col) in enumerate(BANDS9):
+        d.rectangle([x0 + i * bw, by, x0 + (i + 1) * bw - 6, by + 70], fill=col + (70,))
+        if name == "VISIBLE":
+            for k in range(60):
+                c = [(130, 80, 255), (60, 140, 255), (60, 220, 120), (255, 230, 60), (255, 140, 40), (255, 50, 50)]
+                q = k / 59 * 5; c0 = c[int(q)]; c1 = c[min(5, int(q) + 1)]
+                d.rectangle([x0 + i * bw + k * (bw - 6) / 60, by, x0 + i * bw + (k + 1) * (bw - 6) / 60, by + 70], fill=mix(c0, c1, q % 1) + (200,))
+        d.text((x0 + (i + 0.5) * bw, by + 110), name, font=F(34, "ExtraBold"), fill=col + (255,), anchor="mm")
+    img.alpha_composite(lay); d = ImageDraw.Draw(img)
+    mx = x0 + s * bw
+    d.polygon([(mx, by - 6), (mx - 22, by - 44), (mx + 22, by - 44)], fill=WHITE)
+    band = min(3, int(s)); col = BANDS9[band][1] if band != 1 else (255, 240, 200)
+    if band == 1:
+        q = (s - 1) * 5; cs = [(130, 80, 255), (60, 140, 255), (60, 220, 120), (255, 230, 60), (255, 140, 40), (255, 50, 50)]
+        col = mix(cs[min(5, int(q))], cs[min(5, int(q) + 1)], q % 1)
+    lam = 40 * 4.0 ** s / 4.0 ** s0 * (1 if s < 3 else 1) ; lam = min(lam, 1400)
+    pts = []; ph = t * 4
+    for x in range(160, W - 160, 4):
+        pts.append((x, 470 + 150 * math.sin(2 * math.pi * (x - 160) / lam - ph)))
+    lay = Image.new("RGBA", img.size, (0, 0, 0, 0)); dl = ImageDraw.Draw(lay)
+    dl.line(pts, fill=col + (90,), width=18); dl.line(pts, fill=col + (255,), width=6)
+    img.alpha_composite(lay); d = ImageDraw.Draw(img)
+    if v.get("temp"):
+        T = v["temp"][0] * (v["temp"][1] / v["temp"][0]) ** p
+        d.text((W / 2, 200), (f"{T:,.0f} K" if T > 20 else f"{T:.1f} K"), font=F(120, "Black"), fill=col, anchor="mm")
+        d.text((W / 2, 290), v.get("sub", "temperature of the glow"), font=F(40, "SemiBold"), fill=DIM, anchor="mm")
+    else:
+        alpha_text(img, (W / 2, 210), v.get("head", "Space stretches the light"), F(70, "Black"), WHITE, ease(t / 0.5))
+    caption(img, v.get("caption"), ease((t - 2.5) / 0.5), y=H - 70)
 
 SC = {k[3:]: f for k, f in globals().items() if k.startswith("sc_")}
 

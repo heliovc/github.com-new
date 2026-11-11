@@ -7,6 +7,8 @@ Visuais (vis.type):
   "gap"    : Terra no topo e Lua embaixo EM ESCALA; os planetas caem e empilham no vão (vis.add = nomes que entram neste beat,
              vis.moon = "apogee" | "mean"; vis.show_total = mostra a soma) (scale01).
   "inside" : corpo grande Y (vis.big_r_km, vis.big_col) e o pequeno X (vis.small_r_km) com contador de quantos X cabem em Y (vis.count).
+  "storm"  : Júpiter com faixas; zoom do planeta inteiro (z0/z1 = 0) até a Grande Mancha Vermelha (1); largura da mancha segue o ano
+             (y0/y1: 1880 = 41.000 km -> 2017 = 16.000 km); vis.earths = Terras em escala dentro da mancha (drop = caem) (scale02).
 Reaproveita render.py (sprites, fontes) e ranking.py (fundo, texto, legendas).
 """
 import sys, os, math, json, subprocess, importlib.util, random
@@ -98,6 +100,57 @@ def inside_vis(img, v, th, gt, t, dur):
         x, y = cx + r * math.cos(a), cy + r * math.sin(a); d.ellipse([x - rs, y - rs, x + rs, y + rs], fill=tuple(v.get("small_col", (90, 140, 255))))
     text(img, (W / 2, 330), f"{n:,}", 140, acc)
 
+# ---- scale02: "storm" — Jupiter with banded clouds; zoom from the whole planet (zoom 0) to the Great Red Spot (zoom 1);
+# the spot's width follows the year (1880: 41,000 km -> 2017: 16,000 km, linear between); 'earths' = Earth discs dropped inside, to scale.
+JUP_KM, GRS_LAT = 142984, -0.37
+BANDS2 = [(-1.0, (196, 170, 140)), (-0.62, (222, 205, 178)), (-0.47, (176, 128, 96)), (-0.28, (232, 220, 196)), (-0.12, (190, 150, 115)),
+          (0.06, (236, 226, 204)), (0.2, (170, 120, 90)), (0.38, (225, 210, 185)), (0.55, (186, 150, 120)), (0.75, (214, 196, 170))]
+def grs_width(year): return lerp(41000, 16000, max(0, min(1, (year - 1880) / (2017 - 1880))))
+def storm_vis(img, v, th, t, dur, beat_p):
+    z = lerp(v.get("z0", 1.0), v.get("z1", v.get("z0", 1.0)), beat_p)
+    year = lerp(v.get("y0", 2017), v.get("y1", v.get("y0", 2017)), beat_p)
+    k0, k1 = 840 / JUP_KM, 470 / 16000
+    k = k0 * (k1 / k0) ** z                      # px per km
+    cx, cy = W / 2, 900
+    Rj = JUP_KM / 2 * k; jx, jy = cx, cy - GRS_LAT * Rj   # spot at screen centre
+    lay = Image.new("RGBA", img.size, (0, 0, 0, 0)); d = ImageDraw.Draw(lay)
+    for i, (lat, col) in enumerate(BANDS2):
+        top = jy + lat * Rj; nxt = BANDS2[i + 1][0] if i + 1 < len(BANDS2) else 1.0
+        wob = 6 * math.sin(t * 0.8 + i)
+        d.rectangle([0, top + wob, W, jy + nxt * Rj + wob], fill=col + (255,))
+    for j in range(40):  # thin turbulent streaks
+        rr = random.Random(j); lat = rr.uniform(-0.9, 0.9); y = jy + lat * Rj
+        x0 = (rr.uniform(0, W) + t * 30 * (1 if lat > 0 else -1)) % (W + 400) - 200
+        d.line([(x0, y), (x0 + rr.uniform(80, 300), y + rr.uniform(-4, 4))], fill=(255, 245, 225, 70), width=max(2, int(Rj * 0.006)))
+    gw = grs_width(year) * k; gh = gw * 0.82
+    for q in range(6, 0, -1):
+        f = q / 6; c = mix((150, 50, 30), (225, 120, 80), 1 - f)
+        d.ellipse([cx - gw / 2 * f, cy - gh / 2 * f, cx + gw / 2 * f, cy + gh / 2 * f], fill=c + (255,))
+    for q in range(3):  # swirl
+        a0 = t * 40 + q * 120
+        d.arc([cx - gw * 0.38, cy - gh * 0.38, cx + gw * 0.38, cy + gh * 0.38], a0, a0 + 70, fill=(250, 170, 130, 200), width=max(2, int(gw * 0.015)))
+    m = Image.new("L", img.size, 0); ImageDraw.Draw(m).ellipse([jx - Rj, jy - Rj, jx + Rj, jy + Rj], fill=255)
+    lay.putalpha(Image.fromarray(np.minimum(np.asarray(lay.getchannel("A")), np.asarray(m))))
+    img.alpha_composite(lay)
+    d = ImageDraw.Draw(img)
+    # Earths dropped in, side by side across the spot, to scale
+    n = v.get("earths", 0); n = max(1, int(grs_width(year) / 12742)) if n == "auto" else n; er = 12742 / 2 * k
+    if n and er > 3:
+        u = ease((t - 0.3) / 0.6) if v.get("drop") else 1.0
+        for i in range(int(n)):
+            ex = cx + (i - (n - 1) / 2) * 2 * er
+            ey = lerp(cy - 900, cy, u)
+            R.paste_c(img, R.earth_sprite(max(4, int(er)), glow=None), ex, ey)
+    d = ImageDraw.Draw(img)
+    if z > 0.6:
+        d.line([(cx - gw / 2, cy + gh / 2 + 40), (cx + gw / 2, cy + gh / 2 + 40)], fill=(255, 255, 255), width=4)
+        for xx in (cx - gw / 2, cx + gw / 2): d.line([(xx, cy + gh / 2 + 25), (xx, cy + gh / 2 + 55)], fill=(255, 255, 255), width=4)
+        text(img, (cx, cy + gh / 2 + 95), f"{grs_width(year):,.0f} km  ·  {grs_width(year) / 12742:.1f} Earths", 44, (255, 255, 255), w="ExtraBold")
+    if v.get("show_year"):
+        text(img, (W / 2, 420), f"{int(year)}", 110, tuple(th["accent2"]), stroke=4)
+    if z < 0.4 and v.get("label_planet"):
+        text(img, (cx, jy - Rj - 40 if jy - Rj > 380 else 420), "JUPITER · 11 Earths wide", 46, (255, 230, 200), w="ExtraBold")
+
 def chrome(img, th, gt, total):
     d = ImageDraw.Draw(img)
     d.rectangle([0, 0, int(W * gt / total), 10], fill=tuple(th["accent"]))
@@ -129,6 +182,13 @@ def frame(m, durs, gt, chunks, arr):
         if v.get("sub"): text(img, (W / 2, 290), v["sub"], 40, tuple(th["accent2"]), w="ExtraBold")
     elif v["type"] == "inside":
         inside_vis(img, v, th, gt, t, d)
+    elif v["type"] == "storm":
+        storm_vis(img, v, th, t, d, easeio((t - 0.2) / max(0.8, d * 0.75)))
+        sh = Image.new("RGBA", (W, 330), (0, 0, 0, 0)); a_ = np.zeros((330, W), np.uint8) + np.linspace(200, 0, 330).astype(np.uint8)[:, None]
+        sh.putalpha(Image.fromarray(a_)); img.alpha_composite(sh)
+        hl = v.get("head") or m.BIG
+        text(img, (W / 2, 140), hl["num"], 124 if len(hl["num"]) < 12 else 96, tuple(th["accent"]), stroke=4)
+        text(img, (W / 2, 245), hl["top"], 52, (255, 255, 255), stroke=3)
     chrome(img, th, gt, total)
     K.draw_caption(img, chunks, gt, y=1590)
     return img
