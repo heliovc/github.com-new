@@ -1,11 +1,11 @@
 {
- "last_run": "2026-11-11T08:41:56.719578-03:00",
- "pending": 2,
+ "last_run": "2026-11-11T08:47:49.248571-03:00",
+ "pending": 1,
  "post_tasks": 0,
  "errors": [
   "/opt/canal-publisher/repo/cosmic/ep07/publish.json: version deve ser 1"
  ],
  "published_now": [
-  "lab-ep07-long: https://youtu.be/N9Dv0E4G6pk"
+  "lab-ep07-short: https://youtube.com/shorts/OVoy4uZwc2Q"
  ]
 }
