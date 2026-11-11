@@ -360,11 +360,20 @@
   "pinned_comment": "Did you ever see that TV static yourself? Full video: Why Is Space Black If There Are Billions of Stars? (Olbers' Paradox)"
  },
  "ptd-ep10-long": {
-  "attempts": 1,
-  "status": "error",
-  "error": "Page.goto: Timeout 60000ms exceeded.\nCall log:\n  - navigating to \"https://www.youtube.com/channel_switcher\", waiting until \"domcontentloaded\"\n",
+  "attempts": 2,
+  "status": "published",
+  "error": null,
   "screenshot": "20261111-074517-erro-ptd-ep10-long.png",
-  "at": "2026-11-11T07:45:51.528017-03:00"
+  "at": "2026-11-11T08:08:03.791471-03:00",
+  "url": "https://youtu.be/oH-HLJcY8Bc",
+  "by": "robo",
+  "visibility": "schedule",
+  "when": "2026-11-11T18:00:00-03:00",
+  "channel_id": "UCd_BGmJ5gbQ0kECAxmbvQHA",
+  "title": "Rotativo do cartão: o juro de 451% ao ano (e quem ganha com ele)",
+  "kind": "long",
+  "publish_at": "2026-11-11T18:00:00-03:00",
+  "pinned_comment": "Na sua opinião, quem deveria pagar a conta do parcelado sem juros: quem usa o rotativo, o lojista ou ninguém? Conta aqui."
  },
  "ptd-ep10-short": {
   "attempts": 1,
