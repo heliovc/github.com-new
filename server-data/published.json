@@ -314,7 +314,9 @@
   "related_key": "cosmic-ep09-long",
   "pinned_comment": "Which star should we put next? Full video: Why Is Space Black If There Are Billions of Stars? (Olbers' Paradox)",
   "comment_attempts": 1,
-  "comment_done": "2026-11-11T13:12:37.908054-03:00"
+  "comment_done": "2026-11-11T13:12:37.908054-03:00",
+  "related_attempts": 1,
+  "related_done": "2026-11-11T17:12:39.055520-03:00"
  },
  "cosmic-ep09-long": {
   "attempts": 1,
@@ -329,7 +331,9 @@
   "title": "Why Is Space Black If There Are Billions of Stars? (Olbers' Paradox)",
   "kind": "long",
   "publish_at": "2026-11-11T17:00:00-03:00",
-  "pinned_comment": "Before this video, what did you think made space black? Be honest."
+  "pinned_comment": "Before this video, what did you think made space black? Be honest.",
+  "comment_attempts": 1,
+  "comment_done": "2026-11-11T17:13:56.067516-03:00"
  },
  "cosmic-scale02-short": {
   "attempts": 1,
@@ -345,7 +349,9 @@
   "kind": "short",
   "publish_at": "2026-11-11T19:00:00-03:00",
   "related_key": "cosmic-ep09-long",
-  "pinned_comment": "Will the storm still fit Earth in 50 years? Full video: Why Is Space Black If There Are Billions of Stars? (Olbers' Paradox)"
+  "pinned_comment": "Will the storm still fit Earth in 50 years? Full video: Why Is Space Black If There Are Billions of Stars? (Olbers' Paradox)",
+  "related_attempts": 1,
+  "related_done": "2026-11-11T17:15:54.830360-03:00"
  },
  "cosmic-ep09-short": {
   "attempts": 1,
@@ -361,7 +367,9 @@
   "kind": "short",
   "publish_at": "2026-11-11T21:00:00-03:00",
   "related_key": "cosmic-ep09-long",
-  "pinned_comment": "Did you ever see that TV static yourself? Full video: Why Is Space Black If There Are Billions of Stars? (Olbers' Paradox)"
+  "pinned_comment": "Did you ever see that TV static yourself? Full video: Why Is Space Black If There Are Billions of Stars? (Olbers' Paradox)",
+  "related_attempts": 1,
+  "related_done": "2026-11-11T17:19:23.345490-03:00"
  },
  "ptd-ep10-long": {
   "attempts": 2,
