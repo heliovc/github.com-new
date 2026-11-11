@@ -4,7 +4,7 @@ Usage:
   python3 -I tutor.py ep01.py out/ep01 --preview        # one still per scene (at 85% of the scene)
   python3 -I tutor.py ep01.py out/ep01                  # full render -> final.mp4, subtitles.srt, chapters.txt
   python3 -I tutor.py ep01.py out/ep01 --vertical "0,3,5" "TITLE"   # Short 1080x1920 from scenes (uses cached voice)
-Scene types: title, steps, code, term, files, tip, keys, compare, chat, outro, tree (EP02), map (EP02), sheet + args (EP03), prompt + flow (EP04), stage + timeline (EP05: Git areas and commit history), term colors diff +/- lines and errors (EP05), figure (EP06: real matplotlib PNG in a plot window, left-to-right wipe + numbered callouts)
+Scene types: title, steps, code, term, files, tip, keys, compare, chat, outro, tree (EP02), map (EP02), sheet + args (EP03), prompt + flow (EP04), stage + timeline (EP05: Git areas and commit history), term colors diff +/- lines and errors (EP05), figure (EP06: real matplotlib PNG in a plot window, left-to-right wipe + numbered callouts), nav (EP07: folder tree with a moving "YOU ARE HERE" pin driven by cd commands + live pwd bar), cards (EP07: cheat-sheet grid of command cards popping in, optional highlight)
 Identity: charcoal #0F1115, lime #B6F35C, coral #FF7A59, sky #6CC4FF, Poppins + DejaVu Sans Mono.
 """
 import sys, os, re, math, json, hashlib, subprocess, importlib.util
@@ -87,9 +87,9 @@ def colorize(line, lang="py"):
     if lang == "sh":
         if line.startswith("$ "): return [("$ ", LIME), (line[2:], TXT)]
         if line[:1] == "+" and not line.startswith("+++"): return [(line, LIME)]  # EP05: diff / error colors
-        if line[:1] == "-" and not line.startswith("---"): return [(line, CORAL)]
+        if line[:1] == "-" and not line.startswith("---") and not re.match(r"-[rwxsStT-]{9}", line): return [(line, CORAL)]  # EP07: ls -l file lines stay neutral
         if line.startswith("@@"): return [(line, VIO)]
-        if re.match(r"(fatal:|error:|\w+Error:|Author identity unknown)", line): return [(line, CORAL)]
+        if re.match(r"(fatal:|error:|\w+Error:|Author identity unknown|bash: |rm: |rmdir: |mkdir: |cat: |cp: |mv: )", line): return [(line, CORAL)]
         return [(line, DIM if line.startswith("#") else (200, 206, 216))]
     for m in TOK.finditer(line):
         com, st, num, word, sp, other = m.groups()
@@ -650,6 +650,67 @@ def sc_figure(img, v, t, d):
         if a > 0:
             ny = min(H - 80, y0 + bh + 20)
             dr.rounded_rectangle([W / 2 - tw / 2 - 30, ny, W / 2 + tw / 2 + 30, ny + 60], 30, fill=mix(BG, ACC, a)); dr.text((W / 2, ny + 30), v["note"], font=fn, fill=BG, anchor="mm")
+
+# ---- EP07: nav - folder tree on the left, a "YOU ARE HERE" pin that jumps between folders as each cd command is typed (right column), live pwd bar
+def sc_nav(img, v, t, d):
+    tree, steps = v["tree"], v["steps"]  # tree: [(depth, name)], steps: [(cmd, tree_index)]
+    text_a(img, (W / 2, 175), v.get("title", ""), F(48, "Bold"), TXT, ease(t / 0.4), "mm")
+    dr = ImageDraw.Draw(img); x0, y0, rh = 200, 250, 62; bx1 = 900
+    dr.rounded_rectangle([x0 - 30, y0 - 30, bx1, y0 + len(tree) * rh + 10], 18, fill=PANEL, outline=LINE, width=2)
+    t0 = 0.6; per = max(1.2, (d * v.get("span", 0.75) - t0) / max(1, len(steps)))
+    k = int(max(0, min(len(steps), (t - t0) / per + 1))) if t > t0 else 0
+    cur = steps[k - 1][1] if k else v.get("start", 0)
+    prev = steps[k - 2][1] if k >= 2 else v.get("start", 0)
+    mv = ease(((t - t0) - (k - 1) * per) / 0.45) if k else 1
+    for i, (dep, name) in enumerate(tree):
+        y = y0 + i * rh; x = x0 + dep * 56
+        if dep: dr.line([x - 34, y - rh / 2 + 14, x - 34, y + 16], fill=LINE, width=2); dr.line([x - 34, y + 16, x - 8, y + 16], fill=LINE, width=2)
+        on = i == cur
+        isdir = name.endswith("/")
+        (icon_folder if isdir else icon_file)(dr, x, y, ACC if on else (SKY if isdir else DIM))
+        dr.text((x + 48, y + 17), name, font=F(30, "SemiBold" if on else "Medium"), fill=TXT if on else (200, 206, 216), anchor="lm")
+    # pin glides from prev to cur
+    py = y0 + (prev + (cur - prev) * mv) * rh + 17
+    lab = "YOU ARE HERE"; fl = F(22, "Bold"); lw = fl.getlength(lab) + 40
+    px = bx1 - lw - 30
+    dr.rounded_rectangle([px, py - 22, px + lw, py + 22], 22, fill=ACC); dr.polygon([(px - 16, py), (px + 2, py - 12), (px + 2, py + 12)], fill=ACC)
+    dr.text((px + lw / 2, py), lab, font=fl, fill=BG, anchor="mm")
+    # right column: typed commands
+    cx = 990; f = F(30, "mono")
+    for j, (cmd, idx) in enumerate(steps[:k]):
+        a = ease(((t - t0) - j * per) / 0.35); y = y0 + j * 84
+        col = ACC if j == k - 1 else DIM
+        dr.rounded_rectangle([cx, y - 6, 1740, y + 58], 14, fill=mix(BG, PANEL2, a), outline=mix(BG, col, a), width=2)
+        text_a(img, (cx + 24, y + 26), "$", F(30, "monob"), mix(BG, LIME, a), a, "lm")
+        text_a(img, (cx + 60, y + 26), cmd, f, mix(BG, TXT, a), a, "lm")
+    # pwd bar
+    path = v.get("paths", {}).get(cur, "")
+    if path:
+        fy = H - 150; tw = F(30, "mono").getlength("pwd → " + path)
+        dr.rounded_rectangle([W / 2 - tw / 2 - 40, fy, W / 2 + tw / 2 + 40, fy + 64], 32, fill=PANEL2, outline=ACC, width=2)
+        dr.text((W / 2 - tw / 2, fy + 32), "pwd", font=F(30, "monob"), fill=ACC, anchor="lm")
+        dr.text((W / 2 - tw / 2 + F(30, "mono").getlength("pwd "), fy + 32), "→", font=F(30, "monob"), fill=DIM, anchor="lm")
+        dr.text((W / 2 - tw / 2 + F(30, "mono").getlength("pwd → "), fy + 32), path, font=F(30, "mono"), fill=TXT, anchor="lm")
+
+# ---- EP07: cards - cheat-sheet grid of command cards (mono command + plain-English meaning), popping in one by one; hl = index to glow
+def sc_cards(img, v, t, d):
+    items = v["items"]; cols = v.get("cols", 3); n = len(items); rows = (n + cols - 1) // cols
+    text_a(img, (W / 2, 175), v.get("title", ""), F(50, "Bold"), TXT, ease(t / 0.4), "mm")
+    gw, gh = 1640, min(760, rows * (260 if rows == 1 else 190)); cw, ch = gw / cols, gh / rows; x0 = (W - gw) / 2; y0 = 250
+    span = d * v.get("span", 0.6); dr = ImageDraw.Draw(img)
+    for i, (cmd, mean) in enumerate(items):
+        a = ease((t - 0.4 - span * i / n) / 0.35)
+        if a <= 0: continue
+        r, c = divmod(i, cols); bx = x0 + c * cw + 12; by = y0 + r * ch + 12 + (1 - a) * 30
+        glow = v.get("hl") == i
+        col = v.get("colors", [ACC])[i % len(v.get("colors", [ACC]))]
+        dr.rounded_rectangle([bx, by, bx + cw - 24, by + ch - 24], 18, fill=mix(BG, mix(PANEL, col, 0.18) if glow else PANEL, a), outline=mix(BG, col if glow else LINE, a), width=3 if glow else 2)
+        dr.rectangle([bx + 2, by + 16, bx + 8, by + ch - 40], fill=mix(BG, col, a))
+        fs = 34
+        while F(fs, "monob").getlength(cmd) > cw - 80 and fs > 20: fs -= 2
+        text_a(img, (bx + 30, by + 26), cmd, F(fs, "monob"), mix(BG, col, a), a)
+        for k2, ln in enumerate(wrap(mean, F(26, "Medium"), cw - 80)[:2]):
+            text_a(img, (bx + 30, by + 26 + fs + 18 + k2 * 36), ln, F(26, "Medium"), mix(BG, (200, 206, 216), a), a)
 
 SC = {k[3:]: f for k, f in list(globals().items()) if k.startswith("sc_")}
 

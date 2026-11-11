@@ -1,0 +1,129 @@
+### pwd
+$ pwd
+/home/alex
+### ls
+$ ls
+Desktop  Documents  Downloads  notes.txt
+### lsl
+$ ls -l
+total 16
+drwxr-xr-x 2 alex alex 4096 Nov 11 11:14 Desktop
+drwxr-xr-x 3 alex alex 4096 Nov 11 11:14 Documents
+drwxr-xr-x 2 alex alex 4096 Nov 11 11:14 Downloads
+-rw-r--r-- 1 alex alex   18 Nov 11 11:14 notes.txt
+### lsa
+$ ls -a
+.   .bash_logout  .profile  Documents  notes.txt
+..  .bashrc	  Desktop   Downloads
+### cd
+$ cd Documents
+$ pwd
+/home/alex/Documents
+$ ls
+resume.txt  school
+### cdup
+$ cd school
+$ pwd
+/home/alex/Documents/school
+$ cd ..
+$ pwd
+/home/alex/Documents
+$ cd ~
+$ pwd
+/home/alex
+### cdpath
+$ cd Documents/school
+$ pwd
+/home/alex/Documents/school
+$ cd ../..
+$ pwd
+/home/alex
+### mkdir
+$ mkdir trip
+$ cd trip
+$ touch packing.txt budget.txt
+$ ls
+budget.txt  packing.txt
+### echo
+$ echo "passport" > packing.txt
+$ echo "phone charger" >> packing.txt
+$ echo "sunscreen" >> packing.txt
+$ cat packing.txt
+passport
+phone charger
+sunscreen
+### cp
+$ cp packing.txt packing-backup.txt
+$ ls
+budget.txt  packing-backup.txt	packing.txt
+### mv
+$ mv budget.txt costs.txt
+$ ls
+costs.txt  packing-backup.txt  packing.txt
+### mvphotos
+$ mkdir photos
+$ ls ~/Downloads
+beach1.jpg  beach2.jpg	beach3.jpg  ticket.pdf
+$ mv ~/Downloads/*.jpg photos/
+$ ls photos
+beach1.jpg  beach2.jpg	beach3.jpg
+$ ls ~/Downloads
+ticket.pdf
+### glob
+$ ls *.txt
+costs.txt  packing-backup.txt  packing.txt
+### rm
+$ rm packing-backup.txt
+$ ls
+costs.txt  packing.txt	photos
+### rmdir
+$ rm photos
+rm: cannot remove 'photos': Is a directory
+$ rmdir photos
+rmdir: failed to remove 'photos': Directory not empty
+$ mkdir old
+$ rmdir old
+$ ls
+costs.txt  packing.txt	photos
+### err
+$ cd ~
+$ cd Documnets
+bash: cd: Documnets: No such file or directory
+$ sl
+bash: sl: command not found
+$ mkdir trip
+mkdir: cannot create directory ‘trip’: File exists
+$ cd trip
+$ cat packing
+cat: packing: No such file or directory
+### space
+$ mkdir "summer plans"
+$ cd summer plans
+bash: cd: too many arguments
+$ cd "summer plans"
+$ pwd
+/home/alex/trip/summer plans
+$ cd ..
+$ rmdir "summer plans"
+### history
+$ history | tail -5
+   52  cd "summer plans"
+   53  pwd
+   54  cd ..
+   55  rmdir "summer plans"
+   56  history | tail -5
+### help
+$ ls --help | head -4
+Usage: ls [OPTION]... [FILE]...
+List information about the FILEs (the current directory by default).
+Sort entries alphabetically if none of -cftuvSUX nor --sort is specified.
+### final
+$ cd ~
+$ ls
+Desktop  Documents  Downloads  notes.txt  trip
+$ ls trip
+costs.txt  packing.txt	photos
+$ cat trip/packing.txt
+passport
+phone charger
+sunscreen

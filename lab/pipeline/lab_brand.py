@@ -5,6 +5,7 @@ python3 -I lab_brand.py thumbsheet "LINE ONE" "LINE TWO" "=FORMULA" out.jpg cora
 python3 -I lab_brand.py thumbprompt "LINE ONE" "LINE TWO" "vague prompt" out.jpg violet   (EP04: before/after prompt card)
 python3 -I lab_brand.py thumbgit "LINE ONE" "LINE TWO" "hash msg|hash msg|hash msg" out.jpg yellow   (EP05: commit history + "go back" arc)
 python3 -I lab_brand.py thumbchart "LINE ONE" "LINE TWO" "df.plot(kind=\"bar\")" out.jpg mint   (EP06: dark chart card, bars + trend line)
+python3 -I lab_brand.py thumbterm "LINE ONE" "LINE TWO" "$ cmd|output|$ cmd" out.jpg pink   (EP07: big terminal card, typed commands + outputs)
 python3 -I lab_brand.py thumb "LINE ONE" "LINE TWO" "code snippet line" out.jpg [accent: lime|coral|sky]"""
 import sys; sys.path.insert(0, ".")
 import tutor as T
@@ -127,6 +128,22 @@ elif sys.argv[1] == "thumbchart":  # EP06 layout: text left, dark chart card rig
         while T.F(fs, "Bold").getlength(txt) > 600: fs -= 4
         d.text((50, 270 + i * 160), txt, font=T.F(fs, "Bold"), fill=col, anchor="lm", stroke_width=4, stroke_fill=T.BG)
     d.text((54, 600), "pandas + matplotlib · free", font=T.F(30, "Medium"), fill=T.DIM)
+    img.convert("RGB").save(out, quality=92); print("thumb ok")
+elif sys.argv[1] == "thumbterm":
+    l1, l2, lines, out = sys.argv[2:6]; acc = {"lime": T.LIME, "coral": T.CORAL, "sky": T.SKY, "violet": T.VIO, "yellow": T.YEL, "pink": (255, 160, 200)}[sys.argv[6] if len(sys.argv) > 6 else "pink"]
+    T.ACC = acc; T.W, T.H = 1280, 720; img = T.make_bg(1280, 720); d = ImageDraw.Draw(img)
+    box = [640, 140, 1250, 580]; T.window(img, box, "Terminal", kind="term")
+    d = ImageDraw.Draw(img); f = T.F(25, "mono"); y = 225
+    for ln in lines.split("|"):
+        cx = 675
+        for s2, c in T.colorize(ln, "sh"): d.text((cx, y), s2, font=f, fill=(acc if s2 == "$ " else c)); cx += f.getlength(s2)
+        y += 52
+    d.rectangle([cx + 4, y - 52, cx + 22, y - 18], fill=acc)
+    d.rounded_rectangle([40, 40, 300, 92], 26, fill=acc); d.text((170, 66), "SHORTCUT LAB", font=T.F(26, "Bold"), fill=T.BG, anchor="mm")
+    for i, (txt, col) in enumerate([(l1, T.TXT), (l2, acc)]):
+        fs = 120
+        while T.F(fs, "Bold").getlength(txt) > 560: fs -= 4
+        d.text((50, 260 + i * 160), txt, font=T.F(fs, "Bold"), fill=col, anchor="lm", stroke_width=4, stroke_fill=T.BG)
     img.convert("RGB").save(out, quality=92); print("thumb ok")
 else:
     l1, l2, code, out = sys.argv[2:6]; acc = {"lime": T.LIME, "coral": T.CORAL, "sky": T.SKY, "violet": T.VIO, "yellow": T.YEL}[sys.argv[6] if len(sys.argv) > 6 else "lime"]
