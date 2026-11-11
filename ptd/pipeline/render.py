@@ -689,9 +689,51 @@ def sc_flight(img, v, t, dur):
     dr.polygon([(x + px * ca - py * sa, y + px * sa + py * ca) for px, py in pl], fill=WHITE)
     if v.get("caption"): dr.text((W / 2, H - 70), v["caption"], font=F(28, "Medium"), fill=DIM, anchor="mm")
 
+def sc_court(img, v, t, dur):
+    """Criado no EP10: abertura de fase de um julgamento. n (fase), label (ex. 'A ACUSAÇÃO'), title, sub, side ('acc'|'def'|'neutral').
+    Placa de madeira com o nº da fase entra pela esquerda; martelo de juiz desce e bate (onda de impacto); título à direita."""
+    dr = ImageDraw.Draw(img)
+    WOOD, WOODD, GOLD = (120, 72, 38), (78, 44, 22), (226, 186, 100)
+    side = v.get("side", "neutral")
+    acc = {"acc": RED, "def": BLUE, "neutral": GOLD}[side]
+    p = ease((t - 0.1) / 0.7)
+    # bloco de madeira (base do martelo)
+    bx, by = lerp(-560, 150, p), 700
+    dr.rounded_rectangle([bx, by, bx + 300, by + 70], 16, fill=WOODD)
+    dr.rounded_rectangle([bx + 25, by - 26, bx + 275, by + 8], 12, fill=WOOD)
+    # martelo deitado: cabeça à esquerda, cabo para a direita; gira em torno da ponta do cabo e bate em t ~1.1s
+    hit = 1.1
+    ang = lerp(-38, 0, ease((t - 0.3) / (hit - 0.3))) if t < hit else 0
+    px, py = bx + 480, by - 150
+    hx, hy = bx + 150, by - 26
+    lay = Image.new("RGBA", img.size, (0, 0, 0, 0)); d2 = ImageDraw.Draw(lay)
+    d2.rounded_rectangle([hx + 50, py - 16, px, py + 16], 14, fill=WOOD)                    # cabo
+    d2.rounded_rectangle([hx - 62, hy - 250, hx + 62, hy], 30, fill=WOODD)                  # cabeça
+    d2.rectangle([hx - 62, hy - 205, hx + 62, hy - 185], fill=GOLD)
+    d2.rectangle([hx - 62, hy - 65, hx + 62, hy - 45], fill=GOLD)
+    if p > 0.05: img.alpha_composite(lay.rotate(ang, center=(px, py), resample=Image.BICUBIC))
+    dr = ImageDraw.Draw(img)
+    if t > hit:
+        k = ease((t - hit) / 0.6); a = 1 - k
+        if a > 0:
+            cx, cy = hx, by - 20
+            for r0 in (90, 150):
+                r = r0 + 120 * k
+                dr.arc([cx - r, cy - r * 0.35, cx + r, cy + r * 0.35], 180, 360, fill=mix(BG1, GOLD, a), width=6)
+    a1 = ease((t - 0.6) / 0.5); a2 = ease((t - 0.9) / 0.5); a3 = ease((t - 1.2) / 0.5)
+    x = 860
+    lab = f"FASE {v['n']}  ·  {v.get('label', '')}"
+    alpha_text(img, (x, 330), lab, F(54, "Black"), acc, a1, anchor="lm", dy=(1 - a1) * 30)
+    lines = v["title"].split("\n")
+    for i, l in enumerate(lines):
+        alpha_text(img, (x, 450 + i * 110), l, F(100, "ExtraBold"), WHITE, a2, anchor="lm", dy=(1 - a2) * 30)
+    if v.get("sub"): alpha_text(img, (x, 450 + len(lines) * 110 + 20), v["sub"], F(44, "SemiBold"), GOLD, a3, anchor="lm")
+    alpha_text(img, (W / 2, 900), v.get("case", "PROCESSO: O RÉU É O ROTATIVO DO CARTÃO"), F(34, "Bold"), DIM, a3)
+    if v.get("caption"): dr.text((W / 2, H - 50), v["caption"], font=F(28, "Medium"), fill=DIM, anchor="mm")
+
 SC = {"round": sc_round, "ticker": sc_ticker, "scoreboard": sc_scoreboard, "title": sc_title, "bignumber": sc_bignumber, "flow": sc_flow, "split": sc_split, "bullets": sc_bullets,
       "bars": sc_bars, "compare": sc_compare, "timeline": sc_timeline, "cards": sc_cards, "line": sc_line,
-      "receipt": sc_receipt, "stack": sc_stack, "journey": sc_journey, "calendar": sc_calendar, "obit": sc_obit, "race": sc_race, "act": sc_act, "ledger": sc_ledger, "blackbox": sc_blackbox, "flight": sc_flight}
+      "receipt": sc_receipt, "stack": sc_stack, "journey": sc_journey, "calendar": sc_calendar, "obit": sc_obit, "race": sc_race, "act": sc_act, "ledger": sc_ledger, "blackbox": sc_blackbox, "flight": sc_flight, "court": sc_court}
 
 # ---------- voz ----------
 def tts(scenes, outdir, voice="pm_alex", speed=1.05):
