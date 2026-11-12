@@ -504,7 +504,9 @@
   "title": "What If Jupiter Became a Star? It Would Need 80 Jupiters",
   "kind": "long",
   "publish_at": "2026-11-12T17:00:00-03:00",
-  "pinned_comment": "Would you rather have Jupiter as a second sun, or keep Europa's ocean? Tell me below."
+  "pinned_comment": "Would you rather have Jupiter as a second sun, or keep Europa's ocean? Tell me below.",
+  "comment_attempts": 1,
+  "comment_done": "2026-11-12T17:11:23.781833-03:00"
  },
  "cosmic-scale03-short": {
   "attempts": 1,
@@ -520,7 +522,9 @@
   "kind": "short",
   "publish_at": "2026-11-12T19:00:00-03:00",
   "related_key": "cosmic-ep10-long",
-  "pinned_comment": "Star or planet: what would you call it? Full video: What If Jupiter Became a Star? It Would Need 80 Jupiters"
+  "pinned_comment": "Star or planet: what would you call it? Full video: What If Jupiter Became a Star? It Would Need 80 Jupiters",
+  "related_attempts": 1,
+  "related_done": "2026-11-12T17:13:23.693747-03:00"
  },
  "cosmic-ep10-short": {
   "attempts": 1,
@@ -536,7 +540,9 @@
   "kind": "short",
   "publish_at": "2026-11-12T21:00:00-03:00",
   "related_key": "cosmic-ep10-long",
-  "pinned_comment": "Which moon would you try to save? Full video: What If Jupiter Became a Star? It Would Need 80 Jupiters"
+  "pinned_comment": "Which moon would you try to save? Full video: What If Jupiter Became a Star? It Would Need 80 Jupiters",
+  "related_attempts": 1,
+  "related_done": "2026-11-12T17:15:03.297589-03:00"
  },
  "ptd-ep11-long": {
   "attempts": 1,
