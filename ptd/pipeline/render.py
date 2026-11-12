@@ -731,9 +731,50 @@ def sc_court(img, v, t, dur):
     alpha_text(img, (W / 2, 900), v.get("case", "PROCESSO: O RÉU É O ROTATIVO DO CARTÃO"), F(34, "Bold"), DIM, a3)
     if v.get("caption"): dr.text((W / 2, H - 50), v["caption"], font=F(28, "Medium"), fill=DIM, anchor="mm")
 
+def sc_dossier(img, v, t, dur):
+    """Criado no EP11: abertura de pista de uma investigação. n (nº da pista), label, title, sub, stamp (texto do carimbo).
+    Pasta de arquivo (cor de papel pardo) entra pela esquerda com fichas; carimbo vermelho bate na capa; título à direita."""
+    dr = ImageDraw.Draw(img)
+    KRAFT, KRAFTD, PAPER, STAMP = (196, 160, 104), (150, 118, 72), (236, 232, 220), (214, 62, 52)
+    p = ease((t - 0.05) / 0.7)
+    fx, fy, fw, fh = lerp(-700, 130, p), 300, 560, 520
+    lay = Image.new("RGBA", img.size, (0, 0, 0, 0)); d2 = ImageDraw.Draw(lay)
+    d2.rounded_rectangle([fx + 30, fy - 40, fx + 230, fy + 20], 14, fill=KRAFTD)                     # aba
+    d2.text((fx + 130, fy - 12), f"PISTA {v['n']}", font=F(30, "Black"), fill=PAPER, anchor="mm")
+    d2.rounded_rectangle([fx, fy, fx + fw, fy + fh], 18, fill=KRAFTD)                                # fundo da pasta
+    for k in range(3):                                                                                # fichas saindo
+        off = 26 + k * 10; sh = ease((t - 0.5 - k * 0.12) / 0.5) * 50
+        d2.rectangle([fx + off, fy + 14 - sh + k * 8, fx + fw - off, fy + fh - 40], fill=mix(PAPER, (200, 196, 186), k * 0.3))
+        for j in range(5):
+            yy = fy + 60 - sh + k * 8 + j * 34
+            d2.line([(fx + off + 30, yy), (fx + fw - off - 30 - (j % 2) * 80, yy)], fill=(170, 166, 156), width=4)
+    d2.rounded_rectangle([fx, fy + 120, fx + fw, fy + fh], 18, fill=KRAFT)                           # capa
+    d2.text((fx + 40, fy + fh - 60), v.get("case", "CASO: DESCONTOS NO INSS"), font=F(28, "Black"), fill=KRAFTD, anchor="lm")
+    img.alpha_composite(lay)
+    hit = 1.0
+    if t > hit:
+        k = ease((t - hit) / 0.25); s = lerp(1.6, 1.0, k)
+        st = Image.new("RGBA", (460, 130), (0, 0, 0, 0)); ds = ImageDraw.Draw(st)
+        ds.rounded_rectangle([6, 6, 454, 124], 14, outline=STAMP + (230,), width=8)
+        txt = v.get("stamp", "EVIDÊNCIA"); fs = 64
+        while F(fs, "Black").getlength(txt) > 410 and fs > 30: fs -= 2
+        ds.text((230, 66), txt, font=F(fs, "Black"), fill=STAMP + (230,), anchor="mm")
+        st = st.resize((int(460 * s), int(130 * s)), Image.BICUBIC).rotate(-10, expand=True, resample=Image.BICUBIC)
+        a = min(1.0, k * 1.5); st.putalpha(st.getchannel("A").point(lambda x: int(x * a)))
+        cx, cy = fx + fw / 2, fy + 290
+        img.alpha_composite(st, (int(cx - st.width / 2), int(cy - st.height / 2)))
+    a1 = ease((t - 0.5) / 0.5); a2 = ease((t - 0.8) / 0.5); a3 = ease((t - 1.1) / 0.5)
+    x = 820
+    alpha_text(img, (x, 330), f"PISTA {v['n']}  ·  {v.get('label', '')}", F(54, "Black"), STAMP, a1, anchor="lm", dy=(1 - a1) * 30)
+    lines = v["title"].split("\n")
+    for i, l in enumerate(lines):
+        alpha_text(img, (x, 450 + i * 110), l, F(100, "ExtraBold"), WHITE, a2, anchor="lm", dy=(1 - a2) * 30)
+    if v.get("sub"): alpha_text(img, (x, 450 + len(lines) * 110 + 20), v["sub"], F(44, "SemiBold"), KRAFT, a3, anchor="lm")
+    if v.get("caption"): dr.text((W / 2, H - 50), v["caption"], font=F(28, "Medium"), fill=DIM, anchor="mm")
+
 SC = {"round": sc_round, "ticker": sc_ticker, "scoreboard": sc_scoreboard, "title": sc_title, "bignumber": sc_bignumber, "flow": sc_flow, "split": sc_split, "bullets": sc_bullets,
       "bars": sc_bars, "compare": sc_compare, "timeline": sc_timeline, "cards": sc_cards, "line": sc_line,
-      "receipt": sc_receipt, "stack": sc_stack, "journey": sc_journey, "calendar": sc_calendar, "obit": sc_obit, "race": sc_race, "act": sc_act, "ledger": sc_ledger, "blackbox": sc_blackbox, "flight": sc_flight, "court": sc_court}
+      "receipt": sc_receipt, "stack": sc_stack, "journey": sc_journey, "calendar": sc_calendar, "obit": sc_obit, "race": sc_race, "act": sc_act, "ledger": sc_ledger, "blackbox": sc_blackbox, "flight": sc_flight, "court": sc_court, "dossier": sc_dossier}
 
 # ---------- voz ----------
 def tts(scenes, outdir, voice="pm_alex", speed=1.05):
