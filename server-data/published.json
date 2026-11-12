@@ -582,5 +582,36 @@
   "pinned_comment": "De onde você acha que vem a maior parte do lucro de um banco? Vídeo completo: Rotativo do cartão: o juro de 451% ao ano (e quem ganha com ele)",
   "related_attempts": 1,
   "related_done": "2026-11-12T07:56:40.239428-03:00"
+ },
+ "lab-ep08-long": {
+  "attempts": 1,
+  "status": "published",
+  "url": "https://youtu.be/E1p-vM1LRQA",
+  "by": "robo",
+  "visibility": "schedule",
+  "when": "2026-11-12T19:00:00-03:00",
+  "at": "2026-11-12T08:45:09.586010-03:00",
+  "error": null,
+  "channel_id": "UCXGqR8k1RMbfYdVleIuJKzA",
+  "title": "Google Sheets QUERY Function: Automatic Reports in One Formula (Beginner Tutorial)",
+  "kind": "long",
+  "publish_at": "2026-11-12T19:00:00-03:00",
+  "pinned_comment": "What report do you still build by hand every week? Tell me and I'll show the QUERY for it."
+ },
+ "lab-ep08-short": {
+  "attempts": 1,
+  "status": "published",
+  "url": "https://youtu.be/6BIJWRBa1vE",
+  "by": "robo",
+  "visibility": "schedule",
+  "when": "2026-11-12T20:30:00-03:00",
+  "at": "2026-11-12T08:48:07.582711-03:00",
+  "error": null,
+  "channel_id": "UCXGqR8k1RMbfYdVleIuJKzA",
+  "title": "One Formula Builds the Whole Report #shorts",
+  "kind": "short",
+  "publish_at": "2026-11-12T20:30:00-03:00",
+  "related_key": "lab-ep08-long",
+  "pinned_comment": "Spreadsheet or pivot table menu: which do you use? Full tutorial: Google Sheets QUERY: Automatic Reports in One Formula"
  }
 }
