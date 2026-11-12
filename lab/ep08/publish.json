@@ -1,0 +1,59 @@
+{
+  "version": 1,
+  "channel_id": "UCXGqR8k1RMbfYdVleIuJKzA",
+  "created_at": "2026-11-12T08:20:53-03:00",
+  "items": [
+    {
+      "key": "lab-ep08-long",
+      "kind": "long",
+      "video": "video.mp4",
+      "title": "Google Sheets QUERY Function: Automatic Reports in One Formula (Beginner Tutorial)",
+      "description": "Learn the Google Sheets QUERY function from zero: select, where, order by, limit, group by, label, pivot and dates, step by step for beginners. One formula builds a full sales report that updates itself, and every result shown was checked against the same data before publishing.\n\nChapters\n0:00 The result\n0:33 How QUERY works\n0:52 The practice table\n1:10 select: pick your columns\n2:03 where: filter rows\n3:21 order by and limit: top 3\n3:38 group by: totals in one line\n4:31 How QUERY reads your query\n5:22 label: the full report\n5:42 pivot: a pivot table in one formula\n6:00 Filter by date\n6:37 Bonus: a report you control from a cell\n6:59 Common errors\n7:37 Pro tip: a report that grows by itself\n7:54 Recap\n\nEvery formula from the video (data in A1:E13: Date, Rep, Region, Product, Amount; header in row 1):\n=QUERY(A1:E13,\"select B, D, E\",1)  -  pick columns\n=QUERY(A1:E13,\"select B, D, E where C = 'West'\",1)  -  text goes in single quotes\n=QUERY(A1:E13,\"select B, D, E where E GT 500\",1)  -  numbers: no quotes\n=QUERY(A1:E13,\"select B, D, E where C = 'East' and E GT= 90\",1)\n=QUERY(A1:E13,\"select B, D, E where D = 'Mouse' or D = 'Monitor'\",1)\n=QUERY(A1:E13,\"select B, D, E where D contains 'top'\",1)  -  case sensitive\n=QUERY(A1:E13,\"select B, D, E order by E desc limit 3\",1)  -  top 3\n=QUERY(A1:E13,\"select C, sum(E) group by C\",1)  -  one total per region\n=QUERY(A1:E13,\"select B, count(E), max(E) group by B\",1)\n=QUERY(A1:E13,\"select B, sum(E) group by B order by sum(E) desc label sum(E) 'Total'\",1)  -  the full report\n=QUERY(A1:E13,\"select B, sum(E) group by B pivot C\",1)  -  pivot table\n=QUERY(A1:E13,\"select B, D, E where A GT= date '2026-11-01'\",1)  -  dates: date 'yyyy-mm-dd'\n=QUERY(A1:E13,\"select D, E where B = '\"&H1&\"'\",1)  -  rep name typed in H1\n=QUERY(A:E,\"select B, sum(E) where B is not null group by B\",1)  -  grows with new rows\n(GT = the greater-than sign. YouTube doesn't allow that symbol in descriptions.)\n\nClause order: select, where, group by, pivot, order by, limit, label.\n\nCommon errors:\nUnable to parse query string  -  check single quotes, commas and clause order\nNO_COLUMN  -  you used a column letter outside your data\n#REF! Array result was not expanded  -  clear the cells where the result spills\nBlank values  -  a column mixes numbers and text; keep one type per column\n\n—\nShortcut Lab: software and AI tutorials that save you hours. A new tutorial every day.\nSubscribe so you don't miss the next shortcut.\n\nNarration uses a synthetic voice. All formulas shown are checked before publishing.\n#googlesheets #spreadsheet #query",
+      "tags": [
+        "google sheets query",
+        "query function google sheets",
+        "google sheets tutorial",
+        "google sheets for beginners",
+        "google sheets formulas",
+        "google sheets query group by",
+        "google sheets pivot",
+        "spreadsheet tutorial",
+        "google sheets report",
+        "query where clause",
+        "google sheets tips",
+        "sheets automation",
+        "google sheets sum by category",
+        "data analysis for beginners",
+        "google workspace"
+      ],
+      "thumbnail": "thumbnail.jpg",
+      "captions": "legendas.srt",
+      "publish_at": "2026-11-12T19:00:00-03:00",
+      "if_late": "public_now",
+      "made_for_kids": false,
+      "altered_content": true,
+      "pinned_comment": "What report do you still build by hand every week? Tell me and I'll show the QUERY for it."
+    },
+    {
+      "key": "lab-ep08-short",
+      "kind": "short",
+      "video": "vertical.mp4",
+      "title": "One Formula Builds the Whole Report #shorts",
+      "description": "One QUERY formula in Google Sheets turns 12 rows of sales into a ranked report.\nFull tutorial on the channel: \"Google Sheets QUERY: Automatic Reports in One Formula\".\n#googlesheets #spreadsheet #shorts",
+      "tags": [
+        "google sheets",
+        "query function",
+        "spreadsheet",
+        "google sheets tips",
+        "shorts"
+      ],
+      "captions": null,
+      "publish_at": "2026-11-12T20:30:00-03:00",
+      "if_late": "public_now",
+      "made_for_kids": false,
+      "altered_content": true,
+      "related_key": "lab-ep08-long",
+      "pinned_comment": "Spreadsheet or pivot table menu: which do you use? Full tutorial: Google Sheets QUERY: Automatic Reports in One Formula"
+    }
+  ]
+}
