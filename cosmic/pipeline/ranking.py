@@ -16,6 +16,8 @@ vis.type == "lightyears" / THEME.hook/outro == "lightyears": régua vertical em 
 vis.type == "glow" / THEME.hook/outro == "glow": horizonte noturno com a estrela no brilho aparente (magnitude) + régua log "quão potente é de verdade" (× Sol);
   vis.lum, vis.ly, vis.col (rank08).
 vis.type == "daylight" / THEME.hook/outro == "daylight": planeta com dia/noite e Sol girando em volta (1 volta = 1 dia solar) + contador de dias terrestres + régua linear 0–180 dias com os mundos revelados (rank06).
+vis.type == "kelvin" / THEME.hook/outro == "kelvin": régua Kelvin 0–60 K com parede de gelo no zero absoluto e a linha de 2,7 K do espaço vazio;
+  o lugar desliza até a sua temperatura e o objeto congela (vis.kind = planet | crater | nebula; vis.k, vis.col) (rank09).
 Tudo desenhado por código; narração Kokoro (VOICE, padrão af_heart); legenda grande queimada.
 """
 import sys, os, re, math, json, subprocess, importlib.util, random
@@ -468,6 +470,81 @@ def glow_vis(img, it, th, t, dur):
     lum_meter(img, th, shown, cur=it, prog=p)
     text(img, (W / 2, 1060), f'{v["lum"] * 1:,.0f}× the Sun' if p > 0.98 else "", 60, tuple(th["accent"]), a=ease((t - 1.0 - dur * 0.5) / 0.3))
 
+# ---- rank09: "kelvin" — Kelvin ruler 0–60 K with an ice wall at absolute zero and the 2.7 K line of empty space (CMB);
+# the current place slides down to its temperature; the object (planet / shadowed crater / bow-tie nebula) frosts over as it gets colder.
+KV_X0, KV_X1, KV_MAX = 120, 980, 60.0
+def kv_x(k): return lerp(KV_X0, KV_X1, k / KV_MAX)
+_kfrost = {}
+def kv_frost(q):
+    q = round(max(0, min(1, q)), 1)
+    if q not in _kfrost:
+        if "b" not in _kfrost:
+            yy, xx = np.mgrid[0:H, 0:W].astype(np.float32)
+            e = np.clip(1 - np.minimum(np.minimum(xx, W - xx) / 300, np.minimum(yy, H - yy) / 420), 0, 1) ** 2
+            rng = np.random.default_rng(9); n = Image.fromarray((rng.random((H // 10, W // 10)) * 255).astype(np.uint8)).resize((W, H), Image.BICUBIC)
+            _kfrost["b"] = e * (0.55 + 0.45 * np.asarray(n, np.float32) / 255)
+        im = Image.new("RGBA", (W, H), (215, 240, 255, 0)); im.putalpha(Image.fromarray((_kfrost["b"] * 150 * q).astype(np.uint8)))
+        _kfrost[q] = im
+    return _kfrost[q]
+def kv_ruler(img, th, shown, cur=None, curk=None, y=1150, labels=True, cmb=True, q=None):
+    acc, acc2 = tuple(th["accent"]), tuple(th["accent2"]); d = ImageDraw.Draw(img)
+    lay = Image.new("RGBA", img.size, (0, 0, 0, 0)); dl = ImageDraw.Draw(lay)
+    for i in range(10): dl.rectangle([KV_X0 - 46 + i * 3, y - 120, KV_X0 - 16, y + 60], fill=(200, 235, 255, 40 + i * 18))
+    img.alpha_composite(lay); d = ImageDraw.Draw(img)
+    d.text((KV_X0 - 30, y - 150), "ABSOLUTE ZERO", font=F(26, "Black"), fill=(220, 240, 255), anchor="lm")
+    d.rounded_rectangle([KV_X0, y - 10, KV_X1, y + 10], 10, fill=(45, 55, 85))
+    for k in range(0, 61, 10):
+        x = kv_x(k); d.line([(x, y + 14), (x, y + 32)], fill=(150, 165, 200), width=3)
+        d.text((x, y + 54), f"{k} K" if k in (0, 60) else f"{k}", font=F(26, "Bold"), fill=(150, 165, 200), anchor="mm")
+    if cmb:
+        x = kv_x(2.725)
+        for yy in range(int(y - 110), int(y + 10), 14): d.line([(x, yy), (x, yy + 7)], fill=acc2, width=3)
+        d.text((x + 10, y - 124), "empty space: 2.7 K", font=F(26, "ExtraBold"), fill=acc2, anchor="lm")
+    for j, o in enumerate(shown):
+        k = curk if (o is cur and curk is not None) else o["vis"]["k"]; x = kv_x(k); c = tuple(o["vis"]["col"]); big = o is cur
+        r = 18 if big else 11
+        d.ellipse([x - r, y - r, x + r, y + r], fill=c, outline=(255, 255, 255) if big else None, width=3)
+        if labels:
+            yo = {5: -44, 4: 92, 3: -84, 2: 92, 1: -44}.get(o["rank"], -44)
+            d.text((x, y + yo), o["short"], font=F(26 if not big else 30, "ExtraBold"), fill=c if not big else acc, anchor="mm")
+    if q is not None:
+        x = kv_x(1.0); d.ellipse([x - 18, y - 18, x + 18, y + 18], fill=acc); d.text((x, y - 50), "?", font=F(54, "Black"), fill=acc, anchor="mm")
+def kv_object(img, v, cx, cy, r, t, q):
+    kind = v.get("kind", "planet"); c = tuple(v["col"])
+    if kind == "planet":
+        R.paste_c(img, R.planet_sprite(int(r), c, light=(-0.8, -0.4), glow=tuple(min(255, x + 40) for x in c)), cx, cy)
+        if v.get("ring"):
+            d = ImageDraw.Draw(img); d.ellipse([cx - r * 0.25, cy - r * 1.25, cx + r * 0.25, cy + r * 1.25], outline=c + (160,), width=3)
+    elif kind == "crater":
+        R.paste_c(img, R.planet_sprite(int(r), (175, 175, 180), light=(-0.2, -1.0)), cx, cy)
+        lay = Image.new("RGBA", img.size, (0, 0, 0, 0)); dl = ImageDraw.Draw(lay)
+        for (dx, dy, rr) in [(-0.35, -0.55, 0.28), (0.25, -0.62, 0.2), (0.0, -0.3, 0.16)]:
+            dl.ellipse([cx + dx * r - rr * r, cy + dy * r - rr * r * 0.7, cx + dx * r + rr * r, cy + dy * r + rr * r * 0.7], fill=(10, 12, 22, 235))
+        img.alpha_composite(lay)
+        d = ImageDraw.Draw(img); d.line([(cx - 0.35 * r, cy - 0.55 * r), (cx + 120, cy - r - 40)], fill=(220, 240, 255), width=3)
+        d.text((cx + 130, cy - r - 40), "never sees the Sun", font=F(30, "ExtraBold"), fill=(220, 240, 255), anchor="lm")
+    else:  # bow-tie nebula
+        lay = Image.new("RGBA", img.size, (0, 0, 0, 0)); dl = ImageDraw.Draw(lay)
+        for i in range(26):
+            f = 1 - i / 26; w_ = r * 1.25 * f; h_ = r * 0.55 * f; sp = math.sin(t * 0.8 + i) * 4
+            col = R.mix((60, 110, 220), (190, 230, 255), 1 - f) + (int(26 + 30 * (1 - f)),)
+            for sgn in (-1, 1): dl.ellipse([cx + sgn * w_ * 0.85 - w_ * 0.75, cy - h_ + sp, cx + sgn * w_ * 0.85 + w_ * 0.75, cy + h_ + sp], fill=col)
+        img.alpha_composite(lay.filter(ImageFilter.GaussianBlur(6)))
+        R.paste_c(img, star_sprite(16, (255, 245, 230)), cx, cy)
+    if q > 0.05:
+        d = ImageDraw.Draw(img); rng = random.Random(int(r))
+        for i in range(int(40 * q)):  # ice sparkles
+            a = rng.uniform(0, 2 * math.pi); rr = r * rng.uniform(0.3, 1.25); x, y = cx + rr * math.cos(a), cy + rr * math.sin(a)
+            s = 3 + 3 * math.sin(t * 5 + i); d.line([(x - s, y), (x + s, y)], fill=(230, 245, 255), width=2); d.line([(x, y - s), (x, y + s)], fill=(230, 245, 255), width=2)
+def kelvin_vis(img, it, th, t, dur):
+    v = it["vis"]; order = sorted(ALL_ITEMS, key=lambda o: -o["rank"]); shown = order[:order.index(it) + 1]
+    p = easeio((t - 0.4) / max(1.2, dur * 0.55)); k = lerp(KV_MAX, v["k"], p); q = 1 - k / KV_MAX
+    img.alpha_composite(kv_frost(0.25 + 0.75 * q))
+    kv_object(img, v, W / 2, 700, v.get("r", 220), t, q)
+    kv_ruler(img, th, shown, cur=it, curk=k, cmb=it["rank"] <= 2)
+    text(img, (W / 2, 950), f"{k:,.0f} K above absolute zero" if v["k"] >= 2 else f"{k:,.1f} K above absolute zero", 40, (220, 235, 255), w="ExtraBold", a=ease((t - 0.6) / 0.4))
+    if v.get("note"): text(img, (W / 2, 1290), v["note"], 38, tuple(th["accent2"]), w="ExtraBold", a=ease((t - 1.8) / 0.5))
+
 def caption_chunks(say, t0, dur):
     words = say.split(); groups, g = [], []
     for w in words:
@@ -490,6 +567,16 @@ def draw_caption(img, chunks, gt, y=1585):
 
 def seg_hook(img, sc, th, t, dur):
     col = tuple(th["star_col"]); acc = tuple(th["accent"])
+    if th.get("hook") == "kelvin":
+        # frame 0: the big temperature + "colder than empty space" + a frosted "?" nebula sitting below the 2.7 K line
+        img.alpha_composite(kv_frost(0.9))
+        kv_object(img, {"kind": "nebula", "col": (150, 200, 255)}, W / 2, 760, 230, t, 1.0)
+        d = ImageDraw.Draw(img); d.text((W / 2, 760), "?", font=F(200, "Black"), fill=tuple(th["accent"]), anchor="mm")
+        kv_ruler(img, th, [], q=True)
+        text(img, (W / 2, 210), sc.get("big", ""), 150, tuple(th["accent"]), stroke=3)
+        text(img, (W / 2, 330), sc["top"].upper(), 60, (255, 255, 255))
+        text(img, (W / 2, 1330), sc["sub"], 46, tuple(th["accent2"]), w="ExtraBold")
+        return
     if th.get("hook") == "glow":
         # frame 0: the big claim + five unnamed stars over a dark horizon, #2 pulsing
         horizon(img, t)
@@ -629,6 +716,8 @@ def seg_item(img, it, th, t, dur):
         lightyears_vis(img, it, th, t, dur)
     if v["type"] == "glow":
         glow_vis(img, it, th, t, dur)
+    if v["type"] == "kelvin":
+        kelvin_vis(img, it, th, t, dur)
     # number
     p = easeio((t - 0.5) / 1.6)
     num = it["num"]
@@ -641,6 +730,15 @@ def seg_item(img, it, th, t, dur):
 
 def seg_outro(img, sc, th, t, dur):
     a = ease(t / 0.5)
+    if th.get("outro") == "kelvin":
+        img.alpha_composite(kv_frost(0.6))
+        kv_ruler(img, th, sorted(ALL_ITEMS, key=lambda o: -o["rank"]), y=560)
+        if th.get("outro_note"): text(img, (W / 2, 780), th["outro_note"], 44, tuple(th["accent2"]), w="ExtraBold", a=a)
+        text(img, (W / 2, 950), "WHICH PLACE", 96, (255, 255, 255), a=ease((t - 0.3) / 0.5))
+        text(img, (W / 2, 1040), "SHOULD WE PUT NEXT?", 58, tuple(th["accent"]), a=ease((t - 0.5) / 0.5))
+        text(img, (W / 2, 1300), "SUBSCRIBE", 100, tuple(th["accent"]), a=ease((t - 0.8) / 0.5))
+        text(img, (W / 2, 1390), "to Cosmic Scale", 50, (255, 255, 255), w="ExtraBold", a=ease((t - 1.0) / 0.5))
+        return
     if th.get("outro") == "glow":
         horizon(img, t)
         lum_meter(img, th, ALL_ITEMS, cur=None, y=640)

@@ -13,6 +13,13 @@ EP09 added scenes: sightlines (top-down star "forest", rays stop at first star; 
   with star discs into a white wall + Suns counter), suspects (case-board cards with CLEARED/GUILTY stamps), shells (onion shells: k² stars × 1/k²
   brightness = same light), lightbubble (light-travel bubble grows with a cosmic clock; lit vs grey galaxies), stretchwave (wave slides UV->visible
   ->IR->microwave, optional K counter). Palette starlight white / infrared crimson / microwave teal / indigo. Structure NEW: "case file" with 4 suspects.
+EP10 added scenes: massdial (log gauge 1–100 Jupiter masses, body barely changes size, colour -> brown dwarf -> red star), sizeup
+  (Jupiter vs smallest known star vs Saturn to scale, Sun as an arc), massbudget (planets bar / 80-cell grid of the mass needed), twosuns
+  (night landscape lit by a red point + magnitude meter), barywobble (barycentre wobble with zoom on Mercury's orbit / stability zones),
+  moonfall (Galilean moons, a ∝ 1/M as mass grows, sqrt distance scale). Palette Jupiter ochre / ember red / lime. Structure NEW: "recipe"
+  (step 1..6 build a star). Helper jup10(r, s) = banded Jupiter -> red dwarf.
+  Learned: python3 (3.11) can import a broken PIL from /usr/lib/python3/dist-packages -> python3 -m pip install --break-system-packages
+  --ignore-installed pillow numpy. Narration ran short (6.6 min) on the first pass: aim ~1,350+ words for 8 min.
 EP06 added scenes: spinglobe (globe + speed by latitude; top=True rings; slow=True), pendulum, fling, bulge, yearday, dayclock (teal / amber palette)
 """
 import sys, os, re, math, subprocess, importlib.util, json, random, hashlib
@@ -2401,6 +2408,274 @@ def sc_stretchwave(img, v, t, dur):
     else:
         alpha_text(img, (W / 2, 210), v.get("head", "Space stretches the light"), F(70, "Black"), WHITE, ease(t / 0.5))
     caption(img, v.get("caption"), ease((t - 2.5) / 0.5), y=H - 70)
+
+# ---------------- scenes (EP10: Jupiter becomes a star) ----------------
+OCH10, EMB10, LIME10 = (232, 176, 106), (255, 92, 56), (190, 240, 110)
+JBANDS10 = [(-1.0, (196, 170, 140)), (-0.62, (222, 205, 178)), (-0.45, (176, 128, 96)), (-0.28, (232, 220, 196)), (-0.1, (190, 150, 115)),
+            (0.08, (236, 226, 204)), (0.22, (170, 120, 90)), (0.4, (225, 210, 185)), (0.58, (186, 150, 120)), (0.78, (214, 196, 170))]
+_jup10 = {}
+def jup10(r, s=0.0):
+    """banded Jupiter that turns into a red dwarf: s=0 planet, ~0.4 brown dwarf (dim magenta glow), 1 = red star"""
+    r = max(3, int(r)); s = round(max(0.0, min(1.0, s)) * 20) / 20; key = (r, s)
+    if key in _jup10: return _jup10[key]
+    pad = int(r * 0.9) + 6; size = 2 * r + 2 * pad
+    yy, xx = np.mgrid[0:size, 0:size].astype(np.float32)
+    nx, ny = (xx - size / 2) / r, (yy - size / 2) / r; rr = nx ** 2 + ny ** 2; dd = np.sqrt(rr); inside = rr <= 1
+    lat = np.clip(ny, -1, 1); rgb = np.zeros((size, size, 3), np.float32)
+    for i, (l0, col) in enumerate(JBANDS10):
+        l1 = JBANDS10[i + 1][0] if i + 1 < len(JBANDS10) else 1.01
+        rgb[(lat >= l0) & (lat < l1)] = col
+    wav = np.sin(nx * 9 + ny * 31) * 10; rgb += wav[..., None]
+    nz = np.sqrt(np.clip(1 - rr, 0, 1))
+    shade = np.clip((nx * -0.8 + ny * -0.3 + nz * 0.5) / 1.0, 0, 1) * 0.85 + 0.15
+    planet = rgb * shade[..., None]
+    limb = (0.35 + 0.65 * nz)[..., None]
+    star = np.array([255, 120, 70], np.float32) * limb + np.array([255, 220, 160], np.float32) * (nz[..., None] ** 3) * 0.6
+    star += wav[..., None] * 0.6
+    brown = np.array([150, 60, 80], np.float32) * (0.5 + 0.5 * nz[..., None]) + rgb * 0.15
+    if s <= 0.4: body = planet * (1 - s / 0.4) + brown * (s / 0.4)
+    else: body = brown * (1 - (s - 0.4) / 0.6) + star * ((s - 0.4) / 0.6)
+    a = np.where(inside, 255, 0).astype(np.float32)
+    if s > 0.2:
+        gl = np.clip(1 - (dd - 1) / 0.85, 0, 1) ** 2 * (dd > 1) * (s - 0.2) / 0.8
+        gcol = np.array([255, 90, 50], np.float32)
+        body = np.where((dd > 1)[..., None], gcol, body); a = np.maximum(a, gl * 230)
+    img = Image.fromarray(np.dstack([np.clip(body, 0, 255), a]).astype(np.uint8), "RGBA")
+    _jup10[key] = img; return img
+
+def stage10(M):
+    """radius (× Jupiter) and look for a body of M Jupiter masses (rough: max size near 3 MJ, ~0.84 at the hydrogen limit)"""
+    R = 1.0 + 0.05 * min(1, (M - 1) / 2) if M < 3 else 1.05 - 0.21 * (math.log(M / 3) / math.log(80 / 3))
+    if M < 13: s, lab = 0.0, "GAS GIANT"
+    elif M < 75: s, lab = 0.25 + 0.15 * (M - 13) / 62, "BROWN DWARF"
+    else: s, lab = 0.4 + 0.6 * min(1, (M - 75) / 5), "RED DWARF STAR"
+    return R, s, lab
+
+def dash_circle10(d, cx, cy, r, col, w=3, step=7):
+    for k in range(0, 360, step): d.arc([cx - r, cy - r, cx + r, cy + r], k, k + step * 0.55, fill=col, width=w)
+
+def sc_massdial(img, v, t, dur):
+    """gauge of mass (log 1..100 Jupiters, marks at 13 and 80) + the body: size barely changes, colour turns brown dwarf -> red star"""
+    p = easeio((t - 0.3) / max(1.0, dur * v.get("speed", 0.7)))
+    M = math.exp(lerp(math.log(v.get("m0", 1)), math.log(v.get("m1", 80)), p))
+    gx, gy, gr = 560, 610, 330
+    d = ImageDraw.Draw(img)
+    def ang(m): return math.radians(160 + 220 * math.log10(m) / 2)
+    d.arc([gx - gr, gy - gr, gx + gr, gy + gr], 160, 380, fill=(60, 64, 90), width=26)
+    for m0, m1, c in [(1, 13, OCH10), (13, 75, (180, 80, 120)), (75, 100, EMB10)]:
+        a0, a1 = math.degrees(ang(m0)), math.degrees(ang(min(M, m1)))
+        if M > m0: d.arc([gx - gr, gy - gr, gx + gr, gy + gr], a0, a1, fill=c, width=26)
+    for m, lab in [(1, "1"), (13, "13"), (80, "80"), (100, "100")]:
+        a = ang(m); x0, y0 = gx + (gr + 22) * math.cos(a), gy + (gr + 22) * math.sin(a)
+        d.line([(gx + (gr - 20) * math.cos(a), gy + (gr - 20) * math.sin(a)), (x0, y0)], fill=WHITE, width=4)
+        d.text((gx + (gr + 62) * math.cos(a), gy + (gr + 62) * math.sin(a)), lab, font=F(38, "Bold"), fill=WHITE, anchor="mm")
+    a = ang(M); d.line([(gx, gy), (gx + (gr - 50) * math.cos(a), gy + (gr - 50) * math.sin(a))], fill=LIME10, width=10)
+    d.ellipse([gx - 22, gy - 22, gx + 22, gy + 22], fill=LIME10)
+    d.text((gx, gy + 110), f"{M:,.0f}" if M >= 10 else f"{M:,.1f}", font=F(140, "Black"), fill=WHITE, anchor="mm")
+    d.text((gx, gy + 210), "Jupiter masses", font=F(40, "SemiBold"), fill=DIM, anchor="mm")
+    Rx, s, lab = stage10(M)
+    bx, by, R0 = 1400, 470, 220
+    paste_c(img, jup10(R0 * Rx, s), bx, by)
+    d = ImageDraw.Draw(img); dash_circle10(d, bx, by, R0, (200, 205, 230), 3)
+    d.text((bx, by - R0 - 50), "dashed = Jupiter today", font=F(30, "SemiBold"), fill=DIM, anchor="mm")
+    col = OCH10 if M < 13 else ((220, 120, 170) if M < 75 else EMB10)
+    d.text((bx, by + R0 + 75), lab, font=F(62, "Black"), fill=col, anchor="mm")
+    d.text((bx, by + R0 + 140), f"size: {Rx:.2f} × Jupiter", font=F(40, "SemiBold"), fill=WHITE, anchor="mm")
+    if v.get("head"): alpha_text(img, (W / 2, 120), v["head"], F(56, "ExtraBold"), WHITE, ease(t / 0.5))
+    caption(img, v.get("caption"), ease((t - 1.5) / 0.5))
+
+def sc_sizeup(img, v, t, dur):
+    """to scale: Jupiter, the smallest known star (EBLM J0555-57Ab) and Saturn, with the Sun's edge as a giant arc"""
+    k = 215 / 71492; cy = 450
+    sun_r = 696000 * k
+    lay = Image.new("RGBA", img.size, (0, 0, 0, 0)); dl = ImageDraw.Draw(lay)
+    sx = W + sun_r - 170 + (1 - ease(t / 1.2)) * 300
+    dl.ellipse([sx - sun_r, cy - sun_r, sx + sun_r, cy + sun_r], fill=(255, 190, 80, 255))
+    img.alpha_composite(lay.filter(ImageFilter.GaussianBlur(3)))
+    alpha_text(img, (W - 25, 150), "the Sun", F(40, "Bold"), (60, 30, 0), ease((t - 0.5) / 0.5), anchor="rm", shadow=False)
+    items = [("Jupiter", 71492, 0.0, "1 Jupiter mass", OCH10), ("smallest known star", 60000, 1.0, "≈ 85 Jupiter masses", EMB10), ("Saturn", 58232, -1, "0.3 Jupiter masses", (225, 205, 150))]
+    xs = [330, 860, 1330]
+    for i, (nm, km, s, mass, col) in enumerate(items):
+        a = ease((t - 0.4 - i * 0.9) / 0.6)
+        if a <= 0: continue
+        r = km * k; x = xs[i]
+        if s >= 0: paste_c(img, jup10(r, s), x, cy, a)
+        else: paste_c(img, planet_sprite(int(r), (225, 205, 150), light=(-0.8, -0.4)), x, cy, a)
+        alpha_text(img, (x, cy + 215 + 55), nm, F(44, "ExtraBold"), col, a)
+        alpha_text(img, (x, cy + 215 + 112), mass, F(36, "SemiBold"), WHITE, a)
+        alpha_text(img, (x, cy + 215 + 160), f"{2 * km:,} km wide", F(32, "Medium"), DIM, a)
+    if t > 3.2:
+        d = ImageDraw.Draw(img); dash_circle10(d, 860, cy, 71492 * k, (200, 205, 230), 3)
+    caption(img, v.get("caption"), ease((t - 3.5) / 0.5))
+
+def sc_massbudget(img, v, t, dur):
+    """mode 'planets': Jupiter vs all other planets (Earth masses). mode 'grid': 80 cells = mass needed; 1 = Jupiter, 0.4 = rest of the solar system"""
+    d = ImageDraw.Draw(img)
+    if v.get("mode") == "planets":
+        alpha_text(img, (160, 200), v.get("head", "Mass, in Earths"), F(66, "ExtraBold"), WHITE, ease(t / 0.5), anchor="lm")
+        rows = [("Jupiter", 317.8, OCH10), ("all other planets combined", 128.8, LIME10)]
+        for i, (lab, val, col) in enumerate(rows):
+            p = ease((t - 0.6 - i * 1.2) / 1.2); y = 430 + i * 250
+            d.text((160, y - 70), lab, font=F(46, "Bold"), fill=mix(SPACE, WHITE, min(1, p * 3)), anchor="lm")
+            bw = 1450 * val / 317.8 * p
+            d.rounded_rectangle([160, y - 34, 160 + max(6, bw), y + 50], 18, fill=col)
+            if p > 0.05: d.text((160 + max(6, bw) + 26, y + 8), f"{val * p:.0f} Earths", font=F(54, "Black"), fill=WHITE, anchor="lm")
+        caption(img, v.get("caption"), ease((t - 3.0) / 0.5)); return
+    cols, rows, cs, gap = 16, 5, 92, 10
+    x0 = W / 2 - (cols * (cs + gap) - gap) / 2; y0 = 300
+    alpha_text(img, (W / 2, 175), v.get("head", "80 Jupiters needed"), F(66, "ExtraBold"), WHITE, ease(t / 0.5))
+    fill_p = ease((t - 0.8) / 1.0); rest_p = ease((t - 2.0) / 1.0); out_p = easeio((t - 3.4) / max(1.0, dur - 5.0)) if v.get("import") else 0
+    for k in range(80):
+        cx, cy = x0 + (k % cols) * (cs + gap), y0 + (k // cols) * (cs + gap)
+        d.rounded_rectangle([cx, cy, cx + cs, cy + cs], 14, outline=(80, 86, 120), width=3)
+        if k == 0 and fill_p > 0: d.rounded_rectangle([cx, cy, cx + cs, cy + cs], 14, fill=mix(SPACE, OCH10, fill_p))
+        if k == 1 and rest_p > 0: d.rounded_rectangle([cx, cy, cx + max(8, cs * 0.405 * rest_p), cy + cs], 10, fill=LIME10)
+        if k >= 2 and out_p * 78 > k - 2: d.rounded_rectangle([cx + 8, cy + 8, cx + cs - 8, cy + cs - 8], 10, fill=(150, 90, 200))
+    yl = y0 + rows * (cs + gap) + 50
+    for i, (lab, col) in enumerate([("Jupiter", OCH10), ("everything else in the solar system: 0.4", LIME10), ("needed from outside: about 79", (150, 90, 200))]):
+        a = ease((t - 0.8 - i * 1.2) / 0.5)
+        if a > 0:
+            lay = Image.new("RGBA", img.size, (0, 0, 0, 0)); dl = ImageDraw.Draw(lay)
+            dl.rounded_rectangle([200, yl + i * 70 - 18, 236, yl + i * 70 + 18], 8, fill=col + (int(255 * a),))
+            dl.text((262, yl + i * 70), lab, font=F(40, "SemiBold"), fill=WHITE + (int(255 * a),), anchor="lm"); img.alpha_composite(lay)
+    caption(img, v.get("caption"), ease((t - 4.0) / 0.5))
+
+def sc_twosuns(img, v, t, dur):
+    """Earth's night landscape with Jupiter-star as a red point (spikes + glow) casting faint red shadows; magnitude meter (log)"""
+    p = ease((t - 0.2) / max(1.0, dur * 0.5)); day = v.get("day", False)
+    if day:
+        sky = Image.new("RGBA", img.size, (90, 150, 220, 255)); img.alpha_composite(sky)
+    else:
+        lay = Image.new("RGBA", img.size, (0, 0, 0, 0)); g = np.zeros((H, W, 4), np.uint8); yy = np.linspace(0, 1, H)[:, None]
+        g[..., 0] = 120; g[..., 1] = 20; g[..., 2] = 20; g[..., 3] = (np.clip(yy - 0.25, 0, 1) * 110 * p).astype(np.uint8)
+        img.alpha_composite(Image.fromarray(g, "RGBA"))
+    sx, sy = lerp(1180, 1240, p), lerp(820, 300, p)
+    glow = radial(520, [(0, (255, 130, 90, 255)), (0.06, (255, 110, 70, 230)), (0.25, (255, 80, 50, 70)), (1, (255, 60, 40, 0))])
+    paste_c(img, glow, sx, sy, 0.6 if day else 1.0)
+    d = ImageDraw.Draw(img)
+    for ang in (0, 90):
+        a = math.radians(ang); L = 120
+        d.line([(sx - L * math.cos(a), sy - L * math.sin(a)), (sx + L * math.cos(a), sy + L * math.sin(a))], fill=(255, 200, 170), width=3)
+    d.ellipse([sx - 7, sy - 7, sx + 7, sy + 7], fill=(255, 240, 225))
+    if day: paste_c(img, sun_sprite(60), 330, 220)
+    gcol = (30, 34, 28) if day else mix((8, 8, 14), (40, 10, 12), p)
+    pts = [(0, H)] + [(x, 880 - 40 * math.sin(x / 260 + 1.0) - 18 * math.sin(x / 71)) for x in range(0, W + 40, 40)] + [(W, H)]
+    d.polygon(pts, fill=gcol)
+    tx, ty = 620, 870
+    d.rectangle([tx - 10, ty - 60, tx + 10, ty], fill=(4, 4, 8))
+    for j in range(5): w_ = 95 - j * 17; y_ = ty - 50 - j * 55; d.polygon([(tx - w_, y_), (tx + w_, y_), (tx, y_ - 110)], fill=(4, 4, 8))
+    if not day and p > 0.3:
+        sl = Image.new("RGBA", img.size, (0, 0, 0, 0)); ds = ImageDraw.Draw(sl)
+        L = 260 * (1 - (820 - sy) / 520) + 90
+        ds.polygon([(tx - 10, ty), (tx + 10, ty), (tx - 10 - L, ty + 60), (tx - 50 - L, ty + 60)], fill=(0, 0, 0, int(170 * p)))
+        img.alpha_composite(sl); d = ImageDraw.Draw(img)
+    d.text((sx - 40, sy + 70), "Jupiter, as a star", font=F(36, "Bold"), fill=(255, 190, 160), anchor="rm")
+    if v.get("meter", True):
+        mx, my0, my1 = 1700, 170, 820
+        box = Image.new("RGBA", img.size, (0, 0, 0, 0)); ImageDraw.Draw(box).rounded_rectangle([mx - 210, my0 - 70, mx + 200, my1 + 60], 24, fill=(8, 8, 20, 210)); img.alpha_composite(box)
+        d = ImageDraw.Draw(img)
+        d.text((mx - 5, my0 - 30), "brightness", font=F(30, "Bold"), fill=DIM, anchor="mm")
+        def my(mag): return lerp(my1, my0, (-mag - 0) / 27)
+        d.line([(mx - 120, my0), (mx - 120, my1)], fill=(90, 96, 130), width=6)
+        for mag, lab, col in [(-26.7, "Sun", (255, 210, 110)), (-13.6, "Jupiter-star", EMB10), (-12.7, "full Moon", (220, 220, 230)), (-4.6, "Venus", (240, 230, 200)), (-2.9, "Jupiter now", OCH10)]:
+            if lab == "Jupiter-star" and p < 0.6: continue
+            yy_ = my(mag) + (14 if lab == "full Moon" else (-14 if lab == "Jupiter-star" else 0))
+            d.ellipse([mx - 132, my(mag) - 12, mx - 108, my(mag) + 12], fill=col)
+            d.text((mx - 90, yy_), lab, font=F(28, "Bold"), fill=col, anchor="lm")
+    if v.get("head"): alpha_text(img, (W / 2 - 200, 120), v["head"], F(58, "ExtraBold"), WHITE, ease(t / 0.5))
+    caption(img, v.get("caption"), ease((t - 2.0) / 0.5))
+
+def sc_barywobble(img, v, t, dur):
+    """mode 'wobble': left = whole system (Sun + Jupiter-star around the barycentre); right = zoom with Mercury's orbit and the Sun's loop
+    (mass grows 1 -> 80 Jupiters during the scene). mode 'zones': stable zone (≈2.1 AU, Holman & Wiegert rule) vs chaos."""
+    if v.get("mode") == "zones":
+        cx, cy, k = 640, 560, 46
+        d = ImageDraw.Draw(img); p = ease((t - 0.5) / 1.5)
+        lay = Image.new("RGBA", img.size, (0, 0, 0, 0)); dl = ImageDraw.Draw(lay)
+        rs = 2.12 * k; dl.ellipse([cx - rs, cy - rs, cx + rs, cy + rs], fill=LIME10 + (int(60 * p),), outline=LIME10 + (int(220 * p),), width=3)
+        img.alpha_composite(lay); d = ImageDraw.Draw(img)
+        for au, nm, col in [(0.387, "", (170, 160, 150)), (0.723, "", (230, 200, 140)), (1.0, "Earth", (90, 150, 240)), (1.524, "Mars", (210, 100, 70))]:
+            r = au * k; d.ellipse([cx - r, cy - r, cx + r, cy + r], outline=col, width=2)
+            ang = t * 0.9 / au ** 1.5 + au * 5; px, py = cx + r * math.cos(ang), cy + r * math.sin(ang)
+            d.ellipse([px - 5, py - 5, px + 5, py + 5], fill=col)
+        rng = random.Random(4)
+        for i in range(260):
+            r = rng.uniform(2.2, 3.3) * k; a0 = rng.uniform(0, 6.28) + t * 0.15; jit = 14 * p * math.sin(t * 3 + i)
+            x, y = cx + (r + jit) * math.cos(a0), cy + (r + jit) * math.sin(a0); d.ellipse([x - 2, y - 2, x + 2, y + 2], fill=(150, 140, 130))
+        paste_c(img, sun_sprite(10), cx, cy)
+        ja = t * 0.12; jx, jy = cx + 5.2 * k * math.cos(ja), cy + 5.2 * k * math.sin(ja)
+        d.ellipse([cx - 5.2 * k, cy - 5.2 * k, cx + 5.2 * k, cy + 5.2 * k], outline=(255, 120, 90), width=2)
+        paste_c(img, jup10(16, 1.0), jx, jy)
+        sr = 9.54 * k; d = ImageDraw.Draw(img)
+        for kk in range(0, 360, 5): d.arc([cx - sr, cy - sr, cx + sr, cy + sr], kk, kk + 2, fill=(255, 90, 90), width=3)
+        sa = 2.2 + t * 0.05 + 0.25 * p * math.sin(t * 2); sxp, syp = cx + sr * math.cos(sa), cy + sr * math.sin(sa)
+        paste_c(img, planet_sprite(12, (225, 205, 150)), sxp, syp)
+        d = ImageDraw.Draw(img)
+        d.text((sxp - 30, syp + 40), "Saturn", font=F(30, "Bold"), fill=(255, 140, 120), anchor="mm")
+        bx = 1500
+        for i, (head, body, col) in enumerate([("STABLE (≈ 2 AU)", "Mercury, Venus, Earth, Mars", LIME10), ("CHAOS", "the asteroid belt", (200, 180, 150)), ("DANGER", "Saturn, Uranus, Neptune", (255, 110, 100))]):
+            a = ease((t - 0.8 - i * 1.0) / 0.5)
+            alpha_text(img, (bx, 330 + i * 190), head, F(54, "Black"), col, a)
+            alpha_text(img, (bx, 395 + i * 190), body, F(36, "SemiBold"), WHITE, a)
+        caption(img, v.get("caption"), ease((t - 3.0) / 0.5)); return
+    p = easeio((t - 0.4) / max(1.0, dur * 0.6))
+    M = math.exp(lerp(0, math.log(80), p)); mu = M * 0.000954 / (1 + M * 0.000954)
+    ang = t * 0.35
+    cx, cy, k = 450, 540, 70
+    d = ImageDraw.Draw(img)
+    d.ellipse([cx - 5.2 * k, cy - 5.2 * k, cx + 5.2 * k, cy + 5.2 * k], outline=(90, 70, 70), width=2)
+    jx, jy = cx + 5.2 * k * (1 - mu) * math.cos(ang), cy + 5.2 * k * (1 - mu) * math.sin(ang)
+    sxp, syp = cx - 5.2 * k * mu * math.cos(ang), cy - 5.2 * k * mu * math.sin(ang)
+    paste_c(img, sun_sprite(12), sxp, syp); paste_c(img, jup10(14 + 6 * p, stage10(M)[1]), jx, jy)
+    d = ImageDraw.Draw(img); d.line([(cx - 8, cy), (cx + 8, cy)], fill=LIME10, width=3); d.line([(cx, cy - 8), (cx, cy + 8)], fill=LIME10, width=3)
+    d.text((cx, 130), f"Jupiter: {M:,.0f}× its mass", font=F(44, "Bold"), fill=WHITE, anchor="mm")
+    zx, zy, zk = 1460, 520, 780
+    box = Image.new("RGBA", img.size, (0, 0, 0, 0)); ImageDraw.Draw(box).rounded_rectangle([zx - 400, zy - 380, zx + 400, zy + 380], 30, fill=(6, 8, 20, 200), outline=LIME10 + (140,), width=2); img.alpha_composite(box)
+    d = ImageDraw.Draw(img)
+    rm = 0.387 * zk; d.ellipse([zx - rm, zy - rm, zx + rm, zy + rm], outline=(170, 160, 150), width=2)
+    d.text((zx, zy - rm + 34), "Mercury's orbit", font=F(28, "Bold"), fill=(190, 180, 170), anchor="mm")
+    off = 5.2 * mu * zk
+    for kk in range(0, 360, 6): d.arc([zx - off, zy - off, zx + off, zy + off], kk, kk + 3, fill=(255, 210, 120), width=2)
+    paste_c(img, sun_sprite(int(max(4, 0.00465 * zk * 1.0)) + 6), zx - off * math.cos(ang), zy - off * math.sin(ang))
+    d = ImageDraw.Draw(img); d.line([(zx - 10, zy), (zx + 10, zy)], fill=LIME10, width=3); d.line([(zx, zy - 10), (zx, zy + 10)], fill=LIME10, width=3)
+    d.text((zx, zy + 330), f"balance point: {5.2 * mu:.2f} AU from the Sun", font=F(36, "ExtraBold"), fill=LIME10, anchor="mm")
+    d.text((zx, zy - 360), "zoom: the inner solar system", font=F(30, "SemiBold"), fill=DIM, anchor="mm")
+    caption(img, v.get("caption"), ease((t - 2.5) / 0.5))
+
+MOONS10 = [("Io", 421700, (235, 210, 110)), ("Europa", 671034, (225, 215, 200)), ("Ganymede", 1070412, (170, 160, 150)), ("Callisto", 1882709, (120, 110, 100))]
+def sc_moonfall(img, v, t, dur):
+    """Galilean moons around a Jupiter whose mass grows: slow growth -> a ∝ 1/M (angular momentum conserved); square-root distance scale"""
+    p = easeio((t - 0.5) / max(1.0, dur * 0.65))
+    M = math.exp(lerp(math.log(v.get("m0", 1)), math.log(v.get("m1", 80)), p))
+    cx, cy, kk = 760, 560, 470 / math.sqrt(1882709)
+    def rp(km): return kk * math.sqrt(km)
+    Rx, s, _ = stage10(M); star_km = 71492 * Rx
+    d = ImageDraw.Draw(img)
+    for nm, a0, col in MOONS10:
+        a = a0 / M; r = rp(a)
+        dash_circle10(d, cx, cy, rp(a0), (60, 64, 90), 2)
+        if a > star_km:
+            d.ellipse([cx - r, cy - r, cx + r, cy + r], outline=col, width=2)
+    paste_c(img, jup10(rp(star_km), s), cx, cy)
+    d = ImageDraw.Draw(img)
+    for i, (nm, a0, col) in enumerate(MOONS10):
+        a = a0 / M; r = rp(a); per = (a0 / 421700) ** 1.5
+        ang = t * 1.2 / per * (M ** 0.5) ** 0.3 + i * 1.6
+        x, y = cx + r * math.cos(ang), cy + r * math.sin(ang)
+        if a > star_km:
+            d.ellipse([x - 11, y - 11, x + 11, y + 11], fill=col); d.text((x + 18, y - 18), nm, font=F(28, "Bold"), fill=col, anchor="lm")
+    bx = 1560
+    box = Image.new("RGBA", img.size, (0, 0, 0, 0)); ImageDraw.Draw(box).rounded_rectangle([bx - 300, 190, bx + 300, 930], 26, fill=(8, 8, 22, 215)); img.alpha_composite(box)
+    d = ImageDraw.Draw(img)
+    d.text((bx, 250), f"mass × {M:,.0f}", font=F(60, "Black"), fill=LIME10, anchor="mm")
+    d.text((bx, 320), f"star radius ≈ {star_km:,.0f} km", font=F(30, "SemiBold"), fill=(255, 170, 140), anchor="mm")
+    for i, (nm, a0, col) in enumerate(MOONS10):
+        a = a0 / M; y = 420 + i * 120; gone = a <= star_km
+        d.text((bx - 260, y), nm, font=F(40, "ExtraBold"), fill=col, anchor="lm")
+        d.text((bx + 260, y), "INSIDE" if gone else f"{a:,.0f} km", font=F(38, "Black" if gone else "Bold"), fill=EMB10 if gone else WHITE, anchor="rm")
+    d.text((bx, 890), "distances: square-root scale", font=F(26, "Medium"), fill=DIM, anchor="mm")
+    if v.get("head"): alpha_text(img, (cx, 110), v["head"], F(54, "ExtraBold"), WHITE, ease(t / 0.5))
+    caption(img, v.get("caption"), ease((t - 2.5) / 0.5))
 
 SC = {k[3:]: f for k, f in globals().items() if k.startswith("sc_")}
 

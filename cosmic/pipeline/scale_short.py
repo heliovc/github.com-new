@@ -9,6 +9,8 @@ Visuais (vis.type):
   "inside" : corpo grande Y (vis.big_r_km, vis.big_col) e o pequeno X (vis.small_r_km) com contador de quantos X cabem em Y (vis.count).
   "storm"  : Júpiter com faixas; zoom do planeta inteiro (z0/z1 = 0) até a Grande Mancha Vermelha (1); largura da mancha segue o ano
              (y0/y1: 1880 = 41.000 km -> 2017 = 16.000 km); vis.earths = Terras em escala dentro da mancha (drop = caem) (scale02).
+  "starinside": uma estrela real (EBLM J0555-57Ab) EM ESCALA dentro de Júpiter; vis.mode = inside (drop = cai no disco) | balance
+             (1 estrela x pilha de 85 Júpiteres) | saturn (lado a lado com Saturno) | limit (barra 0–100 massas de Júpiter, linha de fusão) (scale03).
 Reaproveita render.py (sprites, fontes) e ranking.py (fundo, texto, legendas).
 """
 import sys, os, math, json, subprocess, importlib.util, random
@@ -151,6 +153,59 @@ def storm_vis(img, v, th, t, dur, beat_p):
     if z < 0.4 and v.get("label_planet"):
         text(img, (cx, jy - Rj - 40 if jy - Rj > 380 else 420), "JUPITER · 11 Earths wide", 46, (255, 230, 200), w="ExtraBold")
 
+# ---- scale03: "starinside" — a real star (EBLM J0555-57Ab) drawn TO SCALE inside Jupiter; modes: inside (star drops into Jupiter's disc),
+# balance (1 star vs a pile of 85 Jupiters on a beam), saturn (star beside Saturn, same size), limit (mass bar 0–100 Jupiters, fusion line ~80).
+JUP_R3, STAR_R3, SAT_R3 = 71492, 59000, 58232
+def starinside_vis(img, v, th, t, dur, bp):
+    acc, acc2 = tuple(th["accent"]), tuple(th["accent2"]); mode = v.get("mode", "inside"); cx, cy = W / 2, 930
+    if mode == "inside":
+        Rj = 400; R.paste_c(img, R.jup10(Rj, 0.0), cx, cy)
+        u = ease((t - 0.2) / 0.7) if v.get("drop") else 1.0
+        rs = Rj * STAR_R3 / JUP_R3; sy = lerp(cy - 1100, cy, u)
+        spr = R.jup10(rs, 1.0).copy(); m_ = Image.new("L", spr.size, 0); c_ = spr.width / 2
+        ImageDraw.Draw(m_).ellipse([c_ - rs - 5, c_ - rs - 5, c_ + rs + 5, c_ + rs + 5], fill=255)
+        spr.putalpha(Image.fromarray(np.minimum(np.asarray(spr.getchannel("A")), np.asarray(m_)))); R.paste_c(img, spr, cx, sy)
+        text(img, (cx, sy), "STAR", 70, (90, 20, 10), w="Black", a=u)
+        d = ImageDraw.Draw(img); R.dash_circle10(d, cx, cy, Rj, (255, 235, 200), 4)
+        text(img, (cx, cy + Rj + 60), "dashed: Jupiter", 40, (255, 225, 190), w="ExtraBold")
+    elif mode == "balance":
+        ang = 0.0
+        px, py, L = cx, 1080, 400
+        d = ImageDraw.Draw(img)
+        d.polygon([(px, py), (px - 60, py + 160), (px + 60, py + 160)], fill=(120, 125, 150))
+        lx, ly = px - L * math.cos(ang), py - L * math.sin(ang); rx, ry = px + L * math.cos(ang), py + L * math.sin(ang)
+        d.line([(lx, ly), (rx, ry)], fill=(200, 205, 225), width=12)
+        R.paste_c(img, R.jup10(120, 1.0), rx, ry - 130)   # the star, heavy side goes down (right)
+        rng = random.Random(5); n = int(85 * ease((t - 0.1) / 0.9))
+        for i in range(n):
+            row = int((math.sqrt(8 * i + 1) - 1) / 2); col = i - row * (row + 1) // 2
+            R.paste_c(img, R.jup10(12, 0.0), lx - row * 13 + col * 26, ly - 40 - (12 - row) * 23)
+        text(img, (lx, ly + 90), f"{n} Jupiters", 46, (240, 200, 150), w="ExtraBold")
+        text(img, (rx, ry + 90), "1 star", 46, acc, w="ExtraBold")
+        text(img, (cx, py + 230), "balanced", 52, (255, 255, 255), a=ease((t - 1.0) / 0.4))
+    elif mode == "saturn":
+        k = 330 / STAR_R3
+        R.paste_c(img, R.jup10(STAR_R3 * k * 0.42, 1.0), cx - 250, cy - 160)
+        sr = SAT_R3 * k * 0.42; sx, sy = cx + 250, cy - 160
+        d = ImageDraw.Draw(img); d.ellipse([sx - sr * 1.9, sy - sr * 0.4, sx + sr * 1.9, sy + sr * 0.4], outline=(225, 205, 150), width=8)
+        R.paste_c(img, R.planet_sprite(int(sr), (225, 205, 150), light=(-0.8, -0.4)), sx, sy)
+        d = ImageDraw.Draw(img); d.arc([sx - sr * 1.9, sy - sr * 0.4, sx + sr * 1.9, sy + sr * 0.4], 0, 180, fill=(225, 205, 150), width=8)
+        text(img, (cx - 250, cy + 60), "the star", 44, acc, w="ExtraBold"); text(img, (cx + 250, cy + 60), "Saturn", 44, (225, 205, 150), w="ExtraBold")
+        text(img, (cx - 250, cy + 120), "≈ 118,000 km", 36, (230, 230, 240), w="Bold"); text(img, (cx + 250, cy + 120), "116,464 km", 36, (230, 230, 240), w="Bold")
+    elif mode == "limit":
+        x0, x1, y = 110, W - 110, 980; d = ImageDraw.Draw(img)
+        def mx(m): return lerp(x0, x1, m / 100)
+        d.rounded_rectangle([x0, y - 22, x1, y + 22], 22, fill=(45, 40, 60))
+        p = easeio((t - 0.2) / max(0.8, dur * 0.6)); m = 85 * p
+        d.rounded_rectangle([x0, y - 22, max(x0 + 44, mx(m)), y + 22], 22, fill=acc)
+        for mm, lab in [(1, "Jupiter"), (13, "brown dwarf"), (80, "STAR")]:
+            x = mx(mm); d.line([(x, y - 60), (x, y + 60)], fill=(255, 255, 255), width=4)
+            d.text((x, y - 90 if mm != 13 else y + 100), lab, font=F(36, "ExtraBold"), fill=(255, 255, 255) if mm != 80 else acc2, anchor="mm")
+        lay = Image.new("RGBA", img.size, (0, 0, 0, 0)); ImageDraw.Draw(lay).rectangle([mx(75), y - 40, mx(83), y + 40], fill=acc2 + (90,)); img.alpha_composite(lay)
+        R.paste_c(img, R.jup10(90, 1.0 if m > 78 else 0.3), mx(m), y - 230)
+        text(img, (W / 2, y + 220), f"{m:.0f} Jupiter masses", 64, (255, 255, 255))
+        text(img, (W / 2, y + 300), "hydrogen fusion line ≈ 80", 40, acc2, w="ExtraBold")
+
 def chrome(img, th, gt, total):
     d = ImageDraw.Draw(img)
     d.rectangle([0, 0, int(W * gt / total), 10], fill=tuple(th["accent"]))
@@ -189,6 +244,11 @@ def frame(m, durs, gt, chunks, arr):
         hl = v.get("head") or m.BIG
         text(img, (W / 2, 140), hl["num"], 124 if len(hl["num"]) < 12 else 96, tuple(th["accent"]), stroke=4)
         text(img, (W / 2, 245), hl["top"], 52, (255, 255, 255), stroke=3)
+    elif v["type"] == "starinside":
+        starinside_vis(img, v, th, t, d, easeio((t - 0.2) / max(0.8, d * 0.75)))
+        hl = v.get("head") or m.BIG
+        text(img, (W / 2, 160), hl["num"], 124 if len(hl["num"]) < 12 else 100, tuple(th["accent"]), stroke=4)
+        text(img, (W / 2, 265), hl["top"], 52, (255, 255, 255), stroke=3)
     chrome(img, th, gt, total)
     K.draw_caption(img, chunks, gt, y=1590)
     return img
