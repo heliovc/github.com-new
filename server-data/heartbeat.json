@@ -1,11 +1,8 @@
 {
- "last_run": "2026-11-11T21:13:09.935134-03:00",
+ "last_run": "2026-11-11T21:20:36.300647-03:00",
  "pending": 0,
- "post_tasks": 1,
+ "post_tasks": 0,
  "errors": [
   "/opt/canal-publisher/repo/cosmic/ep07/publish.json: version deve ser 1"
- ],
- "published_now": [
-  "cosmic-ep09-short: comment comentário fixado"
  ]
 }
