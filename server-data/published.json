@@ -524,7 +524,9 @@
   "related_key": "cosmic-ep10-long",
   "pinned_comment": "Star or planet: what would you call it? Full video: What If Jupiter Became a Star? It Would Need 80 Jupiters",
   "related_attempts": 1,
-  "related_done": "2026-11-12T17:13:23.693747-03:00"
+  "related_done": "2026-11-12T17:13:23.693747-03:00",
+  "comment_attempts": 1,
+  "comment_done": "2026-11-12T19:13:08.903532-03:00"
  },
  "cosmic-ep10-short": {
   "attempts": 1,
@@ -577,7 +579,9 @@
   "related_key": "ptd-ep11-long",
   "pinned_comment": "Você confere o extrato do benefício ou do salário todo mês? Vídeo completo: O golpe dos descontos no INSS: como R$ 6,3 bilhões saíram dos aposentados",
   "related_attempts": 2,
-  "related_done": "2026-11-12T18:22:02.263831-03:00"
+  "related_done": "2026-11-12T18:22:02.263831-03:00",
+  "comment_attempts": 1,
+  "comment_done": "2026-11-12T19:15:15.752878-03:00"
  },
  "ptd-rank09-short": {
   "attempts": 1,
@@ -610,7 +614,9 @@
   "title": "Google Sheets QUERY Function: Automatic Reports in One Formula (Beginner Tutorial)",
   "kind": "long",
   "publish_at": "2026-11-12T19:00:00-03:00",
-  "pinned_comment": "What report do you still build by hand every week? Tell me and I'll show the QUERY for it."
+  "pinned_comment": "What report do you still build by hand every week? Tell me and I'll show the QUERY for it.",
+  "comment_attempts": 1,
+  "comment_done": "2026-11-12T19:17:28.660396-03:00"
  },
  "lab-ep08-short": {
   "attempts": 1,
@@ -626,6 +632,8 @@
   "kind": "short",
   "publish_at": "2026-11-12T20:30:00-03:00",
   "related_key": "lab-ep08-long",
-  "pinned_comment": "Spreadsheet or pivot table menu: which do you use? Full tutorial: Google Sheets QUERY: Automatic Reports in One Formula"
+  "pinned_comment": "Spreadsheet or pivot table menu: which do you use? Full tutorial: Google Sheets QUERY: Automatic Reports in One Formula",
+  "related_attempts": 1,
+  "related_done": "2026-11-12T19:18:55.526893-03:00"
  }
 }
