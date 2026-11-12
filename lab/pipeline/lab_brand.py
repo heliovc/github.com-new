@@ -6,6 +6,7 @@ python3 -I lab_brand.py thumbprompt "LINE ONE" "LINE TWO" "vague prompt" out.jpg
 python3 -I lab_brand.py thumbgit "LINE ONE" "LINE TWO" "hash msg|hash msg|hash msg" out.jpg yellow   (EP05: commit history + "go back" arc)
 python3 -I lab_brand.py thumbchart "LINE ONE" "LINE TWO" "df.plot(kind=\"bar\")" out.jpg mint   (EP06: dark chart card, bars + trend line)
 python3 -I lab_brand.py thumbterm "LINE ONE" "LINE TWO" "$ cmd|output|$ cmd" out.jpg pink   (EP07: big terminal card, typed commands + outputs)
+python3 -I lab_brand.py thumbquery "LINE ONE" "LINE TWO" "=QUERY()" "Lena=1670|Omar=1530" out.jpg orange   (EP08: ranked report card with bars over a faded raw table)
 python3 -I lab_brand.py thumb "LINE ONE" "LINE TWO" "code snippet line" out.jpg [accent: lime|coral|sky]"""
 import sys; sys.path.insert(0, ".")
 import tutor as T
@@ -144,6 +145,29 @@ elif sys.argv[1] == "thumbterm":
         fs = 120
         while T.F(fs, "Bold").getlength(txt) > 560: fs -= 4
         d.text((50, 260 + i * 160), txt, font=T.F(fs, "Bold"), fill=col, anchor="lm", stroke_width=4, stroke_fill=T.BG)
+    img.convert("RGB").save(out, quality=92); print("thumb ok")
+elif sys.argv[1] == "thumbquery":  # EP08 layout: text left; right a faded raw table behind, a clean ranked report card with bars in front, QUERY chip on top
+    l1, l2, form, rows, out = sys.argv[2:7]; acc = {"lime": T.LIME, "coral": T.CORAL, "sky": T.SKY, "violet": T.VIO, "yellow": T.YEL, "orange": (255, 155, 50)}[sys.argv[7] if len(sys.argv) > 7 else "orange"]
+    T.ACC = acc; img = T.make_bg(1280, 720); d = ImageDraw.Draw(img)
+    for i in range(9):  # raw data, faded
+        y = 150 + i * 46; d.rounded_rectangle([800, y, 1240, y + 36], 6, fill=T.mix(T.BG, T.PANEL, 0.6))
+        for j, w in enumerate([90, 60, 80, 70]): d.rounded_rectangle([815 + j * 105, y + 13, 815 + j * 105 + w, y + 23], 4, fill=T.mix(T.BG, T.LINE, 0.8))
+    data = [r.split("=") for r in rows.split("|")]; mx = max(float(v) for _, v in data)
+    cx0, cy0, cw, ch = 650, 220, 520, 90 + len(data) * 74
+    sh = Image.new("RGBA", img.size, (0, 0, 0, 0)); ImageDraw.Draw(sh).rounded_rectangle([cx0 + 12, cy0 + 20, cx0 + cw + 12, cy0 + ch + 20], 22, fill=(0, 0, 0, 170)); sh = sh.filter(ImageFilter.GaussianBlur(20)); img.alpha_composite(sh)
+    d = ImageDraw.Draw(img); d.rounded_rectangle([cx0, cy0, cx0 + cw, cy0 + ch], 22, fill=T.PANEL, outline=acc, width=4)
+    d.text((cx0 + 30, cy0 + 45), "Rep", font=T.F(28, "Bold"), fill=T.DIM, anchor="lm"); d.text((cx0 + cw - 30, cy0 + 45), "Total", font=T.F(28, "Bold"), fill=T.DIM, anchor="rm")
+    for i, (n, v) in enumerate(data):
+        y = cy0 + 100 + i * 74; bw = (cw - 290) * float(v) / mx
+        d.rounded_rectangle([cx0 + 150, y - 20, cx0 + 150 + bw, y + 20], 10, fill=T.mix(T.PANEL, acc, 0.35 + 0.65 * (i == 0)))
+        d.text((cx0 + 30, y), n, font=T.F(32, "SemiBold"), fill=T.TXT, anchor="lm"); d.text((cx0 + cw - 30, y), v, font=T.F(32, "monob"), fill=acc if i == 0 else T.TXT, anchor="rm")
+    fw = T.F(34, "monob").getlength(form) + 60
+    d.rounded_rectangle([cx0 + cw / 2 - fw / 2, cy0 - 90, cx0 + cw / 2 + fw / 2, cy0 - 26], 32, fill=acc); d.text((cx0 + cw / 2, cy0 - 58), form, font=T.F(34, "monob"), fill=T.BG, anchor="mm")
+    d.rounded_rectangle([40, 40, 300, 92], 26, fill=acc); d.text((170, 66), "SHORTCUT LAB", font=T.F(26, "Bold"), fill=T.BG, anchor="mm")
+    for i, (txt, col) in enumerate([(l1, T.TXT), (l2, acc)]):
+        fs = 120
+        while T.F(fs, "Bold").getlength(txt) > 560: fs -= 4
+        d.text((50, 300 + i * 150), txt, font=T.F(fs, "Bold"), fill=col, anchor="lm")
     img.convert("RGB").save(out, quality=92); print("thumb ok")
 else:
     l1, l2, code, out = sys.argv[2:6]; acc = {"lime": T.LIME, "coral": T.CORAL, "sky": T.SKY, "violet": T.VIO, "yellow": T.YEL}[sys.argv[6] if len(sys.argv) > 6 else "lime"]

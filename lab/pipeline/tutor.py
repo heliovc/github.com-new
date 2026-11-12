@@ -4,7 +4,9 @@ Usage:
   python3 -I tutor.py ep01.py out/ep01 --preview        # one still per scene (at 85% of the scene)
   python3 -I tutor.py ep01.py out/ep01                  # full render -> final.mp4, subtitles.srt, chapters.txt
   python3 -I tutor.py ep01.py out/ep01 --vertical "0,3,5" "TITLE"   # Short 1080x1920 from scenes (uses cached voice)
-Scene types: title, steps, code, term, files, tip, keys, compare, chat, outro, tree (EP02), map (EP02), sheet + args (EP03), prompt + flow (EP04), stage + timeline (EP05: Git areas and commit history), term colors diff +/- lines and errors (EP05), figure (EP06: real matplotlib PNG in a plot window, left-to-right wipe + numbered callouts), nav (EP07: folder tree with a moving "YOU ARE HERE" pin driven by cd commands + live pwd bar), cards (EP07: cheat-sheet grid of command cards popping in, optional highlight)
+Scene types: title, steps, code, term, files, tip, keys, compare, chat, outro, tree (EP02), map (EP02), sheet + args (EP03), prompt + flow (EP04), stage + timeline (EP05: Git areas and commit history), term colors diff +/- lines and errors (EP05), figure (EP06: real matplotlib PNG in a plot window, left-to-right wipe + numbered callouts), nav (EP07: folder tree with a moving "YOU ARE HERE" pin driven by cd commands + live pwd bar), cards (EP07: cheat-sheet grid of command cards popping in, optional highlight), funnel (EP08: a QUERY string read clause by clause, each clause
+  highlighted on top while its mini result table appears in a column - rows shrinking left to right, row-count badges); sheet results now
+  draw the header row in bold when a QUERY result starts on row 1 (EP08)
 Identity: charcoal #0F1115, lime #B6F35C, coral #FF7A59, sky #6CC4FF, Poppins + DejaVu Sans Mono.
 """
 import sys, os, re, math, json, hashlib, subprocess, importlib.util
@@ -378,7 +380,7 @@ def sc_sheet(img, v, t, d):
     def put(c, r, val, col=TXT, font=None, alpha=1.0):
         if r > nrows or c >= len(widths): return
         y = (ys[r - 1] + ys[r]) / 2; f = font or (fh if r == 1 else fs); s = str(val)
-        if isinstance(val, (int, float)) and not isinstance(val, bool): text_a(img, (xs[c + 1] - 12, y), s, f, col, a * alpha, "rm")
+        if (isinstance(val, (int, float)) and not isinstance(val, bool)) or re.match(r"\d{4}-\d\d-\d\d$", s): text_a(img, (xs[c + 1] - 12, y), s, f, col, a * alpha, "rm")
         else: text_a(img, (xs[c] + 12, y), s, f, col, a * alpha, "lm")
     for k, val in v.get("cells", {}).items():
         c, r = _addr(k); put(c, r, val, ACC if k == v.get("block") else TXT)
@@ -404,7 +406,7 @@ def sc_sheet(img, v, t, d):
             for i, row in enumerate(res):
                 k = ease((rv * (n + 2) - i) / 2) if n else 0
                 if k <= 0: continue
-                for j, val in enumerate(row if isinstance(row, (list, tuple)) else [row]): put(oc + j, orow + i, val, v.get("rescol", TXT), fs, k)
+                for j, val in enumerate(row if isinstance(row, (list, tuple)) else [row]): put(oc + j, orow + i, val, ACC if (orow + i == 1 and v.get("hdr")) else v.get("rescol", TXT), fh if orow + i == 1 else fs, k)
             if rv > 0.6 and res and not v.get("fill"):
                 wcols = max(len(r) if isinstance(r, (list, tuple)) else 1 for r in res)
                 dr.rectangle([xs[oc], ys[orow - 1], xs[min(len(widths), oc + wcols)], ys[min(nrows, orow + n - 1)]], outline=SKY, width=2)
@@ -711,6 +713,42 @@ def sc_cards(img, v, t, d):
         text_a(img, (bx + 30, by + 26), cmd, F(fs, "monob"), mix(BG, col, a), a)
         for k2, ln in enumerate(wrap(mean, F(26, "Medium"), cw - 80)[:2]):
             text_a(img, (bx + 30, by + 26 + fs + 18 + k2 * 36), ln, F(26, "Medium"), mix(BG, (200, 206, 216), a), a)
+
+# ---- EP08: funnel - the query string on top, clause by clause; under it one column per stage with the rows that survive it
+def sc_funnel(img, v, t, d):
+    stages = v["stages"]; n = len(stages); span = d * v.get("span", 0.75); dr = ImageDraw.Draw(img)
+    text_a(img, (W / 2, 150), v.get("title", ""), F(44, "Bold"), TXT, ease(t / 0.4), "mm")
+    cur = max(0, min(n - 1, int((t - 0.4) / (span / n)))) if t > 0.4 else -1
+    # query string, current clause highlighted
+    fq = F(30, "mono"); full = "".join(s["clause"] for s in stages); x = W / 2 - fq.getlength(full) / 2; yq = 232
+    dr.rounded_rectangle([x - 30, yq - 34, x + fq.getlength(full) + 30, yq + 34], 16, fill=PANEL, outline=LINE, width=2)
+    for i, s in enumerate(stages):
+        c = s["clause"]; wl = fq.getlength(c)
+        lw = fq.getlength(c[:len(c) - len(c.lstrip())])
+        if i == cur and c.strip(): dr.rounded_rectangle([x + lw - 4, yq - 24, x + wl + 4, yq + 24], 8, fill=mix(PANEL, ACC, 0.28))
+        text_a(img, (x, yq), c, fq, ACC if i == cur else (TXT if i < cur else DIM), ease(t / 0.4), "lm"); x += wl
+    gw = 1760; cw = gw / n; x0 = (W - gw) / 2; y0 = 300; rh = 38; fr = F(24, "Medium"); fm = F(24, "mono")
+    for i, s in enumerate(stages):
+        a = ease((t - 0.4 - span * i / n) / 0.4)
+        if a <= 0: continue
+        bx = x0 + i * cw + 14; bw = cw - 70; col = s.get("color", ACC)
+        dr.rounded_rectangle([bx, y0, bx + bw, y0 + 60], 14, fill=mix(BG, mix(PANEL, col, 0.25), a), outline=mix(BG, col, a), width=2)
+        text_a(img, (bx + bw / 2, y0 + 30), s["label"], F(26, "SemiBold"), col, a, "mm")
+        rows = s["rows"]
+        for k, row in enumerate(rows):
+            ka = ease((t - 0.6 - span * i / n - k * 0.04) / 0.3) * a
+            if ka <= 0: continue
+            ry = y0 + 78 + k * rh; dr.rounded_rectangle([bx, ry, bx + bw, ry + rh - 6], 8, fill=mix(BG, PANEL if k % 2 == 0 else PANEL2, ka))
+            text_a(img, (bx + 16, ry + (rh - 6) / 2), str(row[0]), fr, TXT, ka, "lm")
+            text_a(img, (bx + bw - 16, ry + (rh - 6) / 2), str(row[1]), fm, col if s.get("hl") else TXT, ka, "rm")
+        by = y0 + 78 + len(rows) * rh + 8; b = f"{len(rows)} row" + ("s" if len(rows) != 1 else "")
+        text_a(img, (bx + bw / 2, by + 20), b, F(22, "SemiBold"), DIM, a, "mm")
+        if i < n - 1: text_a(img, (bx + bw + 35, y0 + 30), "→", F(40, "monob"), mix(BG, DIM, a), a, "mm")
+    if v.get("note"):
+        k = ease((t - 0.4 - span - 0.2) / 0.5)
+        if k > 0:
+            f = F(32, "SemiBold"); tw = f.getlength(v["note"]); ny = 960
+            dr.rounded_rectangle([W / 2 - tw / 2 - 30, ny, W / 2 + tw / 2 + 30, ny + 62], 31, fill=mix(BG, ACC, k)); dr.text((W / 2, ny + 31), v["note"], font=f, fill=BG, anchor="mm")
 
 SC = {k[3:]: f for k, f in list(globals().items()) if k.startswith("sc_")}
 
