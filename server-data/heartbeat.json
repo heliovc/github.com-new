@@ -1,12 +1,11 @@
 {
- "last_run": "2026-11-13T07:13:21.506597-03:00",
- "pending": 4,
+ "last_run": "2026-11-13T07:41:24.988688-03:00",
+ "pending": 3,
  "post_tasks": 0,
  "errors": [],
  "published_now": [
-  "cosmic-rank10-short: https://youtu.be/ALH_hyEybNY",
-  "cosmic-ep11-long: https://youtu.be/_AncMLL2-kA",
-  "cosmic-scale04-short: https://youtu.be/n38Th8sIi8g",
-  "cosmic-ep11-short: https://youtu.be/Ngie3rZMUW8"
+  "ptd-ep12-long: https://youtu.be/RQvUeHi0KbY",
+  "ptd-ep12-short: https://youtu.be/m9LvjGzyFAg",
+  "ptd-rank10-short: https://youtu.be/Oor27ojVf6k"
  ]
 }

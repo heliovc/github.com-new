@@ -702,5 +702,52 @@
   "publish_at": "2026-11-13T21:00:00-03:00",
   "related_key": "cosmic-ep11-long",
   "pinned_comment": "From your city, would you see the rings? Full video: What If Earth Had Rings Like Saturn? It May Have Had One 466 Million Years Ago"
+ },
+ "ptd-ep12-long": {
+  "attempts": 1,
+  "status": "published",
+  "url": "https://youtu.be/RQvUeHi0KbY",
+  "by": "robo",
+  "visibility": "schedule",
+  "when": "2026-11-13T18:00:00-03:00",
+  "at": "2026-11-13T07:35:30.194984-03:00",
+  "error": null,
+  "channel_id": "UCd_BGmJ5gbQ0kECAxmbvQHA",
+  "title": "Consignado: o empréstimo que o banco recebe antes de você (e quem ganha com ele)",
+  "kind": "long",
+  "publish_at": "2026-11-13T18:00:00-03:00",
+  "pinned_comment": "Na sua opinião, a margem do consignado deveria cair para 30% ou ficar em 45%? Conta aqui por quê."
+ },
+ "ptd-ep12-short": {
+  "attempts": 1,
+  "status": "published",
+  "url": "https://youtu.be/m9LvjGzyFAg",
+  "by": "robo",
+  "visibility": "schedule",
+  "when": "2026-11-13T19:00:00-03:00",
+  "at": "2026-11-13T07:38:20.960885-03:00",
+  "error": null,
+  "channel_id": "UCd_BGmJ5gbQ0kECAxmbvQHA",
+  "title": "R$ 10 mil no consignado: por que você paga quase o dobro #shorts",
+  "kind": "short",
+  "publish_at": "2026-11-13T19:00:00-03:00",
+  "related_key": "ptd-ep12-long",
+  "pinned_comment": "Antes de pegar um empréstimo, você olha a parcela ou o valor total? Vídeo completo: Consignado: o empréstimo que o banco recebe antes de você (e quem ganha com ele)"
+ },
+ "ptd-rank10-short": {
+  "attempts": 1,
+  "status": "published",
+  "url": "https://youtu.be/Oor27ojVf6k",
+  "by": "robo",
+  "visibility": "schedule",
+  "when": "2026-11-14T12:00:00-03:00",
+  "at": "2026-11-13T07:41:23.054934-03:00",
+  "error": null,
+  "channel_id": "UCd_BGmJ5gbQ0kECAxmbvQHA",
+  "title": "Os 5 maiores picos da Selic desde 1999 (o nº 1 foi 45% ao ano) #shorts",
+  "kind": "short",
+  "publish_at": "2026-11-14T12:00:00-03:00",
+  "related_key": "ptd-ep12-long",
+  "pinned_comment": "Qual Selic você acha que a gente vai ver no fim de 2027: maior ou menor que hoje? Vídeo completo: Consignado: o empréstimo que o banco recebe antes de você (e quem ganha com ele)"
  }
 }
