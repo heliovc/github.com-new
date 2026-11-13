@@ -658,7 +658,9 @@
   "related_key": "cosmic-ep11-long",
   "pinned_comment": "Did you expect Everest to miss the top 5? Full video: What If Earth Had Rings Like Saturn? It May Have Had One 466 Million Years Ago",
   "comment_attempts": 1,
-  "comment_done": "2026-11-13T13:13:17.140863-03:00"
+  "comment_done": "2026-11-13T13:13:17.140863-03:00",
+  "related_attempts": 1,
+  "related_error": "Locator.wait_for: Timeout 90000ms exceeded.\nCall log:\n  - waiting for locator(\"#linked-video-editor-link\")\n (20261113-171629-erro-related-cosmic-rank10-short.png)"
  },
  "cosmic-ep11-long": {
   "attempts": 1,
@@ -673,7 +675,9 @@
   "title": "What If Earth Had Rings Like Saturn? It May Have Had One 466 Million Years Ago",
   "kind": "long",
   "publish_at": "2026-11-13T17:00:00-03:00",
-  "pinned_comment": "Where do you live, and how much of the rings would you see from there?"
+  "pinned_comment": "Where do you live, and how much of the rings would you see from there?",
+  "comment_attempts": 1,
+  "comment_error": "Page.goto: Timeout 60000ms exceeded.\nCall log:\n  - navigating to \"https://www.youtube.com/channel_switcher\", waiting until \"domcontentloaded\"\n (20261113-171930-erro-comment-cosmic-ep11-long.png)"
  },
  "cosmic-scale04-short": {
   "attempts": 1,
@@ -689,7 +693,9 @@
   "kind": "short",
   "publish_at": "2026-11-13T19:00:00-03:00",
   "related_key": "cosmic-ep11-long",
-  "pinned_comment": "Huge or tiny: which word fits Saturn's rings better? Full video: What If Earth Had Rings Like Saturn? It May Have Had One 466 Million Years Ago"
+  "pinned_comment": "Huge or tiny: which word fits Saturn's rings better? Full video: What If Earth Had Rings Like Saturn? It May Have Had One 466 Million Years Ago",
+  "related_attempts": 1,
+  "related_error": "Page.goto: Timeout 60000ms exceeded.\nCall log:\n  - navigating to \"https://studio.youtube.com/video/n38Th8sIi8g/edit\", waiting until \"domcontentloaded\"\n (20261113-172208-erro-related-cosmic-scale04-short.png)"
  },
  "cosmic-ep11-short": {
   "attempts": 1,
@@ -705,7 +711,9 @@
   "kind": "short",
   "publish_at": "2026-11-13T21:00:00-03:00",
   "related_key": "cosmic-ep11-long",
-  "pinned_comment": "From your city, would you see the rings? Full video: What If Earth Had Rings Like Saturn? It May Have Had One 466 Million Years Ago"
+  "pinned_comment": "From your city, would you see the rings? Full video: What If Earth Had Rings Like Saturn? It May Have Had One 466 Million Years Ago",
+  "related_attempts": 1,
+  "related_done": "2026-11-13T17:27:36.957484-03:00"
  },
  "ptd-ep12-long": {
   "attempts": 1,
