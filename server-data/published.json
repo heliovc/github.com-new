@@ -783,10 +783,10 @@
   "pinned_comment": "Did you know a button hover is just one CSS rule? Full tutorial: Build Your First Web Page in 15 Minutes (HTML + CSS)"
  },
  "quiet-ep04-long": {
-  "attempts": 2,
+  "attempts": 3,
   "status": "error",
   "error": "Page.goto: Timeout 60000ms exceeded.\nCall log:\n  - navigating to \"https://www.youtube.com/channel_switcher\", waiting until \"domcontentloaded\"\n",
-  "screenshot": "20261113-094341-erro-quiet-ep04-long.png",
-  "at": "2026-11-13T09:43:52.246253-03:00"
+  "screenshot": "20261113-095238-erro-quiet-ep04-long.png",
+  "at": "2026-11-13T09:53:39.797725-03:00"
  }
 }
