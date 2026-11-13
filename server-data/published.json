@@ -695,7 +695,9 @@
   "related_key": "cosmic-ep11-long",
   "pinned_comment": "Huge or tiny: which word fits Saturn's rings better? Full video: What If Earth Had Rings Like Saturn? It May Have Had One 466 Million Years Ago",
   "related_attempts": 2,
-  "related_done": "2026-11-13T17:33:14.950744-03:00"
+  "related_done": "2026-11-13T17:33:14.950744-03:00",
+  "comment_attempts": 1,
+  "comment_done": "2026-11-13T19:13:12.601235-03:00"
  },
  "cosmic-ep11-short": {
   "attempts": 1,
@@ -748,7 +750,9 @@
   "related_key": "ptd-ep12-long",
   "pinned_comment": "Antes de pegar um empréstimo, você olha a parcela ou o valor total? Vídeo completo: Consignado: o empréstimo que o banco recebe antes de você (e quem ganha com ele)",
   "related_attempts": 1,
-  "related_done": "2026-11-13T18:15:11.543367-03:00"
+  "related_done": "2026-11-13T18:15:11.543367-03:00",
+  "comment_attempts": 1,
+  "comment_done": "2026-11-13T19:15:51.325401-03:00"
  },
  "ptd-rank10-short": {
   "attempts": 1,
@@ -781,7 +785,9 @@
   "title": "Build Your First Web Page in 15 Minutes: HTML and CSS for Beginners",
   "kind": "long",
   "publish_at": "2026-11-13T19:00:00-03:00",
-  "pinned_comment": "What would you put on your first web page: a portfolio, a shop, or something else? Tell me below."
+  "pinned_comment": "What would you put on your first web page: a portfolio, a shop, or something else? Tell me below.",
+  "comment_attempts": 1,
+  "comment_done": "2026-11-13T19:18:12.736335-03:00"
  },
  "lab-ep09-short": {
   "attempts": 2,
@@ -798,7 +804,9 @@
   "kind": "short",
   "publish_at": "2026-11-13T20:30:00-03:00",
   "related_key": "lab-ep09-long",
-  "pinned_comment": "Did you know a button hover is just one CSS rule? Full tutorial: Build Your First Web Page in 15 Minutes (HTML + CSS)"
+  "pinned_comment": "Did you know a button hover is just one CSS rule? Full tutorial: Build Your First Web Page in 15 Minutes (HTML + CSS)",
+  "related_attempts": 1,
+  "related_done": "2026-11-13T19:19:57.238574-03:00"
  },
  "quiet-ep04-long": {
   "attempts": 3,
