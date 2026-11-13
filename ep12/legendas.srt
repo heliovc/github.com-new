@@ -1,0 +1,555 @@
+1
+00:00:00,150 --> 00:00:04,478
+Existe um empréstimo em que o banco quase não corre o risco de levar calote.
+
+2
+00:00:04,478 --> 00:00:06,871
+Porque ele recebe a parcela antes de você.
+
+3
+00:00:06,871 --> 00:00:11,542
+Antes de o salário ou a aposentadoria cair na sua conta, a parte do banco já saiu.
+
+4
+00:00:12,142 --> 00:00:13,790
+Esse é o crédito consignado.
+
+5
+00:00:13,790 --> 00:00:14,968
+E ele não é pequeno.
+
+6
+00:00:14,968 --> 00:00:25,390
+Segundo os dados do Banco Central, em março de dois mil e vinte e seis o saldo de todos os empréstimos consignados do país chegava a quase setecentos e setenta bilhões de reais.
+
+7
+00:00:25,990 --> 00:00:29,785
+É o empréstimo mais barato que uma pessoa comum consegue no Brasil.
+
+8
+00:00:29,785 --> 00:00:37,941
+E, ao mesmo tempo, é o crédito que o governo tentou frear este ano, e que milhões de aposentados reclamam de receber por telefone todos os dias.
+
+9
+00:00:37,941 --> 00:00:41,170
+Como uma coisa pode ser barata e perigosa ao mesmo tempo?
+
+10
+00:00:41,170 --> 00:00:42,416
+E quem ganha com isso?
+
+11
+00:00:43,016 --> 00:00:46,408
+Para responder, a gente vai ler esse contrato como ele merece.
+
+12
+00:00:46,408 --> 00:00:47,612
+Cláusula por cláusula.
+
+13
+00:00:47,612 --> 00:00:48,159
+São cinco.
+
+14
+00:00:48,159 --> 00:00:49,800
+E a quinta é a que ninguém lê.
+
+15
+00:00:50,400 --> 00:00:51,470
+Cláusula primeira.
+
+16
+00:00:51,470 --> 00:00:52,124
+A garantia.
+
+17
+00:00:52,124 --> 00:00:55,394
+Todo empréstimo tem um medo: o de não receber de volta.
+
+18
+00:00:55,394 --> 00:00:58,486
+O consignado resolveu esse medo de um jeito simples.
+
+19
+00:00:59,086 --> 00:00:59,943
+Funciona assim.
+
+20
+00:00:59,943 --> 00:01:01,257
+Você pede o empréstimo.
+
+21
+00:01:01,257 --> 00:01:07,199
+O banco avisa quem paga o seu salário ou o seu benefício: pode ser a empresa, o órgão público ou o INSS.
+
+22
+00:01:07,199 --> 00:01:10,799
+E todo mês a parcela é descontada na folha, antes do pagamento.
+
+23
+00:01:10,799 --> 00:01:13,713
+O banco não precisa cobrar, mandar boleto ou ligar.
+
+24
+00:01:13,713 --> 00:01:15,427
+O dinheiro simplesmente chega.
+
+25
+00:01:16,027 --> 00:01:25,362
+Essa ideia virou lei no fim de dois mil e três, com a Lei dez mil oitocentos e vinte, e ganhou força a partir de dois mil e quatro, quando chegou aos aposentados e pensionistas do INSS.
+
+26
+00:01:25,362 --> 00:01:37,019
+Um estudo do próprio Banco Central mostra o tamanho da explosão: em pouco mais de onze anos, até dois mil e dezoito, o saldo saiu de cinquenta e três vírgula sete bilhões para trezentos e vinte e três vírgula oito bilhões de reais.
+
+27
+00:01:37,619 --> 00:01:46,394
+No mesmo estudo, o Banco Central mostra que, desde dois mil e sete, o consignado sempre foi pelo menos sessenta por cento de todo o crédito pessoal do país.
+
+28
+00:01:46,394 --> 00:01:53,875
+Ou seja: quando um brasileiro pega dinheiro emprestado sem dar um carro ou uma casa como garantia, na maioria das vezes é consignado.
+
+29
+00:01:54,475 --> 00:01:55,489
+Cláusula segunda.
+
+30
+00:01:55,489 --> 00:01:55,967
+O preço.
+
+31
+00:01:55,967 --> 00:01:59,309
+Se o banco quase não corre risco, ele pode cobrar menos.
+
+32
+00:01:59,309 --> 00:01:59,787
+E cobra.
+
+33
+00:02:00,387 --> 00:02:02,738
+No consignado do INSS existe até um teto.
+
+34
+00:02:02,738 --> 00:02:05,948
+Quem define é o Conselho Nacional de Previdência Social.
+
+35
+00:02:05,948 --> 00:02:11,624
+Desde março de dois mil e vinte e cinco, o limite é de um vírgula oitenta e cinco por cento ao mês.
+
+36
+00:02:11,624 --> 00:02:14,893
+Isso dá uns vinte e quatro vírgula seis por cento ao ano.
+
+37
+00:02:14,893 --> 00:02:24,296
+E a média que o Banco Central mede para o consignado do INSS ficou bem perto disso: vinte e quatro vírgula um por cento ao ano em agosto de dois mil e vinte e seis.
+
+38
+00:02:24,896 --> 00:02:29,146
+Agora compare com o empréstimo pessoal comum, aquele sem desconto em folha.
+
+39
+00:02:29,146 --> 00:02:35,607
+A média do Banco Central foi de seis vírgula quarenta e dois por cento ao mês em julho de dois mil e vinte e seis.
+
+40
+00:02:35,607 --> 00:02:37,704
+Mais de cento e dez por cento ao ano.
+
+41
+00:02:37,704 --> 00:02:40,085
+Quatro vezes e meia o preço do consignado.
+
+42
+00:02:40,685 --> 00:02:43,499
+Só que barato por mês não quer dizer barato no total.
+
+43
+00:02:43,499 --> 00:02:45,889
+Vamos a uma conta, que é um exemplo do canal.
+
+44
+00:02:45,889 --> 00:02:51,464
+Dez mil reais no consignado, a um vírgula oitenta e cinco por cento ao mês, em oitenta e quatro parcelas.
+
+45
+00:02:51,464 --> 00:02:54,332
+A parcela fica em uns duzentos e trinta e cinco reais.
+
+46
+00:02:54,332 --> 00:02:54,969
+Parece leve.
+
+47
+00:02:54,969 --> 00:02:58,314
+Mas, no fim de sete anos, você terá pago quase vinte mil reais.
+
+48
+00:02:58,314 --> 00:03:00,120
+Praticamente o dobro do que pegou.
+
+49
+00:03:00,719 --> 00:03:01,966
+E aqui vem a surpresa.
+
+50
+00:03:01,966 --> 00:03:12,727
+Os mesmos dez mil reais no empréstimo pessoal comum, a seis vírgula quarenta e dois por cento ao mês, pagos em só dois anos, custariam um total parecido: uns dezenove mil e novecentos reais.
+
+51
+00:03:12,727 --> 00:03:15,106
+O juro do consignado é quatro vezes menor.
+
+52
+00:03:15,106 --> 00:03:18,618
+Mas o prazo longo devolve boa parte da diferença para o banco.
+
+53
+00:03:19,218 --> 00:03:20,965
+Não é que os dois sejam iguais.
+
+54
+00:03:20,965 --> 00:03:25,978
+A parcela do consignado é muito menor, e isso faz diferença para quem tem renda apertada.
+
+55
+00:03:25,978 --> 00:03:29,640
+O ponto é outro: o consignado é barato por mês e caro pelo tempo.
+
+56
+00:03:29,640 --> 00:03:33,639
+E tempo, para um aposentado, é exatamente o que ele está comprometendo.
+
+57
+00:03:34,240 --> 00:03:35,328
+Cláusula terceira.
+
+58
+00:03:35,328 --> 00:03:35,873
+A margem.
+
+59
+00:03:35,873 --> 00:03:41,015
+Se a parcela sai antes de o dinheiro chegar, alguém precisa limitar quanto pode sair.
+
+60
+00:03:41,015 --> 00:03:43,434
+Esse limite se chama margem consignável.
+
+61
+00:03:44,034 --> 00:03:49,588
+Para os aposentados e pensionistas do INSS, a regra soma quarenta e cinco por cento do benefício.
+
+62
+00:03:49,588 --> 00:03:51,993
+Trinta e cinco por cento para empréstimos.
+
+63
+00:03:51,993 --> 00:03:54,971
+Cinco por cento para o cartão de crédito consignado.
+
+64
+00:03:54,971 --> 00:03:58,349
+E mais cinco para o chamado cartão consignado de benefício.
+
+65
+00:03:58,949 --> 00:04:02,474
+Pense no que isso significa para quem ganha um salário mínimo.
+
+66
+00:04:02,474 --> 00:04:06,624
+Quase metade do benefício pode estar comprometida antes de o mês começar.
+
+67
+00:04:06,624 --> 00:04:11,173
+E o desconto não para se aparecer um remédio caro ou uma conta de luz mais alta.
+
+68
+00:04:11,773 --> 00:04:15,237
+Em maio de dois mil e vinte e seis, o governo tentou mexer nisso.
+
+69
+00:04:15,237 --> 00:04:26,057
+Uma medida provisória, a mil trezentos e cinquenta e cinco, baixou a margem total para quarenta por cento, e previa cortes de dois pontos por ano, até chegar a trinta por cento em dois mil e trinta e um.
+
+70
+00:04:26,057 --> 00:04:29,202
+Junto vieram mais travas, como a confirmação por biometria.
+
+71
+00:04:29,802 --> 00:04:31,292
+O efeito apareceu rápido.
+
+72
+00:04:31,292 --> 00:04:42,794
+Segundo dados do Banco Central divulgados pela imprensa, as novas concessões de consignado do INSS caíram de seis vírgula cinco bilhões de reais em março para três vírgula sete bilhões em maio.
+
+73
+00:04:43,394 --> 00:04:48,983
+Mas a medida provisória não foi votada a tempo pelo Congresso e perdeu a validade no início de setembro.
+
+74
+00:04:48,983 --> 00:04:52,101
+Resultado: a margem voltou aos quarenta e cinco por cento.
+
+75
+00:04:52,101 --> 00:04:57,529
+Enquanto isso, o Tribunal de Contas da União mandou suspender a emissão de novos cartões consignados.
+
+76
+00:04:57,529 --> 00:04:59,732
+A regra mudou duas vezes em quatro meses.
+
+77
+00:04:59,732 --> 00:05:01,506
+Para quem empresta, isso é risco.
+
+78
+00:05:01,506 --> 00:05:02,957
+Para quem toma, é confusão.
+
+79
+00:05:03,557 --> 00:05:04,504
+Cláusula quarta.
+
+80
+00:05:04,504 --> 00:05:05,155
+O vendedor.
+
+81
+00:05:05,155 --> 00:05:09,830
+Um produto com risco baixo e lucro garantido atrai muita gente querendo vender.
+
+82
+00:05:09,830 --> 00:05:12,197
+E é aí que o consignado fica barulhento.
+
+83
+00:05:12,797 --> 00:05:15,969
+Boa parte dos consignados não é vendida dentro do banco.
+
+84
+00:05:15,969 --> 00:05:24,466
+É vendida por correspondentes bancários: empresas e promotoras que oferecem o crédito em nome dos bancos, por telefone, em lojas ou de porta em porta.
+
+85
+00:05:24,466 --> 00:05:27,469
+E elas costumam ganhar comissão por contrato fechado.
+
+86
+00:05:27,469 --> 00:05:29,565
+Quanto mais contratos, mais comissão.
+
+87
+00:05:30,165 --> 00:05:37,251
+Esse incentivo explica o assédio que muitos aposentados conhecem: ligações em série, logo depois de o benefício ser concedido.
+
+88
+00:05:37,251 --> 00:05:41,470
+A própria Febraban, a federação dos bancos, criou regras de autorregulação.
+
+89
+00:05:41,470 --> 00:05:47,994
+E, até novembro de dois mil e vinte e cinco, aplicou mil novecentas e oitenta e três medidas contra correspondentes.
+
+90
+00:05:47,994 --> 00:05:50,581
+Cento e treze foram proibidos de atuar de vez.
+
+91
+00:05:51,181 --> 00:05:53,608
+Repare que a própria punição é um termômetro.
+
+92
+00:05:53,608 --> 00:05:57,438
+Quase duas mil medidas significam que o problema não é um caso isolado.
+
+93
+00:05:57,438 --> 00:06:07,202
+É uma consequência do desenho: quando a venda é paga por volume, e o cliente mais disputado é justamente o que tem renda garantida, a pressão vai para cima de quem tem menos defesa.
+
+94
+00:06:07,802 --> 00:06:08,678
+Cláusula quinta.
+
+95
+00:06:08,678 --> 00:06:09,608
+A que ninguém lê.
+
+96
+00:06:09,608 --> 00:06:10,210
+Quem ganha.
+
+97
+00:06:10,210 --> 00:06:14,970
+E aqui volta a pergunta do começo: para onde vão os quase setecentos e setenta bilhões?
+
+98
+00:06:15,570 --> 00:06:16,686
+Primeiro, quem toma.
+
+99
+00:06:16,686 --> 00:06:25,948
+Pelos dados do Banco Central em março de dois mil e vinte e seis, os servidores públicos respondiam por trezentos e oitenta e quatro bilhões de reais, metade de tudo.
+
+100
+00:06:25,948 --> 00:06:30,691
+Os aposentados e pensionistas do INSS, por quase duzentos e oitenta e quatro bilhões.
+
+101
+00:06:30,691 --> 00:06:34,429
+E os trabalhadores do setor privado, por pouco mais de cem bilhões.
+
+102
+00:06:35,029 --> 00:06:37,083
+Essa última fatia é a que mais cresce.
+
+103
+00:06:37,083 --> 00:06:47,083
+Em março de dois mil e vinte e cinco, o governo lançou o Crédito do Trabalhador, que levou o consignado para quem tem carteira assinada, pelo aplicativo da Carteira de Trabalho Digital.
+
+104
+00:06:47,083 --> 00:06:54,975
+No primeiro ano, segundo o balanço oficial, foram mais de cento e dezessete bilhões de reais emprestados em quase vinte e um milhões de contratos.
+
+105
+00:06:55,575 --> 00:06:59,543
+Mas o consignado do trabalhador privado é mais caro que o do aposentado.
+
+106
+00:06:59,543 --> 00:07:06,707
+A taxa média divulgada pelo Ministério do Trabalho no início de dois mil e vinte e seis era de três vírgula dois por cento ao mês.
+
+107
+00:07:06,707 --> 00:07:07,148
+Por quê?
+
+108
+00:07:07,148 --> 00:07:08,746
+Porque o emprego pode acabar.
+
+109
+00:07:08,746 --> 00:07:09,903
+A aposentadoria, não.
+
+110
+00:07:09,903 --> 00:07:13,154
+Para o banco, o aposentado é o devedor mais seguro do país.
+
+111
+00:07:13,754 --> 00:07:15,871
+E do outro lado da mesa, quem empresta?
+
+112
+00:07:15,871 --> 00:07:16,848
+Os grandes bancos.
+
+113
+00:07:16,848 --> 00:07:25,369
+Segundo um levantamento do Bank of America, de dois mil e vinte e seis, o Itaú lidera as concessões de consignado, com cerca de dezoito por cento do mercado.
+
+114
+00:07:25,369 --> 00:07:27,758
+O Banco do Brasil vem em seguida, com treze.
+
+115
+00:07:27,758 --> 00:07:29,711
+E o Bradesco tem uns seis por cento.
+
+116
+00:07:30,312 --> 00:07:32,516
+Juro menor do que no crédito comum, sim.
+
+117
+00:07:32,516 --> 00:07:38,083
+Mas sobre uma carteira gigante, com prazos de muitos anos e calote baixo, porque a parcela sai antes.
+
+118
+00:07:38,083 --> 00:07:42,493
+É um lucro menos vistoso que o do rotativo do cartão, mas muito mais previsível.
+
+119
+00:07:42,493 --> 00:07:44,477
+Para um banco, previsível vale ouro.
+
+120
+00:07:45,077 --> 00:07:47,961
+Fechadas as cinco cláusulas, vamos à letra miúda.
+
+121
+00:07:47,961 --> 00:07:49,079
+A análise do canal.
+
+122
+00:07:49,079 --> 00:07:51,903
+Por que o crédito mais barato pode ser perigoso?
+
+123
+00:07:52,504 --> 00:07:55,710
+Primeiro: porque o consignado inverte quem tem prioridade.
+
+124
+00:07:55,710 --> 00:07:59,469
+Num empréstimo comum, você decide no fim do mês o que paga primeiro.
+
+125
+00:07:59,469 --> 00:08:01,846
+No consignado, o banco já decidiu por você.
+
+126
+00:08:01,846 --> 00:08:03,615
+Isso é ótimo para baixar o juro.
+
+127
+00:08:03,615 --> 00:08:08,866
+E péssimo quando a vida aperta, porque a parcela é a única conta que você não consegue atrasar.
+
+128
+00:08:09,466 --> 00:08:13,331
+Segundo: porque a margem é a renda do futuro sendo vendida no presente.
+
+129
+00:08:13,331 --> 00:08:16,923
+Quarenta e cinco por cento de margem não é um limite de segurança.
+
+130
+00:08:16,923 --> 00:08:18,066
+É o máximo permitido.
+
+131
+00:08:18,066 --> 00:08:22,474
+E terceiro: porque a mesma regra que protege o banco atrai quem vende por volume.
+
+132
+00:08:22,474 --> 00:08:28,026
+Por isso o governo, o TCU e a própria Febraban passaram os últimos anos tentando apertar esse mercado.
+
+133
+00:08:28,626 --> 00:08:35,518
+Uma dica prática, que vale para qualquer crédito: antes de assinar, olhe o valor total que você vai pagar, e não só a parcela.
+
+134
+00:08:35,518 --> 00:08:40,824
+Se você é aposentado do INSS, dá para consultar todos os seus empréstimos no extrato do Meu INSS.
+
+135
+00:08:40,824 --> 00:08:45,309
+E nunca passe dados ou faça biometria por causa de uma ligação que você não pediu.
+
+136
+00:08:45,909 --> 00:08:49,300
+Este vídeo é informativo e não é recomendação financeira.
+
+137
+00:08:49,300 --> 00:08:53,525
+É só a leitura do contrato, para você entender como o dinheiro se move.
+
+138
+00:08:54,125 --> 00:09:03,518
+E já que falamos dos bancos que ganham com o crédito, no próximo episódio vamos falar de quem prometeu acabar com as tarifas e virou um dos maiores bancos do país: o Nubank.
+
+139
+00:09:03,518 --> 00:09:07,970
+Como um banco sem agência e sem tarifa ganha dinheiro, e de onde vem o lucro dele.

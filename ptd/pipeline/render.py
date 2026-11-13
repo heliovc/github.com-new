@@ -772,7 +772,49 @@ def sc_dossier(img, v, t, dur):
     if v.get("sub"): alpha_text(img, (x, 450 + len(lines) * 110 + 20), v["sub"], F(44, "SemiBold"), KRAFT, a3, anchor="lm")
     if v.get("caption"): dr.text((W / 2, H - 50), v["caption"], font=F(28, "Medium"), fill=DIM, anchor="mm")
 
-SC = {"round": sc_round, "ticker": sc_ticker, "scoreboard": sc_scoreboard, "title": sc_title, "bignumber": sc_bignumber, "flow": sc_flow, "split": sc_split, "bullets": sc_bullets,
+def sc_clause(img, v, t, dur):
+    """Criado no EP12: abertura de cláusula de um contrato. n (nº da cláusula), label, title, sub, mark (frase marcada no contrato).
+    Folha de contrato entra de baixo, linhas de letra miúda aparecem, marca-texto amarelo passa sobre a frase-chave; título à direita."""
+    dr = ImageDraw.Draw(img)
+    PAPER, INK, INK2, HL, NAVY = (244, 242, 236), (30, 36, 52), (150, 154, 166), (255, 222, 70), (60, 120, 220)
+    p = ease((t - 0.05) / 0.7)
+    px, py, pw, ph = 140, lerp(H + 40, 170, p), 600, 760
+    lay = Image.new("RGBA", img.size, (0, 0, 0, 0)); d2 = ImageDraw.Draw(lay)
+    d2.rounded_rectangle([px + 14, py + 14, px + pw + 14, py + ph + 14], 10, fill=(0, 0, 0, 90))       # sombra
+    d2.rounded_rectangle([px, py, px + pw, py + ph], 10, fill=PAPER)
+    d2.text((px + pw / 2, py + 52), v.get("doc", "CONTRATO DE CRÉDITO CONSIGNADO"), font=F(26, "Black"), fill=INK, anchor="mm")
+    d2.line([(px + 40, py + 86), (px + pw - 40, py + 86)], fill=INK2, width=2)
+    d2.text((px + 40, py + 140), f"CLÁUSULA {v['n']}ª", font=F(40, "Black"), fill=NAVY, anchor="lm")
+    d2.text((px + 40, py + 190), v.get("label", ""), font=F(30, "Bold"), fill=INK, anchor="lm")
+    # letra miúda: linhas cinza; a 4ª linha é a frase marcada
+    mark = v.get("mark", "")
+    for j in range(11):
+        yy = py + 250 + j * 42
+        k = ease((t - 0.5 - j * 0.04) / 0.3)
+        if k <= 0: continue
+        if j == 3 and mark:
+            hw = ease((t - 1.0) / 0.6)
+            fs = 28
+            while F(fs, "Bold").getlength(mark) > pw - 100 and fs > 18: fs -= 1
+            fm = F(fs, "Bold"); tw = min(pw - 70, fm.getlength(mark) + 16)
+            if hw > 0: d2.rectangle([px + 34, yy - 18, px + 34 + tw * hw, yy + 18], fill=HL + (235,))
+            d2.text((px + 42, yy), mark, font=fm, fill=INK, anchor="lm")
+        else:
+            ww = pw - 80 - (j * 37 % 120)
+            d2.line([(px + 40, yy), (px + 40 + ww * k, yy)], fill=INK2, width=6)
+    d2.line([(px + pw - 260, py + ph - 70), (px + pw - 40, py + ph - 70)], fill=INK, width=2)
+    d2.text((px + pw - 150, py + ph - 44), "assinatura", font=F(20, "Medium"), fill=INK2, anchor="mm")
+    img.alpha_composite(lay)
+    a1 = ease((t - 0.5) / 0.5); a2 = ease((t - 0.8) / 0.5); a3 = ease((t - 1.1) / 0.5)
+    x = 860
+    alpha_text(img, (x, 330), f"CLÁUSULA {v['n']}  ·  {v.get('label', '')}", F(54, "Black"), HL, a1, anchor="lm", dy=(1 - a1) * 30)
+    lines = v["title"].split("\n")
+    for i, l in enumerate(lines):
+        alpha_text(img, (x, 450 + i * 110), l, F(100, "ExtraBold"), WHITE, a2, anchor="lm", dy=(1 - a2) * 30)
+    if v.get("sub"): alpha_text(img, (x, 450 + len(lines) * 110 + 20), v["sub"], F(44, "SemiBold"), (150, 190, 255), a3, anchor="lm")
+    if v.get("caption"): dr.text((W / 2, H - 50), v["caption"], font=F(28, "Medium"), fill=DIM, anchor="mm")
+
+SC = {"clause": sc_clause, "round": sc_round, "ticker": sc_ticker, "scoreboard": sc_scoreboard, "title": sc_title, "bignumber": sc_bignumber, "flow": sc_flow, "split": sc_split, "bullets": sc_bullets,
       "bars": sc_bars, "compare": sc_compare, "timeline": sc_timeline, "cards": sc_cards, "line": sc_line,
       "receipt": sc_receipt, "stack": sc_stack, "journey": sc_journey, "calendar": sc_calendar, "obit": sc_obit, "race": sc_race, "act": sc_act, "ledger": sc_ledger, "blackbox": sc_blackbox, "flight": sc_flight, "court": sc_court, "dossier": sc_dossier}
 

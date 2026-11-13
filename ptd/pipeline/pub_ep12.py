@@ -1,0 +1,64 @@
+# Gera o publish.json do EP12 (longo 18:00 e Short do episódio 19:00 em 13/11; ranking #10 12:00 em 14/11,
+# porque o horário de 12:00 de 13/11 já estava com o ranking #9)
+import json, sys
+durs = json.load(open(sys.argv[1]))
+def ts(i):
+    s = int(sum(durs[:i])); return f"{s//60}:{s%60:02d}"
+caps = [(0, "Gancho: o empréstimo que o banco recebe antes"), (4, "Cláusula 1: a garantia — desconto na fonte"),
+        (8, "Cláusula 2: o preço — 1,85% x 6,42% ao mês"), (11, "A conta dos R$ 10 mil"),
+        (14, "Cláusula 3: a margem — 45% do benefício"), (17, "A MP que baixou a margem (e caiu)"),
+        (20, "Cláusula 4: o vendedor — correspondentes"), (24, "Cláusula 5: quem ganha"),
+        (26, "Crédito do Trabalhador: R$ 117 bi"), (28, "Os bancos do consignado"),
+        (30, "A letra miúda: análise"), (33, "Antes de assinar"), (35, "Próximo episódio")]
+chap = "\n".join(f"{ts(i)} {t}" for i, t in caps)
+LONG_TITLE = "Consignado: o empréstimo que o banco recebe antes de você (e quem ganha com ele)"
+desc = f"""O crédito consignado é o empréstimo mais barato para pessoa física no Brasil, e somava quase R$ 770 bilhões em março de 2026. O segredo: a parcela sai da folha de pagamento ou do benefício do INSS antes de o dinheiro chegar à sua conta. Neste episódio, o contrato é lido em cinco cláusulas: a garantia, o preço, a margem, o vendedor e quem ganha. E a pergunta: se é o crédito mais barato, por que pode ser perigoso?
+
+Capítulos
+{chap}
+
+Fontes
+- Banco Central (séries de crédito), via estudo técnico da FACIAP (mai/2026): saldo do consignado de R$ 769,98 bi em mar/2026 — servidores públicos R$ 384,48 bi, INSS R$ 283,91 bi, setor privado R$ 101,59 bi
+- Banco Central, estudo sobre o empréstimo consignado (dados até jun/2018): saldo de R$ 53,7 bi para R$ 323,8 bi em pouco mais de 11 anos; consignado sempre acima de 60% do crédito pessoal desde mar/2007 (75% em jun/2018)
+- Lei 10.820, de 17/12/2003 (com alterações da Lei 10.953/2004 e da Lei 15.179/2025)
+- CNPS (mar/2025): teto de 1,85% ao mês no empréstimo consignado do INSS; STF manteve a competência do INSS/CNPS para fixar o teto (ago/2026)
+- Banco Central (taxas médias): consignado INSS 24,12% ao ano (ago/2026); crédito pessoal não consignado 6,42% ao mês, cerca de 111% ao ano (jul/2026)
+- Regra da margem do INSS (35% empréstimos + 5% cartão consignado + 5% cartão consignado de benefício), via Contábeis e Correio da Manhã (set/2026)
+- MP 1.355/2026 (em vigor desde 19/05/2026): margem de 40% e redução gradual até 30% em 2031; perdeu a eficácia no início de set/2026 (Congresso Nacional), e a margem voltou a 45%
+- TCU, Acórdão 1.094/2026: suspensão cautelar de novas emissões de cartão consignado e cartão consignado de benefício
+- Banco Central, via NC News (jul/2026): concessões do consignado INSS de R$ 6,5 bi (mar/2026), R$ 5,0 bi (abr) e R$ 3,7 bi (mai)
+- Febraban, autorregulação do consignado: 1.983 medidas administrativas contra correspondentes e 113 impedidos de atuar em definitivo (até nov/2025)
+- Crédito do Trabalhador, balanço de 1 ano (mar/2026), via Meu Tudo e Let's Money: R$ 117,1 bi liberados e 20.942.414 contratos; Ministério do Trabalho (início de 2026): taxa média de 3,2% ao mês
+- Bank of America (2026), via CB Insights e Seu Dinheiro: participação nas concessões de consignado — Itaú cerca de 18%, Banco do Brasil 13%, Bradesco cerca de 6%
+- O contracheque e a simulação de R$ 10 mil (84 parcelas a 1,85% ao mês x 24 parcelas a 6,42% ao mês, tabela Price, sem tarifas e seguros) são exemplos ilustrativos e cálculos do canal.
+
+Este vídeo é informativo e não é recomendação financeira. Narração com voz sintética; roteiro, pesquisa e visual próprios. "Análise" na tela = interpretação do canal.
+
+#consignado #inss #juros #financas #portrasdodinheiro"""
+tags = ["consignado", "emprestimo consignado", "consignado inss", "credito do trabalhador", "consignado clt", "margem consignavel",
+        "juros", "aposentados", "bancos", "banco central", "teto de juros", "economia", "financas", "educacao financeira", "por tras do dinheiro"]
+SH_TITLE = "R$ 10 mil no consignado: por que você paga quase o dobro #shorts"
+RK_TITLE = "Os 5 maiores picos da Selic desde 1999 (o nº 1 foi 45% ao ano) #shorts"
+data = {"version": 1, "channel_id": "UCd_BGmJ5gbQ0kECAxmbvQHA", "created_at": sys.argv[3], "items": [
+  {"key": "ptd-ep12-long", "kind": "long", "video": "video.mp4", "title": LONG_TITLE, "description": desc, "tags": tags,
+   "thumbnail": "thumbnail.jpg", "captions": "legendas.srt", "publish_at": "2026-11-13T18:00:00-03:00", "if_late": "public_now",
+   "made_for_kids": False, "altered_content": True,
+   "pinned_comment": "Na sua opinião, a margem do consignado deveria cair para 30% ou ficar em 45%? Conta aqui por quê."},
+  {"key": "ptd-ep12-short", "kind": "short", "video": "vertical.mp4", "title": SH_TITLE,
+   "description": "O consignado do INSS tem teto de 1,85% ao mês (CNPS), o juro mais baixo para pessoa física. Mas R$ 10 mil em 84 parcelas somam quase R$ 19,8 mil no fim — praticamente o mesmo total de um empréstimo pessoal comum (média de 6,42% ao mês, Banco Central, jul/2026) pago em 24 parcelas. Simulação ilustrativa do canal (tabela Price, sem tarifas). Vídeo completo no canal: \"" + LONG_TITLE + "\". Este vídeo é informativo e não é recomendação financeira. Voz sintética.\n#shorts #consignado #juros #inss",
+   "tags": ["consignado", "juros", "inss", "emprestimo", "shorts", "por tras do dinheiro"],
+   "publish_at": "2026-11-13T19:00:00-03:00", "if_late": "public_now", "made_for_kids": False, "altered_content": True,
+   "related_key": "ptd-ep12-long",
+   "pinned_comment": "Antes de pegar um empréstimo, você olha a parcela ou o valor total? Vídeo completo: " + LONG_TITLE},
+  {"key": "ptd-rank10-short", "kind": "short", "video": "ranking.mp4", "title": RK_TITLE,
+   "description": "Os 5 maiores picos da taxa Selic desde o regime de metas de inflação (1999), pelo topo de cada ciclo de alta da meta definida pelo Copom: 5) 14,25% (jul/2015); 4) 15% (jun/2025); 3) 19,75% (mai/2005); 2) 26,5% (fev/2003); 1) 45% (mar/1999). Hoje a Selic está em 13,75% (Copom, 04/11/2026). Fontes: Banco Central (histórico das metas do Copom), via bpmoney, InvestNews, DadosDeMercado e Jovem Pan. Este vídeo é informativo e não é recomendação financeira. Voz sintética.\n#shorts #selic #juros #copom #financas",
+   "tags": ["selic", "taxa selic", "juros", "copom", "banco central", "historia da selic", "shorts", "por tras do dinheiro"],
+   "publish_at": "2026-11-14T12:00:00-03:00", "if_late": "public_now", "made_for_kids": False, "altered_content": True,
+   "related_key": "ptd-ep12-long",
+   "pinned_comment": "Qual Selic você acha que a gente vai ver no fim de 2027: maior ou menor que hoje? Vídeo completo: " + LONG_TITLE},
+]}
+for it in data["items"]:
+    assert len(it["title"]) <= 100 and len(it["description"]) <= 5000, it["key"]
+    assert "<" not in it["title"] + it["description"] and ">" not in it["title"] + it["description"]
+json.dump(data, open(sys.argv[2], "w"), ensure_ascii=False, indent=1)
+print(chap); print("total", round(sum(durs)), "s")
