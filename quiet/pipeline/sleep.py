@@ -10,7 +10,9 @@ Env: VOICE (default bm_george), SPEED (default 0.80)
 
 Identity (keep distinct from the other channels): warm candle/moonlight palette, Lora serif, no captions on screen,
 slow loops, quiet mix (-19 LUFS), long ambient tail. Each episode may override PALETTE and pick scene types.
-Scene types: city, road, temple, interior, sea, hills, cloister (EP02), nile (EP03).
+Scene types: city, road, temple, interior, sea, hills, cloister (EP02), nile (EP03),
+  longhouse / hearth / fjord (EP04: snowy turf longhouse with rising smoke, long-hearth interior with live flames,
+  fjord with animated aurora; new "snow" particles; palette key "snow").
 """
 import sys, os, re, math, json, hashlib, subprocess, importlib.util, random
 import numpy as np
@@ -132,6 +134,18 @@ def aqueduct(lay, y_top, height, col, x0=0, x1=W, span=110, tiers=2):
             d.pieslice([x, top, x + aw, top + aw], 180, 360, fill=(0, 0, 0, 0))
             x += sp
 
+
+def mountains(y_base, amp, seed, col, snowcol, x0=0, x1=W, base=3, snow_thr=0.45):
+    """Jagged snow-capped ridge between x0..x1: returns RGBA layer."""
+    n = noise1d(W + 1, seed, 5, base); n = (n - n.min()) / max(1e-6, n.max() - n.min())
+    lay = Image.new("RGBA", (W, H), (0, 0, 0, 0)); d = ImageDraw.Draw(lay)
+    xs = list(range(int(x0), int(x1) + 1, 4)); top = [y_base - n[min(W, x)] * amp for x in xs]
+    d.polygon(list(zip(xs, top)) + [(x1, H), (x0, H)], fill=col + (255,))
+    lim = y_base - amp * snow_thr
+    low = [t + max(0.0, (lim - t)) * 0.55 + 4 for t in top]
+    d.polygon(list(zip(xs, top)) + list(zip(xs[::-1], low[::-1])), fill=snowcol + (255,))
+    return lay
+
 # ---------------------------------------------------------------- scenes
 class Scene:
     """Static layers + animated parts, all periodic in LOOP_S so loops are seamless."""
@@ -139,6 +153,7 @@ class Scene:
         self.kind, self.p, self.rng = kind, p, np.random.default_rng(seed)
         self.windows, self.stars_tw, self.lamp, self.reflect = [], [], None, None
         self.particles = "embers"; self.fog_y = 0.72 * H; self.fog_a = 0.22
+        self.smoke, self.fires, self.aurora = None, [], None
         getattr(self, "build_" + kind)()
         self.prepare()
 
@@ -390,6 +405,140 @@ class Scene:
         mx, my, mr = self.moon; self.reflect = (mx, hy + 6, mr)
         self.fog_y = hy + 10; self.fog_a = 0.12; self.particles = "fireflies"
 
+
+    def build_fjord(self):
+        """EP04: steep snow-capped walls of a fjord, still black water with mirrored peaks, aurora curtains overhead."""
+        p, rng = self.p, self.rng; hy = int(H * 0.6); sn = p.get("snow", (180, 192, 212))
+        self.back = self.sky(hy, (0.8, 0.14), 34)
+        water = Image.new("RGBA", (W, H), (0, 0, 0, 0)); dw = ImageDraw.Draw(water)
+        for y in range(hy, H):
+            f = (y - hy) / (H - hy); dw.line([(0, y), (W, y)], fill=mix(mix(p["sea"], p["horizon"], 0.25), p["sea"], f ** 0.5) + (255,))
+        self.back.alpha_composite(water)
+        m = Image.new("RGBA", (W, H), (0, 0, 0, 0))
+        far = mountains(hy + 2, 150, int(rng.integers(1e6)), mix(p["far"], p["horizon"], 0.35), mix(sn, p["horizon"], 0.45), W * 0.25, W * 0.78, 3)
+        fa = np.array(far); fa[hy + 3:, :, 3] = 0; m.alpha_composite(Image.fromarray(fa, "RGBA"))
+        def wall(side, height, seed, col, scol, reach):
+            n = noise1d(W + 1, seed, 5, 5); xs = np.arange(0, W + 1, 4)
+            u = np.clip((xs if side < 0 else W - xs) / (W * reach), 0, 1)              # 0 at the frame edge -> 1 at the water
+            top = hy - height * (1 - u) ** 0.9 - 26 * n[xs] * (1 - u)
+            ok = u < 1; xs, top = xs[ok], top[ok]
+            pts = list(zip(xs.tolist(), top.tolist())); edge = (xs[-1] if side < 0 else xs[0])
+            lay = Image.new("RGBA", (W, H), (0, 0, 0, 0)); d = ImageDraw.Draw(lay)
+            poly = pts + ([(edge + 30, hy + 4), (0, hy + 4)] if side < 0 else [(W, hy + 4), (edge - 30, hy + 4)])
+            d.polygon(poly, fill=col + (255,))
+            lim = hy - height * 0.42; low = [t + max(0.0, lim - t) * 0.5 + 6 for t in top.tolist()]
+            d.polygon(pts + list(zip(xs.tolist()[::-1], low[::-1])), fill=scol + (255,))
+            for k in range(9):                                                           # a few snow gullies down the face
+                x = float(rng.uniform(xs.min(), xs.max())); i = int(np.argmin(abs(xs - x))); y = top[i]
+                d.line([(x, y + 6), (x + side * -rng.uniform(4, 16), y + rng.uniform(40, 90))], fill=mix(scol, col, 0.7) + (255,), width=2)
+            return lay
+        m.alpha_composite(wall(-1, 470, int(rng.integers(1e6)), mix(p["far"], p["mid"], 0.45), mix(sn, p["far"], 0.32), 0.47))
+        m.alpha_composite(wall(1, 400, int(rng.integers(1e6)), mix(p["far"], p["mid"], 0.6), mix(sn, p["far"], 0.42), 0.38))
+        top = m.crop((0, hy - (H - hy), W, hy + 4)).transpose(Image.FLIP_TOP_BOTTOM)  # mirror on the still water
+        ref = Image.new("RGBA", (W, H), (0, 0, 0, 0)); ref.alpha_composite(top, (0, hy + 2))
+        a = np.array(ref); a[..., 3] = (a[..., 3] * 0.18).astype(np.uint8); ref = Image.fromarray(a, "RGBA").filter(ImageFilter.GaussianBlur(2))
+        mid = Image.new("RGBA", (W, H), (0, 0, 0, 0)); mid.alpha_composite(ref); mid.alpha_composite(m)
+        dmid = ImageDraw.Draw(mid)                                               # a farm light far down the shore
+        self.windows.append((W * 0.53, hy - 6, 5, 4, 0.4, 1))
+        self.mid = mid
+        near = Image.new("RGBA", (W, H), (0, 0, 0, 0)); dn = ImageDraw.Draw(near); nc = p["near"] + (255,)
+        dn.polygon([(0, H), (0, H - 170), (W * 0.18, H - 130), (W * 0.34, H - 70), (W * 0.4, H)], fill=nc)
+        dn.polygon([(0, H - 170), (W * 0.18, H - 130), (W * 0.3, H - 92), (W * 0.2, H - 112), (0, H - 150)], fill=mix(sn, p["near"], 0.55) + (255,))
+        bx, by = W * 0.17, H - 128                                               # overturned boat on the stones
+        dn.chord([bx - 120, by - 46, bx + 120, by + 30], 180, 360, fill=mix(sn, p["near"], 0.7) + (255,))
+        r2 = random.Random(int(rng.integers(1e6)))
+        for k in range(5):                                                       # birches on the right shore
+            x = W * 0.78 + k * 80 + r2.uniform(-20, 20); h = r2.uniform(260, 420)
+            dn.polygon([(W * 0.7, H), (W * 0.76, H - 90), (W, H - 140), (W, H)], fill=nc)
+            dn.line([(x, H - 100), (x + r2.uniform(-12, 12), H - 100 - h)], fill=nc, width=6)
+            for j in range(9):
+                yy = H - 100 - h * (0.35 + j * 0.07); L = 30 + j * 4
+                dn.line([(x, yy), (x + (L if j % 2 else -L), yy - 26)], fill=nc, width=2)
+        self.near = near
+        self.aurora = dict(y=hy * 0.36, depth=hy * 0.34, x0=W * 0.05, x1=W * 0.95, hy=hy)
+        self.fog_y = hy - 6; self.fog_a = 0.10; self.particles = "snow"
+
+    def build_longhouse(self):
+        """EP04: long, boat-sided Norse house with a snowy turf roof, smoke from the roof-hole, outbuildings, mountains."""
+        p, rng = self.p, self.rng; hy = int(H * 0.56); sn = p.get("snow", (180, 192, 212))
+        self.back = self.sky(hy, (0.2, 0.17), 38)
+        self.back.alpha_composite(mountains(hy + 30, 330, int(rng.integers(1e6)), mix(p["far"], p["horizon"], 0.25), mix(sn, p["horizon"], 0.4), 0, W, 3, 0.55).filter(ImageFilter.GaussianBlur(1.5)))
+        fj = Image.new("RGBA", (W, H), (0, 0, 0, 0)); ImageDraw.Draw(fj).rectangle([0, hy + 22, W, hy + 44], fill=mix(p["sea"], p["horizon"], 0.3) + (255,))
+        self.back.alpha_composite(fj)
+        mid = Image.new("RGBA", (W, H), (0, 0, 0, 0)); d = ImageDraw.Draw(mid)
+        gnd = hills(hy + 60, 18, int(rng.integers(1e6)), mix(sn, p["mid"], 0.62)); mid.alpha_composite(gnd)
+        x0, x1, base = W * 0.28, W * 0.8, hy + 230
+        ridge = [(lerp(x0 + 30, x1 - 30, u / 40), base - 165 - 46 * math.sin(math.pi * u / 40) ** 0.7) for u in range(41)]
+        eave = [(lerp(x1 + 16, x0 - 16, u / 40), base - 52 + 14 * math.sin(math.pi * u / 40)) for u in range(41)]
+        wall = [(lerp(x0, x1, u / 40), base - 52 + 14 * math.sin(math.pi * u / 40)) for u in range(41)]
+        d.polygon(wall + [(x1 - 6, base + 4), (x0 + 6, base + 4)], fill=p["mid"] + (255,))      # bowed timber wall
+        for k in range(1, 26): xx = lerp(x0, x1, k / 26); d.line([(xx, base - 50), (xx, base)], fill=mix(p["mid"], p["near"], 0.4) + (255,), width=2)
+        d.polygon(ridge + eave, fill=mix(sn, p["far"], 0.3) + (255,))                       # snow on the turf roof
+        d.line(eave, fill=mix(p["mid"], sn, 0.25) + (255,), width=10)                         # turf edge at the eaves
+        dx = W * 0.47; d.rectangle([dx - 22, base - 58, dx + 22, base], fill=mix(p["mid"], p["near"], 0.5) + (255,))
+        self.windows.append((dx, base - 30, 30, 50, 0.3, 1))                                 # half-open door, firelight
+        for (cx, w, h) in ((W * 0.13, 170, 70), (W * 0.9, 150, 60)):                         # storehouse and sheep shed
+            bb = base - 10 + (cx > W / 2) * 20
+            d.rectangle([cx - w / 2, bb - h * 0.5, cx + w / 2, bb], fill=p["mid"] + (255,))
+            d.polygon([(cx - w / 2 - 12, bb - h * 0.5), (cx, bb - h * 1.15), (cx + w / 2 + 12, bb - h * 0.5)], fill=mix(sn, p["far"], 0.2) + (255,))
+        self.windows.append((W * 0.13, base - 30, 6, 8, 2.1, 2))
+        d.polygon([(0, base + 4), (W, base + 4), (W, H), (0, H)], fill=mix(sn, p["mid"], 0.6) + (255,))
+        self.mid = mid
+        near = hills(H - 110, 26, int(rng.integers(1e6)), mix(sn, p["near"], 0.72)); dn = ImageDraw.Draw(near)
+        r2 = random.Random(int(rng.integers(1e6)))
+        for k in range(16):                                                                  # a fence of stakes in the snow
+            x = W * 0.02 + k * 46; y = H - 120 + k * 3
+            dn.line([(x, y), (x + 3, y - 70 - r2.uniform(0, 12))], fill=p["near"] + (255,), width=6)
+        for x, h in ((W * 0.93, 520), (W * 0.985, 400)):                                     # dark spruce
+            for j in range(9):
+                f = j / 9; w = h * 0.24 * (1 - f * 0.85); yy = H - 60 - h * f
+                dn.polygon([(x - w, yy), (x, yy - h * 0.18), (x + w, yy)], fill=p["near"] + (255,))
+                dn.line([(x - w * 0.9, yy - 2), (x, yy - h * 0.14)], fill=mix(sn, p["near"], 0.5) + (255,), width=3)
+        self.near = near
+        self.smoke = (lerp(x0, x1, 0.5), base - 205, 560)
+        self.fog_y = hy + 40; self.fog_a = 0.12; self.particles = "snow"
+
+    def build_hearth(self):
+        """EP04: inside the longhouse - two rows of roof posts receding, benches, the long hearth with live flames."""
+        p, rng = self.p, self.rng; vx, vy = W * 0.5, H * 0.4
+        base = np.zeros((H, W, 3), np.float32) + np.array(mix(p["near"], p["mid"], 0.6), np.float32)
+        base += radial_glow(vx, H * 0.7, 700, p["light"], 0.16) + radial_glow(vx, H * 0.62, 260, p["light"], 0.12)
+        img = Image.fromarray(np.clip(base, 0, 255).astype(np.uint8)).convert("RGBA"); d = ImageDraw.Draw(img)
+        sk = self.sky(int(H * 0.5), (0.53, 0.06), 14)                                      # smoke hole shows a scrap of sky
+        hole = Image.new("L", (W, H), 0); ImageDraw.Draw(hole).polygon([(vx - 70, 40), (vx + 70, 40), (vx + 52, 120), (vx - 52, 120)], fill=255)
+        img.paste(sk, (0, 0), hole)
+        self.stars_tw = [s for s in self.stars_tw if vx - 60 < s[0] < vx + 60 and 45 < s[1] < 115]
+        wood = lambda z: mix(mix(p["mid"], p["light"], 0.10 / z), p["near"], min(0.8, 0.2 * z)) + (255,)
+        for z in (5.5, 4.4, 3.5, 2.7, 2.0, 1.45):                                          # posts, far to near
+            s_ = 1 / z
+            d.line([(vx - 760 * s_, vy - 640 * s_), (vx + 760 * s_, vy - 640 * s_)], fill=wood(z), width=max(2, int(28 * s_)))
+            for side in (-1, 1):
+                x = vx + side * 560 * s_
+                d.rectangle([x - 34 * s_, vy - 640 * s_, x + 34 * s_, vy + 520 * s_], fill=wood(z))
+                d.line([(x, vy - 640 * s_), (vx + side * 980 * s_, vy - 340 * s_)], fill=wood(z), width=max(2, int(20 * s_)))
+        d.rectangle([vx - 560 / 6, vy - 640 / 6, vx + 560 / 6, vy + 520 / 6], fill=mix(p["near"], p["mid"], 0.3) + (255,))  # far partition
+        for side in (-1, 1):                                                                 # bench platforms
+            d.polygon([(vx + side * 600 / 6, vy + 420 / 6), (vx + side * 1500, H * 0.86), (vx + side * 1500, H), (vx + side * 600 / 6, vy + 520 / 6)], fill=mix(p["mid"], p["light"], 0.07) + (255,))
+            d.line([(vx + side * 600 / 6, vy + 420 / 6), (vx + side * 1500, H * 0.86)], fill=mix(p["mid"], p["light"], 0.22) + (255,), width=4)
+        d.polygon([(vx - 30, vy + 520 / 5.5), (vx + 30, vy + 520 / 5.5), (vx + 300, H), (vx - 300, H)], fill=mix(p["near"], p["mid"], 0.3) + (255,))  # hearth stones
+        for k in range(14):
+            f = (k + 1) / 15; y = vy + 520 / 5.5 + f ** 1.8 * (H - vy - 520 / 5.5); hw = 30 + f ** 1.8 * 270
+            d.line([(vx - hw, y), (vx + hw, y)], fill=mix(p["mid"], p["light"], 0.18) + (255,), width=2)
+        for z in (4.2, 3.0, 2.2, 1.6):                                                     # fire spots along the hearth
+            f = ((vy + 520 / z) - (vy + 520 / 5.5)) / (H - vy - 520 / 5.5)
+            self.fires.append((vx, vy + 520 / z + 6, 1.15 / z ** 0.9))
+        self.back = img
+        near = Image.new("RGBA", (W, H), (0, 0, 0, 0)); dn = ImageDraw.Draw(near); nc = p["near"] + (255,)
+        for x in (60, W - 60): dn.rectangle([x - 70, 0, x + 70, H], fill=nc)              # nearest posts frame the shot
+        dn.rectangle([0, 0, W, 34], fill=nc)
+        dn.polygon([(0, H * 0.84), (W * 0.3, H * 0.93), (W * 0.3, H), (0, H)], fill=nc)     # near bench edge with a lamp
+        lx, ly = W * 0.2, H * 0.88
+        dn.ellipse([lx - 46, ly - 22, lx + 46, ly + 6], fill=mix(p["near"], p["accent"], 0.25) + (255,))
+        dn.rectangle([W * 0.08, H * 0.8, W * 0.14, H * 0.9], fill=mix(p["near"], p["accent"], 0.1) + (255,))  # a basket of wool
+        self.lamp = (lx + 30, ly - 22)
+        self.mid = Image.new("RGBA", (W, H), (0, 0, 0, 0)); self.near = near
+        self.particles = "embers"; self.fog_a = 0
+
     # --- per-frame
     def prepare(self):
         p = self.p
@@ -406,7 +555,7 @@ class Scene:
         vig = np.clip(1 - (r - 0.55) * 0.75, 0.35, 1)
         self.vig = Image.fromarray((vig * 255).astype(np.uint8), "L")
         rng = np.random.default_rng(7)
-        n = {"embers": 26, "fireflies": 22, "dust": 34}[self.particles]
+        n = {"embers": 26, "fireflies": 22, "dust": 34, "snow": 90}[self.particles]
         self.parts = [(rng.uniform(0, W), rng.uniform(0, H), rng.uniform(0, TAU), int(rng.integers(1, 3)), rng.uniform(0.4, 1.0)) for _ in range(n)]
         self.glow_sm = self._glow(16); self.glow_lg = self._glow(90)
 
@@ -421,6 +570,47 @@ class Scene:
         s = spr.copy(); s2 = Image.new("RGBA", s.size, col + (0,)); s2.putalpha(s.getchannel("A").point(lambda v: int(v * a)))
         return s2
 
+    def _aurora(self, img, ph):
+        """Soft green curtain computed at 1/4 resolution: rays rise from a wavy lower edge; periodic in LOOP_S."""
+        A = self.aurora; w, h = W // 4, H // 4
+        xs = np.arange(w, dtype=np.float32) * 4; ys = np.arange(h, dtype=np.float32)[:, None] * 4
+        edge = A["y"] + A["depth"] * 0.45 + 40 * np.sin(xs / 260 + ph) + 26 * np.sin(xs / 120 - 2 * ph + 1.3)
+        rays = 0.55 + 0.45 * np.sin(xs / 23 + 3 * ph) * np.sin(xs / 61 - ph + 0.7)
+        env = np.clip((xs - A["x0"]) / 300, 0, 1) * np.clip((A["x1"] - xs) / 300, 0, 1) * (0.7 + 0.3 * np.sin(ph + xs / 400))
+        dy = edge[None, :] - ys
+        a = np.where(dy > 0, np.exp(-dy / (A["depth"] * 0.55)), np.exp(-(dy / 14) ** 2)) * rays[None, :] * env[None, :]
+        a = np.clip(a * 0.34, 0, 1); a[ys[:, 0] > A["hy"] - 20] = 0
+        top = np.clip(dy / A["depth"], 0, 1)[..., None]
+        col = np.array([80, 236, 160], np.float32) * (1 - top) + np.array([150, 110, 210], np.float32) * top
+        lay = np.zeros((h, w, 4), np.uint8); lay[..., :3] = col.astype(np.uint8); lay[..., 3] = (a * 255).astype(np.uint8)
+        img.alpha_composite(Image.fromarray(lay, "RGBA").resize((W, H), Image.BILINEAR).filter(ImageFilter.GaussianBlur(3)))
+
+    def _smoke(self, img, t):
+        sx, sy, rise = self.smoke; lay = Image.new("RGBA", (W, H), (0, 0, 0, 0)); n = 14
+        for i in range(n):
+            u = (t / LOOP_S * 2 + i / n) % 1.0
+            x = sx + 18 * math.sin(TAU * u * 1.5 + i) + u * 40; y = sy - u * rise; r = 14 + u * 70
+            a = 0.42 * math.sin(math.pi * min(1, u * 1.3)) * (1 - u) ** 0.6
+            g = self.tint(self.glow_sm.resize((int(r * 2), int(r * 2))), mix(self.p["horizon"], self.p["moon"], 0.4), a)
+            lay.alpha_composite(g, (int(x - r), int(y - r)))
+        img.alpha_composite(lay)
+
+    def _fires(self, img, ph):
+        p = self.p; lay = Image.new("RGBA", (W, H), (0, 0, 0, 0)); d = ImageDraw.Draw(lay)
+        for fi, (x, y, s) in enumerate(self.fires):
+            fl = 0.85 + 0.1 * math.sin(ph * 7 + fi) + 0.05 * math.sin(ph * 17 + fi * 2)
+            R = int(420 * s); g = self.tint(self.glow_lg.resize((R * 2, R * 2)), p["light"], 0.30 * fl)
+            img.alpha_composite(g, (int(x - R), int(y - R * 1.1)))
+            for k in range(-2, 3):                                                          # rounded tongues of flame
+                fx = x + k * 52 * s; hh = (120 - abs(k) * 26) * s * (0.72 + 0.28 * math.sin(ph * (5 + abs(k) * 2) + k * 1.7 + fi))
+                sway = 10 * s * math.sin(ph * 3 + k); hw = (34 - abs(k) * 4) * s
+                outer = [(fx + sway * v ** 2 + (1 if sd > 0 else -1) * hw * math.sin(math.pi * (0.15 + 0.85 * (1 - v)) ) * (1 - v) ** 0.35, y - hh * v)
+                         for sd in (-1, 1) for v in ([i / 10 for i in range(11)] if sd < 0 else [1 - i / 10 for i in range(11)])]
+                d.polygon(outer, fill=p["ember"] + (170,))
+                d.polygon([(fx + (q[0] - fx) * 0.5, y - (y - q[1]) * 0.6) for q in outer], fill=(255, 210, 130, 210))
+            d.ellipse([x - 150 * s, y - 14 * s, x + 150 * s, y + 16 * s], fill=mix(p["ember"], (90, 30, 10), 0.4) + (230,))  # bed of embers
+        img.alpha_composite(lay.filter(ImageFilter.GaussianBlur(3)))
+
     def frame(self, t):
         p = self.p; ph = TAU * t / LOOP_S
         img = self.back.copy(); d = ImageDraw.Draw(img)
@@ -428,6 +618,7 @@ class Scene:
             bb = b * (0.55 + 0.45 * math.sin(ph * k + f))
             d.point((x, y), fill=mix(p["sky_top"], (240, 232, 214), bb) + (255,))
             if b > 0.3: d.point((x + 1, y), fill=mix(p["sky_top"], (240, 232, 214), bb * 0.6) + (255,))
+        if self.aurora: self._aurora(img, ph)
         if self.reflect:
             mx, ry, mr = self.reflect; lay = Image.new("RGBA", (W, H), (0, 0, 0, 0)); dl = ImageDraw.Draw(lay)
             for i in range(26):
@@ -446,7 +637,9 @@ class Scene:
                 lay.alpha_composite(self.tint(self.glow_sm, p["light"], 0.35 * fl), (int(x - 16), int(y - 16)))
                 dl.rectangle([x - w / 2, y - h / 2, x + w / 2, y + h / 2], fill=mix(p["mid"], p["light"], fl) + (255,))
             img.alpha_composite(lay)
+        if self.smoke: self._smoke(img, t)
         img.alpha_composite(self.near)
+        if self.fires: self._fires(img, ph)
         if self.lamp:
             lx, ly = self.lamp; fl = 0.85 + 0.1 * math.sin(ph * 5) + 0.05 * math.sin(ph * 13 + 1)
             g = self.tint(self.glow_lg.resize((900, 900)), p["light"], 0.33 * fl); img.alpha_composite(g, (int(lx - 450), int(ly - 450)))
@@ -458,6 +651,9 @@ class Scene:
             if self.particles == "embers":
                 y = (y0 - (H + 60) * t / LOOP_S * k) % (H + 60) - 30; x = x0 + 30 * math.sin(ph * 2 + f)
                 a = 0.55 * s * (0.6 + 0.4 * math.sin(ph * 4 + f)) * min(1, y / (H * 0.4)); col = p["ember"]; sz = 4 + 3 * s
+            elif self.particles == "snow":
+                x = x0 + 26 * math.sin(ph * k + f); y = (y0 + (H + 40) * t / LOOP_S * k) % (H + 40) - 20
+                a = 0.5 * s; col = (232, 238, 248); sz = 2 + 3 * s * (1 if k == 2 else 0.7)
             elif self.particles == "fireflies":
                 x = x0 + 60 * math.sin(ph * k + f); y = H * 0.55 + (y0 % (H * 0.45)) + 30 * math.cos(ph * (3 - k) + f)
                 a = max(0, math.sin(ph * 3 * k + f)) ** 2 * 0.8 * s; col = (230, 240, 160); sz = 4 + 2 * s

@@ -1,0 +1,38 @@
+{
+  "version": 1,
+  "channel_id": "UCNrw11y7QKt0fWCrJ84QZ-g",
+  "created_at": "2026-11-13T09:28:13-03:00",
+  "items": [
+    {
+      "key": "quiet-ep04-long",
+      "kind": "long",
+      "video": [
+        "video.part00",
+        "video.part01"
+      ],
+      "title": "Boring History for Sleep: Winter in a Viking Longhouse (Snow & Fireplace, 46 Min)",
+      "description": "Spend a long, snowy winter evening inside a Viking longhouse at the head of a Norwegian fjord, about a thousand years ago. Sit by the long hearth, listen to the animals settling in the byre, share a simple supper, watch the spinning and weaving, a slow game of tafl, and the old Norse stories of Night and her frost-maned horse. Softly narrated, with snowfall, firelight and a long, restful ending.\n\nChapters\n0:00 Winter in a Viking Longhouse\n1:33 The Farm at the Head of the Fjord\n5:42 Inside the Longhouse\n10:04 The Animals in the Byre\n14:12 Supper by the Fire\n18:20 Handwork in the Lamplight\n22:33 A Game of Tafl\n26:26 Stories at Midwinter\n30:40 The House Falls Asleep\n34:31 Rest (ambient only)\n\n— — —\nThe Quiet Archive: calm history to fall asleep to. New episodes every evening.\nSubscribe so tonight's story is waiting for you.\n\nNarrated with a synthetic voice. Visuals are illustrated with code. Historical details are researched and gently simplified for relaxation.\n\n#sleephistory #bedtimestories #vikings",
+      "tags": [
+        "sleep history",
+        "history for sleep",
+        "boring history for sleep",
+        "bedtime stories for adults",
+        "sleep stories",
+        "vikings",
+        "viking history",
+        "viking longhouse",
+        "norse history",
+        "viking winter",
+        "history to fall asleep to",
+        "calm narration"
+      ],
+      "thumbnail": "thumbnail.jpg",
+      "captions": "legendas.srt",
+      "publish_at": "2026-11-13T22:00:00-03:00",
+      "if_late": "public_now",
+      "made_for_kids": false,
+      "altered_content": true,
+      "pinned_comment": "Which place in history should we spend a quiet evening in next?"
+    }
+  ]
+}
