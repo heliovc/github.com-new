@@ -766,10 +766,27 @@
   "pinned_comment": "What would you put on your first web page: a portfolio, a shop, or something else? Tell me below."
  },
  "lab-ep09-short": {
+  "attempts": 2,
+  "status": "published",
+  "error": null,
+  "screenshot": "20261113-092558-erro-lab-ep09-short.png",
+  "at": "2026-11-13T09:38:03.783799-03:00",
+  "url": "https://youtu.be/9k-NM-LkHLw",
+  "by": "robo",
+  "visibility": "schedule",
+  "when": "2026-11-13T20:30:00-03:00",
+  "channel_id": "UCXGqR8k1RMbfYdVleIuJKzA",
+  "title": "Two Text Files = A Real Web Page #shorts",
+  "kind": "short",
+  "publish_at": "2026-11-13T20:30:00-03:00",
+  "related_key": "lab-ep09-long",
+  "pinned_comment": "Did you know a button hover is just one CSS rule? Full tutorial: Build Your First Web Page in 15 Minutes (HTML + CSS)"
+ },
+ "quiet-ep04-long": {
   "attempts": 1,
   "status": "error",
   "error": "Page.goto: Timeout 60000ms exceeded.\nCall log:\n  - navigating to \"https://www.youtube.com/channel_switcher\", waiting until \"domcontentloaded\"\n",
-  "screenshot": "20261113-092558-erro-lab-ep09-short.png",
-  "at": "2026-11-13T09:27:01.012924-03:00"
+  "screenshot": "20261113-094045-erro-quiet-ep04-long.png",
+  "at": "2026-11-13T09:41:05.057293-03:00"
  }
 }
