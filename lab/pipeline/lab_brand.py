@@ -7,6 +7,7 @@ python3 -I lab_brand.py thumbgit "LINE ONE" "LINE TWO" "hash msg|hash msg|hash m
 python3 -I lab_brand.py thumbchart "LINE ONE" "LINE TWO" "df.plot(kind=\"bar\")" out.jpg mint   (EP06: dark chart card, bars + trend line)
 python3 -I lab_brand.py thumbterm "LINE ONE" "LINE TWO" "$ cmd|output|$ cmd" out.jpg pink   (EP07: big terminal card, typed commands + outputs)
 python3 -I lab_brand.py thumbquery "LINE ONE" "LINE TWO" "=QUERY()" "Lena=1670|Omar=1530" out.jpg orange   (EP08: ranked report card with bars over a faded raw table)
+python3 -I lab_brand.py thumbweb "LINE ONE" "LINE TWO" "<html line>|<html line>" screenshot.png out.jpg periwinkle   (EP09: code card behind, browser with the REAL page screenshot in front)
 python3 -I lab_brand.py thumb "LINE ONE" "LINE TWO" "code snippet line" out.jpg [accent: lime|coral|sky]"""
 import sys; sys.path.insert(0, ".")
 import tutor as T
@@ -168,6 +169,26 @@ elif sys.argv[1] == "thumbquery":  # EP08 layout: text left; right a faded raw t
         fs = 120
         while T.F(fs, "Bold").getlength(txt) > 560: fs -= 4
         d.text((50, 300 + i * 150), txt, font=T.F(fs, "Bold"), fill=col, anchor="lm")
+    img.convert("RGB").save(out, quality=92); print("thumb ok")
+elif sys.argv[1] == "thumbweb":  # EP09 layout: text left; right an index.html code card (behind) + browser window showing the real rendered page (front)
+    l1, l2, code, shot, out = sys.argv[2:7]; acc = {"lime": T.LIME, "coral": T.CORAL, "sky": T.SKY, "violet": T.VIO, "yellow": T.YEL, "periwinkle": (125, 140, 255)}[sys.argv[7] if len(sys.argv) > 7 else "periwinkle"]
+    T.ACC = acc; T.W, T.H = 1280, 720; img = T.make_bg(1280, 720)
+    T.window(img, [590, 80, 1100, 400], "index.html")
+    d = ImageDraw.Draw(img); f = T.F(24, "mono"); y = 158
+    for ln in code.split("|"):
+        cx = 625
+        for s2, c in T.colorize(ln, "html"): d.text((cx, y), s2, font=f, fill=c); cx += f.getlength(s2)
+        y += 44
+    bx0, by0, bw = 760, 262, 490; pic = Image.open(shot).convert("RGBA"); pic = pic.resize((bw - 24, int(pic.height * (bw - 24) / pic.width)), Image.LANCZOS).crop((0, 0, bw - 24, 330))
+    T.window(img, [bx0, by0, bx0 + bw, by0 + 52 + 12 + pic.height + 12], "my first page", kind="term")
+    img.alpha_composite(pic, (bx0 + 12, by0 + 64)); d = ImageDraw.Draw(img)
+    d.rounded_rectangle([bx0 - 4, by0 - 4, bx0 + bw + 4, by0 + 52 + 12 + pic.height + 16], 18, outline=acc, width=4)
+    d.rounded_rectangle([40, 40, 300, 92], 26, fill=acc); d.text((170, 66), "SHORTCUT LAB", font=T.F(26, "Bold"), fill=T.BG, anchor="mm")
+    for i, (txt, col) in enumerate([(l1, T.TXT), (l2, acc)]):
+        fs = 120
+        while T.F(fs, "Bold").getlength(txt) > 540: fs -= 4
+        d.text((50, 280 + i * 150), txt, font=T.F(fs, "Bold"), fill=col, anchor="lm", stroke_width=4, stroke_fill=T.BG)
+    d.text((54, 600), "HTML + CSS · 15 minutes · free", font=T.F(30, "Medium"), fill=T.DIM)
     img.convert("RGB").save(out, quality=92); print("thumb ok")
 else:
     l1, l2, code, out = sys.argv[2:6]; acc = {"lime": T.LIME, "coral": T.CORAL, "sky": T.SKY, "violet": T.VIO, "yellow": T.YEL}[sys.argv[6] if len(sys.argv) > 6 else "lime"]

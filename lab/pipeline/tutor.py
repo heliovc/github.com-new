@@ -7,6 +7,9 @@ Usage:
 Scene types: title, steps, code, term, files, tip, keys, compare, chat, outro, tree (EP02), map (EP02), sheet + args (EP03), prompt + flow (EP04), stage + timeline (EP05: Git areas and commit history), term colors diff +/- lines and errors (EP05), figure (EP06: real matplotlib PNG in a plot window, left-to-right wipe + numbered callouts), nav (EP07: folder tree with a moving "YOU ARE HERE" pin driven by cd commands + live pwd bar), cards (EP07: cheat-sheet grid of command cards popping in, optional highlight), funnel (EP08: a QUERY string read clause by clause, each clause
   highlighted on top while its mini result table appears in a column - rows shrinking left to right, row-count badges); sheet results now
   draw the header row in bold when a QUERY result starts on row 1 (EP08)
+  live (EP09: split screen - code editor on the left typing HTML/CSS with new lines highlighted, a browser window on the right
+  with address bar + "reload" sweep that reveals a REAL Chromium screenshot of that exact file; phone=True draws a phone frame);
+  colorize() now also highlights lang="html" (tags, attributes, values) and lang="css" (selectors, properties, values) (EP09)
 Identity: charcoal #0F1115, lime #B6F35C, coral #FF7A59, sky #6CC4FF, Poppins + DejaVu Sans Mono.
 """
 import sys, os, re, math, json, hashlib, subprocess, importlib.util
@@ -84,8 +87,25 @@ def window(img, box, title, kind="editor", a=1.0):
 # ---------------- syntax highlight (python + shell, small and safe)
 KW = set("from import def return for in if else elif while with as not and or is None True False class try except finally lambda pass break continue print".split())
 TOK = re.compile(r"(#.*$)|(f?\"[^\"]*\"|f?'[^']*')|(\b\d+\b)|(\b[A-Za-z_]\w*\b)|(\s+)|(.)")
+HTMLTOK = re.compile(r"(<!--.*?-->)|(</?[A-Za-z!][\w-]*|/?>)|(\b[\w-]+(?==))|(\"[^\"]*\")|([^<\"]+?(?=<|\"|$|\b[\w-]+=))|(.)")
 def colorize(line, lang="py"):
     out = []
+    if lang == "html":  # EP09
+        intag = False
+        for m in HTMLTOK.finditer(line):
+            com, tag, attr, val, txt, other = m.groups()
+            if com: out.append((com, DIM))
+            elif tag: out.append((tag, CORAL)); intag = not tag.endswith(">")
+            elif attr and intag: out.append((attr, SKY))
+            elif val and intag: out.append((val, YEL))
+            else: out.append((m.group(0), TXT))
+        return out
+    if lang == "css":  # EP09
+        st = line.strip()
+        if ":" in st and st.endswith(";"):
+            k, _, rest = line.partition(":"); return [(k, SKY), (":", DIM), (rest[:-1], YEL), (";", DIM)]
+        if st.endswith("{"): return [(line[:-1], CORAL if not st.startswith("@") else VIO), ("{", DIM)]
+        return [(line, DIM if st in ("}", "") else TXT)]
     if lang == "sh":
         if line.startswith("$ "): return [("$ ", LIME), (line[2:], TXT)]
         if line[:1] == "+" and not line.startswith("+++"): return [(line, LIME)]  # EP05: diff / error colors
@@ -749,6 +769,51 @@ def sc_funnel(img, v, t, d):
         if k > 0:
             f = F(32, "SemiBold"); tw = f.getlength(v["note"]); ny = 960
             dr.rounded_rectangle([W / 2 - tw / 2 - 30, ny, W / 2 + tw / 2 + 30, ny + 62], 31, fill=mix(BG, ACC, k)); dr.text((W / 2, ny + 31), v["note"], font=f, fill=BG, anchor="mm")
+
+# ---- EP09: live - editor (left) + browser (right). After the code finishes typing, a reload sweep reveals a REAL screenshot of that file.
+def sc_live(img, v, t, d):
+    lines = v["code"].strip("\n").split("\n"); v0 = 0
+    if v.get("view"): v0, v1 = v["view"]; lines = lines[v0:v1]
+    hl = tuple(h - v0 for h in v.get("hl", ())); start = v.get("from", 0); start = max(0, start - v0)
+    ex0, ey0, ex1, ey1 = 50, 140, 1000, 1000; bx0, bx1 = 1030, 1870
+    size = v.get("size", 23)
+    while size > 15 and (F(size, "mono").getlength(max(lines, key=len)) > ex1 - ex0 - 130 or len(lines) * size * 1.5 > ey1 - ey0 - 90): size -= 1
+    lh = int(size * 1.5)
+    window(img, [ex0, ey0, ex1, ey1], v.get("file", "index.html"))
+    total = sum(len(l) + 1 for l in lines); st = sum(len(l) + 1 for l in lines[:start])
+    typ = v.get("typed", True); dur = min(d * 0.55, max(0.8, (total - st) / v.get("cps", 40)))
+    chars = st + (total - st) * ease(t / dur) if typ else total
+    tmp = img.copy()  # draw on a copy, keep only the editor area (line highlights stay inside the narrower editor)
+    draw_code(tmp, ex0 + 100, ey0 + 76, lines, int(chars), v.get("lang", "html"), hl if (t > dur * 0.6 or not typ) else (), lh, size, t=t, num0=v0)
+    img.paste(tmp.crop((ex0 + 2, ey0 + 54, ex1 - 2, ey1 - 2)), (ex0 + 2, ey0 + 54))
+    # browser
+    phone = v.get("phone"); bw_ = 470 if phone else bx1 - bx0; bxa = bx0 + ((bx1 - bx0) - bw_) // 2 if phone else bx0
+    if v["shot"] not in _imc: _imc[v["shot"]] = Image.open(v["shot"]).convert("RGBA")
+    src = _imc[v["shot"]]; iw = bw_ - 24; ih = int(src.height * iw / src.width)
+    by1 = min(ey1, ey0 + 52 + 56 + ih + 12); byy0 = ey0 if not phone else max(ey0, (ey0 + ey1) // 2 - (by1 - ey0) // 2); by1 += byy0 - ey0
+    window(img, [bxa, byy0, bxa + bw_, by1], v.get("tab", "Sam Rivera"), kind="term")
+    dr = ImageDraw.Draw(img); ay = byy0 + 62
+    dr.rounded_rectangle([bxa + 14, ay, bxa + bw_ - 14, ay + 40], 20, fill=(38, 42, 52))
+    url = v.get("url", "file:///C:/my-site/index.html"); fu = F(19, "mono")
+    while fu.getlength(url) > bw_ - 90 and len(url) > 10: url = "…" + url[2:]
+    dr.text((bxa + 40, ay + 20), url, font=fu, fill=DIM, anchor="lm")
+    k = ease((t - dur - 0.15) / 0.5) if typ else ease((t - 0.2) / 0.5)
+    py = ay + 50; ph = by1 - py - 12; pic = src.resize((iw, ih), Image.LANCZOS).crop((0, 0, iw, min(ih, ph)))
+    dr.rectangle([bxa + 12, py, bxa + 12 + iw, py + pic.height], fill=(255, 255, 255))
+    if v.get("prev") and k < 1:  # previous version stays until the reload
+        if v["prev"] not in _imc: _imc[v["prev"]] = Image.open(v["prev"]).convert("RGBA")
+        pp = _imc[v["prev"]]; img.alpha_composite(pp.resize((iw, int(pp.height * iw / pp.width)), Image.LANCZOS).crop((0, 0, iw, pic.height)), (bxa + 12, py))
+    if k > 0:
+        ch = max(1, int(pic.height * k)); img.alpha_composite(pic.crop((0, 0, iw, ch)), (bxa + 12, py))
+        if k < 1: dr.rectangle([bxa + 12, py + ch - 2, bxa + 12 + iw, py + ch + 3], fill=ACC)
+    rk = 1 - abs(((t - dur - 0.15) / 0.5) - 0.5) * 2 if typ else 0  # reload chip pulses during the sweep
+    if rk > 0:
+        lab = v.get("reload", "Ctrl+S, then F5"); fl = F(24, "monob"); lw = fl.getlength(lab) + 40
+        dr.rounded_rectangle([bxa + bw_ / 2 - lw / 2, by1 - 70, bxa + bw_ / 2 + lw / 2, by1 - 22], 24, fill=mix(BG, ACC, rk)); dr.text((bxa + bw_ / 2, by1 - 46), lab, font=fl, fill=BG, anchor="mm")
+    if v.get("note"):
+        a = ease((t - dur - 0.9) / 0.5); fn = F(30, "SemiBold"); tw = fn.getlength(v["note"])
+        if a > 0:
+            dr.rounded_rectangle([W / 2 - tw / 2 - 30, 1012, W / 2 + tw / 2 + 30, 1066], 27, fill=mix(BG, v.get("notecol", ACC), a)); dr.text((W / 2, 1039), v["note"], font=fn, fill=BG, anchor="mm")
 
 SC = {k[3:]: f for k, f in list(globals().items()) if k.startswith("sc_")}
 

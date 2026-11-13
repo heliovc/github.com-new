@@ -1,0 +1,715 @@
+1
+00:00:00,250 --> 00:00:01,612
+This is a real web page.
+
+2
+00:00:01,612 --> 00:00:08,935
+A profile card, a round photo, a button that changes color when you point at it, and three cards that stack up neatly on a phone.
+
+3
+00:00:08,935 --> 00:00:11,490
+And it's made from just two small text files.
+
+4
+00:00:11,490 --> 00:00:16,600
+In the next fifteen minutes, you'll build it yourself, line by line, from an empty folder.
+
+5
+00:00:17,300 --> 00:00:19,667
+No experience needed, and nothing to buy.
+
+6
+00:00:19,667 --> 00:00:23,882
+You need a text editor and a web browser, and you already have a browser.
+
+7
+00:00:23,882 --> 00:00:26,826
+By the end, you'll understand what every line does.
+
+8
+00:00:26,826 --> 00:00:33,351
+And I'll show you the two mistakes that break almost every beginner's first page, with the real result on screen.
+
+9
+00:00:34,051 --> 00:00:35,035
+Here's the plan.
+
+10
+00:00:35,035 --> 00:00:37,433
+First, make a folder and an empty file.
+
+11
+00:00:37,433 --> 00:00:39,893
+Then write the HTML, that's the content.
+
+12
+00:00:39,893 --> 00:00:41,308
+Open it in the browser.
+
+13
+00:00:41,308 --> 00:00:43,215
+Then add CSS, that's the style.
+
+14
+00:00:43,215 --> 00:00:44,691
+Make a button and cards.
+
+15
+00:00:44,691 --> 00:00:46,966
+And finally, make it work on a phone.
+
+16
+00:00:47,666 --> 00:00:49,203
+Two languages, two jobs.
+
+17
+00:00:49,203 --> 00:00:51,124
+HTML says what is on the page.
+
+18
+00:00:51,124 --> 00:00:53,813
+A heading, a paragraph, a picture, a link.
+
+19
+00:00:53,813 --> 00:00:55,222
+CSS says how it looks.
+
+20
+00:00:55,222 --> 00:00:57,783
+Colors, fonts, spacing, rounded corners.
+
+21
+00:00:57,783 --> 00:01:02,778
+Think of HTML as the walls of a house, and CSS as the paint and the furniture.
+
+22
+00:01:02,778 --> 00:01:05,275
+You'll keep them in two separate files.
+
+23
+00:01:05,975 --> 00:01:09,094
+Make a new folder anywhere, and call it my site.
+
+24
+00:01:09,094 --> 00:01:10,719
+Open a plain text editor.
+
+25
+00:01:10,719 --> 00:01:14,228
+I recommend VS Code, it's free, but Notepad works too.
+
+26
+00:01:14,228 --> 00:01:18,581
+Create a new file and save it inside that folder as index dot html.
+
+27
+00:01:18,581 --> 00:01:20,141
+That exact name matters.
+
+28
+00:01:20,141 --> 00:01:24,885
+Browsers and web servers look for index dot html first, as the home page.
+
+29
+00:01:25,585 --> 00:01:27,728
+One trap, especially on Windows.
+
+30
+00:01:27,728 --> 00:01:32,015
+Notepad can secretly save your file as index dot html dot t x t.
+
+31
+00:01:32,015 --> 00:01:35,163
+Then the browser shows your code as plain text.
+
+32
+00:01:35,163 --> 00:01:38,445
+In the Save As window, set the type to All files.
+
+33
+00:01:38,445 --> 00:01:44,004
+And turn on file name extensions in File Explorer, so you always see the real name.
+
+34
+00:01:44,704 --> 00:01:45,543
+Now type this.
+
+35
+00:01:45,543 --> 00:01:49,978
+The first line, doctype html, tells the browser this is a modern web page.
+
+36
+00:01:49,978 --> 00:01:52,076
+Then the html tag wraps everything.
+
+37
+00:01:52,076 --> 00:01:58,489
+Inside, the head holds information about the page, like the character set and the title on the browser tab.
+
+38
+00:01:58,489 --> 00:02:01,305
+And the body holds everything you actually see.
+
+39
+00:02:01,305 --> 00:02:04,062
+A big heading with h1, and a paragraph with p.
+
+40
+00:02:04,762 --> 00:02:05,905
+Notice the pattern.
+
+41
+00:02:05,905 --> 00:02:07,890
+Almost every tag comes in a pair.
+
+42
+00:02:07,890 --> 00:02:11,860
+An opening tag, like h1, and a closing tag with a slash, slash h1.
+
+43
+00:02:11,860 --> 00:02:13,485
+The text goes between them.
+
+44
+00:02:13,485 --> 00:02:15,831
+The pair together is called an element.
+
+45
+00:02:15,831 --> 00:02:19,620
+And elements go inside other elements, like boxes inside boxes.
+
+46
+00:02:19,620 --> 00:02:23,651
+That's why I indent them, so you can see which box is inside which.
+
+47
+00:02:24,351 --> 00:02:25,147
+Save the file.
+
+48
+00:02:25,147 --> 00:02:28,275
+Then go to your folder and double click index dot html.
+
+49
+00:02:28,275 --> 00:02:29,697
+It opens in your browser.
+
+50
+00:02:29,697 --> 00:02:30,606
+Look at the tab.
+
+51
+00:02:30,606 --> 00:02:32,824
+It says Sam Rivera, from the title tag.
+
+52
+00:02:32,824 --> 00:02:35,497
+And on the page, the heading and the paragraph.
+
+53
+00:02:35,497 --> 00:02:38,568
+No styling yet, just the browser's plain default look.
+
+54
+00:02:38,568 --> 00:02:39,364
+That's normal.
+
+55
+00:02:39,364 --> 00:02:40,786
+You just made a web page.
+
+56
+00:02:41,486 --> 00:02:42,772
+Let's add more content.
+
+57
+00:02:42,772 --> 00:02:45,958
+Below the paragraph, an h2, a smaller heading, What I do.
+
+58
+00:02:45,958 --> 00:02:49,145
+Then u l, an unordered list, with three l i items inside.
+
+59
+00:02:49,145 --> 00:02:49,760
+And a link.
+
+60
+00:02:49,760 --> 00:02:52,108
+The a tag, with an attribute called h ref.
+
+61
+00:02:52,108 --> 00:02:53,617
+That's where the link goes.
+
+62
+00:02:53,617 --> 00:02:54,903
+Here it opens an email.
+
+63
+00:02:54,903 --> 00:02:59,152
+Save with Control S, or Command S on a Mac, and refresh the browser with F5.
+
+64
+00:02:59,152 --> 00:03:01,164
+There's the list, and the blue link.
+
+65
+00:03:01,864 --> 00:03:04,828
+This is your work loop for the rest of the video.
+
+66
+00:03:04,828 --> 00:03:07,429
+Change the file, save, refresh the browser.
+
+67
+00:03:07,429 --> 00:03:08,094
+Every time.
+
+68
+00:03:08,094 --> 00:03:14,566
+If something doesn't change on screen, nine times out of ten you just forgot to save, or forgot to refresh.
+
+69
+00:03:15,266 --> 00:03:16,377
+Now the final HTML.
+
+70
+00:03:16,377 --> 00:03:19,768
+We wrap the top part in a header with a class called hero.
+
+71
+00:03:19,768 --> 00:03:22,458
+A class is a name we'll use later, in the CSS.
+
+72
+00:03:22,458 --> 00:03:24,445
+We add a picture with the img tag.
+
+73
+00:03:24,445 --> 00:03:29,357
+Src is the file name, and alt describes the picture for people using screen readers.
+
+74
+00:03:29,357 --> 00:03:31,169
+The link gets the class button.
+
+75
+00:03:31,169 --> 00:03:34,560
+And the list becomes three divs, each with the class card.
+
+76
+00:03:35,260 --> 00:03:39,982
+Refresh, and, honestly, it looks the same as before, plus a square picture.
+
+77
+00:03:39,982 --> 00:03:40,989
+That's expected.
+
+78
+00:03:40,989 --> 00:03:43,507
+Classes don't do anything by themselves.
+
+79
+00:03:43,507 --> 00:03:44,767
+They're just labels.
+
+80
+00:03:44,767 --> 00:03:48,670
+The magic happens when CSS finds those labels and styles them.
+
+81
+00:03:48,670 --> 00:03:50,181
+So let's write some CSS.
+
+82
+00:03:50,881 --> 00:03:51,532
+Two steps.
+
+83
+00:03:51,532 --> 00:03:54,590
+First, in the head of the HTML, this link line.
+
+84
+00:03:54,590 --> 00:03:57,845
+Rel equals stylesheet, h ref equals style dot css.
+
+85
+00:03:57,845 --> 00:04:00,838
+It tells the browser where your style file is.
+
+86
+00:04:00,838 --> 00:04:07,151
+Second, create a new file called style dot css, in the same folder, right next to index dot html.
+
+87
+00:04:07,151 --> 00:04:10,665
+Those two names must match exactly, letter for letter.
+
+88
+00:04:11,365 --> 00:04:13,608
+Every CSS rule has the same shape.
+
+89
+00:04:13,608 --> 00:04:16,048
+A selector, which says what to style.
+
+90
+00:04:16,048 --> 00:04:17,368
+Then curly brackets.
+
+91
+00:04:17,368 --> 00:04:20,138
+Inside, property, colon, value, semicolon.
+
+92
+00:04:20,138 --> 00:04:20,995
+One per line.
+
+93
+00:04:20,995 --> 00:04:27,063
+So body, open curly bracket, background colon, a color code, semicolon, close curly bracket.
+
+94
+00:04:27,063 --> 00:04:28,910
+That's all of CSS, repeated.
+
+95
+00:04:29,610 --> 00:04:32,292
+Our first rule styles the body, the whole page.
+
+96
+00:04:32,292 --> 00:04:33,433
+A clean font, Arial.
+
+97
+00:04:33,433 --> 00:04:34,802
+A warm background color.
+
+98
+00:04:34,802 --> 00:04:35,372
+Dark text.
+
+99
+00:04:35,372 --> 00:04:38,738
+Then max width, eight hundred pixels, and margin zero auto.
+
+100
+00:04:38,738 --> 00:04:43,816
+Together, those two keep the page in a neat column, centered in the middle of the screen.
+
+101
+00:04:43,816 --> 00:04:45,927
+And padding adds some breathing room.
+
+102
+00:04:45,927 --> 00:04:46,726
+Save, refresh.
+
+103
+00:04:46,726 --> 00:04:47,581
+Already better.
+
+104
+00:04:48,281 --> 00:04:49,988
+Now we use the class names.
+
+105
+00:04:49,988 --> 00:04:52,705
+To select a class in CSS, start with a dot.
+
+106
+00:04:52,705 --> 00:04:53,273
+Dot hero.
+
+107
+00:04:53,273 --> 00:04:59,213
+White background, rounded corners with border radius, padding inside, and everything centered.
+
+108
+00:04:59,213 --> 00:05:03,320
+Then dot hero space img, which means only images inside the hero.
+
+109
+00:05:03,320 --> 00:05:07,554
+Border radius fifty percent turns the square picture into a circle.
+
+110
+00:05:08,254 --> 00:05:09,194
+Next, the button.
+
+111
+00:05:09,194 --> 00:05:12,292
+Remember, it's really just a link with the class button.
+
+112
+00:05:12,292 --> 00:05:15,223
+Display inline block lets it have padding like a box.
+
+113
+00:05:15,223 --> 00:05:22,468
+An orange background, white text, padding, a huge border radius for the pill shape, and text decoration none removes the underline.
+
+114
+00:05:22,468 --> 00:05:24,017
+Then dot button colon hover.
+
+115
+00:05:24,017 --> 00:05:26,727
+That's the style only while the mouse is over it.
+
+116
+00:05:26,727 --> 00:05:27,612
+A darker orange.
+
+117
+00:05:28,312 --> 00:05:30,003
+Here's the hover, for real.
+
+118
+00:05:30,003 --> 00:05:32,759
+When I point at the button, it turns darker.
+
+119
+00:05:32,759 --> 00:05:35,201
+No JavaScript, just one small CSS rule.
+
+120
+00:05:35,201 --> 00:05:40,588
+That tiny change makes a page feel alive, and it tells people this thing is clickable.
+
+121
+00:05:41,287 --> 00:05:42,120
+Now the cards.
+
+122
+00:05:42,120 --> 00:05:44,378
+Dot cards is the box around all three.
+
+123
+00:05:44,378 --> 00:05:48,004
+Display flex puts the boxes inside it side by side, in a row.
+
+124
+00:05:48,004 --> 00:05:50,204
+Gap adds sixteen pixels between them.
+
+125
+00:05:50,204 --> 00:05:57,337
+Then each dot card gets flex one, so they share the width equally, plus a white background, rounded corners and padding.
+
+126
+00:05:57,337 --> 00:06:00,368
+Save, refresh, and there's the page from the start.
+
+127
+00:06:01,068 --> 00:06:02,871
+Flexbox is worth remembering.
+
+128
+00:06:02,871 --> 00:06:06,975
+Display flex on the parent box, and its children line up in a row.
+
+129
+00:06:06,975 --> 00:06:10,519
+Flex one on each child, and they share the space equally.
+
+130
+00:06:10,519 --> 00:06:12,509
+Gap sets the space between them.
+
+131
+00:06:12,509 --> 00:06:16,799
+That one idea builds menus, toolbars and card grids all over the web.
+
+132
+00:06:17,499 --> 00:06:18,210
+Now, phones.
+
+133
+00:06:18,210 --> 00:06:20,580
+Here's the same page on a narrow screen.
+
+134
+00:06:20,580 --> 00:06:23,364
+The three cards are squeezed into tiny columns.
+
+135
+00:06:23,364 --> 00:06:24,727
+Ugly, and hard to read.
+
+136
+00:06:24,727 --> 00:06:25,319
+Two fixes.
+
+137
+00:06:25,319 --> 00:06:32,783
+First, the viewport line in the head, which tells phones to use their real screen width instead of pretending to be a desktop.
+
+138
+00:06:33,483 --> 00:06:34,790
+Second, a media query.
+
+139
+00:06:34,790 --> 00:06:42,571
+At max width six hundred pixels, which means on screens six hundred pixels wide or less, the cards switch to flex direction column.
+
+140
+00:06:42,571 --> 00:06:44,472
+They stack, one under the other.
+
+141
+00:06:44,472 --> 00:06:48,214
+Save, refresh, and now it looks like it was made for the phone.
+
+142
+00:06:48,214 --> 00:06:50,174
+On a big screen, nothing changes.
+
+143
+00:06:50,874 --> 00:06:52,886
+Now the two mistakes I promised.
+
+144
+00:06:52,886 --> 00:06:53,640
+Mistake one.
+
+145
+00:06:53,640 --> 00:06:57,600
+Your CSS is ignored completely, and the page looks plain again.
+
+146
+00:06:57,600 --> 00:07:02,881
+Here, the link says styles dot css, with an s, but the file is called style dot css.
+
+147
+00:07:02,881 --> 00:07:03,572
+One letter.
+
+148
+00:07:03,572 --> 00:07:08,161
+The browser can't find the file, so it silently skips all of your styles.
+
+149
+00:07:08,161 --> 00:07:09,229
+No error message.
+
+150
+00:07:09,929 --> 00:07:10,577
+Mistake two.
+
+151
+00:07:10,577 --> 00:07:13,434
+Half of your styles work, and the rest are just gone.
+
+152
+00:07:13,434 --> 00:07:17,370
+Here, one closing curly bracket is missing, after the round picture rule.
+
+153
+00:07:17,370 --> 00:07:20,498
+Now the picture is still a circle, but look at the button.
+
+154
+00:07:20,498 --> 00:07:22,062
+It's a plain blue link again.
+
+155
+00:07:22,062 --> 00:07:26,591
+The browser thinks the button rule is inside the broken rule, and it throws it away.
+
+156
+00:07:26,591 --> 00:07:28,370
+Always close every curly bracket.
+
+157
+00:07:29,070 --> 00:07:30,487
+Three more you'll meet.
+
+158
+00:07:30,487 --> 00:07:34,059
+Text in the wrong place, because a closing tag is missing.
+
+159
+00:07:34,059 --> 00:07:38,679
+A broken picture icon, because the image file name or folder doesn't match.
+
+160
+00:07:38,679 --> 00:07:43,052
+And changes that don't show up, because you forgot to save, or refresh.
+
+161
+00:07:43,752 --> 00:07:44,192
+Pro tip.
+
+162
+00:07:44,192 --> 00:07:47,108
+Right click anything on your page and choose Inspect.
+
+163
+00:07:47,108 --> 00:07:50,575
+Or press F12, or Control Shift I, or Command Option I on a Mac.
+
+164
+00:07:50,575 --> 00:07:53,656
+These are the developer tools, built into every browser.
+
+165
+00:07:53,656 --> 00:07:57,287
+Click an element, and you see exactly which CSS rules apply to it.
+
+166
+00:07:57,287 --> 00:08:00,918
+You can even change a color right there, and watch it update live.
+
+167
+00:08:00,918 --> 00:08:03,174
+When you like it, copy it into your file.
+
+168
+00:08:03,874 --> 00:08:04,634
+Quick recap.
+
+169
+00:08:04,634 --> 00:08:07,039
+HTML is the content, CSS is the looks.
+
+170
+00:08:07,039 --> 00:08:09,634
+Every page starts with the same skeleton.
+
+171
+00:08:09,634 --> 00:08:10,837
+Tags come in pairs.
+
+172
+00:08:10,837 --> 00:08:14,128
+Classes are labels, and CSS selects them with a dot.
+
+173
+00:08:14,128 --> 00:08:15,901
+Flexbox puts boxes in a row.
+
+174
+00:08:15,901 --> 00:08:17,610
+A media query fixes phones.
+
+175
+00:08:17,610 --> 00:08:19,888
+And edit, save, refresh, every time.
+
+176
+00:08:19,888 --> 00:08:22,294
+Pause and screenshot this cheat sheet.
+
+177
+00:08:22,993 --> 00:08:25,682
+Your page lives on your computer for now.
+
+178
+00:08:25,682 --> 00:08:32,893
+Next on Shortcut Lab, we go back to Python, and pull the text and the tables out of P D F files automatically.
+
+179
+00:08:32,893 --> 00:08:34,992
+Subscribe, so you don't miss it.
