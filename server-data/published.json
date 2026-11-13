@@ -749,5 +749,27 @@
   "publish_at": "2026-11-14T12:00:00-03:00",
   "related_key": "ptd-ep12-long",
   "pinned_comment": "Qual Selic você acha que a gente vai ver no fim de 2027: maior ou menor que hoje? Vídeo completo: Consignado: o empréstimo que o banco recebe antes de você (e quem ganha com ele)"
+ },
+ "lab-ep09-long": {
+  "attempts": 1,
+  "status": "published",
+  "url": "https://youtu.be/o1VaWUleu5o",
+  "by": "robo",
+  "visibility": "schedule",
+  "when": "2026-11-13T19:00:00-03:00",
+  "at": "2026-11-13T09:23:09.458014-03:00",
+  "error": null,
+  "channel_id": "UCXGqR8k1RMbfYdVleIuJKzA",
+  "title": "Build Your First Web Page in 15 Minutes: HTML and CSS for Beginners",
+  "kind": "long",
+  "publish_at": "2026-11-13T19:00:00-03:00",
+  "pinned_comment": "What would you put on your first web page: a portfolio, a shop, or something else? Tell me below."
+ },
+ "lab-ep09-short": {
+  "attempts": 1,
+  "status": "error",
+  "error": "Page.goto: Timeout 60000ms exceeded.\nCall log:\n  - navigating to \"https://www.youtube.com/channel_switcher\", waiting until \"domcontentloaded\"\n",
+  "screenshot": "20261113-092558-erro-lab-ep09-short.png",
+  "at": "2026-11-13T09:27:01.012924-03:00"
  }
 }
