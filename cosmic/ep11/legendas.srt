@@ -1,0 +1,407 @@
+1
+00:00:00,200 --> 00:00:04,620
+Step outside in New York tonight, and a glowing arch splits the sky in two.
+
+2
+00:00:04,620 --> 00:00:11,457
+It rises from the east, arcs over the southern horizon, and comes down in the west, glowing with reflected sunlight.
+
+3
+00:00:11,457 --> 00:00:16,349
+And in the middle of it, there's a dark patch, as if someone took a bite out of it.
+
+4
+00:00:17,049 --> 00:00:20,639
+That's what Earth would look like with rings like Saturn's.
+
+5
+00:00:20,639 --> 00:00:24,715
+But move a few thousand kilometers and the view changes completely.
+
+6
+00:00:24,715 --> 00:00:26,479
+In one city it's a thin line.
+
+7
+00:00:26,479 --> 00:00:28,487
+In another it fills half the sky.
+
+8
+00:00:28,487 --> 00:00:32,259
+And in some places, the rings would steal the winter sunshine.
+
+9
+00:00:32,960 --> 00:00:34,709
+What If Earth Had Rings Like Saturn?
+
+10
+00:00:35,409 --> 00:00:36,801
+First, let's build them.
+
+11
+00:00:36,801 --> 00:00:42,022
+We'll take Saturn's main rings and shrink them to fit Earth, keeping the same proportions.
+
+12
+00:00:42,022 --> 00:00:46,374
+The inner edge would sit about fifteen hundred kilometers above the ground.
+
+13
+00:00:46,374 --> 00:00:48,520
+The outer edge, about eight thousand.
+
+14
+00:00:48,520 --> 00:00:51,537
+Edge to edge, they'd be wider than the whole planet.
+
+15
+00:00:52,237 --> 00:00:52,985
+Why so close?
+
+16
+00:00:52,985 --> 00:00:55,573
+Because rings can only survive near a planet.
+
+17
+00:00:55,573 --> 00:01:06,158
+Inside a boundary called the Roche limit, the planet's tides pull harder on the near side of a clump than on the far side, so loose material can never pull itself together into a moon.
+
+18
+00:01:06,158 --> 00:01:11,910
+For icy rubble around Earth, that limit is roughly twenty eight thousand kilometers from the center.
+
+19
+00:01:11,910 --> 00:01:13,866
+For rock, about nineteen thousand.
+
+20
+00:01:13,866 --> 00:01:16,685
+Our Moon sits more than twenty times farther out.
+
+21
+00:01:17,385 --> 00:01:19,940
+And here's the part that's hard to believe.
+
+22
+00:01:19,940 --> 00:01:28,200
+Saturn's main rings stretch across roughly two hundred seventy thousand kilometers, but in most places they're only about ten meters thick.
+
+23
+00:01:28,200 --> 00:01:31,230
+That's about the height of a three storey building.
+
+24
+00:01:31,930 --> 00:01:39,600
+If you shrank the rings down to the thickness of a sheet of paper, by our calculation they'd still be almost three kilometers wide.
+
+25
+00:01:39,600 --> 00:01:47,855
+They're made almost entirely of water ice, in pieces from tiny grains up to boulders several meters across, all circling in their own orbits.
+
+26
+00:01:47,855 --> 00:01:49,962
+Each piece is basically a tiny moon.
+
+27
+00:01:49,962 --> 00:01:55,290
+Billions of them, bumping gently into each other, flattening the whole system into a sheet.
+
+28
+00:01:55,990 --> 00:01:57,022
+Now let's travel.
+
+29
+00:01:57,022 --> 00:02:00,300
+Postcard number one, from Quito, right on the equator.
+
+30
+00:02:00,300 --> 00:02:04,853
+You're standing exactly in the plane of the rings, so you see them edge on.
+
+31
+00:02:04,853 --> 00:02:09,467
+Just a thin, bright line running from east to west, straight over your head.
+
+32
+00:02:09,467 --> 00:02:11,713
+By day, you might not even notice it.
+
+33
+00:02:12,413 --> 00:02:18,547
+But the rings would still be up there, casting a narrow shadow, and a single stripe would cut across the equator.
+
+34
+00:02:18,547 --> 00:02:25,768
+Every launch from near the equator, where rockets get the biggest boost from Earth's spin, would have to be planned around the rings.
+
+35
+00:02:26,467 --> 00:02:30,180
+Postcard two, from Mexico City, about nineteen degrees north.
+
+36
+00:02:30,180 --> 00:02:37,482
+Here the rings become a vast ribbon, sweeping from the eastern horizon to the western one, high across the southern sky.
+
+37
+00:02:37,482 --> 00:02:45,272
+All three main rings are visible, the faint inner ring, the bright middle one, and the outer ring, with a dark gap between them.
+
+38
+00:02:45,272 --> 00:02:48,315
+The gap alone would look wider than the full Moon.
+
+39
+00:02:48,315 --> 00:02:57,139
+At sunset, the whole arch would turn orange and pink, long after the ground had gone dark, because sunlight still reaches the ice high above you.
+
+40
+00:02:57,839 --> 00:02:59,657
+Postcard three, from New York.
+
+41
+00:02:59,657 --> 00:03:02,567
+The arch is lower now, and something is missing.
+
+42
+00:03:02,567 --> 00:03:07,962
+The faint inner ring has slipped below the horizon, hidden behind the curve of the Earth.
+
+43
+00:03:07,962 --> 00:03:12,751
+By our calculation, nobody north of about thirty six degrees could ever see it.
+
+44
+00:03:13,451 --> 00:03:15,145
+Postcard four, from London.
+
+45
+00:03:15,145 --> 00:03:22,362
+Now only the outer rings peek over the southern horizon, a low pale arc, like a permanent rainbow that never moves.
+
+46
+00:03:22,362 --> 00:03:26,379
+And the farther north you go, the more of it sinks out of sight.
+
+47
+00:03:27,079 --> 00:03:31,139
+And postcard five, from Reykjavik, at sixty four degrees north.
+
+48
+00:03:31,139 --> 00:03:31,654
+Nothing.
+
+49
+00:03:31,654 --> 00:03:36,874
+By our calculation, the outer edge of the rings would sit just below the horizon.
+
+50
+00:03:36,874 --> 00:03:45,896
+People in Iceland, northern Scandinavia and Alaska would live on a ringed planet and never see the rings at all, unless they traveled south.
+
+51
+00:03:45,896 --> 00:03:52,920
+Imagine flying from Reykjavik to Madrid, and watching a giant arch slowly climb out of the horizon as you go.
+
+52
+00:03:52,920 --> 00:03:57,366
+For many people, a first look at the rings would be a vacation photo.
+
+53
+00:03:58,066 --> 00:04:01,528
+The southern hemisphere gets the same show in reverse.
+
+54
+00:04:01,528 --> 00:04:06,849
+From Sydney or Buenos Aires, the arch would hang over the northern horizon instead.
+
+55
+00:04:06,849 --> 00:04:10,503
+Wherever you live, the rings always sit over the equator.
+
+56
+00:04:11,203 --> 00:04:12,356
+Now the fine print.
+
+57
+00:04:12,356 --> 00:04:13,447
+First, the nights.
+
+58
+00:04:13,447 --> 00:04:19,087
+Ice is a great mirror, so the rings would reflect sunlight down onto the night side of Earth.
+
+59
+00:04:19,087 --> 00:04:21,148
+Nights would never get truly dark.
+
+60
+00:04:21,148 --> 00:04:27,758
+But around midnight, Earth's own shadow falls across the rings, and that's the dark bite you saw in New York.
+
+61
+00:04:28,458 --> 00:04:29,628
+Second, the winters.
+
+62
+00:04:29,628 --> 00:04:37,989
+Earth is tilted, so for half the year the Sun sits below the plane of the rings for the northern hemisphere, and above it for the southern one.
+
+63
+00:04:37,989 --> 00:04:41,322
+In winter, the rings would stand between you and the Sun.
+
+64
+00:04:42,022 --> 00:04:52,001
+By our calculation, at noon on the winter solstice, the shadow of the thick middle ring would cover a band from about fourteen to twenty seven degrees of latitude.
+
+65
+00:04:52,001 --> 00:05:00,266
+Mexico City, Hong Kong, Havana and Miami would spend part of every winter in a long twilight, with the Sun dimmed or blocked at midday.
+
+66
+00:05:00,266 --> 00:05:03,817
+Darker winters would almost certainly mean colder winters.
+
+67
+00:05:03,817 --> 00:05:14,102
+And because the shadow drifts with the seasons, sliding toward the equator as spring arrives, every city in that band would get its own strange calendar of shadow days.
+
+68
+00:05:14,802 --> 00:05:15,925
+Third, satellites.
+
+69
+00:05:15,925 --> 00:05:21,858
+The International Space Station flies about four hundred twenty kilometers up, below our rings.
+
+70
+00:05:21,858 --> 00:05:26,041
+GPS satellites fly about twenty thousand kilometers up, above them.
+
+71
+00:05:26,041 --> 00:05:32,473
+But anything that has to cross the rings would risk smashing into ice at several kilometers per second.
+
+72
+00:05:32,473 --> 00:05:37,905
+The space between fifteen hundred and eight thousand kilometers would be a no fly zone.
+
+73
+00:05:38,605 --> 00:05:41,348
+And fourth, the rings wouldn't last forever.
+
+74
+00:05:41,348 --> 00:05:43,654
+Saturn is losing its rings right now.
+
+75
+00:05:43,654 --> 00:05:49,326
+Icy particles get electrically charged and pulled along its magnetic field into the planet.
+
+76
+00:05:49,326 --> 00:05:56,120
+NASA scientists estimate this ring rain drains enough water to fill an Olympic swimming pool every half hour.
+
+77
+00:05:56,820 --> 00:06:03,104
+At that pace, the whole ring system could be gone in about three hundred million years, and maybe much sooner.
+
+78
+00:06:03,104 --> 00:06:08,817
+Some measurements even suggest the rings themselves are young, only a few hundred million years old.
+
+79
+00:06:08,817 --> 00:06:12,074
+That means we're lucky to be alive while Saturn has them.
+
+80
+00:06:12,774 --> 00:06:13,675
+Now the twist.
+
+81
+00:06:13,675 --> 00:06:15,865
+Earth may already have had a ring.
+
+82
+00:06:15,865 --> 00:06:29,520
+In twenty twenty four, geologists at Monash University in Australia mapped twenty one impact craters from about four hundred sixty six million years ago, a time when there was a sudden spike in meteorite impacts.
+
+83
+00:06:30,220 --> 00:06:42,295
+When they rebuilt where the continents sat back then, every one of those craters landed within thirty degrees of the equator, even though most of the land that could have kept a crater lay outside that band.
+
+84
+00:06:42,295 --> 00:06:43,345
+Their explanation?
+
+85
+00:06:43,345 --> 00:06:50,636
+A large asteroid passed inside Earth's Roche limit, broke apart, and formed a ring that slowly rained down along the equator.
+
+86
+00:06:51,336 --> 00:06:58,573
+They even suggested the ring's shadow may have helped cool the planet, just before one of the coldest periods in Earth's history.
+
+87
+00:06:58,573 --> 00:07:03,173
+Not every scientist is convinced, and the dating of some craters is still debated.
+
+88
+00:07:03,173 --> 00:07:09,512
+But it means the view from your street might have looked like this once, long before anyone was around to see it.
+
+89
+00:07:10,212 --> 00:07:11,984
+And Earth won't be the last.
+
+90
+00:07:11,984 --> 00:07:14,453
+Mars's moon Phobos is spiraling inward.
+
+91
+00:07:14,453 --> 00:07:23,060
+In roughly twenty to forty million years, according to a twenty fifteen study, it will cross Mars's Roche limit and be torn into a ring.
+
+92
+00:07:23,060 --> 00:07:25,591
+Mars is about to become a ringed planet.
+
+93
+00:07:25,591 --> 00:07:29,199
+On the scale of the universe, that's the blink of an eye.
+
+94
+00:07:29,899 --> 00:07:36,578
+So, rings like Saturn's would hang fifteen hundred to eight thousand kilometers above us, only about ten meters thick.
+
+95
+00:07:36,578 --> 00:07:42,409
+They'd be a thin line from the equator, a huge arch from the tropics, and invisible from the far north.
+
+96
+00:07:42,409 --> 00:07:47,220
+They'd brighten our nights, darken our winters, and get in the way of our satellites.
+
+97
+00:07:47,220 --> 00:07:49,768
+And they might not be science fiction at all.
+
+98
+00:07:49,768 --> 00:07:51,296
+They might be Earth's past.
+
+99
+00:07:51,996 --> 00:07:56,362
+Next time, the fastest thing in the universe turns out to be painfully slow.
+
+100
+00:07:56,362 --> 00:08:01,761
+Light takes eight minutes to reach us from the Sun, and the numbers only get worse from there.
+
+101
+00:08:01,761 --> 00:08:04,576
+The speed of light is slow, and here's the proof.
+
+102
+00:08:04,576 --> 00:08:05,265
+That's next.

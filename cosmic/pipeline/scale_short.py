@@ -11,6 +11,9 @@ Visuais (vis.type):
              (y0/y1: 1880 = 41.000 km -> 2017 = 16.000 km); vis.earths = Terras em escala dentro da mancha (drop = caem) (scale02).
   "starinside": uma estrela real (EBLM J0555-57Ab) EM ESCALA dentro de Júpiter; vis.mode = inside (drop = cai no disco) | balance
              (1 estrela x pilha de 85 Júpiteres) | saturn (lado a lado com Saturno) | limit (barra 0–100 massas de Júpiter, linha de fusão) (scale03).
+  "thinring": anéis de Saturno, 273.000 km de largura x ~10 m de espessura; vis.mode = edge (linha + lupa com prédio de 3 andares) | wide
+             (Saturno inclinado + barra Terra–Lua em escala) | zoom (zoom log na borda) | paper (anel fino como papel = 2,7 km sobre uma
+             cidade em escala) | tilt (anéis ficando de perfil, 2017 -> 2025) (scale04).
 Reaproveita render.py (sprites, fontes) e ranking.py (fundo, texto, legendas).
 """
 import sys, os, math, json, subprocess, importlib.util, random
@@ -206,6 +209,93 @@ def starinside_vis(img, v, th, t, dur, bp):
         text(img, (W / 2, y + 220), f"{m:.0f} Jupiter masses", 64, (255, 255, 255))
         text(img, (W / 2, y + 300), "hydrogen fusion line ≈ 80", 40, acc2, w="ExtraBold")
 
+# ---- scale04: "thinring" — Saturn's rings: 273,000 km across vs about 10 m thick. modes: edge (hairline across the screen + magnifier with a
+# 3-storey building beside the ring band) | wide (tilted Saturn + rings vs the Earth–Moon distance, to scale) | zoom (log zoom on the edge,
+# field-of-view counter) | paper (paper-thin rings would still be 2.7 km wide: strip over a skyline to scale) | tilt (rings close to edge-on,
+# year counter 2017 -> 2025).
+SAT_R4 = 60268
+def saturn4(img, cx, cy, r, tilt):
+    s = math.sin(math.radians(max(0.15, tilt)))
+    def rings(front):
+        lay = Image.new("RGBA", img.size, (0, 0, 0, 0)); dl = ImageDraw.Draw(lay)
+        for nm, r0, r1, col, op in R.RINGS11:
+            for j in range(6):
+                rr = r * lerp(r0, r1, (j + 0.5) / 6); w_ = max(2, int(r * (r1 - r0) / 6 * s * 1.1 + 2)) if s > 0.05 else 2
+                box = [cx - rr, cy - rr * s, cx + rr, cy + rr * s]
+                dl.arc(box, 0 if front else 180, 180 if front else 360, fill=col + (int(255 * op),), width=max(2, int(r * (r1 - r0) / 6) if s > 0.2 else 3))
+        img.alpha_composite(lay)
+    rings(False)
+    R.paste_c(img, R.planet_sprite(int(r), (226, 204, 150), light=(-0.8, -0.5)), cx, cy)
+    rings(True)
+def thinring_vis(img, v, th, t, dur, bp):
+    acc, acc2 = tuple(th["accent"]), tuple(th["accent2"]); mode = v.get("mode", "edge"); cx, cy = W / 2, 930
+    d = ImageDraw.Draw(img)
+    if mode == "edge":
+        d.line([(0, cy), (W, cy)], fill=R.CREAM11, width=2)
+        mr = 330; mx, my = cx, cy
+        lay = Image.new("RGBA", img.size, (0, 0, 0, 0)); dl = ImageDraw.Draw(lay)
+        dl.ellipse([mx - mr, my - mr, mx + mr, my + mr], fill=(6, 8, 22, 245))
+        bh = 260  # 10 m = 260 px inside the magnifier
+        dl.rectangle([mx - mr, my - bh / 2, mx + mr, my + bh / 2], fill=R.CREAM11 + (70,))
+        rng = random.Random(4)
+        for i in range(160):
+            x = mx + rng.uniform(-mr, mr); y = my + rng.uniform(-bh / 2 + 10, bh / 2 - 10); s_ = 10 ** rng.uniform(-0.3, 1.5)
+            sh = int(205 + 40 * rng.random()); dl.ellipse([x - s_, y - s_ * 0.8, x + s_, y + s_ * 0.8], fill=(sh, sh - 6, sh - 24, 255))
+        bx = mx + 70; bw = 150
+        dl.rectangle([bx, my + bh / 2 - bh, bx + bw, my + bh / 2], fill=(60, 72, 110, 255), outline=(170, 180, 215, 255), width=4)
+        for fl in range(3):
+            for wn in range(3): dl.rectangle([bx + 18 + wn * 45, my - bh / 2 + 22 + fl * 84, bx + 46 + wn * 45, my - bh / 2 + 60 + fl * 84], fill=(255, 210, 130, 255))
+        m = Image.new("L", img.size, 0); ImageDraw.Draw(m).ellipse([mx - mr, my - mr, mx + mr, my + mr], fill=255)
+        lay.putalpha(Image.fromarray(np.minimum(np.asarray(lay.getchannel("A")), np.asarray(m))))
+        img.alpha_composite(lay); d = ImageDraw.Draw(img)
+        d.ellipse([mx - mr, my - mr, mx + mr, my + mr], outline=acc, width=8)
+        d.line([(mx + mr + 30, my - bh / 2), (mx + mr + 30, my + bh / 2)], fill=acc2, width=6)
+        for yy in (my - bh / 2, my + bh / 2): d.line([(mx + mr + 14, yy), (mx + mr + 46, yy)], fill=acc2, width=6)
+        text(img, (mx + mr + 30, my - bh / 2 - 50), "10 m", 52, acc2)
+        text(img, (W / 2, cy + mr + 70), "the ring, edge-on (magnified)", 38, (230, 232, 240), w="ExtraBold")
+    elif mode == "wide":
+        k = 520 / 136775; saturn4(img, cx, 800, SAT_R4 * k, 22)
+        y = 1240; x0 = 50
+        for i, (lab, km, col) in enumerate([("main rings, edge to edge: 273,000 km", 273550, R.CREAM11), ("Earth to the Moon: 384,400 km", 384400, (140, 190, 255))]):
+            p = ease((t - 0.3 - i * 0.8) / 0.8); L = (W - 100) * km / 384400 * p; yy = y + i * 130
+            d.rounded_rectangle([x0, yy - 16, x0 + max(20, L), yy + 16], 16, fill=col)
+            d.text((x0, yy - 50), lab, font=F(34, "ExtraBold"), fill=col, anchor="lm")
+        d.text((W / 2, y + 230), "same scale", font=F(30, "Bold"), fill=(170, 175, 200), anchor="mm")
+    elif mode == "zoom":
+        p = easeio((t - 0.2) / max(0.8, dur * 0.8))
+        pxm = math.exp(lerp(math.log(1000 / 2.8e8), math.log(1000 / 40.0), p)); th_ = max(2, 10 * pxm); half = 1.365e8 * pxm
+        lay = Image.new("RGBA", img.size, (0, 0, 0, 0)); dl = ImageDraw.Draw(lay)
+        dl.rectangle([max(-10, cx - half), cy - th_ / 2, min(W + 10, cx + half), cy + th_ / 2], fill=R.CREAM11 + (110 if th_ > 6 else 255,))
+        if pxm > 0.4:
+            rng = random.Random(5)
+            for i in range(500):
+                s_ = 10 ** rng.uniform(-2, 0.7); r_ = max(0.8, s_ * pxm / 2); x = rng.uniform(0, W); y = cy + rng.uniform(-5, 5) * pxm
+                sh = int(200 + 40 * rng.random()); dl.ellipse([x - r_, y - r_ * 0.8, x + r_, y + r_ * 0.8], fill=(sh, sh - 8, sh - 25, 255))
+        img.alpha_composite(lay)
+        if half * 2 < W - 60:
+            R.paste_c(img, R.planet_sprite(max(2, int(SAT_R4 * 1000 * pxm)), (226, 204, 150)), cx, cy)
+        view = W / pxm; s = f"{view / 1000:,.0f} km" if view > 5000 else f"{view:,.0f} m"
+        text(img, (W / 2, 1290), "view: " + s + " wide", 56, acc2)
+    elif mode == "paper":
+        y = 1080; L = W - 120; pxm = L / 2730.0
+        rng = random.Random(9); x = 60
+        while x < W - 60:
+            bw = rng.uniform(30, 70); bh = rng.choice([rng.uniform(60, 120), rng.uniform(150, 330)]) * pxm
+            d.rectangle([x, y + 60 - bh, x + bw, y + 60], fill=(50, 58, 90)); x += bw + rng.uniform(2, 10)
+        d.rectangle([0, y + 60, W, y + 75], fill=(30, 34, 55))
+        p = ease((t - 0.3) / 1.0)
+        d.rectangle([W / 2 - L / 2 * p, y - 400, W / 2 + L / 2 * p, y - 396], fill=(255, 255, 255))
+        d.line([(60, y - 340), (W - 60, y - 340)], fill=acc2, width=4)
+        for xx in (60, W - 60): d.line([(xx, y - 360), (xx, y - 320)], fill=acc2, width=4)
+        text(img, (W / 2, y - 290), "2.7 km", 90, acc2)
+        text(img, (W / 2, y - 470), "a ring as thin as paper (0.1 mm)", 40, (255, 255, 255), w="ExtraBold")
+        text(img, (W / 2, y + 130), "city skyline, same scale", 32, (170, 175, 200), w="Bold")
+    elif mode == "tilt":
+        p = easeio((t - 0.2) / max(0.8, dur * 0.7)); tilt = lerp(27, 0.3, p); yr = lerp(2017, 2025, p)
+        saturn4(img, cx, 880, 230, tilt)
+        text(img, (W / 2, 1270), f"{yr:.0f}", 110, acc2)
+        text(img, (W / 2, 1365), "as seen from Earth", 38, (230, 232, 240), w="ExtraBold")
+
 def chrome(img, th, gt, total):
     d = ImageDraw.Draw(img)
     d.rectangle([0, 0, int(W * gt / total), 10], fill=tuple(th["accent"]))
@@ -244,6 +334,11 @@ def frame(m, durs, gt, chunks, arr):
         hl = v.get("head") or m.BIG
         text(img, (W / 2, 140), hl["num"], 124 if len(hl["num"]) < 12 else 96, tuple(th["accent"]), stroke=4)
         text(img, (W / 2, 245), hl["top"], 52, (255, 255, 255), stroke=3)
+    elif v["type"] == "thinring":
+        thinring_vis(img, v, th, t, d, easeio((t - 0.2) / max(0.8, d * 0.75)))
+        hl = v.get("head") or m.BIG
+        text(img, (W / 2, 160), hl["num"], 124 if len(hl["num"]) < 12 else 100, tuple(th["accent"]), stroke=4)
+        text(img, (W / 2, 265), hl["top"], 50, (255, 255, 255), stroke=3)
     elif v["type"] == "starinside":
         starinside_vis(img, v, th, t, d, easeio((t - 0.2) / max(0.8, d * 0.75)))
         hl = v.get("head") or m.BIG

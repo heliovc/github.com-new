@@ -18,6 +18,8 @@ vis.type == "glow" / THEME.hook/outro == "glow": horizonte noturno com a estrela
 vis.type == "daylight" / THEME.hook/outro == "daylight": planeta com dia/noite e Sol girando em volta (1 volta = 1 dia solar) + contador de dias terrestres + régua linear 0–180 dias com os mundos revelados (rank06).
 vis.type == "kelvin" / THEME.hook/outro == "kelvin": régua Kelvin 0–60 K com parede de gelo no zero absoluto e a linha de 2,7 K do espaço vazio;
   o lugar desliza até a sua temperatura e o objeto congela (vis.kind = planet | crater | nebula; vis.k, vis.col) (rank09).
+vis.type == "peaks" / THEME.hook/outro == "peaks": régua vertical 0–26 km com Everest e a linha dos aviões (11 km); o perfil da montanha sobe
+  da base (vis.kind = shield | central | ridge | block | ocean; vis.km, vis.sea = nível do mar em km, vis.world, vis.world_col) (rank10).
 Tudo desenhado por código; narração Kokoro (VOICE, padrão af_heart); legenda grande queimada.
 """
 import sys, os, re, math, json, subprocess, importlib.util, random
@@ -545,6 +547,62 @@ def kelvin_vis(img, it, th, t, dur):
     text(img, (W / 2, 950), f"{k:,.0f} K above absolute zero" if v["k"] >= 2 else f"{k:,.1f} K above absolute zero", 40, (220, 235, 255), w="ExtraBold", a=ease((t - 0.6) / 0.4))
     if v.get("note"): text(img, (W / 2, 1290), v["note"], 38, tuple(th["accent2"]), w="ExtraBold", a=ease((t - 1.8) / 0.5))
 
+# ---- rank10: "peaks" — heights TO SCALE on a vertical km ruler (0–26 km), Everest + airliner cruising line as references;
+# the mountain's profile rises from its base (shield | central | ridge | block | ocean); its world as a small sphere in the corner.
+PK_Y0, PK_Y1, PK_MAX, PK_X = 1290, 470, 26.0, 120
+def pk_y(km): return lerp(PK_Y0, PK_Y1, km / PK_MAX)
+def pk_profile(kind, u):
+    """u in [-1, 1] -> height fraction 0..1"""
+    a = abs(u)
+    if kind == "shield":  # broad gentle dome with escarpment cliffs at the base
+        return max(0.0, 0.78 * (1 - a ** 1.6) + (0.22 if a < 0.92 else 0.22 * max(0, (1 - a) / 0.08)))
+    if kind == "central":  # crater floor, rim walls at the edges, central peak
+        rim = 0.32 * math.exp(-((a - 0.95) / 0.06) ** 2)
+        return max(0.0, math.exp(-(u / 0.22) ** 2) * 1.0 + rim)
+    if kind == "ridge":  # sharp equatorial ridge
+        return max(0.0, 1 - a / 0.42) ** 1.2
+    if kind == "block":  # tilted tectonic block: steep on one side
+        return max(0.0, min(1.0, (u + 0.8) / 0.95) if u < 0.15 else max(0.0, 1 - (u - 0.15) / 0.35))
+    return max(0.0, 1 - a ** 1.1)  # ocean: cone from the sea floor
+def pk_mountain(img, kind, km, col, prog, x0=200, x1=930, sea=None):
+    pts = [(x0, PK_Y0)]
+    for i in range(121):
+        u = -1 + 2 * i / 120; x = lerp(x0, x1, i / 120)
+        pts.append((x, pk_y(km * prog * pk_profile(kind, u))))
+    pts.append((x1, PK_Y0))
+    lay = Image.new("RGBA", img.size, (0, 0, 0, 0)); dl = ImageDraw.Draw(lay)
+    dl.polygon(pts, fill=col + (255,))
+    mid = (x0 + x1) / 2
+    dl.polygon([(mid, pk_y(km * prog * pk_profile(kind, 0)))] + [p for p in pts if p[0] >= mid], fill=tuple(int(c * 0.72) for c in col) + (255,))
+    if sea is not None:
+        dl.rectangle([x0 - 60, pk_y(sea), x1 + 60, PK_Y0], fill=(40, 110, 200, 150))
+        dl.line([(x0 - 60, pk_y(sea)), (x1 + 60, pk_y(sea))], fill=(120, 200, 255, 255), width=3)
+    img.alpha_composite(lay)
+def pk_ruler(img, th, a=1.0):
+    d = ImageDraw.Draw(img); c = (150, 160, 190)
+    d.line([(PK_X, PK_Y0), (PK_X, PK_Y1)], fill=c, width=4)
+    for k in range(0, 27, 5):
+        y = pk_y(k); d.line([(PK_X, y), (PK_X + 22, y)], fill=c, width=3)
+        d.text((PK_X - 14, y), f"{k}", font=F(28, "Bold"), fill=c, anchor="rm")
+    d.text((PK_X - 14, PK_Y1 - 40), "km", font=F(28, "Bold"), fill=c, anchor="rm")
+    d.line([(PK_X - 30, PK_Y0), (W - 40, PK_Y0)], fill=(90, 96, 120), width=3)
+def pk_refs(img, th, a=1.0):
+    d = ImageDraw.Draw(img); y = pk_y(11)
+    for x in range(PK_X + 30, W - 40, 26): d.line([(x, y), (x + 12, y)], fill=(170, 180, 210), width=2)
+    d.text((W - 50, y - 22), "airliners cruise ≈ 11 km", font=F(26, "Bold"), fill=(170, 180, 210), anchor="rm")
+    ex0, ex1 = 960, 1050; pts = [(ex0, PK_Y0), (ex0 + 30, pk_y(6)), (ex0 + 44, pk_y(8.849)), (ex0 + 58, pk_y(7)), (ex1, PK_Y0)]
+    d.polygon(pts, fill=(205, 215, 235)); d.polygon([(ex0 + 44, pk_y(8.849)), (ex0 + 36, pk_y(7.6)), (ex0 + 52, pk_y(7.6))], fill=(255, 255, 255))
+    d.text(((ex0 + ex1) / 2, PK_Y0 + 30), "Everest", font=F(26, "ExtraBold"), fill=(205, 215, 235), anchor="mm")
+def peaks_vis(img, it, th, t, dur):
+    v = it["vis"]; col = tuple(v["col"]); p = easeio((t - 0.4) / max(1.2, dur * 0.55))
+    R.paste_c(img, R.planet_sprite(70, tuple(v.get("world_col", col)), light=(-0.8, -0.5)), W - 130, 470)
+    text(img, (W - 130, 570), v.get("world", ""), 30, (230, 232, 240), w="ExtraBold")
+    pk_ruler(img, th); pk_refs(img, th)
+    pk_mountain(img, v["kind"], v["km"], col, p, sea=v.get("sea"))
+    d = ImageDraw.Draw(img); top = pk_y(v["km"] * p)
+    d.line([(PK_X, top), (PK_X + 70, top)], fill=tuple(th["accent"]), width=5)
+    if v.get("note"): text(img, (W / 2, 412), v["note"], 36, tuple(th["accent2"]), w="ExtraBold", a=ease((t - 1.8) / 0.5))
+
 def caption_chunks(say, t0, dur):
     words = say.split(); groups, g = [], []
     for w in words:
@@ -567,6 +625,15 @@ def draw_caption(img, chunks, gt, y=1585):
 
 def seg_hook(img, sc, th, t, dur):
     col = tuple(th["star_col"]); acc = tuple(th["accent"])
+    if th.get("hook") == "peaks":
+        # frame 0: the big height + a "?" mountain already towering over Everest and the airliner line
+        pk_ruler(img, th); pk_refs(img, th)
+        pk_mountain(img, "shield", 25, (200, 110, 80), 0.97 + 0.03 * math.sin(t * 3))
+        d = ImageDraw.Draw(img); d.text((615, pk_y(14)), "?", font=F(200, "Black"), fill=(40, 16, 10), anchor="mm")
+        text(img, (W / 2, 200), sc.get("big", ""), 150, tuple(th["accent"]), stroke=3)
+        text(img, (W / 2, 320), sc["top"].upper(), 58, (255, 255, 255))
+        text(img, (W / 2, 1380), sc["sub"], 46, tuple(th["accent2"]), w="ExtraBold")
+        return
     if th.get("hook") == "kelvin":
         # frame 0: the big temperature + "colder than empty space" + a frosted "?" nebula sitting below the 2.7 K line
         img.alpha_composite(kv_frost(0.9))
@@ -718,6 +785,8 @@ def seg_item(img, it, th, t, dur):
         glow_vis(img, it, th, t, dur)
     if v["type"] == "kelvin":
         kelvin_vis(img, it, th, t, dur)
+    if v["type"] == "peaks":
+        peaks_vis(img, it, th, t, dur)
     # number
     p = easeio((t - 0.5) / 1.6)
     num = it["num"]
@@ -730,6 +799,18 @@ def seg_item(img, it, th, t, dur):
 
 def seg_outro(img, sc, th, t, dur):
     a = ease(t / 0.5)
+    if th.get("outro") == "peaks":
+        pk_ruler(img, th); pk_refs(img, th)
+        order = sorted(ALL_ITEMS, key=lambda o: -o["rank"]); n = len(order); span = (940 - 190) / n
+        for i, o in enumerate(order):
+            x0 = 190 + i * span; v = o["vis"]
+            pk_mountain(img, v["kind"], v["km"], tuple(v["col"]), ease((t - i * 0.12) / 0.6), x0=x0, x1=x0 + span - 14)
+            text(img, (x0 + span / 2, pk_y(v["km"]) - 34), f'{v["km"]:g}', 34, (255, 255, 255), w="Black")
+        text(img, (W / 2, 360), "WHICH MOUNTAIN", 84, (255, 255, 255), a=ease((t - 0.3) / 0.5))
+        text(img, (W / 2, 445), "SHOULD WE PUT NEXT?", 56, tuple(th["accent"]), a=ease((t - 0.5) / 0.5))
+        text(img, (W / 2, 1390), "SUBSCRIBE", 100, tuple(th["accent"]), a=ease((t - 0.8) / 0.5))
+        text(img, (W / 2, 1480), "to Cosmic Scale", 50, (255, 255, 255), w="ExtraBold", a=ease((t - 1.0) / 0.5))
+        return
     if th.get("outro") == "kelvin":
         img.alpha_composite(kv_frost(0.6))
         kv_ruler(img, th, sorted(ALL_ITEMS, key=lambda o: -o["rank"]), y=560)

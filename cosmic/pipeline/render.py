@@ -20,6 +20,13 @@ EP10 added scenes: massdial (log gauge 1–100 Jupiter masses, body barely chang
   (step 1..6 build a star). Helper jup10(r, s) = banded Jupiter -> red dwarf.
   Learned: python3 (3.11) can import a broken PIL from /usr/lib/python3/dist-packages -> python3 -m pip install --break-system-packages
   --ignore-installed pillow numpy. Narration ran short (6.6 min) on the first pass: aim ~1,350+ words for 8 min.
+EP11 added scenes: ringsky (ground view at a latitude facing the equator; Saturn-scaled rings computed in 3D with a gnomonic camera, cached
+  layer; day | night | dusk; shadow=True = Earth's shadow across the arch; city box with which rings are visible), orbitzones (top-down Earth
+  TO SCALE with rings, Roche limits, ISS / GPS / geostationary / Moon, animated zoom), ringedge (log zoom on a ring's edge down to 10 m next
+  to a 3-storey building), shadowmap (season chart day-of-year x latitude of the noon ring shadow, cities highlighted when shaded),
+  craterbelt (ancient Earth with a debris ring and 21 crater markers inside ±30°). Palette ring cream / dusk rose / sea teal.
+  Structure NEW: "postcards by latitude". Learned: never put ">" or "<" in SOURCES (they go into the description; the Studio refuses them);
+  a horizontal drift of a cached full-frame layer leaves a blank strip at the edge -> keep drift 0; 1,336 words = 7.8 min, ~1,390 = 8.1 min.
 EP06 added scenes: spinglobe (globe + speed by latitude; top=True rings; slow=True), pendulum, fling, bulge, yearday, dayclock (teal / amber palette)
 """
 import sys, os, re, math, subprocess, importlib.util, json, random, hashlib
@@ -2676,6 +2683,332 @@ def sc_moonfall(img, v, t, dur):
     d.text((bx, 890), "distances: square-root scale", font=F(26, "Medium"), fill=DIM, anchor="mm")
     if v.get("head"): alpha_text(img, (cx, 110), v["head"], F(54, "ExtraBold"), WHITE, ease(t / 0.5))
     caption(img, v.get("caption"), ease((t - 2.5) / 0.5))
+
+# ---------------- scenes (EP11) ----------------
+CREAM11, ROSE11, TEAL11 = (240, 226, 196), (240, 140, 160), (70, 200, 185)
+# Saturn's main rings in Saturn radii (NASA ring fact sheet), scaled to Earth: (name, r_in, r_out, colour, opacity)
+RINGS11 = [("C", 1.239, 1.527, (165, 152, 135), 0.38), ("B", 1.527, 1.951, (244, 230, 200), 0.95),
+           ("Cassini Division", 1.951, 2.027, (110, 100, 90), 0.12), ("A", 2.027, 2.269, (222, 210, 186), 0.72)]
+_rs11 = {}
+
+def _v3dot(a, b): return a[0] * b[0] + a[1] * b[1] + a[2] * b[2]
+
+def ring_layer11(lat, elev, fov, mode, shadow):
+    """rings seen from the ground at latitude `lat`, facing the equator, camera tilted up `elev` degrees (gnomonic camera, cached)"""
+    key = (lat, elev, fov, mode, shadow)
+    if key in _rs11: return _rs11[key]
+    phi, e = math.radians(abs(lat)), math.radians(elev)
+    U = (math.cos(phi), 0.0, math.sin(phi)); S = (math.sin(phi), 0.0, -math.cos(phi))
+    Fw = tuple(math.cos(e) * s + math.sin(e) * u for s, u in zip(S, U)); Cu = tuple(-math.sin(e) * s + math.cos(e) * u for s, u in zip(S, U))
+    Rt = (0.0, -1.0, 0.0); f = (W / 2) / math.tan(math.radians(fov / 2))
+    def proj(r, th):
+        D = (r * math.cos(th) - U[0], r * math.sin(th) - U[1], -U[2])
+        z = _v3dot(D, Fw)
+        if z < 0.02: return None
+        return (W / 2 + f * _v3dot(D, Rt) / z, H / 2 - f * _v3dot(D, Cu) / z)
+    lay = Image.new("RGBA", (W, H), (0, 0, 0, 0)); d = ImageDraw.Draw(lay)
+    rng = random.Random(11); N = 900
+    ths = [-math.pi + 2 * math.pi * k / N for k in range(N + 1)]
+    for nm, r0, r1, col, op in RINGS11:
+        nsub = 7
+        for j in range(nsub):
+            a_ = r0 + (r1 - r0) * j / nsub; b_ = r0 + (r1 - r0) * (j + 1) / nsub
+            q = op * rng.uniform(0.7, 1.15)
+            if mode == "day": c = mix((150, 185, 230), col, 0.55); al = int(255 * min(1, q * 0.75))
+            else: c = col; al = int(255 * min(1, q))
+            pa = [proj(a_, th) for th in ths]; pb = [proj(b_, th) for th in ths]
+            for k in range(N):
+                if None in (pa[k], pa[k + 1], pb[k], pb[k + 1]): continue
+                th = ths[k]
+                if max(abs(pa[k][0]), abs(pb[k][0])) > 4 * W or max(abs(pa[k][1]), abs(pb[k][1])) > 4 * H: continue
+                cc, aa = c, al
+                if shadow and math.cos(th) > 0 and abs(((a_ + b_) / 2) * math.sin(th)) < 1.0: cc, aa = mix(c, (40, 44, 70), 0.72), int(al * 0.7)
+                d.polygon([pa[k], pa[k + 1], pb[k + 1], pb[k]], fill=cc + (aa,))
+        for rr in (r0, r1):  # crisp edges (also makes the edge-on ring visible from the equator)
+            pts = [p for p in (proj(rr, th) for th in ths) if p and abs(p[0]) < 4 * W and abs(p[1]) < 4 * H]
+            if len(pts) > 1 and abs(lat) < 0.5: d.line(pts, fill=col + (240,), width=5)
+    _rs11[key] = (lay, f)
+    return _rs11[key]
+
+def sky11(img, mode, hy):
+    yy = np.linspace(0, 1, H)[:, None]
+    g = np.zeros((H, W, 4), np.float32)
+    if mode == "day":
+        top, bot, al = np.array([40, 95, 190]), np.array([150, 195, 235]), 255
+    elif mode == "dusk":
+        top, bot, al = np.array([20, 24, 70]), np.array([235, 130, 90]), 235
+    else:
+        top, bot, al = np.array([4, 6, 20]), np.array([24, 30, 60]), 140
+    k = np.clip(yy / max(1, hy / H), 0, 1) ** 1.6
+    g[..., :3] = top[None, None, :] * (1 - k[..., None]) + bot[None, None, :] * k[..., None]
+    g[..., 3] = al
+    img.alpha_composite(Image.fromarray(np.clip(g, 0, 255).astype(np.uint8), "RGBA"))
+
+_city11 = {}
+def skyline11(img, hy, seed, mode, t):
+    if seed not in _city11:
+        rng = random.Random(seed); b = []; x = -20
+        while x < W + 20:
+            w_ = rng.uniform(30, 90); h_ = rng.choice([rng.uniform(20, 70), rng.uniform(60, 180)]); b.append((x, w_, h_)); x += w_ + rng.uniform(0, 14)
+        _city11[seed] = b
+    d = ImageDraw.Draw(img); gcol = (24, 40, 30) if mode == "day" else (8, 9, 16)
+    pts = [(0, H)] + [(x, hy + 6 + 10 * math.sin(x / 210 + seed)) for x in range(0, W + 40, 40)] + [(W, H)]
+    bcol = (40, 50, 64) if mode == "day" else (10, 11, 20)
+    rng = random.Random(seed + 1)
+    for x, w_, h_ in _city11[seed]:
+        d.rectangle([x, hy - h_, x + w_, hy + 20], fill=bcol)
+        if mode != "day":
+            for wy in range(int(hy - h_ + 10), int(hy), 18):
+                for wx in range(int(x + 6), int(x + w_ - 6), 14):
+                    if rng.random() < 0.25: d.rectangle([wx, wy, wx + 5, wy + 7], fill=(255, 205, 120))
+    d.polygon(pts, fill=gcol)
+
+def sc_ringsky(img, v, t, dur):
+    """ground view at latitude v.lat facing the equator: Saturn-scaled rings computed in 3D (gnomonic camera); mode day | night | dusk;
+    shadow=True: Earth's shadow cuts a dark gap across the arch at midnight; v.city, v.head, v.caption"""
+    lat = v.get("lat", 40.7); mode = v.get("mode", "night"); elev = v.get("elev", 30); fov = v.get("fov", 118)
+    f = (W / 2) / math.tan(math.radians(fov / 2)); hy = H / 2 + f * math.tan(math.radians(elev))
+    sky11(img, mode, hy)
+    if mode == "day":
+        alt = math.radians(90 - abs(lat)); e = math.radians(elev)
+        z = math.cos(alt) * math.cos(e) + math.sin(alt) * math.sin(e); yv = math.sin(alt) * math.cos(e) - math.cos(alt) * math.sin(e)
+        if z > 0.1:
+            sx, sy = W / 2 + 260, H / 2 - f * yv / z
+            if -100 < sy < H: paste_c(img, sun_sprite(46), sx, sy)
+    lay, _ = ring_layer11(lat, elev, fov, mode, v.get("shadow", False))
+    a = ease((t - 0.2) / 1.2); drift = 0
+    if a > 0:
+        l2 = lay if a >= 1 else Image.fromarray((np.asarray(lay) * np.array([1, 1, 1, a])).astype(np.uint8), "RGBA")
+        img.alpha_composite(l2, (drift, 0)) if drift >= 0 else img.alpha_composite(l2.crop((-drift, 0, W, H)), (0, 0))
+    if mode == "night" and v.get("glow", True):
+        gl = Image.new("RGBA", img.size, (0, 0, 0, 0)); g = np.zeros((H, W, 4), np.uint8)
+        yy = np.linspace(0, 1, H)[:, None]; g[..., 0] = 120; g[..., 1] = 115; g[..., 2] = 100
+        g[..., 3] = (np.clip((yy - 0.45) * 1.8, 0, 1) * 40 * a).astype(np.uint8); img.alpha_composite(Image.fromarray(g, "RGBA"))
+    skyline11(img, hy, int(abs(lat) * 7) + 3, mode, t)
+    d = ImageDraw.Draw(img)
+    toward = "SOUTH" if lat >= 0 else "NORTH"
+    d.text((W / 2, min(H - 60, hy + 70)), f"looking {toward}", font=F(30, "Bold"), fill=(200, 205, 220), anchor="mm")
+    d.text((60, min(H - 60, hy + 70)), "EAST" if lat >= 0 else "WEST", font=F(28, "Bold"), fill=DIM, anchor="lm")
+    d.text((W - 60, min(H - 60, hy + 70)), "WEST" if lat >= 0 else "EAST", font=F(28, "Bold"), fill=DIM, anchor="rm")
+    if v.get("city"):
+        bx = 70; by = 150
+        box = Image.new("RGBA", img.size, (0, 0, 0, 0)); ImageDraw.Draw(box).rounded_rectangle([bx - 20, by - 50, bx + 600, by + 170], 22, fill=(8, 10, 24, 200), outline=ROSE11 + (180,), width=3); img.alpha_composite(box)
+        d = ImageDraw.Draw(img)
+        d.text((bx, by - 2), v["city"], font=F(54, "Black"), fill=WHITE, anchor="lm")
+        la = abs(lat); hem = "N" if lat >= 0 else "S"
+        d.text((bx, by + 62), f"latitude {la:.0f}° {hem}", font=F(34, "Bold"), fill=ROSE11, anchor="lm")
+        vis = [nm for nm, r0, r1, c, o in RINGS11 if nm != "Cassini Division" and la < math.degrees(math.acos(1 / r1))]
+        full = [nm for nm, r0, r1, c, o in RINGS11 if nm != "Cassini Division" and la < math.degrees(math.acos(1 / r0))]
+        txt = "rings: all visible" if len(full) == 3 else ("rings: hidden below the horizon" if not vis else "rings: only the outer part")
+        if abs(lat) < 0.5: txt = "rings: edge-on, a thin line"
+        alpha_text(img, (bx, by + 118), txt, F(32, "SemiBold"), CREAM11, ease((t - 1.0) / 0.5), anchor="lm")
+    if v.get("head"): alpha_text(img, (W / 2, 70), v["head"], F(52, "ExtraBold"), WHITE, ease(t / 0.5))
+    caption(img, v.get("caption"), ease((t - 2.0) / 0.5), y=H - 150)
+
+def sc_orbitzones(img, v, t, dur):
+    """top-down Earth TO SCALE with Saturn-scaled rings (7,900–14,500 km from the centre); scale animates fit0 -> fit1 (km at 440 px);
+    show: list of 'rings', 'roche', 'iss', 'gps', 'geo', 'moon'"""
+    p = easeio((t - 0.3) / max(1.0, dur * 0.5))
+    fit = math.exp(lerp(math.log(v.get("fit0", 16000)), math.log(v.get("fit1", 16000)), p)); k = 440 / fit
+    cx, cy = 640, 560; show = v.get("show", ["rings"]); d = ImageDraw.Draw(img)
+    def circ(rkm, col, w=2, dash=False, label=None, ang=-0.5, a=1.0):
+        r = rkm * k
+        if a <= 0: return
+        c = mix(SPACE, col, a)
+        if dash: dash_circle10(d, cx, cy, r, c, w)
+        else: d.ellipse([cx - r, cy - r, cx + r, cy + r], outline=c, width=w)
+        if label and r < 900:
+            x, y = cx + r * math.cos(ang), cy + r * math.sin(ang)
+            d.text((x + 10, y - 8), label, font=F(28, "Bold"), fill=c, anchor="lb")
+    if "rings" in show:
+        lay = Image.new("RGBA", img.size, (0, 0, 0, 0)); dl = ImageDraw.Draw(lay)
+        for nm, r0, r1, col, op in RINGS11[::-1]:
+            ro = r1 * 6371 * k
+            dl.ellipse([cx - ro, cy - ro, cx + ro, cy + ro], fill=col + (int(220 * op),))
+        ri = 1.239 * 6371 * k; dl.ellipse([cx - ri, cy - ri, cx + ri, cy + ri], fill=(0, 0, 0, 0))
+        img.alpha_composite(lay)
+        ri = 1.239 * 6371 * k
+        hole = Image.new("L", img.size, 0); ImageDraw.Draw(hole).ellipse([cx - ri, cy - ri, cx + ri, cy + ri], fill=255)
+        img.paste(background(t).crop((0, 0, W, H)), (0, 0), hole)
+    d = ImageDraw.Draw(img)
+    paste_c(img, earth_sprite(max(4, int(6371 * k))), cx, cy)
+    d = ImageDraw.Draw(img)
+    items = []
+    if "iss" in show: circ(6371 + 420, (120, 255, 170), 2, label=None); items.append(("ISS", "420 km up — below the rings", (120, 255, 170)))
+    if "rings" in show: items.append(("RINGS", "1,500 to 8,100 km up", CREAM11))
+    if "roche" in show:
+        q = ease((t - 1.0) / 0.6)
+        circ(19000, ROSE11, 3, dash=True, label="Roche limit, rock", ang=-2.5, a=q); circ(28400, (140, 200, 255), 3, dash=True, label="Roche limit, ice", ang=-0.6, a=q)
+        items.append(("ROCHE LIMIT", "≈ 19,000–28,000 km from the centre", ROSE11))
+    if "gps" in show: circ(26560, (255, 200, 90), 2, label="GPS", ang=0.6); items.append(("GPS", "20,200 km up — above the rings", (255, 200, 90)))
+    if "geo" in show: circ(42164, (200, 150, 255), 2, label="geostationary", ang=0.9); items.append(("TV SATELLITES", "35,786 km up", (200, 150, 255)))
+    if "moon" in show:
+        mr = 384400 * k
+        if mr < 1200: circ(384400, (200, 200, 210), 2)
+        mx = min(cx + mr, W - 520); d.text((mx - 20, cy + 150), "Moon →" if cx + mr > W - 500 else "Moon", font=F(34, "Bold"), fill=(220, 220, 230), anchor="rm")
+        items.append(("MOON", "384,400 km — far outside", (220, 220, 230)))
+    bx = 1360
+    for i, (h1, h2, col) in enumerate(items):
+        a = ease((t - 0.5 - i * 0.7) / 0.5)
+        alpha_text(img, (bx, 260 + i * 130), h1, F(46, "Black"), col, a, anchor="lm")
+        alpha_text(img, (bx, 310 + i * 130), h2, F(30, "SemiBold"), WHITE, a, anchor="lm")
+    d = ImageDraw.Draw(img)
+    sb = 10000 * k
+    if 40 < sb < 600:
+        d.line([(90, 1010), (90 + sb, 1010)], fill=WHITE, width=3); d.text((90 + sb / 2, 985), "10,000 km", font=F(26, "Bold"), fill=WHITE, anchor="mm")
+    if v.get("head"): alpha_text(img, (W / 2, 110), v["head"], F(56, "ExtraBold"), WHITE, ease(t / 0.5))
+    caption(img, v.get("caption"), ease((t - 2.5) / 0.5))
+
+def sc_ringedge(img, v, t, dur):
+    """side view of a ring zooming in (log): a hairline 273,000 km long becomes a band 10 m thick next to a 3-storey building;
+    the field-of-view width counts down; optional paper analogy at the end"""
+    p = easeio((t - 0.4) / max(1.0, dur * 0.7))
+    z0, z1 = math.log(1700 / 2.8e8), math.log(1700 / 60.0)
+    pxm = math.exp(lerp(z0, z1, p)); cy = 560; cx = W / 2
+    d = ImageDraw.Draw(img)
+    half = 1.365e8 * pxm
+    th = max(1.5, 10 * pxm)
+    x0, x1 = max(-10, cx - half), min(W + 10, cx + half)
+    lay = Image.new("RGBA", img.size, (0, 0, 0, 0)); dl = ImageDraw.Draw(lay)
+    dl.rectangle([x0, cy - th / 2, x1, cy + th / 2], fill=CREAM11 + (110 if th > 6 else 255,))
+    if pxm > 0.4:
+        rng = random.Random(5)
+        for i in range(900):
+            s = 10 ** rng.uniform(-2, 0.7)
+            r = max(0.8, s * pxm / 2)
+            x = rng.uniform(0, W); y = cy + rng.uniform(-5, 5) * pxm
+            sh = int(200 + 40 * rng.random())
+            dl.ellipse([x - r, y - r * 0.8, x + r, y + r * 0.8], fill=(sh, sh - 8, sh - 25, 255))
+    img.alpha_composite(lay); d = ImageDraw.Draw(img)
+    if half * 2 < W - 100:
+        paste_c(img, planet_sprite(max(2, int(60268 * pxm * 1000)), (225, 205, 150)), cx, cy) if 60268e3 * pxm > 1 else None
+        d.text((cx, cy + 60), "Saturn", font=F(30, "Bold"), fill=(225, 205, 150), anchor="mm")
+    if pxm > 2:
+        bh = 10 * pxm; bw = 9 * pxm; bx = 1500
+        a = ease((pxm - 2) / 4)
+        bl = Image.new("RGBA", img.size, (0, 0, 0, 0)); db = ImageDraw.Draw(bl)
+        db.rectangle([bx, cy + th / 2 + 40 - bh, bx + bw, cy + th / 2 + 40], fill=(70, 80, 110, int(255 * a)), outline=(170, 180, 210, int(255 * a)), width=3)
+        for fl in range(3):
+            for wn in range(3):
+                wx = bx + bw * (0.15 + 0.3 * wn); wy = cy + th / 2 + 40 - bh + bh * (0.1 + 0.32 * fl)
+                db.rectangle([wx, wy, wx + bw * 0.15, wy + bh * 0.15], fill=(255, 210, 130, int(220 * a)))
+        img.alpha_composite(bl)
+        alpha_text(img, (bx + bw / 2, cy + th / 2 + 85), "a 3-storey building (≈ 10 m)", F(30, "Bold"), WHITE, a)
+        d = ImageDraw.Draw(img)
+        d.line([(bx - 40, cy - th / 2), (bx - 40, cy + th / 2)], fill=ROSE11, width=4)
+        alpha_text(img, (bx - 60, cy), "≈ 10 m", F(40, "Black"), ROSE11, a, anchor="rm")
+    view = W / pxm
+    s = f"{view / 1000:,.0f} km" if view > 5000 else f"{view:,.0f} m"
+    alpha_text(img, (W / 2, 900), "width of this view: " + s, F(44, "ExtraBold"), CREAM11, ease(t / 0.5))
+    if v.get("head"): alpha_text(img, (W / 2, 120), v["head"], F(56, "ExtraBold"), WHITE, ease(t / 0.5))
+    caption(img, v.get("caption"), ease((t - dur * 0.75) / 0.5), y=H - 90)
+
+def shadow_lat11(decl, band):
+    """latitudes (deg) in the winter hemisphere where the noon Sun is behind ring band (r0, r1); decl in degrees"""
+    if abs(decl) < 0.3: return []
+    dd = math.radians(abs(decl)); out = []
+    for i in range(0, 700):
+        ph = math.radians(i / 10)
+        x = math.cos(ph) + math.sin(ph) / math.tan(dd)
+        if band[0] <= x < band[1]: out.append(i / 10)
+    return out
+
+CITIES11 = [("Quito", -0.2), ("Mexico City", 19.4), ("Hong Kong", 22.3), ("Miami", 25.8), ("Cairo", 30.0), ("New York", 40.7), ("London", 51.5),
+            ("São Paulo", -23.5), ("Sydney", -33.9), ("Buenos Aires", -34.6)]
+_sm11 = None
+def sc_shadowmap(img, v, t, dur):
+    """season chart: x = day of the year, y = latitude (−60..60), shaded where the rings block the noon Sun (our calculation, 23.44° tilt);
+    a cursor sweeps the months and fills the chart; city lines with markers"""
+    global _sm11
+    X0, X1, Y0, Y1 = 400, 1780, 170, 930
+    def ly(la): return lerp(Y0, Y1, (60 - la) / 120)
+    if _sm11 is None:
+        arr = np.zeros((int(Y1 - Y0), int(X1 - X0), 4), np.uint8)
+        for xi in range(0, int(X1 - X0), 3):
+            day = xi / (X1 - X0) * 365; dec = -23.44 * math.cos(2 * math.pi * (day + 10) / 365)
+            for nm, r0, r1, col, op in RINGS11:
+                if op < 0.2: continue
+                for la in shadow_lat11(dec, (r0, r1))[::3]:
+                    lat_ = la if dec < 0 else -la
+                    yi = int(ly(lat_) - Y0)
+                    if 0 <= yi < arr.shape[0]:
+                        a_ = int(255 * op)
+                        arr[max(0, yi - 1):yi + 2, xi:xi + 3] = np.maximum(arr[max(0, yi - 1):yi + 2, xi:xi + 3], np.array([20, 24, 60, a_], np.uint8))
+        _sm11 = Image.fromarray(arr, "RGBA")
+    d = ImageDraw.Draw(img)
+    pane = Image.new("RGBA", img.size, (0, 0, 0, 0)); ImageDraw.Draw(pane).rectangle([X0, Y0, X1, Y1], fill=(255, 214, 120, 60)); img.alpha_composite(pane)
+    p = ease((t - 0.4) / max(1.0, dur * 0.7)); xc = X0 + (X1 - X0) * p
+    reveal = _sm11.crop((0, 0, max(1, int(xc - X0)), _sm11.height)); img.alpha_composite(reveal, (X0, Y0))
+    d = ImageDraw.Draw(img)
+    for la in (-60, -30, 0, 30, 60):
+        d.line([(X0, ly(la)), (X1, ly(la))], fill=(120, 126, 150) if la else (200, 205, 225), width=1 if la else 2)
+        d.text((X1 + 14, ly(la)), f"{abs(la)}°{'N' if la > 0 else ('S' if la < 0 else '')}", font=F(24, "SemiBold"), fill=DIM, anchor="lm")
+    months = "JFMAMJJASOND"
+    for i, m in enumerate(months):
+        d.text((X0 + (i + 0.5) * (X1 - X0) / 12, Y1 + 30), m, font=F(30, "Bold"), fill=WHITE, anchor="mm")
+    day = p * 365; dec = -23.44 * math.cos(2 * math.pi * (day + 10) / 365)
+    d.line([(xc, Y0 - 10), (xc, Y1 + 10)], fill=ROSE11, width=4)
+    cs = sorted([c for c in CITIES11 if c[0] in v.get("cities", [c[0] for c in CITIES11])], key=lambda c: -c[1])
+    ys = []
+    for nm, la in cs:
+        y = ly(la)
+        if ys and y < ys[-1] + 34: y = ys[-1] + 34
+        ys.append(y)
+    for (nm, la), yl in zip(cs, ys):
+        y = ly(la)
+        insh = False
+        for _, r0, r1, col, op in RINGS11:
+            if op < 0.2: continue
+            if (la > 0) == (dec < 0) and any(abs(abs(la) - s) < 0.6 for s in shadow_lat11(dec, (r0, r1))): insh = True
+        col = ROSE11 if insh else WHITE
+        d.ellipse([X0 - 26, y - 9, X0 - 8, y + 9], fill=col)
+        if abs(yl - y) > 2: d.line([(X0 - 30, y), (X0 - 60, yl)], fill=col, width=2)
+        d.text((X0 - 66, yl), nm, font=F(30, "Bold" if insh else "SemiBold"), fill=col, anchor="rm")
+    d.text((X0, Y0 - 40), v.get("head", "Where the rings hide the noon Sun"), font=F(46, "ExtraBold"), fill=WHITE, anchor="lm")
+    d.text((X1, Y0 - 40), "shaded = ring shadow at noon", font=F(28, "SemiBold"), fill=CREAM11, anchor="rm")
+    caption(img, v.get("caption"), ease((t - 2.5) / 0.5), y=H - 70)
+
+def sc_craterbelt(img, v, t, dur):
+    """ancient Earth (Ordovician, ~466 million years ago) with a debris ring; 21 impact markers land inside the ±30° band (positions illustrative)"""
+    cx, cy, R = 640, 560, 330; rot = t * 9
+    tilt = 0.32
+    def ring_pts(rr, front):
+        pts = []
+        for k in range(0, 181):
+            a = math.pi * k / 180 + (0 if front else math.pi)
+            x, y = rr * math.cos(a), rr * math.sin(a) * math.sin(tilt)
+            pts.append((cx + x, cy + y))
+        return pts
+    def ring(front):
+        lay = Image.new("RGBA", img.size, (0, 0, 0, 0)); dl = ImageDraw.Draw(lay)
+        for i in range(16):
+            rr = R * (1.35 + 0.9 * i / 16); a = int(150 * (0.6 + 0.4 * math.sin(i * 1.7)) * ease((t - 0.3) / 1.0))
+            dl.line(ring_pts(rr, front), fill=(200, 170, 140, a), width=6)
+        img.alpha_composite(lay)
+    ring(False)
+    paste_c(img, planet_sprite(R, (36, 70, 130), light=(-0.8, -0.4), glow=(110, 170, 255)), cx, cy)
+    lay = Image.new("RGBA", img.size, (0, 0, 0, 0)); dl = ImageDraw.Draw(lay)
+    for la in (-30, 30):
+        pts = [proj6(la, lo, 0, R, cx, cy, tilt=tilt) for lo in range(-180, 181, 4)]
+        seg = [(p[0], p[1]) for p in pts if p[2] > 0]
+        if len(seg) > 1: dl.line(seg, fill=ROSE11 + (230,), width=4)
+    img.alpha_composite(lay)
+    rng = random.Random(466); n = int(21 * ease((t - 1.0) / max(1.0, dur * 0.55)))
+    d = ImageDraw.Draw(img)
+    for i in range(21):
+        la, lo = rng.uniform(-28, 28), rng.uniform(0, 360)
+        if i >= n: continue
+        x, y, z = proj6(la, lo, rot, R, cx, cy, tilt=tilt)
+        if z > 0: d.ellipse([x - 9, y - 9, x + 9, y + 9], outline=(255, 190, 90), width=4)
+    ring(True)
+    bx = 1430
+    alpha_text(img, (bx, 300), f"{n} / 21", F(120, "Black"), (255, 190, 90), ease((t - 0.8) / 0.5))
+    alpha_text(img, (bx, 400), "impact craters from that era", F(34, "SemiBold"), WHITE, ease((t - 0.8) / 0.5))
+    alpha_text(img, (bx, 450), "all within 30° of the equator", F(34, "ExtraBold"), ROSE11, ease((t - 1.5) / 0.5))
+    alpha_text(img, (bx, 560), "≈ 466 million years ago", F(40, "Black"), CREAM11, ease((t - 2.0) / 0.5))
+    alpha_text(img, (bx, 620), "crater positions illustrative", F(26, "Medium"), DIM, ease((t - 2.0) / 0.5))
+    if v.get("head"): alpha_text(img, (W / 2, 100), v["head"], F(54, "ExtraBold"), WHITE, ease(t / 0.5))
+    caption(img, v.get("caption"), ease((t - 3.0) / 0.5))
 
 SC = {k[3:]: f for k, f in globals().items() if k.startswith("sc_")}
 
