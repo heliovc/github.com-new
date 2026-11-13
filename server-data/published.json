@@ -728,7 +728,9 @@
   "title": "Consignado: o empréstimo que o banco recebe antes de você (e quem ganha com ele)",
   "kind": "long",
   "publish_at": "2026-11-13T18:00:00-03:00",
-  "pinned_comment": "Na sua opinião, a margem do consignado deveria cair para 30% ou ficar em 45%? Conta aqui por quê."
+  "pinned_comment": "Na sua opinião, a margem do consignado deveria cair para 30% ou ficar em 45%? Conta aqui por quê.",
+  "comment_attempts": 1,
+  "comment_done": "2026-11-13T18:13:10.612244-03:00"
  },
  "ptd-ep12-short": {
   "attempts": 1,
@@ -744,7 +746,9 @@
   "kind": "short",
   "publish_at": "2026-11-13T19:00:00-03:00",
   "related_key": "ptd-ep12-long",
-  "pinned_comment": "Antes de pegar um empréstimo, você olha a parcela ou o valor total? Vídeo completo: Consignado: o empréstimo que o banco recebe antes de você (e quem ganha com ele)"
+  "pinned_comment": "Antes de pegar um empréstimo, você olha a parcela ou o valor total? Vídeo completo: Consignado: o empréstimo que o banco recebe antes de você (e quem ganha com ele)",
+  "related_attempts": 1,
+  "related_done": "2026-11-13T18:15:11.543367-03:00"
  },
  "ptd-rank10-short": {
   "attempts": 1,
@@ -760,7 +764,9 @@
   "kind": "short",
   "publish_at": "2026-11-14T12:00:00-03:00",
   "related_key": "ptd-ep12-long",
-  "pinned_comment": "Qual Selic você acha que a gente vai ver no fim de 2027: maior ou menor que hoje? Vídeo completo: Consignado: o empréstimo que o banco recebe antes de você (e quem ganha com ele)"
+  "pinned_comment": "Qual Selic você acha que a gente vai ver no fim de 2027: maior ou menor que hoje? Vídeo completo: Consignado: o empréstimo que o banco recebe antes de você (e quem ganha com ele)",
+  "related_attempts": 1,
+  "related_done": "2026-11-13T18:17:10.226855-03:00"
  },
  "lab-ep09-long": {
   "attempts": 1,
