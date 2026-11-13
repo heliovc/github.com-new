@@ -620,15 +620,19 @@ class Studio:
     def collect_metrics(self, channel_id: str) -> dict:
         p = self.page
         out = {"channel_id": channel_id, "collected_at": datetime.now().astimezone().isoformat()}
-        p.goto(self.EXPLORE.format(cid=channel_id), wait_until="domcontentloaded")
-        try:
-            p.wait_for_selector("yta-explore-table", timeout=30_000)
-            p.wait_for_timeout(4000)
-            out["table_text"] = self.js("() => document.querySelector('yta-explore-table').innerText")
-        except PWTimeout:
-            out["table_text"] = None
-            out["table_error"] = "tabela não carregou"
-            self.shot(f"metricas-{channel_id}")
+        out["table_text"] = None
+        # o Analytics demora no droplet (10–12/11: 3 de 4 canais estouraram 30 s) → 90 s e 1 nova tentativa
+        for attempt in range(2):
+            p.goto(self.EXPLORE.format(cid=channel_id), wait_until="domcontentloaded")
+            try:
+                p.wait_for_selector("yta-explore-table", timeout=90_000)
+                p.wait_for_timeout(6000)
+                out["table_text"] = self.js("() => document.querySelector('yta-explore-table').innerText")
+                out.pop("table_error", None)
+                break
+            except PWTimeout:
+                out["table_error"] = f"tabela não carregou (tentativa {attempt + 1})"
+                self.shot(f"metricas-{channel_id}-{attempt + 1}")
         p.goto(f"https://studio.youtube.com/channel/{channel_id}", wait_until="domcontentloaded")
         p.wait_for_timeout(6000)
         out["dashboard_text"] = self.js("() => document.body.innerText")[:8000]
