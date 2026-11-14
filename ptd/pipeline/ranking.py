@@ -7,7 +7,7 @@ ou "gauge" (termômetro horizontal com escala, criado no rank #3 — bom para ta
 ou "bubbles" (bolhas com área proporcional ao valor, criado no rank #4 — bom para tamanhos/bases de clientes)
 ou "pits" (buracos, rank #5) ou "piles" (pilhas de notas, criado no rank #6 — bom para dívidas/valores em R$)
 ou "towers" (arranha-céus com janelas, criado no rank #7 — bom para tamanho de empresas/bancos)
-ou "phones" (celulares cuja tela enche, com piso de escala THEME["floor"], criado no rank #8 — bom para valores próximos)\nou "coins" (pilhas de moedas, criado no rank #9 — bom para lucros/valores em R$)\nou "thermo" (termômetros verticais, criado no rank #10 — bom para taxas de juros).
+ou "phones" (celulares cuja tela enche, com piso de escala THEME["floor"], criado no rank #8 — bom para valores próximos)\nou "coins" (pilhas de moedas, criado no rank #9 — bom para lucros/valores em R$)\nou "thermo" (termômetros verticais, criado no rank #10 — bom para taxas de juros)\nou "crowd" (colunas de bonequinhos, 1 boneco = THEME["per_icon"], criado no rank #11 — bom para número de clientes/pessoas).
 Tudo desenhado por código; narração Kokoro (pm_alex, pt-br); legenda grande queimada. Layout seguro p/ UI do Shorts:
 legenda y=1585, @ y=1690, fonte y=1745.
 """
@@ -396,8 +396,47 @@ def chart_th(img, items, th, upto, t, cur_rank):
         while F(fs2, "ExtraBold").getlength(it["short"]) > cw + 24 and fs2 > 18: fs2 -= 2
         d.text((cx, top - 92), it["short"], font=F(fs2, "ExtraBold"), fill=WHITE if on else (180, 186, 205), anchor="mm")
 
+def chart_cr(img, items, th, upto, t, cur_rank):
+    """Criado no rank #11 (bancos com mais clientes): 5 colunas de bonequinhos (5º à esquerda), base em y=1400;
+    cada boneco = THEME["per_icon"] (ex.: 10 milhões). Não revelado: coluna com "?"; atual: bonecos surgem de baixo para cima."""
+    d = ImageDraw.Draw(img); per = th.get("per_icon", 10.0)
+    order = sorted(items, key=lambda x: -x["rank"])
+    base, cw, gap, ih = 1400, 160, 32, 36
+    x0 = W / 2 - (5 * cw + 4 * gap) / 2
+    acc = tuple(th["accent"])
+    for k, it in enumerate(order):
+        x = x0 + k * (cw + gap); cx = x + cw / 2
+        d.text((cx, base + 50), f"{it['rank']}º", font=F(40, "Black"), fill=tuple(th["accent2"]), anchor="mm")
+        d.line([(x + 6, base + 14), (x + cw - 6, base + 14)], fill=(70, 80, 105), width=4)
+        if it["rank"] < upto:
+            d.text((cx, base - 60), "?", font=F(64, "Black"), fill=(100, 112, 140), anchor="mm")
+            continue
+        on = it["rank"] == cur_rank
+        col = acc if on else tuple(int(c * 0.6) for c in acc)
+        n = it["num"] / per
+        fr = ease(t / 1.4) if on else 1.0
+        shown = n * fr; full = int(shown)
+        for j in range(int(n) + 1):
+            if j > full: break
+            part = 1.0 if j < full else shown - full
+            if part < 0.5: continue
+            yb = base - j * ih
+            for side in (-1, 1):
+                px = cx + side * 34
+                lay_col = col
+                d.ellipse([px - 9, yb - 33, px + 9, yb - 15], fill=lay_col)
+                d.rounded_rectangle([px - 14, yb - 13, px + 14, yb + 2], 7, fill=lay_col)
+        top = base - n * ih * fr - 30
+        v = it["num"] * fr
+        fs = 38
+        while F(fs, "Black").getlength(val_str(it, it["num"])) > cw + 30 and fs > 20: fs -= 2
+        d.text((cx, top - 30), val_str(it, v), font=F(fs, "Black"), fill=WHITE if on else (200, 205, 220), anchor="mm")
+        fs2 = 30
+        while F(fs2, "ExtraBold").getlength(it["short"]) > cw + 24 and fs2 > 18: fs2 -= 2
+        d.text((cx, top - 76), it["short"], font=F(fs2, "ExtraBold"), fill=WHITE if on else (180, 186, 205), anchor="mm")
+
 def chart(img, items, th, upto, t, cur_rank):
-    {"thermo": chart_th, "vbars": chart_v, "gauge": chart_g, "bubbles": chart_b, "pits": chart_p, "piles": chart_n, "towers": chart_t, "phones": chart_ph, "coins": chart_c}.get(th.get("chart"), chart_h)(img, items, th, upto, t, cur_rank)
+    {"crowd": chart_cr, "thermo": chart_th, "vbars": chart_v, "gauge": chart_g, "bubbles": chart_b, "pits": chart_p, "piles": chart_n, "towers": chart_t, "phones": chart_ph, "coins": chart_c}.get(th.get("chart"), chart_h)(img, items, th, upto, t, cur_rank)
 
 def seg_hook(img, sc, th, t, dur, items):
     ease = lambda x: 1.0  # frame 1 = thumbnail: gancho inteiro visível desde o frame 0 (rank #3)
@@ -414,7 +453,7 @@ def seg_hook(img, sc, th, t, dur, items):
             text(img, (x0 + k * (cw + gap) + cw / 2, base - 280), "?", 64, (90, 100, 130), a=ease((t - 0.4 - k * 0.15) / 0.3))
     elif th.get("chart") == "bubbles":
         if sc.get("tease"): text(img, (W / 2, 690), sc["tease"], 64, th["accent"], a=1.0)
-    elif th.get("chart") in ("piles", "towers", "coins", "thermo"):
+    elif th.get("chart") in ("piles", "towers", "coins", "thermo", "crowd"):
         if sc.get("tease"): text(img, (W / 2, 780), sc["tease"], 64, th["accent"], a=1.0)
     elif th.get("chart") == "phones":
         if sc.get("tease"): text(img, (W / 2, 710), sc["tease"], 64, th["accent"], a=1.0)

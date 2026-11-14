@@ -1,0 +1,559 @@
+1
+00:00:00,150 --> 00:00:06,099
+Ontem, sexta-feira, treze de novembro, o Banco Central aprovou um negócio pequeno, com uma consequência enorme.
+
+2
+00:00:06,099 --> 00:00:11,835
+O Nubank, que passou treze anos dizendo que não era banco, recebeu o aval para comprar um banco de verdade.
+
+3
+00:00:11,835 --> 00:00:14,998
+E, com ele, a licença para se chamar oficialmente de banco.
+
+4
+00:00:15,598 --> 00:00:19,497
+Um dia antes, o Nubank tinha divulgado o maior lucro da sua história.
+
+5
+00:00:19,497 --> 00:00:22,888
+Um bilhão e noventa milhões de dólares em apenas três meses.
+
+6
+00:00:22,888 --> 00:00:27,352
+Pela conta do canal, isso dá perto de doze milhões de dólares de lucro por dia.
+
+7
+00:00:27,952 --> 00:00:29,251
+E aqui está o paradoxo.
+
+8
+00:00:29,251 --> 00:00:32,472
+A empresa nasceu prometendo acabar com tarifa e anuidade.
+
+9
+00:00:32,472 --> 00:00:34,618
+Então, de onde vem esse dinheiro todo?
+
+10
+00:00:34,618 --> 00:00:37,160
+A resposta curta é: quase nada vem de tarifa.
+
+11
+00:00:37,160 --> 00:00:41,115
+E, no mesmo balanço do lucro recorde, apareceu um número que preocupa.
+
+12
+00:00:41,715 --> 00:00:44,820
+Para responder, a gente vai olhar o Nubank como um prédio.
+
+13
+00:00:44,820 --> 00:00:46,694
+Ele foi construído andar por andar.
+
+14
+00:00:46,694 --> 00:00:48,888
+Cada andar é um jeito de ganhar dinheiro.
+
+15
+00:00:48,888 --> 00:00:49,424
+São cinco.
+
+16
+00:00:49,424 --> 00:00:53,064
+E no fim, a gente desce até a fundação, para procurar as rachaduras.
+
+17
+00:00:53,664 --> 00:00:54,545
+Primeiro andar.
+
+18
+00:00:54,545 --> 00:00:55,661
+A porta de entrada.
+
+19
+00:00:55,661 --> 00:00:58,363
+Todo prédio começa por onde as pessoas entram.
+
+20
+00:00:58,363 --> 00:01:02,710
+E a porta do Nubank foi um cartão roxo, sem anuidade, pedido pelo celular.
+
+21
+00:01:03,310 --> 00:01:08,229
+A empresa foi fundada em dois mil e treze, em São Paulo, e lançou o cartão no ano seguinte.
+
+22
+00:01:08,229 --> 00:01:13,797
+Naquela época, abrir conta ou pedir cartão quase sempre significava fila em agência, papelada e tarifa.
+
+23
+00:01:13,797 --> 00:01:16,716
+O Nubank inverteu a lógica: primeiro, ganha o cliente.
+
+24
+00:01:16,716 --> 00:01:19,203
+Depois, pensa em como ganhar dinheiro com ele.
+
+25
+00:01:19,803 --> 00:01:20,924
+E a porta funcionou.
+
+26
+00:01:20,924 --> 00:01:26,808
+No fim de setembro de dois mil e vinte e seis, eram cento e quarenta e três milhões de clientes no total.
+
+27
+00:01:26,808 --> 00:01:29,105
+Quase cento e vinte milhões só no Brasil.
+
+28
+00:01:29,105 --> 00:01:34,822
+Isso é mais da metade da população do país, que o IBGE estimou em duzentos e treze milhões de pessoas.
+
+29
+00:01:35,422 --> 00:01:38,072
+Mais importante do que ter o cliente é ele usar.
+
+30
+00:01:38,072 --> 00:01:45,803
+E, segundo o balanço, a taxa de atividade no Brasil bateu recorde: oitenta e seis vírgula três por cento dos clientes usaram a conta no mês.
+
+31
+00:01:45,803 --> 00:01:48,398
+Um banco não ganha dinheiro com cliente parado.
+
+32
+00:01:48,398 --> 00:01:50,718
+E o Nubank tem pouquíssimo cliente parado.
+
+33
+00:01:51,318 --> 00:01:52,140
+Segundo andar.
+
+34
+00:01:52,140 --> 00:01:52,610
+O cofre.
+
+35
+00:01:52,610 --> 00:01:55,312
+Todo banco precisa de dinheiro para emprestar.
+
+36
+00:01:55,312 --> 00:01:58,955
+E o dinheiro mais barato que existe é o dos próprios clientes.
+
+37
+00:01:59,555 --> 00:02:05,855
+Os depósitos dos clientes do Nubank somaram quarenta e sete e meio bilhões de dólares no terceiro trimestre.
+
+38
+00:02:05,855 --> 00:02:08,480
+Trinta e oito vírgula seis bilhões no Brasil.
+
+39
+00:02:08,480 --> 00:02:15,598
+E aqui tem um detalhe que pouca gente percebe: o Nubank paga, em média, oitenta e sete por cento do CDI por esse dinheiro.
+
+40
+00:02:16,198 --> 00:02:19,226
+Como assim, se tanta gente recebe cem por cento do CDI?
+
+41
+00:02:19,226 --> 00:02:20,272
+Porque é uma média.
+
+42
+00:02:20,272 --> 00:02:25,668
+Tem dinheiro parado na conta, rendendo menos ou nada, e tem dinheiro nas caixinhas, rendendo mais.
+
+43
+00:02:25,668 --> 00:02:29,412
+No total, o custo fica abaixo da taxa que os bancos cobram entre si.
+
+44
+00:02:29,412 --> 00:02:33,542
+E é com esse dinheiro, mais barato que o do mercado, que o Nubank empresta.
+
+45
+00:02:34,141 --> 00:02:37,239
+Vamos a um exemplo do canal, só para entender a mecânica.
+
+46
+00:02:37,239 --> 00:02:41,533
+Mil reais depositados, que custam ao banco algo perto de doze por cento ao ano.
+
+47
+00:02:41,533 --> 00:02:46,750
+Se esses mesmos mil reais viram crédito a três ou quatro por cento ao mês, a diferença é enorme.
+
+48
+00:02:46,750 --> 00:02:49,359
+É essa diferença que os bancos chamam de spread.
+
+49
+00:02:49,359 --> 00:02:50,717
+E é o coração do negócio.
+
+50
+00:02:51,317 --> 00:02:52,191
+Terceiro andar.
+
+51
+00:02:52,191 --> 00:02:52,773
+A máquina.
+
+52
+00:02:52,773 --> 00:02:57,781
+Aquele cartão grátis da porta de entrada voltou, só que agora do outro lado do balcão.
+
+53
+00:02:58,381 --> 00:03:03,250
+A carteira de crédito do Nubank chegou a quarenta e um vírgula seis bilhões de dólares.
+
+54
+00:03:03,250 --> 00:03:07,334
+E o cartão é, de longe, a maior parte: vinte e sete vírgula dois bilhões.
+
+55
+00:03:07,334 --> 00:03:11,587
+Quase dois terços de tudo o que o Nubank empresta está no cartão de crédito.
+
+56
+00:03:12,187 --> 00:03:14,302
+O cartão ganha dinheiro de dois jeitos.
+
+57
+00:03:14,302 --> 00:03:19,399
+Primeiro, a cada compra, a loja paga uma taxa, e uma parte dela fica com quem emitiu o cartão.
+
+58
+00:03:19,399 --> 00:03:23,629
+É o caminho dos três reais da maquininha que a gente já mostrou aqui no canal.
+
+59
+00:03:23,629 --> 00:03:27,967
+Segundo, e principalmente, quando o cliente parcela a fatura ou cai no rotativo.
+
+60
+00:03:27,967 --> 00:03:28,997
+Aí entram os juros.
+
+61
+00:03:29,597 --> 00:03:31,400
+E esse andar não para de crescer.
+
+62
+00:03:31,400 --> 00:03:35,933
+Segundo o balanço, a carteira de cartões cresceu trinta e dois por cento em um ano.
+
+63
+00:03:35,933 --> 00:03:45,491
+Um relatório do BTG, com dados da Card Monitor, mostra que o Nubank cresce mais rápido que o mercado, enquanto os quatro grandes bancos tradicionais perderam espaço no cartão.
+
+64
+00:03:46,091 --> 00:03:46,835
+Quarto andar.
+
+65
+00:03:46,835 --> 00:03:47,578
+O empréstimo.
+
+66
+00:03:47,578 --> 00:03:53,586
+Depois de conhecer o cliente pelo cartão, o banco sabe quanto ele ganha, como ele gasta e se paga em dia.
+
+67
+00:03:53,586 --> 00:03:57,248
+E aí oferece o produto que mais dá dinheiro por real emprestado.
+
+68
+00:03:57,848 --> 00:04:04,417
+O empréstimo pessoal sem garantia chegou a onze bilhões de dólares, e cresceu trinta e nove por cento em um ano.
+
+69
+00:04:04,417 --> 00:04:06,528
+É o andar que mais cresce no prédio.
+
+70
+00:04:06,528 --> 00:04:13,037
+Já o crédito com garantia, onde entram o consignado e a antecipação do FGTS, somou três vírgula quatro bilhões.
+
+71
+00:04:13,637 --> 00:04:18,335
+Juntando tudo, o balanço mostra uma margem financeira de vinte e dois e meio por cento.
+
+72
+00:04:18,335 --> 00:04:27,675
+Em português claro: para cada cem dólares que o Nubank tem emprestados ou aplicados, sobram, ao longo de um ano, uns vinte e dois e meio depois de pagar o custo do dinheiro.
+
+73
+00:04:27,675 --> 00:04:30,320
+É uma das margens mais altas do mundo dos bancos.
+
+74
+00:04:30,920 --> 00:04:33,163
+E agora a resposta da primeira pergunta.
+
+75
+00:04:33,163 --> 00:04:41,237
+No trimestre, as tarifas e comissões, que incluem aquela taxa que a loja paga em cada compra, somaram oitocentos e dezessete milhões de dólares.
+
+76
+00:04:41,237 --> 00:04:46,900
+Pela conta do canal, isso é só uns treze por cento de uma receita total de seis vírgula três bilhões.
+
+77
+00:04:46,900 --> 00:04:50,376
+Os outros oitenta e sete por cento vêm, basicamente, de juros.
+
+78
+00:04:50,976 --> 00:04:53,991
+Ou seja: o Nubank nunca prometeu não ganhar dinheiro.
+
+79
+00:04:53,991 --> 00:04:55,755
+Ele prometeu não cobrar tarifa.
+
+80
+00:04:55,755 --> 00:04:57,291
+E cumpriu, em grande parte.
+
+81
+00:04:57,291 --> 00:05:00,647
+O lucro não vem de quem usa a conta e paga a fatura em dia.
+
+82
+00:05:00,647 --> 00:05:02,069
+Vem de quem toma crédito.
+
+83
+00:05:02,669 --> 00:05:03,366
+Quinto andar.
+
+84
+00:05:03,366 --> 00:05:04,009
+A cobertura.
+
+85
+00:05:04,009 --> 00:05:07,704
+Com o prédio cheio no Brasil, o Nubank começou a construir para fora.
+
+86
+00:05:08,304 --> 00:05:11,761
+No México, já são dezesseis vírgula seis milhões de clientes.
+
+87
+00:05:11,761 --> 00:05:13,687
+E lá o Nubank já opera como banco.
+
+88
+00:05:13,687 --> 00:05:18,447
+Só no primeiro trimestre com essa licença, ganhou oitocentos e setenta mil clientes.
+
+89
+00:05:18,447 --> 00:05:20,770
+Na Colômbia, são seis vírgula um milhões.
+
+90
+00:05:20,770 --> 00:05:24,453
+Os depósitos fora do Brasil já passam de oito bilhões de dólares.
+
+91
+00:05:25,053 --> 00:05:30,678
+A aposta é repetir a receita: entrar pelo cartão, juntar depósitos, e só depois vender crédito.
+
+92
+00:05:30,678 --> 00:05:34,823
+O risco é que cada país tem seus juros, suas regras e seus caloteiros.
+
+93
+00:05:34,823 --> 00:05:39,027
+O que deu certo no Brasil não tem garantia de dar certo em outro lugar.
+
+94
+00:05:39,627 --> 00:05:40,354
+Prédio de pé.
+
+95
+00:05:40,354 --> 00:05:43,655
+Agora vamos descer até a fundação e procurar as rachaduras.
+
+96
+00:05:43,655 --> 00:05:45,557
+E aqui está o número que preocupa.
+
+97
+00:05:46,157 --> 00:05:49,386
+No mesmo balanço do lucro recorde, a inadimplência subiu.
+
+98
+00:05:49,386 --> 00:05:58,393
+Os empréstimos com mais de noventa dias de atraso passaram de seis vírgula nove por cento para sete vírgula três por cento da carteira, em apenas um trimestre.
+
+99
+00:05:58,393 --> 00:06:04,227
+E os atrasos mais curtos, de quinze a noventa dias, também subiram, para quatro vírgula nove por cento.
+
+100
+00:06:04,827 --> 00:06:05,972
+Por que isso importa?
+
+101
+00:06:05,972 --> 00:06:09,896
+Porque a margem gorda do quarto andar só existe enquanto o cliente paga.
+
+102
+00:06:09,896 --> 00:06:14,421
+Quando o calote sobe, o banco precisa reservar mais dinheiro para cobrir as perdas.
+
+103
+00:06:14,421 --> 00:06:21,125
+Por isso, a margem ajustada ao risco, que já desconta o calote, caiu de doze vírgula quatro para doze vírgula um por cento.
+
+104
+00:06:21,725 --> 00:06:22,621
+Repare na conta.
+
+105
+00:06:22,621 --> 00:06:25,139
+Quase metade da margem vai embora com calote.
+
+106
+00:06:25,139 --> 00:06:29,223
+É o preço de emprestar caro para muita gente que não tinha crédito antes.
+
+107
+00:06:29,223 --> 00:06:35,266
+E com a Selic ainda alta, em treze vírgula setenta e cinco por cento, o bolso do cliente fica mais apertado.
+
+108
+00:06:35,266 --> 00:06:37,112
+A rachadura não derruba o prédio.
+
+109
+00:06:37,112 --> 00:06:40,413
+Mas é ela que o mercado vai vigiar nos próximos trimestres.
+
+110
+00:06:41,013 --> 00:06:42,651
+E então, a licença de ontem.
+
+111
+00:06:42,651 --> 00:06:46,453
+Se o Nubank já era tão grande, por que precisou comprar um banco?
+
+112
+00:06:47,053 --> 00:06:52,745
+Até agora, o Nubank funcionava com outras licenças: instituição de pagamento, financeira e corretora.
+
+113
+00:06:52,745 --> 00:07:03,565
+Só que uma regra nova do Banco Central e do Conselho Monetário Nacional, a Resolução Conjunta número dezessete, proibiu quem não é banco de usar palavras como banco ou bank no nome e na marca.
+
+114
+00:07:04,165 --> 00:07:13,561
+A solução foi comprar um banco pequeno que já tinha a licença: o Banco Porto Real de Investimentos, do estado do Rio de Janeiro, fundado em mil novecentos e noventa e dois.
+
+115
+00:07:13,561 --> 00:07:17,057
+Em março, ele tinha só trinta e dois milhões de reais em ativos.
+
+116
+00:07:17,057 --> 00:07:19,952
+Ou seja: o Nubank não comprou clientes, nem agências.
+
+117
+00:07:19,952 --> 00:07:21,317
+Comprou a placa na porta.
+
+118
+00:07:21,917 --> 00:07:26,639
+Para o cliente, segundo a própria empresa, nada muda: mesmo aplicativo, mesma marca.
+
+119
+00:07:26,639 --> 00:07:29,618
+E o Nubank diz que a licença não exige capital extra.
+
+120
+00:07:29,618 --> 00:07:31,978
+A mudança é mais simbólica do que prática.
+
+121
+00:07:31,978 --> 00:07:33,215
+Mas o símbolo é forte.
+
+122
+00:07:33,215 --> 00:07:37,149
+A fintech que nasceu contra os bancos agora é, oficialmente, um deles.
+
+123
+00:07:37,749 --> 00:07:39,380
+Então, vamos juntar as peças.
+
+124
+00:07:39,380 --> 00:07:40,842
+A porta é o cartão grátis.
+
+125
+00:07:40,842 --> 00:07:43,203
+O cofre é o dinheiro barato dos depósitos.
+
+126
+00:07:43,203 --> 00:07:45,002
+A máquina é o cartão de crédito.
+
+127
+00:07:45,002 --> 00:07:47,139
+O empréstimo é o andar que mais rende.
+
+128
+00:07:47,139 --> 00:07:48,657
+E a cobertura é o exterior.
+
+129
+00:07:48,657 --> 00:07:53,941
+Quase todo o lucro vem de um lugar só: a diferença entre o que o banco paga e o que ele cobra.
+
+130
+00:07:54,541 --> 00:07:57,327
+E a lição vale para qualquer banco, digital ou não.
+
+131
+00:07:57,327 --> 00:08:01,314
+Quando um serviço financeiro é grátis, vale perguntar onde o banco ganha.
+
+132
+00:08:01,314 --> 00:08:03,553
+Quase sempre, a resposta está no crédito.
+
+133
+00:08:03,553 --> 00:08:06,993
+Se você paga a fatura em dia, você é o cliente que custa pouco.
+
+134
+00:08:06,993 --> 00:08:10,925
+Se você parcela e entra no rotativo, você é o cliente que paga o prédio.
+
+135
+00:08:11,525 --> 00:08:16,107
+Este vídeo é informativo e não é recomendação financeira, nem de investimento.
+
+136
+00:08:16,107 --> 00:08:20,101
+É só a planta do prédio, para você entender como o dinheiro se move.
+
+137
+00:08:20,701 --> 00:08:27,576
+E já que a palavra de hoje foi spread, a diferença entre o que o banco paga e o que ele cobra, no próximo episódio vamos atrás dela.
+
+138
+00:08:27,576 --> 00:08:31,742
+Por que o juro no Brasil é um dos mais altos do mundo, mesmo quando a Selic cai?
+
+139
+00:08:31,742 --> 00:08:33,252
+Quem fica com essa diferença?
+
+140
+00:08:33,252 --> 00:08:34,867
+É o spread bancário, explicado.

@@ -814,7 +814,53 @@ def sc_clause(img, v, t, dur):
     if v.get("sub"): alpha_text(img, (x, 450 + len(lines) * 110 + 20), v["sub"], F(44, "SemiBold"), (150, 190, 255), a3, anchor="lm")
     if v.get("caption"): dr.text((W / 2, H - 50), v["caption"], font=F(28, "Medium"), fill=DIM, anchor="mm")
 
-SC = {"clause": sc_clause, "round": sc_round, "ticker": sc_ticker, "scoreboard": sc_scoreboard, "title": sc_title, "bignumber": sc_bignumber, "flow": sc_flow, "split": sc_split, "bullets": sc_bullets,
+def sc_floor(img, v, t, dur):
+    """Criado no EP13: andar de um prédio (o modelo de negócio como construção). n (andar 1..5), label, title, sub,
+    floors (lista de 5 rótulos, de baixo para cima). Prédio à esquerda sobe andar por andar; o andar atual acende em âmbar,
+    os de baixo ficam acesos em verde-escuro, os de cima ficam como 'em obra' (tracejado). Título à direita."""
+    dr = ImageDraw.Draw(img)
+    floors = v.get("floors", ["", "", "", "", ""]); n = v["n"]
+    LIT, DONE, OFF, EDGE = (242, 169, 59), (38, 96, 72), (30, 40, 60), (90, 105, 130)
+    bx, bw, fh, base = 150, 560, 132, 930
+    lay = Image.new("RGBA", img.size, (0, 0, 0, 0)); d2 = ImageDraw.Draw(lay)
+    d2.rectangle([bx - 60, base, bx + bw + 60, base + 14], fill=EDGE)                                # chão
+    for i, lab in enumerate(floors):
+        k = ease((t - 0.05 - i * 0.12) / 0.45)
+        if k <= 0: continue
+        y1 = base - (i + 1) * fh; y0 = y1 + fh
+        yy = lerp(y0, y1, k)
+        if y0 - yy < 10: continue
+        f = i + 1
+        if f < n: col, tc, a = DONE, (170, 230, 195), 255
+        elif f == n: col, tc, a = LIT, BG1, 255
+        else: col, tc, a = OFF, (110, 125, 150), 200
+        if f == n:
+            pul = 0.5 + 0.5 * math.sin(t * 4)
+            d2.rectangle([bx - 8, yy - 8, bx + bw + 8, y0 + 2], outline=LIT + (int(90 + 80 * pul),), width=5)
+        d2.rectangle([bx, yy + 6, bx + bw, y0], fill=col + (a,), outline=EDGE + (255,), width=3)
+        if f > n:
+            for xx in range(bx + 20, bx + bw - 20, 40):
+                d2.line([(xx, yy + 20), (xx + 20, yy + 20)], fill=EDGE + (200,), width=3)
+        if k > 0.9:
+            d2.text((bx + 24, (yy + y0) / 2 + 3), f"{f}º", font=F(34, "Black"), fill=tc + (255,), anchor="lm")
+            fs = 34
+            while F(fs, "Bold").getlength(lab) > bw - 120 and fs > 20: fs -= 1
+            d2.text((bx + 90, (yy + y0) / 2 + 3), lab, font=F(fs, "Bold"), fill=tc + (255,), anchor="lm")
+    rk = ease((t - 0.9) / 0.4)
+    if rk > 0:
+        ry = base - 5 * fh
+        d2.polygon([(bx - 20, ry), (bx + bw / 2, ry - 70 * rk), (bx + bw + 20, ry)], fill=(130, 50, 160, int(255 * rk)))
+    img.alpha_composite(lay)
+    a1 = ease((t - 0.5) / 0.5); a2 = ease((t - 0.8) / 0.5); a3 = ease((t - 1.1) / 0.5)
+    x = 830
+    alpha_text(img, (x, 330), f"{n}º ANDAR  ·  {v.get('label', '')}", F(54, "Black"), LIT, a1, anchor="lm", dy=(1 - a1) * 30)
+    lines = v["title"].split("\n")
+    for i, l in enumerate(lines):
+        alpha_text(img, (x, 450 + i * 110), l, F(100, "ExtraBold"), WHITE, a2, anchor="lm", dy=(1 - a2) * 30)
+    if v.get("sub"): alpha_text(img, (x, 450 + len(lines) * 110 + 20), v["sub"], F(44, "SemiBold"), (200, 160, 230), a3, anchor="lm")
+    if v.get("caption"): dr.text((W / 2, H - 50), v["caption"], font=F(28, "Medium"), fill=DIM, anchor="mm")
+
+SC = {"floor": sc_floor, "clause": sc_clause, "round": sc_round, "ticker": sc_ticker, "scoreboard": sc_scoreboard, "title": sc_title, "bignumber": sc_bignumber, "flow": sc_flow, "split": sc_split, "bullets": sc_bullets,
       "bars": sc_bars, "compare": sc_compare, "timeline": sc_timeline, "cards": sc_cards, "line": sc_line,
       "receipt": sc_receipt, "stack": sc_stack, "journey": sc_journey, "calendar": sc_calendar, "obit": sc_obit, "race": sc_race, "act": sc_act, "ledger": sc_ledger, "blackbox": sc_blackbox, "flight": sc_flight, "court": sc_court, "dossier": sc_dossier}
 
