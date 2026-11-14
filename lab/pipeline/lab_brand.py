@@ -8,6 +8,7 @@ python3 -I lab_brand.py thumbchart "LINE ONE" "LINE TWO" "df.plot(kind=\"bar\")"
 python3 -I lab_brand.py thumbterm "LINE ONE" "LINE TWO" "$ cmd|output|$ cmd" out.jpg pink   (EP07: big terminal card, typed commands + outputs)
 python3 -I lab_brand.py thumbquery "LINE ONE" "LINE TWO" "=QUERY()" "Lena=1670|Omar=1530" out.jpg orange   (EP08: ranked report card with bars over a faded raw table)
 python3 -I lab_brand.py thumbweb "LINE ONE" "LINE TWO" "<html line>|<html line>" screenshot.png out.jpg periwinkle   (EP09: code card behind, browser with the REAL page screenshot in front)
+python3 -I lab_brand.py thumbpdf "LINE ONE" "LINE TWO" page.png "h1,h2|a,b|c,d" out.jpg ruby   (EP10: REAL PDF page tilted left, arrow, clean spreadsheet grid right)
 python3 -I lab_brand.py thumb "LINE ONE" "LINE TWO" "code snippet line" out.jpg [accent: lime|coral|sky]"""
 import sys; sys.path.insert(0, ".")
 import tutor as T
@@ -189,6 +190,29 @@ elif sys.argv[1] == "thumbweb":  # EP09 layout: text left; right an index.html c
         while T.F(fs, "Bold").getlength(txt) > 540: fs -= 4
         d.text((50, 280 + i * 150), txt, font=T.F(fs, "Bold"), fill=col, anchor="lm", stroke_width=4, stroke_fill=T.BG)
     d.text((54, 600), "HTML + CSS · 15 minutes · free", font=T.F(30, "Medium"), fill=T.DIM)
+    img.convert("RGB").save(out, quality=92); print("thumb ok")
+elif sys.argv[1] == "thumbpdf":  # EP10 layout: text top-left; bottom-right a REAL rendered PDF page (tilted) -> arrow -> clean spreadsheet grid
+    l1, l2, page, rows, out = sys.argv[2:7]; acc = {"lime": T.LIME, "coral": T.CORAL, "sky": T.SKY, "violet": T.VIO, "yellow": T.YEL, "ruby": (240, 80, 110)}[sys.argv[7] if len(sys.argv) > 7 else "ruby"]
+    T.ACC = acc; T.W, T.H = 1280, 720; img = T.make_bg(1280, 720)
+    pg = Image.open(page).convert("RGBA"); pg = pg.crop((0, 0, pg.width, int(pg.height * 0.42))); pw = 420; pg = pg.resize((pw, int(pg.height * pw / pg.width)), Image.LANCZOS)
+    card = Image.new("RGBA", (pw + 24, pg.height + 24), (255, 255, 255, 255)); card.alpha_composite(pg, (12, 12))
+    sh = Image.new("RGBA", img.size, (0, 0, 0, 0)); rc = card.rotate(6, expand=True, resample=Image.BICUBIC)
+    m = Image.new("RGBA", rc.size, (0, 0, 0, 150)); m.putalpha(rc.split()[3].point(lambda a: int(a * 0.55))); sh.alpha_composite(m, (48, 330)); sh = sh.filter(ImageFilter.GaussianBlur(14)); img.alpha_composite(sh)
+    img.alpha_composite(rc, (30, 312))
+    d = ImageDraw.Draw(img); d.rounded_rectangle([18, 300, 150, 344], 22, fill=acc); d.text((84, 322), "PDF", font=T.F(26, "Bold"), fill=T.BG, anchor="mm")
+    d.text((560, 500), "→", font=T.F(110, "monob"), fill=acc, anchor="mm")
+    R = [r.split(",") for r in rows.split("|")]; gx, gy, cw, rh = 650, 330, 150, 52
+    T.window(img, [gx - 20, gy - 72, gx + cw * len(R[0]) + 20, gy + rh * len(R) + 20], "sales.xlsx", kind="term"); d = ImageDraw.Draw(img)
+    for r, row in enumerate(R):
+        for c, cell in enumerate(row):
+            x, y = gx + c * cw, gy + r * rh
+            d.rectangle([x, y, x + cw - 4, y + rh - 4], fill=T.mix(T.PANEL, acc, 0.35) if r == 0 else (T.PANEL if r % 2 else T.PANEL2), outline=T.LINE)
+            d.text((x + 14, y + (rh - 4) / 2), cell, font=T.F(26, "monob" if r == 0 else "mono"), fill=T.TXT, anchor="lm")
+    d.rounded_rectangle([40, 40, 300, 92], 26, fill=acc); d.text((170, 66), "SHORTCUT LAB", font=T.F(26, "Bold"), fill=T.BG, anchor="mm")
+    d.text((50, 170), l1, font=T.F(100, "Bold"), fill=T.TXT, anchor="lm", stroke_width=4, stroke_fill=T.BG)
+    x2 = 50 + T.F(100, "Bold").getlength(l1 + " ")
+    d.text((x2, 170), l2, font=T.F(100, "Bold"), fill=acc, anchor="lm", stroke_width=4, stroke_fill=T.BG)
+    if len(sys.argv) > 8: d.text((640, 640), sys.argv[8], font=T.F(30, "Medium"), fill=T.DIM, anchor="lm")
     img.convert("RGB").save(out, quality=92); print("thumb ok")
 else:
     l1, l2, code, out = sys.argv[2:6]; acc = {"lime": T.LIME, "coral": T.CORAL, "sky": T.SKY, "violet": T.VIO, "yellow": T.YEL}[sys.argv[6] if len(sys.argv) > 6 else "lime"]

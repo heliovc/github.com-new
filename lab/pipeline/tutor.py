@@ -10,6 +10,8 @@ Scene types: title, steps, code, term, files, tip, keys, compare, chat, outro, t
   live (EP09: split screen - code editor on the left typing HTML/CSS with new lines highlighted, a browser window on the right
   with address bar + "reload" sweep that reveals a REAL Chromium screenshot of that exact file; phone=True draws a phone frame);
   colorize() now also highlights lang="html" (tags, attributes, values) and lang="css" (selectors, properties, values) (EP09)
+  pdfx (EP10: a REAL rendered PDF page in a viewer window, a scan beam sweeps down and every box pdfplumber really found - text lines or
+  table rows - lights up as it passes, while its extracted text lands on the right as lines or as a cell grid; empty= for scanned pages)
 Identity: charcoal #0F1115, lime #B6F35C, coral #FF7A59, sky #6CC4FF, Poppins + DejaVu Sans Mono.
 """
 import sys, os, re, math, json, hashlib, subprocess, importlib.util
@@ -812,6 +814,58 @@ def sc_live(img, v, t, d):
         dr.rounded_rectangle([bxa + bw_ / 2 - lw / 2, by1 - 70, bxa + bw_ / 2 + lw / 2, by1 - 22], 24, fill=mix(BG, ACC, rk)); dr.text((bxa + bw_ / 2, by1 - 46), lab, font=fl, fill=BG, anchor="mm")
     if v.get("note"):
         a = ease((t - dur - 0.9) / 0.5); fn = F(30, "SemiBold"); tw = fn.getlength(v["note"])
+        if a > 0:
+            dr.rounded_rectangle([W / 2 - tw / 2 - 30, 1012, W / 2 + tw / 2 + 30, 1066], 27, fill=mix(BG, v.get("notecol", ACC), a)); dr.text((W / 2, 1039), v["note"], font=fn, fill=BG, anchor="mm")
+
+# ---- EP10: pdfx - a REAL rendered PDF page (left, PDF viewer) with a scan beam sweeping down; every box pdfplumber really found
+#      (text lines / table rows, page fractions from demo/ep10/boxes.json) lights up as the beam passes it, and its extracted text
+#      lands in the output panel on the right - as plain lines (mode "text") or as a cell grid (mode "table"). pick = boxes in accent color.
+def sc_pdfx(img, v, t, d):
+    if v["page"] not in _imc: _imc[v["page"]] = Image.open(v["page"]).convert("RGBA")
+    src = _imc[v["page"]]; ph = 800; pw = int(src.width * ph / src.height)
+    x0, y0 = 90, 150; box = [x0, y0, x0 + pw + 40, y0 + 52 + ph + 40]
+    if v.get("title"): text_a(img, (1360, 175), v["title"], F(40, "Bold"), TXT, ease(t / 0.4), "mm")
+    window(img, box, v.get("win", "invoice_1042.pdf"), kind="term")
+    px, py = x0 + 20, y0 + 72; pic = src.resize((pw, ph), Image.LANCZOS); img.alpha_composite(pic, (px, py))
+    span = d * v.get("span", 0.55); k = max(0.0, min(1.0, (t - 0.4) / span)); beam = py + ph * k
+    dr = ImageDraw.Draw(img)
+    boxes = v.get("boxes", []); pick = v.get("pick", ())
+    lay = Image.new("RGBA", img.size, (0, 0, 0, 0)); dl = ImageDraw.Draw(lay); done = 0
+    for i, b in enumerate(boxes):
+        bx0, by0, bx1, by1 = px + b[0] * pw - 4, py + b[1] * ph - 3, px + b[2] * pw + 4, py + b[3] * ph + 3
+        if beam < by1: continue
+        done += 1; col = ACC if (i in pick or not pick) else SKY
+        dl.rectangle([bx0, by0, bx1, by1], fill=col + (60 if i in pick else 34,), outline=col + (255 if i in pick else 150,), width=3 if i in pick else 1)
+    img.alpha_composite(lay)
+    if 0 < k < 1:
+        g = Image.new("RGBA", img.size, (0, 0, 0, 0)); dg = ImageDraw.Draw(g)
+        for j in range(26): dg.line([px, beam - j, px + pw, beam - j], fill=ACC + (int(110 * (1 - j / 26)),))
+        img.alpha_composite(g); dr.line([px, beam, px + pw, beam], fill=ACC, width=3)
+    # output panel
+    ox0, ox1 = box[2] + 50, W - 70; oy0 = 230 if v.get("title") else 150; oy1 = box[3]
+    window(img, [ox0, oy0, ox1, oy1], v.get("outwin", "extracted"), kind="term")
+    out = v.get("out", []); oy = oy0 + 80
+    if v.get("mode") == "table":
+        cols = len(out[0]); cw = (ox1 - ox0 - 60) / cols; rh = min(66, (oy1 - oy - 30) / max(1, len(out)))
+        fr = F(26, "mono")
+        for r, row in enumerate(out):
+            if r >= done: break
+            ry = oy + r * rh
+            for c, cell in enumerate(row):
+                cx = ox0 + 30 + c * cw
+                dr.rectangle([cx, ry, cx + cw - 6, ry + rh - 6], fill=mix(PANEL, ACC, 0.3) if r == 0 else (PANEL if r % 2 else PANEL2), outline=LINE)
+                dr.text((cx + 14, ry + (rh - 6) / 2), cell, font=F(26, "monob") if r == 0 else fr, fill=BG if False else (ACC if r == 0 else TXT), anchor="lm")
+    else:
+        fo = F(v.get("size", 25), "mono"); lh = int(v.get("size", 25) * 1.6); maxw = ox1 - ox0 - 60; n = 0
+        for i, ln in enumerate(out):
+            if i >= done and boxes: break
+            while fo.getlength(ln) > maxw and len(ln) > 4: ln = ln[:-2] + "…"
+            dr.text((ox0 + 30, oy + n * lh), ln, font=fo, fill=ACC if (i in pick) else (200, 206, 216)); n += 1
+        if not boxes and k >= 1:  # nothing found on the page (scanned image / no table)
+            fe = F(40, "monob"); dr.text(((ox0 + ox1) / 2, (oy0 + oy1) / 2 - 30), v.get("empty", "''"), font=fe, fill=CORAL, anchor="mm")
+            if v.get("empty_sub"): dr.text(((ox0 + ox1) / 2, (oy0 + oy1) / 2 + 40), v["empty_sub"], font=F(28, "Medium"), fill=DIM, anchor="mm")
+    if v.get("note"):
+        a = ease((t - 0.6 - span) / 0.5); fn = F(30, "SemiBold"); tw = fn.getlength(v["note"])
         if a > 0:
             dr.rounded_rectangle([W / 2 - tw / 2 - 30, 1012, W / 2 + tw / 2 + 30, 1066], 27, fill=mix(BG, v.get("notecol", ACC), a)); dr.text((W / 2, 1039), v["note"], font=fn, fill=BG, anchor="mm")
 

@@ -1,0 +1,59 @@
+{
+  "version": 1,
+  "channel_id": "UCXGqR8k1RMbfYdVleIuJKzA",
+  "created_at": "2026-11-14T08:34:41-03:00",
+  "items": [
+    {
+      "key": "lab-ep10-long",
+      "kind": "long",
+      "video": "video.mp4",
+      "title": "Extract Text and Tables from PDFs with Python (PDF to Excel for Beginners)",
+      "description": "Pull the text and tables out of any PDF with Python and pdfplumber, then save them to Excel with pandas, step by step for complete beginners. You'll read an invoice, grab the total, turn a PDF table into a spreadsheet, and process a whole folder of invoices into one summary file, plus the fixes for tables without lines and scanned PDFs. Every output on screen is the real result of the code shown.\n\nChapters\n0:00 The result\n0:34 The plan\n0:49 Why copy and paste fails\n1:08 Install pdfplumber\n1:29 The practice files\n1:45 Step 1: read the text\n2:42 Step 2: find one value\n3:16 Every page\n3:48 Step 3: extract a table\n4:35 Step 4: save it to Excel\n5:13 Step 5: a whole folder of invoices\n6:10 When there's no grid\n6:58 Scanned PDFs\n7:19 Common errors\n7:55 Pro tip: the pdfplumber cheat sheet\n8:14 Recap\n\nInstall\npip install pdfplumber pandas openpyxl\n\nstep1.py (read all the text)\nimport pdfplumber\n\nwith pdfplumber.open(\"invoice_1042.pdf\") as pdf:\n    print(\"Pages:\", len(pdf.pages))\n    page = pdf.pages[0]\n    text = page.extract_text()\n    print(text)\n\nfind_total.py (find one value)\nimport pdfplumber\n\nwith pdfplumber.open(\"invoice_1042.pdf\") as pdf:\n    text = pdf.pages[0].extract_text()\n\nfor line in text.splitlines():\n    if line.startswith(\"Total:\"):\n        total = line.split(\":\")[1].strip()\n        print(\"Found the total:\", total)\n\nto_excel.py (PDF table to Excel and CSV)\nimport pdfplumber\nimport pandas as pd\n\nwith pdfplumber.open(\"report.pdf\") as pdf:\n    table = pdf.pages[0].extract_table()\n\ndf = pd.DataFrame(table[1:], columns=table[0])\nprint(df)\ndf.to_excel(\"sales.xlsx\", index=False)\ndf.to_csv(\"sales.csv\", index=False)\nprint(\"Saved sales.xlsx and sales.csv\")\n\nbatch.py (a whole folder of invoices into one spreadsheet)\nfrom pathlib import Path\nimport pdfplumber\nimport pandas as pd\n\nrows = []\nfor path in sorted(Path(\"invoices\").glob(\"*.pdf\")):\n    with pdfplumber.open(path) as pdf:\n        text = pdf.pages[0].extract_text()\n    info = {\"file\": path.name}\n    for line in text.splitlines():\n        for label in [\"Invoice number\", \"Date\", \"Customer\", \"Total\"]:\n            if line.startswith(label + \":\"):\n                info[label] = line.split(\":\", 1)[1].strip()\n    rows.append(info)\n\ndf = pd.DataFrame(rows)\ndf[\"Total\"] = df[\"Total\"].astype(float)\nprint(df)\nprint(\"Grand total:\", df[\"Total\"].sum())\ndf.to_excel(\"invoices_summary.xlsx\", index=False)\n\nTable without lines? Use the text strategy:\nsettings = {\"vertical_strategy\": \"text\", \"horizontal_strategy\": \"text\"}\ntable = page.extract_table(settings)\n\nCommon problems:\nextract_table() returns None  -  the table has no drawn lines: use the text strategy above\nextract_text() returns ''  -  it's a scanned PDF (only an image), you need OCR\nModuleNotFoundError: No module named 'pdfplumber'  -  run python3 -m pip install pdfplumber\nFileNotFoundError  -  check the exact file name and cd into the folder first\n\n—\nShortcut Lab: software and AI tutorials that save you hours. A new tutorial every day.\nSubscribe so you don't miss the next shortcut.\n\nNarration uses a synthetic voice. All code shown is run and checked before publishing.\n#python #pdf #automation",
+      "tags": [
+        "extract text from pdf python",
+        "pdf to excel python",
+        "pdfplumber tutorial",
+        "extract tables from pdf",
+        "python pdf",
+        "pdf table to excel",
+        "python for beginners",
+        "pandas to excel",
+        "automate invoices python",
+        "read pdf python",
+        "python automation",
+        "pdfplumber",
+        "pdf data extraction",
+        "python tutorial",
+        "excel automation"
+      ],
+      "thumbnail": "thumbnail.jpg",
+      "captions": "legendas.srt",
+      "publish_at": "2026-11-14T19:00:00-03:00",
+      "if_late": "public_now",
+      "made_for_kids": false,
+      "altered_content": true,
+      "pinned_comment": "What kind of PDFs do you deal with most: invoices, bank statements or reports? Tell me and I'll make a tutorial for it."
+    },
+    {
+      "key": "lab-ep10-short",
+      "kind": "short",
+      "video": "vertical.mp4",
+      "title": "Python Reads a PDF in 1 Second #shorts",
+      "description": "A few lines of Python read every line of a PDF invoice and pull out the total.\nFull tutorial on the channel: \"Extract Text and Tables from PDFs with Python\".\n#python #pdf #shorts",
+      "tags": [
+        "python",
+        "pdf",
+        "pdfplumber",
+        "python automation",
+        "shorts"
+      ],
+      "captions": null,
+      "publish_at": "2026-11-14T20:30:00-03:00",
+      "if_late": "public_now",
+      "made_for_kids": false,
+      "altered_content": true,
+      "related_key": "lab-ep10-long",
+      "pinned_comment": "How many PDFs do you copy numbers from every month? Full tutorial: Extract Text and Tables from PDFs with Python (PDF to Excel for Beginners)"
+    }
+  ]
+}

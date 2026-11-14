@@ -1,0 +1,79 @@
+### step1
+Pages: 1
+Maple & Co. Supplies
+INVOICE
+Invoice number: INV-1042
+Date: 2026-10-03
+Customer: Bright Dental Clinic
+Item Qty Price Amount
+Printer paper (box) 4 32.50 130.00
+Toner cartridge 2 89.90 179.80
+Desk organizer 3 14.00 42.00
+Total: 351.80
+Thank you for your order. Payment due in 30 days.
+### find_total
+Found the total: 351.80
+### all_pages
+--- page 1 ---
+Quarterly Sales Report
+Maple & Co. Supplies - Q3
+Sales grew in every region this quarter. The table below shows
+units sold and revenue by region.
+Region Units Revenue Growth
+North 1,240 18,600 +12%
+South 980 14,700 +8%
+East 1,515 22,725 +15%
+West 760 11,400 +3%
+Online 2,310 34,650 +27%
+Online is now the biggest channel.
+--- page 2 ---
+Top Products
+Product Units Revenue
+Notebook A5 3,100 9,300
+Gel pens (10) 2,450 12,250
+Desk lamp 640 19,200
+Sticky notes 4,800 7,200
+### table
+['Region', 'Units', 'Revenue', 'Growth']
+['North', '1,240', '18,600', '+12%']
+['South', '980', '14,700', '+8%']
+['East', '1,515', '22,725', '+15%']
+['West', '760', '11,400', '+3%']
+['Online', '2,310', '34,650', '+27%']
+### to_excel
+   Region  Units Revenue Growth
+0   North  1,240  18,600   +12%
+1   South    980  14,700    +8%
+2    East  1,515  22,725   +15%
+3    West    760  11,400    +3%
+4  Online  2,310  34,650   +27%
+Saved sales.xlsx and sales.csv
+### no_lines
+None
+### no_lines_fix
+['Top Products', '', '']
+['Product', 'Units', 'Revenue']
+['Notebook A5', '3,100', '9,300']
+['Gel pens (10)', '2,450', '12,250']
+['Desk lamp', '640', '19,200']
+['Sticky notes', '4,800', '7,200']
+### batch
+           file Invoice number        Date              Customer  Total
+0  INV-1040.pdf       INV-1040  2026-10-01          Lopez Bakery  121.0
+1  INV-1041.pdf       INV-1041  2026-10-02       Green Leaf Cafe   84.0
+2  INV-1042.pdf       INV-1042  2026-10-03  Bright Dental Clinic  351.8
+3  INV-1043.pdf       INV-1043  2026-10-06        Oak Street Gym  288.0
+4  INV-1044.pdf       INV-1044  2026-10-07          Lopez Bakery   60.0
+Grand total: 904.8
+### scanned
+''
+Images on the page: 1
+### typo
+Traceback (most recent call last):
+  File "/root/lab/demo/ep10/typo.py", line 3, in <module>
+    with pdfplumber.open("invoice-1042.pdf") as pdf:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/dist-packages/pdfplumber/pdf.py", line 98, in open
+    stream = open(path_or_fp, "rb")
+             ^^^^^^^^^^^^^^^^^^^^^^
+FileNotFoundError: [Errno 2] No such file or directory: 'invoice-1042.pdf'

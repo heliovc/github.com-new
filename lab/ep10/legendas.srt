@@ -1,0 +1,711 @@
+1
+00:00:00,250 --> 00:00:01,612
+This is a PDF invoice.
+
+2
+00:00:01,612 --> 00:00:06,877
+And in about one second, Python just read every line of it, and pulled out the total.
+
+3
+00:00:06,877 --> 00:00:10,098
+No copying, no retyping, no squinting at the screen.
+
+4
+00:00:10,098 --> 00:00:13,442
+Now imagine doing that for a hundred invoices at once.
+
+5
+00:00:13,442 --> 00:00:15,362
+That's what you'll build today.
+
+6
+00:00:16,062 --> 00:00:26,716
+In the next ten minutes, you'll learn to get the text out of any PDF, find one value inside it, pull a whole table straight into Excel, and then process a folder full of PDFs in one go.
+
+7
+00:00:26,716 --> 00:00:28,731
+Step by step, no experience needed.
+
+8
+00:00:28,731 --> 00:00:33,799
+And I'll show you the PDFs that refuse to give up their text, and what to do about them.
+
+9
+00:00:34,499 --> 00:00:35,458
+Here's the plan.
+
+10
+00:00:35,458 --> 00:00:36,956
+Install one free library.
+
+11
+00:00:36,956 --> 00:00:38,693
+Read all the text from a PDF.
+
+12
+00:00:38,693 --> 00:00:40,371
+Find the one value you need.
+
+13
+00:00:40,371 --> 00:00:43,128
+Extract a table, and save it as an Excel file.
+
+14
+00:00:43,128 --> 00:00:44,206
+Then, the big one.
+
+15
+00:00:44,206 --> 00:00:49,420
+Loop through a whole folder of invoices, and build a summary spreadsheet automatically.
+
+16
+00:00:50,119 --> 00:00:51,697
+Why not just copy and paste?
+
+17
+00:00:51,697 --> 00:00:54,400
+Try it with a table, and the columns fall apart.
+
+18
+00:00:54,400 --> 00:00:58,230
+Everything lands in one cell, or the numbers jump to the wrong rows.
+
+19
+00:00:58,230 --> 00:01:00,652
+And with fifty PDFs, it takes an afternoon.
+
+20
+00:01:00,652 --> 00:01:08,368
+Python reads the PDF the way the computer stores it, so the rows and columns come out clean, and fifty files take the same effort as one.
+
+21
+00:01:09,068 --> 00:01:10,701
+You need Python installed.
+
+22
+00:01:10,701 --> 00:01:14,218
+If you don't have it yet, it's free from python dot org.
+
+23
+00:01:14,218 --> 00:01:18,238
+Open a terminal and type pip install pdfplumber pandas openpyxl.
+
+24
+00:01:18,238 --> 00:01:19,620
+Pdfplumber reads PDFs.
+
+25
+00:01:19,620 --> 00:01:21,127
+Pandas organizes tables.
+
+26
+00:01:21,127 --> 00:01:23,828
+And openpyxl lets pandas write Excel files.
+
+27
+00:01:23,828 --> 00:01:25,901
+Then check it with this one line.
+
+28
+00:01:25,901 --> 00:01:28,853
+If it prints two version numbers, you're ready.
+
+29
+00:01:29,553 --> 00:01:32,284
+Here are the practice files, all in one folder.
+
+30
+00:01:32,284 --> 00:01:38,153
+An invoice, a two page sales report, a scanned receipt, and a folder called invoices, with five more.
+
+31
+00:01:38,153 --> 00:01:40,245
+Your scripts go in this same folder.
+
+32
+00:01:40,245 --> 00:01:44,836
+That's important, because Python looks for files in the folder you run it from.
+
+33
+00:01:45,536 --> 00:01:46,045
+Step one.
+
+34
+00:01:46,045 --> 00:01:47,346
+Create step one dot py.
+
+35
+00:01:47,346 --> 00:01:48,364
+Import pdfplumber.
+
+36
+00:01:48,364 --> 00:01:52,153
+Then, with pdfplumber dot open and the file name, you open the PDF.
+
+37
+00:01:52,153 --> 00:01:55,434
+The with keyword closes the file for you when you're done.
+
+38
+00:01:55,434 --> 00:01:57,526
+pdf dot pages is a list of the pages.
+
+39
+00:01:57,526 --> 00:02:00,015
+Print its length, to see how many there are.
+
+40
+00:02:00,015 --> 00:02:01,429
+Then take the first page.
+
+41
+00:02:01,429 --> 00:02:05,275
+Remember, Python counts from zero, so the first page is pages, zero.
+
+42
+00:02:05,275 --> 00:02:08,329
+And extract text gives you all its text as one string.
+
+43
+00:02:09,029 --> 00:02:09,440
+Run it.
+
+44
+00:02:09,440 --> 00:02:10,086
+Pages, one.
+
+45
+00:02:10,086 --> 00:02:12,729
+And there's the whole invoice, as plain text.
+
+46
+00:02:12,729 --> 00:02:20,188
+The shop name, the invoice number, the date, the customer, every item with its quantity and price, and the total at the bottom.
+
+47
+00:02:20,188 --> 00:02:22,008
+Line by line, in reading order.
+
+48
+00:02:22,708 --> 00:02:25,290
+Here's what's happening behind the scenes.
+
+49
+00:02:25,290 --> 00:02:29,533
+A PDF stores every piece of text with its exact position on the page.
+
+50
+00:02:29,533 --> 00:02:35,865
+Pdfplumber finds those pieces, groups the ones that sit on the same line, and reads them top to bottom.
+
+51
+00:02:35,865 --> 00:02:38,386
+Each box you see here is a line it found.
+
+52
+00:02:38,386 --> 00:02:41,768
+That's why the output keeps the same order as the page.
+
+53
+00:02:42,468 --> 00:02:42,970
+Step two.
+
+54
+00:02:42,970 --> 00:02:45,872
+Usually you don't want all the text, just one value.
+
+55
+00:02:45,872 --> 00:02:46,710
+Like the total.
+
+56
+00:02:46,710 --> 00:02:49,891
+Text dot split lines turns the text into a list of lines.
+
+57
+00:02:49,891 --> 00:02:50,728
+Loop over them.
+
+58
+00:02:50,728 --> 00:02:53,910
+If a line starts with Total colon, split it at the colon.
+
+59
+00:02:53,910 --> 00:02:56,868
+That gives two parts, the word Total, and the number.
+
+60
+00:02:56,868 --> 00:03:00,887
+Take part one, the number, and strip removes the extra spaces around it.
+
+61
+00:03:01,587 --> 00:03:02,006
+Run it.
+
+62
+00:03:02,006 --> 00:03:05,478
+Found the total, three hundred fifty one point eight zero.
+
+63
+00:03:05,478 --> 00:03:07,932
+That's exactly the number on the invoice.
+
+64
+00:03:07,932 --> 00:03:09,967
+The same idea works for any label.
+
+65
+00:03:09,967 --> 00:03:11,823
+Invoice number, date, customer.
+
+66
+00:03:11,823 --> 00:03:15,953
+If the PDF writes a label and then a value, you can grab it this way.
+
+67
+00:03:16,653 --> 00:03:18,806
+What about a PDF with many pages?
+
+68
+00:03:18,806 --> 00:03:20,373
+Loop over pdf dot pages.
+
+69
+00:03:20,373 --> 00:03:27,094
+Enumerate, with start equals one, gives you a page number that starts at one, like a human would count.
+
+70
+00:03:27,094 --> 00:03:30,358
+Print a small header for each page, then its text.
+
+71
+00:03:31,058 --> 00:03:32,536
+Here's the sales report.
+
+72
+00:03:32,536 --> 00:03:36,293
+Page one has an introduction, and a table of sales by region.
+
+73
+00:03:36,293 --> 00:03:38,510
+Page two has a list of top products.
+
+74
+00:03:38,510 --> 00:03:40,358
+All the text, from every page.
+
+75
+00:03:40,358 --> 00:03:41,775
+But look at the tables.
+
+76
+00:03:41,775 --> 00:03:45,101
+In plain text, they're just words separated by spaces.
+
+77
+00:03:45,101 --> 00:03:48,304
+To get real rows and columns, we need the next step.
+
+78
+00:03:49,004 --> 00:03:50,145
+Step three, tables.
+
+79
+00:03:50,145 --> 00:03:52,489
+This is where pdfplumber really shines.
+
+80
+00:03:52,489 --> 00:03:55,854
+Instead of extract text, call extract table on the page.
+
+81
+00:03:55,854 --> 00:04:02,223
+It looks for the lines that draw the table, the grid, and uses them to split the text into rows and cells.
+
+82
+00:04:02,223 --> 00:04:03,906
+You get back a list of rows.
+
+83
+00:04:03,906 --> 00:04:05,588
+Each row is a list of cells.
+
+84
+00:04:06,288 --> 00:04:08,386
+Watch it work on the real page.
+
+85
+00:04:08,386 --> 00:04:12,378
+Pdfplumber finds the table, and reads it one row at a time.
+
+86
+00:04:12,378 --> 00:04:14,475
+Region, units, revenue, growth.
+
+87
+00:04:14,475 --> 00:04:16,979
+North, South, East, West, and Online.
+
+88
+00:04:16,979 --> 00:04:20,633
+Every cell in the right column, exactly like the page.
+
+89
+00:04:21,333 --> 00:04:23,113
+And here's the printed result.
+
+90
+00:04:23,113 --> 00:04:23,647
+Six rows.
+
+91
+00:04:23,647 --> 00:04:26,376
+The first row is the header, the column names.
+
+92
+00:04:26,376 --> 00:04:28,630
+Notice the square brackets and quotes.
+
+93
+00:04:28,630 --> 00:04:32,605
+Each row is a Python list, and each cell is text, even the numbers.
+
+94
+00:04:32,605 --> 00:04:35,038
+Keep that in mind, we'll come back to it.
+
+95
+00:04:35,738 --> 00:04:36,347
+Step four.
+
+96
+00:04:36,347 --> 00:04:37,689
+Let's put it in Excel.
+
+97
+00:04:37,689 --> 00:04:38,970
+Import pandas as p d.
+
+98
+00:04:38,970 --> 00:04:42,446
+Then build a data frame, that's pandas' word for a table.
+
+99
+00:04:42,446 --> 00:04:46,776
+The data is table, from one onward, that's every row except the header.
+
+100
+00:04:46,776 --> 00:04:49,642
+And columns equals table, zero, the header row.
+
+101
+00:04:49,642 --> 00:04:54,521
+Then to excel saves an Excel file, and index equals false skips the row numbers.
+
+102
+00:04:54,521 --> 00:04:56,717
+To csv does the same for a CSV file.
+
+103
+00:04:57,417 --> 00:04:57,898
+Run it.
+
+104
+00:04:57,898 --> 00:05:00,853
+There's the table, now with proper columns.
+
+105
+00:05:00,853 --> 00:05:05,733
+And two new files in the folder, sales dot x l s x and sales dot c s v.
+
+106
+00:05:05,733 --> 00:05:09,719
+Open the Excel file, and every value sits in its own cell.
+
+107
+00:05:09,719 --> 00:05:12,743
+No copy and paste, no columns falling apart.
+
+108
+00:05:13,443 --> 00:05:14,675
+Now the real shortcut.
+
+109
+00:05:14,675 --> 00:05:17,477
+A folder of invoices, and one summary spreadsheet.
+
+110
+00:05:17,477 --> 00:05:21,511
+Path, invoices, dot glob, star dot p d f, finds every PDF in the folder.
+
+111
+00:05:21,511 --> 00:05:24,088
+For each one, read the text of the first page.
+
+112
+00:05:24,088 --> 00:05:26,441
+Then check every line against four labels.
+
+113
+00:05:26,441 --> 00:05:28,739
+Invoice number, date, customer and total.
+
+114
+00:05:28,739 --> 00:05:31,428
+When a line starts with a label, keep the value.
+
+115
+00:05:31,428 --> 00:05:34,397
+Split with a one means split only at the first colon.
+
+116
+00:05:34,397 --> 00:05:36,022
+Each invoice becomes one row.
+
+117
+00:05:36,722 --> 00:05:39,340
+Then pandas turns all the rows into one table.
+
+118
+00:05:39,340 --> 00:05:43,836
+As type float turns the totals from text into real numbers, so we can add them.
+
+119
+00:05:43,836 --> 00:05:45,715
+Remember, cells come out as text.
+
+120
+00:05:45,715 --> 00:05:47,422
+And sum gives the grand total.
+
+121
+00:05:47,422 --> 00:05:47,820
+Run it.
+
+122
+00:05:47,820 --> 00:05:52,544
+Five invoices, one clean table, and a grand total of nine hundred four point eight.
+
+123
+00:05:52,544 --> 00:05:53,853
+Saved as an Excel file.
+
+124
+00:05:53,853 --> 00:05:56,699
+With five hundred invoices, it's the same command.
+
+125
+00:05:57,399 --> 00:05:59,260
+That's the moment it pays off.
+
+126
+00:05:59,260 --> 00:06:05,649
+The boring job, opening each PDF, finding the number, typing it into a spreadsheet, is now one command.
+
+127
+00:06:05,649 --> 00:06:10,549
+Run it again next month, on next month's folder, and the summary builds itself.
+
+128
+00:06:11,249 --> 00:06:13,154
+Now, the PDFs that fight back.
+
+129
+00:06:13,154 --> 00:06:13,916
+Problem one.
+
+130
+00:06:13,916 --> 00:06:19,249
+Page two of the report has a table with no lines, just columns lined up with spaces.
+
+131
+00:06:19,249 --> 00:06:21,535
+Run extract table, and you get None.
+
+132
+00:06:21,535 --> 00:06:22,043
+Nothing.
+
+133
+00:06:22,043 --> 00:06:26,298
+By default, pdfplumber looks for drawn lines, and there aren't any.
+
+134
+00:06:26,998 --> 00:06:28,414
+The fix is one setting.
+
+135
+00:06:28,414 --> 00:06:31,433
+Tell it to use the text itself, instead of lines.
+
+136
+00:06:31,433 --> 00:06:34,821
+Vertical strategy, text, and horizontal strategy, text.
+
+137
+00:06:34,821 --> 00:06:37,778
+Now it splits columns at the gaps between words.
+
+138
+00:06:37,778 --> 00:06:44,862
+It also returns some empty rows from the spacing, so this one line keeps only the rows that have something in them.
+
+139
+00:06:45,562 --> 00:06:46,567
+And there it is.
+
+140
+00:06:46,567 --> 00:06:50,776
+Product, units, revenue, and four products, each in its own column.
+
+141
+00:06:50,776 --> 00:06:54,105
+The title, Top Products, came along as the first row.
+
+142
+00:06:54,105 --> 00:06:57,560
+Just skip it, with table, from one onward, like before.
+
+143
+00:06:58,260 --> 00:06:59,757
+Problem two, scanned PDFs.
+
+144
+00:06:59,757 --> 00:07:02,174
+This receipt was photographed, or scanned.
+
+145
+00:07:02,174 --> 00:07:04,879
+Run extract text, and you get two empty quotes.
+
+146
+00:07:04,879 --> 00:07:05,800
+An empty string.
+
+147
+00:07:05,800 --> 00:07:09,139
+Because there is no text inside, just one picture of text.
+
+148
+00:07:09,139 --> 00:07:12,247
+Pdfplumber confirms it, there's one image on the page.
+
+149
+00:07:12,247 --> 00:07:19,154
+To read a scan, you need O C R, optical character recognition, which is a different tool, and a topic for its own video.
+
+150
+00:07:19,854 --> 00:07:22,049
+Two more errors you'll probably meet.
+
+151
+00:07:22,049 --> 00:07:22,643
+Error one.
+
+152
+00:07:22,643 --> 00:07:25,312
+Module not found, no module named pdfplumber.
+
+153
+00:07:25,312 --> 00:07:28,753
+The library isn't installed for the Python you're running.
+
+154
+00:07:28,753 --> 00:07:30,711
+Run pip install pdfplumber again.
+
+155
+00:07:30,711 --> 00:07:37,890
+If you have several Pythons, use python three dash m pip install, so it goes to the same Python you run your script with.
+
+156
+00:07:38,590 --> 00:07:39,253
+Error two.
+
+157
+00:07:39,253 --> 00:07:40,249
+File not found.
+
+158
+00:07:40,249 --> 00:07:41,909
+Look closely at the name.
+
+159
+00:07:41,909 --> 00:07:47,552
+I typed invoice dash ten forty two, but the file is invoice underscore ten forty two.
+
+160
+00:07:47,552 --> 00:07:49,410
+The name must match exactly.
+
+161
+00:07:49,410 --> 00:07:53,062
+And the terminal must be in the same folder as the PDF.
+
+162
+00:07:53,062 --> 00:07:54,854
+Use c d to get there first.
+
+163
+00:07:55,554 --> 00:07:56,024
+Pro tip.
+
+164
+00:07:56,024 --> 00:07:57,670
+Keep these five lines handy.
+
+165
+00:07:57,670 --> 00:07:59,434
+Extract text for all the text.
+
+166
+00:07:59,434 --> 00:08:04,606
+Extract table for one table, and extract tables, with an s, for every table on the page.
+
+167
+00:08:04,606 --> 00:08:08,604
+Crop, with a box, reads only part of the page, like just the header.
+
+168
+00:08:08,604 --> 00:08:13,718
+And extract words gives you every word with its exact position, for the tricky layouts.
+
+169
+00:08:14,418 --> 00:08:15,195
+Quick recap.
+
+170
+00:08:15,195 --> 00:08:16,427
+Install pdfplumber.
+
+171
+00:08:16,427 --> 00:08:18,954
+Open the file with pdfplumber dot open.
+
+172
+00:08:18,954 --> 00:08:22,778
+Extract text for the text, and split lines to find a value.
+
+173
+00:08:22,778 --> 00:08:26,601
+Extract table for tables, and pandas to save them to Excel.
+
+174
+00:08:26,601 --> 00:08:28,934
+Loop over a folder for the big jobs.
+
+175
+00:08:28,934 --> 00:08:32,240
+And if a table has no lines, use the text strategy.
+
+176
+00:08:32,940 --> 00:08:35,625
+Next on Shortcut Lab, regex for beginners.
+
+177
+00:08:35,625 --> 00:08:43,809
+One small pattern that finds every email, phone number or date in any text, including the text you just pulled out of your PDFs.
+
+178
+00:08:43,809 --> 00:08:45,855
+Subscribe, so you don't miss it.
