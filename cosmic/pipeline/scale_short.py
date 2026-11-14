@@ -14,6 +14,8 @@ Visuais (vis.type):
   "thinring": anéis de Saturno, 273.000 km de largura x ~10 m de espessura; vis.mode = edge (linha + lupa com prédio de 3 andares) | wide
              (Saturno inclinado + barra Terra–Lua em escala) | zoom (zoom log na borda) | paper (anel fino como papel = 2,7 km sobre uma
              cidade em escala) | tilt (anéis ficando de perfil, 2017 -> 2025) (scale04).
+  "fillsun": o Sol EM ESCALA contra a Terra; vis.mode = hook (Sol + Terra minúscula ao lado) | row (109 Terras no diâmetro) | fill
+             (Terras enchendo o disco + contador até 1,3 milhão por volume; fatia 2D ilustrativa) | door (Sol = porta de 2 m, Terra = 18 mm) (scale05); vis.count = alvo do contador.
 Reaproveita render.py (sprites, fontes) e ranking.py (fundo, texto, legendas).
 """
 import sys, os, math, json, subprocess, importlib.util, random
@@ -296,6 +298,71 @@ def thinring_vis(img, v, th, t, dur, bp):
         text(img, (W / 2, 1270), f"{yr:.0f}", 110, acc2)
         text(img, (W / 2, 1365), "as seen from Earth", 38, (230, 232, 240), w="ExtraBold")
 
+SUN_KM5, EARTH_KM5 = 1392000, 12742
+_fill5 = {}
+def _fill_pts5(R_, er):
+    key = (int(R_), round(er, 2))
+    if key not in _fill5:
+        pts = []; dx = 2 * er; dy = math.sqrt(3) * er; j = 0; y = -R_ + er
+        while y < R_:
+            x = -R_ + er + (er if j % 2 else 0)
+            while x < R_:
+                if x * x + y * y < (R_ - er) ** 2: pts.append((x, y))
+                x += dx
+            y += dy; j += 1
+        pts.sort(key=lambda p: -p[1]); _fill5[key] = pts
+    return _fill5[key]
+
+def fillsun_vis(img, v, th, t, dur, bp):
+    """the Sun TO SCALE against Earth: mode hook (Sun + tiny Earth beside it) | row (109 Earths across the diameter) | fill (Earths pour in,
+    counter to 1.3 million by volume; 2D slice is illustrative) | door (Sun = a 2 m front door, Earth = an 18 mm coin)"""
+    acc, acc2 = tuple(th["accent"]), tuple(th["accent2"]); mode = v.get("mode", "hook"); cx, cy = (W / 2 if mode != "hook" else 470), 900
+    R_ = 420; er = R_ * EARTH_KM5 / SUN_KM5
+    d = ImageDraw.Draw(img)
+    if mode in ("hook", "row", "fill"):
+        R.paste_c(img, R.sun_sprite(R_), cx, cy)
+        d = ImageDraw.Draw(img)
+    if mode == "hook":
+        ex = cx + R_ + 60; R.paste_c(img, R.earth_sprite(max(4, int(er * 1.0)), glow=None), ex, cy)
+        d = ImageDraw.Draw(img); d.ellipse([ex - 28, cy - 28, ex + 28, cy + 28], outline=acc2, width=4)
+        d.line([(ex, cy - 28), (ex - 10, cy - 120)], fill=acc2, width=4); text(img, (ex - 20, cy - 150), "EARTH", 40, acc2)
+        text(img, (W / 2, cy + R_ + 80), "to scale", 36, (230, 232, 240), w="ExtraBold")
+    elif mode == "row":
+        n = int(109 * min(1, bp * 1.1)); x0 = cx - R_ + (2 * R_ - 109 * 2 * er) / 2
+        d = ImageDraw.Draw(img)
+        for k in range(n):
+            x = x0 + er + k * 2 * er; d.ellipse([x - er, cy - er, x + er, cy + er], fill=(40, 110, 230) if k % 2 else (120, 200, 255))
+        text(img, (W / 2, cy + R_ + 70), "each dot = 1 Earth, to scale", 36, (230, 232, 240), w="ExtraBold")
+        d = ImageDraw.Draw(img); d.rounded_rectangle([cx - 150, cy + 30, cx + 150, cy + 130], 20, fill=(10, 10, 20))
+        d.text((cx, cy + 80), f"{n} / 109", font=F(64, "Black"), fill=acc2, anchor="mm")
+    elif mode == "fill":
+        pts = _fill_pts5(R_, er * 2.2); n = int(len(pts) * bp)
+        lay = Image.new("RGBA", img.size, (0, 0, 0, 0)); dl = ImageDraw.Draw(lay); rr = er * 2.2 * 0.9
+        for (x, y) in pts[:n]:
+            dl.ellipse([cx + x - rr, cy + y - rr, cx + x + rr, cy + y + rr], fill=(70, 130, 230, 255), outline=(170, 210, 255, 255))
+        img.alpha_composite(lay); d = ImageDraw.Draw(img)
+        cnt = v.get("count", 1300000) * bp
+        d.rounded_rectangle([cx - 330, cy - 70, cx + 330, cy + 70], 26, fill=(10, 10, 20, 230))
+        d.text((cx, cy), f"{cnt:,.0f}", font=F(110, "Black"), fill=acc2, anchor="mm")
+        text(img, (W / 2, cy + R_ + 70), "Earths, by volume (dots enlarged)", 36, (230, 232, 240), w="ExtraBold")
+    elif mode == "door":
+        dh = 900; dw = 420; x0, y0 = 270, cy - dh / 2 + 60
+        d.rectangle([x0 - 24, y0 - 24, x0 + dw + 24, y0 + dh], fill=(60, 40, 30))
+        d.rectangle([x0, y0, x0 + dw, y0 + dh], fill=(120, 80, 50))
+        for k in range(2):
+            for j in range(3): d.rectangle([x0 + 40 + k * 190, y0 + 40 + j * 280, x0 + 190 + k * 190, y0 + 260 + j * 280], outline=(90, 60, 38), width=6)
+        d.ellipse([x0 + dw - 60, y0 + dh / 2 - 15, x0 + dw - 30, y0 + dh / 2 + 15], fill=(220, 190, 90))
+        sa = ease((t - 0.3) / 0.6); sr_ = dh / 2; scx, scy = x0 + dw / 2, y0 + dh / 2
+        lay = Image.new("RGBA", img.size, (0, 0, 0, 0)); ImageDraw.Draw(lay).ellipse([scx - sr_, scy - sr_, scx + sr_, scy + sr_], fill=(255, 190, 60, int(70 * sa)), outline=(255, 200, 60, int(255 * sa)), width=8)
+        img.alpha_composite(lay); d = ImageDraw.Draw(img)
+        er_px = dh / 2 / 109.2; xc = x0 + dw + 190; yc = y0 + dh - 120
+        R.paste_c(img, R.earth_sprite(max(4, int(er_px)), glow=None), xc, yc)
+        d = ImageDraw.Draw(img); d.ellipse([xc - 36, yc - 36, xc + 36, yc + 36], outline=acc2, width=4)
+        text(img, (xc, yc - 80), "EARTH", 40, acc2); text(img, (xc, yc + 80), "≈ 18 mm", 40, (255, 255, 255))
+        d.line([(x0 + dw + 60, y0), (x0 + dw + 60, y0 + dh)], fill=acc, width=5)
+        text(img, (x0 + dw + 120, y0 + 60), "SUN = 2 m", 40, acc, anchor="lm")
+
+
 def chrome(img, th, gt, total):
     d = ImageDraw.Draw(img)
     d.rectangle([0, 0, int(W * gt / total), 10], fill=tuple(th["accent"]))
@@ -339,6 +406,11 @@ def frame(m, durs, gt, chunks, arr):
         hl = v.get("head") or m.BIG
         text(img, (W / 2, 160), hl["num"], 124 if len(hl["num"]) < 12 else 100, tuple(th["accent"]), stroke=4)
         text(img, (W / 2, 265), hl["top"], 50, (255, 255, 255), stroke=3)
+    elif v["type"] == "fillsun":
+        fillsun_vis(img, v, th, t, d, easeio((t - 0.2) / max(0.8, d * 0.8)))
+        hl = v.get("head") or m.BIG
+        text(img, (W / 2, 170), hl["num"], 124 if len(hl["num"]) < 12 else 100, tuple(th["accent"]), stroke=4)
+        text(img, (W / 2, 280), hl["top"], 52, (255, 255, 255), stroke=3)
     elif v["type"] == "starinside":
         starinside_vis(img, v, th, t, d, easeio((t - 0.2) / max(0.8, d * 0.75)))
         hl = v.get("head") or m.BIG

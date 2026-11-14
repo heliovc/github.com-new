@@ -20,6 +20,9 @@ vis.type == "kelvin" / THEME.hook/outro == "kelvin": régua Kelvin 0–60 K com 
   o lugar desliza até a sua temperatura e o objeto congela (vis.kind = planet | crater | nebula; vis.k, vis.col) (rank09).
 vis.type == "peaks" / THEME.hook/outro == "peaks": régua vertical 0–26 km com Everest e a linha dos aviões (11 km); o perfil da montanha sobe
   da base (vis.kind = shield | central | ridge | block | ocean; vis.km, vis.sea = nível do mar em km, vis.world, vis.world_col) (rank10).
+vis.type == "spin" / THEME.hook/outro == "spin": objeto girando (vis.kind = gas | dwarf | rock | pulsar) numa velocidade visível vis.vis_rps,
+  com selo "REAL SPEED" / "sped up N×" / "slowed down N×" calculado contra a real (vis.rps = voltas por segundo) + régua log de voltas por
+  segundo (1 por dia -> 1.000/s, Terra de referência) (rank11).
 Tudo desenhado por código; narração Kokoro (VOICE, padrão af_heart); legenda grande queimada.
 """
 import sys, os, re, math, json, subprocess, importlib.util, random
@@ -603,6 +606,76 @@ def peaks_vis(img, it, th, t, dur):
     d.line([(PK_X, top), (PK_X + 70, top)], fill=tuple(th["accent"]), width=5)
     if v.get("note"): text(img, (W / 2, 412), v["note"], 36, tuple(th["accent2"]), w="ExtraBold", a=ease((t - 1.8) / 0.5))
 
+# ---- rank11: spin ----
+SP_LO, SP_HI = -5.5, 3.3   # log10 spins per second on the meter
+SP_X0, SP_X1 = 90, W - 90
+def sp_x(rps): return lerp(SP_X0, SP_X1, (math.log10(rps) - SP_LO) / (SP_HI - SP_LO))
+def spin_meter(img, th, shown, cur=None, y=1160, a=1.0):
+    d = ImageDraw.Draw(img); acc = tuple(th["accent"]); acc2 = tuple(th["accent2"])
+    d.rounded_rectangle([SP_X0, y - 12, SP_X1, y + 12], 12, fill=(20, 26, 50), outline=(70, 90, 140), width=2)
+    for e, lab in [(-5, "1 per day"), (-2, ""), (0, "1 per second"), (2, ""), (3, "1,000 / s")]:
+        x = sp_x(10 ** e) if e != -5 else sp_x(1 / 86400)
+        d.line([(x, y - 26), (x, y + 26)], fill=(110, 125, 170), width=3)
+        if lab: d.text((x, y + 52), lab, font=F(26, "Bold"), fill=(150, 160, 195), anchor="mm")
+    d.text((sp_x(1 / 86400) - 6, y + 52), "", font=F(26, "ExtraBold"), fill=(140, 190, 255), anchor="mm")
+    xe = sp_x(1 / 86400); d.ellipse([xe - 9, y - 9, xe + 9, y + 9], fill=(140, 190, 255)); d.text((xe, y + 88), "(Earth)", font=F(24, "ExtraBold"), fill=(140, 190, 255), anchor="mm")
+    for o in shown:
+        x = sp_x(o["vis"]["rps"]); c = acc if (cur is not None and o is cur) else acc2
+        rr = 18 if o is cur else 12
+        d.ellipse([x - rr, y - rr, x + rr, y + rr], fill=c, outline=(255, 255, 255), width=3)
+        d.text((x, y - 48 - (12 if o is cur else 0) - (30 if o["rank"] == 1 and cur is None else 0)), f'#{o["rank"]}', font=F(30 if o is cur else 24, "Black"), fill=c, anchor="mm")
+    d.text((W / 2, y - 100), "SPINS PER SECOND (log scale)", font=F(28, "ExtraBold"), fill=(200, 205, 225), anchor="mm")
+
+def spin_obj(img, kind, cx, cy, r, ang, col):
+    d = ImageDraw.Draw(img)
+    if kind == "gas":
+        R.paste_c(img, R.planet_sprite(r, col, light=(-0.7, -0.3)), cx, cy); d = ImageDraw.Draw(img)
+        for k, dy in enumerate((-0.55, -0.25, 0.1, 0.4, 0.62)):
+            w_ = r * math.sqrt(1 - dy * dy); d.line([(cx - w_, cy + dy * r), (cx + w_, cy + dy * r)], fill=mix(col, (120, 70, 40), 0.5), width=max(3, r // 18))
+        for off, sc_, c2 in ((0, 1.0, (200, 90, 60)), (2.1, 0.6, (240, 230, 210)), (4.0, 0.5, (150, 90, 60))):
+            a_ = ang * 2 * math.pi + off; z = math.cos(a_)
+            if z > 0:
+                x = cx + r * 0.95 * math.sin(a_); w_ = r * 0.22 * sc_ * (0.3 + 0.7 * z); yy = cy + r * 0.22
+                d.ellipse([x - w_, yy - r * 0.09 * sc_, x + w_, yy + r * 0.09 * sc_], fill=c2)
+    elif kind == "dwarf":
+        R.paste_c(img, R.radial(int(r * 3), [(0, (255, 255, 255, 255)), (0.3, (220, 235, 255, 255)), (0.34, (170, 200, 255, 160)), (1, (90, 140, 255, 0))]), cx, cy)
+        d = ImageDraw.Draw(img)
+        for off in (0, math.pi):
+            a_ = ang * 2 * math.pi + off; z = math.cos(a_)
+            if z > -0.1:
+                x = cx + r * 0.42 * math.sin(a_); w_ = r * 0.12 * (0.3 + 0.7 * max(0, z))
+                d.ellipse([x - w_, cy - r * 0.2 - w_, x + w_, cy - r * 0.2 + w_], fill=(255, 190, 120))
+    elif kind == "rock":
+        a_ = ang * 2 * math.pi; pts = []
+        rng = random.Random(24)
+        rad = [0.75 + 0.35 * rng.random() for _ in range(14)]
+        for k in range(14):
+            th_ = a_ + 2 * math.pi * k / 14; rr = r * rad[k] * (1.35 if k in (0, 7) else 1.0)
+            pts.append((cx + rr * math.cos(th_), cy + rr * 0.8 * math.sin(th_)))
+        d.polygon(pts, fill=(120, 108, 96), outline=(200, 185, 165)); 
+        for k in (2, 5, 10):
+            x, y = pts[k]; d.ellipse([lerp(cx, x, 0.5) - 10, lerp(cy, y, 0.5) - 8, lerp(cx, x, 0.5) + 10, lerp(cy, y, 0.5) + 8], fill=(85, 76, 68))
+    elif kind == "pulsar":
+        a_ = ang * 2 * math.pi
+        lay = Image.new("RGBA", img.size, (0, 0, 0, 0)); dl = ImageDraw.Draw(lay)
+        for off in (0, math.pi):
+            b = a_ + off; L = 520
+            p1 = (cx + L * math.cos(b - 0.12), cy + L * math.sin(b - 0.12)); p2 = (cx + L * math.cos(b + 0.12), cy + L * math.sin(b + 0.12))
+            dl.polygon([(cx, cy), p1, p2], fill=col + (120,))
+        img.alpha_composite(lay.filter(ImageFilter.GaussianBlur(6)))
+        R.paste_c(img, R.radial(int(r * 4), [(0, (255, 255, 255, 255)), (0.22, (200, 225, 255, 255)), (0.25, (150, 190, 255, 150)), (1, (90, 120, 255, 0))]), cx, cy)
+
+def spin_vis(img, it, th, t, dur):
+    v = it["vis"]; ang = t * v.get("vis_rps", 0.5)
+    spin_obj(img, v["kind"], W / 2, 760, v.get("r", 230), ang, tuple(v.get("col", (200, 200, 220))))
+    f = v["vis_rps"] / v["rps"]
+    lab = "REAL SPEED" if 0.7 < f < 1.4 else (f"sped up {f:,.0f}×" if f > 1 else f"slowed down {1 / f:,.0f}×")
+    text(img, (W / 2, 450), lab, 40, tuple(th["accent2"]), w="ExtraBold", a=ease((t - 0.5) / 0.4))
+    if v.get("note"): text(img, (W / 2, 990), v["note"], 38, (235, 235, 245), w="ExtraBold", a=ease((t - 1.6) / 0.5))
+    shown = [o for o in ALL_ITEMS if o["rank"] >= it["rank"]]
+    spin_meter(img, th, shown, cur=it, a=1.0)
+
+
 def caption_chunks(say, t0, dur):
     words = say.split(); groups, g = [], []
     for w in words:
@@ -625,6 +698,13 @@ def draw_caption(img, chunks, gt, y=1585):
 
 def seg_hook(img, sc, th, t, dur):
     col = tuple(th["star_col"]); acc = tuple(th["accent"])
+    if th.get("hook") == "spin":
+        # frame 0: the big number + a pulsar already sweeping its beams (slowed down) + the "?" over the meter
+        spin_obj(img, "pulsar", W / 2, 820, 60, t * 1.8, tuple(th["accent"]))
+        text(img, (W / 2, 220), sc.get("big", ""), 140, tuple(th["accent"]), stroke=3)
+        text(img, (W / 2, 335), sc["top"].upper(), 56, (255, 255, 255))
+        text(img, (W / 2, 1300), sc["sub"], 46, tuple(th["accent2"]), w="ExtraBold")
+        return
     if th.get("hook") == "peaks":
         # frame 0: the big height + a "?" mountain already towering over Everest and the airliner line
         pk_ruler(img, th); pk_refs(img, th)
@@ -787,6 +867,8 @@ def seg_item(img, it, th, t, dur):
         kelvin_vis(img, it, th, t, dur)
     if v["type"] == "peaks":
         peaks_vis(img, it, th, t, dur)
+    if v["type"] == "spin":
+        spin_vis(img, it, th, t, dur)
     # number
     p = easeio((t - 0.5) / 1.6)
     num = it["num"]
@@ -799,6 +881,14 @@ def seg_item(img, it, th, t, dur):
 
 def seg_outro(img, sc, th, t, dur):
     a = ease(t / 0.5)
+    if th.get("outro") == "spin":
+        spin_meter(img, th, ALL_ITEMS, cur=None, y=640)
+        if th.get("outro_note"): text(img, (W / 2, 820), th["outro_note"], 44, tuple(th["accent2"]), w="ExtraBold", a=a)
+        text(img, (W / 2, 960), "WHICH OBJECT", 96, (255, 255, 255), a=ease((t - 0.3) / 0.5))
+        text(img, (W / 2, 1050), "SHOULD WE PUT NEXT?", 58, tuple(th["accent"]), a=ease((t - 0.5) / 0.5))
+        text(img, (W / 2, 1310), "SUBSCRIBE", 100, tuple(th["accent"]), a=ease((t - 0.8) / 0.5))
+        text(img, (W / 2, 1400), "to Cosmic Scale", 50, (255, 255, 255), w="ExtraBold", a=ease((t - 1.0) / 0.5))
+        return
     if th.get("outro") == "peaks":
         pk_ruler(img, th); pk_refs(img, th)
         order = sorted(ALL_ITEMS, key=lambda o: -o["rank"]); n = len(order); span = (940 - 190) / n

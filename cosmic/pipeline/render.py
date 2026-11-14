@@ -27,6 +27,12 @@ EP11 added scenes: ringsky (ground view at a latitude facing the equator; Saturn
   craterbelt (ancient Earth with a debris ring and 21 crater markers inside ±30°). Palette ring cream / dusk rose / sea teal.
   Structure NEW: "postcards by latitude". Learned: never put ">" or "<" in SOURCES (they go into the description; the Studio refuses them);
   a horizontal drift of a cached full-frame layer leaves a blank strip at the edge -> keep drift 0; 1,336 words = 7.8 min, ~1,390 = 8.1 min.
+EP12 added scenes: lagmeter (chapter card: log "lag meter" 0.1 ns -> billions of years + NEVER, one stamp per message), chiptick (processor die
+  + 10 cm ruler, light pulse per 3 GHz tick), fiberrace (New York -> London lanes: vacuum vs glass fiber vs radio, ms timers, slow motion),
+  marsdelay (mode moon = real-time 1.28 s radio round trip; range = Earth/Mars orbits to scale with live one-way light time 3 -> 22 min;
+  landing = Perseverance timeline, Mars vs what Earth hears), randomwalk (Sun cross-section + random-walk path core -> surface, years counter),
+  horizonrun (expanding line, photons x' = Hx - c: inside the horizon they arrive, beyond it they are carried away). Palette photon gold /
+  signal green / fiber magenta / navy. Structure NEW: "7 messages, 1 stopwatch" (each chapter = a message and its lag).
 EP06 added scenes: spinglobe (globe + speed by latitude; top=True rings; slow=True), pendulum, fling, bulge, yearday, dayclock (teal / amber palette)
 """
 import sys, os, re, math, subprocess, importlib.util, json, random, hashlib
@@ -3009,6 +3015,259 @@ def sc_craterbelt(img, v, t, dur):
     alpha_text(img, (bx, 620), "crater positions illustrative", F(26, "Medium"), DIM, ease((t - 2.0) / 0.5))
     if v.get("head"): alpha_text(img, (W / 2, 100), v["head"], F(54, "ExtraBold"), WHITE, ease(t / 0.5))
     caption(img, v.get("caption"), ease((t - 3.0) / 0.5))
+
+# ---------------- scenes (EP12: photon gold / signal green / fiber magenta) ----------------
+PHOT12, SIG12, FIB12, NAVY12 = (255, 232, 150), (110, 255, 170), (255, 95, 200), (14, 20, 46)
+LAG12 = [("Inside a chip", 3.3e-10), ("New York → London", 0.0273), ("The Moon", 1.28), ("Mars", (182, 1335)), ("Sunlight", 499),
+         ("Voyager 1", 86000), ("Beyond the horizon", None)]
+LAG_TICKS12 = [(1e-9, "1 ns"), (1e-3, "1 ms"), (1, "1 s"), (3600, "1 hour"), (3.156e7, "1 year"), (3.156e13, "1 million yr"), (3.156e16, "1 billion yr")]
+def _lagx12(s, x0=170, x1=1600): return lerp(x0, x1, (math.log10(s) + 10.5) / 28.0)
+def sc_lagmeter(img, v, t, dur):
+    """chapter card: a log 'lag meter' from 0.1 ns to billions of years + NEVER; stamps for messages 1..n, the current one (n) pops in"""
+    n = v.get("n", 0); d = ImageDraw.Draw(img); y = 660
+    if n:
+        alpha_text(img, (W / 2, 230), f"MESSAGE {n}", F(130, "Black"), PHOT12, ease(t / 0.4), dy=(1 - ease(t / 0.4)) * 30)
+        alpha_text(img, (W / 2, 360), v.get("name", LAG12[n - 1][0]), F(64, "ExtraBold"), WHITE, ease((t - 0.3) / 0.4))
+    else:
+        alpha_text(img, (W / 2, 250), v.get("head", "7 messages, 1 stopwatch"), F(96, "Black"), PHOT12, ease(t / 0.4))
+    d.rounded_rectangle([150, y - 10, 1630, y + 10], 10, fill=NAVY12, outline=(60, 80, 140), width=2)
+    for s, lab in LAG_TICKS12:
+        x = _lagx12(s); d.line([(x, y - 24), (x, y + 24)], fill=(90, 105, 150), width=3)
+        d.text((x, y + 60), lab, font=F(28, "Bold"), fill=DIM, anchor="mm")
+    d.rounded_rectangle([1660, y - 34, 1840, y + 34], 18, fill=(60, 16, 30), outline=RED, width=3)
+    d.text((1750, y), "NEVER", font=F(36, "Black"), fill=RED, anchor="mm")
+    show = range(len(LAG12)) if n == 0 else range(n)
+    for i in show:
+        nm, s = LAG12[i]; cur = (i == n - 1)
+        a = ease((t - 0.6 - (i * 0.35 if n == 0 else (0.4 if cur else 0))) / 0.4)
+        if a <= 0: continue
+        col = SIG12 if cur or n == 0 else (120, 135, 175)
+        if s is None:
+            d.rounded_rectangle([1660, y - 34, 1840, y + 34], 18, fill=mix(SPACE, RED, a), outline=WHITE, width=4)
+            d.text((1750, y), "NEVER", font=F(36, "Black"), fill=WHITE, anchor="mm"); d.text((1750, y - 70), str(i + 1), font=F(34, "Black"), fill=mix(SPACE, RED, a), anchor="mm")
+            continue
+        elif isinstance(s, tuple):
+            xa, xb = _lagx12(s[0]), _lagx12(s[1]); x = (xa + xb) / 2
+            d.rounded_rectangle([xa, y - 16, xb, y + 16], 12, fill=mix(SPACE, col, a))
+        else: x = _lagx12(s)
+        r = 22 if cur else 15
+        d.ellipse([x - r, y - r, x + r, y + r], fill=mix(SPACE, col, a), outline=mix(SPACE, WHITE, a), width=3)
+        d.text((x, y - 40 - (i % 2) * 44 if n == 0 else y - 46), str(i + 1), font=F(34 if cur else 28, "Black"), fill=mix(SPACE, col, a), anchor="mm")
+    alpha_text(img, (W / 2, 830), "time for light to get there", F(36, "SemiBold"), DIM, ease((t - 0.5) / 0.5))
+    caption(img, v.get("caption"), ease((t - 1.5) / 0.5))
+
+def sc_chiptick(img, v, t, dur):
+    """a processor die with a 10 cm ruler; a light pulse crosses it once per 3 GHz clock tick (slow motion), counter in cm"""
+    cx, cy = W / 2, 560; L = 1000; x0 = cx - L / 2
+    lay = Image.new("RGBA", img.size, (0, 0, 0, 0)); dl = ImageDraw.Draw(lay)
+    dl.rounded_rectangle([cx - 560, cy - 250, cx + 560, cy + 250], 24, fill=(14, 40, 34, 245), outline=(80, 170, 130, 255), width=4)
+    for i in range(14):
+        for j in range(6):
+            xx, yy = cx - 520 + i * 74, cy - 210 + j * 72
+            dl.rectangle([xx, yy, xx + 60, yy + 56], fill=(24, 70, 56, 255), outline=(50, 120, 95, 255))
+            dl.rectangle([xx + 8, yy + 8, xx + 26, yy + 20], fill=(200, 170, 70, 120))
+    for k in range(40):
+        dl.rectangle([cx - 560 + 14 + k * 28, cy + 250, cx - 560 + 26 + k * 28, cy + 268], fill=(200, 180, 110, 255))
+        dl.rectangle([cx - 560 + 14 + k * 28, cy - 268, cx - 560 + 26 + k * 28, cy - 250], fill=(200, 180, 110, 255))
+    img.alpha_composite(lay)
+    per = v.get("period", 2.2); ph = (t % per) / per; ticks = int(t // per) + 1
+    px = x0 + L * min(1, ph / 0.85); d = ImageDraw.Draw(img); yl = cy
+    for k in range(40):
+        tx = px - k * 9
+        if tx < x0: break
+        d.ellipse([tx - 10 + k * 0.2, yl - 10 + k * 0.2, tx + 10 - k * 0.2, yl + 10 - k * 0.2], fill=mix((14, 40, 34), PHOT12, 1 - k / 40))
+    paste_c(img, radial(120, [(0, (255, 250, 220, 255)), (0.25, (255, 230, 140, 200)), (1, (255, 200, 80, 0))]), px, yl)
+    d = ImageDraw.Draw(img); ry = cy + 330
+    d.line([(x0, ry), (x0 + L, ry)], fill=WHITE, width=4)
+    for k in range(11):
+        x = x0 + L * k / 10; d.line([(x, ry - 22), (x, ry)], fill=WHITE, width=3)
+        d.text((x, ry + 30), f"{k}", font=F(30, "Bold"), fill=WHITE, anchor="mm")
+    d.text((x0 + L + 40, ry + 30), "cm", font=F(30, "Bold"), fill=DIM, anchor="lm")
+    alpha_text(img, (W / 2, 150), v.get("head", "One clock tick at 3 GHz = 0.33 nanoseconds"), F(54, "ExtraBold"), WHITE, ease(t / 0.5))
+    box = Image.new("RGBA", img.size, (0, 0, 0, 0)); ImageDraw.Draw(box).rounded_rectangle([1430, 860, 1860, 1000], 20, fill=(8, 10, 24, 220), outline=PHOT12 + (160,), width=3); img.alpha_composite(box)
+    d = ImageDraw.Draw(img)
+    d.text((1645, 905), f"light: {10 * min(1, ph / 0.85):4.1f} cm", font=F(44, "Black"), fill=PHOT12, anchor="mm")
+    d.text((1645, 960), f"tick #{ticks}  (slow motion)", font=F(28, "SemiBold"), fill=DIM, anchor="mm")
+    caption(img, v.get("caption"), ease((t - 2.0) / 0.5), y=H - 80)
+
+def sc_fiberrace(img, v, t, dur):
+    """New York -> London (5,570 km) in slow motion: light in vacuum vs light in glass fiber (2/3 c); optional microwave lane"""
+    xa, xb = 250, 1670; km = v.get("km", 5570); c = 299792.458
+    lanes = [("light in a vacuum", c, PHOT12), ("light in glass fiber", c / 1.47, FIB12)]
+    if v.get("microwave"): lanes.insert(1, ("radio through air", c / 1.0003, SIG12))
+    slow = v.get("slow", 160.0)  # animation seconds per real second
+    tr = max(0, t - 0.8) / slow
+    d = ImageDraw.Draw(img)
+    d.arc([xa - 300, 760, xb + 300, 1500], 200, 340, fill=(40, 90, 160), width=6)
+    d.text((W / 2, 900), "Atlantic Ocean", font=F(32, "SemiBold"), fill=(80, 130, 200), anchor="mm")
+    for x, nm in ((xa, "NEW YORK"), (xb, "LONDON")):
+        d.line([(x, 280), (x, 800)], fill=(90, 100, 140), width=3)
+        d.text((x, 245), nm, font=F(44, "Black"), fill=WHITE, anchor="mm")
+    for i, (lab, sp, col) in enumerate(lanes):
+        y = 380 + i * (360 / max(1, len(lanes) - 1)) if len(lanes) > 1 else 500
+        dist = min(km, sp * tr); x = lerp(xa, xb, dist / km)
+        d.line([(xa, y), (xb, y)], fill=mix(SPACE, col, 0.25), width=4)
+        d.line([(xa, y), (x, y)], fill=col, width=8)
+        paste_c(img, radial(90, [(0, (255, 255, 240, 255)), (0.3, col + (200,)), (1, col + (0,))]), x, y)
+        d = ImageDraw.Draw(img)
+        ms = 1000 * min(tr, km / sp)
+        d.text((xa + 20, y - 44), lab, font=F(34, "Bold"), fill=col, anchor="lm")
+        d.text((xb + 30, y), f"{ms:5.1f} ms", font=F(46, "Black"), fill=WHITE if dist < km else col, anchor="lm")
+    alpha_text(img, (W / 2, 140), v.get("head", "New York → London: 5,570 km"), F(56, "ExtraBold"), WHITE, ease(t / 0.5))
+    d.text((W / 2, 1000), "slow motion  •  straight-line distance (real cables are longer)", font=F(28, "Medium"), fill=DIM, anchor="mm")
+    caption(img, v.get("caption"), ease((t - 3.0) / 0.5), y=H - 160)
+
+def _sig12(d, x0, y0, x1, y1, p, col):
+    x, y = lerp(x0, x1, p), lerp(y0, y1, p)
+    for k in range(3):
+        r = 14 + k * 10; d.ellipse([x - r, y - r, x + r, y + r], outline=mix(SPACE, col, 1 - k * 0.3), width=3)
+    return x, y
+
+def sc_marsdelay(img, v, t, dur):
+    """mode moon: Earth <-> Moon radio round trip in real time (1.28 s each way); mode range: top-down orbits, Mars from closest
+    (perihelic opposition) to farthest (conjunction near aphelion), live one-way light time; mode landing: Perseverance timeline"""
+    mode = v.get("mode", "range"); d = ImageDraw.Draw(img)
+    if mode == "moon":
+        ex, mx_, y = 330, 1590, 560
+        paste_c(img, earth_sprite(110), ex, y); paste_c(img, moon8(46) if callable(globals().get("moon8")) else planet_sprite(46, (190, 190, 195)), mx_, y)
+        d = ImageDraw.Draw(img); cyc = 2.56 + 0.8; ph = (t % cyc)
+        if ph < 1.28: _sig12(d, ex + 120, y, mx_ - 60, y, ph / 1.28, SIG12); lab = "question on its way"
+        elif ph < 2.56: _sig12(d, mx_ - 60, y, ex + 120, y, (ph - 1.28) / 1.28, PHOT12); lab = "answer on its way"
+        else: lab = "answer arrives"
+        d.text((W / 2, y + 170), f"{min(ph, 2.56):.2f} s", font=F(96, "Black"), fill=WHITE, anchor="mm")
+        d.text((W / 2, y + 260), lab, font=F(38, "Bold"), fill=SIG12 if ph < 1.28 else PHOT12, anchor="mm")
+        d.text((ex, y + 160), "EARTH", font=F(36, "Black"), fill=WHITE, anchor="mm"); d.text((mx_, y + 100), "MOON", font=F(36, "Black"), fill=WHITE, anchor="mm")
+        d.text((W / 2, y - 120), "384,400 km  •  1.28 s each way (real time)", font=F(36, "Bold"), fill=DIM, anchor="mm")
+    elif mode == "range":
+        cx, cy, k = 700, 560, 200; a_, e_ = 1.524, 0.0934
+        paste_c(img, sun_sprite(26), cx, cy); d = ImageDraw.Draw(img)
+        d.ellipse([cx - k, cy - k, cx + k, cy + k], outline=(60, 100, 180), width=2)
+        pts = []
+        for i in range(181):
+            nu = 2 * math.pi * i / 180; r = a_ * (1 - e_ ** 2) / (1 + e_ * math.cos(nu)); pts.append((cx + k * r * math.cos(nu), cy - k * r * math.sin(nu)))
+        d.line(pts, fill=(150, 80, 60), width=2)
+        p = easeio((t - 0.5) / max(1.0, dur * 0.75)); nu = math.pi * p; th = 2 * math.pi * p
+        rm = a_ * (1 - e_ ** 2) / (1 + e_ * math.cos(nu)); mxp, myp = cx + k * rm * math.cos(nu), cy - k * rm * math.sin(nu)
+        exp_, eyp = cx + k * math.cos(th), cy - k * math.sin(th)
+        dist = math.hypot(rm * math.cos(nu) - math.cos(th), rm * math.sin(nu) - math.sin(th))
+        blocked = dist > 2.3
+        d.line([(exp_, eyp), (mxp, myp)], fill=SIG12 if not blocked else (120, 130, 150), width=3)
+        paste_c(img, earth_sprite(16, glow=None), exp_, eyp); paste_c(img, planet_sprite(13, (210, 100, 70)), mxp, myp)
+        d = ImageDraw.Draw(img)
+        d.text((exp_ + 24, eyp - 24), "Earth", font=F(30, "Bold"), fill=WHITE, anchor="lb"); d.text((mxp + 22, myp - 20), "Mars", font=F(30, "Bold"), fill=(240, 140, 110), anchor="lb")
+        box = Image.new("RGBA", img.size, (0, 0, 0, 0)); ImageDraw.Draw(box).rounded_rectangle([1150, 330, 1820, 760], 28, fill=(8, 10, 24, 225), outline=SIG12 + (150,), width=3); img.alpha_composite(box)
+        d = ImageDraw.Draw(img)
+        d.text((1485, 390), "radio signal, one way", font=F(36, "Bold"), fill=DIM, anchor="mm")
+        mins = dist * 499.0 / 60
+        d.text((1485, 510), f"{mins:4.1f} min", font=F(120, "Black"), fill=SIG12, anchor="mm")
+        d.text((1485, 620), f"{dist * 149.6:,.0f} million km", font=F(40, "ExtraBold"), fill=WHITE, anchor="mm")
+        d.text((1485, 700), "range: about 3 to 22 minutes", font=F(32, "SemiBold"), fill=PHOT12, anchor="mm")
+        d.text((700, 1010), "orbits to scale (Mars's orbit is slightly oval)", font=F(26, "Medium"), fill=DIM, anchor="mm")
+    else:  # landing
+        x0, x1 = 220, 1700; m2x = lambda m: lerp(x0, x1, m / 20.0)
+        now = min(20.0, max(0.0, (t - 0.5) / max(1.0, dur * 0.8)) * 20.0)
+        d.text((x0, 230), "ON MARS", font=F(40, "Black"), fill=(240, 140, 110), anchor="lm")
+        d.text((x0, 560), "ON EARTH (signal ≈ 11 min 22 s later)", font=F(40, "Black"), fill=SIG12, anchor="lm")
+        for y in (330, 660):
+            d.rounded_rectangle([x0, y - 22, x1, y + 22], 14, fill=NAVY12)
+        d.rounded_rectangle([m2x(0), 308, m2x(7), 352], 14, fill=(200, 90, 60))
+        d.text(((m2x(0) + m2x(7)) / 2, 330), "entry → touchdown ≈ 7 min", font=F(28, "Black"), fill=WHITE, anchor="mm")
+        lag = 11.37
+        d.rounded_rectangle([m2x(lag), 638, m2x(lag + 7), 682], 14, fill=(40, 120, 80))
+        d.text(((m2x(lag) + m2x(lag + 7)) / 2, 660), "what Earth hears", font=F(28, "Black"), fill=WHITE, anchor="mm")
+        for m in range(0, 21, 2):
+            d.text((m2x(m), 760), f"{m} min", font=F(26, "Bold"), fill=DIM, anchor="mm")
+        d.line([(m2x(now), 260), (m2x(now), 720)], fill=WHITE, width=4)
+        d.text((m2x(now), 810), f"{int(now):02d}:{int((now % 1) * 60):02d}", font=F(44, "Black"), fill=WHITE, anchor="mm")
+        if now >= 7: d.text((m2x(7), 410), "rover already on the ground", font=F(32, "ExtraBold"), fill=PHOT12, anchor="mm")
+        if now >= lag: d.text((m2x(lag), 600), "Earth hears: \"entry has begun\"", font=F(32, "ExtraBold"), fill=SIG12, anchor="lm")
+        d.text((W / 2, 900), "Perseverance, 18 February 2021 (NASA)", font=F(30, "SemiBold"), fill=DIM, anchor="mm")
+    if v.get("head"): alpha_text(img, (W / 2, 130 if mode != "landing" else 120), v["head"], F(54, "ExtraBold"), WHITE, ease(t / 0.5))
+    caption(img, v.get("caption"), ease((t - 2.5) / 0.5), y=H - 90)
+
+_rw12 = None
+def _walk12():
+    global _rw12
+    if _rw12 is None:
+        rng = np.random.default_rng(12); p = np.zeros(2); pts = [p.copy()]
+        while np.hypot(*p) < 1.0 and len(pts) < 9000:
+            a = rng.uniform(0, 2 * math.pi); st = rng.uniform(0.006, 0.03)
+            p = p + st * np.array([math.cos(a), math.sin(a)]) + 0.00012 * p / max(0.05, np.hypot(*p))
+            pts.append(p.copy())
+        _rw12 = np.array(pts)
+    return _rw12
+
+def sc_randomwalk(img, v, t, dur):
+    """Sun cross-section (core / radiative / convective), a random-walk path from the core to the surface; years counter (model-dependent);
+    side box: 'straight line ≈ 2.3 s'. v.y1 = counter end, v.head, v.caption"""
+    cx, cy, R_ = 680, 570, 430
+    lay = Image.new("RGBA", img.size, (0, 0, 0, 0)); dl = ImageDraw.Draw(lay)
+    for fr, col in [(1.0, (230, 90, 30)), (0.71, (250, 140, 50)), (0.25, (255, 235, 170))]:
+        r = R_ * fr; dl.ellipse([cx - r, cy - r, cx + r, cy + r], fill=col + (255,))
+    rng = random.Random(3)
+    for i in range(70):
+        a = rng.uniform(0, 2 * math.pi); rr = R_ * rng.uniform(0.74, 0.97); s = rng.uniform(12, 26)
+        dl.ellipse([cx + rr * math.cos(a) - s, cy + rr * math.sin(a) - s, cx + rr * math.cos(a) + s, cy + rr * math.sin(a) + s], outline=(200, 70, 20, 160), width=3)
+    img.alpha_composite(lay)
+    paste_c(img, radial(int(R_ * 2.6), [(0, (255, 200, 90, 0)), (0.76, (255, 170, 60, 0)), (0.8, (255, 160, 50, 90)), (1, (255, 120, 30, 0))]), cx, cy)
+    pts = _walk12(); p = easeio((t - 0.4) / max(1.0, dur * 0.8)); n = max(2, int(len(pts) * p))
+    sel = pts[:n]; xy = [(cx + R_ * x, cy + R_ * y) for x, y in sel[:: max(1, n // 1500)]] + [(cx + R_ * sel[-1][0], cy + R_ * sel[-1][1])]
+    d = ImageDraw.Draw(img); d.line(xy, fill=(40, 20, 60), width=3)
+    paste_c(img, radial(60, [(0, (255, 255, 255, 255)), (0.3, (190, 230, 255, 220)), (1, (120, 180, 255, 0))]), *xy[-1])
+    d = ImageDraw.Draw(img)
+    for fr, lab in [(0.12, "CORE"), (0.48, "RADIATIVE ZONE"), (0.86, "CONVECTIVE ZONE")]:
+        d.text((cx, cy + R_ * fr + (0 if fr > 0.2 else 0)), lab, font=F(24, "Black"), fill=(70, 30, 10), anchor="mm")
+    box = Image.new("RGBA", img.size, (0, 0, 0, 0)); ImageDraw.Draw(box).rounded_rectangle([1240, 300, 1840, 820], 28, fill=(8, 10, 24, 225), outline=PHOT12 + (150,), width=3); img.alpha_composite(box)
+    d = ImageDraw.Draw(img); y1 = v.get("y1", 170000)
+    d.text((1540, 360), "energy escaping the Sun", font=F(34, "Bold"), fill=DIM, anchor="mm")
+    d.text((1540, 470), f"{y1 * p:,.0f}", font=F(110, "Black"), fill=PHOT12, anchor="mm")
+    d.text((1540, 570), "years", font=F(48, "ExtraBold"), fill=WHITE, anchor="mm")
+    d.text((1540, 660), "estimates: ≈ 10,000 to 170,000", font=F(30, "SemiBold"), fill=DIM, anchor="mm")
+    d.text((1540, 740), "straight line: ≈ 2.3 seconds", font=F(36, "ExtraBold"), fill=SIG12, anchor="mm")
+    if v.get("head"): alpha_text(img, (W / 2, 95), v["head"], F(52, "ExtraBold"), WHITE, ease(t / 0.5))
+    caption(img, v.get("caption"), ease((t - 2.5) / 0.5), y=H - 80)
+
+def sc_horizonrun(img, v, t, dur):
+    """expanding space with a constant expansion rate (illustrative): galaxies drift away (x' = Hx), light heads toward us at c
+    (x' = Hx - c). Inside the horizon (Hx = c) light arrives; beyond it, light is carried away forever. v.label = show the horizon label"""
+    x0, y0 = 150, 560; xh = 900.0; c = 150.0; Hh = c / xh; tt = t * 0.9
+    d = ImageDraw.Draw(img)
+    for k in range(1, 40):  # stretching grid
+        gx = x0 + 60 * k * math.exp(Hh * (tt % 6.0) * 0.4)
+        if gx > W: break
+        d.line([(gx, 300), (gx, 820)], fill=(26, 30, 60), width=2)
+    d.line([(x0, y0), (W, y0)], fill=(50, 60, 100), width=2)
+    xs = x0 + xh
+    if v.get("label", True):
+        lay = Image.new("RGBA", img.size, (0, 0, 0, 0)); dl = ImageDraw.Draw(lay)
+        dl.rectangle([xs, 280, W, 840], fill=(80, 10, 30, 70)); img.alpha_composite(lay); d = ImageDraw.Draw(img)
+        for yy in range(290, 840, 30): d.line([(xs, yy), (xs, yy + 16)], fill=RED, width=5)
+        d.text((xs, 245), "cosmic event horizon ≈ 16 billion light-years", font=F(34, "Black"), fill=RED, anchor="mm")
+    rng = random.Random(16)
+    gal = [rng.uniform(math.log(60), math.log(4000)) for _ in range(26)]
+    for i, lg in enumerate(gal):
+        xi = math.exp(lg) * math.exp(Hh * tt * 0.35) % 2600
+        x = x0 + xi
+        if x > W + 40: continue
+        far = xi > xh
+        col = (110, 115, 150) if far else (255, 225, 170)
+        yy = y0 + (i % 5 - 2) * 46
+        d.ellipse([x - 16, yy - 6, x + 16, yy + 6], fill=col)
+        for k in range(6):  # photons emitted every 1.6 s toward us
+            te = (math.floor(tt / 1.6) - k) * 1.6
+            if te < -0.01: continue
+            xe = math.exp(lg) * math.exp(Hh * te * 0.35) % 2600
+            if (xe > xh) != far and abs(xe - xi) > 300: continue
+            px = xh + (xe - xh) * math.exp(Hh * (tt - te))
+            if 0 < px < W - x0 and abs(px - xi) > 4:
+                d.ellipse([x0 + px - 5, yy - 5, x0 + px + 5, yy + 5], fill=PHOT12 if px < xh else (150, 150, 170))
+    paste_c(img, earth_sprite(28, glow=(120, 180, 255)), x0 - 40, y0)
+    d = ImageDraw.Draw(img); d.text((x0 - 40, y0 + 70), "US", font=F(34, "Black"), fill=WHITE, anchor="mm")
+    d.text((560, 900), "light inside the horizon: arrives one day", font=F(32, "Bold"), fill=PHOT12, anchor="mm")
+    d.text((1450, 900), "light beyond it: never arrives", font=F(32, "Bold"), fill=(170, 170, 190), anchor="mm")
+    if v.get("head"): alpha_text(img, (W / 2, 130), v["head"], F(54, "ExtraBold"), WHITE, ease(t / 0.5))
+    d.text((W / 2, 990), "illustration, not to scale", font=F(26, "Medium"), fill=DIM, anchor="mm")
+
 
 SC = {k[3:]: f for k, f in globals().items() if k.startswith("sc_")}
 

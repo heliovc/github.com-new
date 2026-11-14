@@ -1,0 +1,96 @@
+{
+ "version": 1,
+ "channel_id": "UCsYYjUbmq4n3lAKgw2F2IJw",
+ "created_at": "2026-11-14T06:28:25-03:00",
+ "items": [
+  {
+   "key": "cosmic-rank11-short",
+   "kind": "short",
+   "video": "ranking.mp4",
+   "title": "Top 5 Fastest-Spinning Objects Ever Measured (#1 Spins 716 Times a Second) #shorts",
+   "description": "From a planet with a 10-hour day to a dead star the size of a city spinning 716 times every second.\nFull video: The Speed of Light Is Slow. Here's the Proof (Even at 1 Billion km/h)\n\nSources\n• NASA: Jupiter rotates once about every 9 hours 56 minutes, the shortest day of any planet; about 11 times Earth's width\n• Pelisoli et al. (2021), Nature Astronomy (Universities of Sheffield and Warwick): white dwarf LAMOST J0240+1952 spins every 24.93 seconds, the fastest confirmed white dwarf\n• Devogele et al. (2024), arXiv preprint: asteroid 2024 BX1, about 1 m wide, which broke up over Berlin on 21 January 2024, rotated every 2.588 seconds, the fastest asteroid spin measured\n• Backer et al. (1982), Nature: pulsar PSR B1937+21 spins 642 times per second (record until 2006)\n• Hessels et al. (2006), Science, 'A Radio Pulsar Spinning at 716 Hz': PSR J1748-2446ad in the globular cluster Terzan 5; its equator moves at roughly 24% of the speed of light\n• Own calculations: 9 h 56 min = 35,760 s; 86,400 / 2.588 ≈ 33,000 spins a day; animation speeds compared with real spin rates\n\nVisuals are original. Narration uses a synthetic voice.\n#shorts #space #pulsar #science",
+   "tags": [
+    "fastest spinning",
+    "pulsar",
+    "neutron star",
+    "jupiter",
+    "asteroid",
+    "top 5",
+    "space",
+    "shorts"
+   ],
+   "publish_at": "2026-11-14T13:00:00-03:00",
+   "if_late": "public_now",
+   "made_for_kids": false,
+   "altered_content": true,
+   "related_key": "cosmic-ep12-long",
+   "pinned_comment": "Which spin rate surprised you most? Full video: The Speed of Light Is Slow. Here's the Proof (Even at 1 Billion km/h)"
+  },
+  {
+   "key": "cosmic-ep12-long",
+   "kind": "long",
+   "video": "video.mp4",
+   "title": "The Speed of Light Is Slow. Here's the Proof (Even at 1 Billion km/h)",
+   "description": "Light circles the Earth seven and a half times every second, and it's still too slow. Seven messages, one stopwatch: inside your processor, a trade from New York to London, a call to the Moon, a rover landing on Mars, the sunlight on your skin, a call to Voyager 1, and a message that can never arrive.\n\nChapters\n0:00 Sunlight's hidden age\n0:12 Light: 7.5 laps of Earth per second\n0:40 7 messages, 1 stopwatch\n0:55 Message 1: inside a chip\n1:39 Message 2: New York to London\n2:32 Message 3: a call to the Moon\n3:11 Message 4: driving on Mars\n4:19 Message 5: sunlight\n5:27 Message 6: Voyager 1 and the stars\n6:37 Message 7: the one that never arrives\n7:32 Recap and next episode\n\nSources\n• BIPM / SI definition: the speed of light in vacuum is exactly 299,792,458 m/s\n• NASA Science, Sun: a photon's energy takes about 170,000 years to travel from the core to the surface; Mitalas & Sills (1992), Astrophysical Journal; other estimates are as low as about 10,000 years (model-dependent)\n• ESA (Mars Express) and NASA (Perseverance): radio signals between Earth and Mars take about 3 to 22 minutes one way, depending on the planets' positions\n• NASA: during Mars solar conjunction (about every two years) the Sun blocks communications with Mars missions for about two weeks\n• NASA / JPL, Perseverance landing (18 February 2021): about seven minutes from the top of the atmosphere to touchdown; about 11 minutes for the signal to reach Earth\n• NASA: average Earth–Moon distance 384,400 km\n• Lunar laser ranging (APOLLO station, Apache Point Observatory; Murphy 2013, Reports on Progress in Physics): Apollo retroreflectors, Earth–Moon distance measured to about a millimeter\n• NASA: Parker Solar Probe reached about 692,000 km/h (192 km/s) on 24 December 2024, the fastest human-made object\n• NASA / JPL: Voyager 1 (launched 1977) reaches one light-day from Earth on 18 November 2026\n• NASA: Proxima Centauri is 4.24 light-years away; the Milky Way is about 100,000 light-years across; the Andromeda galaxy is about 2.5 million light-years away\n• Davis & Lineweaver (2004), Publications of the Astronomical Society of Australia, 'Expanding Confusion': cosmic event horizon about 16 billion light-years; observable universe radius about 46 billion light-years\n• Own calculations (Python): c = 1,079,252,849 km/h; 40,075 km equator, 7.48 laps per second; 3 GHz tick = 0.33 ns, about 10 cm of light travel; New York–London about 5,570 km great circle, 18.6 ms in vacuum and 27.3 ms in glass fiber (refractive index about 1.47); 1 AU = 149,597,871 km, 499 s = 8 min 19 s; Sun radius 696,000 km, 2.3 s in a straight line; screen to eyes about 0.5 m = 1.7 ns; 2 × 4.24 = 8.5-year round trip to Proxima; 299,792 / 192 ≈ 1,561; (16/46)^3 ≈ 4%, so more than 9 in 10 galaxies we can see are out of reach (assumes galaxies spread evenly)\n\n—\nCosmic Scale: the universe, measured in a way you can feel.\nSubscribe for a new space video every week.\nVisuals and animations are original. Narration uses a synthetic voice.\n#space #universe #science",
+   "tags": [
+    "speed of light",
+    "light is slow",
+    "space",
+    "astronomy",
+    "mars signal delay",
+    "voyager 1",
+    "cosmic event horizon",
+    "cosmic scale"
+   ],
+   "thumbnail": "thumbnail.jpg",
+   "captions": "legendas.srt",
+   "publish_at": "2026-11-14T17:00:00-03:00",
+   "if_late": "public_now",
+   "made_for_kids": false,
+   "altered_content": true,
+   "pinned_comment": "Which message surprised you most: the Mars landing, the sunlight, or the one that can never arrive?"
+  },
+  {
+   "key": "cosmic-scale05-short",
+   "kind": "short",
+   "video": "scale.mp4",
+   "title": "1.3 Million Earths Fit Inside the Sun #shorts",
+   "description": "109 Earths across, 1.3 million inside. The Sun and the Earth, to scale.\nFull video: The Speed of Light Is Slow. Here's the Proof (Even at 1 Billion km/h)\n\nSources\n• NASA Science, Sun facts: the Sun is about 1,392,000 km (865,000 miles) wide, about 109 Earths, and about 1.3 million Earths could fit inside it\n• NASA Earth fact sheet: Earth's mean diameter 12,742 km\n• Own calculations: 1,392,000 / 12,742 ≈ 109.2; 109.2³ ≈ 1.30 million (by volume; packed as whole balls, at most about 74% of the space is filled, so about 960,000); Sun as a 2 m door, so Earth ≈ 2,000 mm / 109.2 ≈ 18 mm\n\nVisuals are original. Narration uses a synthetic voice.\n#shorts #space #sun #science",
+   "tags": [
+    "sun vs earth",
+    "earths inside the sun",
+    "size comparison",
+    "scale",
+    "space",
+    "shorts"
+   ],
+   "publish_at": "2026-11-14T19:00:00-03:00",
+   "if_late": "public_now",
+   "made_for_kids": false,
+   "altered_content": true,
+   "related_key": "cosmic-ep12-long",
+   "pinned_comment": "Did you guess higher or lower than 1.3 million? Full video: The Speed of Light Is Slow. Here's the Proof (Even at 1 Billion km/h)"
+  },
+  {
+   "key": "cosmic-ep12-short",
+   "kind": "short",
+   "video": "vertical.mp4",
+   "title": "Mars Landed in 7 Minutes. Earth Heard About It 11 Minutes Later #shorts",
+   "description": "When Perseverance landed on Mars, nobody on Earth could help: the radio signal was slower than the landing.\nFull video: The Speed of Light Is Slow. Here's the Proof (Even at 1 Billion km/h)\n\nSources: NASA / JPL (Perseverance, 18 February 2021: about seven minutes from the top of the atmosphere to touchdown, about 11 minutes for the signal to reach Earth); ESA and NASA (Earth–Mars signal delay about 3 to 22 minutes one way).\n\nVisuals are original. Narration uses a synthetic voice.\n#shorts #space #mars #science",
+   "tags": [
+    "mars landing",
+    "perseverance",
+    "speed of light",
+    "signal delay",
+    "space",
+    "shorts"
+   ],
+   "publish_at": "2026-11-14T21:00:00-03:00",
+   "if_late": "public_now",
+   "made_for_kids": false,
+   "altered_content": true,
+   "related_key": "cosmic-ep12-long",
+   "pinned_comment": "Would you trust a robot to land itself with no help from Earth? Full video: The Speed of Light Is Slow. Here's the Proof (Even at 1 Billion km/h)"
+  }
+ ]
+}
