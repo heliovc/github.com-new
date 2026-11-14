@@ -1,6 +1,9 @@
 {
- "last_run": "2026-11-13T20:50:59.817126-03:00",
+ "last_run": "2026-11-13T21:13:27.020673-03:00",
  "pending": 0,
- "post_tasks": 0,
- "errors": []
+ "post_tasks": 1,
+ "errors": [],
+ "published_now": [
+  "cosmic-ep11-short: comment comentário fixado"
+ ]
 }
