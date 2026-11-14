@@ -1,0 +1,29 @@
+{
+ "collected_at": "2026-11-14T08:50:32.157820-03:00",
+ "channels": [
+  {
+   "name": "Por Trás do Dinheiro",
+   "channel_id": "UCd_BGmJ5gbQ0kECAxmbvQHA",
+   "error": "Page.goto: Timeout 60000ms exceeded.\nCall log:\n  - navigating to \"https://studio.youtube.com/channel/UCd_BGmJ5gbQ0kECAxmbvQHA\", waiting until \"domcontentloaded\"\n"
+  },
+  {
+   "name": "Cosmic Scale",
+   "channel_id": "UCsYYjUbmq4n3lAKgw2F2IJw",
+   "error": "Page.goto: Timeout 60000ms exceeded.\nCall log:\n  - navigating to \"https://www.youtube.com/channel_switcher\", waiting until \"domcontentloaded\"\n"
+  },
+  {
+   "name": "The Quiet Archive",
+   "channel_id": "UCNrw11y7QKt0fWCrJ84QZ-g",
+   "error": "Page.goto: Timeout 60000ms exceeded.\nCall log:\n  - navigating to \"https://www.youtube.com/channel_switcher\", waiting until \"domcontentloaded\"\n"
+  },
+  {
+   "channel_id": "UCXGqR8k1RMbfYdVleIuJKzA",
+   "collected_at": "2026-11-14T09:05:10.369233-03:00",
+   "table_text": null,
+   "table_error": "tabela não carregou (tentativa 2)",
+   "dashboard_text": "",
+   "monetization_text": "",
+   "name": "Shortcut Lab"
+  }
+ ]
+}
