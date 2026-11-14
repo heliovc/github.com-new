@@ -962,10 +962,19 @@
   "pinned_comment": "How many PDFs do you copy numbers from every month? Full tutorial: Extract Text and Tables from PDFs with Python (PDF to Excel for Beginners)"
  },
  "quiet-ep05-long": {
-  "attempts": 1,
-  "status": "error",
-  "error": "Page.goto: Timeout 60000ms exceeded.\nCall log:\n  - navigating to \"https://www.youtube.com/channel_switcher\", waiting until \"domcontentloaded\"\n",
+  "attempts": 2,
+  "status": "published",
+  "error": null,
   "screenshot": "20261114-094516-erro-quiet-ep05-long.png",
-  "at": "2026-11-14T09:45:21.284496-03:00"
+  "at": "2026-11-14T09:55:51.388879-03:00",
+  "url": "https://youtu.be/Zn6TKiinPYY",
+  "by": "robo",
+  "visibility": "schedule",
+  "when": "2026-11-14T22:00:00-03:00",
+  "channel_id": "UCNrw11y7QKt0fWCrJ84QZ-g",
+  "title": "Fall Asleep on the Silk Road | A Night Camel Caravan Sleep Story (48 Min)",
+  "kind": "long",
+  "publish_at": "2026-11-14T22:00:00-03:00",
+  "pinned_comment": "Where should the caravan rest tomorrow night?"
  }
 }
