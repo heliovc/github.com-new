@@ -928,5 +928,37 @@
   "publish_at": "2026-11-15T12:00:00-03:00",
   "related_key": "ptd-ep13-long",
   "pinned_comment": "Qual desses bancos é o seu principal hoje? Vídeo completo: O Nubank virou banco: de onde vem o lucro recorde (e o número que preocupa)"
+ },
+ "lab-ep10-long": {
+  "attempts": 1,
+  "status": "published",
+  "url": "https://youtu.be/S49-eUD64cg",
+  "by": "robo",
+  "visibility": "schedule",
+  "when": "2026-11-14T19:00:00-03:00",
+  "at": "2026-11-14T09:31:18.662559-03:00",
+  "error": null,
+  "channel_id": "UCXGqR8k1RMbfYdVleIuJKzA",
+  "title": "Extract Text and Tables from PDFs with Python (PDF to Excel for Beginners)",
+  "kind": "long",
+  "publish_at": "2026-11-14T19:00:00-03:00",
+  "pinned_comment": "What kind of PDFs do you deal with most: invoices, bank statements or reports? Tell me and I'll make a tutorial for it."
+ },
+ "lab-ep10-short": {
+  "attempts": 2,
+  "status": "published",
+  "error": null,
+  "screenshot": "20261114-093348-erro-lab-ep10-short.png",
+  "at": "2026-11-14T09:43:14.685033-03:00",
+  "url": "https://youtube.com/shorts/bTcfnyjAgEA",
+  "by": "robo",
+  "visibility": "schedule",
+  "when": "2026-11-14T20:30:00-03:00",
+  "channel_id": "UCXGqR8k1RMbfYdVleIuJKzA",
+  "title": "Python Reads a PDF in 1 Second #shorts",
+  "kind": "short",
+  "publish_at": "2026-11-14T20:30:00-03:00",
+  "related_key": "lab-ep10-long",
+  "pinned_comment": "How many PDFs do you copy numbers from every month? Full tutorial: Extract Text and Tables from PDFs with Python (PDF to Excel for Beginners)"
  }
 }
