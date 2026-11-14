@@ -1,0 +1,38 @@
+{
+  "version": 1,
+  "channel_id": "UCNrw11y7QKt0fWCrJ84QZ-g",
+  "created_at": "2026-11-14T09:25:00-03:00",
+  "items": [
+    {
+      "key": "quiet-ep05-long",
+      "kind": "long",
+      "video": [
+        "video.part00",
+        "video.part01"
+      ],
+      "title": "Fall Asleep on the Silk Road | A Night Camel Caravan Sleep Story (48 Min)",
+      "description": "Leave a quiet oasis town at the edge of the desert and travel west with a camel caravan along the Silk Road, about twelve hundred years ago. Watch the camels being loaded with silk, pass the old Jade Gate and its silent watchtowers, listen to the slow caravan bell under a sky full of stars, rest beside a desert well, and hear a little music by the fire. Softly narrated, with moonlit dunes and a long, restful ending.\n\nChapters\n0:00 A Night Caravan on the Silk Road\n1:47 Dunhuang at Dusk\n6:44 Loading the Camels\n11:02 Through the Jade Gate\n15:33 Merchants of Samarkand\n19:50 The Stars over the Desert\n24:19 A Halt at the Well\n28:25 Music by the Fire\n32:08 The Long Road Sleeps\n36:44 Rest (ambient only)\n\n— — —\nThe Quiet Archive: calm history to fall asleep to. New episodes every evening.\nSubscribe so tonight's story is waiting for you.\n\nNarrated with a synthetic voice. Visuals are illustrated with code. Historical details are researched and gently simplified for relaxation.\n\n#sleephistory #sleepstory #silkroad",
+      "tags": [
+        "sleep history",
+        "history for sleep",
+        "boring history for sleep",
+        "bedtime stories for adults",
+        "sleep stories",
+        "silk road",
+        "silk road history",
+        "camel caravan",
+        "dunhuang",
+        "ancient china",
+        "history to fall asleep to",
+        "calm narration"
+      ],
+      "thumbnail": "thumbnail.jpg",
+      "captions": "legendas.srt",
+      "publish_at": "2026-11-14T22:00:00-03:00",
+      "if_late": "public_now",
+      "made_for_kids": false,
+      "altered_content": true,
+      "pinned_comment": "Where should the caravan rest tomorrow night?"
+    }
+  ]
+}

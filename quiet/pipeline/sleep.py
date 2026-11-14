@@ -13,6 +13,9 @@ slow loops, quiet mix (-19 LUFS), long ambient tail. Each episode may override P
 Scene types: city, road, temple, interior, sea, hills, cloister (EP02), nile (EP03),
   longhouse / hearth / fjord (EP04: snowy turf longhouse with rising smoke, long-hearth interior with live flames,
   fjord with animated aurora; new "snow" particles; palette key "snow").
+  dunes / oasis / camp (EP05 Silk Road: moonlit dune sea with a seamless walking camel caravan (draw_camel, dune_layer
+  with lit lee faces), the crescent spring among tall dunes with reeds, a desert halt with felt awning, kneeling camels,
+  travellers around a fire and a beacon tower; new "sand" drift particles; palette key "sand").
 """
 import sys, os, re, math, json, hashlib, subprocess, importlib.util, random
 import numpy as np
@@ -146,6 +149,75 @@ def mountains(y_base, amp, seed, col, snowcol, x0=0, x1=W, base=3, snow_thr=0.45
     d.polygon(list(zip(xs, top)) + list(zip(xs[::-1], low[::-1])), fill=snowcol + (255,))
     return lay
 
+def dune_layer(y0, amp, seed, col, litcol, peaks=5, lit_dir=1, x0=0, x1=W, spec=None):
+    """EP05: sand dunes with gentle windward slopes, steep lee faces lit by the moon, a bright crest line.
+    Returns (RGBA layer, crest y per column)."""
+    rng = np.random.default_rng(seed); xs = np.arange(W, dtype=np.float32); crest = np.zeros(W, np.float32)
+    if spec is None:
+        spec = [(c, rng.uniform(0.5, 1.0) * amp, rng.uniform(0.16, 0.3) * W, None) for c in np.sort(rng.uniform(x0 - 0.1 * W, x1 + 0.1 * W, peaks))]
+    for c, h, wl, wr in spec:
+        wr = wr or wl * rng.uniform(0.45, 0.7)
+        if lit_dir < 0: wl, wr = wr, wl
+        u = np.clip(np.where(xs < c, (c - xs) / wl, (xs - c) / wr), 0, 1)
+        gentle = 1 - u * u * (3 - 2 * u); steep = (1 - u) ** 1.25                            # windward: smooth; lee: straight-ish
+        prof = np.where(xs < c, gentle if lit_dir > 0 else steep, steep if lit_dir > 0 else gentle)
+        crest = np.maximum(crest, prof * h)
+    kk = np.ones(17, np.float32) / 17; crest = np.convolve(np.pad(crest, 8, mode="edge"), kk, mode="valid")[:W]  # soften crests
+    crest += noise1d(W + 1, seed + 1, 3, 4)[:W] * amp * 0.04
+    top = y0 - crest
+    slope = np.gradient(top) * lit_dir
+    lit = np.clip(slope * 2.2, 0, 1) ** 0.6
+    kl = np.ones(91, np.float32) / 91; lit = np.convolve(np.pad(lit, 45, mode="edge"), kl, mode="valid")[:W] * 0.7 + 0.07  # soft terminator
+    yy = np.arange(H, dtype=np.float32)[:, None]; d = yy - top[None, :]
+    shade = lit[None, :] * np.exp(-np.clip(d, 0, None) / (amp * 0.7 + 30))
+    shade = np.clip(shade + np.exp(-(np.clip(d, 0, None) / 2.2) ** 2) * 0.35, 0, 1)
+    c0, c1 = np.array(col, np.float32), np.array(litcol, np.float32)
+    rgb = c0 * (1 - shade[..., None]) + c1 * shade[..., None]
+    a = np.clip(d + 1, 0, 1) * 255
+    if x0 > 0 or x1 < W: a = a * ((xs >= x0) & (xs <= x1))[None, :]
+    arr = np.dstack([np.clip(rgb, 0, 255), a]).astype(np.uint8)
+    return Image.fromarray(arr, "RGBA"), top
+
+def draw_camel(d, x, yg, s, col, ph, loadcol=None, kneel=False):
+    """EP05: Bactrian camel silhouette facing right; ph = stride phase (legs swing, body bobs)."""
+    c = col + (255,); bob = 0 if kneel else 2.2 * s * math.sin(2 * ph)
+    by = yg - (34 if kneel else 74) * s + bob                                              # body centre
+    d.ellipse([x - 56 * s, by - 24 * s, x + 54 * s, by + 22 * s], fill=c)
+    for hx in (-24, 16):                                                                    # two humps
+        d.ellipse([x + (hx - 19) * s, by - 52 * s, x + (hx + 19) * s, by - 4 * s], fill=c)
+    if loadcol:                                                                             # bales slung between the humps
+        lc = loadcol + (255,)
+        d.rounded_rectangle([x - 14 * s, by - 34 * s, x + 6 * s, by + 14 * s], radius=4 * s, fill=lc)
+        d.rounded_rectangle([x - 44 * s, by - 6 * s, x - 18 * s, by + 18 * s], radius=4 * s, fill=lc)
+        d.line([(x - 40 * s, by - 10 * s), (x + 4 * s, by - 30 * s)], fill=c, width=max(1, int(2 * s)))
+    nk = [(x + 46 * s, by - 6 * s), (x + 66 * s, by + 4 * s), (x + 80 * s, by - 14 * s), (x + 86 * s, by - 40 * s), (x + 90 * s, by - 52 * s)]
+    if kneel: nk = [(px, py - 10 * s) for px, py in nk]
+    d.line(nk, fill=c, width=max(2, int(15 * s)), joint="curve")
+    hx, hy = nk[-1]
+    d.ellipse([hx - 9 * s, hy - 9 * s, hx + 15 * s, hy + 6 * s], fill=c)
+    d.polygon([(hx + 8 * s, hy - 6 * s), (hx + 26 * s, hy - 1 * s), (hx + 24 * s, hy + 7 * s), (hx + 6 * s, hy + 6 * s)], fill=c)
+    d.line([(hx - 2 * s, hy - 8 * s), (hx - 6 * s, hy - 15 * s)], fill=c, width=max(1, int(3 * s)))  # ear
+    d.line([(x - 54 * s, by - 4 * s), (x - 62 * s, by + 22 * s)], fill=c, width=max(1, int(3 * s)))  # tail
+    if kneel:
+        d.ellipse([x - 60 * s, yg - 18 * s, x + 56 * s, yg + 2 * s], fill=c)
+        return (hx + 20 * s, hy + 4 * s)
+    w = max(2, int(7 * s))
+    for lx, off in ((-40, 0.0), (-30, math.pi), (34, math.pi), (44, 0.0)):                # legs, diagonal pairs
+        sw = 13 * s * math.sin(ph + off); kx = x + lx * s + sw * 0.4
+        d.line([(x + lx * s, by + 10 * s), (kx, (by + yg) / 2 + 6 * s), (x + lx * s + sw, yg)], fill=c, width=w, joint="curve")
+        d.ellipse([x + lx * s + sw - 6 * s, yg - 3 * s, x + lx * s + sw + 6 * s, yg + 1 * s], fill=c)
+    return (hx + 20 * s, hy + 4 * s)
+
+def draw_figure(d, x, yg, s, col, seated=True, hat=True, lute=False):
+    """EP05: seated traveller in a long coat (cloak triangle + head + felt hat)."""
+    c = col + (255,); h = (58 if seated else 96) * s
+    d.polygon([(x - 26 * s, yg), (x + 26 * s, yg), (x + 9 * s, yg - h), (x - 9 * s, yg - h)], fill=c)
+    d.ellipse([x - 10 * s, yg - h - 20 * s, x + 10 * s, yg - h + 2 * s], fill=c)
+    if hat: d.polygon([(x - 12 * s, yg - h - 12 * s), (x, yg - h - 34 * s), (x + 12 * s, yg - h - 12 * s)], fill=c)
+    if lute:
+        d.ellipse([x + 4 * s, yg - h * 0.62, x + 34 * s, yg - h * 0.18], fill=c)
+        d.line([(x + 22 * s, yg - h * 0.5), (x + 40 * s, yg - h * 1.05), (x + 32 * s, yg - h * 1.12)], fill=c, width=max(2, int(4 * s)))
+
 # ---------------------------------------------------------------- scenes
 class Scene:
     """Static layers + animated parts, all periodic in LOOP_S so loops are seamless."""
@@ -153,7 +225,7 @@ class Scene:
         self.kind, self.p, self.rng = kind, p, np.random.default_rng(seed)
         self.windows, self.stars_tw, self.lamp, self.reflect = [], [], None, None
         self.particles = "embers"; self.fog_y = 0.72 * H; self.fog_a = 0.22
-        self.smoke, self.fires, self.aurora = None, [], None
+        self.smoke, self.fires, self.aurora, self.caravan = None, [], None, None
         getattr(self, "build_" + kind)()
         self.prepare()
 
@@ -539,6 +611,128 @@ class Scene:
         self.mid = Image.new("RGBA", (W, H), (0, 0, 0, 0)); self.near = near
         self.particles = "embers"; self.fog_a = 0
 
+    def build_dunes(self):
+        """EP05: moonlit sand sea; a caravan of Bactrian camels walks slowly along a long dune ridge (seamless loop:
+        each camel advances exactly one spacing per loop); dark dune shoulders hide where the line enters and leaves."""
+        p, rng = self.p, self.rng; hy = int(H * 0.6); sd = p.get("sand", (168, 128, 92))
+        self.back = self.sky(hy, (0.76, 0.17), 44)
+        far, _ = dune_layer(hy + 8, 70, int(rng.integers(1e6)), mix(p["far"], p["horizon"], 0.5), mix(sd, p["moon"], 0.25), 7)
+        self.back.alpha_composite(far.filter(ImageFilter.GaussianBlur(1.5)))
+        mid1, _ = dune_layer(hy + 70, 110, int(rng.integers(1e6)), mix(p["far"], p["mid"], 0.35), mix(sd, p["far"], 0.35), 5)
+        path_lay, top = dune_layer(hy + 170, 46, int(rng.integers(1e6)), mix(p["mid"], p["far"], 0.35), mix(sd, p["mid"], 0.45), 2)
+        k = np.ones(81, np.float32) / 81; top = np.convolve(np.pad(top, 40, mode="edge"), k, mode="valid")[:W]   # smooth walking line
+        mid = Image.new("RGBA", (W, H), (0, 0, 0, 0)); mid.alpha_composite(mid1); mid.alpha_composite(path_lay)
+        self.mid = mid
+        near = Image.new("RGBA", (W, H), (0, 0, 0, 0))
+        sh_l, _ = dune_layer(hy + 300, 250, int(rng.integers(1e6)), p["near"], mix(sd, p["near"], 0.62), 1, 1, spec=[(-W * 0.02, 250, W * 0.2, W * 0.32)])
+        sh_r, _ = dune_layer(H + 10, 380, int(rng.integers(1e6)), p["near"], mix(sd, p["near"], 0.66), 1, -1, spec=[(W * 1.02, 380, W * 0.36, W * 0.2)])
+        fl, _ = dune_layer(H - 40, 40, int(rng.integers(1e6)), mix(p["near"], p["mid"], 0.4), mix(sd, p["near"], 0.55), 3)
+        near.alpha_composite(fl); near.alpha_composite(sh_l); near.alpha_composite(sh_r)
+        dn = ImageDraw.Draw(near)
+        for j in range(7):                                                                    # wind ripples on the near sand
+            y = H - 30 + j * 4; dn.arc([W * 0.32 + j * 40, y - 30, W * 0.62 + j * 50, y + 30], 200, 340, fill=mix(sd, p["near"], 0.7) + (255,), width=2)
+        self.near = near
+        self.caravan = dict(top=top, s=0.62, spacing=168, n=14, col=mix(p["near"], p["mid"], 0.25), load=mix(p["near"], p["accent"], 0.12), x_in=W * 0.12, x_out=W * 0.86)
+        self.fog_y = hy + 40; self.fog_a = 0.08; self.particles = "sand"
+
+    def build_oasis(self):
+        """EP05: the crescent spring - a curved pool among tall dunes, reeds along its rim, doubled stars and moon."""
+        p, rng = self.p, self.rng; hy = int(H * 0.5); sd = p.get("sand", (168, 128, 92))
+        self.back = self.sky(hy, (0.5, 0.15), 40)
+        lake = Image.new("RGBA", (W, H), (0, 0, 0, 0)); dl = ImageDraw.Draw(lake)
+        for y in range(int(H * 0.6), H):
+            f = (y - H * 0.6) / (H * 0.4); dl.line([(0, y), (W, y)], fill=mix(mix(p["sea"], (120, 142, 196), 0.42), p["sea"], f ** 0.8) + (255,))
+        r2 = random.Random(int(rng.integers(1e6)))
+        for _ in range(70):                                                                   # stars mirrored in the still water
+            x, y = r2.uniform(W * 0.2, W * 0.8), r2.uniform(H * 0.64, H * 0.84)
+            dl.point((x, y), fill=mix(p["sea"], p["moon"], r2.uniform(0.2, 0.6)) + (255,))
+        self.back.alpha_composite(lake)
+        mid = Image.new("RGBA", (W, H), (0, 0, 0, 0))
+        big_l, _ = dune_layer(H * 0.62, 340, int(rng.integers(1e6)), mix(p["far"], p["mid"], 0.3), mix(sd, p["moon"], 0.1), 1, 1, spec=[(W * 0.2, 330, W * 0.4, W * 0.24)])
+        big_r, _ = dune_layer(H * 0.62, 260, int(rng.integers(1e6)), mix(p["far"], p["mid"], 0.45), mix(sd, p["far"], 0.2), 1, -1, spec=[(W * 0.84, 250, W * 0.36, W * 0.2)])
+        for lay_ in (big_r, big_l):
+            a_ = np.array(lay_); a_[int(H * 0.61):, :, 3] = 0; mid.alpha_composite(Image.fromarray(a_, "RGBA"))
+        rim = Image.new("RGBA", (W, H), (0, 0, 0, 0)); dr = ImageDraw.Draw(rim); rc = mix(p["mid"], sd, 0.22) + (255,)
+        dr.rectangle([0, H * 0.6, W, H], fill=rc)
+        cx, cy = W * 0.5, H * 0.71                                                            # carve the crescent pool
+        dr.ellipse([cx - 600, cy - 95, cx + 600, cy + 165], fill=(0, 0, 0, 0))
+        dr.ellipse([cx - 480, cy - 118, cx + 480, cy + 60], fill=rc)
+        dr.arc([cx - 480, cy - 118, cx + 480, cy + 60], 15, 165, fill=mix(rc[:3], p["moon"], 0.16) + (255,), width=3)
+        mid.alpha_composite(rim)
+        dm = ImageDraw.Draw(mid); nc = mix(p["near"], p["mid"], 0.45) + (255,)
+        for _ in range(170):                                                                  # reeds along the outer rim
+            a = r2.uniform(0.04, 0.96) * math.pi; x = cx - math.cos(a) * 560 * r2.uniform(0.96, 1.04); y = cy + math.sin(a) * 140 + r2.uniform(-4, 8)
+            hgt = r2.uniform(26, 70) * (0.6 + 0.6 * math.sin(a)); lean = r2.uniform(-12, 12)
+            dm.line([(x, y), (x + lean, y - hgt)], fill=nc, width=2)
+            if r2.random() < 0.3: dm.ellipse([x + lean - 3, y - hgt - 12, x + lean + 3, y - hgt + 2], fill=nc)
+        for tx in (W * 0.12, W * 0.86):                                                       # tamarisk bushes
+            for _ in range(40):
+                a = r2.uniform(0.15, 0.85) * math.pi; L = r2.uniform(40, 110)
+                dm.line([(tx, H * 0.66), (tx + math.cos(a) * L, H * 0.66 - math.sin(a) * L)], fill=nc, width=2)
+        self.windows.append((W * 0.78, H * 0.6, 4, 4, 0.8, 1))                                # a traveller's lamp far off
+        self.mid = mid
+        near = Image.new("RGBA", (W, H), (0, 0, 0, 0)); dn = ImageDraw.Draw(near); n2 = p["near"] + (255,)
+        dn.polygon([(0, H), (0, H - 120), (W * 0.2, H - 60), (W * 0.42, H - 20), (W * 0.5, H)], fill=n2)
+        for k in range(26):                                                                   # foreground reeds, left
+            x = 20 + k * 22 + r2.uniform(-6, 6); hgt = r2.uniform(160, 330)
+            dn.line([(x, H - 90 + k * 2), (x + r2.uniform(-30, 30), H - 90 - hgt)], fill=n2, width=3)
+        self.near = near
+        mx, my, mr = self.moon; self.reflect = (mx, H * 0.7, mr)
+        self.fog_y = H * 0.6; self.fog_a = 0.14; self.particles = "fireflies"
+
+    def build_camp(self):
+        """EP05: caravan halt in a hollow - felt awning on poles, kneeling camels, stacked bales, travellers around
+        a small fire (one with a lute), an old beacon tower on the horizon."""
+        p, rng = self.p, self.rng; hy = int(H * 0.6); sd = p.get("sand", (168, 128, 92))
+        self.back = self.sky(hy, (0.18, 0.16), 36)
+        far, _ = dune_layer(hy + 6, 80, int(rng.integers(1e6)), mix(p["far"], p["horizon"], 0.45), mix(sd, p["moon"], 0.2), 6, -1)
+        df = ImageDraw.Draw(far); tx, ty = W * 0.7, hy - 8                                  # beacon tower of earth and reeds
+        tc = mix(p["far"], p["horizon"], 0.3) + (255,)
+        df.polygon([(tx - 30, ty), (tx + 30, ty), (tx + 21, ty - 120), (tx - 21, ty - 120)], fill=tc)
+        for j in range(1, 8): df.line([(tx - 30 + j * 1.2, ty - j * 15), (tx + 30 - j * 1.2, ty - j * 15)], fill=mix(p["far"], p["moon"], 0.12) + (255,), width=1)
+        self.back.alpha_composite(far.filter(ImageFilter.GaussianBlur(1)))
+        mid = Image.new("RGBA", (W, H), (0, 0, 0, 0))
+        g, _ = dune_layer(hy + 120, 60, int(rng.integers(1e6)), mix(p["mid"], p["far"], 0.25), mix(sd, p["mid"], 0.4), 3, -1)
+        mid.alpha_composite(g); d = ImageDraw.Draw(mid)
+        d.rectangle([0, hy + 150, W, H], fill=mix(p["mid"], sd, 0.12) + (255,))
+        cc = mix(p["near"], p["mid"], 0.55)
+        for i, (x, s) in enumerate(((W * 0.1, 0.9), (W * 0.24, 0.78), (W * 0.78, 0.82), (W * 0.9, 0.95))):  # kneeling camels
+            draw_camel(d, x, hy + 230 + s * 40, s, cc, 0, None, kneel=True)
+        ax0, ax1, ay = W * 0.3, W * 0.62, hy + 70                                           # felt awning on poles
+        d.polygon([(ax0 - 30, ay + 30), (ax0 + 40, ay - 40), (ax1 - 40, ay - 50), (ax1 + 30, ay + 22), (ax1, ay + 34), (ax0, ay + 42)], fill=mix(p["mid"], p["accent"], 0.16) + (255,))
+        for x in (ax0, ax1): d.line([(x, ay + 40), (x, ay + 210)], fill=cc + (255,), width=6)
+        for j in range(4):                                                                    # stacked bales
+            d.rounded_rectangle([W * 0.64 + j * 46, hy + 196 - (j % 2) * 30, W * 0.64 + j * 46 + 54, hy + 236 - (j % 2) * 30], radius=6, fill=mix(mix(p["near"], p["mid"], 0.6), p["accent"], 0.06 + 0.02 * j) + (255,))
+        self.mid = mid
+        fx, fy = W * 0.47, H * 0.83
+        self.fires.append((fx, fy, 0.42))
+        near = Image.new("RGBA", (W, H), (0, 0, 0, 0)); dn = ImageDraw.Draw(near); fc = p["near"]
+        for x, s, lute in ((fx - 210, 1.25, False), (fx - 120, 1.05, False), (fx + 150, 1.15, True), (fx + 260, 1.35, False)):
+            draw_figure(dn, x, H * 0.88 + s * 6, s, fc, True, x != fx - 120, lute)          # travellers around the fire
+        dn.chord([fx + 62, H * 0.835, fx + 104, H * 0.87], 0, 180, fill=fc + (255,))         # the iron pot, set aside on the sand
+        sn, _ = dune_layer(H - 10, 70, int(rng.integers(1e6)), p["near"], mix(sd, p["near"], 0.6), 2, -1)
+        near.alpha_composite(sn)
+        self.near = near
+        self.fog_y = hy + 30; self.fog_a = 0.08; self.particles = "embers"
+
+    def _caravan(self, img, t):
+        C = self.caravan; lay = Image.new("RGBA", (W, H), (0, 0, 0, 0)); d = ImageDraw.Draw(lay)
+        L = C["n"] * C["spacing"]; s = C["s"]; prev = None
+        pos = sorted(((i * C["spacing"] + t / LOOP_S * C["spacing"]) % L - 260 for i in range(C["n"])), reverse=True)
+        for x in pos:                                                                         # leader first, so ropes go back
+            if x < -200 or x > W + 200: prev = None; continue
+            xi = int(min(W - 1, max(0, x))); yg = C["top"][xi] + 4
+            ph = TAU * 16 * t / LOOP_S + x / C["spacing"] * 1.7
+            head = draw_camel(d, x, yg, s, C["col"], ph, C["load"])
+            if prev is not None:                                                              # lead rope to the camel ahead
+                px, py = prev; mx_ = (head[0] + px) / 2
+                d.line([head, (mx_, max(head[1], py) + 10 * s), (px, py)], fill=C["col"] + (255,), width=2, joint="curve")
+            prev = (x - 58 * s, yg - 70 * s)
+        a = np.array(lay); xs = np.arange(W, dtype=np.float32)
+        fade = np.clip((xs - C["x_in"]) / 160, 0, 1) * np.clip((C["x_out"] - xs) / 160, 0, 1)
+        a[..., 3] = (a[..., 3] * fade[None, :]).astype(np.uint8)
+        img.alpha_composite(Image.fromarray(a, "RGBA"))
+
     # --- per-frame
     def prepare(self):
         p = self.p
@@ -555,7 +749,7 @@ class Scene:
         vig = np.clip(1 - (r - 0.55) * 0.75, 0.35, 1)
         self.vig = Image.fromarray((vig * 255).astype(np.uint8), "L")
         rng = np.random.default_rng(7)
-        n = {"embers": 26, "fireflies": 22, "dust": 34, "snow": 90}[self.particles]
+        n = {"embers": 26, "fireflies": 22, "dust": 34, "snow": 90, "sand": 70}[self.particles]
         self.parts = [(rng.uniform(0, W), rng.uniform(0, H), rng.uniform(0, TAU), int(rng.integers(1, 3)), rng.uniform(0.4, 1.0)) for _ in range(n)]
         self.glow_sm = self._glow(16); self.glow_lg = self._glow(90)
 
@@ -638,6 +832,7 @@ class Scene:
                 dl.rectangle([x - w / 2, y - h / 2, x + w / 2, y + h / 2], fill=mix(p["mid"], p["light"], fl) + (255,))
             img.alpha_composite(lay)
         if self.smoke: self._smoke(img, t)
+        if self.caravan: self._caravan(img, t)
         img.alpha_composite(self.near)
         if self.fires: self._fires(img, ph)
         if self.lamp:
@@ -654,6 +849,9 @@ class Scene:
             elif self.particles == "snow":
                 x = x0 + 26 * math.sin(ph * k + f); y = (y0 + (H + 40) * t / LOOP_S * k) % (H + 40) - 20
                 a = 0.5 * s; col = (232, 238, 248); sz = 2 + 3 * s * (1 if k == 2 else 0.7)
+            elif self.particles == "sand":                                                 # EP05: fine sand drifting on the breeze
+                x = (x0 + (W + 40) * t / LOOP_S * k) % (W + 40) - 20; y = H * 0.55 + (y0 % (H * 0.45)) + 12 * math.sin(ph * 2 * k + f)
+                a = 0.16 * s * (0.6 + 0.4 * math.sin(ph * 3 + f)); col = mix(p.get("sand", (200, 170, 130)), (255, 255, 255), 0.3); sz = 1.5 + 1.5 * s
             elif self.particles == "fireflies":
                 x = x0 + 60 * math.sin(ph * k + f); y = H * 0.55 + (y0 % (H * 0.45)) + 30 * math.cos(ph * (3 - k) + f)
                 a = max(0, math.sin(ph * 3 * k + f)) ** 2 * 0.8 * s; col = (230, 240, 160); sz = 4 + 2 * s
