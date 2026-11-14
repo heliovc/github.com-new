@@ -881,5 +881,52 @@
   "publish_at": "2026-11-14T21:00:00-03:00",
   "related_key": "cosmic-ep12-long",
   "pinned_comment": "Would you trust a robot to land itself with no help from Earth? Full video: The Speed of Light Is Slow. Here's the Proof (Even at 1 Billion km/h)"
+ },
+ "ptd-ep13-long": {
+  "attempts": 1,
+  "status": "published",
+  "url": "https://youtu.be/iE94lv2QQNk",
+  "by": "robo",
+  "visibility": "schedule",
+  "when": "2026-11-14T18:00:00-03:00",
+  "at": "2026-11-14T07:55:20.723832-03:00",
+  "error": null,
+  "channel_id": "UCd_BGmJ5gbQ0kECAxmbvQHA",
+  "title": "O Nubank virou banco: de onde vem o lucro recorde (e o número que preocupa)",
+  "kind": "long",
+  "publish_at": "2026-11-14T18:00:00-03:00",
+  "pinned_comment": "Para você, o Nubank virar banco oficialmente muda alguma coisa, ou é só uma placa nova na porta? Conta aqui."
+ },
+ "ptd-ep13-short": {
+  "attempts": 1,
+  "status": "published",
+  "url": "https://youtu.be/MW_pjQU9sus",
+  "by": "robo",
+  "visibility": "schedule",
+  "when": "2026-11-14T19:00:00-03:00",
+  "at": "2026-11-14T07:58:23.477803-03:00",
+  "error": null,
+  "channel_id": "UCd_BGmJ5gbQ0kECAxmbvQHA",
+  "title": "Nubank lucrou US$ 1 bilhão sem cobrar tarifa. De onde veio? #shorts",
+  "kind": "short",
+  "publish_at": "2026-11-14T19:00:00-03:00",
+  "related_key": "ptd-ep13-long",
+  "pinned_comment": "Você paga a fatura inteira ou já parcelou alguma vez? Vídeo completo: O Nubank virou banco: de onde vem o lucro recorde (e o número que preocupa)"
+ },
+ "ptd-rank11-short": {
+  "attempts": 1,
+  "status": "published",
+  "url": "https://youtu.be/OPnwE4vBnO0",
+  "by": "robo",
+  "visibility": "schedule",
+  "when": "2026-11-15T12:00:00-03:00",
+  "at": "2026-11-14T08:01:56.076329-03:00",
+  "error": null,
+  "channel_id": "UCd_BGmJ5gbQ0kECAxmbvQHA",
+  "title": "Os 5 bancos com mais clientes no Brasil (o nº 2 não tem agência) #shorts",
+  "kind": "short",
+  "publish_at": "2026-11-15T12:00:00-03:00",
+  "related_key": "ptd-ep13-long",
+  "pinned_comment": "Qual desses bancos é o seu principal hoje? Vídeo completo: O Nubank virou banco: de onde vem o lucro recorde (e o número que preocupa)"
  }
 }
