@@ -930,8 +930,8 @@
   "pinned_comment": "Você paga a fatura inteira ou já parcelou alguma vez? Vídeo completo: O Nubank virou banco: de onde vem o lucro recorde (e o número que preocupa)",
   "related_attempts": 1,
   "related_done": "2026-11-14T18:15:22.675596-03:00",
-  "comment_attempts": 1,
-  "comment_error": "Page.goto: Timeout 60000ms exceeded.\nCall log:\n  - navigating to \"https://www.youtube.com/watch?v=MW_pjQU9sus\", waiting until \"domcontentloaded\"\n (20261114-191550-erro-comment-ptd-ep13-short.png)"
+  "comment_attempts": 2,
+  "comment_done": "2026-11-14T19:26:45.095134-03:00"
  },
  "ptd-rank11-short": {
   "attempts": 1,
