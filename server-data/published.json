@@ -907,7 +907,9 @@
   "title": "O Nubank virou banco: de onde vem o lucro recorde (e o número que preocupa)",
   "kind": "long",
   "publish_at": "2026-11-14T18:00:00-03:00",
-  "pinned_comment": "Para você, o Nubank virar banco oficialmente muda alguma coisa, ou é só uma placa nova na porta? Conta aqui."
+  "pinned_comment": "Para você, o Nubank virar banco oficialmente muda alguma coisa, ou é só uma placa nova na porta? Conta aqui.",
+  "comment_attempts": 1,
+  "comment_done": "2026-11-14T18:13:17.552701-03:00"
  },
  "ptd-ep13-short": {
   "attempts": 1,
@@ -923,7 +925,9 @@
   "kind": "short",
   "publish_at": "2026-11-14T19:00:00-03:00",
   "related_key": "ptd-ep13-long",
-  "pinned_comment": "Você paga a fatura inteira ou já parcelou alguma vez? Vídeo completo: O Nubank virou banco: de onde vem o lucro recorde (e o número que preocupa)"
+  "pinned_comment": "Você paga a fatura inteira ou já parcelou alguma vez? Vídeo completo: O Nubank virou banco: de onde vem o lucro recorde (e o número que preocupa)",
+  "related_attempts": 1,
+  "related_done": "2026-11-14T18:15:22.675596-03:00"
  },
  "ptd-rank11-short": {
   "attempts": 1,
@@ -939,7 +943,9 @@
   "kind": "short",
   "publish_at": "2026-11-15T12:00:00-03:00",
   "related_key": "ptd-ep13-long",
-  "pinned_comment": "Qual desses bancos é o seu principal hoje? Vídeo completo: O Nubank virou banco: de onde vem o lucro recorde (e o número que preocupa)"
+  "pinned_comment": "Qual desses bancos é o seu principal hoje? Vídeo completo: O Nubank virou banco: de onde vem o lucro recorde (e o número que preocupa)",
+  "related_attempts": 1,
+  "related_done": "2026-11-14T18:18:10.807236-03:00"
  },
  "lab-ep10-long": {
   "attempts": 1,
