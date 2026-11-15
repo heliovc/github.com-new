@@ -1,6 +1,9 @@
 {
- "last_run": "2026-11-15T09:30:24.569310-03:00",
- "pending": 0,
+ "last_run": "2026-11-15T09:56:03.066840-03:00",
+ "pending": 1,
  "post_tasks": 0,
- "errors": []
+ "errors": [],
+ "published_now": [
+  "quiet-comp01-long: https://youtu.be/yD8tx2T5foI"
+ ]
 }
