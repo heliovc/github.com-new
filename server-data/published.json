@@ -1174,7 +1174,9 @@
   "related_key": "lab-ep11-long",
   "pinned_comment": "Did you know regex could do this in one line? Full tutorial: Regex for Beginners: Find Anything in Text (Python Regular Expressions Tutorial)",
   "related_attempts": 1,
-  "related_done": "2026-11-15T19:19:18.367855-03:00"
+  "related_done": "2026-11-15T19:19:18.367855-03:00",
+  "comment_attempts": 1,
+  "comment_done": "2026-11-15T20:41:58.937756-03:00"
  },
  "quiet-ep04b-long": {
   "attempts": 1,

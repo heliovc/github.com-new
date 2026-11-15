@@ -1,6 +1,9 @@
 {
- "last_run": "2026-11-15T19:30:59.359058-03:00",
+ "last_run": "2026-11-15T20:42:01.320667-03:00",
  "pending": 0,
- "post_tasks": 0,
- "errors": []
+ "post_tasks": 1,
+ "errors": [],
+ "published_now": [
+  "lab-ep11-short: comment comentário fixado"
+ ]
 }
