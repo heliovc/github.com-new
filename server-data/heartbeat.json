@@ -1,6 +1,11 @@
 {
- "last_run": "2026-11-15T07:10:48.914361-03:00",
- "pending": 0,
+ "last_run": "2026-11-15T07:42:00.334563-03:00",
+ "pending": 3,
  "post_tasks": 0,
- "errors": []
+ "errors": [],
+ "published_now": [
+  "ptd-ep14-long: https://youtu.be/mi0IE30PPEo",
+  "ptd-ep14-short: https://youtu.be/0Sqa2LFpovM",
+  "ptd-rank12-short: https://youtu.be/qQBT3zH4CtU"
+ ]
 }

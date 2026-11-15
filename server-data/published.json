@@ -1071,5 +1071,52 @@
   "publish_at": "2026-11-15T21:00:00-03:00",
   "related_key": "cosmic-ep13-long",
   "pinned_comment": "Did you expect Mercury to be harder to reach than Jupiter? Full video: How Long to Reach Every Planet? By Car, Neptune Takes 4,912 Years"
+ },
+ "ptd-ep14-long": {
+  "attempts": 1,
+  "status": "published",
+  "url": "https://youtu.be/mi0IE30PPEo",
+  "by": "robo",
+  "visibility": "schedule",
+  "when": "2026-11-15T18:00:00-03:00",
+  "at": "2026-11-15T07:35:47.025850-03:00",
+  "error": null,
+  "channel_id": "UCd_BGmJ5gbQ0kECAxmbvQHA",
+  "title": "Spread bancário: por que o juro no Brasil não cai quando a Selic cai",
+  "kind": "long",
+  "publish_at": "2026-11-15T18:00:00-03:00",
+  "pinned_comment": "Antes de ver o vídeo, qual camada você apostava que era a maior: o lucro do banco, o calote ou os impostos? Conta aqui."
+ },
+ "ptd-ep14-short": {
+  "attempts": 1,
+  "status": "published",
+  "url": "https://youtu.be/0Sqa2LFpovM",
+  "by": "robo",
+  "visibility": "schedule",
+  "when": "2026-11-15T19:00:00-03:00",
+  "at": "2026-11-15T07:38:49.992687-03:00",
+  "error": null,
+  "channel_id": "UCd_BGmJ5gbQ0kECAxmbvQHA",
+  "title": "A Selic caiu 5 vezes. O seu juro subiu. Por quê? #shorts",
+  "kind": "short",
+  "publish_at": "2026-11-15T19:00:00-03:00",
+  "related_key": "ptd-ep14-long",
+  "pinned_comment": "O juro do seu cartão ou empréstimo caiu este ano? Vídeo completo: Spread bancário: por que o juro no Brasil não cai quando a Selic cai"
+ },
+ "ptd-rank12-short": {
+  "attempts": 1,
+  "status": "published",
+  "url": "https://youtu.be/qQBT3zH4CtU",
+  "by": "robo",
+  "visibility": "schedule",
+  "when": "2026-11-16T12:00:00-03:00",
+  "at": "2026-11-15T07:41:57.030461-03:00",
+  "error": null,
+  "channel_id": "UCd_BGmJ5gbQ0kECAxmbvQHA",
+  "title": "5 fatias de cada R$ 100 de juros no Brasil (o lucro do banco é a menor) #shorts",
+  "kind": "short",
+  "publish_at": "2026-11-16T12:00:00-03:00",
+  "related_key": "ptd-ep14-long",
+  "pinned_comment": "Você imaginava que o lucro do banco era a menor fatia? Vídeo completo: Spread bancário: por que o juro no Brasil não cai quando a Selic cai"
  }
 }
