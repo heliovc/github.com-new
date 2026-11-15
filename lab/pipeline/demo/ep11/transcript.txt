@@ -1,0 +1,38 @@
+### step1
+['Invoice']
+['4417', '2026', '10', '03', '555', '201', '7788', '1042', '555', '318', '9020', '2026', '11', '20', '555', '404', '1234']
+### phones
+['555-201-7788', '555-318-9020', '555-404-1234']
+3 phone numbers
+### emails
+maria.lopez@sunnybakery.com
+tom_r@greenleaf.cafe
+dana.kim+orders@brightdental.org
+### dates
+03/10/2026
+20/11/2026
+### hide
+From: Maria Lopez <maria.lopez@sunnybakery.com>
+Order 4417 arrived on 2026-10-03. Please call XXX-XXX-7788.
+From: Tom Reyes <tom_r@greenleaf.cafe>
+Invoice 1042 is late. My number is XXX-XXX-9020.
+From: Dana Kim <dana.kim+orders@brightdental.org>
+Meeting moved to 2026-11-20. Office line: XXX-XXX-1234.
+
+### greedy
+['<red> and <blue>']
+['<red>', '<blue>']
+### check
+AB-1234 valid
+ab-1234 invalid
+AB-12345 invalid
+XAB-1234 invalid
+### raw
+[]
+['cat']
+### ignore
+[]
+['Invoice 1042']
+### dot
+['2026-10-03', '2026x10x03']
+['2026.10.03']

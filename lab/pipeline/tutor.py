@@ -12,6 +12,9 @@ Scene types: title, steps, code, term, files, tip, keys, compare, chat, outro, t
   colorize() now also highlights lang="html" (tags, attributes, values) and lang="css" (selectors, properties, values) (EP09)
   pdfx (EP10: a REAL rendered PDF page in a viewer window, a scan beam sweeps down and every box pdfplumber really found - text lines or
   table rows - lights up as it passes, while its extracted text lands on the right as lines or as a cell grid; empty= for scanned pages)
+  rx (EP11: regex lab - the pattern in a big bar on top, split into colored parts that pop in as "chips" explaining each piece; below,
+  the sample text in a window where every REAL match (re.finditer at render time) lights up one after another, capture groups in their
+  own colors, with a live match counter; sub= swaps each match for its re.sub replacement after the sweep)
 Identity: charcoal #0F1115, lime #B6F35C, coral #FF7A59, sky #6CC4FF, Poppins + DejaVu Sans Mono.
 """
 import sys, os, re, math, json, hashlib, subprocess, importlib.util
@@ -868,6 +871,82 @@ def sc_pdfx(img, v, t, d):
         a = ease((t - 0.6 - span) / 0.5); fn = F(30, "SemiBold"); tw = fn.getlength(v["note"])
         if a > 0:
             dr.rounded_rectangle([W / 2 - tw / 2 - 30, 1012, W / 2 + tw / 2 + 30, 1066], 27, fill=mix(BG, v.get("notecol", ACC), a)); dr.text((W / 2, 1039), v["note"], font=fn, fill=BG, anchor="mm")
+
+# ---- EP11: rx - regex lab. Pattern bar (parts colored + explanation chips), then the text where each real re.finditer match lights up
+#      in order (groups tinted with GROUPC), a live "N matches" counter, optional sub= replacement shown after the sweep.
+GROUPC = [(108, 196, 255), (255, 211, 105), (80, 220, 190), (255, 122, 89)]
+def sc_rx(img, v, t, d):
+    pat = v["pattern"]; parts = v.get("parts") or [(pat, "", ACC)]; flags = re.I if v.get("ignorecase") else 0
+    lines = v["text"] if isinstance(v["text"], list) else v["text"].split("\n"); text = "\n".join(lines)
+    dr = ImageDraw.Draw(img); span = d * v.get("span", 0.7)
+    tp = span * (0.45 if v.get("parts") else 0.1)  # time spent on the chips
+    # pattern bar
+    fp = F(v.get("psize", 50), "monob"); full = "".join(p[0] for p in parts); pw = fp.getlength(full) + fp.getlength("r\"\"")
+    x = W / 2 - pw / 2; yb = 190; a0 = ease(t / 0.4)
+    dr.rounded_rectangle([x - 40, yb - 50, x + pw + 40, yb + 50], 22, fill=mix(BG, PANEL, a0), outline=mix(BG, ACC, a0), width=3)
+    text_a(img, (x - 40, yb - 72), v.get("label", "PATTERN"), F(22, "Bold"), ACC, a0, "ls")
+    text_a(img, (x, yb), "r\"", fp, DIM, a0, "lm"); x += fp.getlength("r\"")
+    n = len(parts); cur = int((t - 0.4) / max(0.01, tp / n)) if t > 0.4 else -1
+    for i, (tok, expl, col) in enumerate(parts):
+        wl = fp.getlength(tok)
+        if i == cur and v.get("parts") and t < 0.4 + tp: dr.rounded_rectangle([x - 4, yb - 36, x + wl + 4, yb + 36], 8, fill=mix(PANEL, col, 0.3))
+        text_a(img, (x, yb), tok, fp, col if (i <= cur or not v.get("parts")) else (200, 206, 216), a0, "lm"); x += wl
+    text_a(img, (x, yb), "\"", fp, DIM, a0, "lm")
+    y = 300
+    if v.get("parts"):  # explanation chips, flowing left to right
+        fc, fe = F(30, "monob"), F(24, "Medium"); ws = [max(fc.getlength(p[0]), fe.getlength(p[1])) + 44 for p in parts]
+        rows, row, rw = [], [], 0
+        for i, w_ in enumerate(ws):
+            if row and rw + w_ + 20 > 1760: rows.append(row); row, rw = [], 0
+            row.append(i); rw += w_ + 20
+        rows.append(row)
+        for r, row in enumerate(rows):
+            tw = sum(ws[i] + 20 for i in row) - 20; cx = W / 2 - tw / 2
+            for i in row:
+                a = ease((t - 0.4 - tp * i / n) / 0.35); tok, expl, col = parts[i]
+                if a > 0:
+                    cy = y + r * 106 + (1 - a) * 20
+                    dr.rounded_rectangle([cx, cy, cx + ws[i], cy + 92], 16, fill=mix(BG, mix(PANEL, col, 0.14), a), outline=mix(BG, col, a), width=2)
+                    text_a(img, (cx + ws[i] / 2, cy + 30), tok, fc, col, a, "mm"); text_a(img, (cx + ws[i] / 2, cy + 68), expl, fe, (200, 206, 216), a, "mm")
+                cx += ws[i] + 20
+        y += len(rows) * 106 + 20
+    # text window
+    ft = F(v.get("size", 28), "mono"); cw = ft.getlength("M"); lh = int(v.get("size", 28) * 1.6)
+    hgt = 52 + 40 + len(lines) * lh + 20; wy0 = max(y, min(1010 - hgt, y + 20)); box = [90, wy0, W - 90, wy0 + hgt]
+    window(img, box, v.get("file", "inbox.txt"), kind="term")
+    ms = list(re.finditer(pat, text, flags)); t1 = 0.4 + tp; gap = max(0.05, (span - tp) / max(1, len(ms)))
+    shown = sum(1 for k, _ in enumerate(ms) if t >= t1 + k * gap)
+    subbed = v.get("sub") is not None and t > 0.4 + span + 0.3
+    if subbed: lines = re.sub(pat, v["sub"], text, flags=flags).split("\n")
+    lx, ly = 130, wy0 + 76; offs = [0]
+    for ln in lines[:-1]: offs.append(offs[-1] + len(ln) + 1)
+    lay = Image.new("RGBA", img.size, (0, 0, 0, 0)); dl = ImageDraw.Draw(lay)
+    if not subbed:
+        for k, m in enumerate(ms[:shown]):
+            hot = k == shown - 1 and t < t1 + shown * gap + 0.3
+            for li, o in enumerate(offs):
+                s0, s1 = max(m.start(), o), min(m.end(), o + len(lines[li]))
+                if s0 >= s1: continue
+                yy = ly + li * lh
+                dl.rounded_rectangle([lx + cw * (s0 - o) - 3, yy - 5, lx + cw * (s1 - o) + 3, yy + lh - 9], 6, fill=ACC + (110 if hot else 70,), outline=ACC + (255,), width=2)
+                for g in range(1, (m.lastindex or 0) + 1):
+                    g0, g1 = max(m.start(g), o), min(m.end(g), o + len(lines[li]))
+                    if g0 < g1: dl.rectangle([lx + cw * (g0 - o), yy + lh - 14, lx + cw * (g1 - o), yy + lh - 9], fill=GROUPC[(g - 1) % 4] + (255,))
+    img.alpha_composite(lay)
+    for li, ln in enumerate(lines): dr.text((lx, ly + li * lh), ln, font=ft, fill=TXT if not subbed else (200, 206, 216))
+    if subbed:  # tint the replaced pieces
+        rs = list(re.finditer(re.escape(v.get("subshow", "")), "\n".join(lines))) if v.get("subshow") else []
+        for m in rs:
+            for li, o in enumerate(offs):
+                if o <= m.start() < o + len(lines[li]) + 1: dr.text((lx + cw * (m.start() - o), ly + li * lh), m.group(0), font=ft, fill=ACC)
+    # counter chip
+    lab = (f"{shown} match" + ("" if shown == 1 else "es")) if not subbed else v.get("sublabel", "re.sub() done")
+    fl = F(26, "Bold"); lw = fl.getlength(lab) + 44
+    dr.rounded_rectangle([box[2] - lw - 20, box[1] + 9, box[2] - 20, box[1] + 45], 18, fill=ACC if shown or subbed else LINE); dr.text((box[2] - 20 - lw / 2, box[1] + 27), lab, font=fl, fill=BG, anchor="mm")
+    if v.get("note"):
+        a = ease((t - 0.6 - span) / 0.5); fn = F(30, "SemiBold"); tw = fn.getlength(v["note"])
+        if a > 0:
+            ny = min(1012, box[3] + 14); dr.rounded_rectangle([W / 2 - tw / 2 - 30, ny, W / 2 + tw / 2 + 30, ny + 54], 27, fill=mix(BG, v.get("notecol", ACC), a)); dr.text((W / 2, ny + 27), v["note"], font=fn, fill=BG, anchor="mm")
 
 SC = {k[3:]: f for k, f in list(globals().items()) if k.startswith("sc_")}
 
