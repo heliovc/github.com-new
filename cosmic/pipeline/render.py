@@ -33,6 +33,14 @@ EP12 added scenes: lagmeter (chapter card: log "lag meter" 0.1 ns -> billions of
   landing = Perseverance timeline, Mars vs what Earth hears), randomwalk (Sun cross-section + random-walk path core -> surface, years counter),
   horizonrun (expanding line, photons x' = Hx - c: inside the horizon they arrive, beyond it they are carried away). Palette photon gold /
   signal green / fiber magenta / navy. Structure NEW: "7 messages, 1 stopwatch" (each chapter = a message and its lag).
+EP13 added scenes: departures (split-flap board GATE / DESTINATION / CAR / JET / FASTEST PROBE [+ LIGHT]; rows flip in, hl row glows,
+  detail line), roadtrip (highway in perspective into space toward a world, car from behind, odometer + time on the road + generations
+  icons; hide = "??" for a guess beat), transfer (top-down orbits, linear up to Mars / square-root beyond; half-ellipse transfer with day
+  counter; ghost = dashed straight line; straight = rules demo; avg = live average distance Venus vs Mercury; map = all orbits + AU box),
+  slingshot (gravity assist boost | brake toward the Sun | tour = Voyager 2 Grand Tour with mission clock). Palette road amber / board teal /
+  ticket coral. Structure NEW: "departure board" (one gate per destination). Learned: NASA Horizons / NSSDC hosts are blocked by the
+  proxy -> verify numbers with web search; 1,400 words incl. 34 scenes = 8.2 min. ranking.py: vis "wind" (rank12). scale_short.py:
+  vis "mapfit" (scale06, US outline normalised to 4,500 km).
 EP06 added scenes: spinglobe (globe + speed by latitude; top=True rings; slow=True), pendulum, fling, bulge, yearday, dayclock (teal / amber palette)
 """
 import sys, os, re, math, subprocess, importlib.util, json, random, hashlib
@@ -3267,6 +3275,261 @@ def sc_horizonrun(img, v, t, dur):
     d.text((1450, 900), "light beyond it: never arrives", font=F(32, "Bold"), fill=(170, 170, 190), anchor="mm")
     if v.get("head"): alpha_text(img, (W / 2, 130), v["head"], F(54, "ExtraBold"), WHITE, ease(t / 0.5))
     d.text((W / 2, 990), "illustration, not to scale", font=F(26, "Medium"), fill=DIM, anchor="mm")
+
+
+# ---------------- scenes (EP13: road amber / board teal / ticket coral) ----------------
+ROAD13, BOARD13, TICK13, PLUM13 = (255, 170, 60), (60, 225, 200), (255, 120, 110), (34, 14, 40)
+DEP13 = [("MOON", "160 days", "18 days", "33 min", "1.3 s"), ("VENUS", "43.6 yr", "4.8 yr", "2.3 days", "2.1 min"),
+         ("MARS", "62.3 yr", "6.9 yr", "3.3 days", "3.0 min"), ("MERCURY", "88.2 yr", "9.8 yr", "4.6 days", "4.3 min"),
+         ("JUPITER", "671 yr", "74.6 yr", "35 days", "33 min"), ("SATURN", "1,364 yr", "152 yr", "72 days", "66 min"),
+         ("URANUS", "2,945 yr", "327 yr", "155 days", "2.4 h"), ("NEPTUNE", "4,912 yr", "546 yr", "259 days", "4.0 h")]
+PL13 = {"Mercury": (0.387, 88.0, (175, 165, 155)), "Venus": (0.723, 224.7, (235, 205, 150)), "Earth": (1.0, 365.25, (70, 130, 230)),
+        "Mars": (1.524, 687.0, (210, 100, 70)), "Jupiter": (5.203, 4331, (215, 175, 130)), "Saturn": (9.537, 10747, (225, 200, 140)),
+        "Uranus": (19.19, 30589, (150, 220, 230)), "Neptune": (30.07, 59800, (80, 120, 240))}
+_FLAP = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"
+def _flap13(txt, t, seed):
+    """split-flap text: random letters that settle left to right"""
+    rng = random.Random(seed + int(t * 20)); out = []
+    for i, ch in enumerate(txt):
+        out.append(ch if t > 0.25 + i * 0.04 or ch == " " else rng.choice(_FLAP))
+    return "".join(out)
+
+def sc_departures(img, v, t, dur):
+    """airport split-flap departure board: GATE / DESTINATION / CAR / JET / FASTEST PROBE (+ LIGHT); v.rows shown, newest row flips in,
+    v.hl highlighted (-1 none), v.detail line under the board, v.light adds a LIGHT column"""
+    rows = v.get("rows", 0); hl = v.get("hl", -1); light = v.get("light", False)
+    x0, x1, y0 = 120, 1800, 220
+    cols = [("GATE", 150), ("DESTINATION", 360), ("CAR 100 km/h", 330), ("JET 900 km/h", 300), ("FASTEST PROBE", 330)]
+    if light: cols.append(("LIGHT", 210))
+    tw = sum(c[1] for c in cols); sx = (x1 - x0) / tw
+    lay = Image.new("RGBA", img.size, (0, 0, 0, 0)); dl = ImageDraw.Draw(lay)
+    dl.rounded_rectangle([x0 - 30, y0 - 120, x1 + 30, 1000], 28, fill=(14, 12, 20, 240), outline=(70, 60, 80, 255), width=4)
+    img.alpha_composite(lay); d = ImageDraw.Draw(img)
+    d.text((x0, y0 - 70), v.get("head", "DEPARTURES"), font=F(56, "Black"), fill=ROAD13, anchor="lm")
+    d.text((x1, y0 - 70), "SOLAR SYSTEM TERMINAL", font=F(30, "Bold"), fill=DIM, anchor="rm")
+    x = x0
+    for name, w in cols:
+        d.text((x + 12, y0), name, font=F(26, "Bold"), fill=BOARD13 if name != "LIGHT" else PHOT12, anchor="lm"); x += w * sx
+    rh = 88
+    for i in range(min(rows, len(DEP13))):
+        row = DEP13[i]; y = y0 + 70 + i * rh
+        new = (i == rows - 1 and v.get("hl", -1) == i and not light)
+        tt = t if new else 9.0
+        if i == hl:
+            g = Image.new("RGBA", img.size, (0, 0, 0, 0)); ImageDraw.Draw(g).rounded_rectangle([x0 - 14, y - 8, x1 + 14, y + rh - 14], 12, fill=BOARD13 + (50,), outline=BOARD13 + (220,), width=3); img.alpha_composite(g); d = ImageDraw.Draw(img)
+        vals = [str(i), row[0], row[1], row[2], row[3]] + ([row[4]] if light else [])
+        x = x0
+        for k, ((name, w), val) in enumerate(zip(cols, vals)):
+            cw = w * sx - 16
+            d.rounded_rectangle([x + 4, y, x + cw, y + rh - 22], 8, fill=(30, 28, 36))
+            d.line([(x + 4, y + (rh - 22) / 2), (x + cw, y + (rh - 22) / 2)], fill=(10, 10, 14), width=2)
+            txt = _flap13(val.upper(), tt - k * 0.12, i * 10 + k)
+            col = WHITE if k < 2 else (ROAD13 if k == 2 else (TICK13 if k == 3 else (BOARD13 if k == 4 else PHOT12)))
+            d.text((x + 14, y + (rh - 22) / 2), txt, font=F(38, "Bold"), fill=col, anchor="lm"); x += w * sx
+    if rows == 0:
+        for i in range(8):
+            y = y0 + 70 + i * rh; d.rounded_rectangle([x0 + 4, y, x1, y + rh - 22], 8, fill=(24, 22, 30))
+        d.text((W / 2, y0 + 70 + 3.5 * rh), "BOARDING SOON", font=F(64, "Black"), fill=mix(SPACE, ROAD13, 0.5 + 0.5 * math.sin(t * 4)), anchor="mm")
+    if v.get("detail"): alpha_text(img, (W / 2, 1040), v["detail"], F(40, "ExtraBold"), TICK13, ease((t - 1.0) / 0.5))
+    elif rows: d.text((W / 2, 1040), "nonstop, straight line, planet at its closest (NASA fact sheet distances)", font=F(28, "SemiBold"), fill=DIM, anchor="mm")
+
+def _car13(d, cx, cy, s, t):
+    """car seen from behind (simple shapes)"""
+    b = cy + math.sin(t * 9) * 1.5 * s
+    d.rounded_rectangle([cx - 150 * s, b - 40 * s, cx + 150 * s, b + 50 * s], int(22 * s), fill=(200, 60, 50))
+    d.polygon([(cx - 110 * s, b - 40 * s), (cx - 80 * s, b - 105 * s), (cx + 80 * s, b - 105 * s), (cx + 110 * s, b - 40 * s)], fill=(170, 45, 40))
+    d.polygon([(cx - 92 * s, b - 46 * s), (cx - 70 * s, b - 96 * s), (cx + 70 * s, b - 96 * s), (cx + 92 * s, b - 46 * s)], fill=(60, 80, 110))
+    for sx_ in (-1, 1):
+        d.rounded_rectangle([cx + sx_ * 105 * s - 30 * s, b - 20 * s, cx + sx_ * 105 * s + 30 * s, b + 4 * s], int(6 * s), fill=(255, 70, 60))
+        d.rounded_rectangle([cx + sx_ * 120 * s - 28 * s, b + 40 * s, cx + sx_ * 120 * s + 28 * s, b + 78 * s], int(8 * s), fill=(20, 20, 24))
+    d.rectangle([cx - 45 * s, b + 10 * s, cx + 45 * s, b + 34 * s], fill=(235, 235, 220))
+
+def sc_roadtrip(img, v, t, dur):
+    """highway in perspective toward a destination world; car from behind; dashboard: odometer, time on the road, generations (v.gens);
+    v.hide = counters show '?'"""
+    dest = v.get("dest", "Mars"); vx, vy = W / 2, 470
+    col = PL13.get(dest, (0, 0, (190, 190, 195)))[2] if dest in PL13 else (190, 190, 195)
+    p = easeio((t - 0.3) / max(1.0, dur * 0.8))
+    rr = 46 + 40 * p
+    paste_c(img, radial(int(rr * 5), [(0, col + (80,)), (1, col + (0,))]), vx, vy - 90)
+    if dest == "Moon": paste_c(img, moon8(int(rr)), vx, vy - 90)
+    else: paste_c(img, planet_sprite(int(rr), col, light=(-0.6, -0.4)), vx, vy - 90)
+    lay = Image.new("RGBA", img.size, (0, 0, 0, 0)); dl = ImageDraw.Draw(lay)
+    dl.polygon([(vx - 14, vy), (vx + 14, vy), (W + 500, H), (-500, H)], fill=(36, 32, 40, 255))
+    for side in (-1, 1): dl.line([(vx + side * 12, vy), (W / 2 + side * 1400, H)], fill=(230, 220, 200, 255), width=6)
+    for k in range(14):
+        z = ((k + t * 2.2) % 14) / 14; z2 = z + 0.03
+        ya, yb = vy + (H - vy) * z ** 2.2, vy + (H - vy) * min(1, z2) ** 2.2
+        wa, wb = 2 + 14 * z ** 2.2, 2 + 14 * min(1, z2) ** 2.2
+        dl.polygon([(vx - wa, ya), (vx + wa, ya), (vx + wb, yb), (vx - wb, yb)], fill=ROAD13 + (255,))
+    img.alpha_composite(lay); d = ImageDraw.Draw(img)
+    _car13(d, 620, 900, 0.9, t)
+    d.text((vx, vy - 90 - rr - 40), dest.upper(), font=F(44, "Black"), fill=WHITE, anchor="mm")
+    box = Image.new("RGBA", img.size, (0, 0, 0, 0)); ImageDraw.Draw(box).rounded_rectangle([1150, 600, 1860, 1010], 26, fill=(10, 8, 16, 235), outline=ROAD13 + (180,), width=3); img.alpha_composite(box)
+    d = ImageDraw.Draw(img); hide = v.get("hide")
+    d.text((1505, 650), f"{v.get('kmh', 100)} km/h, no stops", font=F(32, "Bold"), fill=DIM, anchor="mm")
+    km = v.get("km", 1) * p
+    d.text((1505, 730), "?? km" if hide else f"{km:,.0f} km", font=F(60, "Black"), fill=WHITE, anchor="mm")
+    if "days" in v: tv = "?? days" if hide else f"{v['days'] * p:,.0f} days"
+    else: tv = "?? years" if hide else (f"{v['years'] * p:,.1f} years" if v["years"] < 100 else f"{v['years'] * p:,.0f} years")
+    d.text((1505, 830), tv, font=F(84, "Black"), fill=ROAD13, anchor="mm")
+    d.text((1505, 900), "on the road", font=F(32, "Bold"), fill=DIM, anchor="mm")
+    if v.get("gens") and not hide:
+        n = int(v["years"] * p / 30); show = min(n, 44)
+        for k in range(show):
+            gx, gy = 1180 + (k % 22) * 30, 950 + (k // 22) * 30
+            d.ellipse([gx, gy - 12, gx + 10, gy - 2], fill=TICK13); d.rectangle([gx + 1, gy - 1, gx + 9, gy + 12], fill=TICK13)
+        d.text((1505, 570), f"{n} generations of drivers", font=F(34, "ExtraBold"), fill=TICK13, anchor="mm")
+    if v.get("head"): alpha_text(img, (W / 2, 120), v["head"], F(56, "ExtraBold"), WHITE, ease(t / 0.5))
+    caption(img, v.get("caption"), ease((t - 2.0) / 0.5), y=H - 70)
+
+def _pos13(name, day, k, cx, cy, sq, ph0=0.0):
+    a, P, _ = PL13[name]; r = k * (math.sqrt(a) if sq else a); th = ph0 + 2 * math.pi * day / P
+    return cx + r * math.cos(th), cy - r * math.sin(th), r
+
+def sc_transfer(img, v, t, dur):
+    """top-down orbits (linear up to Mars, square-root scale beyond); a probe follows a half-ellipse transfer from Earth to v.target while the
+    target moves to meet it; day counter (v.days). v.ghost = dashed straight line 'not how it works'; v.straight = only the straight line;
+    v.avg = Mercury/Venus averaging demo; v.map = all orbits with AU labels"""
+    tgt = v.get("target", "Mars"); cx, cy = 760 if not v.get("avg") else 640, 580
+    amax = 30.07 if v.get("map") else max(1.7, PL13[tgt][0]); sq = amax > 2
+    k = 440 / (math.sqrt(amax) if sq else amax)
+    d = ImageDraw.Draw(img); paste_c(img, sun_sprite(16 if sq else 22), cx, cy); d = ImageDraw.Draw(img)
+    for nm, (a, P, col) in PL13.items():
+        if a > amax * 1.01: continue
+        r = k * (math.sqrt(a) if sq else a)
+        d.ellipse([cx - r, cy - r, cx + r, cy + r], outline=mix(SPACE, col, 0.45), width=2)
+        if v.get("map") and a > 5: d.text((cx + r * 0.71 + 6, cy + r * 0.71 + 6), f"{nm} {a:g} AU", font=F(24, "Bold"), fill=col, anchor="lt")
+    p = easeio((t - 0.4) / max(1.0, dur * 0.75))
+    if v.get("map"):
+        for i, nm in enumerate(PL13):
+            x, y, _ = _pos13(nm, 0, k, cx, cy, sq, ph0=0.6 + i * 0.7); paste_c(img, planet_sprite(9, PL13[nm][2]), x, y)
+        d = ImageDraw.Draw(img)
+        r1, r2 = k * math.sqrt(1.524), k * math.sqrt(5.203)
+        d.arc([cx - r2, cy - r2, cx + r2, cy + r2], 0, 360, fill=ROAD13, width=4)
+        box = Image.new("RGBA", img.size, (0, 0, 0, 0)); ImageDraw.Draw(box).rounded_rectangle([1300, 330, 1860, 820], 26, fill=(10, 8, 16, 230), outline=BOARD13 + (160,), width=3); img.alpha_composite(box)
+        d = ImageDraw.Draw(img)
+        for i, (lab, val, c_) in enumerate([("Sun → Mars", "1.5 AU", WHITE), ("Mars → Jupiter", "3.7 AU", ROAD13), ("Sun → Neptune", "30 AU", BOARD13), ("Sun as a 2 m door:", "Neptune 6.5 km", TICK13)]):
+            d.text((1580, 390 + i * 110), lab, font=F(32, "Bold"), fill=DIM, anchor="mm"); d.text((1580, 435 + i * 110), val, font=F(46, "Black"), fill=c_, anchor="mm")
+        d.text((cx, 1030), "square-root scale (true scale would not fit)", font=F(26, "Medium"), fill=DIM, anchor="mm")
+    elif v.get("avg"):
+        days = 30 + t * 420.0; ex, ey, _ = _pos13("Earth", days, k, cx, cy, sq); paste_c(img, earth_sprite(14, glow=None), ex, ey)
+        acc = {"Venus": [], "Mercury": []}
+        for nm in ("Venus", "Mercury"):
+            for j in range(0, int(days) + 1, 7):
+                a1 = _pos13("Earth", j, 1, 0, 0, False); b1 = _pos13(nm, j, 1, 0, 0, False, ph0=1.0)
+                acc[nm].append(math.hypot(a1[0] - b1[0], a1[1] - b1[1]))
+            x, y, _ = _pos13(nm, days, k, cx, cy, sq, ph0=1.0); paste_c(img, planet_sprite(11, PL13[nm][2]), x, y)
+            d = ImageDraw.Draw(img); d.line([(ex, ey), (x, y)], fill=mix(SPACE, PL13[nm][2], 0.6), width=2)
+        box = Image.new("RGBA", img.size, (0, 0, 0, 0)); ImageDraw.Draw(box).rounded_rectangle([1200, 300, 1860, 860], 26, fill=(10, 8, 16, 230), outline=TICK13 + (160,), width=3); img.alpha_composite(box)
+        d = ImageDraw.Draw(img); d.text((1530, 350), "average distance from Earth", font=F(34, "Bold"), fill=DIM, anchor="mm")
+        for i, nm in enumerate(("Venus", "Mercury")):
+            m_ = sum(acc[nm]) / len(acc[nm]); y = 470 + i * 200
+            d.text((1250, y), nm, font=F(44, "Black"), fill=PL13[nm][2], anchor="lm"); d.text((1820, y), f"{m_:.2f} AU", font=F(56, "Black"), fill=WHITE, anchor="rm")
+            d.rounded_rectangle([1250, y + 45, 1250 + 520 * min(1, m_ / 1.6), y + 75], 12, fill=PL13[nm][2])
+        d.text((1530, 820), f"simulated: {days / 365.25:,.1f} years", font=F(30, "SemiBold"), fill=DIM, anchor="mm")
+        d.text((cx, 1030), "circular orbits, simplified", font=F(26, "Medium"), fill=DIM, anchor="mm")
+    else:
+        a2 = PL13[tgt][0]; r1, r2 = k * (1 if not sq else 1), k * (math.sqrt(a2) if sq else a2)
+        th0 = math.radians(200); ex, ey = cx + r1 * math.cos(th0), cy - r1 * math.sin(th0)
+        tx_end = (cx + r2 * math.cos(th0 + math.pi), cy - r2 * math.sin(th0 + math.pi))
+        if v.get("ghost") or v.get("straight"):
+            tq = th0 + math.pi * (0.62 if not v.get("straight") else 0.35)
+            gx, gy = cx + r2 * math.cos(tq), cy - r2 * math.sin(tq)
+            for j in range(0, 40, 2):
+                d.line([(lerp(ex, gx, j / 40), lerp(ey, gy, j / 40)), (lerp(ex, gx, (j + 1) / 40), lerp(ey, gy, (j + 1) / 40))], fill=(200, 200, 215) if not v.get("straight") else ROAD13, width=4)
+            if v.get("straight"):
+                px, py = lerp(ex, gx, p), lerp(ey, gy, p); paste_c(img, radial(50, [(0, (255, 255, 255, 255)), (1, ROAD13 + (0,))]), px, py)
+                paste_c(img, planet_sprite(16, PL13[tgt][2]), gx, gy)
+            else:
+                d.text(((ex + gx) / 2, (ey + gy) / 2 - 30), "straight line: not how it works", font=F(30, "Bold"), fill=(220, 220, 230), anchor="mm")
+        if not v.get("straight"):
+            a_ = (r1 + r2) / 2; c_ = (r2 - r1) / 2; b_ = math.sqrt(max(1, a_ * a_ - c_ * c_))
+            pts = []
+            for j in range(int(60 * p) + 1):
+                E = math.pi * j / 60; xx = -c_ + a_ * math.cos(E) if False else a_ * math.cos(E) - c_; yy = b_ * math.sin(E)
+                # ellipse with the Sun at a focus, perihelion at Earth (angle th0)
+                ang = th0 + math.atan2(yy, -xx) if False else th0 + E
+                rr = r1 + (r2 - r1) * (1 - math.cos(E)) / 2
+                pts.append((cx + rr * math.cos(ang), cy - rr * math.sin(ang)))
+            if len(pts) > 1: d.line(pts, fill=BOARD13, width=5)
+            if pts: paste_c(img, radial(46, [(0, (255, 255, 255, 255)), (1, BOARD13 + (0,))]), *pts[-1])
+            tth = th0 + math.pi - math.pi * 0.35 * (1 - p)
+            paste_c(img, planet_sprite(18 if sq else 20, PL13[tgt][2]), cx + r2 * math.cos(tth), cy - r2 * math.sin(tth))
+            d = ImageDraw.Draw(img)
+            if v.get("days"):
+                box = Image.new("RGBA", img.size, (0, 0, 0, 0)); ImageDraw.Draw(box).rounded_rectangle([1360, 420, 1860, 700], 26, fill=(10, 8, 16, 230), outline=BOARD13 + (160,), width=3); img.alpha_composite(box)
+                d = ImageDraw.Draw(img); dd = v["days"] * p
+                d.text((1610, 480), f"to {tgt}", font=F(36, "Bold"), fill=DIM, anchor="mm")
+                d.text((1610, 570), f"{dd:,.0f} days" if v["days"] < 1000 else f"{dd / 365.25:,.1f} years", font=F(72, "Black"), fill=BOARD13, anchor="mm")
+        paste_c(img, earth_sprite(15, glow=None), ex, ey); d = ImageDraw.Draw(img)
+        d.text((ex - 20, ey + 34), "Earth", font=F(28, "Bold"), fill=(140, 190, 255), anchor="mm")
+        if sq: d.text((cx, 1030), "square-root scale; path illustrative", font=F(26, "Medium"), fill=DIM, anchor="mm")
+    if v.get("head"): alpha_text(img, (W / 2, 95), v["head"], F(54, "ExtraBold"), WHITE, ease(t / 0.5))
+    caption(img, v.get("caption"), ease((t - 2.5) / 0.5), y=H - 70)
+
+def sc_slingshot(img, v, t, dur):
+    """gravity assist: mode boost (probe swings behind a moving planet and speeds up) | brake (probe falling sunward passes in front of a
+    planet and slows) | tour (Voyager 2 Grand Tour: Jupiter 1979, Saturn 1981, Uranus 1986, Neptune 1989; square-root scale, illustrative)"""
+    mode = v.get("mode", "boost"); d = ImageDraw.Draw(img)
+    if mode == "tour":
+        cx, cy = 520, 600; k = 430 / math.sqrt(30.07)
+        paste_c(img, sun_sprite(12), cx, cy); d = ImageDraw.Draw(img)
+        stops = [("Earth", 1977.6, 1.0, 200), ("Jupiter", 1979.5, 5.203, 160), ("Saturn", 1981.6, 9.537, 125), ("Uranus", 1986.1, 19.19, 95), ("Neptune", 1989.6, 30.07, 70)]
+        for nm, yr, a, ang in stops:
+            r = k * math.sqrt(a); d.ellipse([cx - r, cy - r, cx + r, cy + r], outline=mix(SPACE, PL13[nm][2], 0.4), width=2)
+        p = easeio((t - 0.3) / max(1.0, dur * 0.8)); yr_now = lerp(1977.6, 1989.6, p)
+        pts = []
+        for j in range(len(stops) - 1):
+            n0, y0_, a0, g0 = stops[j]; n1, y1_, a1, g1 = stops[j + 1]
+            for q in range(21):
+                f = q / 20; yy = lerp(y0_, y1_, f)
+                if yy > yr_now: break
+                r = k * math.sqrt(lerp(a0, a1, f)); g = math.radians(lerp(g0, g1, f)); pts.append((cx + r * math.cos(g), cy - r * math.sin(g)))
+        if len(pts) > 1: d.line(pts, fill=BOARD13, width=5)
+        for nm, yr, a, ang in stops:
+            r = k * math.sqrt(a); g = math.radians(ang); x, y = cx + r * math.cos(g), cy - r * math.sin(g)
+            paste_c(img, planet_sprite(14 if nm != "Earth" else 10, PL13[nm][2]) if nm != "Earth" else earth_sprite(10, glow=None), x, y)
+            d = ImageDraw.Draw(img)
+            if yr_now >= yr - 0.05: d.text((x + 22, y - 22), f"{nm} {int(yr)}", font=F(30, "ExtraBold"), fill=PL13[nm][2], anchor="lb")
+        if pts: paste_c(img, radial(40, [(0, (255, 255, 255, 255)), (1, BOARD13 + (0,))]), *pts[-1])
+        d = ImageDraw.Draw(img)
+        box = Image.new("RGBA", img.size, (0, 0, 0, 0)); ImageDraw.Draw(box).rounded_rectangle([1180, 380, 1860, 760], 26, fill=(10, 8, 16, 230), outline=BOARD13 + (160,), width=3); img.alpha_composite(box)
+        d = ImageDraw.Draw(img); d.text((1520, 450), "Voyager 2 mission clock", font=F(34, "Bold"), fill=DIM, anchor="mm")
+        d.text((1520, 560), f"{yr_now - 1977.6:,.1f} years", font=F(90, "Black"), fill=BOARD13, anchor="mm")
+        d.text((1520, 680), "alignment: about once every 175 years", font=F(30, "ExtraBold"), fill=ROAD13, anchor="mm")
+        d.text((cx, 1030), "square-root scale; positions illustrative", font=F(26, "Medium"), fill=DIM, anchor="mm")
+    else:
+        pc = (900, 560); pr = 120; pn = v.get("planet", "Venus" if mode == "brake" else "Jupiter")
+        cyc = 4.0; ph = (t % cyc) / cyc
+        # planet moves left->right; probe comes in and bends around it
+        ox = (ph - 0.5) * 120
+        paste_c(img, planet_sprite(pr, PL13[pn][2], light=(-0.7, -0.4)), pc[0] + ox, pc[1])
+        d = ImageDraw.Draw(img)
+        d.line([(pc[0] - 260 + ox, pc[1] + pr + 40), (pc[0] + 260 + ox, pc[1] + pr + 40)], fill=PL13[pn][2], width=4)
+        d.polygon([(pc[0] + 260 + ox, pc[1] + pr + 28), (pc[0] + 285 + ox, pc[1] + pr + 40), (pc[0] + 260 + ox, pc[1] + pr + 52)], fill=PL13[pn][2])
+        d.text((pc[0] + ox, pc[1] + pr + 80), f"{pn}'s motion around the Sun", font=F(28, "Bold"), fill=PL13[pn][2], anchor="mm")
+        pts = []; sgn = 1 if mode == "boost" else -1
+        for j in range(int(80 * ph) + 1):
+            u = j / 80 * 2 - 1
+            x = pc[0] + ox + 520 * u; y = pc[1] - sgn * (pr + 60) * (1 / (1 + 6 * u * u)) * 1.0 + sgn * 0 - (260 * u if mode == "boost" else -260 * u) * 0.0
+            yy = pc[1] - sgn * (pr + 50) - sgn * 300 * abs(u) ** 1.6 * (1 if u > 0 else 0.6)
+            pts.append((pc[0] + ox + 520 * u * (1 if mode == "boost" else -1), yy))
+        if len(pts) > 1: d.line(pts, fill=BOARD13, width=5)
+        if pts: paste_c(img, radial(44, [(0, (255, 255, 255, 255)), (1, BOARD13 + (0,))]), *pts[-1])
+        d = ImageDraw.Draw(img)
+        sp = 0.5 + (0.35 if mode == "boost" else -0.3) * easeio((ph - 0.35) / 0.3)
+        gx, gy, gr = 1580, 640, 190
+        d.arc([gx - gr, gy - gr, gx + gr, gy + gr], 180, 360, fill=(70, 70, 90), width=26)
+        d.arc([gx - gr, gy - gr, gx + gr, gy + gr], 180, 180 + 180 * sp, fill=BOARD13 if mode == "boost" else TICK13, width=26)
+        ang = math.pi * (1 - sp); d.line([(gx, gy), (gx + (gr - 30) * math.cos(ang), gy - (gr - 30) * math.sin(ang))], fill=WHITE, width=7)
+        d.text((gx, gy + 60), "probe speed vs the Sun", font=F(32, "Bold"), fill=DIM, anchor="mm")
+        d.text((gx, gy + 120), "SPEED GAINED" if mode == "boost" else "SPEED SHED", font=F(52, "Black"), fill=BOARD13 if mode == "boost" else TICK13, anchor="mm")
+        if mode == "brake":
+            paste_c(img, sun_sprite(30), 150, 560); d = ImageDraw.Draw(img); d.text((150, 680), "toward the Sun", font=F(28, "Bold"), fill=ROAD13, anchor="mm")
+        d.text((W / 2, 1030), "gravity assist, illustration", font=F(26, "Medium"), fill=DIM, anchor="mm")
+    if v.get("head"): alpha_text(img, (W / 2, 110), v["head"], F(56, "ExtraBold"), WHITE, ease(t / 0.5))
+    caption(img, v.get("caption"), ease((t - 2.5) / 0.5), y=H - 80)
 
 
 SC = {k[3:]: f for k, f in globals().items() if k.startswith("sc_")}

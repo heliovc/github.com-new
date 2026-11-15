@@ -23,6 +23,8 @@ vis.type == "peaks" / THEME.hook/outro == "peaks": régua vertical 0–26 km com
 vis.type == "spin" / THEME.hook/outro == "spin": objeto girando (vis.kind = gas | dwarf | rock | pulsar) numa velocidade visível vis.vis_rps,
   com selo "REAL SPEED" / "sped up N×" / "slowed down N×" calculado contra a real (vis.rps = voltas por segundo) + régua log de voltas por
   segundo (1 por dia -> 1.000/s, Terra de referência) (rank11).
+vis.type == "wind" / THEME.hook/outro == "wind": planeta com faixas e nuvens correndo numa velocidade visível (log da real) + régua log
+  de vento 100–50.000 km/h com marcas de referência (furacão cat. 5, avião, som); vis.kmh, vis.col, vis.r, vis.earth, vis.note (rank12).
 Tudo desenhado por código; narração Kokoro (VOICE, padrão af_heart); legenda grande queimada.
 """
 import sys, os, re, math, json, subprocess, importlib.util, random
@@ -676,6 +678,45 @@ def spin_vis(img, it, th, t, dur):
     spin_meter(img, th, shown, cur=it, a=1.0)
 
 
+# ---- rank12: wind (planet with streaming cloud bands + log wind gauge 100–50,000 km/h with reference marks) ----
+WD_LO, WD_HI, WD_X0, WD_X1 = 2.0, math.log10(50000), 110, W - 110
+WD_REFS = [(252, "Cat 5 hurricane"), (900, "airliner"), (1235, "speed of sound")]
+def wd_x(kmh): return lerp(WD_X0, WD_X1, (math.log10(kmh) - WD_LO) / (WD_HI - WD_LO))
+def wind_meter(img, th, shown, cur=None, y=1180, a=1.0, prog=1.0):
+    d = ImageDraw.Draw(img); acc = tuple(th["accent"]); acc2 = tuple(th["accent2"])
+    d.rounded_rectangle([WD_X0, y - 12, WD_X1, y + 12], 12, fill=(30, 34, 50))
+    for k in (100, 1000, 10000):
+        x = wd_x(k); d.line([(x, y - 26), (x, y + 26)], fill=(120, 130, 160), width=3)
+        d.text((x, y + 50), f"{k:,} km/h", font=F(26, "Bold"), fill=(150, 160, 190), anchor="mm")
+    for kmh, lab in WD_REFS:
+        x = wd_x(kmh); d.line([(x, y - 60), (x, y - 14)], fill=(200, 200, 215), width=2)
+        d.text((x, y - 74 - (30 if lab == "airliner" else 0)), lab, font=F(24, "SemiBold"), fill=(200, 205, 220), anchor="mm")
+    for o in shown:
+        v = o["vis"]; col = tuple(v["col"]); x = wd_x(v["kmh"] * (prog if o is cur else 1.0) if (o is not cur or prog >= 0.01) else 100)
+        r = 20 if o is cur else 13
+        d.ellipse([x - r, y - r, x + r, y + r], fill=col, outline=(255, 255, 255), width=3)
+        if o is not cur: d.text((x, y + 86 + (34 if o["rank"] % 2 == 0 else 0)), o["short"], font=F(24, "ExtraBold"), fill=col, anchor="mm")
+
+def wind_planet(img, cx, cy, r, col, speed, t, a=1.0, earth=False):
+    """banded planet; cloud streaks race along the bands at a visible speed (log of real speed)"""
+    if earth: R.paste_c(img, R.earth_sprite(int(r), glow=None), cx, cy)
+    else: R.paste_c(img, R.planet_sprite(int(r), col, light=(-0.7, -0.35)), cx, cy)
+    lay = Image.new("RGBA", img.size, (0, 0, 0, 0)); dl = ImageDraw.Draw(lay); rng = random.Random(int(r) + 7)
+    vis = 0.15 + 0.22 * (math.log10(max(100, speed)) - 2)
+    for i in range(26):
+        lat = rng.uniform(-0.85, 0.85); hw = math.sqrt(1 - lat * lat) * r; y = cy + lat * r
+        L = rng.uniform(0.15, 0.45) * hw * (0.6 + vis); ph = (rng.random() + t * vis * rng.uniform(0.7, 1.3)) % 1.0
+        x = cx - hw + ph * 2 * hw
+        x0_, x1_ = max(cx - hw, x - L), min(cx + hw, x)
+        if x1_ > x0_: dl.line([(x0_, y), (x1_, y)], fill=(255, 255, 255, int(150 * a)), width=rng.choice([3, 4, 6]))
+    img.alpha_composite(lay)
+
+def wind_vis(img, it, th, t, dur):
+    v = it["vis"]; prog = easeio((t - 0.4) / 1.6)
+    wind_planet(img, W / 2, 800, v.get("r", 250), tuple(v["col"]), v["kmh"], t, earth=v.get("earth", False))
+    wind_meter(img, th, [o for o in ALL_ITEMS if o["rank"] > it["rank"]] + [it], cur=it, prog=max(0.01, prog))
+    if v.get("note"): text(img, (W / 2, 470), v["note"], 40, (230, 232, 240), w="ExtraBold", a=ease((t - 1.2) / 0.5))
+
 def caption_chunks(say, t0, dur):
     words = say.split(); groups, g = [], []
     for w in words:
@@ -698,6 +739,14 @@ def draw_caption(img, chunks, gt, y=1585):
 
 def seg_hook(img, sc, th, t, dur):
     col = tuple(th["star_col"]); acc = tuple(th["accent"])
+    if th.get("hook") == "wind":
+        # frame 0: the big speed + a hot-Jupiter already streaming at full tilt, the "?" over it
+        wind_planet(img, W / 2, 860, 300, (90, 120, 200), 33000, t)
+        d = ImageDraw.Draw(img); d.text((W / 2, 860), "?", font=F(220, "Black"), fill=tuple(th["accent"]), anchor="mm")
+        text(img, (W / 2, 220), sc.get("big", ""), 126, tuple(th["accent"]), stroke=3)
+        text(img, (W / 2, 335), sc["top"].upper(), 52, (255, 255, 255))
+        text(img, (W / 2, 1300), sc["sub"], 46, tuple(th["accent2"]), w="ExtraBold")
+        return
     if th.get("hook") == "spin":
         # frame 0: the big number + a pulsar already sweeping its beams (slowed down) + the "?" over the meter
         spin_obj(img, "pulsar", W / 2, 820, 60, t * 1.8, tuple(th["accent"]))
@@ -869,6 +918,8 @@ def seg_item(img, it, th, t, dur):
         peaks_vis(img, it, th, t, dur)
     if v["type"] == "spin":
         spin_vis(img, it, th, t, dur)
+    if v["type"] == "wind":
+        wind_vis(img, it, th, t, dur)
     # number
     p = easeio((t - 0.5) / 1.6)
     num = it["num"]
@@ -881,6 +932,14 @@ def seg_item(img, it, th, t, dur):
 
 def seg_outro(img, sc, th, t, dur):
     a = ease(t / 0.5)
+    if th.get("outro") == "wind":
+        wind_meter(img, th, ALL_ITEMS, cur=None, y=640)
+        if th.get("outro_note"): text(img, (W / 2, 850), th["outro_note"], 44, tuple(th["accent2"]), w="ExtraBold", a=a)
+        text(img, (W / 2, 980), "WHICH WORLD", 96, (255, 255, 255), a=ease((t - 0.3) / 0.5))
+        text(img, (W / 2, 1070), "SHOULD WE PUT NEXT?", 58, tuple(th["accent"]), a=ease((t - 0.5) / 0.5))
+        text(img, (W / 2, 1310), "SUBSCRIBE", 100, tuple(th["accent"]), a=ease((t - 0.8) / 0.5))
+        text(img, (W / 2, 1400), "to Cosmic Scale", 50, (255, 255, 255), w="ExtraBold", a=ease((t - 1.0) / 0.5))
+        return
     if th.get("outro") == "spin":
         spin_meter(img, th, ALL_ITEMS, cur=None, y=640)
         if th.get("outro_note"): text(img, (W / 2, 820), th["outro_note"], 44, tuple(th["accent2"]), w="ExtraBold", a=a)

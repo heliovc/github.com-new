@@ -16,6 +16,9 @@ Visuais (vis.type):
              cidade em escala) | tilt (anéis ficando de perfil, 2017 -> 2025) (scale04).
   "fillsun": o Sol EM ESCALA contra a Terra; vis.mode = hook (Sol + Terra minúscula ao lado) | row (109 Terras no diâmetro) | fill
              (Terras enchendo o disco + contador até 1,3 milhão por volume; fatia 2D ilustrativa) | door (Sol = porta de 2 m, Terra = 18 mm) (scale05); vis.count = alvo do contador.
+  "mapfit": Plutão EM ESCALA contra o contorno simplificado dos EUA (48 estados, desenhado à mão em lon/lat); vis.mode = hook (mapa +
+             Plutão em cima; drop = cai) | ruler (barras 4.500 x 2.377 km) | moon (Lua x Plutão sobre o mapa) | trip (Terra -> Plutão,
+             contador de anos da New Horizons 2006 -> 2015) (scale06).
 Reaproveita render.py (sprites, fontes) e ranking.py (fundo, texto, legendas).
 """
 import sys, os, math, json, subprocess, importlib.util, random
@@ -363,6 +366,75 @@ def fillsun_vis(img, v, th, t, dur, bp):
         text(img, (x0 + dw + 120, y0 + 60), "SUN = 2 m", 40, acc, anchor="lm")
 
 
+# ---- scale06: Pluto vs the contiguous United States (hand-traced, simplified outline; equirectangular at 39°N) ----
+US6 = [(-124.7, 48.4), (-124.0, 46.3), (-124.2, 43.0), (-124.4, 40.4), (-122.4, 37.8), (-120.6, 34.6), (-117.1, 32.5), (-114.7, 32.7),
+       (-111.0, 31.3), (-108.2, 31.3), (-106.5, 31.8), (-104.5, 29.6), (-103.0, 29.0), (-101.4, 29.8), (-99.5, 27.5), (-97.4, 25.9),
+       (-97.4, 27.8), (-94.7, 29.4), (-91.0, 29.2), (-89.4, 29.0), (-89.6, 30.2), (-87.5, 30.3), (-85.0, 29.7), (-83.0, 29.0), (-82.6, 27.5),
+       (-81.8, 26.0), (-80.4, 25.2), (-80.0, 26.8), (-81.2, 29.9), (-81.4, 30.7), (-80.9, 32.0), (-79.1, 33.4), (-77.9, 34.0), (-75.5, 35.2),
+       (-76.0, 37.0), (-75.0, 38.5), (-74.0, 40.5), (-72.0, 41.0), (-70.0, 41.6), (-70.6, 42.6), (-70.2, 43.7), (-67.0, 44.8), (-67.8, 47.1),
+       (-69.2, 47.4), (-71.5, 45.0), (-74.9, 45.0), (-76.9, 43.6), (-79.0, 43.3), (-79.2, 42.5), (-82.5, 41.7), (-83.1, 42.3), (-82.4, 43.0),
+       (-82.5, 45.3), (-84.6, 46.4), (-88.4, 48.3), (-89.6, 48.0), (-95.2, 49.0), (-123.0, 49.0), (-122.8, 48.2)]
+PLUTO_KM6, MOON_KM6, US_KM6 = 2377, 3475, 4500
+def us_poly6(cx, cy, kpx):
+    """kpx = pixels per km; returns screen polygon centred on (cx, cy)"""
+    c = math.cos(math.radians(39)); pts = [(lo * c * 111.32, la * 110.57) for lo, la in US6]
+    mx = (min(p[0] for p in pts) + max(p[0] for p in pts)) / 2; my = (min(p[1] for p in pts) + max(p[1] for p in pts)) / 2
+    f = US_KM6 / (max(p[0] for p in pts) - min(p[0] for p in pts))  # outline width normalised to ~4,500 km coast to coast
+    return [(cx + (x - mx) * f * kpx, cy - (y - my) * f * kpx) for x, y in pts]
+
+def pluto6(r):
+    """Pluto: tan/cream with the pale heart-shaped plain (Tombaugh Regio, simplified) and a darker equatorial band"""
+    r = max(4, int(r)); img = R.planet_sprite(r, (196, 160, 128), light=(-0.75, -0.35)).copy()
+    lay = Image.new("RGBA", img.size, (0, 0, 0, 0)); dl = ImageDraw.Draw(lay); c = img.width / 2
+    dl.ellipse([c - r * 0.95, c + r * 0.05, c + r * 0.95, c + r * 0.55], fill=(110, 70, 55, 120))
+    hx, hy, hs = c + 0.15 * r, c + 0.05 * r, 0.62
+    for ox in (-0.16, 0.16):
+        dl.ellipse([hx + (ox - 0.2) * r * hs / 0.62, hy - 0.18 * r, hx + (ox + 0.2) * r * hs / 0.62, hy + 0.18 * r], fill=(240, 228, 210, 130))
+    dl.polygon([(hx - 0.34 * r, hy + 0.05 * r), (hx + 0.34 * r, hy + 0.05 * r), (hx, hy + 0.45 * r)], fill=(240, 228, 210, 130))
+    m = Image.new("L", img.size, 0); ImageDraw.Draw(m).ellipse([c - r, c - r, c + r, c + r], fill=255)
+    lay.putalpha(Image.fromarray(np.minimum(np.asarray(lay.getchannel("A")), np.asarray(m))))
+    img.alpha_composite(lay); return img
+
+def mapfit_vis(img, v, th, t, dur, bp):
+    """Pluto TO SCALE against the contiguous US: mode hook (map + Pluto dropped on it) | ruler (two bars: 2,377 vs ~4,500 km) |
+    moon (Moon vs Pluto over the map) | trip (Earth -> Pluto, New Horizons year counter 2006 -> 2015)"""
+    acc, acc2 = tuple(th["accent"]), tuple(th["accent2"]); mode = v.get("mode", "hook"); cx, cy = W / 2, 920
+    kpx = 920 / US_KM6
+    if mode in ("hook", "ruler", "moon"):
+        poly = us_poly6(cx, cy, kpx)
+        lay = Image.new("RGBA", img.size, (0, 0, 0, 0)); dl = ImageDraw.Draw(lay)
+        dl.polygon(poly, fill=(40, 90, 70, 235), outline=(140, 220, 170, 255)); dl.line(poly + [poly[0]], fill=(140, 220, 170, 255), width=4)
+        img.alpha_composite(lay)
+        if mode != "moon": text(img, (cx, cy + 330), "USA (lower 48), outline simplified", 32, (200, 230, 210), w="Bold")
+    if mode == "hook":
+        drop = ease((t - 0.0) / 0.5) if v.get("drop") else 1.0
+        R.paste_c(img, pluto6(PLUTO_KM6 / 2 * kpx), cx + 30, cy + 20 - (1 - drop) * 500)
+        d = ImageDraw.Draw(img); d.text((cx + 30, cy + 20 - (1 - drop) * 500), "PLUTO", font=F(52, "Black"), fill=(40, 25, 20), anchor="mm")
+    elif mode == "ruler":
+        d = ImageDraw.Draw(img); y1, y2 = 1340, 1440; x0 = cx - US_KM6 / 2 * kpx
+        d.rounded_rectangle([x0, y1 - 22, x0 + US_KM6 * kpx * min(1, bp * 1.3), y1 + 22], 16, fill=(140, 220, 170))
+        d.rounded_rectangle([x0, y2 - 22, x0 + PLUTO_KM6 * kpx * min(1, bp * 1.3), y2 + 22], 16, fill=acc)
+        d.text((x0 + 10, y1), "USA ≈ 4,500 km", font=F(32, "Black"), fill=(10, 30, 20), anchor="lm")
+        d.text((x0 + 10, y2), "PLUTO 2,377 km", font=F(32, "Black"), fill=(40, 20, 10), anchor="lm")
+        R.paste_c(img, pluto6(PLUTO_KM6 / 2 * kpx), x0 + PLUTO_KM6 / 2 * kpx, cy, ease((t - 0.3) / 0.5))
+    elif mode == "moon":
+        R.paste_c(img, R.planet_sprite(int(MOON_KM6 / 2 * kpx), (185, 185, 190), light=(-0.7, -0.4)), cx - 175, cy - 40)
+        R.paste_c(img, pluto6(PLUTO_KM6 / 2 * kpx), cx + 285, cy + 90)
+        text(img, (cx - 175, cy - 40), "MOON", 50, (40, 40, 45)); text(img, (cx + 285, cy + 90), "PLUTO", 46, (40, 25, 20))
+        text(img, (cx - 230, cy - 440), "3,475 km", 44, (230, 230, 240)); text(img, (cx + 285, cy + 370), "2,377 km", 44, acc)
+    elif mode == "trip":
+        d = ImageDraw.Draw(img); y = 980; xa, xb = 150, 930
+        R.paste_c(img, R.earth_sprite(30, glow=None), xa, y); R.paste_c(img, pluto6(16), xb, y)
+        for k in range(0, 60, 2):
+            d = ImageDraw.Draw(img); d.line([(lerp(xa + 40, xb - 30, k / 60), y), (lerp(xa + 40, xb - 30, (k + 1) / 60), y)], fill=(150, 160, 190), width=4)
+        px = lerp(xa + 40, xb - 30, bp); R.paste_c(img, R.radial(60, [(0, (255, 255, 255, 255)), (1, acc2 + (0,))]), px, y)
+        d = ImageDraw.Draw(img); d.line([(xa + 40, y), (px, y)], fill=acc2, width=6)
+        text(img, (xa, y + 70), "EARTH", 36, (140, 190, 255)); text(img, (xb, y + 70), "PLUTO", 36, acc)
+        yr = 2006.05 + 9.48 * bp
+        d.rounded_rectangle([cx - 300, 1130, cx + 300, 1330], 26, fill=(10, 10, 20))
+        d.text((cx, 1190), f"{yr:.1f}", font=F(96, "Black"), fill=acc2, anchor="mm")
+        d.text((cx, 1280), "New Horizons, 2006 → 2015", font=F(34, "Bold"), fill=(220, 225, 240), anchor="mm")
+
 def chrome(img, th, gt, total):
     d = ImageDraw.Draw(img)
     d.rectangle([0, 0, int(W * gt / total), 10], fill=tuple(th["accent"]))
@@ -408,6 +480,11 @@ def frame(m, durs, gt, chunks, arr):
         text(img, (W / 2, 265), hl["top"], 50, (255, 255, 255), stroke=3)
     elif v["type"] == "fillsun":
         fillsun_vis(img, v, th, t, d, easeio((t - 0.2) / max(0.8, d * 0.8)))
+        hl = v.get("head") or m.BIG
+        text(img, (W / 2, 170), hl["num"], 124 if len(hl["num"]) < 12 else 100, tuple(th["accent"]), stroke=4)
+        text(img, (W / 2, 280), hl["top"], 52, (255, 255, 255), stroke=3)
+    elif v["type"] == "mapfit":
+        mapfit_vis(img, v, th, t, d, easeio((t - 0.2) / max(0.8, d * 0.8)))
         hl = v.get("head") or m.BIG
         text(img, (W / 2, 170), hl["num"], 124 if len(hl["num"]) < 12 else 100, tuple(th["accent"]), stroke=4)
         text(img, (W / 2, 280), hl["top"], 52, (255, 255, 255), stroke=3)
