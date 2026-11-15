@@ -1,0 +1,97 @@
+{
+ "version": 1,
+ "channel_id": "UCsYYjUbmq4n3lAKgw2F2IJw",
+ "created_at": "2026-11-15T06:32:00-03:00",
+ "items": [
+  {
+   "key": "cosmic-rank12-short",
+   "kind": "short",
+   "video": "ranking.mp4",
+   "title": "Top 5 Fastest Winds Ever Measured (#1 Is 33,000 km/h) #shorts",
+   "description": "From Earth's record gust to a jet stream 27 times faster than sound on a planet 500 light-years away.\nFull video: How Long to Reach Every Planet? By Car, Neptune Takes 4,912 Years\n\nSources\n• World Meteorological Organization: 408 km/h gust at Barrow Island, Australia, on 10 April 1996 (Tropical Cyclone Olivia), the highest wind gust recorded on Earth that was not in a tornado\n• NASA: winds in Saturn's upper atmosphere reach about 500 m/s (about 1,800 km/h) near the equator\n• NASA: Neptune's winds reach more than 2,000 km/h (1,200 mph), the fastest in the solar system\n• Louden & Wheatley (2015), Astrophysical Journal Letters (University of Warwick): winds of about 8,700 km/h (5,400 mph) on exoplanet HD 189733b, about 64 light-years away\n• ESO (January 2025), Nortmann et al., Astronomy & Astrophysics: a supersonic jet stream of up to 33,000 km/h (about 9 km/s) on exoplanet WASP-127b, about 500 light-years away\n• Own calculations: speed of sound in air at sea level about 1,235 km/h; 33,000 / 1,235 ≈ 27; 33,000 / 3,600 ≈ 9.2 km/s\n\nVisuals are original. Narration uses a synthetic voice.\n#shorts #space #exoplanet #science",
+   "tags": [
+    "fastest winds",
+    "neptune",
+    "saturn",
+    "exoplanet",
+    "wasp-127b",
+    "top 5",
+    "space",
+    "shorts"
+   ],
+   "publish_at": "2026-11-15T13:00:00-03:00",
+   "related_key": "cosmic-ep13-long",
+   "pinned_comment": "Would you rather face Neptune's winds or a Cat 5 hurricane? Full video: How Long to Reach Every Planet? By Car, Neptune Takes 4,912 Years",
+   "if_late": "public_now",
+   "made_for_kids": false,
+   "altered_content": true
+  },
+  {
+   "key": "cosmic-ep13-long",
+   "kind": "long",
+   "video": "video.mp4",
+   "title": "How Long to Reach Every Planet? By Car, Neptune Takes 4,912 Years",
+   "description": "A car at 100 km/h, a passenger jet, and the fastest machine ever built: how long would each take to reach every planet? One departure board, eight gates, and one planet that is much harder to reach than it looks.\n\nChapters\n0:00 A road trip to Neptune\n0:34 The rules: car, jet, fastest probe\n1:12 Gate 0: the Moon\n1:36 Gate 1: Venus\n2:04 Gate 2: Mars\n3:00 Gate 3: Mercury, the strange one\n4:24 Gate 4: Jupiter\n4:49 Gate 5: Saturn\n5:14 Gates 6 and 7: Uranus and Neptune\n6:18 The full board\n6:55 Why we can't fly straight\n7:44 Recap and next episode\n\nSources\n• NASA Planetary Fact Sheet (NSSDCA): minimum distance from Earth in millions of km: Venus 38.2, Mars 54.6, Mercury 77.3, Jupiter 588.5, Saturn 1,195.5, Uranus 2,581.9, Neptune 4,305.9\n• NASA: average Earth–Moon distance 384,400 km; Apollo missions reached the Moon in about three days\n• NASA: Parker Solar Probe reached about 692,000 km/h (192 km/s) on 24 December 2024, the fastest human-made object\n• ESA: Venus Express launched 9 November 2005 and entered orbit around Venus on 11 April 2006\n• NASA / JPL: Perseverance launched 30 July 2020 and landed on Mars 18 February 2021; Earth–Mars launch windows about every 26 months\n• NASA / JHUAPL: MESSENGER launched 3 August 2004 and entered orbit around Mercury on 18 March 2011, after flybys of Earth (1), Venus (2) and Mercury (3)\n• ESA / JAXA: BepiColombo launched 20 October 2018; nine planetary flybys; Mercury orbit insertion planned for November 2026\n• Stockman, Monroe & Cordner (2019), Physics Today, 'Venus is not Earth's closest neighbor': on average Mercury is the closest planet to Earth and to every other planet\n• NASA / JPL: Juno launched 5 August 2011, Earth flyby October 2013, arrived at Jupiter 4 July 2016\n• NASA / JPL: Cassini launched 15 October 1997, flybys of Venus (2), Earth and Jupiter, arrived at Saturn 1 July 2004\n• NASA / JPL: Voyager 2 launched 20 August 1977, flew past Uranus on 24 January 1986 and Neptune on 25 August 1989, the only spacecraft to visit them; the alignment that allowed the Grand Tour happens about once every 175 years\n• NASA: New Horizons left Earth at about 58,536 km/h (16.26 km/s), the fastest launch speed ever; Pluto flyby 14 July 2015\n• NASA: Earth orbits the Sun at about 30 km/s\n• NASA / JPL: Perseverance traveled about 472 million km (293 million miles) from Earth to Mars; during Voyager 2's Neptune flyby, signals took about 4 hours to reach Earth\n• NASA: Sun diameter about 1,392,000 km; Mars orbits about 1.52 AU and Neptune about 30.1 AU from the Sun\n• Great Pyramid of Giza: built around 2560 BC (about 4,500 years ago)\n• Own calculations (Python): time = distance / speed with no stops; car 100 km/h, jet 900 km/h, Parker 692,000 km/h, light 299,792 km/s. Car: Moon 160 days, Venus 43.6 years, Mars 62.3, Mercury 88.2, Jupiter 671, Saturn 1,364, Uranus 2,945, Neptune 4,912. Jet: Moon 18 days, Venus 4.8 years, Mars 6.9, Mercury 9.8, Jupiter 74.6, Saturn 152, Uranus 327, Neptune 546. Parker: Venus 2.3 days, Mars 3.3, Mercury 4.6, Jupiter 35, Saturn 72, Uranus 155, Neptune 259. Light to Neptune 4.0 hours. Neptune vs Mars at closest: 4,305.9 / 54.6 = 79. Sun scaled to a 2 m door: 1 AU = 215 m, so Mars at 1.52 AU ≈ 330 m and Neptune at 30.1 AU ≈ 6.5 km from the Sun. Walking to the Moon at 5 km/h: 8.8 years. 30 years per generation (Jupiter by car about 22 generations)\n\n—\nCosmic Scale: the universe, measured in a way you can feel.\nSubscribe for a new space video every week.\nVisuals and animations are original. Narration uses a synthetic voice.\n#space #universe #science",
+   "tags": [
+    "how long to travel to every planet",
+    "travel time to planets",
+    "space travel",
+    "solar system",
+    "mercury",
+    "neptune",
+    "voyager 2",
+    "cosmic scale"
+   ],
+   "thumbnail": "thumbnail.jpg",
+   "captions": "legendas.srt",
+   "publish_at": "2026-11-15T17:00:00-03:00",
+   "pinned_comment": "What was your guess for driving to Mars before gate two?",
+   "if_late": "public_now",
+   "made_for_kids": false,
+   "altered_content": true
+  },
+  {
+   "key": "cosmic-scale06-short",
+   "kind": "short",
+   "video": "scale.mp4",
+   "title": "Pluto Is Smaller Than the United States #shorts",
+   "description": "2,377 km wide: Pluto, to scale, on a map of the lower 48 states.\nFull video: How Long to Reach Every Planet? By Car, Neptune Takes 4,912 Years\n\nSources\n• NASA Science, Pluto facts: Pluto is about 2,377 km (1,477 miles) wide, about half the width of the United States and about two thirds the width of Earth's Moon\n• NASA: Earth's Moon is about 3,475 km wide\n• Contiguous United States: about 4,500 km (2,800 miles) from east to west\n• NASA: New Horizons launched 19 January 2006, the fastest launch speed of any spacecraft, and flew past Pluto on 14 July 2015\n• Own calculations: 2,377 / 4,500 ≈ 0.53; 2,377 / 3,475 ≈ 0.68; 19 Jan 2006 to 14 Jul 2015 ≈ 9.5 years; US outline simplified and drawn by hand, to the same scale as Pluto\n\nVisuals are original. Narration uses a synthetic voice.\n#shorts #space #pluto #science",
+   "tags": [
+    "pluto",
+    "pluto vs usa",
+    "size comparison",
+    "scale",
+    "dwarf planet",
+    "space",
+    "shorts"
+   ],
+   "publish_at": "2026-11-15T19:00:00-03:00",
+   "related_key": "cosmic-ep13-long",
+   "pinned_comment": "Planet or dwarf planet: what do you call Pluto? Full video: How Long to Reach Every Planet? By Car, Neptune Takes 4,912 Years",
+   "if_late": "public_now",
+   "made_for_kids": false,
+   "altered_content": true
+  },
+  {
+   "key": "cosmic-ep13-short",
+   "kind": "short",
+   "video": "vertical.mp4",
+   "title": "Mercury Is 8 Times Closer Than Jupiter. It Takes Longer to Reach #shorts",
+   "description": "Falling toward the Sun speeds you up, so stopping at Mercury takes years of braking.\nFull video: How Long to Reach Every Planet? By Car, Neptune Takes 4,912 Years\n\nSources: NASA Planetary Fact Sheet (minimum distance from Earth: Mercury 77.3 million km, Jupiter 588.5 million km); NASA / JHUAPL (MESSENGER: launched 3 August 2004, Mercury orbit 18 March 2011, six flybys); NASA / JPL (Juno: launched 5 August 2011, Jupiter 4 July 2016).\n\nVisuals are original. Narration uses a synthetic voice.\n#shorts #space #mercury #science",
+   "tags": [
+    "mercury",
+    "jupiter",
+    "messenger",
+    "gravity assist",
+    "space travel",
+    "shorts"
+   ],
+   "publish_at": "2026-11-15T21:00:00-03:00",
+   "related_key": "cosmic-ep13-long",
+   "pinned_comment": "Did you expect Mercury to be harder to reach than Jupiter? Full video: How Long to Reach Every Planet? By Car, Neptune Takes 4,912 Years",
+   "if_late": "public_now",
+   "made_for_kids": false,
+   "altered_content": true
+  }
+ ]
+}

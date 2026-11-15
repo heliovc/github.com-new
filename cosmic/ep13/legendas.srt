@@ -1,0 +1,547 @@
+1
+00:00:00,200 --> 00:00:08,690
+If you had started driving to Neptune when the Great Pyramid was being built, you would still be on the road today, with about four hundred years left to drive.
+
+2
+00:00:09,390 --> 00:00:13,205
+Today we're buying tickets to every planet in the solar system.
+
+3
+00:00:13,205 --> 00:00:14,476
+Three ways to travel.
+
+4
+00:00:14,476 --> 00:00:15,687
+One departure board.
+
+5
+00:00:15,687 --> 00:00:19,502
+And one destination that is much harder to reach than it looks.
+
+6
+00:00:20,202 --> 00:00:22,075
+Before we start, make a guess.
+
+7
+00:00:22,075 --> 00:00:25,072
+Driving nonstop to Mars, how long would it take?
+
+8
+00:00:25,072 --> 00:00:25,571
+A month?
+
+9
+00:00:25,571 --> 00:00:26,008
+A year?
+
+10
+00:00:26,008 --> 00:00:26,695
+A lifetime?
+
+11
+00:00:26,695 --> 00:00:30,378
+Keep your guess in mind, because we reach Mars at gate two.
+
+12
+00:00:31,078 --> 00:00:33,596
+How Long Would It Take to Travel to Every Planet?
+
+13
+00:00:34,296 --> 00:00:35,379
+First, the rules.
+
+14
+00:00:35,379 --> 00:00:40,349
+Vehicle one is a car, driving at a hundred kilometers per hour, with no stops.
+
+15
+00:00:40,349 --> 00:00:42,770
+No sleep, no gas stations, no traffic.
+
+16
+00:00:42,770 --> 00:00:47,485
+Vehicle two is a passenger jet, at about nine hundred kilometers per hour.
+
+17
+00:00:47,485 --> 00:00:58,253
+Vehicle three is the fastest machine humans have ever built, NASA's Parker Solar Probe, at its record speed of about six hundred ninety two thousand kilometers per hour.
+
+18
+00:00:58,953 --> 00:01:00,270
+And we'll be generous.
+
+19
+00:01:00,270 --> 00:01:06,559
+We'll leave on the day each planet comes closest to Earth, and we'll travel in a perfectly straight line.
+
+20
+00:01:06,559 --> 00:01:10,152
+Real spacecraft can't do that, and we'll see why at the end.
+
+21
+00:01:10,152 --> 00:01:12,009
+For now, the doors are closing.
+
+22
+00:01:12,709 --> 00:01:13,400
+Gate zero.
+
+23
+00:01:13,400 --> 00:01:14,092
+A warm-up.
+
+24
+00:01:14,092 --> 00:01:14,714
+The Moon.
+
+25
+00:01:15,414 --> 00:01:19,656
+The Moon is about three hundred eighty four thousand kilometers away.
+
+26
+00:01:19,656 --> 00:01:24,206
+By car, that's a hundred sixty days of nonstop driving, about five months.
+
+27
+00:01:24,206 --> 00:01:25,558
+By jet, eighteen days.
+
+28
+00:01:25,558 --> 00:01:28,448
+If you walked, it would take almost nine years.
+
+29
+00:01:28,448 --> 00:01:31,829
+Our fastest probe would be there in about half an hour.
+
+30
+00:01:31,829 --> 00:01:35,702
+The Apollo astronauts, for comparison, needed about three days.
+
+31
+00:01:36,402 --> 00:01:36,989
+Gate one.
+
+32
+00:01:36,989 --> 00:01:39,794
+Venus, the planet that comes closest to us.
+
+33
+00:01:40,494 --> 00:01:44,757
+At its closest, Venus is about thirty eight million kilometers away.
+
+34
+00:01:44,757 --> 00:01:47,578
+That's a hundred times farther than the Moon.
+
+35
+00:01:47,578 --> 00:01:50,336
+By car, forty four years of nonstop driving.
+
+36
+00:01:50,336 --> 00:01:52,718
+Leave at twenty, arrive at sixty four.
+
+37
+00:01:52,718 --> 00:01:54,347
+By jet, almost five years.
+
+38
+00:01:54,347 --> 00:01:56,667
+Parker would need just over two days.
+
+39
+00:01:56,667 --> 00:01:58,297
+The real record is slower.
+
+40
+00:01:58,297 --> 00:02:03,876
+The European probe Venus Express took about five months to get there and slip into orbit.
+
+41
+00:02:04,575 --> 00:02:05,494
+Gate two.
+
+42
+00:02:05,494 --> 00:02:06,005
+Mars.
+
+43
+00:02:06,705 --> 00:02:10,953
+Mars at its closest is about fifty five million kilometers away.
+
+44
+00:02:10,953 --> 00:02:12,546
+By car, sixty two years.
+
+45
+00:02:12,546 --> 00:02:16,263
+Most people who start that drive would not live to park.
+
+46
+00:02:16,263 --> 00:02:17,989
+By jet, about seven years.
+
+47
+00:02:17,989 --> 00:02:19,649
+Parker, about three days.
+
+48
+00:02:19,649 --> 00:02:25,158
+But NASA's Perseverance rover took two hundred and three days, almost seven months.
+
+49
+00:02:25,858 --> 00:02:26,601
+Why so slow?
+
+50
+00:02:26,601 --> 00:02:29,509
+Because a spacecraft doesn't drive toward Mars.
+
+51
+00:02:29,509 --> 00:02:36,255
+It's thrown into a long curve around the Sun, timed so that Mars arrives at the same spot at the same moment.
+
+52
+00:02:36,255 --> 00:02:40,834
+Launch a few weeks late, and you wait about two years for the next window.
+
+53
+00:02:41,534 --> 00:02:42,897
+And the curve is long.
+
+54
+00:02:42,897 --> 00:02:46,367
+Perseverance didn't cover fifty five million kilometers.
+
+55
+00:02:46,367 --> 00:02:55,227
+By NASA's count, it traveled about four hundred seventy two million kilometers to reach Mars, more than eight times the straight-line distance.
+
+56
+00:02:55,227 --> 00:03:00,307
+In space, the shortest path in time is almost never the shortest path in distance.
+
+57
+00:03:01,007 --> 00:03:01,654
+Gate three.
+
+58
+00:03:01,654 --> 00:03:02,124
+Mercury.
+
+59
+00:03:02,124 --> 00:03:03,887
+This is where it gets strange.
+
+60
+00:03:04,587 --> 00:03:08,758
+Mercury is closer to us than Jupiter by a factor of almost eight.
+
+61
+00:03:08,758 --> 00:03:10,811
+By car, it's eighty eight years.
+
+62
+00:03:10,811 --> 00:03:11,580
+By jet, ten.
+
+63
+00:03:11,580 --> 00:03:13,569
+So you'd expect it to be quick.
+
+64
+00:03:13,569 --> 00:03:14,147
+It isn't.
+
+65
+00:03:14,147 --> 00:03:19,536
+NASA's MESSENGER probe needed six and a half years to get into orbit around Mercury.
+
+66
+00:03:19,536 --> 00:03:22,230
+Longer than it took Juno to reach Jupiter.
+
+67
+00:03:22,930 --> 00:03:23,921
+Here's the catch.
+
+68
+00:03:23,921 --> 00:03:29,810
+Earth is racing around the Sun at about thirty kilometers per second, and so is everything we launch.
+
+69
+00:03:29,810 --> 00:03:34,767
+To reach Mercury, you're falling toward the Sun, and you speed up the whole way down.
+
+70
+00:03:34,767 --> 00:03:37,332
+Arrive like that, and you fly straight past.
+
+71
+00:03:37,332 --> 00:03:45,437
+So MESSENGER spent years braking, swinging past Earth once, Venus twice and Mercury three times, using each planet's gravity to shed speed.
+
+72
+00:03:46,137 --> 00:03:47,672
+And it's still happening.
+
+73
+00:03:47,672 --> 00:03:52,215
+The European and Japanese mission BepiColombo launched in twenty eighteen.
+
+74
+00:03:52,215 --> 00:03:57,556
+It's due to slip into orbit around Mercury this month, eight years after leaving Earth.
+
+75
+00:03:57,556 --> 00:04:02,713
+Nine flybys, for a planet that, on average, is actually the closest planet to Earth.
+
+76
+00:04:03,413 --> 00:04:04,461
+Yes, on average.
+
+77
+00:04:04,461 --> 00:04:09,835
+Venus comes closest, but it also spends long stretches on the far side of the Sun.
+
+78
+00:04:09,835 --> 00:04:14,946
+Mercury never strays far from the Sun, so averaged over time, it stays nearer.
+
+79
+00:04:14,946 --> 00:04:23,596
+In fact, according to a twenty nineteen analysis in Physics Today, Mercury is the closest planet, on average, to every other planet.
+
+80
+00:04:23,596 --> 00:04:24,447
+Even Neptune.
+
+81
+00:04:25,147 --> 00:04:25,776
+Gate four.
+
+82
+00:04:25,776 --> 00:04:26,280
+Jupiter.
+
+83
+00:04:26,280 --> 00:04:28,795
+Now the board starts to look ridiculous.
+
+84
+00:04:29,495 --> 00:04:33,251
+Five hundred eighty eight million kilometers at its closest.
+
+85
+00:04:33,251 --> 00:04:35,629
+By car, six hundred seventy one years.
+
+86
+00:04:35,629 --> 00:04:39,510
+A family would need about twenty generations behind the wheel.
+
+87
+00:04:39,510 --> 00:04:42,452
+By jet, seventy five years, a whole human life.
+
+88
+00:04:42,452 --> 00:04:44,017
+Parker, thirty five days.
+
+89
+00:04:44,017 --> 00:04:49,399
+Juno did it in just under five years, with an extra swing past Earth to pick up speed.
+
+90
+00:04:50,099 --> 00:04:50,833
+Gate five.
+
+91
+00:04:50,833 --> 00:04:51,347
+Saturn.
+
+92
+00:04:51,347 --> 00:04:53,769
+One point two billion kilometers.
+
+93
+00:04:54,469 --> 00:04:57,261
+By car, about thirteen hundred and sixty years.
+
+94
+00:04:57,261 --> 00:05:01,835
+If you had left in the year six hundred sixty, you'd be pulling up about now.
+
+95
+00:05:01,835 --> 00:05:03,855
+By jet, a hundred and fifty years.
+
+96
+00:05:03,855 --> 00:05:10,627
+The Cassini spacecraft took almost seven years, bouncing off Venus twice, Earth once, and Jupiter once on the way.
+
+97
+00:05:10,627 --> 00:05:13,775
+Even light needs more than an hour to make that trip.
+
+98
+00:05:14,475 --> 00:05:15,835
+Gates six and seven.
+
+99
+00:05:15,835 --> 00:05:17,127
+Uranus and Neptune.
+
+100
+00:05:17,127 --> 00:05:20,662
+Only one spacecraft has ever visited either of them.
+
+101
+00:05:21,362 --> 00:05:26,708
+Uranus is two point six billion kilometers away, nearly three thousand years by car.
+
+102
+00:05:26,708 --> 00:05:35,174
+Neptune, at four point three billion kilometers, is almost five thousand years by car, and about five hundred and fifty years by jet.
+
+103
+00:05:35,174 --> 00:05:40,583
+Even our record-breaking Parker Solar Probe would need about eight and a half months.
+
+104
+00:05:41,283 --> 00:05:44,074
+The one spacecraft that made it is Voyager two.
+
+105
+00:05:44,074 --> 00:05:48,823
+It reached Uranus eight and a half years after launch, and Neptune after twelve.
+
+106
+00:05:48,823 --> 00:05:59,033
+It only managed it because the giant planets had lined up in a pattern that happens about once every hundred and seventy five years, letting it bounce from one to the next.
+
+107
+00:05:59,733 --> 00:06:02,185
+Out there, even a conversation is slow.
+
+108
+00:06:02,185 --> 00:06:08,033
+When Voyager two flew past Neptune, its radio signals needed about four hours to reach Earth.
+
+109
+00:06:08,033 --> 00:06:13,378
+The engineers were watching pictures of a moment that had already ended hours before.
+
+110
+00:06:13,378 --> 00:06:17,717
+The flyby was programmed in advance, and the spacecraft did it alone.
+
+111
+00:06:18,417 --> 00:06:19,875
+Here's the whole board.
+
+112
+00:06:19,875 --> 00:06:23,553
+For the car, every planet is a trip measured in lifetimes.
+
+113
+00:06:23,553 --> 00:06:27,421
+For the jet, everything past Mars takes longer than a career.
+
+114
+00:06:27,421 --> 00:06:32,241
+And for light, the fastest thing there is, Neptune is about four hours away.
+
+115
+00:06:32,941 --> 00:06:34,841
+Look at the gap between the rows.
+
+116
+00:06:34,841 --> 00:06:39,160
+The jump from Mars to Jupiter is bigger than everything before it combined.
+
+117
+00:06:39,160 --> 00:06:44,170
+The inner planets huddle close to the Sun, and then the solar system suddenly opens up.
+
+118
+00:06:44,170 --> 00:06:47,797
+Neptune is about eighty times farther than Mars at its closest.
+
+119
+00:06:47,797 --> 00:06:55,341
+If the Sun were a front door, Mars would sit about three hundred thirty meters from it, and Neptune six and a half kilometers away.
+
+120
+00:06:56,041 --> 00:06:59,173
+So why can't we just point a rocket at Neptune and go?
+
+121
+00:06:59,173 --> 00:07:02,537
+Because there is no such thing as standing still in space.
+
+122
+00:07:02,537 --> 00:07:07,524
+You start out already moving around the Sun at thirty kilometers per second, sideways.
+
+123
+00:07:07,524 --> 00:07:13,150
+Going outward means climbing out of the Sun's gravity, and every kilometer per second costs fuel.
+
+124
+00:07:13,850 --> 00:07:19,672
+Parker Solar Probe got its record speed by falling toward the Sun, not by flying away from it.
+
+125
+00:07:19,672 --> 00:07:28,528
+The fastest anything has ever been launched from Earth is New Horizons, on its way to Pluto, at about fifty eight thousand kilometers per hour.
+
+126
+00:07:28,528 --> 00:07:31,749
+Even so, it took nine and a half years to get there.
+
+127
+00:07:32,449 --> 00:07:35,066
+That's the real lesson of the solar system.
+
+128
+00:07:35,066 --> 00:07:38,839
+The distances are huge, but the hard part is not the distance.
+
+129
+00:07:38,839 --> 00:07:44,011
+It's the speed you have to gain, or lose, and the planets you have to borrow it from.
+
+130
+00:07:44,711 --> 00:07:47,263
+So, by car, every planet is out of reach.
+
+131
+00:07:47,263 --> 00:07:50,561
+By jet, only the nearest are reachable in a lifetime.
+
+132
+00:07:50,561 --> 00:07:56,038
+By spacecraft, it's months to Mars, years to Jupiter, and more than a decade to Neptune.
+
+133
+00:07:56,038 --> 00:08:00,830
+And Mercury, the closest planet on average, is one of the hardest to stop at.
+
+134
+00:08:00,830 --> 00:08:05,000
+Every number in this video, with its source, is in the description.
+
+135
+00:08:05,699 --> 00:08:10,141
+Next time: an asteroid is heading for Earth, and it's going to hit the ocean.
+
+136
+00:08:10,141 --> 00:08:12,218
+Would that be better, or much worse?
+
+137
+00:08:12,218 --> 00:08:12,910
+That's next.
