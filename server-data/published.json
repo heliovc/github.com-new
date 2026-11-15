@@ -1025,7 +1025,9 @@
   "kind": "short",
   "publish_at": "2026-11-15T13:00:00-03:00",
   "related_key": "cosmic-ep13-long",
-  "pinned_comment": "Would you rather face Neptune's winds or a Cat 5 hurricane? Full video: How Long to Reach Every Planet? By Car, Neptune Takes 4,912 Years"
+  "pinned_comment": "Would you rather face Neptune's winds or a Cat 5 hurricane? Full video: How Long to Reach Every Planet? By Car, Neptune Takes 4,912 Years",
+  "comment_attempts": 1,
+  "comment_done": "2026-11-15T13:13:10.928095-03:00"
  },
  "cosmic-ep13-long": {
   "attempts": 1,
@@ -1165,7 +1167,9 @@
   "title": "Boring History for Sleep: Winter in a Viking Longhouse (Snow & Fireplace, 46 Min)",
   "kind": "long",
   "publish_at": "2026-11-15T13:00:00-03:00",
-  "pinned_comment": "Which place in history should we spend a quiet evening in next?"
+  "pinned_comment": "Which place in history should we spend a quiet evening in next?",
+  "comment_attempts": 1,
+  "comment_done": "2026-11-15T13:15:32.106880-03:00"
  },
  "quiet-comp01-long": {
   "attempts": 1,
