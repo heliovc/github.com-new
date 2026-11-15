@@ -1,6 +1,12 @@
 {
- "last_run": "2026-11-15T06:10:27.816174-03:00",
- "pending": 0,
+ "last_run": "2026-11-15T07:05:44.760478-03:00",
+ "pending": 4,
  "post_tasks": 0,
- "errors": []
+ "errors": [],
+ "published_now": [
+  "cosmic-rank12-short: https://youtu.be/HaOpmayH6wU",
+  "cosmic-ep13-long: https://youtu.be/yb9pUIOHkb4",
+  "cosmic-scale06-short: https://youtu.be/7iMA43Mc9cg",
+  "cosmic-ep13-short: https://youtu.be/Np3buGAaPIc"
+ ]
 }
