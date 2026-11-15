@@ -1118,5 +1118,51 @@
   "publish_at": "2026-11-16T12:00:00-03:00",
   "related_key": "ptd-ep14-long",
   "pinned_comment": "Você imaginava que o lucro do banco era a menor fatia? Vídeo completo: Spread bancário: por que o juro no Brasil não cai quando a Selic cai"
+ },
+ "lab-ep11-long": {
+  "attempts": 1,
+  "status": "published",
+  "url": "https://youtu.be/kYVfCSJ7hB4",
+  "by": "robo",
+  "visibility": "schedule",
+  "when": "2026-11-15T19:00:00-03:00",
+  "at": "2026-11-15T08:45:58.685014-03:00",
+  "error": null,
+  "channel_id": "UCXGqR8k1RMbfYdVleIuJKzA",
+  "title": "Regex for Beginners: Find Anything in Text (Python Regular Expressions Tutorial)",
+  "kind": "long",
+  "publish_at": "2026-11-15T19:00:00-03:00",
+  "pinned_comment": "What's the messiest text you'd love to search with one pattern? Tell me and it might become a future tutorial."
+ },
+ "lab-ep11-short": {
+  "attempts": 1,
+  "status": "published",
+  "url": "https://youtu.be/BeyTtOzup1k",
+  "by": "robo",
+  "visibility": "schedule",
+  "when": "2026-11-15T20:30:00-03:00",
+  "at": "2026-11-15T08:49:04.318088-03:00",
+  "error": null,
+  "channel_id": "UCXGqR8k1RMbfYdVleIuJKzA",
+  "title": "One Pattern Finds Every Email #shorts",
+  "kind": "short",
+  "publish_at": "2026-11-15T20:30:00-03:00",
+  "related_key": "lab-ep11-long",
+  "pinned_comment": "Did you know regex could do this in one line? Full tutorial: Regex for Beginners: Find Anything in Text (Python Regular Expressions Tutorial)"
+ },
+ "quiet-ep04b-long": {
+  "attempts": 1,
+  "status": "published",
+  "url": "https://youtu.be/ZzaTsmQyL8U",
+  "by": "robo",
+  "visibility": "schedule",
+  "when": "2026-11-15T13:00:00-03:00",
+  "at": "2026-11-15T09:15:43.689768-03:00",
+  "error": null,
+  "channel_id": "UCNrw11y7QKt0fWCrJ84QZ-g",
+  "title": "Boring History for Sleep: Winter in a Viking Longhouse (Snow & Fireplace, 46 Min)",
+  "kind": "long",
+  "publish_at": "2026-11-15T13:00:00-03:00",
+  "pinned_comment": "Which place in history should we spend a quiet evening in next?"
  }
 }
