@@ -1027,7 +1027,9 @@
   "related_key": "cosmic-ep13-long",
   "pinned_comment": "Would you rather face Neptune's winds or a Cat 5 hurricane? Full video: How Long to Reach Every Planet? By Car, Neptune Takes 4,912 Years",
   "comment_attempts": 1,
-  "comment_done": "2026-11-15T13:13:10.928095-03:00"
+  "comment_done": "2026-11-15T13:13:10.928095-03:00",
+  "related_attempts": 1,
+  "related_done": "2026-11-15T17:13:19.725853-03:00"
  },
  "cosmic-ep13-long": {
   "attempts": 1,
@@ -1042,7 +1044,9 @@
   "title": "How Long to Reach Every Planet? By Car, Neptune Takes 4,912 Years",
   "kind": "long",
   "publish_at": "2026-11-15T17:00:00-03:00",
-  "pinned_comment": "What was your guess for driving to Mars before gate two?"
+  "pinned_comment": "What was your guess for driving to Mars before gate two?",
+  "comment_attempts": 1,
+  "comment_done": "2026-11-15T17:14:25.500210-03:00"
  },
  "cosmic-scale06-short": {
   "attempts": 1,
@@ -1058,7 +1062,9 @@
   "kind": "short",
   "publish_at": "2026-11-15T19:00:00-03:00",
   "related_key": "cosmic-ep13-long",
-  "pinned_comment": "Planet or dwarf planet: what do you call Pluto? Full video: How Long to Reach Every Planet? By Car, Neptune Takes 4,912 Years"
+  "pinned_comment": "Planet or dwarf planet: what do you call Pluto? Full video: How Long to Reach Every Planet? By Car, Neptune Takes 4,912 Years",
+  "related_attempts": 1,
+  "related_done": "2026-11-15T17:16:21.005514-03:00"
  },
  "cosmic-ep13-short": {
   "attempts": 1,
@@ -1074,7 +1080,9 @@
   "kind": "short",
   "publish_at": "2026-11-15T21:00:00-03:00",
   "related_key": "cosmic-ep13-long",
-  "pinned_comment": "Did you expect Mercury to be harder to reach than Jupiter? Full video: How Long to Reach Every Planet? By Car, Neptune Takes 4,912 Years"
+  "pinned_comment": "Did you expect Mercury to be harder to reach than Jupiter? Full video: How Long to Reach Every Planet? By Car, Neptune Takes 4,912 Years",
+  "related_attempts": 1,
+  "related_done": "2026-11-15T17:18:20.642697-03:00"
  },
  "ptd-ep14-long": {
   "attempts": 1,
