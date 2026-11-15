@@ -1097,7 +1097,9 @@
   "title": "Spread bancário: por que o juro no Brasil não cai quando a Selic cai",
   "kind": "long",
   "publish_at": "2026-11-15T18:00:00-03:00",
-  "pinned_comment": "Antes de ver o vídeo, qual camada você apostava que era a maior: o lucro do banco, o calote ou os impostos? Conta aqui."
+  "pinned_comment": "Antes de ver o vídeo, qual camada você apostava que era a maior: o lucro do banco, o calote ou os impostos? Conta aqui.",
+  "comment_attempts": 1,
+  "comment_done": "2026-11-15T18:13:32.488298-03:00"
  },
  "ptd-ep14-short": {
   "attempts": 1,
@@ -1113,7 +1115,9 @@
   "kind": "short",
   "publish_at": "2026-11-15T19:00:00-03:00",
   "related_key": "ptd-ep14-long",
-  "pinned_comment": "O juro do seu cartão ou empréstimo caiu este ano? Vídeo completo: Spread bancário: por que o juro no Brasil não cai quando a Selic cai"
+  "pinned_comment": "O juro do seu cartão ou empréstimo caiu este ano? Vídeo completo: Spread bancário: por que o juro no Brasil não cai quando a Selic cai",
+  "related_attempts": 1,
+  "related_error": "vídeo mi0IE30PPEo não apareceu na lista do 'Vídeo relacionado' (nao-achei) (20261115-181427-erro-related-ptd-ep14-short.png)"
  },
  "ptd-rank12-short": {
   "attempts": 1,
@@ -1129,7 +1133,9 @@
   "kind": "short",
   "publish_at": "2026-11-16T12:00:00-03:00",
   "related_key": "ptd-ep14-long",
-  "pinned_comment": "Você imaginava que o lucro do banco era a menor fatia? Vídeo completo: Spread bancário: por que o juro no Brasil não cai quando a Selic cai"
+  "pinned_comment": "Você imaginava que o lucro do banco era a menor fatia? Vídeo completo: Spread bancário: por que o juro no Brasil não cai quando a Selic cai",
+  "related_attempts": 1,
+  "related_done": "2026-11-15T18:16:11.108500-03:00"
  },
  "lab-ep11-long": {
   "attempts": 1,
