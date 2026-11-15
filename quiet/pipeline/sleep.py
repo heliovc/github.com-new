@@ -16,6 +16,9 @@ Scene types: city, road, temple, interior, sea, hills, cloister (EP02), nile (EP
   dunes / oasis / camp (EP05 Silk Road: moonlit dune sea with a seamless walking camel caravan (draw_camel, dune_layer
   with lit lee faces), the crescent spring among tall dunes with reeds, a desert halt with felt awning, kneeling camels,
   travellers around a fire and a beacon tower; new "sand" drift particles; palette key "sand").
+Compilations: comp01.py (COMP01 = EP01-EP03 re-rendered via comp01_pNN.py wrappers) adds "candle haze" text cards that
+  dissolve into the next part's first scene, one long ambient tail at the end, one loudness pass; thumb_comp.py = 3-scene
+  blended thumbnail.
 """
 import sys, os, re, math, json, hashlib, subprocess, importlib.util, random
 import numpy as np
