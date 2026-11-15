@@ -7,7 +7,7 @@ ou "gauge" (termômetro horizontal com escala, criado no rank #3 — bom para ta
 ou "bubbles" (bolhas com área proporcional ao valor, criado no rank #4 — bom para tamanhos/bases de clientes)
 ou "pits" (buracos, rank #5) ou "piles" (pilhas de notas, criado no rank #6 — bom para dívidas/valores em R$)
 ou "towers" (arranha-céus com janelas, criado no rank #7 — bom para tamanho de empresas/bancos)
-ou "phones" (celulares cuja tela enche, com piso de escala THEME["floor"], criado no rank #8 — bom para valores próximos)\nou "coins" (pilhas de moedas, criado no rank #9 — bom para lucros/valores em R$)\nou "thermo" (termômetros verticais, criado no rank #10 — bom para taxas de juros)\nou "crowd" (colunas de bonequinhos, 1 boneco = THEME["per_icon"], criado no rank #11 — bom para número de clientes/pessoas).
+ou "phones" (celulares cuja tela enche, com piso de escala THEME["floor"], criado no rank #8 — bom para valores próximos)\nou "coins" (pilhas de moedas, criado no rank #9 — bom para lucros/valores em R$)\nou "thermo" (termômetros verticais, criado no rank #10 — bom para taxas de juros)\nou "crowd" (colunas de bonequinhos, 1 boneco = THEME["per_icon"], criado no rank #11 — bom para número de clientes/pessoas)\nou "donut" (rosca com fatias de um total, criado no rank #12 — bom para "para onde vai o dinheiro"; cor por item em it["col"]).
 Tudo desenhado por código; narração Kokoro (pm_alex, pt-br); legenda grande queimada. Layout seguro p/ UI do Shorts:
 legenda y=1585, @ y=1690, fonte y=1745.
 """
@@ -435,8 +435,47 @@ def chart_cr(img, items, th, upto, t, cur_rank):
         while F(fs2, "ExtraBold").getlength(it["short"]) > cw + 24 and fs2 > 18: fs2 -= 2
         d.text((cx, top - 76), it["short"], font=F(fs2, "ExtraBold"), fill=WHITE if on else (180, 186, 205), anchor="mm")
 
+def chart_d(img, items, th, upto, t, cur_rank):
+    """Criado no rank #12 (para onde vão R$ 100 de juros): rosca (donut) com área = fatia do total. Centro em (540, 1090).
+    As fatias são reveladas do 5º ao 1º (ordem do ranking, no sentido horário a partir do topo); o que ainda não foi
+    revelado fica cinza com "?". A fatia atual cresce e se destaca para fora. Cores por item: it["col"] (opcional)."""
+    import math
+    cx, cy, Ro, Ri = W / 2, 1090, 300, 150
+    tot = sum(i["num"] for i in items)
+    order = sorted(items, key=lambda x: -x["rank"])
+    lay = Image.new("RGBA", img.size, (0, 0, 0, 0)); d = ImageDraw.Draw(lay)
+    d.ellipse([cx - Ro, cy - Ro, cx + Ro, cy + Ro], fill=(44, 52, 72, 255))
+    ang = -90.0; labels = []
+    for it in order:
+        span = 360 * it["num"] / tot
+        if it["rank"] >= upto:
+            on = it["rank"] == cur_rank
+            col = tuple(it.get("col", th["accent"]))
+            fr = ease(t / 0.9) if on else 1.0
+            if not on and cur_rank != -1: col = tuple(int(c * 0.55) for c in col)
+            mid = math.radians(ang + span / 2); off = 26 * fr if on else 0
+            ox, oy = math.cos(mid) * off, math.sin(mid) * off
+            d.pieslice([cx - Ro + ox, cy - Ro + oy, cx + Ro + ox, cy + Ro + oy], ang, ang + span * fr, fill=col + (255,), outline=BG1 + (255,), width=6)
+            labels.append((it, mid, on))
+        ang += span
+    d.ellipse([cx - Ri, cy - Ri, cx + Ri, cy + Ri], fill=BG1 + (255,))
+    img.alpha_composite(lay)
+    text(img, (cx, cy - 22), "R$ 100", 64, WHITE)
+    text(img, (cx, cy + 36), "de juros", 34, (190, 198, 215), w="Bold")
+    for it, mid, on in labels:
+        r = Ro + 100
+        x, y = cx + math.cos(mid) * r, cy + math.sin(mid) * r
+        x = max(120, min(W - 120, x))
+        text(img, (x, y - 22), it["short"], 34 if not on else 40, WHITE if on else (190, 196, 214), w="ExtraBold")
+        text(img, (x, y + 22), val_str(it, it["num"]), 34 if not on else 40, tuple(th["accent2"]) if on else (150, 160, 185), w="Black")
+    if upto > 1:
+        rest0 = -90 + sum(360 * i["num"] / tot for i in order if i["rank"] >= upto)
+        restspan = 270 - rest0
+        mid = math.radians(rest0 + restspan / 2)
+        text(img, (cx + math.cos(mid) * (Ro + Ri) / 2, cy + math.sin(mid) * (Ro + Ri) / 2), "?", 80, (120, 130, 160))
+
 def chart(img, items, th, upto, t, cur_rank):
-    {"crowd": chart_cr, "thermo": chart_th, "vbars": chart_v, "gauge": chart_g, "bubbles": chart_b, "pits": chart_p, "piles": chart_n, "towers": chart_t, "phones": chart_ph, "coins": chart_c}.get(th.get("chart"), chart_h)(img, items, th, upto, t, cur_rank)
+    {"donut": chart_d, "crowd": chart_cr, "thermo": chart_th, "vbars": chart_v, "gauge": chart_g, "bubbles": chart_b, "pits": chart_p, "piles": chart_n, "towers": chart_t, "phones": chart_ph, "coins": chart_c}.get(th.get("chart"), chart_h)(img, items, th, upto, t, cur_rank)
 
 def seg_hook(img, sc, th, t, dur, items):
     ease = lambda x: 1.0  # frame 1 = thumbnail: gancho inteiro visível desde o frame 0 (rank #3)
@@ -459,6 +498,8 @@ def seg_hook(img, sc, th, t, dur, items):
         if sc.get("tease"): text(img, (W / 2, 710), sc["tease"], 64, th["accent"], a=1.0)
     elif th.get("chart") == "pits":
         if sc.get("tease"): text(img, (W / 2, 650), sc["tease"], 64, th["accent"], a=1.0)
+    elif th.get("chart") == "donut":
+        if sc.get("tease"): text(img, (W / 2, 1490), sc["tease"], 54, th["accent"], a=1.0)
     elif th.get("chart") == "gauge":
         if sc.get("tease"): text(img, (W / 2, 790), sc["tease"], 72, th["accent"], a=1.0)
         else: text(img, (W / 2, 800), "?", 120, (110, 120, 150), a=1.0)

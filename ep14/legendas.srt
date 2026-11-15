@@ -1,0 +1,683 @@
+1
+00:00:00,150 --> 00:00:04,878
+Em dois mil e vinte e seis, o Banco Central cortou a taxa Selic cinco vezes seguidas.
+
+2
+00:00:04,878 --> 00:00:11,274
+Ela saiu de quinze por cento ao ano, o maior nível em quase duas décadas, e chegou a treze vírgula setenta e cinco.
+
+3
+00:00:11,274 --> 00:00:14,334
+Seria de esperar que o juro do empréstimo caísse junto.
+
+4
+00:00:14,334 --> 00:00:14,834
+Não caiu.
+
+5
+00:00:14,834 --> 00:00:15,168
+Subiu.
+
+6
+00:00:15,768 --> 00:00:23,643
+Em março, o juro médio do crédito livre, aquele que o banco define sem regra do governo, estava em quarenta e oito vírgula três por cento ao ano.
+
+7
+00:00:23,643 --> 00:00:27,553
+Em setembro, com a Selic mais baixa, foi para quarenta e nove por cento.
+
+8
+00:00:27,553 --> 00:00:31,192
+E para as pessoas físicas, chegou a sessenta e dois vírgula quatro.
+
+9
+00:00:31,792 --> 00:00:34,096
+Então a pergunta deste episódio é simples.
+
+10
+00:00:34,096 --> 00:00:39,032
+Se o dinheiro ficou mais barato para o banco, por que ele não ficou mais barato para você?
+
+11
+00:00:39,032 --> 00:00:40,129
+A resposta tem nome.
+
+12
+00:00:40,129 --> 00:00:41,226
+É o spread bancário.
+
+13
+00:00:41,226 --> 00:00:48,795
+E para entender o spread, a gente vai fazer uma coisa diferente: descascar o juro como uma cebola, camada por camada, até chegar no miolo.
+
+14
+00:00:49,395 --> 00:00:51,028
+Antes de começar, uma aposta.
+
+15
+00:00:51,028 --> 00:00:53,731
+Das cinco camadas, qual você acha que é a maior?
+
+16
+00:00:53,731 --> 00:00:56,490
+A maioria das pessoas responde: o lucro do banco.
+
+17
+00:00:56,490 --> 00:00:57,729
+Guarde a sua resposta.
+
+18
+00:00:57,729 --> 00:00:59,080
+No fim, a gente confere.
+
+19
+00:00:59,680 --> 00:01:00,698
+Primeiro, o básico.
+
+20
+00:01:00,698 --> 00:01:02,788
+Um banco é, no fundo, um intermediário.
+
+21
+00:01:02,788 --> 00:01:09,755
+Ele pega dinheiro emprestado de alguém, paga um juro por isso, e empresta esse dinheiro para outra pessoa, cobrando um juro maior.
+
+22
+00:01:09,755 --> 00:01:13,078
+A diferença entre o que ele cobra e o que ele paga é o spread.
+
+23
+00:01:13,678 --> 00:01:21,057
+Em setembro, pelas contas do Banco Central, o spread médio do crédito livre foi de trinta e cinco vírgula cinco pontos percentuais.
+
+24
+00:01:21,057 --> 00:01:23,480
+Em março, era trinta e quatro vírgula seis.
+
+25
+00:01:23,480 --> 00:01:28,888
+Ou seja: enquanto a Selic caía, a diferença entre o que o banco paga e o que ele cobra aumentou.
+
+26
+00:01:29,488 --> 00:01:31,442
+Mas spread não é sinônimo de lucro.
+
+27
+00:01:31,442 --> 00:01:33,620
+Dentro dessa diferença tem muita coisa.
+
+28
+00:01:33,620 --> 00:01:37,696
+E o próprio Banco Central faz, todo ano, a conta de onde vai cada pedaço.
+
+29
+00:01:37,696 --> 00:01:43,726
+A edição mais recente, publicada em maio de dois mil e vinte e seis, olha o ano de dois mil e vinte e cinco.
+
+30
+00:01:43,726 --> 00:01:45,680
+É ela que vai guiar a nossa cebola.
+
+31
+00:01:46,280 --> 00:01:46,848
+Camada um.
+
+32
+00:01:46,848 --> 00:01:47,302
+A casca.
+
+33
+00:01:47,302 --> 00:01:48,436
+O custo do dinheiro.
+
+34
+00:01:48,436 --> 00:01:51,671
+Antes de emprestar, o banco precisa conseguir o dinheiro.
+
+35
+00:01:51,671 --> 00:01:56,778
+Ele paga juros a quem deposita, a quem compra um CDB, a quem empresta para ele no mercado.
+
+36
+00:01:56,778 --> 00:02:00,296
+E quem dita o preço desse dinheiro é, principalmente, a Selic.
+
+37
+00:02:00,896 --> 00:02:03,667
+Essa casca, tecnicamente, nem faz parte do spread.
+
+38
+00:02:03,667 --> 00:02:04,830
+É o ponto de partida.
+
+39
+00:02:04,830 --> 00:02:05,772
+Mas ela é grossa.
+
+40
+00:02:05,772 --> 00:02:14,195
+Pela decomposição do Banco Central, o custo de captação respondeu por perto de quarenta por cento do custo médio do crédito em dois mil e vinte e cinco.
+
+41
+00:02:14,195 --> 00:02:18,240
+E o banco central explica por quê: foi o ano da Selic a quinze por cento.
+
+42
+00:02:18,840 --> 00:02:21,230
+Aqui está o primeiro detalhe do paradoxo.
+
+43
+00:02:21,230 --> 00:02:23,387
+Quando a Selic cai, essa casca afina.
+
+44
+00:02:23,387 --> 00:02:24,670
+Mas ela afina devagar.
+
+45
+00:02:24,670 --> 00:02:29,042
+Um CDB contratado no ano passado continua pagando a taxa antiga até vencer.
+
+46
+00:02:29,042 --> 00:02:31,956
+O banco não renova todo o seu dinheiro de uma vez.
+
+47
+00:02:31,956 --> 00:02:33,880
+A casca leva meses para encolher.
+
+48
+00:02:34,480 --> 00:02:35,170
+Camada dois.
+
+49
+00:02:35,170 --> 00:02:37,643
+E agora a gente entra no spread de verdade.
+
+50
+00:02:37,643 --> 00:02:40,002
+A camada mais grossa de todas é o calote.
+
+51
+00:02:40,002 --> 00:02:42,992
+Todo banco sabe que parte das pessoas não vai pagar.
+
+52
+00:02:42,992 --> 00:02:45,811
+Então ele coloca esse prejuízo esperado no preço.
+
+53
+00:02:45,811 --> 00:02:48,859
+Quem paga em dia, paga também pelo calote dos outros.
+
+54
+00:02:49,459 --> 00:02:56,459
+Segundo o Banco Central, a inadimplência respondeu por trinta e seis vírgula seis por cento do spread em dois mil e vinte e cinco.
+
+55
+00:02:56,459 --> 00:02:57,482
+É mais de um terço.
+
+56
+00:02:57,482 --> 00:03:00,013
+E o problema é que esse número não está parado.
+
+57
+00:03:00,013 --> 00:03:05,882
+Em setembro, o atraso acima de noventa dias no crédito livre das famílias chegou a oito vírgula um por cento.
+
+58
+00:03:05,882 --> 00:03:07,336
+O maior da série histórica.
+
+59
+00:03:07,936 --> 00:03:10,243
+E isso explica a segunda parte do paradoxo.
+
+60
+00:03:10,243 --> 00:03:11,744
+O banco não olha só a Selic.
+
+61
+00:03:11,744 --> 00:03:12,656
+Ele olha o risco.
+
+62
+00:03:12,656 --> 00:03:16,840
+Se o calote está subindo, ele cobra mais caro de todo mundo, para se proteger.
+
+63
+00:03:16,840 --> 00:03:19,254
+A Selic diz que o dinheiro ficou mais barato.
+
+64
+00:03:19,254 --> 00:03:21,828
+O calote diz que emprestar ficou mais arriscado.
+
+65
+00:03:21,828 --> 00:03:24,832
+E, em dois mil e vinte e seis, o calote falou mais alto.
+
+66
+00:03:25,432 --> 00:03:26,545
+Tem mais um detalhe.
+
+67
+00:03:26,545 --> 00:03:30,497
+No Brasil, quando alguém não paga, recuperar o dinheiro é lento e caro.
+
+68
+00:03:30,497 --> 00:03:33,781
+Processos que demoram anos, garantias difíceis de executar.
+
+69
+00:03:33,781 --> 00:03:37,233
+Quanto menos o banco consegue recuperar, mais ele cobra antes.
+
+70
+00:03:37,233 --> 00:03:39,125
+O calote não pesa só pelo tamanho.
+
+71
+00:03:39,125 --> 00:03:41,240
+Pesa porque a conta quase nunca volta.
+
+72
+00:03:41,840 --> 00:03:42,565
+Camada três.
+
+73
+00:03:42,565 --> 00:03:43,229
+A operação.
+
+74
+00:03:43,229 --> 00:03:45,643
+Banco é uma empresa como outra qualquer.
+
+75
+00:03:45,643 --> 00:03:51,197
+Tem funcionários, agências, sistemas, segurança, tecnologia, atendimento, combate a fraudes.
+
+76
+00:03:51,197 --> 00:03:52,404
+Tudo isso tem custo.
+
+77
+00:03:52,404 --> 00:03:55,302
+E esse custo também entra no juro que você paga.
+
+78
+00:03:55,902 --> 00:04:03,067
+Pelo Banco Central, as despesas administrativas foram vinte e dois vírgula nove por cento do spread em dois mil e vinte e cinco.
+
+79
+00:04:03,067 --> 00:04:05,810
+É aqui que os bancos digitais dizem ter vantagem.
+
+80
+00:04:05,810 --> 00:04:07,881
+Sem agência, o custo por cliente cai.
+
+81
+00:04:07,881 --> 00:04:11,688
+Foi esse o argumento do Nubank, que a gente viu no episódio passado.
+
+82
+00:04:12,288 --> 00:04:13,663
+Só que repare numa coisa.
+
+83
+00:04:13,663 --> 00:04:17,951
+Mesmo com a chegada de dezenas de bancos digitais, o juro médio não despencou.
+
+84
+00:04:17,951 --> 00:04:18,391
+Por quê?
+
+85
+00:04:18,391 --> 00:04:20,536
+Porque a operação é só uma das camadas.
+
+86
+00:04:20,536 --> 00:04:22,295
+Dá para cortar custo de agência.
+
+87
+00:04:22,295 --> 00:04:26,859
+Não dá para cortar, com um aplicativo, o calote, os impostos e o preço do dinheiro.
+
+88
+00:04:27,459 --> 00:04:28,227
+Camada quatro.
+
+89
+00:04:28,227 --> 00:04:28,775
+O governo.
+
+90
+00:04:28,775 --> 00:04:30,586
+Cada empréstimo carrega impostos.
+
+91
+00:04:30,586 --> 00:04:32,890
+Tem o IOF, cobrado do cliente na operação.
+
+92
+00:04:32,890 --> 00:04:39,418
+E tem os tributos que o banco paga sobre o que ganha, como o PIS, a Cofins, o imposto de renda e a contribuição social.
+
+93
+00:04:39,418 --> 00:04:46,659
+Além disso, os bancos pagam uma taxa para o Fundo Garantidor de Créditos, o FGC, que protege os depositantes quando um banco quebra.
+
+94
+00:04:47,259 --> 00:04:52,532
+Juntos, tributos e FGC foram vinte vírgula cinco por cento do spread em dois mil e vinte e cinco.
+
+95
+00:04:52,532 --> 00:04:53,075
+Um quinto.
+
+96
+00:04:53,075 --> 00:04:59,381
+E o FGC tem a ver com uma história que a gente já contou aqui: foi ele que pagou a conta bilionária do Banco Master.
+
+97
+00:04:59,381 --> 00:05:03,622
+Esse seguro é pago pelo sistema, e o custo, no fim, chega ao preço do crédito.
+
+98
+00:05:04,221 --> 00:05:05,394
+E chegamos ao miolo.
+
+99
+00:05:05,394 --> 00:05:06,157
+Camada cinco.
+
+100
+00:05:06,157 --> 00:05:07,212
+A margem do banco.
+
+101
+00:05:07,212 --> 00:05:11,727
+É o que sobra depois de pagar o dinheiro, o calote, a operação e os impostos.
+
+102
+00:05:11,727 --> 00:05:13,135
+É aqui que mora o lucro.
+
+103
+00:05:13,135 --> 00:05:15,656
+E agora vem a resposta da aposta do começo.
+
+104
+00:05:16,256 --> 00:05:23,094
+Segundo o Banco Central, a margem financeira foi dezenove vírgula nove sete por cento do spread em dois mil e vinte e cinco.
+
+105
+00:05:23,094 --> 00:05:24,362
+Praticamente um quinto.
+
+106
+00:05:24,362 --> 00:05:26,513
+É a menor das quatro camadas do spread.
+
+107
+00:05:26,513 --> 00:05:30,870
+Menor que o calote, menor que a operação, e um pouquinho menor que os impostos.
+
+108
+00:05:31,469 --> 00:05:33,882
+Vamos transformar isso num exemplo do canal.
+
+109
+00:05:33,882 --> 00:05:38,982
+Pense em cada cem reais de juros que o sistema cobrou, em média, em dois mil e vinte e cinco.
+
+110
+00:05:38,982 --> 00:05:41,834
+Perto de quarenta reais pagaram o custo do dinheiro.
+
+111
+00:05:41,834 --> 00:05:43,534
+Vinte e dois cobriram o calote.
+
+112
+00:05:43,534 --> 00:05:45,344
+Quase catorze pagaram a operação.
+
+113
+00:05:45,344 --> 00:05:47,044
+Uns doze ficaram com o governo.
+
+114
+00:05:47,044 --> 00:05:48,963
+E uns doze foram a margem do banco.
+
+115
+00:05:49,563 --> 00:05:52,137
+Então, se você apostou no lucro do banco, errou.
+
+116
+00:05:52,137 --> 00:05:52,673
+Mas calma.
+
+117
+00:05:52,673 --> 00:05:55,194
+Isso não quer dizer que os bancos ganham pouco.
+
+118
+00:05:55,194 --> 00:05:59,109
+Doze por cento de uma montanha de juros ainda é uma montanha de dinheiro.
+
+119
+00:05:59,109 --> 00:06:01,951
+O crédito no Brasil passou de sete trilhões de reais.
+
+120
+00:06:01,951 --> 00:06:04,848
+E os maiores bancos lucram dezenas de bilhões por ano.
+
+121
+00:06:04,848 --> 00:06:05,652
+A fatia é fina.
+
+122
+00:06:05,652 --> 00:06:06,885
+O bolo é que é gigante.
+
+123
+00:06:07,485 --> 00:06:09,893
+Agora vamos sair da cozinha e olhar para fora.
+
+124
+00:06:09,893 --> 00:06:11,777
+Quão estranho é o spread brasileiro?
+
+125
+00:06:11,777 --> 00:06:21,198
+Nos dados do Banco Mundial de dois mil e vinte e quatro, que comparam o juro do empréstimo com o juro do depósito, o Brasil aparece no topo, com trinta e dois vírgula cinco pontos.
+
+126
+00:06:21,198 --> 00:06:24,339
+O segundo da lista, o Quirguistão, tinha dezoito vírgula um.
+
+127
+00:06:24,939 --> 00:06:25,828
+Um cuidado aqui.
+
+128
+00:06:25,828 --> 00:06:32,833
+Essa conta do Banco Mundial usa uma metodologia diferente da do Banco Central, e nem todos os países informam o dado todo ano.
+
+129
+00:06:32,833 --> 00:06:41,451
+Mas a mensagem é a mesma em qualquer régua: o Brasil cobra muito mais pelo crédito, em relação ao que paga pelo depósito, do que quase qualquer outro país.
+
+130
+00:06:42,051 --> 00:06:44,615
+Então, vamos responder o paradoxo do começo.
+
+131
+00:06:44,615 --> 00:06:47,645
+Por que a Selic caiu cinco vezes e o seu juro subiu?
+
+132
+00:06:47,645 --> 00:06:49,859
+Juntando as camadas, são três motivos.
+
+133
+00:06:50,459 --> 00:06:52,230
+Primeiro: a casca afina devagar.
+
+134
+00:06:52,230 --> 00:06:55,883
+O custo do dinheiro do banco demora meses para acompanhar a Selic.
+
+135
+00:06:55,883 --> 00:06:57,212
+Segundo: o calote subiu.
+
+136
+00:06:57,212 --> 00:07:03,245
+Com a inadimplência das famílias em recorde, o banco aumenta a camada de risco, e isso come o corte da Selic.
+
+137
+00:07:03,245 --> 00:07:07,673
+Terceiro: as outras camadas, operação, impostos e margem, não dependem da Selic.
+
+138
+00:07:07,673 --> 00:07:08,891
+Elas ficam onde estão.
+
+139
+00:07:09,491 --> 00:07:10,354
+Repare na conta.
+
+140
+00:07:10,354 --> 00:07:12,188
+A Selic caiu um ponto e um quarto.
+
+141
+00:07:12,188 --> 00:07:15,640
+O spread do crédito livre subiu quase um ponto no mesmo período.
+
+142
+00:07:15,640 --> 00:07:17,851
+Um movimento praticamente anulou o outro.
+
+143
+00:07:17,851 --> 00:07:20,925
+Para o cliente, o corte da Selic chegou como um sussurro.
+
+144
+00:07:21,525 --> 00:07:23,303
+E não é por falta de tentativa.
+
+145
+00:07:23,303 --> 00:07:26,686
+Nos últimos anos, o país mexeu em várias camadas da cebola.
+
+146
+00:07:26,686 --> 00:07:32,879
+Em dois mil e dezenove, o cadastro positivo virou automático, para o banco conhecer melhor quem paga em dia.
+
+147
+00:07:32,879 --> 00:07:34,829
+Em dois mil e vinte, chegou o Pix.
+
+148
+00:07:34,829 --> 00:07:40,677
+Em dois mil e vinte e um, o open finance, para o cliente levar o seu histórico de um banco para outro.
+
+149
+00:07:40,677 --> 00:07:46,927
+E, desde dois mil e vinte e quatro, uma lei limita os juros do rotativo do cartão ao valor da própria dívida.
+
+150
+00:07:47,527 --> 00:07:49,200
+Cada medida atacou uma camada.
+
+151
+00:07:49,200 --> 00:07:54,663
+O cadastro positivo e o open finance miram o calote, porque ajudam a separar o bom do mau pagador.
+
+152
+00:07:54,663 --> 00:07:57,116
+O Pix e os bancos digitais miram a operação.
+
+153
+00:07:57,116 --> 00:08:02,524
+E o teto do rotativo mira o pedaço mais caro do cartão, que a gente destrinchou no episódio onze.
+
+154
+00:08:02,524 --> 00:08:06,983
+Mas nenhuma delas mexe na casca, que depende da Selic, nem na camada do governo.
+
+155
+00:08:07,583 --> 00:08:10,068
+Então, vamos montar a cebola inteira de novo.
+
+156
+00:08:10,068 --> 00:08:13,381
+Por fora, o custo do dinheiro, que segue a Selic com atraso.
+
+157
+00:08:13,381 --> 00:08:16,031
+Depois o calote, a camada mais grossa do spread.
+
+158
+00:08:16,031 --> 00:08:17,522
+Depois a operação do banco.
+
+159
+00:08:17,522 --> 00:08:18,461
+Depois o governo.
+
+160
+00:08:18,461 --> 00:08:23,541
+E, no miolo, a margem, menor do que a maioria das pessoas imagina, mas sobre um bolo enorme.
+
+161
+00:08:24,141 --> 00:08:26,177
+E a lição que fica é desconfortável.
+
+162
+00:08:26,177 --> 00:08:28,553
+O juro alto no Brasil não tem um vilão só.
+
+163
+00:08:28,553 --> 00:08:31,042
+Não é só a Selic, nem só o lucro dos bancos.
+
+164
+00:08:31,042 --> 00:08:33,305
+É uma cebola grossa em todas as camadas.
+
+165
+00:08:33,305 --> 00:08:35,907
+E a camada que mais pesa no spread é o calote.
+
+166
+00:08:35,907 --> 00:08:40,375
+Ou seja: em parte, quem paga em dia está pagando pelo crédito de quem não paga.
+
+167
+00:08:40,975 --> 00:08:45,590
+Este vídeo é informativo e não é recomendação financeira, nem de investimento.
+
+168
+00:08:45,590 --> 00:08:50,618
+É só a cebola descascada, para você entender o que está dentro do juro que você paga.
+
+169
+00:08:51,218 --> 00:09:00,193
+E se o calote é a maior camada, existe uma ferramenta que os bancos usam para decidir quem é bom pagador, e quanto cada um vai pagar de juro: o seu score de crédito.
+
+170
+00:09:00,193 --> 00:09:02,586
+No próximo episódio, vamos abrir essa caixa.
+
+171
+00:09:02,586 --> 00:09:09,330
+Quem calcula o seu score, o que faz ele subir ou cair, e por que dois vizinhos pagam juros diferentes pelo mesmo empréstimo.

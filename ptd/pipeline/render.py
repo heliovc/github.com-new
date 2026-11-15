@@ -309,7 +309,9 @@ def sc_stack(img, v, t, dur):
                 while F(fsn, "Black").getlength(f"{fmt_num(pct, 0)}%") > w - 30 and fsn > 40: fsn -= 4
                 dr.text((cx + w / 2, y), f"{fmt_num(pct, 0)}%", font=F(fsn, "Black"), fill=BG1, anchor="mm")
                 tc = WHITE if (hl < 0 or i == hl) else (110, 120, 145)
-                dr.text((cx + w / 2, y + 160), lab, font=F(48, "ExtraBold"), fill=tc, anchor="mm")
+                fsl = 48
+                while F(fsl, "ExtraBold").getlength(lab) > w - 16 and fsl > 26: fsl -= 2
+                dr.text((cx + w / 2, y + 160), lab, font=F(fsl, "ExtraBold"), fill=tc, anchor="mm")
                 for j, ln in enumerate(note.split("\n")):
                     dr.text((cx + w / 2, y + 225 + j * 46), ln, font=F(32, "Medium"), fill=DIM, anchor="mm")
         cx += w
@@ -860,7 +862,59 @@ def sc_floor(img, v, t, dur):
     if v.get("sub"): alpha_text(img, (x, 450 + len(lines) * 110 + 20), v["sub"], F(44, "SemiBold"), (200, 160, 230), a3, anchor="lm")
     if v.get("caption"): dr.text((W / 2, H - 50), v["caption"], font=F(28, "Medium"), fill=DIM, anchor="mm")
 
-SC = {"floor": sc_floor, "clause": sc_clause, "round": sc_round, "ticker": sc_ticker, "scoreboard": sc_scoreboard, "title": sc_title, "bignumber": sc_bignumber, "flow": sc_flow, "split": sc_split, "bullets": sc_bullets,
+def sc_onion(img, v, t, dur):
+    """Criado no EP14: a cebola do juro. O juro final visto como camadas concêntricas que vão sendo descascadas.
+    n (camada 1..5, de fora para dentro), label, title, sub, pct (texto grande opcional, ex.: '36,6%'), pct_note,
+    layers (5 rótulos curtos, de fora para dentro). Camadas já descascadas ficam só no contorno tracejado; a atual
+    acende em âmbar e pulsa; as de dentro ficam em tons apagados. Texto à direita."""
+    dr = ImageDraw.Draw(img)
+    layers = v.get("layers", ["", "", "", "", ""]); n = v["n"]
+    cx, cy = 480, 560
+    R = [400, 330, 260, 190, 120]
+    INNER = [(52, 70, 104), (62, 58, 98), (74, 52, 88), (86, 48, 76), (98, 46, 64)]
+    LIT, EDGE = (242, 169, 59), (90, 105, 130)
+    lay = Image.new("RGBA", img.size, (0, 0, 0, 0)); d2 = ImageDraw.Draw(lay)
+    grow = ease(t / 0.6)
+    for i in range(5):
+        r = R[i] * (0.85 + 0.15 * grow); f = i + 1
+        box = [cx - r, cy - r, cx + r, cy + r]
+        if f < n:
+            k = ease((t - 0.1) / 0.6)
+            for a0 in range(0, 360, 12):
+                d2.arc(box, a0, a0 + 6, fill=EDGE + (int(150 * (1 - 0.4 * k)),), width=3)
+        elif f == n:
+            pul = 0.5 + 0.5 * math.sin(t * 4)
+            d2.ellipse([box[0] - 10, box[1] - 10, box[2] + 10, box[3] + 10], outline=LIT + (int(90 + 90 * pul),), width=6)
+            d2.ellipse(box, fill=LIT + (255,), outline=BG1 + (255,), width=4)
+        else:
+            d2.ellipse(box, fill=INNER[i] + (255,), outline=BG1 + (255,), width=4)
+    img.alpha_composite(lay)
+    # rótulo da camada atual dentro do anel (topo do anel)
+    a0 = ease((t - 0.4) / 0.5)
+    lab = layers[n - 1] if n - 1 < len(layers) else ""
+    if lab:
+        r_out = R[n - 1]; r_in = R[n] if n < 5 else 0
+        ly = cy - (r_out + r_in) / 2 if n < 5 else cy
+        fs = 34 if n < 5 else 30
+        while F(fs, "Black").getlength(lab) > (2 * r_in + 40 if n < 4 else 2 * (r_out - 10)) and fs > 18: fs -= 1
+        alpha_text(img, (cx, ly), lab, F(fs, "Black"), BG1, a0)
+    a1 = ease((t - 0.5) / 0.5); a2 = ease((t - 0.8) / 0.5); a3 = ease((t - 1.1) / 0.5); a4 = ease((t - 1.5) / 0.5)
+    x = 1000
+    alpha_text(img, (x, 250), f"CAMADA {n}  ·  {v.get('label', '')}", F(50, "Black"), LIT, a1, anchor="lm", dy=(1 - a1) * 30)
+    lines = v["title"].split("\n")
+    for i, l in enumerate(lines):
+        fs = 96
+        while F(fs, "ExtraBold").getlength(l) > W - x - 80 and fs > 60: fs -= 2
+        alpha_text(img, (x, 370 + i * 105), l, F(fs, "ExtraBold"), WHITE, a2, anchor="lm", dy=(1 - a2) * 30)
+    yb = 370 + len(lines) * 105
+    if v.get("sub"): alpha_text(img, (x, yb), v["sub"], F(42, "SemiBold"), (200, 160, 230), a3, anchor="lm")
+    if v.get("pct"):
+        alpha_text(img, (x, yb + 130), v["pct"], F(110, "Black"), LIT, a4, anchor="lm", dy=(1 - a4) * 20)
+        if v.get("pct_note"):
+            alpha_text(img, (x, yb + 225), v["pct_note"], F(36, "Medium"), DIM, a4, anchor="lm")
+    if v.get("caption"): dr.text((W / 2, H - 50), v["caption"], font=F(28, "Medium"), fill=DIM, anchor="mm")
+
+SC = {"onion": sc_onion, "floor": sc_floor, "clause": sc_clause, "round": sc_round, "ticker": sc_ticker, "scoreboard": sc_scoreboard, "title": sc_title, "bignumber": sc_bignumber, "flow": sc_flow, "split": sc_split, "bullets": sc_bullets,
       "bars": sc_bars, "compare": sc_compare, "timeline": sc_timeline, "cards": sc_cards, "line": sc_line,
       "receipt": sc_receipt, "stack": sc_stack, "journey": sc_journey, "calendar": sc_calendar, "obit": sc_obit, "race": sc_race, "act": sc_act, "ledger": sc_ledger, "blackbox": sc_blackbox, "flight": sc_flight, "court": sc_court, "dossier": sc_dossier}
 
