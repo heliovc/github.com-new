@@ -1064,7 +1064,9 @@
   "related_key": "cosmic-ep13-long",
   "pinned_comment": "Planet or dwarf planet: what do you call Pluto? Full video: How Long to Reach Every Planet? By Car, Neptune Takes 4,912 Years",
   "related_attempts": 1,
-  "related_done": "2026-11-15T17:16:21.005514-03:00"
+  "related_done": "2026-11-15T17:16:21.005514-03:00",
+  "comment_attempts": 1,
+  "comment_done": "2026-11-15T19:12:47.875380-03:00"
  },
  "cosmic-ep13-short": {
   "attempts": 1,
@@ -1117,7 +1119,9 @@
   "related_key": "ptd-ep14-long",
   "pinned_comment": "O juro do seu cartão ou empréstimo caiu este ano? Vídeo completo: Spread bancário: por que o juro no Brasil não cai quando a Selic cai",
   "related_attempts": 2,
-  "related_done": "2026-11-15T18:22:44.208143-03:00"
+  "related_done": "2026-11-15T18:22:44.208143-03:00",
+  "comment_attempts": 1,
+  "comment_done": "2026-11-15T19:14:59.003369-03:00"
  },
  "ptd-rank12-short": {
   "attempts": 1,
@@ -1150,7 +1154,9 @@
   "title": "Regex for Beginners: Find Anything in Text (Python Regular Expressions Tutorial)",
   "kind": "long",
   "publish_at": "2026-11-15T19:00:00-03:00",
-  "pinned_comment": "What's the messiest text you'd love to search with one pattern? Tell me and it might become a future tutorial."
+  "pinned_comment": "What's the messiest text you'd love to search with one pattern? Tell me and it might become a future tutorial.",
+  "comment_attempts": 1,
+  "comment_done": "2026-11-15T19:17:32.805289-03:00"
  },
  "lab-ep11-short": {
   "attempts": 1,
@@ -1166,7 +1172,9 @@
   "kind": "short",
   "publish_at": "2026-11-15T20:30:00-03:00",
   "related_key": "lab-ep11-long",
-  "pinned_comment": "Did you know regex could do this in one line? Full tutorial: Regex for Beginners: Find Anything in Text (Python Regular Expressions Tutorial)"
+  "pinned_comment": "Did you know regex could do this in one line? Full tutorial: Regex for Beginners: Find Anything in Text (Python Regular Expressions Tutorial)",
+  "related_attempts": 1,
+  "related_done": "2026-11-15T19:19:18.367855-03:00"
  },
  "quiet-ep04b-long": {
   "attempts": 1,
