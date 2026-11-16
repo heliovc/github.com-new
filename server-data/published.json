@@ -1327,5 +1327,36 @@
   "publish_at": "2026-11-16T19:00:00-03:00",
   "related_key": "ptd-ep15-long",
   "pinned_comment": "Você sabe qual é o seu score hoje? Vídeo completo: Score de crédito: a prova secreta que decide quanto juro você paga"
+ },
+ "lab-ep12-long": {
+  "attempts": 1,
+  "status": "published",
+  "url": "https://youtu.be/F7tFCMIeMrk",
+  "by": "robo",
+  "visibility": "schedule",
+  "when": "2026-11-16T19:00:00-03:00",
+  "at": "2026-11-16T08:55:45.824777-03:00",
+  "error": null,
+  "channel_id": "UCXGqR8k1RMbfYdVleIuJKzA",
+  "title": "Run a Python Script Automatically Every Day (cron + Windows Task Scheduler for Beginners)",
+  "kind": "long",
+  "publish_at": "2026-11-16T19:00:00-03:00",
+  "pinned_comment": "Which task would you hand over to your computer first: a daily report, a backup, or cleaning your downloads? Tell me below."
+ },
+ "lab-ep12-short": {
+  "attempts": 1,
+  "status": "published",
+  "url": "https://youtu.be/Phtk7K2tRVU",
+  "by": "robo",
+  "visibility": "schedule",
+  "when": "2026-11-16T20:30:00-03:00",
+  "at": "2026-11-16T08:58:51.257425-03:00",
+  "error": null,
+  "channel_id": "UCXGqR8k1RMbfYdVleIuJKzA",
+  "title": "This Python Script Runs Itself #shorts",
+  "kind": "short",
+  "publish_at": "2026-11-16T20:30:00-03:00",
+  "related_key": "lab-ep12-long",
+  "pinned_comment": "What would you schedule first? Full tutorial: Run a Python Script Automatically Every Day (cron + Windows Task Scheduler for Beginners)"
  }
 }
