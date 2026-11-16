@@ -89,3 +89,30 @@ def test_missing_file_reported(tmp_path):
     write(tmp_path, "a", base(), files=("video.mp4",))
     it = mf.discover(tmp_path)[0][0]
     assert len(it.missing_files()) == 2
+
+
+def test_jitter_schedule(tmp_path, monkeypatch):
+    monkeypatch.delenv("PUBLISH_JITTER", raising=False)
+    write(tmp_path, "a", base())
+    it = mf.discover(tmp_path)[0][0]
+    grace = timedelta(minutes=90)
+    d = mf.decide(it, {}, datetime(2026, 11, 7, 20, 0, tzinfo=SP), grace)
+    assert d.action == "upload" and d.visibility == "schedule"
+    off = (d.when - it.publish_at).total_seconds() / 60
+    assert off in mf.JITTER_STEPS and d.when.minute % 15 == 0
+    # mesmo canal e mesmo dia → mesmo deslocamento (mantém a ordem longo → Short)
+    it2 = mf.Item(key="x-short", kind="short", channel_id=it.channel_id, folder=it.folder, video=["v"], title="t",
+                  publish_at=it.publish_at + timedelta(hours=1))
+    d2 = mf.decide(it2, {}, datetime(2026, 11, 7, 20, 0, tzinfo=SP), grace)
+    assert d2.when - it2.publish_at == d.when - it.publish_at
+    # perto do horário: nunca adianta para dentro da folga mínima
+    near = it.publish_at - timedelta(minutes=25)
+    d3 = mf.decide(it, {}, near, grace)
+    assert d3.when - near >= mf.MIN_LEAD
+    # horário "quebrado" (rotina já variou) → respeita
+    it.publish_at = datetime(2026, 11, 8, 18, 7, tzinfo=SP)
+    assert mf.decide(it, {}, datetime(2026, 11, 7, 20, 0, tzinfo=SP), grace).when == it.publish_at
+    # desligado
+    monkeypatch.setenv("PUBLISH_JITTER", "0")
+    it.publish_at = datetime(2026, 11, 8, 18, 0, tzinfo=SP)
+    assert mf.decide(it, {}, datetime(2026, 11, 7, 20, 0, tzinfo=SP), grace).when == it.publish_at

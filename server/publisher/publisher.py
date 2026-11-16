@@ -198,7 +198,9 @@ def remember(state: dict, it) -> None:
     rec["channel_id"] = it.channel_id
     rec["title"] = it.clean_title()
     rec["kind"] = it.kind
-    if it.publish_at:
+    if rec.get("when"):                # horário real (com o deslocamento do dia)
+        rec["publish_at"] = rec["when"]
+    elif it.publish_at:
         rec["publish_at"] = it.publish_at.isoformat()
     else:
         rec.setdefault("publish_at", rec.get("at"))

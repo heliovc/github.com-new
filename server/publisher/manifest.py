@@ -183,6 +183,35 @@ class Decision:
 
 MIN_LEAD = timedelta(minutes=20)  # o Studio exige agendar com folga
 
+# 16/11: anti-"fábrica". Os 4 canais publicavam todo dia no mesmo minuto (12:00, 17:00...), padrão que o
+# YouTube associa a contas automatizadas em grupo. O robô desloca o horário em passos de 15 min (a lista
+# de horários do Studio só tem :00/:15/:30/:45). O deslocamento é o mesmo para todos os itens do mesmo
+# canal no mesmo dia (mantém a ordem longo → Short) e muda de dia para dia e de canal para canal.
+# Desligar: PUBLISH_JITTER=0 no canal-publisher.env.
+JITTER_STEPS = (-45, -30, -15, 15, 30, 45)
+
+
+def jitter_minutes(channel_id: str, day) -> int:
+    if os.environ.get("PUBLISH_JITTER", "1") == "0":
+        return 0
+    import hashlib
+    h = hashlib.sha256(f"{channel_id}|{day.isoformat()}".encode()).digest()
+    return JITTER_STEPS[h[0] % len(JITTER_STEPS)]
+
+
+def effective_time(item: "Item", now: datetime) -> datetime | None:
+    """Horário real de publicação: publish_at + deslocamento do dia (só se publish_at for "redondo")."""
+    t = item.publish_at
+    if t is None or t.minute % 15 or t.second:
+        return t
+    off = jitter_minutes(item.channel_id, t.date())
+    if off == 0:
+        return t
+    eff = t + timedelta(minutes=off)
+    if eff - now < MIN_LEAD:          # adiantar não cabe mais → só atrasar
+        eff = t + timedelta(minutes=abs(off))
+    return eff
+
 
 def decide(item: Item, state: dict, now: datetime, grace: timedelta) -> Decision:
     """Decide o que fazer com o item agora."""
@@ -198,6 +227,9 @@ def decide(item: Item, state: dict, now: datetime, grace: timedelta) -> Decision
     if item.publish_at is None:
         return Decision("upload", "public", reason="publicar já")
     if item.publish_at - now >= MIN_LEAD:
+        eff = effective_time(item, now)
+        if eff - now >= MIN_LEAD:
+            return Decision("upload", "schedule", eff, "agendar")
         return Decision("upload", "schedule", item.publish_at, "agendar")
     if item.if_late == "skip":
         return Decision("skip", reason="horário já passou e if_late=skip")
