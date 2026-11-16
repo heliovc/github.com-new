@@ -1358,5 +1358,20 @@
   "publish_at": "2026-11-16T20:30:00-03:00",
   "related_key": "lab-ep12-long",
   "pinned_comment": "What would you schedule first? Full tutorial: Run a Python Script Automatically Every Day (cron + Windows Task Scheduler for Beginners)"
+ },
+ "quiet-ep06-long": {
+  "attempts": 1,
+  "status": "published",
+  "url": "https://youtu.be/MzU6J3AEpMo",
+  "by": "robo",
+  "visibility": "schedule",
+  "when": "2026-11-16T22:00:00-03:00",
+  "at": "2026-11-16T09:56:19.992500-03:00",
+  "error": null,
+  "channel_id": "UCNrw11y7QKt0fWCrJ84QZ-g",
+  "title": "Venice by Lamplight: History for Sleep on a Gondola at Night (48 Min)",
+  "kind": "long",
+  "publish_at": "2026-11-16T22:00:00-03:00",
+  "pinned_comment": "Which quiet corner of history should we drift through tomorrow night?"
  }
 }
