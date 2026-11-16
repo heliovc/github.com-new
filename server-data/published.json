@@ -1232,7 +1232,9 @@
   "related_key": "cosmic-ep14-long",
   "pinned_comment": "Which crater should we put to scale next? Full video: What If an Asteroid Hit the Ocean? A 10 km Rock Would Hit the Seafloor",
   "comment_attempts": 1,
-  "comment_done": "2026-11-16T13:13:26.728135-03:00"
+  "comment_done": "2026-11-16T13:13:26.728135-03:00",
+  "related_attempts": 1,
+  "related_done": "2026-11-16T17:12:14.362073-03:00"
  },
  "cosmic-ep14-long": {
   "attempts": 1,
@@ -1247,7 +1249,9 @@
   "title": "What If an Asteroid Hit the Ocean? A 10 km Rock Would Hit the Seafloor",
   "kind": "long",
   "publish_at": "2026-11-16T17:00:00-03:00",
-  "pinned_comment": "Which rock surprised you most: the one that never reaches the water, or the one that treats the ocean like a puddle?"
+  "pinned_comment": "Which rock surprised you most: the one that never reaches the water, or the one that treats the ocean like a puddle?",
+  "comment_attempts": 1,
+  "comment_done": "2026-11-16T17:13:24.383665-03:00"
  },
  "cosmic-scale07-short": {
   "attempts": 1,
@@ -1281,7 +1285,9 @@
   "kind": "short",
   "publish_at": "2026-11-16T21:00:00-03:00",
   "related_key": "cosmic-ep14-long",
-  "pinned_comment": "Would you have guessed the ocean is that shallow? Full video: What If an Asteroid Hit the Ocean? A 10 km Rock Would Hit the Seafloor"
+  "pinned_comment": "Would you have guessed the ocean is that shallow? Full video: What If an Asteroid Hit the Ocean? A 10 km Rock Would Hit the Seafloor",
+  "related_attempts": 1,
+  "related_done": "2026-11-16T17:15:28.366942-03:00"
  },
  "ptd-rank13-short": {
   "attempts": 1,

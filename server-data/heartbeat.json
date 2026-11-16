@@ -1,6 +1,11 @@
 {
- "last_run": "2026-11-16T17:00:55.826935-03:00",
+ "last_run": "2026-11-16T17:15:33.440266-03:00",
  "pending": 0,
- "post_tasks": 0,
- "errors": []
+ "post_tasks": 3,
+ "errors": [],
+ "published_now": [
+  "cosmic-rank13-short: related vinculado a mymWiwJUrzI",
+  "cosmic-ep14-long: comment comentário fixado",
+  "cosmic-ep14-short: related vinculado a mymWiwJUrzI"
+ ]
 }
