@@ -914,7 +914,108 @@ def sc_onion(img, v, t, dur):
             alpha_text(img, (x, yb + 225), v["pct_note"], F(36, "Medium"), DIM, a4, anchor="lm")
     if v.get("caption"): dr.text((W / 2, H - 50), v["caption"], font=F(28, "Medium"), fill=DIM, anchor="mm")
 
-SC = {"onion": sc_onion, "floor": sc_floor, "clause": sc_clause, "round": sc_round, "ticker": sc_ticker, "scoreboard": sc_scoreboard, "title": sc_title, "bignumber": sc_bignumber, "flow": sc_flow, "split": sc_split, "bullets": sc_bullets,
+def sc_exam(img, v, t, dur):
+    """Criado no EP15: a prova do score. À esquerda, uma folha de prova com as questões (qs) e os pesos (weights);
+    as já corrigidas ganham um visto verde, a atual (n, 1-based) acende em âmbar, as próximas ficam como '?'.
+    À direita: 'QUESTÃO n · PESO x%', title (\n quebra), sub e caption. n=0 mostra a folha toda escondida."""
+    dr = ImageDraw.Draw(img)
+    qs, ws, n = v["qs"], v["weights"], v.get("n", 0)
+    a0 = ease(t / 0.5)
+    px0, py0, px1, py1 = 120, 140, 860, 1000
+    lay = Image.new("RGBA", img.size, (0, 0, 0, 0)); d2 = ImageDraw.Draw(lay)
+    d2.rounded_rectangle([px0 + 12, py0 + 14, px1 + 12, py1 + 14], 26, fill=(0, 0, 0, int(110 * a0)))
+    d2.rounded_rectangle([px0, py0, px1, py1], 26, fill=(236, 232, 220, int(255 * a0)))
+    for y in range(py0 + 170, py1 - 20, 46):
+        d2.line([(px0 + 40, y), (px1 - 40, y)], fill=(200, 210, 225, int(160 * a0)), width=2)
+    d2.line([(px0 + 110, py0 + 20), (px0 + 110, py1 - 20)], fill=(230, 150, 150, int(200 * a0)), width=3)
+    img.alpha_composite(lay)
+    INK, PEN = (40, 48, 70), (205, 60, 60)
+    alpha_text(img, (px0 + 140, py0 + 70), "PROVA DO SCORE", F(50, "Black"), INK, a0, anchor="lm")
+    alpha_text(img, (px0 + 140, py0 + 125), "nota de 0 a 1.000", F(30, "SemiBold"), (110, 115, 130), a0, anchor="lm")
+    for i, (q, w) in enumerate(zip(qs, ws)):
+        y = py0 + 215 + i * 112; k = i + 1
+        a = ease((t - 0.2 - i * 0.08) / 0.4)
+        if a <= 0: continue
+        if k < n or n == -1:
+            col, txt, wt = INK, q, f"{w}%"
+        elif k == n:
+            col, txt, wt = INK, q, f"{w}%"
+        else:
+            col, txt, wt = (150, 150, 160), "?  ?  ?", "?"
+        if k == n:
+            pul = 0.5 + 0.5 * math.sin(t * 4)
+            hl = Image.new("RGBA", img.size, (0, 0, 0, 0))
+            ImageDraw.Draw(hl).rounded_rectangle([px0 + 24, y - 46, px1 - 24, y + 46], 16, fill=(242, 169, 59, int((150 + 60 * pul) * a)))
+            img.alpha_composite(hl)
+        alpha_text(img, (px0 + 70, y), f"{k}.", F(40, "Black"), (150, 60, 60), a)
+        fs = 40
+        while F(fs, "Bold").getlength(txt) > 470 and fs > 26: fs -= 2
+        alpha_text(img, (px0 + 140, y), txt, F(fs, "Bold"), col, a, anchor="lm")
+        alpha_text(img, (px1 - 36, y), wt, F(42, "Black"), col if k != n else (120, 60, 0), a, anchor="rm")
+        if k < n or n == -1:
+            ck = ease((t - 0.4 - i * 0.08) / 0.4)
+            if ck > 0:
+                cl = Image.new("RGBA", img.size, (0, 0, 0, 0)); c2 = ImageDraw.Draw(cl)
+                x = px1 - 158
+                c2.line([(x - 18, y), (x - 4, y + 16), (x + 24, y - 20)], fill=(40, 170, 100, int(255 * ck)), width=8)
+                img.alpha_composite(cl)
+    if n > 0:
+        a1, a2, a3 = ease((t - 0.4) / 0.5), ease((t - 0.7) / 0.5), ease((t - 1.0) / 0.5)
+        x = 960
+        alpha_text(img, (x, 260), f"QUESTÃO {n}  ·  PESO {ws[n - 1]}%", F(50, "Black"), AMBER, a1, anchor="lm", dy=(1 - a1) * 30)
+        lines = v["title"].split("\n")
+        for i, l in enumerate(lines):
+            fs = 92
+            while F(fs, "ExtraBold").getlength(l) > W - x - 70 and fs > 56: fs -= 2
+            alpha_text(img, (x, 380 + i * 104), l, F(fs, "ExtraBold"), WHITE, a2, anchor="lm", dy=(1 - a2) * 30)
+        yb = 380 + len(lines) * 104
+        if v.get("sub"):
+            for j, sl in enumerate(v["sub"].split("\n")):
+                alpha_text(img, (x, yb + j * 56), sl, F(42, "SemiBold"), (150, 200, 240), a3, anchor="lm")
+    elif v.get("title"):
+        a2 = ease((t - 0.6) / 0.5)
+        for i, l in enumerate(v["title"].split("\n")):
+            alpha_text(img, (960, 420 + i * 110), l, F(96, "ExtraBold"), WHITE, a2, anchor="lm", dy=(1 - a2) * 30)
+        if v.get("sub"): alpha_text(img, (960, 420 + len(v["title"].split("\n")) * 110 + 20), v["sub"], F(44, "SemiBold"), GREEN, ease((t - 1.0) / 0.5), anchor="lm")
+    if v.get("caption"): dr.text((W / 2, H - 50), v["caption"], font=F(28, "Medium"), fill=DIM, anchor="mm")
+
+def sc_gauge(img, v, t, dur):
+    """Criado no EP15: velocímetro do score (0 a 1.000) com as 4 faixas da Serasa (baixo/regular/bom/excelente).
+    needles = [[valor, rótulo, cor_hex], ...] (até 2 ponteiros, animam do zero); title no topo; caption embaixo.
+    Os números das faixas ficam no arco; o valor do 1º ponteiro aparece grande no centro (big=False desliga)."""
+    dr = ImageDraw.Draw(img)
+    cx, cy, r = W / 2, 820, 520
+    if v.get("title"): alpha_text(img, (W / 2, 150), v["title"], F(64, "ExtraBold"), WHITE, ease(t / 0.5))
+    bands = [(0, 300, (224, 108, 90), "BAIXO"), (300, 500, (242, 169, 59), "REGULAR"), (500, 700, (91, 141, 239), "BOM"), (700, 1000, (58, 196, 125), "EXCELENTE")]
+    a0 = ease(t / 0.6)
+    lay = Image.new("RGBA", img.size, (0, 0, 0, 0)); d2 = ImageDraw.Draw(lay)
+    for lo, hi, col, lab in bands:
+        s0 = 180 + 180 * lo / 1000; s1 = 180 + 180 * hi / 1000
+        d2.arc([cx - r, cy - r, cx + r, cy + r], s0 + 0.6, s1 - 0.6, fill=col + (int(255 * a0),), width=70)
+        mid = math.radians((s0 + s1) / 2)
+        d2.text((cx + (r - 150) * math.cos(mid), cy + (r - 150) * math.sin(mid)), lab, font=F(28, "Black"), fill=col + (int(255 * a0),), anchor="mm")
+    for val in (0, 300, 500, 700, 1000):
+        ang = math.radians(180 + 180 * val / 1000)
+        d2.text((cx + (r + 60) * math.cos(ang), cy + (r + 60) * math.sin(ang) - (0 if val in (0, 1000) else 6)), fmt_num(val, 0), font=F(32, "Bold"), fill=DIM + (int(255 * a0),), anchor="mm")
+    img.alpha_composite(lay)
+    nd = v.get("needles", [])
+    for i, (val, lab, c) in enumerate(nd):
+        p = ease((t - 0.6 - i * 0.9) / 1.4)
+        if p <= 0: continue
+        cur = val * p; ang = math.radians(180 + 180 * cur / 1000); col = hexc(c)
+        L = r - 60
+        tip = (cx + L * math.cos(ang), cy + L * math.sin(ang))
+        dr.line([(cx, cy), tip], fill=col, width=14)
+        dr.ellipse([cx - 34, cy - 34, cx + 34, cy + 34], fill=col)
+        ly = cy + 76 + i * 50; lw = F(36, "Black").getlength(lab + "  " + fmt_num(val, 0))
+        dr.ellipse([cx - lw / 2 - 44, ly - 14, cx - lw / 2 - 16, ly + 14], fill=col)
+        dr.text((cx - lw / 2, ly), lab + "  " + fmt_num(val * p, 0), font=F(36, "Black"), fill=WHITE, anchor="lm")
+    if nd and v.get("big", True):
+        val, lab, c = nd[0]; p = ease((t - 0.6) / 1.4)
+        alpha_text(img, (cx, cy - 150), fmt_num(val * p, 0), F(150, "Black"), hexc(c), ease((t - 0.6) / 0.4))
+    if v.get("caption"): dr.text((W / 2, H - 70), v["caption"], font=F(28, "Medium"), fill=DIM, anchor="mm")
+
+SC = {"exam": sc_exam, "gauge": sc_gauge, "onion": sc_onion, "floor": sc_floor, "clause": sc_clause, "round": sc_round, "ticker": sc_ticker, "scoreboard": sc_scoreboard, "title": sc_title, "bignumber": sc_bignumber, "flow": sc_flow, "split": sc_split, "bullets": sc_bullets,
       "bars": sc_bars, "compare": sc_compare, "timeline": sc_timeline, "cards": sc_cards, "line": sc_line,
       "receipt": sc_receipt, "stack": sc_stack, "journey": sc_journey, "calendar": sc_calendar, "obit": sc_obit, "race": sc_race, "act": sc_act, "ledger": sc_ledger, "blackbox": sc_blackbox, "flight": sc_flight, "court": sc_court, "dossier": sc_dossier}
 

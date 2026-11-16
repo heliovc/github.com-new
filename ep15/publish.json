@@ -1,0 +1,80 @@
+{
+ "version": 1,
+ "channel_id": "UCd_BGmJ5gbQ0kECAxmbvQHA",
+ "created_at": "2026-11-16T07:28:50-03:00",
+ "items": [
+  {
+   "key": "ptd-rank13-short",
+   "kind": "short",
+   "video": "ranking.mp4",
+   "title": "5 coisas que mais pesam no seu score (o nº 1 não é ter dívida) #shorts",
+   "description": "Os pesos do Serasa Score 2.0, divulgados pela própria Serasa: 5) dados cadastrais, 8%; 4) busca por crédito, 12%; 3) dívidas negativadas, 21%; 2) tempo de mercado, 24%; 1) pagar em dia (Cadastro Positivo), 29%. Fica de fora: contratos de crédito, 6%. Cada birô tem o seu próprio modelo. Fonte: Serasa, perguntas frequentes do Serasa Score 2.0. Este vídeo é informativo e não é recomendação financeira. Voz sintética.\n#shorts #score #serasa #credito",
+   "tags": [
+    "score de credito",
+    "serasa score",
+    "cadastro positivo",
+    "credito",
+    "shorts",
+    "por tras do dinheiro"
+   ],
+   "publish_at": "2026-11-16T12:00:00-03:00",
+   "if_late": "public_now",
+   "made_for_kids": false,
+   "altered_content": true,
+   "related_key": "ptd-ep14-long",
+   "pinned_comment": "Você achava que ter dívida era o que mais pesava no score? Vídeo completo: Spread bancário: por que o juro no Brasil não cai quando a Selic cai"
+  },
+  {
+   "key": "ptd-ep15-long",
+   "kind": "long",
+   "video": "video.mp4",
+   "title": "Score de crédito: a prova secreta que decide quanto juro você paga",
+   "description": "Dois vizinhos, mesmo salário, mesmo empréstimo de R$ 10 mil em 24 meses. Um paga R$ 15.741; o outro, R$ 20.925 (exemplo ilustrativo). O que separa os dois é o score de crédito. Neste episódio, o score é aberto como uma prova de seis questões: quem aplica (Serasa, Boa Vista, Quod e SPC), de onde veio, quanto pesa cada questão, o boletim do Brasil, o círculo vicioso do juro e o que a lei garante para você.\n\nCapítulos\n0:00 Dois vizinhos, o mesmo empréstimo\n0:57 Quem aplica a prova: os birôs\n1:49 De onde veio o score\n2:44 A prova: as 6 questões\n4:40 A prova inteira\n4:56 Quanto isso vale em juro\n5:31 O boletim do Brasil\n6:18 O círculo vicioso\n7:08 O que a lei garante\n7:45 A prova corrigida\n8:23 Próximo episódio\n\nFontes\n- Serasa, perguntas frequentes do Serasa Score 2.0: escala de 0 a 1.000; faixas baixo (0-300), regular (301-500), bom (501-700) e excelente (701-1.000); pesos: hábitos de pagamento do Cadastro Positivo 29%, experiência com o mercado de crédito 24%, dívidas negativadas 21%, busca por crédito 12%, informações cadastrais 8%, contratos de crédito 6%; a consulta do próprio score não afeta a nota\n- Serasa, Mapa Score do Brasil, via release e imprensa (agosto de 2026): média nacional de 548 (abril de 2025) e 542 pontos (abril de 2026); 500 pontos entre 18 e 25 anos e 603 acima de 65 anos\n- Serasa, Mapa da Inadimplência e Renegociação de Dívidas, divulgado em 02/11/2026, via imprensa: 84,2 milhões de inadimplentes em setembro de 2026 (recorde) e R$ 597,4 bilhões em dívidas\n- Banco Central, \"Análise dos efeitos do Cadastro Positivo\" (2021): no crédito pessoal não consignado, diferença de 31 pontos percentuais na taxa anual para tomadores com pontuação no cadastro (amostra com taxa média de 299% ao ano)\n- Equifax, relatório anual (10-K) de 2023: compra da Boa Vista Serviços concluída em 07/08/2023, cerca de US$ 510 milhões em dinheiro mais ações\n- Quod (Gestora de Inteligência de Crédito), constituída em 2017 por Banco do Brasil, Bradesco, Caixa, Itaú Unibanco e Santander\n- FICO: fundada em 1956 por Bill Fair e Earl Isaac; score FICO de uso geral lançado em 1989\n- Lei 12.414/2011 (Cadastro Positivo); Lei Complementar 166/2019 (inclusão automática); STJ, Súmula 550 (2015) e Súmula 548; Lei 13.709/2018 (LGPD), art. 20\n- Cálculos do canal: exemplo dos vizinhos (EXEMPLO ILUSTRATIVO; R$ 10 mil em 24 parcelas fixas a 4% e a 7% ao mês) e somas dos pesos.\n\nEste vídeo é informativo e não é recomendação financeira nem de investimento. Narração com voz sintética; roteiro, pesquisa e visual próprios. \"Análise\" na tela = interpretação do canal.\n\n#score #serasa #credito #juros #portrasdodinheiro",
+   "tags": [
+    "score de credito",
+    "score",
+    "serasa score",
+    "cadastro positivo",
+    "como funciona o score",
+    "aumentar score",
+    "birô de crédito",
+    "boa vista",
+    "quod",
+    "spc",
+    "juros",
+    "nome sujo",
+    "inadimplencia",
+    "educacao financeira",
+    "por tras do dinheiro"
+   ],
+   "thumbnail": "thumbnail.jpg",
+   "captions": "legendas.srt",
+   "publish_at": "2026-11-16T18:00:00-03:00",
+   "if_late": "public_now",
+   "made_for_kids": false,
+   "altered_content": true,
+   "pinned_comment": "Na sua opinião, é justo um algoritmo decidir quanto juro você paga, sem você ver a fórmula? Conta aqui."
+  },
+  {
+   "key": "ptd-ep15-short",
+   "kind": "short",
+   "video": "vertical.mp4",
+   "title": "Mesmo salário, mesmo empréstimo. Um pagou R$ 5 mil a mais #shorts",
+   "description": "Dois vizinhos, mesmo salário, mesmo empréstimo de R$ 10 mil em 24 meses: a 4% ao mês, um paga R$ 15.741; a 7%, o outro paga R$ 20.925 (exemplo ilustrativo, cálculo do canal). O que muda é o score. E a questão que mais pesa na nota é pagar em dia (29%, segundo a Serasa). Vídeo completo no canal: \"Score de crédito: a prova secreta que decide quanto juro você paga\". Este vídeo é informativo e não é recomendação financeira. Voz sintética.\n#shorts #score #juros #credito",
+   "tags": [
+    "score de credito",
+    "score",
+    "juros",
+    "serasa",
+    "shorts",
+    "por tras do dinheiro"
+   ],
+   "publish_at": "2026-11-16T19:00:00-03:00",
+   "if_late": "public_now",
+   "made_for_kids": false,
+   "altered_content": true,
+   "related_key": "ptd-ep15-long",
+   "pinned_comment": "Você sabe qual é o seu score hoje? Vídeo completo: Score de crédito: a prova secreta que decide quanto juro você paga"
+  }
+ ]
+}
