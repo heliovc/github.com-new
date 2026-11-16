@@ -1,0 +1,5 @@
+[x] Send invoice to Sunny Bakery
+[ ] Update the price list
+[ ] Back up the photos folder
+[x] Reply to Dana
+[ ] Order new printer paper

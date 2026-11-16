@@ -1,0 +1,55 @@
+### manual
+$ python3 --version
+Python 3.11.18
+$ ls
+report.py
+todo.txt
+$ python3 report.py
+2026-11-16 11:09  3 open tasks
+$ cat report.txt
+2026-11-16 11:09  3 open tasks
+### which
+$ pwd
+/home/alex/scripts
+$ which python3
+/usr/local/bin/python3
+### crontab0
+$ crontab -l
+no crontab for alex
+### crontab1
+$ crontab -l
+* * * * * /usr/local/bin/python3 /home/alex/scripts/report.py >> /home/alex/scripts/cron.log 2>&1
+### fail
+$ cat cron.log
+Traceback (most recent call last):
+  File "/home/alex/scripts/report.py", line 3, in <module>
+    tasks = open("todo.txt").read().splitlines()
+            ^^^^^^^^^^^^^^^^
+FileNotFoundError: [Errno 2] No such file or directory: 'todo.txt'
+### todo
+$ cat todo.txt
+[x] Send invoice to Sunny Bakery
+[ ] Update the price list
+[ ] Back up the photos folder
+[x] Reply to Dana
+[ ] Order new printer paper
+### works
+$ cat report.txt
+2026-11-16 11:09  3 open tasks
+2026-11-16 11:11  3 open tasks
+2026-11-16 11:12  3 open tasks
+2026-11-16 11:13  3 open tasks
+### result
+$ ls
+cron.log
+report.py
+report.txt
+todo.txt
+$ cat report.txt
+2026-11-16 11:09  3 open tasks
+2026-11-16 11:11  3 open tasks
+2026-11-16 11:12  3 open tasks
+2026-11-16 11:13  3 open tasks
+### crontab2
+$ crontab -l
+0 9 * * * /usr/local/bin/python3 /home/alex/scripts/report.py >> /home/alex/scripts/cron.log 2>&1

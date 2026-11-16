@@ -1,0 +1,59 @@
+{
+  "version": 1,
+  "channel_id": "UCXGqR8k1RMbfYdVleIuJKzA",
+  "created_at": "2026-11-16T08:31:33-03:00",
+  "items": [
+    {
+      "key": "lab-ep12-long",
+      "kind": "long",
+      "video": "video.mp4",
+      "title": "Run a Python Script Automatically Every Day (cron + Windows Task Scheduler for Beginners)",
+      "description": "Make any Python script run by itself every day: cron on Mac and Linux, Task Scheduler on Windows. Step by step for complete beginners, including the mistake that breaks almost everyone's first schedule (and the two-line fix), how to read a cron schedule, and how to make sure a scheduled script never fails silently. Every output on screen is the real result of the code shown.\n\nChapters\n0:00 The result\n0:31 Why schedule a script?\n0:47 The plan\n1:03 The script\n1:52 Mac and Linux: cron\n2:08 How to read a cron schedule\n2:26 Use full paths\n2:46 Add the job: crontab -e\n3:25 The mistake that breaks first schedules\n3:43 The fix: use the script's own folder\n4:16 Every day at 9 AM\n4:42 Weekdays only\n4:57 Cron cheat sheet\n5:18 Mistake 2: minute and hour swapped\n5:33 Windows: Task Scheduler\n6:43 Mistake 3: the computer was asleep\n7:02 Pro tips\n7:39 Recap\n\ntodo.txt (practice file)\n[x] Send invoice to Sunny Bakery\n[ ] Update the price list\n[ ] Back up the photos folder\n[x] Reply to Dana\n[ ] Order new printer paper\n\nreport.py (final version, safe to schedule)\nfrom datetime import datetime\nfrom pathlib import Path\n\nfolder = Path(__file__).parent  # the folder this script lives in\n\ntasks = (folder / \"todo.txt\").read_text().splitlines()\nopen_tasks = [t for t in tasks if t.startswith(\"[ ]\")]\n\nnow = datetime.now().strftime(\"%Y-%m-%d %H:%M\")\nline = f\"{now}  {len(open_tasks)} open tasks\\n\"\n\nwith open(folder / \"report.txt\", \"a\") as f:\n    f.write(line)\nprint(line, end=\"\")\n\nFirst version (works by hand, fails under cron: it looks for todo.txt in the wrong folder)\nfrom datetime import datetime\n\ntasks = open(\"todo.txt\").read().splitlines()\nopen_tasks = [t for t in tasks if t.startswith(\"[ ]\")]\n\nnow = datetime.now().strftime(\"%Y-%m-%d %H:%M\")\nline = f\"{now}  {len(open_tasks)} open tasks\\n\"\n\nwith open(\"report.txt\", \"a\") as f:\n    f.write(line)\nprint(line, end=\"\")\n\nThe cron line (crontab -e), every day at 9:00\n0 9 * * * /full/path/to/python3 /full/path/to/scripts/report.py >> /full/path/to/scripts/cron.log 2>&1\nFind your own paths with:  which python3   and   pwd\n\nCron cheat sheet (minute  hour  day-of-month  month  day-of-week)\n* * * * *  every minute (testing)  |  */15 * * * *  every 15 minutes  |  0 * * * *  every hour\n0 9 * * *  every day at 9:00  |  30 8 * * 1-5  weekdays at 8:30  |  0 9 * * 1  Mondays at 9:00\n0 0 1 * *  midnight on the 1st  |  0 9,17 * * *  9:00 and 17:00\n\nWindows Task Scheduler\nCommand Prompt: where python  (copy the path ending in python.exe)\nTask Scheduler, Create Basic Task, Trigger: Daily, Action: Start a program\nProgram/script: full path to python.exe  |  Add arguments: report.py  |  Start in: your scripts folder\nTest: right-click the task, Run. Last Run Result 0x0 = success.\n\nCommon problems:\nFileNotFoundError only when scheduled  -  use Path(__file__).parent (or fill in \"Start in\" on Windows)\nRuns at 00:09 instead of 9:00  -  the first field is the minute, the second is the hour\nNothing happened and no error  -  add >> cron.log 2>&1 so output and errors are saved\nMissed run  -  the computer was asleep; on Windows tick \"Run task as soon as possible after a scheduled start is missed\"\ncrontab -r deletes ALL your jobs  -  use crontab -e and delete one line instead\n\n—\nShortcut Lab: software and AI tutorials that save you hours. A new tutorial every day.\nSubscribe so you don't miss the next shortcut.\n\nNarration uses a synthetic voice. All code shown is run and checked before publishing.\n#python #automation #cron",
+      "tags": [
+        "run python script automatically",
+        "cron tutorial",
+        "crontab",
+        "schedule python script",
+        "task scheduler python",
+        "windows task scheduler",
+        "cron for beginners",
+        "python automation",
+        "automate python script",
+        "crontab -e",
+        "cron job",
+        "python for beginners",
+        "python tutorial",
+        "run script every day",
+        "automation for beginners"
+      ],
+      "thumbnail": "thumbnail.jpg",
+      "captions": "legendas.srt",
+      "publish_at": "2026-11-16T19:00:00-03:00",
+      "if_late": "public_now",
+      "made_for_kids": false,
+      "altered_content": true,
+      "pinned_comment": "Which task would you hand over to your computer first: a daily report, a backup, or cleaning your downloads? Tell me below."
+    },
+    {
+      "key": "lab-ep12-short",
+      "kind": "short",
+      "video": "vertical.mp4",
+      "title": "This Python Script Runs Itself #shorts",
+      "description": "One cron line and a Python script runs by itself every day, then the mistake that breaks most first schedules.\nFull tutorial on the channel: \"Run a Python Script Automatically Every Day (cron + Windows Task Scheduler for Beginners)\".\n#python #automation #shorts",
+      "tags": [
+        "cron",
+        "python",
+        "python automation",
+        "crontab",
+        "shorts"
+      ],
+      "captions": null,
+      "publish_at": "2026-11-16T20:30:00-03:00",
+      "if_late": "public_now",
+      "made_for_kids": false,
+      "altered_content": true,
+      "related_key": "lab-ep12-long",
+      "pinned_comment": "What would you schedule first? Full tutorial: Run a Python Script Automatically Every Day (cron + Windows Task Scheduler for Beginners)"
+    }
+  ]
+}

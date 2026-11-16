@@ -15,6 +15,8 @@ Scene types: title, steps, code, term, files, tip, keys, compare, chat, outro, t
   rx (EP11: regex lab - the pattern in a big bar on top, split into colored parts that pop in as "chips" explaining each piece; below,
   the sample text in a window where every REAL match (re.finditer at render time) lights up one after another, capture groups in their
   own colors, with a live match counter; sub= swaps each match for its re.sub replacement after the sweep)
+  cron (EP12: a crontab line decoded - five time fields pop in as colored tiles with label + plain meaning, then a 7-day x 24-hour
+  calendar where a cursor sweeps and every REAL run time (cron matcher at render time, dom/dow OR rule) drops a dot + run counter)
 Identity: charcoal #0F1115, lime #B6F35C, coral #FF7A59, sky #6CC4FF, Poppins + DejaVu Sans Mono.
 """
 import sys, os, re, math, json, hashlib, subprocess, importlib.util
@@ -947,6 +949,76 @@ def sc_rx(img, v, t, d):
         a = ease((t - 0.6 - span) / 0.5); fn = F(30, "SemiBold"); tw = fn.getlength(v["note"])
         if a > 0:
             ny = min(1012, box[3] + 14); dr.rounded_rectangle([W / 2 - tw / 2 - 30, ny, W / 2 + tw / 2 + 30, ny + 54], 27, fill=mix(BG, v.get("notecol", ACC), a)); dr.text((W / 2, ny + 27), v["note"], font=fn, fill=BG, anchor="mm")
+
+# ---- EP12: cron - a crontab line decoded: its five time fields pop in as big colored tiles (label + plain meaning under each),
+# then a 7-day x 24-hour calendar where a time cursor sweeps left to right and every REAL run time (computed at render time by a
+# small cron matcher: *, */n, a-b, a,b, dom/dow OR rule) drops a dot; a counter chip shows the runs found that week
+CRON_NAMES = ["MINUTE", "HOUR", "DAY OF MONTH", "MONTH", "DAY OF WEEK"]
+def _cron_set(f, lo, hi):
+    out = set()
+    for part in f.split(","):
+        rng, _, step = part.partition("/"); step = int(step or 1)
+        if rng == "*": a, b = lo, hi
+        elif "-" in rng: a, b = map(int, rng.split("-"))
+        else: a = b = int(rng)
+        out |= set(range(a, b + 1, step))
+    return out
+def cron_runs(expr, start="2026-11-16", days=7):
+    import datetime as _dt
+    mi, ho, dm, mo, dw = expr.split()[:5]
+    M, Hh, D, Mo = _cron_set(mi, 0, 59), _cron_set(ho, 0, 23), _cron_set(dm, 1, 31), _cron_set(mo, 1, 12)
+    Wd = {x % 7 for x in _cron_set(dw, 0, 7)}
+    t0 = _dt.datetime.fromisoformat(start); runs = []
+    for k in range(days * 24 * 60):
+        t = t0 + _dt.timedelta(minutes=k)
+        if t.minute not in M or t.hour not in Hh or t.month not in Mo: continue
+        dom_ok, dow_ok = t.day in D, (t.isoweekday() % 7) in Wd
+        ok = (dom_ok or dow_ok) if (dm != "*" and dw != "*") else (dom_ok and dow_ok)
+        if ok: runs.append(t)
+    return runs
+def sc_cron(img, v, t, d):
+    expr = v["expr"]; flds = expr.split()[:5]; cols = v.get("colors", [SKY, YEL, (80, 220, 190), CORAL, VIO])
+    dr = ImageDraw.Draw(img); span = d * v.get("span", 0.75); tp = span * 0.4
+    if v.get("title"): text_a(img, (W / 2, 150), v["title"], F(44, "Bold"), TXT, ease(t / 0.4), "mm")
+    fb = F(64, "monob"); tw, gap = 300, 26; x0 = W / 2 - (5 * tw + 4 * gap) / 2; y0 = 210
+    for i, f in enumerate(flds):
+        a = ease((t - 0.3 - tp * i / 5) / 0.35); col = cols[i]
+        if a <= 0: continue
+        x = x0 + i * (tw + gap); yy = y0 + (1 - a) * 24
+        dr.rounded_rectangle([x, yy, x + tw, yy + 110], 18, fill=mix(BG, mix(PANEL, col, 0.16), a), outline=mix(BG, col, a), width=3)
+        text_a(img, (x + tw / 2, yy + 55), f, fb, col, a, "mm")
+        text_a(img, (x + tw / 2, yy + 140), CRON_NAMES[i], F(22, "Bold"), DIM, a, "mm")
+        if v.get("means"): text_a(img, (x + tw / 2, yy + 176), v["means"][i], F(28, "SemiBold"), TXT, a, "mm")
+    if v.get("cmd"):
+        a = ease((t - 0.3 - tp) / 0.4); fc = F(24, "mono")
+        text_a(img, (W / 2, y0 + 222), "then runs:  " + v["cmd"], fc, (200, 206, 216), a, "mm")
+    # week calendar
+    runs = cron_runs(expr, v.get("start", "2026-11-16")); gx0, gx1, gy0, rh = 330, 1730, 500, 56
+    a = ease((t - tp) / 0.4)
+    if a > 0:
+        fd, fh = F(26, "SemiBold"), F(20, "mono")
+        for h in range(0, 25, 3):
+            x = gx0 + (gx1 - gx0) * h / 24; text_a(img, (x, gy0 - 22), f"{h:02d}:00" if h < 24 else "", fh, DIM, a, "mm")
+        for r, nm in enumerate(["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"]):
+            y = gy0 + r * rh
+            dr.rounded_rectangle([gx0, y + 8, gx1, y + rh - 8], 10, fill=mix(BG, PANEL, a), outline=mix(BG, LINE, a), width=1)
+            text_a(img, (gx0 - 30, y + rh / 2), nm, fd, (200, 206, 216), a, "rm")
+        frac = max(0.0, min(1.0, (t - tp - 0.3) / max(0.5, span - tp)))
+        if 0 < frac < 1: cx = gx0 + (gx1 - gx0) * frac; dr.line([cx, gy0, cx, gy0 + 7 * rh], fill=ACC, width=3)
+        n = 0; dense = len(runs) > 7 * 60
+        for rt in runs:
+            fx = (rt.hour * 60 + rt.minute) / 1440
+            if fx > frac: continue
+            n += 1; x = gx0 + (gx1 - gx0) * fx; y = gy0 + rt.weekday() * rh + rh / 2
+            if dense: dr.line([x, y - 12, x, y + 12], fill=ACC, width=2)
+            else:
+                rr = 11 if fx > frac - 0.03 else 9; dr.ellipse([x - rr, y - rr, x + rr, y + rr], fill=ACC, outline=BG, width=2)
+                if len(runs) <= 10: dr.text((x + 20, y), rt.strftime("%H:%M"), font=F(20, "mono"), fill=TXT, anchor="lm")
+        lab = f"{n} run" + ("" if n == 1 else "s") + " this week"; fl = F(26, "Bold"); lw = fl.getlength(lab) + 44
+        dr.rounded_rectangle([gx1 - lw, gy0 + 7 * rh + 14, gx1, gy0 + 7 * rh + 60], 23, fill=ACC); dr.text((gx1 - lw / 2, gy0 + 7 * rh + 37), lab, font=fl, fill=BG, anchor="mm")
+    if v.get("english"):
+        a = ease((t - span) / 0.5); fe = F(32, "SemiBold")
+        text_a(img, (gx0, gy0 + 7 * rh + 37), v["english"], fe, v.get("engcol", TXT), a, "lm")
 
 SC = {k[3:]: f for k, f in list(globals().items()) if k.startswith("sc_")}
 
