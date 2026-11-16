@@ -41,6 +41,15 @@ EP13 added scenes: departures (split-flap board GATE / DESTINATION / CAR / JET /
   ticket coral. Structure NEW: "departure board" (one gate per destination). Learned: NASA Horizons / NSSDC hosts are blocked by the
   proxy -> verify numbers with web search; 1,400 words incl. 34 scenes = 8.2 min. ranking.py: vis "wind" (rank12). scale_short.py:
   vis "mapfit" (scale06, US outline normalised to 4,500 km).
+EP14 added scenes: oceancut (side cross-section TO SCALE: sky / ocean v.depth km / seafloor, km ruler; a rock of v.d_m metres falls in:
+  mode drop (rests on the floor; "still sticking out" tag if taller than the sea) | burst (explodes at v.alt km, the sea untouched) | crater
+  (water cavity v.cav_km + rim wave + steam); v.everest silhouette; v.bare/v.hot for thumbnails), sizeladder (chapter card "ROCK n OF 5":
+  rocks spaced evenly with leader lines to a log size axis 1 m -> 30 km + landmarks; n=0/6 = intro/recap), wavering (mode local: rings
+  spread over a top-down sea toward a coastline at v.coast_km, minute clock + wave-height box; mode global: rings sweep over a globe,
+  hour clock), plume (atmosphere 0-60 km: mode vapor = steam column into the stratosphere + counter; mode ozone = ozone band thins + UV
+  index meter 0-60 with WHO "extreme" 11+). Palette abyss teal / impact orange / foam white. Structure NEW: "drop test" (same ocean, five
+  rocks, each a chapter). Learned: 1,348 words + 28 scenes = 7.9 min -> ~1,400 words for 8.1 min; three renders in parallel on 4 cores
+  are fine (~25 min). ranking.py: vis "crater" (rank13). scale_short.py: vis "bhfit" (scale07, M87* horizon vs the solar system).
 EP06 added scenes: spinglobe (globe + speed by latitude; top=True rings; slow=True), pendulum, fling, bulge, yearday, dayclock (teal / amber palette)
 """
 import sys, os, re, math, subprocess, importlib.util, json, random, hashlib
@@ -3530,6 +3539,294 @@ def sc_slingshot(img, v, t, dur):
         d.text((W / 2, 1030), "gravity assist, illustration", font=F(26, "Medium"), fill=DIM, anchor="mm")
     if v.get("head"): alpha_text(img, (W / 2, 110), v["head"], F(56, "ExtraBold"), WHITE, ease(t / 0.5))
     caption(img, v.get("caption"), ease((t - 2.5) / 0.5), y=H - 80)
+
+
+# ---------------- scenes (EP14) ----------------
+TEAL14, IMPACT14, FOAM14, ABYSS14, SAND14 = (40, 205, 195), (255, 128, 46), (222, 242, 255), (6, 24, 52), (120, 92, 64)
+
+def _rock14(r, seed=3, hot=0.0):
+    """irregular shaded rock sprite (potato shape); hot 0..1 adds an entry glow"""
+    r = max(2, int(r)); key = ("rock14", r, seed, round(hot, 2))
+    if key in _pl: return _pl[key]
+    pad = int(r * 0.8) + 4; s = 2 * r + 2 * pad
+    yy, xx = np.mgrid[0:s, 0:s].astype(np.float32)
+    nx, ny = (xx - s / 2) / r, (yy - s / 2) / r
+    ang = np.arctan2(ny, nx); rng = np.random.default_rng(seed)
+    ph = rng.uniform(0, 6.28, 4); amp = [0.10, 0.07, 0.05, 0.03]
+    rad = 1 + sum(a * np.sin((k + 2) * ang + p) for k, (a, p) in enumerate(zip(amp, ph)))
+    dd = np.sqrt(nx ** 2 + ny ** 2) / rad
+    inside = dd <= 1
+    nz = np.sqrt(np.clip(1 - dd ** 2, 0, 1))
+    shade = np.clip((-0.7 * nx - 0.5 * ny + 0.5 * nz) / 1.0, 0, 1) * 0.9 + 0.1
+    lo = Image.fromarray((rng.random((8, 8)) * 255).astype(np.uint8)).resize((s, s), Image.BICUBIC)
+    tex = np.asarray(lo, np.float32) / 255
+    base = np.array([118, 104, 92], np.float32)
+    rgb = base[None, None, :] * (0.75 + 0.5 * tex[..., None]) * shade[..., None]
+    a = np.where(inside, 255, 0).astype(np.float32)
+    if hot > 0:
+        rim = np.clip(1 - np.abs(dd - 1) / 0.25, 0, 1)
+        rgb = rgb * (1 - rim[..., None] * hot) + np.array(IMPACT14, np.float32) * rim[..., None] * hot
+        gl = np.clip((1.6 - dd) / 0.6, 0, 1) * (dd > 1) * hot
+        rgb = np.where((dd > 1)[..., None], np.array((255, 170, 80), np.float32), rgb); a = np.maximum(a, gl * 150)
+    img = Image.fromarray(np.dstack([np.clip(rgb, 0, 255), a]).astype(np.uint8), "RGBA")
+    _pl[key] = img
+    return img
+
+def _nice_step(span):
+    for s in (0.1, 0.2, 0.5, 1, 2, 5, 10, 20, 50):
+        if span / s <= 7: return s
+    return 100
+
+def sc_oceancut(img, v, t, dur):
+    """side cross-section TO SCALE: sky, ocean (v.depth km, default 3.7), seafloor; a rock of v.d_m metres falls in.
+    v.view_km = vertical extent from the seafloor to the top of the frame; mode: drop (falls to the floor; if taller than the sea,
+    'still sticking out' tag) | burst (explodes at v.alt km, shock ring, the sea is untouched) | crater (water cavity v.cav_km wide + rim
+    wave + steam); v.everest = Everest silhouette on the floor; v.label = name under the rock size tag"""
+    depth = v.get("depth", 3.7); view = v.get("view_km", 20.0); mode = v.get("mode", "drop")
+    yF, yT = 990, 170; k = (yF - yT) / view; yS = yF - depth * k
+    d = ImageDraw.Draw(img)
+    # sky band (subtle) + sea + floor
+    sky = Image.new("RGBA", (W, int(yS - yT)), (0, 0, 0, 0)); sd = ImageDraw.Draw(sky)
+    for y in range(0, sky.height, 4):
+        q = y / max(1, sky.height); sd.rectangle([0, y, W, y + 4], fill=(30, 60, 120, int(20 + 70 * q)))
+    img.alpha_composite(sky, (0, int(yT)))
+    sea = Image.new("RGBA", (W, max(1, int(yF - yS))), (0, 0, 0, 0)); wd = ImageDraw.Draw(sea)
+    for y in range(0, sea.height, 2):
+        q = y / max(1, sea.height); wd.rectangle([0, y, W, y + 2], fill=mix(TEAL14, ABYSS14, q ** 0.6) + (235,))
+    img.alpha_composite(sea, (0, int(yS)))
+    d = ImageDraw.Draw(img)
+    floor = [(x, yF + 6 * math.sin(x / 90) + 4 * math.sin(x / 23)) for x in range(0, W + 20, 20)]
+    d.polygon(floor + [(W, H), (0, H)], fill=SAND14)
+    d.line([(0, yS), (W, yS)], fill=FOAM14, width=3)
+    # ruler (left)
+    st = _nice_step(view); kk = 0.0 if not v.get("bare") else view * 9
+    if not v.get("bare"): d.line([(90, yF), (90, yT)], fill=(150, 165, 190), width=2)
+    while kk <= view + 1e-6:
+        y = yF - kk * k; d.line([(80, y), (100, y)], fill=(150, 165, 190), width=2)
+        lab = f"{kk:g} km"; d.text((110, y), lab, font=F(22, "SemiBold"), fill=(170, 182, 205), anchor="lm"); kk += st
+    if not v.get("bare"): d.text((W - 60, yS + 26), f"average ocean depth: {depth:g} km", font=F(28, "Bold"), fill=FOAM14, anchor="rm")
+    if v.get("everest"):
+        eh = 8.849 * k; ex = 1480
+        d.polygon([(ex - eh * 0.9, yF), (ex - eh * 0.15, yF - eh * 0.82), (ex, yF - eh), (ex + eh * 0.35, yF - eh * 0.7), (ex + eh * 0.95, yF)], fill=(90, 96, 112))
+        d.polygon([(ex - eh * 0.15, yF - eh * 0.82), (ex, yF - eh), (ex + eh * 0.35, yF - eh * 0.7), (ex + eh * 0.12, yF - eh * 0.78)], fill=(235, 240, 248))
+        d.text((ex, yF - eh - 28), "Everest, 8.8 km", font=F(28, "Bold"), fill=WHITE, anchor="mm")
+    # rock
+    dkm = v.get("d_m", 1000) / 1000.0; rp = dkm / 2 * k; rr = max(4, rp)
+    cx_end = v.get("x", 900)
+    p = easeio((t - 0.4) / max(0.8, dur * 0.42))
+    if mode == "burst":
+        y_end = yF - v.get("alt", 30) * k
+    else:
+        y_end = yF - rp if rp * 2 > depth * k else yS + 0.6 * (yF - yS)
+    x0, y0 = cx_end + 700, yT - rr - 60
+    cx, cy = lerp(x0, cx_end, p), lerp(y0, y_end, p)
+    hit_t = 0.4 + max(0.8, dur * 0.42)
+    after = t - hit_t
+    if mode == "burst" and after > 0:
+        fl = max(0.0, 1 - after / 1.2)
+        paste_c(img, radial(int(260 + 200 * min(1, after)), [(0, (255, 240, 200, int(255 * fl))), (0.3, (255, 170, 80, int(160 * fl))), (1, (255, 120, 40, 0))]), cx, cy)
+        ring = 40 + after * 260; lay = Image.new("RGBA", img.size, (0, 0, 0, 0)); ld = ImageDraw.Draw(lay)
+        ld.ellipse([cx - ring, cy - ring, cx + ring, cy + ring], outline=(255, 220, 170, int(200 * max(0, 1 - after / 3))), width=5)
+        img.alpha_composite(lay); d = ImageDraw.Draw(img)
+        d.text((cx, cy - 120), f"explodes ~{v.get('alt', 30):g} km up", font=F(34, "ExtraBold"), fill=WHITE, anchor="mm")
+        if after > 1.5: d.text((W / 2, yS - 40), "the sea below: untouched", font=F(32, "Bold"), fill=TEAL14, anchor="mm")
+    elif mode == "crater" and after > 0:
+        q = ease(after / 1.6); cw = v.get("cav_km", 3) * k / 2 * q; ch = min(yF - yS - 2, cw * 0.9)
+        lay = Image.new("RGBA", img.size, (0, 0, 0, 0)); ld = ImageDraw.Draw(lay)
+        ld.chord([cx_end - cw, yS - ch, cx_end + cw, yS + ch], 0, 180, fill=(18, 26, 48, 255))
+        rim = 20 + 60 * q * (1 - 0.5 * ease((after - 2) / 2))
+        for side in (-1, 1):
+            bx = cx_end + side * cw
+            ld.polygon([(bx - side * 6, yS), (bx + side * rim * 0.4, yS - rim), (bx + side * rim * 1.6, yS)], fill=FOAM14 + (230,))
+        img.alpha_composite(lay)
+        for j in range(10):
+            ph = (after * 0.6 + j / 10) % 1.0; sy = yS - ph * (yS - yT) * 0.8; sx = cx_end + math.sin(j * 2.1 + after) * 40 * (1 + ph * 3)
+            paste_c(img, radial(int(80 + 140 * ph), [(0, (235, 240, 250, int(110 * (1 - ph)))), (1, (235, 240, 250, 0))]), sx, sy)
+        d = ImageDraw.Draw(img)
+        if after > 1.0: d.text((cx_end, yS - rim - 60), v.get("cav_label", "a hole in the water"), font=F(34, "ExtraBold"), fill=WHITE, anchor="mm")
+    if not (mode in ("burst", "crater") and after > 0.15):
+        hot = 0.9 if t > 0.5 else 0.0
+        if p > 0.02 and rr < 60:
+            lay = Image.new("RGBA", img.size, (0, 0, 0, 0)); ld = ImageDraw.Draw(lay)
+            for j in range(18):
+                q = j / 18; ld.line([(lerp(cx, x0, q * 0.25), lerp(cy, y0, q * 0.25)), (lerp(cx, x0, (q + 0.05) * 0.25), lerp(cy, y0, (q + 0.05) * 0.25))], fill=IMPACT14 + (int(200 * (1 - q)),), width=max(2, int(rr * 0.6)))
+            img.alpha_composite(lay)
+        paste_c(img, _rock14(rr, seed=v.get("seed", 3), hot=v.get("hot", hot if rr < 200 else 0.4)), cx, cy)
+        d = ImageDraw.Draw(img)
+        if rp < 6:
+            d.ellipse([cx - 26, cy - 26, cx + 26, cy + 26], outline=IMPACT14, width=3)
+        if v.get("bare"): tag = ""
+        else: tag = v.get("size", f"{v.get('d_m'):,} m" if v.get("d_m", 0) < 1000 else f"{dkm:g} km")
+        d.text((cx + max(rr, 26) + 24, cy - 14), tag, font=F(40, "Black"), fill=IMPACT14, anchor="lm")
+        if v.get("label"): d.text((cx + max(rr, 26) + 24, cy + 26), v["label"], font=F(26, "SemiBold"), fill=DIM, anchor="lm")
+    if mode == "drop" and rp * 2 > depth * k and after > 0.2 and not v.get("bare"):
+        d = ImageDraw.Draw(img)
+        alpha_text(img, (cx_end, yS - (2 * rp - depth * k) - 60), "touches the seafloor, still sticking out of the sea", F(36, "ExtraBold"), WHITE, ease(after / 0.5))
+        yy = yS - (2 * rp - depth * k)
+        for x in range(int(cx_end - rp - 160), int(cx_end - rp - 20), 14): d.line([(x, yy), (x + 7, yy)], fill=FOAM14, width=2)
+    if v.get("head"): alpha_text(img, (W / 2, 100), v["head"], F(54, "ExtraBold"), WHITE, ease(t / 0.5))
+    caption(img, v.get("caption"), ease((t - 2.2) / 0.5), y=H - 50)
+
+LADDER14 = [("18 m", 18, "Chelyabinsk-size"), ("140 m", 140, "NASA's danger line"), ("250 m", 250, "steam maker"), ("1 km", 1000, "ozone killer"), ("10 km", 10000, "Chicxulub")]
+REFS14 = [("a person", 1.8), ("a bus", 12), ("Statue of Liberty", 93), ("Eiffel Tower", 330), ("Everest", 8849)]
+def _lx14(m): return lerp(220, 1720, (math.log10(m) - math.log10(1)) / (math.log10(30000) - math.log10(1)))
+def sc_sizeladder(img, v, t, dur):
+    """chapter card: five rocks on a log size axis (1 m -> 30 km) with reference landmarks; v.n = current rock (1..5); later rocks are '?'"""
+    n = v.get("n", 1); d = ImageDraw.Draw(img); y = 640
+    head = f"ROCK {n} OF 5" if 1 <= n <= 5 else "FIVE ROCKS, ONE OCEAN"
+    alpha_text(img, (W / 2, 140), head, F(74, "Black"), IMPACT14, ease(t / 0.4))
+    alpha_text(img, (W / 2, 215), "same ocean, bigger rock" if n <= 5 else "the drop test, complete", F(34, "SemiBold"), DIM, ease((t - 0.2) / 0.4))
+    d.line([(200, y), (1740, y)], fill=(90, 110, 150), width=4)
+    for e in range(0, 5):
+        x = _lx14(10 ** e); d.line([(x, y - 10), (x, y + 10)], fill=(90, 110, 150), width=3)
+        d.text((x, y + 34), ["1 m", "10 m", "100 m", "1 km", "10 km"][e], font=F(24, "SemiBold"), fill=(130, 145, 175), anchor="mm")
+    for lab, m in REFS14:
+        x = _lx14(m); d.line([(x, y + 60), (x, y + 120)], fill=(70, 85, 120), width=2)
+        d.text((x, y + 150), lab, font=F(24, "Medium"), fill=(150, 160, 185), anchor="mm")
+        d.text((x, y + 180), f"{m:g} m" if m < 1000 else f"{m / 1000:.1f} km", font=F(22, "Medium"), fill=(110, 120, 150), anchor="mm")
+    for i, (lab, m, nick) in enumerate(LADDER14):
+        xa = _lx14(m); x = 380 + i * 300; r = 26 + i * 16; cy = y - 190
+        d.line([(x, cy + r + (64 if i + 1 == n else 8)), (xa, y - 8)], fill=(70, 85, 120), width=2)
+        d.ellipse([xa - 7, y - 7, xa + 7, y + 7], fill=IMPACT14 if i + 1 <= n else (70, 85, 120))
+        if i + 1 < n or n > 5:
+            paste_c(img, _rock14(r, seed=i + 2), x, cy, 0.45); d = ImageDraw.Draw(img)
+            d.text((x, cy - r - 30), lab, font=F(30, "Bold"), fill=DIM, anchor="mm")
+        elif i + 1 == n:
+            a = ease((t - 0.4) / 0.5); pul = 1 + 0.04 * math.sin(t * 4)
+            paste_c(img, radial(int(r * 5), [(0, IMPACT14 + (110,)), (1, IMPACT14 + (0,))]), x, cy, a)
+            paste_c(img, _rock14(int(r * pul), seed=i + 2), x, cy, a); d = ImageDraw.Draw(img)
+            d.text((x, cy - r - 44), lab, font=F(48, "Black"), fill=mix(SPACE, WHITE, a), anchor="mm")
+            d.text((x, cy + r + 36), nick, font=F(28, "Bold"), fill=mix(SPACE, IMPACT14, a), anchor="mm")
+        else:
+            dash_circle10(d, x, cy, r, (80, 95, 130), w=3)
+            d.text((x, cy), "?", font=F(int(r * 0.9) + 10, "Black"), fill=(80, 95, 130), anchor="mm")
+    caption(img, v.get("caption"), ease((t - 1.5) / 0.5), y=H - 90)
+
+def _ringpts14(theta, tilt, cx, cy, R, n=180):
+    """points of a small circle at angular distance theta from an impact point tilted `tilt` rad toward the viewer (orthographic)"""
+    pts = []
+    for j in range(n + 1):
+        ph = 2 * math.pi * j / n
+        x, y, z = math.sin(theta) * math.cos(ph), math.sin(theta) * math.sin(ph), math.cos(theta)
+        y2, z2 = y * math.cos(tilt) - z * math.sin(tilt), y * math.sin(tilt) + z * math.cos(tilt)
+        pts.append((cx + R * x, cy + R * y2, z2))
+    return pts
+
+def sc_wavering(img, v, t, dur):
+    """mode local: top-down sea, rings spread from the impact, a coastline at v.coast_km (scale v.view_km across), clock + wave-height readout
+    from v.heights [[t_frac, text]]; mode global: a globe with rings sweeping over it from v.lat (tilt), clock to v.hours"""
+    mode = v.get("mode", "local"); d = ImageDraw.Draw(img)
+    p = min(1.0, max(0.0, (t - 0.3) / max(1.0, dur * 0.85)))
+    if mode == "global":
+        cx, cy, Rg = 760, 580, 400
+        paste_c(img, earth_sprite(Rg, light=(-0.7, -0.4)), cx, cy)
+        tilt = math.radians(v.get("tilt", 35))
+        lay = Image.new("RGBA", img.size, (0, 0, 0, 0)); ld = ImageDraw.Draw(lay)
+        for j in range(4):
+            th = (p * math.pi * 0.72) - j * 0.12
+            if th <= 0.02: continue
+            pts = _ringpts14(th, tilt, cx, cy, Rg)
+            seg = []
+            for (x, y, z) in pts:
+                if z > 0: seg.append((x, y))
+                elif len(seg) > 1: ld.line(seg, fill=FOAM14 + (int(230 * (1 - j * 0.22)),), width=6 - j); seg = []
+                else: seg = []
+            if len(seg) > 1: ld.line(seg, fill=FOAM14 + (int(230 * (1 - j * 0.22)),), width=6 - j)
+        ip = _ringpts14(0.0, tilt, cx, cy, Rg, n=1)[0]
+        ld.ellipse([ip[0] - 12, ip[1] - 12, ip[0] + 12, ip[1] + 12], fill=IMPACT14 + (255,))
+        img.alpha_composite(lay); d = ImageDraw.Draw(img)
+        hrs = v.get("hours", 48) * p
+        d.text((1500, 420), f"{hrs:,.0f} h" if hrs >= 1 else f"{hrs * 60:,.0f} min", font=F(120, "Black"), fill=FOAM14, anchor="mm")
+        d.text((1500, 510), "after impact", font=F(34, "SemiBold"), fill=DIM, anchor="mm")
+    else:
+        cx, cy = 560, 600; R0 = 420; view = v.get("view_km", 300); k = R0 / (view / 2)
+        disk = radial(2 * R0 + 40, [(0, (30, 140, 160, 200)), (0.9, (12, 60, 110, 200)), (1, (12, 60, 110, 0))]); paste_c(img, disk, cx, cy)
+        ck = v.get("coast_km")
+        if ck:
+            cxk = cx + ck * k
+            lay = Image.new("RGBA", img.size, (0, 0, 0, 0)); ld = ImageDraw.Draw(lay)
+            pts = [(cxk + 18 * math.sin(yy / 40) + 8 * math.sin(yy / 13), yy) for yy in range(80, 1060, 20)]
+            ld.polygon(pts + [(1120, 1060), (1120, 80)], fill=(92, 120, 70, 255)); img.alpha_composite(lay); d = ImageDraw.Draw(img)
+            d.text((cxk + 60, 200), v.get("coast", "coast"), font=F(32, "Bold"), fill=WHITE, anchor="lm")
+            d.text((cxk + 60, 245), f"{ck:g} km away", font=F(28, "SemiBold"), fill=(220, 230, 200), anchor="lm")
+        lay = Image.new("RGBA", img.size, (0, 0, 0, 0)); ld = ImageDraw.Draw(lay)
+        reach = p * v.get("reach_km", view) * k
+        for j in range(5):
+            rr = reach - j * 26
+            if rr <= 4: continue
+            aa = int(220 * (1 - j / 5) * (1 - 0.6 * p))
+            ld.ellipse([cx - rr, cy - rr, cx + rr, cy + rr], outline=FOAM14 + (aa,), width=max(2, 6 - j))
+        ld.ellipse([cx - 10, cy - 10, cx + 10, cy + 10], fill=IMPACT14 + (255,))
+        img.alpha_composite(lay); d = ImageDraw.Draw(img)
+        d.line([(cx - R0, 1030), (cx - R0 + 100 * k, 1030)], fill=WHITE, width=4); d.text((cx - R0, 1000), "100 km", font=F(24, "SemiBold"), fill=WHITE, anchor="lm")
+        mins = v.get("minutes", 30) * p
+        d.text((1500, 420), f"{mins:,.0f} min", font=F(110, "Black"), fill=FOAM14, anchor="mm")
+        d.text((1500, 505), "after impact", font=F(34, "SemiBold"), fill=DIM, anchor="mm")
+    cur = None
+    for fr, txt in v.get("heights", []):
+        if p >= fr: cur = txt
+    if cur:
+        box = Image.new("RGBA", img.size, (0, 0, 0, 0)); ImageDraw.Draw(box).rounded_rectangle([1210, 590, 1790, 760], 24, fill=(6, 16, 34, 230), outline=TEAL14 + (200,), width=3); img.alpha_composite(box)
+        d = ImageDraw.Draw(img); d.text((1500, 645), v.get("hlabel", "wave height"), font=F(30, "Bold"), fill=DIM, anchor="mm")
+        d.text((1500, 710), cur, font=F(58, "Black"), fill=TEAL14, anchor="mm")
+    if v.get("head"): alpha_text(img, (W / 2, 100), v["head"], F(54, "ExtraBold"), WHITE, ease(t / 0.5))
+    caption(img, v.get("caption"), ease((t - 2.2) / 0.5), y=H - 50)
+
+def sc_plume(img, v, t, dur):
+    """side view of the atmosphere (0-60 km: troposphere to 12 km, stratosphere 12-50 km); mode vapor: a steam column rises from the sea into
+    the stratosphere + counter (v.count, v.unit); mode ozone: the ozone layer (~15-35 km) thins + UV index meter 0-60 (WHO 'extreme' 11+),
+    needle to v.uv"""
+    mode = v.get("mode", "vapor"); d = ImageDraw.Draw(img)
+    yG, yT = 990, 180; k = (yG - yT) / 60.0; X1 = 1250 if mode == "ozone" else W - 80
+    lay = Image.new("RGBA", img.size, (0, 0, 0, 0)); ld = ImageDraw.Draw(lay)
+    ld.rectangle([80, yG - 12 * k, X1, yG], fill=(40, 90, 160, 60)); ld.rectangle([80, yG - 50 * k, X1, yG - 12 * k], fill=(70, 60, 150, 45))
+    img.alpha_composite(lay); d = ImageDraw.Draw(img)
+    d.rectangle([80, yG, X1, yG + 40], fill=mix(TEAL14, ABYSS14, 0.4))
+    for km, lab in [(12, "12 km: airliners, top of the weather"), (50, "50 km: top of the stratosphere")]:
+        y = yG - km * k
+        for x in range(80, X1, 18): d.line([(x, y), (x + 9, y)], fill=(150, 160, 200), width=2)
+        d.text((100, y - 22), lab, font=F(24, "SemiBold"), fill=(170, 180, 215), anchor="lm")
+    d.text((100, yG - 6 * k), "troposphere", font=F(28, "Bold"), fill=(130, 175, 230), anchor="lm")
+    d.text((100, yG - 31 * k), "stratosphere", font=F(28, "Bold"), fill=(160, 140, 235), anchor="lm")
+    p = ease((t - 0.3) / max(1.0, dur * 0.7))
+    if mode == "vapor":
+        cx = 900; top = v.get("top_km", 40) * k * p
+        for j in range(60):
+            q = j / 60; y = yG - top * q; w = 30 + 90 * q + (220 * ease((q - 0.55) / 0.45) if q > 0.55 else 0)
+            x = cx + math.sin(q * 9 + t * 1.5) * 18
+            paste_c(img, radial(int(w * 2), [(0, (235, 240, 250, int(80 * (0.5 + 0.5 * q)))), (1, (235, 240, 250, 0))]), x, y)
+        d = ImageDraw.Draw(img)
+        cnt = v.get("count", 250) * p
+        d.text((1560, 330), f"{cnt:,.0f}", font=F(120, "Black"), fill=FOAM14, anchor="mm")
+        d.text((1560, 420), v.get("unit", "million tonnes of water"), font=F(32, "Bold"), fill=DIM, anchor="mm")
+        d.text((1560, 465), "thrown up as steam", font=F(32, "Bold"), fill=DIM, anchor="mm")
+    else:
+        th = 1 - 0.75 * p
+        lay = Image.new("RGBA", img.size, (0, 0, 0, 0)); ld = ImageDraw.Draw(lay)
+        for x in range(80, X1, 6):
+            hole = 0.5 + 0.5 * math.sin(x / 70 + 1.3) * math.sin(x / 23)
+            a = int(170 * max(0.05, th - 0.3 * hole * p))
+            ld.line([(x, yG - 35 * k), (x, yG - 15 * k)], fill=(120, 230, 170, a), width=6)
+        img.alpha_composite(lay); d = ImageDraw.Draw(img)
+        d.text((X1 - 20, yG - 25 * k), "ozone layer", font=F(30, "ExtraBold"), fill=(150, 240, 190), anchor="rm")
+        # sun rays reaching the ground grow with p
+        lay = Image.new("RGBA", img.size, (0, 0, 0, 0)); ld = ImageDraw.Draw(lay)
+        for j in range(9):
+            x = 220 + j * 115; ld.line([(x + 200, yT), (x, yG)], fill=(190, 120, 255, int(40 + 120 * p)), width=4)
+        img.alpha_composite(lay); d = ImageDraw.Draw(img)
+        # UV meter
+        mx0, mx1, my = 1420, 1840, 900
+        d.text((1630, 230), "UV INDEX", font=F(44, "Black"), fill=WHITE, anchor="mm")
+        for u in range(0, 61, 2):
+            y = lerp(my, 300, u / 60); c = (80, 200, 120) if u < 3 else (240, 220, 80) if u < 6 else (255, 150, 60) if u < 8 else (240, 80, 70) if u < 11 else (170, 90, 230)
+            d.rectangle([1540, y - 8, 1600, y + 8], fill=c)
+        for u, lab in [(0, "0"), (11, "11+ extreme (WHO)"), (30, "30"), (60, "60")]:
+            y = lerp(my, 300, u / 60); d.text((1620, y), lab, font=F(24, "SemiBold"), fill=(200, 205, 225), anchor="lm")
+        uv = lerp(v.get("uv0", 10), v.get("uv", 56), p); y = lerp(my, 300, uv / 60)
+        d.polygon([(1525, y), (1495, y - 16), (1495, y + 16)], fill=WHITE)
+        d.text((1480, y), f"{uv:.0f}", font=F(54, "Black"), fill=WHITE, anchor="rm")
+    if v.get("head"): alpha_text(img, (W / 2, 100), v["head"], F(54, "ExtraBold"), WHITE, ease(t / 0.5))
+    caption(img, v.get("caption"), ease((t - 2.2) / 0.5), y=H - 50)
 
 
 SC = {k[3:]: f for k, f in globals().items() if k.startswith("sc_")}

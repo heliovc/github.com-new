@@ -25,6 +25,9 @@ vis.type == "spin" / THEME.hook/outro == "spin": objeto girando (vis.kind = gas 
   segundo (1 por dia -> 1.000/s, Terra de referência) (rank11).
 vis.type == "wind" / THEME.hook/outro == "wind": planeta com faixas e nuvens correndo numa velocidade visível (log da real) + régua log
   de vento 100–50.000 km/h com marcas de referência (furacão cat. 5, avião, som); vis.kmh, vis.col, vis.r, vis.earth, vis.note (rank12).
+vis.type == "crater" / THEME.hook/outro == "crater": cratera vista de cima EM ESCALA (4 px/km) sobre chão rochoso; um rastro cai, a cratera
+  abre com flash, borda e anel central (vis.erosion 0–1 apaga a borda das antigas) + barra de uma maratona (42 km) como régua; outro = as 5
+  bordas concêntricas em escala com cores vis.ring (rank13).
 Tudo desenhado por código; narração Kokoro (VOICE, padrão af_heart); legenda grande queimada.
 """
 import sys, os, re, math, json, subprocess, importlib.util, random
@@ -717,6 +720,73 @@ def wind_vis(img, it, th, t, dur):
     wind_meter(img, th, [o for o in ALL_ITEMS if o["rank"] > it["rank"]] + [it], cur=it, prog=max(0.01, prog))
     if v.get("note"): text(img, (W / 2, 470), v["note"], 40, (230, 232, 240), w="ExtraBold", a=ease((t - 1.2) / 0.5))
 
+# ---- rank13: crater (top-down crater TO SCALE on rocky ground: a streak hits, the crater opens with rim + peak ring; marathon bar for scale;
+#      old craters are eroded = fainter rim) ----
+CR_K = 4.0  # px per km (160 km = 640 px)
+_cr_ground = None
+def cr_ground():
+    global _cr_ground
+    if _cr_ground is None:
+        rng = np.random.default_rng(13); acc = np.zeros((900, W), np.float32)
+        for k in range(5):
+            n = 4 * 2 ** k
+            lo = Image.fromarray((rng.random((n, n)) * 255).astype(np.uint8)).resize((W, 900), Image.BICUBIC)
+            acc += (np.asarray(lo, np.float32) / 255 - 0.5) / (1.6 ** k)
+        base = np.array([96, 82, 66], np.float32); rgb = base[None, None, :] * (1 + acc[..., None] * 0.9)
+        yy = np.linspace(-1, 1, 900)[:, None]; xx = np.linspace(-1, 1, W)[None, :]
+        a = np.clip(1.25 - np.sqrt(xx ** 2 * 0.9 + yy ** 2) * 1.0, 0, 1) * 255
+        _cr_ground = Image.fromarray(np.dstack([np.clip(rgb, 0, 255), a]).astype(np.uint8), "RGBA")
+    return _cr_ground
+
+def cr_crater(img, cx, cy, km, q, erosion=0.0, col=(255, 150, 70)):
+    """crater of km diameter at progress q (0..1), erosion 0..1 fades the rim"""
+    r = km / 2 * CR_K * ease(q)
+    if r < 2: return
+    lay = Image.new("RGBA", img.size, (0, 0, 0, 0)); dl = ImageDraw.Draw(lay)
+    n = 24
+    for i in range(n):
+        f = 1 - i / n; rr = r * f
+        sh = int(40 + 60 * (1 - f))
+        dl.ellipse([cx - rr, cy - rr * 0.92, cx + rr, cy + rr * 0.92], fill=(sh, int(sh * 0.86), int(sh * 0.72), 255))
+    rimw = max(3, int(r * 0.07)); ra = int(230 * (1 - 0.6 * erosion))
+    dl.ellipse([cx - r, cy - r * 0.92, cx + r, cy + r * 0.92], outline=(200, 175, 140, ra), width=rimw)
+    dl.arc([cx - r, cy - r * 0.92, cx + r, cy + r * 0.92], 200, 340, fill=(240, 220, 190, ra), width=max(2, rimw // 2))
+    pr = r * 0.42
+    dl.ellipse([cx - pr, cy - pr * 0.92, cx + pr, cy + pr * 0.92], outline=(170, 150, 120, int(200 * (1 - 0.5 * erosion))), width=max(2, rimw // 2))
+    img.alpha_composite(lay)
+
+def cr_scene(img, cx, cy, km, t, col, erosion=0.0, hit_t=0.5, label=True):
+    img.alpha_composite(cr_ground(), (0, int(cy - 450)))
+    q = (t - hit_t) / 1.0
+    if q < 0:
+        p = ease((t + 0.3) / (hit_t + 0.3)); x0, y0 = cx + 700, cy - 900
+        d = ImageDraw.Draw(img); x, y = lerp(x0, cx, p), lerp(y0, cy, p)
+        for j in range(16):
+            u = j / 16; d.line([(lerp(x, x0, u * 0.3), lerp(y, y0, u * 0.3)), (lerp(x, x0, (u + 0.06) * 0.3), lerp(y, y0, (u + 0.06) * 0.3))], fill=(255, int(200 - 80 * u), 120), width=max(2, int(14 * (1 - u))))
+        R.paste_c(img, R.radial(80, [(0, (255, 250, 220, 255)), (1, (255, 160, 60, 0))]), x, y)
+        return
+    cr_crater(img, cx, cy, km, min(1, q), erosion, col)
+    if q < 1.2:
+        fl = max(0.0, 1 - q / 1.2)
+        R.paste_c(img, R.radial(int(km * CR_K * 1.6), [(0, (255, 245, 210, int(255 * fl))), (0.4, (255, 150, 60, int(160 * fl))), (1, (255, 100, 30, 0))]), cx, cy)
+    d = ImageDraw.Draw(img)
+    if label and q > 0.8:
+        r = km / 2 * CR_K
+        d.line([(cx - r, cy + r * 0.92 + 40), (cx + r, cy + r * 0.92 + 40)], fill=(255, 255, 255), width=4)
+        for s in (-1, 1): d.line([(cx + s * r, cy + r * 0.92 + 28), (cx + s * r, cy + r * 0.92 + 52)], fill=(255, 255, 255), width=4)
+
+def cr_marathon(img, x, y, th):
+    d = ImageDraw.Draw(img); L = 42.195 * CR_K
+    d.rounded_rectangle([x, y - 8, x + L, y + 8], 6, fill=tuple(th["accent2"]))
+    d.text((x, y - 34), "a marathon, 42 km", font=F(28, "ExtraBold"), fill=tuple(th["accent2"]), anchor="lm")
+
+def crater_vis(img, it, th, t, dur):
+    v = it["vis"]; cy = 860
+    cr_scene(img, W / 2, cy, v["km"], t, tuple(th["accent"]), erosion=v.get("erosion", 0.0))
+    cr_marathon(img, 90, 470, th)
+    if v.get("note"): text(img, (W / 2, 1260), v["note"], 40, (240, 232, 220), w="ExtraBold", a=ease((t - 1.6) / 0.5))
+
+
 def caption_chunks(say, t0, dur):
     words = say.split(); groups, g = [], []
     for w in words:
@@ -739,6 +809,14 @@ def draw_caption(img, chunks, gt, y=1585):
 
 def seg_hook(img, sc, th, t, dur):
     col = tuple(th["star_col"]); acc = tuple(th["accent"])
+    if th.get("hook") == "crater":
+        # frame 0: the big number + the #1 crater already open on the ground (eroded rim), a "?" in the middle, a second streak coming in
+        img.alpha_composite(cr_ground(), (0, 860 - 450)); cr_crater(img, W / 2, 860, 160, 1.0, 0.5)
+        d = ImageDraw.Draw(img); d.text((W / 2, 860), "?", font=F(220, "Black"), fill=tuple(th["accent"]), anchor="mm")
+        text(img, (W / 2, 220), sc.get("big", ""), 140, tuple(th["accent"]), stroke=3)
+        text(img, (W / 2, 335), sc["top"].upper(), 52, (255, 255, 255))
+        text(img, (W / 2, 1360), sc["sub"], 46, tuple(th["accent2"]), w="ExtraBold")
+        return
     if th.get("hook") == "wind":
         # frame 0: the big speed + a hot-Jupiter already streaming at full tilt, the "?" over it
         wind_planet(img, W / 2, 860, 300, (90, 120, 200), 33000, t)
@@ -920,6 +998,8 @@ def seg_item(img, it, th, t, dur):
         spin_vis(img, it, th, t, dur)
     if v["type"] == "wind":
         wind_vis(img, it, th, t, dur)
+    if v["type"] == "crater":
+        crater_vis(img, it, th, t, dur)
     # number
     p = easeio((t - 0.5) / 1.6)
     num = it["num"]
@@ -932,6 +1012,19 @@ def seg_item(img, it, th, t, dur):
 
 def seg_outro(img, sc, th, t, dur):
     a = ease(t / 0.5)
+    if th.get("outro") == "crater":
+        img.alpha_composite(cr_ground(), (0, 700 - 450))
+        for i, o in enumerate(sorted(ALL_ITEMS, key=lambda o: o["rank"])):
+            km = o["vis"]["km"]; r = km / 2 * CR_K; d = ImageDraw.Draw(img)
+            d.ellipse([W / 2 - r, 700 - r * 0.92, W / 2 + r, 700 + r * 0.92], outline=tuple(o["vis"].get("ring", th["accent"])), width=5)
+            ang = math.radians([-90, -35, 10, 180, 125][i]); lx, ly = W / 2 + (r + 16) * math.cos(ang), 700 + (r * 0.92 + 16) * math.sin(ang)
+            anc = "mm" if abs(math.cos(ang)) < 0.3 else ("lm" if math.cos(ang) > 0 else "rm")
+            d.text((lx, ly - (14 if i == 0 else 0)), o["short"], font=F(32, "ExtraBold"), fill=tuple(o["vis"].get("ring", th["accent"])), anchor=anc, stroke_width=4, stroke_fill=(0, 0, 0))
+        if th.get("outro_note"): text(img, (W / 2, 1130), th["outro_note"], 44, tuple(th["accent2"]), w="ExtraBold", a=a)
+        text(img, (W / 2, 1240), "WHICH CRATER", 96, (255, 255, 255), a=ease((t - 0.3) / 0.5))
+        text(img, (W / 2, 1330), "SHOULD WE PUT NEXT?", 58, tuple(th["accent"]), a=ease((t - 0.5) / 0.5))
+        text(img, (W / 2, 1460), "SUBSCRIBE to Cosmic Scale", 56, tuple(th["accent"]), a=ease((t - 0.8) / 0.5))
+        return
     if th.get("outro") == "wind":
         wind_meter(img, th, ALL_ITEMS, cur=None, y=640)
         if th.get("outro_note"): text(img, (W / 2, 850), th["outro_note"], 44, tuple(th["accent2"]), w="ExtraBold", a=a)

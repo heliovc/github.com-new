@@ -19,6 +19,10 @@ Visuais (vis.type):
   "mapfit": Plutão EM ESCALA contra o contorno simplificado dos EUA (48 estados, desenhado à mão em lon/lat); vis.mode = hook (mapa +
              Plutão em cima; drop = cai) | ruler (barras 4.500 x 2.377 km) | moon (Lua x Plutão sobre o mapa) | trip (Terra -> Plutão,
              contador de anos da New Horizons 2006 -> 2015) (scale06).
+  "bhfit" : o Sistema Solar EM ESCALA dentro do horizonte de eventos de M87* (raio 128,3 UA = Schwarzschild de 6,5 bilhões de Sóis);
+             vis.mode = hook (buraco negro + órbitas até Netuno; rows = 4 órbitas de Netuno lado a lado) | zoom (começa nos planetas e
+             afasta em log até o horizonte aparecer) | mass (Sol minúsculo + contador de Sóis) | voyager (linha da Voyager 1, 1977 -> 2026,
+             173 UA, sai da borda por pouco) | light (pulso de luz atravessando o diâmetro, contador até 35,6 h) (scale07).
 Reaproveita render.py (sprites, fontes) e ranking.py (fundo, texto, legendas).
 """
 import sys, os, math, json, subprocess, importlib.util, random
@@ -435,6 +439,89 @@ def mapfit_vis(img, v, th, t, dur, bp):
         d.text((cx, 1190), f"{yr:.1f}", font=F(96, "Black"), fill=acc2, anchor="mm")
         d.text((cx, 1280), "New Horizons, 2006 → 2015", font=F(34, "Bold"), fill=(220, 225, 240), anchor="mm")
 
+# ---- scale07: the solar system inside M87*'s event horizon (TO SCALE: horizon radius 128.3 AU; Schwarzschild, 6.5 billion Suns) ----
+RS_AU7 = 128.34
+ORB7 = [("Mercury", 0.387), ("Venus", 0.723), ("Earth", 1.0), ("Mars", 1.524), ("Jupiter", 5.203), ("Saturn", 9.537), ("Uranus", 19.19), ("Neptune", 30.07)]
+def bh7(img, cx, cy, rpx, t, a=1.0):
+    """event horizon disc of radius rpx: warm photon ring + lensed glow, black inside"""
+    if rpx < 2: return
+    g = int(rpx * 3.2)
+    R.paste_c(img, R.radial(g, [(0, (0, 0, 0, 0)), (0.30, (0, 0, 0, 0)), (0.33, (255, 200, 120, int(220 * a))), (0.40, (255, 120, 50, int(130 * a))),
+                                  (0.62, (180, 60, 30, int(40 * a))), (1, (120, 40, 20, 0))]), cx, cy)
+    lay = Image.new("RGBA", img.size, (0, 0, 0, 0)); dl = ImageDraw.Draw(lay)
+    dl.ellipse([cx - rpx, cy - rpx, cx + rpx, cy + rpx], fill=(0, 0, 0, int(255 * a)))
+    sh = 0.5 + 0.5 * math.sin(t * 1.3)
+    dl.arc([cx - rpx * 1.04, cy - rpx * 1.04, cx + rpx * 1.04, cy + rpx * 1.04], 150, 390, fill=(255, 235, 190, int((150 + 80 * sh) * a)), width=max(2, int(rpx * 0.03)))
+    img.alpha_composite(lay)
+
+def solar7(img, cx, cy, k, t, upto=30.07, a=1.0, labels=True):
+    """orbits to scale (k px per AU) + planets on them; the Sun as a glow point"""
+    lay = Image.new("RGBA", img.size, (0, 0, 0, 0)); dl = ImageDraw.Draw(lay)
+    for i, (n, au) in enumerate(ORB7):
+        if au > upto: continue
+        r = au * k
+        if r < 3: continue
+        dl.ellipse([cx - r, cy - r, cx + r, cy + r], outline=(120, 170, 255, int(170 * a)), width=2)
+        ang = t * 0.4 / math.sqrt(au) + i * 1.7
+        px, py = cx + r * math.cos(ang), cy + r * math.sin(ang)
+        pr = 4 if au < 3 else 6
+        dl.ellipse([px - pr, py - pr, px + pr, py + pr], fill=R.PCOL.get(n, (200, 200, 200)) + (int(255 * a),))
+        if labels and n in ("Earth", "Jupiter", "Neptune") and r > 26:
+            dl.text((px + 12, py - 12), n, font=F(26, "Bold"), fill=(220, 230, 255, int(255 * a)), anchor="lm")
+    img.alpha_composite(lay)
+    R.paste_c(img, R.radial(36, [(0, (255, 250, 220, int(255 * a))), (0.3, (255, 210, 120, int(200 * a))), (1, (255, 160, 60, 0))]), cx, cy)
+
+def bhfit_vis(img, v, th, t, dur, bp):
+    """mode hook (black hole + the solar system to scale inside) | zoom (start on the planets, zoom out log until the horizon appears around them)
+    | mass (a tiny Sun vs the hole + counter of Suns) | voyager (Voyager 1 line from the Sun, 1977 -> 2026, just crosses the edge) |
+    light (a light pulse crosses the diameter, hours counter to 35.6)"""
+    acc, acc2 = tuple(th["accent"]), tuple(th["accent2"]); mode = v.get("mode", "hook"); cx, cy = W / 2, 960
+    kfit = 470 / RS_AU7
+    if mode == "zoom":
+        k = math.exp(lerp(math.log(470 / 31.0), math.log(kfit), bp))
+        bh7(img, cx, cy, RS_AU7 * k, t, a=ease((bp - 0.35) / 0.4))
+        solar7(img, cx, cy, k, t)
+        if bp > 0.8: text(img, (cx, cy + RS_AU7 * k + 70), "event horizon, to scale", 36, acc, w="ExtraBold", a=ease((bp - 0.8) / 0.2))
+        return
+    if mode == "voyager":
+        bh7(img, cx, cy, RS_AU7 * kfit * 0.8, t); k = kfit * 0.8
+        solar7(img, cx, cy, k, t, labels=False)
+        dist = 173.1 * bp; ang = math.radians(-35)
+        x1, y1 = cx + dist * k * math.cos(ang), cy + dist * k * math.sin(ang)
+        d = ImageDraw.Draw(img); d.line([(cx, cy), (x1, y1)], fill=acc2, width=4)
+        R.paste_c(img, R.radial(40, [(0, (255, 255, 255, 255)), (1, acc2 + (0,))]), x1, y1)
+        out = dist > RS_AU7
+        text(img, (x1 - 40, y1 - 50), "VOYAGER 1", 34, acc2, anchor="mm")
+        yr = 1977.7 + (2026.9 - 1977.7) * bp
+        d.rounded_rectangle([cx - 300, 1330, cx + 300, 1500], 26, fill=(10, 8, 16))
+        d.text((cx, 1385), f"{int(yr)}", font=F(84, "Black"), fill=acc2, anchor="mm")
+        d.text((cx, 1460), "OUTSIDE, BARELY" if out else "still inside", font=F(36, "ExtraBold"), fill=(140, 255, 160) if out else (255, 255, 255), anchor="mm")
+        return
+    bh7(img, cx, cy, RS_AU7 * kfit, t)
+    if mode == "hook":
+        solar7(img, cx, cy, kfit, t)
+        if v.get("rows"):
+            lay = Image.new("RGBA", img.size, (0, 0, 0, 0)); dl = ImageDraw.Draw(lay); rr = 30.07 * kfit
+            for j in range(4):
+                x = cx - RS_AU7 * kfit + rr + j * 2 * rr * 1.0 + 6 * j
+                q = ease((t - 0.3 - j * 0.35) / 0.4)
+                if q > 0: dl.ellipse([x - rr, cy - rr, x + rr, cy + rr], outline=acc + (int(230 * q),), width=4)
+            img.alpha_composite(lay)
+            text(img, (cx, cy + 300), "Neptune's orbit, 4 times across", 38, acc, w="ExtraBold", a=ease((t - 1.2) / 0.4))
+    elif mode == "mass":
+        R.paste_c(img, R.sun_sprite(6), cx + 380, cy - 420)
+        text(img, (cx + 380, cy - 470), "our Sun", 32, (255, 225, 180), w="Bold")
+        d = ImageDraw.Draw(img); n = 6.5e9 * bp
+        d.text((cx, cy), f"{n:,.0f}", font=F(84, "Black"), fill=(255, 255, 255), anchor="mm")
+        d.text((cx, cy + 80), "Suns of mass", font=F(40, "ExtraBold"), fill=acc, anchor="mm")
+        text(img, (cx, cy + 560), "M87*: the first black hole ever photographed (EHT, 2019)", 30, (200, 205, 225), w="SemiBold")
+    elif mode == "light":
+        p = (t * 0.25) % 1.0; x0 = cx - RS_AU7 * kfit; x = lerp(x0, cx + RS_AU7 * kfit, bp)
+        d = ImageDraw.Draw(img); d.line([(x0, cy), (x, cy)], fill=(255, 245, 170), width=5)
+        R.paste_c(img, R.radial(70, [(0, (255, 255, 255, 255)), (1, (255, 240, 160, 0))]), x, cy)
+        d.text((cx, cy - 120), f"{35.6 * bp:.1f} h", font=F(110, "Black"), fill=(255, 245, 170), anchor="mm")
+        d.text((cx, cy + 110), "for light to cross it", font=F(40, "ExtraBold"), fill=(255, 255, 255), anchor="mm")
+
 def chrome(img, th, gt, total):
     d = ImageDraw.Draw(img)
     d.rectangle([0, 0, int(W * gt / total), 10], fill=tuple(th["accent"]))
@@ -485,6 +572,11 @@ def frame(m, durs, gt, chunks, arr):
         text(img, (W / 2, 280), hl["top"], 52, (255, 255, 255), stroke=3)
     elif v["type"] == "mapfit":
         mapfit_vis(img, v, th, t, d, easeio((t - 0.2) / max(0.8, d * 0.8)))
+        hl = v.get("head") or m.BIG
+        text(img, (W / 2, 170), hl["num"], 124 if len(hl["num"]) < 12 else 100, tuple(th["accent"]), stroke=4)
+        text(img, (W / 2, 280), hl["top"], 52, (255, 255, 255), stroke=3)
+    elif v["type"] == "bhfit":
+        bhfit_vis(img, v, th, t, d, easeio((t - 0.2) / max(0.8, d * 0.8)))
         hl = v.get("head") or m.BIG
         text(img, (W / 2, 170), hl["num"], 124 if len(hl["num"]) < 12 else 100, tuple(th["accent"]), stroke=4)
         text(img, (W / 2, 280), hl["top"], 52, (255, 255, 255), stroke=3)
