@@ -1322,7 +1322,9 @@
   "title": "Score de crédito: a prova secreta que decide quanto juro você paga",
   "kind": "long",
   "publish_at": "2026-11-16T18:00:00-03:00",
-  "pinned_comment": "Na sua opinião, é justo um algoritmo decidir quanto juro você paga, sem você ver a fórmula? Conta aqui."
+  "pinned_comment": "Na sua opinião, é justo um algoritmo decidir quanto juro você paga, sem você ver a fórmula? Conta aqui.",
+  "comment_attempts": 1,
+  "comment_done": "2026-11-16T18:12:36.717052-03:00"
  },
  "ptd-ep15-short": {
   "attempts": 1,
@@ -1338,7 +1340,9 @@
   "kind": "short",
   "publish_at": "2026-11-16T19:00:00-03:00",
   "related_key": "ptd-ep15-long",
-  "pinned_comment": "Você sabe qual é o seu score hoje? Vídeo completo: Score de crédito: a prova secreta que decide quanto juro você paga"
+  "pinned_comment": "Você sabe qual é o seu score hoje? Vídeo completo: Score de crédito: a prova secreta que decide quanto juro você paga",
+  "related_attempts": 1,
+  "related_done": "2026-11-16T18:14:19.775480-03:00"
  },
  "lab-ep12-long": {
   "attempts": 1,
