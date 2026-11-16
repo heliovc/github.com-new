@@ -1,6 +1,10 @@
 {
- "last_run": "2026-11-16T11:30:39.966829-03:00",
+ "last_run": "2026-11-16T12:14:27.391541-03:00",
  "pending": 0,
- "post_tasks": 0,
- "errors": []
+ "post_tasks": 2,
+ "errors": [],
+ "published_now": [
+  "ptd-rank12-short: comment comentário fixado",
+  "ptd-rank13-short: comment comentário fixado"
+ ]
 }
