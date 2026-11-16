@@ -1381,7 +1381,9 @@
   "related_key": "lab-ep12-long",
   "pinned_comment": "What would you schedule first? Full tutorial: Run a Python Script Automatically Every Day (cron + Windows Task Scheduler for Beginners)",
   "related_attempts": 1,
-  "related_done": "2026-11-16T19:19:57.643741-03:00"
+  "related_done": "2026-11-16T19:19:57.643741-03:00",
+  "comment_attempts": 1,
+  "comment_done": "2026-11-16T20:41:50.815627-03:00"
  },
  "quiet-ep06-long": {
   "attempts": 1,
