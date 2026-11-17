@@ -21,6 +21,13 @@ Scene types: city, road, temple, interior, sea, hills, cloister (EP02), nile (EP
   (_gondola); a campo with a carved wellhead, cat, altana with washing, campanile and a lamp before a corner shrine;
   the old wooden Rialto bridge with shop rows and a raised centre; open lagoon with tied mooring posts, a heron, an
   island church and the far Murano furnace glow (glowspot); new "mist" particles; palette key "brick").
+  headland / lantern / rocktower / watchroom (EP07 Lighthouse Keepers: white tower on a cliff with keepers' cottages,
+  walled garden, chimney smoke and a sweeping beam (_tower, _beam: cone reaches far side-on, flashes and widens when it
+  swings towards the viewer, two turns per loop); breathing foam lines on the rocks (_foam); inside the lantern a
+  beehive Fresnel lens with bull's-eye panels turning round the belt and glare when one faces us (_lens) behind
+  diagonal astragals; a flared granite rock tower out at sea with a two-masted schooner crossing, stern lantern and
+  sidelights (_ship); the round watch room with curved box bunk, stove, kettle steam, clock, logbook and oil lamp, the
+  beam sweeping the sea in the deep window (_winbeam); new "spray" particles; palette key "chalk").
 Compilations: comp01.py (COMP01 = EP01-EP03 re-rendered via comp01_pNN.py wrappers) adds "candle haze" text cards that
   dissolve into the next part's first scene, one long ambient tail at the end, one loudness pass; thumb_comp.py = 3-scene
   blended thumbnail.
@@ -235,6 +242,7 @@ class Scene:
         self.particles = "embers"; self.fog_y = 0.72 * H; self.fog_a = 0.22
         self.smoke, self.fires, self.aurora, self.caravan = None, [], None, None
         self.gondola, self.wlights, self.glowspot, self.water_y = None, [], None, None
+        self.beam, self.beam_src, self.foam, self.lensp, self.win, self.ship = None, None, [], None, None, None
         getattr(self, "build_" + kind)()
         self.prepare()
 
@@ -997,6 +1005,353 @@ class Scene:
         self.gondola = dict(y=hy + 60, s=0.3, dir=1)
         self.fog_y = hy + 6; self.fog_a = 0.2; self.particles = "mist"
 
+    # --- EP07 Lighthouse keepers: headland / lantern / rocktower / watchroom
+    def _tower(self, d, cx, base, h, wb, wt, s=1.0, flare=0.0, lit=True):
+        """Tapered white tower, shaded from the moonlit side; optional concave flare at the foot (rock towers).
+        Gallery with railing, lantern with diagonal astragals, dome and ventilator ball. Returns the lamp centre."""
+        p = self.p; chalk = p.get("chalk", (206, 208, 200)); n = 28
+        lit_c = mix(chalk, p["moon"], 0.1); dark_c = mix(chalk, p["mid"], 0.72)
+        def half(v):  # half-width at height fraction v (0 = foot)
+            hw = wb / 2 + (wt / 2 - wb / 2) * v
+            if flare: hw += flare * wb * 0.5 * max(0.0, 1 - v / 0.3) ** 2.2
+            return hw
+        vs = np.linspace(0, 1, 30)
+        for i in range(n):
+            u0, u1 = i / n, (i + 1) / n
+            sh = smooth(1 - abs((u0 + u1) / 2 - 0.7) / 0.7)                                   # moon from the right
+            col = mix(dark_c, lit_c, 0.15 + 0.85 * sh)
+            left = [(cx - half(v) + 2 * half(v) * u0, base - v * h) for v in vs]
+            right = [(cx - half(v) + 2 * half(v) * u1, base - v * h) for v in vs[::-1]]
+            d.polygon(left + right, fill=col + (255,))
+        for k in range(1, 5):                                                                 # small windows up the stair
+            v = k / 5.4; y = base - v * h; x = cx + half(v) * (0.25 if k % 2 else -0.2)
+            d.rectangle([x - 4 * s, y - 9 * s, x + 4 * s, y + 9 * s], fill=mix(dark_c, (0, 0, 0), 0.5) + (255,))
+            if lit and k == 4: self.windows.append((x, y, 6 * s, 14 * s, 0.7, 1))
+        top = base - h; gw = wt / 2 + 22 * s; ic = (14, 15, 19)
+        d.rectangle([cx - gw, top - 10 * s, cx + gw, top + 6 * s], fill=ic + (255,))          # gallery deck + railing
+        d.line([(cx - gw, top - 30 * s), (cx + gw, top - 30 * s)], fill=ic + (255,), width=max(1, int(3 * s)))
+        for k in range(9): d.line([(cx - gw + k * gw / 4, top - 30 * s), (cx - gw + k * gw / 4, top - 10 * s)], fill=ic + (255,), width=max(1, int(2 * s)))
+        lw, lh = wt / 2 - 4 * s, 64 * s; ly0 = top - 10 * s - lh
+        d.rectangle([cx - lw, ly0, cx + lw, top - 10 * s], fill=mix(p["light"], (255, 250, 236), 0.4) + (255,))
+        for k in range(-3, 4):                                                                # diagonal astragals (Scottish lanterns)
+            x0 = cx + k * lw / 2.2; d.line([(x0 - lw / 3, top - 10 * s), (x0 + lw / 3, ly0)], fill=ic + (255,), width=max(1, int(3 * s)))
+        d.line([(cx - lw, ly0), (cx - lw, top - 10 * s)], fill=ic + (255,), width=max(1, int(4 * s)))
+        d.line([(cx + lw, ly0), (cx + lw, top - 10 * s)], fill=ic + (255,), width=max(1, int(4 * s)))
+        d.chord([cx - lw - 4 * s, ly0 - 40 * s, cx + lw + 4 * s, ly0 + 26 * s], 180, 360, fill=ic + (255,))  # dome
+        d.line([(cx, ly0 - 40 * s), (cx, ly0 - 58 * s)], fill=ic + (255,), width=max(1, int(3 * s)))
+        d.ellipse([cx - 7 * s, ly0 - 70 * s, cx + 7 * s, ly0 - 56 * s], fill=ic + (255,))
+        return (cx, ly0 + lh * 0.5)
+
+    def _foam_line(self, pts, n=1):
+        """Foam along the rocks: stored as polylines that brighten and fade like slow breathing."""
+        self.foam.append((pts, self.rng.uniform(0, TAU), n))
+
+    def build_headland(self):
+        """White tower on a dark cliff, keepers' cottages and walled garden beside it, smoke from a chimney, a slow
+        lighthouse beam sweeping over the sea (two turns per loop), moon path on the water, foam at the cliff foot."""
+        p, rng = self.p, self.rng; hy = int(H * 0.6)
+        self.back = self.sky(hy, (0.2, 0.18), 40)
+        self._water(hy, 0.3)
+        far = Image.new("RGBA", (W, H), (0, 0, 0, 0)); df = ImageDraw.Draw(far)               # far coast across a firth
+        fc = mix(p["far"], p["horizon"], 0.4); xs = np.arange(0, W * 0.42, 6)
+        nz = noise1d(len(xs), int(rng.integers(1e6)), 4, 3)
+        df.polygon([(0, hy)] + [(x, hy - 26 - 22 * v - 40 * max(0, 1 - x / (W * 0.25))) for x, v in zip(xs, nz)] + [(W * 0.42, hy)], fill=fc + (255,))
+        self.back.alpha_composite(far.filter(ImageFilter.GaussianBlur(1.5)))
+        self.wlights.append((W * 0.08, 8, 60, 0.4))
+        mid = Image.new("RGBA", (W, H), (0, 0, 0, 0)); d = ImageDraw.Draw(mid); cc = p["mid"]
+        r3 = random.Random(int(rng.integers(1e6))); gy = hy - 120                           # ground level on top
+        face = [(W * 0.36 + 0.2 * W * (k / 16) ** 0.8 + r3.uniform(-14, 14), H - (H - gy + 4) * (k / 16) ** 0.9 + r3.uniform(-10, 10)) for k in range(17)]
+        cl = [(W * 0.3, H)] + face + [(W * 0.7, gy - 4), (W * 0.86, gy - 8), (W, gy - 16), (W, H)]
+        d.polygon(cl, fill=cc + (255,))                                                       # the headland
+        for k in range(7):                                                                    # rock strata catching moonlight
+            fx, fy = face[2 + k * 2]; d.line([(fx + 6, fy), (fx + 160, fy - 30), (W, fy - 60)], fill=mix(cc, p["moon"], 0.07) + (255,), width=2)
+        chalk = p.get("chalk", (206, 208, 200)); cot = mix(chalk, p["mid"], 0.45); roof = mix(p["mid"], (0, 0, 0), 0.35)
+        d.rectangle([W * 0.6, gy - 34, W * 0.98, gy + 4], fill=mix(cot, p["mid"], 0.35) + (255,))  # garden wall
+        for k in range(30): d.line([(W * 0.6 + k * 24, gy - 34), (W * 0.6 + k * 24 + 12, gy - 34)], fill=mix(cot, p["moon"], 0.2) + (255,), width=3)
+        for x0, w, h in ((W * 0.66, 210, 70), (W * 0.79, 160, 60)):                          # two cottages
+            d.rectangle([x0, gy - h, x0 + w, gy], fill=cot + (255,))
+            d.polygon([(x0 - 10, gy - h), (x0 + w / 2, gy - h - 56), (x0 + w + 10, gy - h)], fill=roof + (255,))
+            d.rectangle([x0 + w - 30, gy - h - 74, x0 + w - 12, gy - h - 30], fill=roof + (255,))   # chimney
+            d.rectangle([x0 + w * 0.42, gy - 38, x0 + w * 0.58, gy], fill=mix(roof, (0, 0, 0), 0.4) + (255,))
+            for wx in (x0 + w * 0.2, x0 + w * 0.8):
+                d.rectangle([wx - 12, gy - 50, wx + 12, gy - 22], fill=mix(roof, (0, 0, 0), 0.3) + (255,))
+                if rng.random() < 0.7: self.windows.append((wx, gy - 36, 18, 22, rng.uniform(0, TAU), 1))
+        self.smoke = (W * 0.66 + 210 - 21, gy - 70 - 74, 260)
+        d.line([(W * 0.95, gy), (W * 0.95, gy - 190)], fill=roof + (255,), width=4)          # flagstaff
+        d.line([(W * 0.95, gy - 170), (W * 0.975, gy - 170)], fill=roof + (255,), width=2)
+        self.beam_src = self._tower(d, W * 0.6, gy + 6, 330, 92, 62, 1.0)
+        self.mid = mid
+        mx, my, mr = self.moon; self.reflect = (mx, hy + 4, mr)
+        self.foam = []
+        for k in range(3):                                                                    # foam along the foot of the cliff
+            y0 = hy + 30 + k * 150; xs_ = [x for x, y in face if abs(y - y0) < 90] or [W * 0.45]
+            xe = min(xs_); self._foam_line([(xe - 220 + j * 34, y0 + 26 + 5 * math.sin(j * 1.3 + k) + j * 2) for j in range(7)], k % 3 + 1)
+        near = Image.new("RGBA", (W, H), (0, 0, 0, 0)); dn = ImageDraw.Draw(near); nc = p["near"]
+        dn.polygon([(0, H), (0, H - 120), (W * 0.1, H - 150), (W * 0.22, H - 110), (W * 0.32, H - 40), (W * 0.36, H)], fill=nc + (255,))
+        r2 = random.Random(int(rng.integers(1e6)))
+        for _ in range(60):                                                                   # grass tussocks and sea pinks
+            x = r2.uniform(0, W * 0.3); yb = H - 110 - 40 * math.sin(x / W * 9) + r2.uniform(0, 40)
+            for j in range(4): dn.line([(x, yb), (x + r2.uniform(-14, 14), yb - r2.uniform(18, 46))], fill=nc + (255,), width=2)
+            if r2.random() < 0.3: dn.ellipse([x - 5, yb - 52, x + 5, yb - 42], fill=mix(nc, (200, 150, 170), 0.18) + (255,))
+        self.near = near
+        self.beam = dict(L=2300, spread=210, a=0.3)
+        self.fog_y = hy + 4; self.fog_a = 0.1; self.particles = "spray"
+
+    def build_rocktower(self):
+        """A tall granite rock tower far out at sea (curved, flared foot) on a low reef ringed with foam, its beam
+        turning; a two-masted schooner with stern lantern and sidelights sails across each loop; dark rocks in front."""
+        p, rng = self.p, self.rng; hy = int(H * 0.63)
+        self.back = self.sky(hy, (0.78, 0.17), 38)
+        self._water(hy, 0.32)
+        far = Image.new("RGBA", (W, H), (0, 0, 0, 0)); df = ImageDraw.Draw(far)
+        df.polygon([(W * 0.0, hy), (W * 0.06, hy - 18), (W * 0.15, hy - 10), (W * 0.2, hy)], fill=mix(p["far"], p["horizon"], 0.5) + (255,))
+        self.back.alpha_composite(far.filter(ImageFilter.GaussianBlur(2)))
+        self.windows.append((W * 0.09, hy - 20, 3, 3, 0.0, 3))                                 # a far light on the island
+        mid = Image.new("RGBA", (W, H), (0, 0, 0, 0)); d = ImageDraw.Draw(mid)
+        tx = W * 0.4; rb = hy + 18
+        d.polygon([(tx - 150, rb + 8), (tx - 110, rb - 10), (tx - 40, rb - 16), (tx + 60, rb - 14), (tx + 140, rb - 4), (tx + 170, rb + 8)], fill=p["mid"] + (255,))
+        self.beam_src = self._tower(d, tx, rb - 12, 330, 54, 36, 0.62, flare=1.1)
+        self.mid = mid
+        mx, my, mr = self.moon; self.reflect = (mx, hy + 4, mr)
+        self.foam = []
+        self._foam_line([(tx - 170 + j * 30, rb + 10 + 3 * math.sin(j)) for j in range(12)], 2)
+        self._foam_line([(tx - 120 + j * 26, rb + 22 + 3 * math.sin(j * 2)) for j in range(9)], 1)
+        self.wlights.append((tx, 10, 90, 0.9))
+        near = Image.new("RGBA", (W, H), (0, 0, 0, 0)); dn = ImageDraw.Draw(near); nc = p["near"]
+        dn.polygon([(W * 0.72, H), (W * 0.78, H - 90), (W * 0.86, H - 120), (W * 0.95, H - 96), (W, H - 140), (W, H)], fill=nc + (255,))
+        dn.polygon([(0, H), (0, H - 60), (W * 0.08, H - 74), (W * 0.15, H - 30), (W * 0.18, H)], fill=nc + (255,))
+        for k in range(18):                                                                   # seaweed fringe
+            x = W * 0.74 + k * 26; dn.line([(x, H - 70 - 30 * math.sin(k)), (x + 6, H - 40)], fill=mix(nc, (40, 50, 30), 0.3) + (255,), width=3)
+        self._foam_line([(W * 0.7 + j * 40, H - 40 + 6 * math.sin(j)) for j in range(8)], 3)
+        self.near = near
+        self.ship = dict(y=hy + 70, s=0.42, dir=1)
+        self.beam = dict(L=1900, spread=150, a=0.28)
+        self.fog_y = hy - 4; self.fog_a = 0.12; self.particles = "spray"
+
+    def build_lantern(self):
+        """Inside the lantern: the beehive Fresnel lens (prism rings above and below a belt of bull's-eye panels,
+        brass frame) glowing round its lamp; panels turn slowly; diagonal storm panes with sky and sea behind."""
+        p, rng = self.p, self.rng; hy = int(H * 0.66)
+        sky = self.sky(hy, (0.86, 0.2), 30)
+        sea = Image.new("RGBA", (W, H), (0, 0, 0, 0)); ds = ImageDraw.Draw(sea)
+        for y in range(hy, H): ds.line([(0, y), (W, y)], fill=mix(mix(p["sea"], p["horizon"], 0.3), p["sea"], ((y - hy) / (H - hy)) ** 0.5) + (255,))
+        sky.alpha_composite(sea)
+        base = np.array(sky.convert("RGB"), np.float32)
+        cx, cy = W * 0.5, H * 0.5
+        base += radial_glow(cx, cy, 720, p["light"], 0.20) + radial_glow(cx, cy, 300, p["light"], 0.18)
+        img = Image.fromarray(np.clip(base, 0, 255).astype(np.uint8)).convert("RGBA"); d = ImageDraw.Draw(img)
+        fr = (16, 16, 20, 255); fr2 = mix((16, 16, 20), p["light"], 0.25) + (255,)
+        for k in range(-9, 10):                                                               # diagonal astragals of the glazing
+            x0 = W / 2 + k * 230; d.line([(x0 - 260, H * 0.86), (x0 + 260, H * 0.08)], fill=fr, width=10)
+        d.rectangle([0, 0, W, H * 0.1], fill=fr); d.rectangle([0, H * 0.84, W, H], fill=fr)
+        for k in range(8): d.line([(W * k / 7, H * 0.1), (W * k / 7, H * 0.84)], fill=fr, width=22)   # mullions
+        d.line([(0, H * 0.1), (W, H * 0.1)], fill=fr2, width=3)
+        self.stars_tw = [s for s in self.stars_tw if s[1] > H * 0.12]
+        lw, top, bot = 250, H * 0.13, H * 0.86                                                # the lens: a glass beehive
+        belt0, belt1 = cy - 110, cy + 110; ht = (bot - 70 - top - 30) / 2; lc = (top + 30 + bot - 70) / 2
+        prof = lambda y: lw * max(0.0, 1 - ((y - lc) / (ht * 1.08)) ** 2) ** 0.42
+        d.ellipse([cx - lw * 0.8, belt0 - 160, cx + lw * 0.8, belt1 + 160], fill=mix(p["mid"], p["light"], 0.3) + (255,))
+        y = top + 34; i = 0
+        while y < bot - 80:
+            if belt0 - 8 < y < belt1 + 8: y = belt1 + 10; continue
+            hgt = 15 if y < belt0 else 17; w0, w1 = prof(y), prof(y + hgt)
+            v = 0.5 + 0.5 * math.sin(i * 1.7)
+            gc = mix(mix(p["mid"], p["light"], 0.28 + 0.22 * v), (255, 246, 226), 0.06 + 0.1 * (1 - abs(y - cy) / (bot - cy)))
+            d.polygon([(cx - w0, y), (cx + w0, y), (cx + w1, y + hgt - 3), (cx - w1, y + hgt - 3)], fill=gc + (255,))
+            hl = (y + 1) if y < belt0 else (y + hgt - 4)
+            d.line([(cx - w0 * 0.8, hl), (cx + w0 * 0.8, hl)], fill=mix(p["light"], (255, 255, 255), 0.7) + (int(110 + 90 * v),), width=2)
+            y += hgt; i += 1
+        d.rectangle([cx - lw, belt0, cx + lw, belt1], fill=mix(p["mid"], p["light"], 0.38) + (255,))
+        for k in range(-4, 5):                                                                # brass frame bars
+            x = cx + lw * math.sin(k / 4 * math.pi / 2.2) * 0.97
+            ys_ = [yy for yy in range(int(top + 34), int(bot - 74), 4) if prof(yy) > abs(x - cx) + 3 or belt0 <= yy <= belt1]
+            if ys_: d.line([(x, ys_[0]), (x, ys_[-1])], fill=(70, 54, 30, 255), width=4)
+        d.rectangle([cx - lw - 8, belt0 - 6, cx + lw + 8, belt0 + 3], fill=(96, 74, 40, 255))
+        d.rectangle([cx - lw - 8, belt1 - 3, cx + lw + 8, belt1 + 6], fill=(96, 74, 40, 255))
+        d.chord([cx - 60, top + 4, cx + 60, top + 56], 180, 360, fill=(70, 54, 30, 255))
+        d.rectangle([cx - 150, bot - 70, cx + 150, H], fill=(30, 26, 22, 255))               # pedestal
+        d.rectangle([cx - 190, bot - 76, cx + 190, bot - 56], fill=(60, 48, 30, 255))
+        self.back = img
+        self.lensp = dict(cx=cx, lw=lw, y0=belt0, y1=belt1)
+        self.lamp = (cx, cy + 30); self.lamp_r = 440
+        near = Image.new("RGBA", (W, H), (0, 0, 0, 0)); dn = ImageDraw.Draw(near); nc = p["near"] + (255,)
+        dn.rectangle([0, H * 0.9, W, H], fill=nc)                                             # floor
+        for k in range(12): dn.line([(k * 170, H * 0.9), (k * 170 - 60, H)], fill=mix(p["near"], p["light"], 0.08) + (255,), width=2)
+        dn.line([(W * 0.06, H), (W * 0.06, H * 0.42)], fill=nc, width=14)                      # hatch ladder rail
+        dn.line([(W * 0.1, H), (W * 0.1, H * 0.42)], fill=nc, width=14)
+        for k in range(6): dn.line([(W * 0.06, H * 0.48 + k * 90), (W * 0.1, H * 0.48 + k * 90)], fill=nc, width=10)
+        ox, oy = W * 0.84, H * 0.9                                                            # oil can and folded cloth
+        dn.rectangle([ox - 36, oy - 70, ox + 36, oy], fill=mix(p["near"], p["accent"], 0.18) + (255,))
+        dn.line([(ox + 30, oy - 60), (ox + 80, oy - 100)], fill=mix(p["near"], p["accent"], 0.18) + (255,), width=6)
+        dn.rectangle([ox - 160, oy - 22, ox - 70, oy], fill=mix(p["near"], (220, 214, 196), 0.25) + (255,))
+        self.mid = Image.new("RGBA", (W, H), (0, 0, 0, 0)); self.near = near
+        self.particles = "dust"; self.fog_a = 0
+
+    def build_watchroom(self):
+        """The keepers' round room in the tower: curved stone courses, a curved box bunk with a curtain, a cast-iron
+        stove with glowing door and kettle, a wall clock, the table with open logbook and oil lamp, and a deep round
+        window where the beam sweeps across the sea."""
+        p, rng = self.p, self.rng; vx = W * 0.5
+        wallc = mix(p["mid"], p["light"], 0.12)
+        base = np.zeros((H, W, 3), np.float32) + np.array(wallc, np.float32)
+        xx = np.arange(W, dtype=np.float32)[None, :, None]
+        base *= (0.55 + 0.45 * np.cos((xx - vx) / W * math.pi * 0.95))                        # curvature shading
+        base += radial_glow(W * 0.6, H * 0.72, 650, p["light"], 0.10)
+        img = Image.fromarray(np.clip(base, 0, 255).astype(np.uint8)).convert("RGBA")
+        wx, wy, wr = vx - 10, H * 0.34, 150                                                   # deep round window
+        sky = self.sky(int(H * 0.4), (0.47, 0.25), 16)
+        sea = Image.new("RGBA", (W, H), (0, 0, 0, 0)); ds = ImageDraw.Draw(sea)
+        for y in range(int(H * 0.4), H): ds.line([(0, y), (W, y)], fill=mix(p["sea"], p["horizon"], 0.25) + (255,))
+        sky.alpha_composite(sea)
+        m = Image.new("L", (W, H), 0); ImageDraw.Draw(m).ellipse([wx - wr, wy - wr, wx + wr, wy + wr], fill=255)
+        img.paste(sky, (0, 0), m)
+        self.stars_tw = [s for s in self.stars_tw if math.hypot(s[0] - wx, s[1] - wy) < wr - 10]
+        self.win = (wx, wy, wr)
+        d = ImageDraw.Draw(img)
+        d.ellipse([wx - wr - 34, wy - wr - 34, wx + wr + 34, wy + wr + 34], outline=mix(wallc, (0, 0, 0), 0.5) + (255,), width=34)
+        d.line([(wx - wr, wy), (wx + wr, wy)], fill=(20, 18, 18, 255), width=6); d.line([(wx, wy - wr), (wx, wy + wr)], fill=(20, 18, 18, 255), width=6)
+        for k in range(9):                                                                    # curved stone courses
+            y = H * 0.06 + k * 110
+            pts = [(x, y + 26 * math.cos((x - vx) / W * math.pi)) for x in range(0, W + 1, 40)]
+            d.line(pts, fill=mix(wallc, (0, 0, 0), 0.32) + (255,), width=2)
+        cx_, cy_ = W * 0.74, H * 0.2                                                          # wall clock
+        d.ellipse([cx_ - 46, cy_ - 46, cx_ + 46, cy_ + 46], fill=(40, 30, 22, 255)); d.ellipse([cx_ - 36, cy_ - 36, cx_ + 36, cy_ + 36], fill=mix((230, 220, 196), p["mid"], 0.4) + (255,))
+        d.line([(cx_, cy_), (cx_ + 4, cy_ - 26)], fill=(20, 18, 16, 255), width=3); d.line([(cx_, cy_), (cx_ + 20, cy_ + 8)], fill=(20, 18, 16, 255), width=3)
+        bk = mix(p["near"], p["light"], 0.08)                                                 # curved box bunk, left
+        d.polygon([(0, H * 0.3), (W * 0.26, H * 0.36), (W * 0.26, H * 0.66), (0, H * 0.72)], fill=bk + (255,))
+        d.polygon([(10, H * 0.34), (W * 0.24, H * 0.39), (W * 0.24, H * 0.6), (10, H * 0.64)], fill=mix(bk, (0, 0, 0), 0.5) + (255,))
+        cur = mix(mix(p["accent"], (120, 60, 50), 0.4), p["near"], 0.62)
+        for k in range(9):                                                                    # half-drawn curtain folds
+            x = 10 + k * 26; d.polygon([(x, H * 0.34 + k * 2), (x + 26, H * 0.34 + k * 2.4), (x + 22, H * 0.62 - k * 2), (x - 4, H * 0.63 - k * 2)], fill=mix(cur, (0, 0, 0), 0.15 * (k % 2)) + (255,))
+        d.rectangle([W * 0.11, H * 0.52, W * 0.23, H * 0.6], fill=mix((150, 120, 96), p["near"], 0.55) + (255,))   # folded blanket
+        sx, sy = W * 0.8, H * 0.86                                                            # stove, right
+        sc = (22, 20, 20, 255)
+        d.rectangle([sx - 110, sy - 230, sx + 110, sy], fill=sc)
+        d.rectangle([sx - 124, sy - 246, sx + 124, sy - 226], fill=sc)
+        d.rectangle([sx - 20, 0, sx + 20, sy - 246], fill=sc)
+        d.rounded_rectangle([sx - 60, sy - 170, sx + 60, sy - 90], radius=10, fill=(255, 150, 70, 255))
+        for k in range(5): d.line([(sx - 50 + k * 25, sy - 168), (sx - 50 + k * 25, sy - 92)], fill=sc, width=6)
+        self.glowspot = (sx, sy - 130, 230)
+        kx = sx - 40; d.ellipse([kx - 52, sy - 300, kx + 52, sy - 240], fill=(36, 32, 30, 255))  # kettle
+        d.rectangle([kx - 46, sy - 272, kx + 46, sy - 246], fill=(36, 32, 30, 255))
+        d.arc([kx - 34, sy - 332, kx + 34, sy - 270], 180, 360, fill=(36, 32, 30, 255), width=6)
+        d.line([(kx + 46, sy - 268), (kx + 84, sy - 292)], fill=(36, 32, 30, 255), width=10)
+        self.smoke = (kx + 86, sy - 300, 140)
+        self.back = img
+        near = Image.new("RGBA", (W, H), (0, 0, 0, 0)); dn = ImageDraw.Draw(near); nc = p["near"]
+        dn.polygon([(W * 0.18, H), (W * 0.24, H * 0.78), (W * 0.66, H * 0.78), (W * 0.7, H)], fill=mix(nc, p["light"], 0.1) + (255,))   # table
+        dn.line([(W * 0.24, H * 0.78), (W * 0.66, H * 0.78)], fill=mix(nc, p["light"], 0.25) + (255,), width=4)
+        bx, by = W * 0.38, H * 0.84                                                           # open logbook with ruled lines
+        dn.polygon([(bx - 160, by + 40), (bx - 140, by - 34), (bx, by - 26), (bx, by + 46)], fill=mix((232, 222, 196), p["mid"], 0.25) + (255,))
+        dn.polygon([(bx, by + 46), (bx, by - 26), (bx + 140, by - 34), (bx + 160, by + 40)], fill=mix((232, 222, 196), p["mid"], 0.2) + (255,))
+        for k in range(6):
+            y = by - 18 + k * 10; dn.line([(bx - 136 + k * 2, y), (bx - 12, y + 2)], fill=mix((120, 110, 100), p["mid"], 0.3) + (255,), width=1)
+            dn.line([(bx + 12, y + 2), (bx + 136 - k * 2, y)], fill=mix((120, 110, 100), p["mid"], 0.3) + (255,), width=1)
+        dn.line([(bx + 60, by - 4), (bx + 180, by - 50)], fill=(30, 26, 22, 255), width=4)       # pen
+        mg = (W * 0.22, H * 0.8)                                                              # mug
+        dn.rectangle([W * 0.27, H * 0.77, W * 0.3, H * 0.83], fill=mix(nc, p["accent"], 0.3) + (255,))
+        lx, ly = W * 0.56, H * 0.79                                                           # oil lamp with glass chimney
+        dn.ellipse([lx - 46, ly - 22, lx + 46, ly + 8], fill=mix(nc, p["accent"], 0.35) + (255,))
+        dn.rectangle([lx - 8, ly - 50, lx + 8, ly - 18], fill=mix(nc, p["accent"], 0.35) + (255,))
+        self.lamp = (lx, ly - 66); self.lamp_r = 380
+        self.mid = Image.new("RGBA", (W, H), (0, 0, 0, 0)); self.near = near
+        self.particles = "dust"; self.fog_a = 0
+
+    def _beam(self, img, ph):
+        """EP07: the light turning twice per loop. The cone reaches far when it points across the view, widens and
+        brightens as it swings towards us (the flash), and dims as it turns away. Drawn at 1/4 size, then blurred."""
+        B = self.beam; lx, ly = self.beam_src; p = self.p
+        th = ph * 2; c, s = math.cos(th), math.sin(th)
+        q = 4; lay = Image.new("RGBA", (W // q, H // q), (0, 0, 0, 0)); d = ImageDraw.Draw(lay)
+        toward = max(0.0, s); away = max(0.0, -s)
+        L = B["L"] * (abs(c) * 0.9 + 0.1); hw = B["spread"] * (0.25 + 1.6 * toward ** 2)
+        ex, ey = lx + c * L, ly + 14 + L * 0.02
+        a = B["a"] * (0.35 + 0.65 * toward) * (1 - 0.6 * away)
+        col = mix(p["light"], (255, 250, 236), 0.55)
+        N = 14                                                                                # fades out along its length
+        for i in range(N):
+            f0, f1 = i / N, (i + 1) / N; fade = (1 - (f0 + f1) / 2) ** 1.3
+            for k, f in enumerate((1.0, 0.55, 0.25)):
+                pts = [(lx + (ex - lx) * g, ly + (ey - ly) * g + sg * (3 + (hw * f - 3) * g)) for g, sg in ((f0, -1), (f1, -1), (f1, 1), (f0, 1))]
+                d.polygon([(x_ / q, y_ / q) for x_, y_ in pts], fill=col + (int(255 * a * (0.35 + k * 0.3) * fade),))
+        lay = lay.resize((W, H), Image.BILINEAR).filter(ImageFilter.GaussianBlur(10))
+        img.alpha_composite(lay)
+        fl = 0.25 + 0.75 * toward ** 6                                                        # the flash at the lantern
+        R = int(70 + 260 * toward ** 4)
+        img.alpha_composite(self.tint(self.glow_lg.resize((R * 2, R * 2)), (255, 244, 220), 0.75 * fl), (int(lx - R), int(ly - R)))
+
+    def _foam(self, img, ph):
+        lay = Image.new("RGBA", (W, H), (0, 0, 0, 0)); d = ImageDraw.Draw(lay); p = self.p
+        for pts, f, n in self.foam:
+            br = 0.5 + 0.5 * math.sin(ph * n + f)
+            sh = 8 * math.sin(ph * n + f)
+            d.line([(x + sh, y + br * 3) for x, y in pts], fill=mix(p["moon"], p["sea"], 0.15) + (int(60 + 150 * br),), width=4, joint="curve")
+        img.alpha_composite(lay.filter(ImageFilter.GaussianBlur(1.6)))
+
+    def _lens(self, img, ph):
+        """EP07: bull's-eye panels sliding round the belt of the lens (one turn per loop, 8 panels); the one facing
+        us blazes; soft bands of light drift across the glazing behind."""
+        L = self.lensp; cx, lw, y0, y1 = L["cx"], L["lw"], L["y0"], L["y1"]; p = self.p
+        lay = Image.new("RGBA", (W, H), (0, 0, 0, 0)); d = ImageDraw.Draw(lay); r = (y1 - y0) / 2 - 8; cy = (y0 + y1) / 2
+        for k in range(8):
+            a = ph + k * TAU / 8; z = math.cos(a)
+            if z <= 0: continue
+            x = cx + lw * math.sin(a) * 0.96; rx = r * z ** 0.8
+            b = z ** 10
+            for j in range(5, 0, -1):
+                rr = j / 5
+                d.ellipse([x - rx * rr, cy - r * rr, x + rx * rr, cy + r * rr], outline=mix(p["light"], (255, 255, 255), 0.6) + (int(60 + 150 * z),), width=2)
+            d.ellipse([x - rx * 0.2, cy - r * 0.2, x + rx * 0.2, cy + r * 0.2], fill=(255, 244, 214, int(70 + 185 * b)))
+        img.alpha_composite(lay)
+        for k in range(8):                                                                    # glare of the facing panel
+            a = ph + k * TAU / 8; z = math.cos(a)
+            if z > 0.8:
+                x = cx + lw * math.sin(a) * 0.96; R = int(120 + 560 * ((z - 0.8) / 0.2) ** 3)
+                img.alpha_composite(self.tint(self.glow_lg.resize((R * 2, R * 2)), (255, 246, 226), 0.55 * ((z - 0.8) / 0.2) ** 2), (int(x - R), int(cy - R)))
+        for k in range(8):                                                                    # beams out the back crossing the glazing
+            a = ph + k * TAU / 8 + math.pi; x = cx + math.sin(a) * W * 0.62
+            if math.cos(a) < 0.2: continue
+            band = Image.new("RGBA", (W // 8, H // 8), (0, 0, 0, 0)); bd = ImageDraw.Draw(band)
+            bd.rectangle([(x - 60) / 8, H * 0.1 / 8, (x + 60) / 8, H * 0.84 / 8], fill=p["light"] + (int(40 * math.cos(a)),))
+            img.alpha_composite(band.resize((W, H), Image.BILINEAR).filter(ImageFilter.GaussianBlur(16)))
+
+    def _winbeam(self, img, ph):
+        """EP07 watchroom: the beam from above sweeps across the sea seen through the window, twice per loop."""
+        wx, wy, wr = self.win; th = ph * 2; s = math.sin(th)
+        x = wx + wr * 1.6 * math.cos(th); a = max(0.0, s) ** 2
+        if a < 0.02: return
+        lay = Image.new("RGBA", (W, H), (0, 0, 0, 0)); d = ImageDraw.Draw(lay)
+        d.polygon([(x - 30, wy - wr), (x + 30, wy - wr), (x + 120, wy + wr), (x - 120, wy + wr)], fill=mix(self.p["light"], (255, 255, 255), 0.5) + (int(110 * a),))
+        m = Image.new("L", (W, H), 0); ImageDraw.Draw(m).ellipse([wx - wr, wy - wr, wx + wr, wy + wr], fill=255)
+        lay.putalpha(Image.fromarray(np.minimum(np.array(lay.getchannel("A")), np.array(m))))
+        img.alpha_composite(lay.filter(ImageFilter.GaussianBlur(8)))
+
+    def _ship(self, img, t, ph):
+        """EP07: two-masted schooner crossing once per loop: pale gaff sails and jibs, stern lantern, red/green sidelights."""
+        S_ = self.ship; s = S_["s"]; p = self.p; L = 420 * s; span = W + L * 2; u = t / LOOP_S
+        x = -L + u * span; y = S_["y"] + 4 * s * math.sin(ph * 3)
+        lay = Image.new("RGBA", (W, H), (0, 0, 0, 0)); d = ImageDraw.Draw(lay); c = (8, 9, 12, 255)
+        hull = [(x - L / 2, y - 26 * s), (x + L / 2 + 30 * s, y - 34 * s), (x + L / 2 - 10 * s, y + 6 * s), (x - L / 2 + 16 * s, y + 8 * s)]
+        d.polygon([(px, 2 * y - py + 14 * s) for px, py in hull], fill=(4, 6, 10, 60))
+        d.polygon(hull, fill=c)
+        sail = mix(p["moon"], p["far"], 0.72) + (205,)
+        for mxo, mh in ((-0.18, 300), (0.16, 340)):
+            m0 = x + mxo * L
+            d.line([(m0, y - 28 * s), (m0, y - mh * s)], fill=c, width=max(2, int(5 * s)))
+            d.polygon([(m0 - 6 * s, y - (mh - 20) * s), (m0 - 150 * s, y - (mh - 80) * s), (m0 - 150 * s, y - 50 * s), (m0 - 6 * s, y - 44 * s)], fill=sail)
+        bx = x + L / 2 + 30 * s
+        d.line([(bx, y - 34 * s), (bx + 110 * s, y - 70 * s)], fill=c, width=max(2, int(4 * s)))         # bowsprit
+        d.polygon([(x + 0.16 * L + 8 * s, y - 320 * s), (bx + 100 * s, y - 70 * s), (x + 0.16 * L + 14 * s, y - 50 * s)], fill=sail)
+        img.alpha_composite(lay)
+        fl = 0.85 + 0.15 * math.sin(ph * 5)
+        for lx, ly, col, R in ((x - L / 2 + 6 * s, y - 40 * s, (255, 214, 150), 40), (x + L / 2, y - 40 * s, (120, 255, 150), 18)):
+            img.alpha_composite(self.tint(self.glow_sm.resize((R * 2, R * 2)), col, 0.8 * fl), (int(lx - R), int(ly - R)))
+            ImageDraw.Draw(img).ellipse([lx - 3, ly - 3, lx + 3, ly + 3], fill=col + (255,))
+        d2 = ImageDraw.Draw(img); lx = x - L / 2 + 6 * s
+        for j in range(5):
+            yy = y + 16 * s + j * 8; ww = (12 - j * 2) * (0.7 + 0.3 * math.sin(ph * 5 + j))
+            d2.line([(lx - ww, yy), (lx + ww, yy)], fill=(255, 214, 150, int(120 - j * 22)), width=2)
+
     def _wlights(self, img, ph):
         """EP06: lamplight trembling on the water below each lit window (periodic in LOOP_S)."""
         p = self.p; lay = Image.new("RGBA", (W, H), (0, 0, 0, 0)); dl = ImageDraw.Draw(lay); wy = self.water_y
@@ -1093,7 +1448,7 @@ class Scene:
         vig = np.clip(1 - (r - 0.55) * 0.75, 0.35, 1)
         self.vig = Image.fromarray((vig * 255).astype(np.uint8), "L")
         rng = np.random.default_rng(7)
-        n = {"embers": 26, "fireflies": 22, "dust": 34, "snow": 90, "sand": 70, "mist": 16}[self.particles]
+        n = {"embers": 26, "fireflies": 22, "dust": 34, "snow": 90, "sand": 70, "mist": 16, "spray": 40}[self.particles]
         self.parts = [(rng.uniform(0, W), rng.uniform(0, H), rng.uniform(0, TAU), int(rng.integers(1, 3)), rng.uniform(0.4, 1.0)) for _ in range(n)]
         self.glow_sm = self._glow(16); self.glow_lg = self._glow(90)
 
@@ -1168,6 +1523,8 @@ class Scene:
             gx, gy, R = self.glowspot; fl = 0.8 + 0.12 * math.sin(ph * 3) + 0.08 * math.sin(ph * 7 + 1)
             img.alpha_composite(self.tint(self.glow_lg.resize((R * 2, R)), p["light"], 0.5 * fl), (int(gx - R), int(gy - R // 2)))
         if self.wlights: self._wlights(img, ph)
+        if self.win: self._winbeam(img, ph)
+        if self.lensp: self._lens(img, ph)
         if self.fog_a:
             off = int(W / 2 + 160 * math.sin(ph))
             img.alpha_composite(self.fog.crop((off, 0, off + W, H)))
@@ -1179,6 +1536,9 @@ class Scene:
                 lay.alpha_composite(self.tint(self.glow_sm, p["light"], 0.35 * fl), (int(x - 16), int(y - 16)))
                 dl.rectangle([x - w / 2, y - h / 2, x + w / 2, y + h / 2], fill=mix(p["mid"], p["light"], fl) + (255,))
             img.alpha_composite(lay)
+        if self.foam: self._foam(img, ph)
+        if self.beam: self._beam(img, ph)
+        if self.ship: self._ship(img, t, ph)
         if self.smoke: self._smoke(img, t)
         if self.caravan: self._caravan(img, t)
         if self.gondola: self._gondola(img, t, ph)
@@ -1204,6 +1564,9 @@ class Scene:
             elif self.particles == "mist":                                                 # EP06: slow banks of lagoon mist
                 x = x0 + 140 * math.sin(ph + f) * k; y = H * 0.5 + (y0 % (H * 0.45)) + 10 * math.sin(ph * 2 + f)
                 a = 0.07 * s * (0.6 + 0.4 * math.sin(ph * 2 * k + f)); col = mix(p["moon"], p["horizon"], 0.3); sz = 50 + 60 * s
+            elif self.particles == "spray":                                                # EP07: fine salt spray drifting landward
+                x = (x0 - (W + 80) * t / LOOP_S * k) % (W + 80) - 40; y = H * 0.6 + (y0 % (H * 0.4)) + 18 * math.sin(ph * 2 * k + f)
+                a = 0.13 * s * (0.5 + 0.5 * math.sin(ph * 3 * k + f)); col = mix(p["moon"], p["sea"], 0.2); sz = 2 + 3 * s
             elif self.particles == "fireflies":
                 x = x0 + 60 * math.sin(ph * k + f); y = H * 0.55 + (y0 % (H * 0.45)) + 30 * math.cos(ph * (3 - k) + f)
                 a = max(0, math.sin(ph * 3 * k + f)) ** 2 * 0.8 * s; col = (230, 240, 160); sz = 4 + 2 * s
