@@ -1519,5 +1519,20 @@
   "publish_at": "2026-11-17T20:00:00-03:00",
   "related_key": "lab-ep13-long",
   "pinned_comment": "Which shortcut should I show next? Full tutorial: VS Code Shortcuts That Save Hours (Multi-Cursor, Move Lines, Command Palette for Beginners)"
+ },
+ "quiet-ep07-long": {
+  "attempts": 1,
+  "status": "published",
+  "url": "https://youtu.be/8HWVVPhjVow",
+  "by": "robo",
+  "visibility": "schedule",
+  "when": "2026-11-17T22:15:00-03:00",
+  "at": "2026-11-17T10:06:14.420676-03:00",
+  "error": null,
+  "channel_id": "UCNrw11y7QKt0fWCrJ84QZ-g",
+  "title": "Fall Asleep with the Lighthouse Keepers | 47 Min Sleep Story (Sea & Lamplight)",
+  "kind": "long",
+  "publish_at": "2026-11-17T22:15:00-03:00",
+  "pinned_comment": "Which quiet corner of the past should we keep watch over tomorrow night?"
  }
 }
