@@ -1,0 +1,735 @@
+1
+00:00:00,250 --> 00:00:00,951
+Five words.
+
+2
+00:00:00,951 --> 00:00:04,013
+In five seconds, they become a real Python list.
+
+3
+00:00:04,013 --> 00:00:07,522
+No copy and paste, no typing the same thing five times.
+
+4
+00:00:07,522 --> 00:00:10,137
+One cursor became five, and I typed once.
+
+5
+00:00:10,137 --> 00:00:17,026
+In this video, you'll learn the V S Code shortcuts that do this kind of thing every day, and save you hours.
+
+6
+00:00:17,726 --> 00:00:22,918
+Every shortcut here is shown for Windows and Linux, and for Mac, side by side.
+
+7
+00:00:22,918 --> 00:00:25,648
+And every result you see, I ran for real.
+
+8
+00:00:25,648 --> 00:00:26,247
+Let's go.
+
+9
+00:00:26,947 --> 00:00:28,196
+Here's the difference.
+
+10
+00:00:28,196 --> 00:00:34,950
+With the mouse, you scroll to find a file, you drag to select, and you fix the same word in five places, one at a time.
+
+11
+00:00:34,950 --> 00:00:42,102
+With the keyboard, you jump straight to any file or line, you move whole lines with one key, and you edit many places at once.
+
+12
+00:00:42,802 --> 00:00:43,735
+Here's the plan.
+
+13
+00:00:43,735 --> 00:00:47,522
+First, moving around: files, lines, the sidebar and the terminal.
+
+14
+00:00:47,522 --> 00:00:48,979
+Then editing whole lines.
+
+15
+00:00:48,979 --> 00:00:51,485
+Then the real superpower, multiple cursors.
+
+16
+00:00:51,485 --> 00:00:56,614
+Then the rename shortcut, the mistake that trips up almost everyone, and a few pro tips.
+
+17
+00:00:57,314 --> 00:00:59,205
+One quick rule before we start.
+
+18
+00:00:59,205 --> 00:01:03,233
+On a Mac, Control usually becomes Command, and Alt becomes Option.
+
+19
+00:01:03,233 --> 00:01:06,773
+I'll show both on the right side of the screen every time.
+
+20
+00:01:06,773 --> 00:01:11,168
+And on Linux, a couple of shortcuts are different, I'll point those out.
+
+21
+00:01:11,867 --> 00:01:12,596
+Shortcut one.
+
+22
+00:01:12,596 --> 00:01:16,180
+Control B shows or hides the sidebar, the file list on the left.
+
+23
+00:01:16,180 --> 00:01:18,701
+Hide it, and your code gets the whole screen.
+
+24
+00:01:18,701 --> 00:01:20,381
+Now, Control P, P for project.
+
+25
+00:01:20,381 --> 00:01:21,277
+It's quick open.
+
+26
+00:01:21,277 --> 00:01:25,870
+Type a few letters of any file name, like r e p, and the list filters as you type.
+
+27
+00:01:25,870 --> 00:01:27,942
+Press Enter, and report dot py opens.
+
+28
+00:01:27,942 --> 00:01:30,294
+No scrolling, no clicking through folders.
+
+29
+00:01:30,294 --> 00:01:32,591
+Control B again, and the sidebar is gone.
+
+30
+00:01:33,291 --> 00:01:34,023
+Shortcut two.
+
+31
+00:01:34,023 --> 00:01:35,262
+Control G, go to line.
+
+32
+00:01:35,262 --> 00:01:38,528
+When an error says line eight, type eight and press Enter.
+
+33
+00:01:38,528 --> 00:01:39,711
+You land right there.
+
+34
+00:01:39,711 --> 00:01:41,344
+On a Mac, it's Control G too.
+
+35
+00:01:41,344 --> 00:01:42,414
+And shortcut three.
+
+36
+00:01:42,414 --> 00:01:45,285
+Control and the backtick key, the one under Escape.
+
+37
+00:01:45,285 --> 00:01:47,763
+It opens the terminal right inside V S Code.
+
+38
+00:01:47,763 --> 00:01:52,606
+Here I run python three report dot py, and see the output, without leaving the editor.
+
+39
+00:01:53,306 --> 00:01:55,520
+Shortcut four is the most important one.
+
+40
+00:01:55,520 --> 00:01:57,844
+Control Shift P opens the Command Palette.
+
+41
+00:01:57,844 --> 00:02:00,334
+Every single feature in V S Code is in there.
+
+42
+00:02:00,334 --> 00:02:01,772
+Can't remember a shortcut?
+
+43
+00:02:01,772 --> 00:02:06,199
+Press this, type what you want, like word wrap, or color theme, and press Enter.
+
+44
+00:02:06,199 --> 00:02:11,235
+Even better, the list shows the shortcut next to each command, so you learn them as you go.
+
+45
+00:02:11,935 --> 00:02:12,746
+Now let's edit.
+
+46
+00:02:12,746 --> 00:02:14,694
+Here's a small shopping cart script.
+
+47
+00:02:14,694 --> 00:02:17,291
+The subtotal should be printed before the total.
+
+48
+00:02:17,291 --> 00:02:18,373
+Don't cut and paste.
+
+49
+00:02:18,373 --> 00:02:22,107
+Put your cursor anywhere on the line, and press Alt and the up arrow.
+
+50
+00:02:22,107 --> 00:02:23,405
+The whole line moves up.
+
+51
+00:02:23,405 --> 00:02:24,487
+On a Mac, Option up.
+
+52
+00:02:25,187 --> 00:02:26,208
+Need one more item?
+
+53
+00:02:26,208 --> 00:02:29,751
+Put the cursor on the milk line, and press Shift, Alt, down arrow.
+
+54
+00:02:29,751 --> 00:02:31,415
+The line is copied right below.
+
+55
+00:02:31,415 --> 00:02:34,637
+Control D selects the word under the cursor, so I type eggs.
+
+56
+00:02:34,637 --> 00:02:38,717
+Then I click before the price, and Shift End selects to the end of the line.
+
+57
+00:02:38,717 --> 00:02:39,737
+Type the new price.
+
+58
+00:02:39,737 --> 00:02:41,777
+Done, without retyping the whole line.
+
+59
+00:02:41,777 --> 00:02:44,247
+On Linux, copy line is Control Shift Alt down.
+
+60
+00:02:44,947 --> 00:02:47,399
+This debug line prints the whole dictionary.
+
+61
+00:02:47,399 --> 00:02:50,186
+Control slash comments it out, so Python skips it.
+
+62
+00:02:50,186 --> 00:02:51,858
+Press it again, and it's back.
+
+63
+00:02:51,858 --> 00:02:53,808
+This is perfect for testing things.
+
+64
+00:02:53,808 --> 00:02:58,211
+And when you're sure you don't need it, Control Shift K deletes the whole line.
+
+65
+00:02:58,211 --> 00:02:59,270
+No selecting first.
+
+66
+00:02:59,970 --> 00:03:02,764
+Two bonus moves that need no selection at all.
+
+67
+00:03:02,764 --> 00:03:08,231
+With nothing selected, Control C copies the whole line, and Control X cuts the whole line.
+
+68
+00:03:08,231 --> 00:03:10,539
+Then paste it anywhere with Control V.
+
+69
+00:03:10,539 --> 00:03:16,918
+It's the fastest way to move a line a long distance, when Alt and the arrows would take too many presses.
+
+70
+00:03:17,617 --> 00:03:18,403
+Let's run it.
+
+71
+00:03:18,403 --> 00:03:22,630
+Subtotal seven seventy nine, then the total with tax, eight forty one.
+
+72
+00:03:22,630 --> 00:03:25,287
+The eggs are in, and the debug line is gone.
+
+73
+00:03:25,287 --> 00:03:28,186
+Four quick shortcuts, and the mouse never moved.
+
+74
+00:03:28,886 --> 00:03:29,895
+Now the superpower.
+
+75
+00:03:29,895 --> 00:03:32,495
+I want to rename the variable total, to subtotal.
+
+76
+00:03:32,495 --> 00:03:35,255
+Put the cursor inside the word, and press Control D.
+
+77
+00:03:35,255 --> 00:03:36,317
+It selects the word.
+
+78
+00:03:36,317 --> 00:03:38,970
+Press Control D again, and it adds the next match.
+
+79
+00:03:38,970 --> 00:03:39,501
+And again.
+
+80
+00:03:39,501 --> 00:03:40,244
+Three cursors.
+
+81
+00:03:40,244 --> 00:03:42,633
+Now type once, and all three change together.
+
+82
+00:03:42,633 --> 00:03:43,323
+Look closely.
+
+83
+00:03:43,323 --> 00:03:46,666
+The word Total inside the text, and Subtotal, were not touched.
+
+84
+00:03:46,666 --> 00:03:49,055
+That's because we started with just a cursor.
+
+85
+00:03:49,755 --> 00:03:52,590
+And this is the mistake that trips up almost everyone.
+
+86
+00:03:52,590 --> 00:03:58,156
+If you first select the word by hand, with the mouse or Shift and the arrows, Control D works differently.
+
+87
+00:03:58,156 --> 00:04:02,094
+It now ignores upper and lower case, and it matches inside other words too.
+
+88
+00:04:02,094 --> 00:04:02,409
+Watch.
+
+89
+00:04:02,409 --> 00:04:04,089
+It grabs Total, inside the text.
+
+90
+00:04:04,089 --> 00:04:05,507
+And total, inside Subtotal.
+
+91
+00:04:05,507 --> 00:04:07,502
+Type now, and you'd break your output.
+
+92
+00:04:07,502 --> 00:04:08,447
+The fix is simple.
+
+93
+00:04:08,447 --> 00:04:12,910
+Press Escape, click once inside the word with no selection, and then press Control D.
+
+94
+00:04:13,610 --> 00:04:18,105
+When a word appears twenty times, pressing Control D twenty times is slow.
+
+95
+00:04:18,105 --> 00:04:21,628
+Select it once with Control D, then press Control Shift L.
+
+96
+00:04:21,628 --> 00:04:23,997
+Every match gets a cursor, all at once.
+
+97
+00:04:23,997 --> 00:04:26,001
+Now I'll use the Command Palette.
+
+98
+00:04:26,001 --> 00:04:29,828
+Control Shift P, type upper, and choose Transform to Uppercase.
+
+99
+00:04:29,828 --> 00:04:32,379
+Tax becomes a capital TAX, in both places.
+
+100
+00:04:32,379 --> 00:04:35,720
+In Python, capitals are the usual style for a constant.
+
+101
+00:04:36,420 --> 00:04:39,002
+Same result as before, so nothing broke.
+
+102
+00:04:39,002 --> 00:04:42,294
+Subtotal seven seventy nine, total eight forty one.
+
+103
+00:04:42,294 --> 00:04:47,522
+Renaming with multiple cursors is safe, as long as you start from a plain cursor.
+
+104
+00:04:48,222 --> 00:04:50,599
+Now, the trick from the start of the video.
+
+105
+00:04:50,599 --> 00:04:51,815
+A plain list of words.
+
+106
+00:04:51,815 --> 00:04:54,027
+Press Control Alt down arrow four times.
+
+107
+00:04:54,027 --> 00:04:55,685
+On a Mac, Command Option down.
+
+108
+00:04:55,685 --> 00:04:57,952
+Now there are five cursors, one per line.
+
+109
+00:04:57,952 --> 00:04:59,555
+Type four spaces and a quote.
+
+110
+00:04:59,555 --> 00:05:05,359
+Press End, to jump every cursor to the end of its own line, even though the lines have different lengths.
+
+111
+00:05:05,359 --> 00:05:06,741
+Type a quote and a comma.
+
+112
+00:05:06,741 --> 00:05:08,455
+Escape goes back to one cursor.
+
+113
+00:05:09,155 --> 00:05:12,171
+To finish, Control Shift Enter adds a new line above.
+
+114
+00:05:12,171 --> 00:05:14,960
+It keeps the indent, so one Backspace removes it.
+
+115
+00:05:14,960 --> 00:05:16,895
+I type items equals, open bracket.
+
+116
+00:05:16,895 --> 00:05:18,546
+Control G, line six, and End.
+
+117
+00:05:18,546 --> 00:05:22,302
+Control Enter adds a line below, without breaking the current one.
+
+118
+00:05:22,302 --> 00:05:25,034
+Backspace removes the indent, close the bracket.
+
+119
+00:05:25,034 --> 00:05:27,368
+One more Control Enter, and a print line.
+
+120
+00:05:27,368 --> 00:05:28,107
+Let's run it.
+
+121
+00:05:28,807 --> 00:05:29,533
+Five items.
+
+122
+00:05:29,533 --> 00:05:31,708
+Apple, bread, milk, eggs, coffee.
+
+123
+00:05:31,708 --> 00:05:34,147
+A real Python list, built in seconds.
+
+124
+00:05:34,147 --> 00:05:37,904
+And on Linux, add cursor below is Shift Alt down instead.
+
+125
+00:05:38,604 --> 00:05:40,417
+Renaming a function is different.
+
+126
+00:05:40,417 --> 00:05:43,165
+Its name can also appear in comments, and in text.
+
+127
+00:05:43,165 --> 00:05:45,362
+Put the cursor on the name and press F2.
+
+128
+00:05:45,362 --> 00:05:47,945
+Type the new name, line total, and press Enter.
+
+129
+00:05:47,945 --> 00:05:50,747
+V S Code renames the function and every call to it.
+
+130
+00:05:50,747 --> 00:05:55,857
+But the comment on line one and the text on line six stay the same, because they're not code.
+
+131
+00:05:55,857 --> 00:05:59,264
+This needs the Python extension, and it works the same on Mac.
+
+132
+00:05:59,963 --> 00:06:01,019
+And it still runs.
+
+133
+00:06:01,019 --> 00:06:02,602
+Milk, one point nine eight.
+
+134
+00:06:02,602 --> 00:06:06,296
+And apple shows three point five nine nine, with lots of nines.
+
+135
+00:06:06,296 --> 00:06:07,586
+That's not the rename.
+
+136
+00:06:07,586 --> 00:06:09,990
+It's how computers store decimal numbers.
+
+137
+00:06:09,990 --> 00:06:13,156
+Wrap it in round, if you want a clean three point six.
+
+138
+00:06:13,856 --> 00:06:15,502
+Two more problems beginners hit.
+
+139
+00:06:15,502 --> 00:06:18,329
+First, a shortcut does nothing, or does something else.
+
+140
+00:06:18,329 --> 00:06:21,466
+Your operating system, or another app, may use the same keys.
+
+141
+00:06:21,466 --> 00:06:25,271
+Open the Keyboard Shortcuts editor, search the command, and pick new keys.
+
+142
+00:06:25,271 --> 00:06:27,122
+Second, a different keyboard layout.
+
+143
+00:06:27,122 --> 00:06:30,155
+The backtick key isn't in the same place on every keyboard.
+
+144
+00:06:30,155 --> 00:06:35,091
+If Control backtick doesn't open the terminal, use the Command Palette, and search for terminal.
+
+145
+00:06:35,792 --> 00:06:37,240
+Here's your cheat sheet.
+
+146
+00:06:37,240 --> 00:06:38,689
+Control P to open files.
+
+147
+00:06:38,689 --> 00:06:40,742
+Control Shift P for every command.
+
+148
+00:06:40,742 --> 00:06:42,312
+Control G to go to a line.
+
+149
+00:06:42,312 --> 00:06:44,123
+Alt up and down to move lines.
+
+150
+00:06:44,123 --> 00:06:45,934
+Shift Alt down to copy a line.
+
+151
+00:06:45,934 --> 00:06:47,444
+Control slash to comment.
+
+152
+00:06:47,444 --> 00:06:49,436
+Control Shift K to delete a line.
+
+153
+00:06:49,436 --> 00:06:52,515
+Control D and Control Shift L for multiple cursors.
+
+154
+00:06:52,515 --> 00:06:53,542
+And F2 to rename.
+
+155
+00:06:53,542 --> 00:06:55,896
+Pause the video, and take a screenshot.
+
+156
+00:06:56,596 --> 00:06:57,251
+Pro tip one.
+
+157
+00:06:57,251 --> 00:06:59,651
+Shift Alt right arrow expands the selection.
+
+158
+00:06:59,651 --> 00:07:03,742
+Press it again, and it grows from the word, to the text, to the whole line.
+
+159
+00:07:03,742 --> 00:07:06,087
+On a Mac, it's Control Shift Command right.
+
+160
+00:07:06,087 --> 00:07:06,742
+Pro tip two.
+
+161
+00:07:06,742 --> 00:07:10,614
+Alt and click, Option click on a Mac, adds a cursor anywhere you click.
+
+162
+00:07:10,614 --> 00:07:13,778
+Great when the places you want to edit aren't in a column.
+
+163
+00:07:14,478 --> 00:07:15,255
+Pro tip three.
+
+164
+00:07:15,255 --> 00:07:18,752
+Control K, then Control S, opens the Keyboard Shortcuts editor.
+
+165
+00:07:18,752 --> 00:07:21,416
+Search any command, and you'll see its shortcut.
+
+166
+00:07:21,416 --> 00:07:22,692
+You can even change it.
+
+167
+00:07:22,692 --> 00:07:24,912
+And don't try to learn everything today.
+
+168
+00:07:24,912 --> 00:07:29,463
+Pick two shortcuts this week, use them until they're automatic, then add two more.
+
+169
+00:07:30,163 --> 00:07:31,942
+Here's how to make these stick.
+
+170
+00:07:31,942 --> 00:07:33,320
+This week, use only two.
+
+171
+00:07:33,320 --> 00:07:36,707
+Control P to open files, and Alt up and down to move lines.
+
+172
+00:07:36,707 --> 00:07:38,946
+Next week, add Control D and Control G.
+
+173
+00:07:38,946 --> 00:07:41,414
+The week after, the Command Palette and F2.
+
+174
+00:07:41,414 --> 00:07:45,949
+Each time you reach for the mouse, stop, and ask, is there a shortcut for this?
+
+175
+00:07:45,949 --> 00:07:47,729
+Then check the Command Palette.
+
+176
+00:07:48,429 --> 00:07:49,196
+Quick recap.
+
+177
+00:07:49,196 --> 00:07:52,714
+Control P to jump to files, Control G to jump to lines.
+
+178
+00:07:52,714 --> 00:07:55,336
+Control Shift P when you forget anything.
+
+179
+00:07:55,336 --> 00:07:58,470
+Alt arrows to move lines, Shift Alt to copy them.
+
+180
+00:07:58,470 --> 00:08:02,243
+Control D for the next match, starting from a plain cursor.
+
+181
+00:08:02,243 --> 00:08:04,289
+Control Shift L for all of them.
+
+182
+00:08:04,289 --> 00:08:05,824
+And F2 to rename safely.
+
+183
+00:08:06,524 --> 00:08:12,525
+Next on Shortcut Lab, merge hundreds of Excel files into one, with a few lines of Python.
+
+184
+00:08:12,525 --> 00:08:14,682
+Subscribe, so you don't miss it.

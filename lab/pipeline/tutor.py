@@ -17,6 +17,10 @@ Scene types: title, steps, code, term, files, tip, keys, compare, chat, outro, t
   own colors, with a live match counter; sub= swaps each match for its re.sub replacement after the sweep)
   cron (EP12: a crontab line decoded - five time fields pop in as colored tiles with label + plain meaning, then a 7-day x 24-hour
   calendar where a cursor sweeps and every REAL run time (cron matcher at render time, dom/dow OR rule) drops a dot + run counter)
+  vsc (EP13: a code editor driven by real shortcut semantics - multi-cursor carets, add-next-match (whole word, match case), select all
+  matches, cursor below, move/copy/delete line, toggle comment, F2 rename (identifiers only), go-to-line box, quick-open/command palette
+  with a live fuzzy filter, terminal panel + explorer toggles; keycap HUD with Windows/Linux + Mac keys and a shortcut history;
+  the edit engine runs at render time and ep13 runs the resulting files for the real terminal output)
 Identity: charcoal #0F1115, lime #B6F35C, coral #FF7A59, sky #6CC4FF, Poppins + DejaVu Sans Mono.
 """
 import sys, os, re, math, json, hashlib, subprocess, importlib.util
@@ -1019,6 +1023,259 @@ def sc_cron(img, v, t, d):
     if v.get("english"):
         a = ease((t - span) / 0.5); fe = F(32, "SemiBold")
         text_a(img, (gx0, gy0 + 7 * rh + 37), v["english"], fe, v.get("engcol", TXT), a, "lm")
+
+# ---- EP13: "vsc" - a code editor driven by REAL keyboard-shortcut semantics. Each op = Windows/Linux keys + Mac keys + a list of
+# primitive actions (cursor, add-next-match, select-all-matches, cursor below, move/copy/delete line, toggle comment, F2 rename,
+# go to line, quick-open/command-palette filter, terminal panel). The edit engine runs at render time (vsc_apply), so the code
+# on screen at the end is exactly what the engine produced - ep13 writes those final files out and runs them for the terminal shots.
+# Multi-cursor carets glow, a keycap HUD on the right shows the shortcut being pressed + a history of the last ones, status bar
+# shows Ln/Col and "N selections".
+VS_WORD = re.compile(r"[A-Za-z_]\w*|\d+")
+def _wordat(ln, c):
+    for m in VS_WORD.finditer(ln):
+        if m.start() <= c <= m.end(): return m.start(), m.end()
+    return c, c
+def _instr(ln, c):  # True if column c is inside a "..." / '...' literal
+    q = None
+    for i, ch in enumerate(ln[:c]):
+        if q is None and ch in "\"'": q = ch
+        elif q == ch: q = None
+    return q is not None
+def vsc_apply(st, act, frac=1.0):
+    """st = {"lines": [...], "car": [(row, c0, c1)], ...}; rows 0-based. Returns new state (frac < 1 only matters for typing)."""
+    L = list(st["lines"]); car = list(st["car"]); st = dict(st, lines=L, car=car, changed=set())
+    op = act[0]
+    if op == "cur": st["car"] = [(act[1] - 1, act[2], act[2])]
+    elif op == "add": st["car"] = car + [(act[1] - 1, act[2], act[2])]
+    elif op == "sel": st["car"] = [(act[1] - 1, act[2], act[3])]
+    elif op == "selend": st["car"] = [(r, c0, len(L[r])) for r, c0, c1 in car]
+    elif op == "esc": st["car"] = car[:1]  # Escape keeps the primary (first) cursor
+    elif op == "upper":
+        for r, c0, c1 in car: L[r] = L[r][:c0] + L[r][c0:c1].upper() + L[r][c1:]; st["changed"].add(r)
+    elif op == "bs":  # Backspace; on indentation it removes one tab stop (4 spaces)
+        new = []
+        for r, c0, c1 in car:
+            n = 4 if L[r][:c1].strip() == "" and c1 % 4 == 0 and c1 > 0 else 1
+            L[r] = L[r][:c1 - n] + L[r][c1:]; new.append((r, c1 - n, c1 - n)); st["changed"].add(r)
+        st["car"] = new
+    elif op == "word": st["car"] = [(r,) + _wordat(L[r], c0) for r, c0, c1 in car]
+    elif op in ("next", "all"):
+        r, c0, c1 = car[-1]; w = L[r][c0:c1]
+        pat = re.compile(re.escape(w), re.I) if "loose" in act else re.compile(r"(?<!\w)" + re.escape(w) + r"(?!\w)")  # loose = selection made by hand (default find options)
+        hits = [(i, m.start(), m.end()) for i, ln in enumerate(L) for m in pat.finditer(ln)]
+        if op == "all": st["car"] = hits
+        else:
+            after = [h for h in hits if (h[0], h[1]) > (r, c0) and h not in car] or [h for h in hits if h not in car]
+            st["car"] = car + after[:1]
+    elif op == "type":
+        s = act[1][:int(round(len(act[1]) * frac))]; new = []; shift = {}
+        for r, c0, c1 in sorted(car):
+            k = shift.get(r, 0); a, b = c0 + k, c1 + k
+            L[r] = L[r][:a] + s + L[r][b:]; shift[r] = k + len(s) - (b - a); new.append((r, a + len(s), a + len(s))); st["changed"].add(r)
+        st["car"] = new
+    elif op == "end": st["car"] = [(r, len(L[r]), len(L[r])) for r, c0, c1 in car]
+    elif op == "home": st["car"] = [(r, len(L[r]) - len(L[r].lstrip()), len(L[r]) - len(L[r].lstrip())) for r, c0, c1 in car]
+    elif op == "below":
+        r, c0, c1 = car[-1]; st["car"] = car + [(r + 1, min(c1, len(L[r + 1])), min(c1, len(L[r + 1])))]
+    elif op in ("mvu", "mvd"):
+        r, c0, c1 = car[-1]; j = r - 1 if op == "mvu" else r + 1
+        L[r], L[j] = L[j], L[r]; st["car"] = [(j, c0, c1)]; st["changed"] = {j}
+    elif op == "cpd":
+        r, c0, c1 = car[-1]; L.insert(r + 1, L[r]); st["car"] = [(r + 1, c0, c1)]; st["changed"] = {r + 1}
+    elif op == "del":
+        r = car[-1][0]; L.pop(r); r = min(r, len(L) - 1); st["car"] = [(r, 0, 0)]; st["changed"] = {r}
+    elif op in ("below_line", "above_line"):  # Ctrl+Enter / Ctrl+Shift+Enter: new line keeping indentation
+        r = car[-1][0]; ind = L[r][:len(L[r]) - len(L[r].lstrip())]; j = r + 1 if op == "below_line" else r
+        L.insert(j, ind); st["car"] = [(j, len(ind), len(ind))]; st["changed"] = {j}
+    elif op == "cmt":
+        rows = sorted({r for r, _, _ in car}); ind = min(len(L[r]) - len(L[r].lstrip()) for r in rows)
+        if all(L[r].lstrip().startswith("# ") for r in rows):
+            for r in rows: L[r] = L[r].replace("# ", "", 1)
+            st["car"] = [(r, max(0, c0 - 2), max(0, c1 - 2)) for r, c0, c1 in car]
+        else:
+            for r in rows: L[r] = L[r][:ind] + "# " + L[r][ind:]
+            st["car"] = [(r, c0 + 2, c1 + 2) for r, c0, c1 in car]
+        st["changed"] = set(rows)
+    elif op == "rename":  # F2: identifiers only (strings and comments untouched)
+        r, c0, c1 = car[-1]; a, b = _wordat(L[r], c0); old = L[r][a:b]; pat = re.compile(r"(?<!\w)" + re.escape(old) + r"(?!\w)")
+        for i, ln in enumerate(L):
+            cut = ln.find("#") if "#" in ln and not _instr(ln, ln.find("#")) else len(ln)
+            out, last = "", 0
+            for m in pat.finditer(ln):
+                if m.start() >= cut or _instr(ln, m.start()): continue
+                out += ln[last:m.start()] + act[1]; last = m.end(); st["changed"].add(i)
+            L[i] = out + ln[last:]
+        st["car"] = [(r, a, a + len(act[1]))]; st["renamed"] = (old, act[1])
+    elif op == "goto": st["car"] = [(act[1] - 1, 0, 0)]
+    elif op == "open": st.update(lines=act[2].strip("\n").split("\n"), file=act[1], car=[(0, 0, 0)])
+    elif op == "term": st["term"] = None if st.get("term") else act[1]
+    elif op == "side": st["side"] = None if st.get("side") else act[1]
+    return st
+
+def vsc_ops(v):
+    ops = v["ops"]; ws = [o.get("w", 1.0) + sum(len(a[1]) / 14 for a in o["do"] if a[0] == "type") for o in ops]
+    return ops, ws
+
+def vsc_state(v, upto, frac=1.0):
+    st = dict(lines=v["code"].strip("\n").split("\n"), car=[tuple(c) for c in v.get("car", [(1, 0, 0)])], file=v.get("file", "main.py"))
+    st["car"] = [(r - 1, c0, c1) for r, c0, c1 in st["car"]]
+    ops = v["ops"]
+    for k in range(min(upto, len(ops))):
+        for a in ops[k]["do"]: st = vsc_apply(st, a)
+    if upto < len(ops) and frac > 0:
+        types = [a for a in ops[upto]["do"] if a[0] == "type"]; nt = len(types); ti = 0
+        for a in ops[upto]["do"]:
+            if a[0] in ("type",):
+                f = max(0.0, min(1.0, frac * nt - ti)); ti += 1
+                if f <= 0: break
+                st = vsc_apply(st, a, f)
+                if f < 1: break
+            elif a[0] in ("rename", "goto", "open", "palette", "upper"):
+                if frac >= 1: st = vsc_apply(st, a)
+            else:
+                if frac * max(1, nt) >= ti: st = vsc_apply(st, a)
+    return st
+
+def vsc_final(v):
+    st = vsc_state(v, len(v["ops"])); return "\n".join(st["lines"]) + "\n"
+
+def _keycaps(img, x, y, keys, size, col, a=1.0, press=0.0, maxw=440):
+    dr = ImageDraw.Draw(img); groups = keys.split(" "); f = F(size, "SemiBold"); fm = F(size, "monob")
+    ARW = {"Up": "↑", "Down": "↓", "Left": "←", "Right": "→"}
+    caps = []
+    for gi, g in enumerate(groups):
+        for ki, k in enumerate(g.split("+") if g != "+" else ["+"]):
+            lab = ARW.get(k, k); ff = fm if lab in ARW.values() or lab in "`/" else f
+            caps.append((lab, ff, ki > 0)); 
+        caps.append((None, None, False))
+    caps = caps[:-1]
+    xx = x
+    for lab, ff, plus in caps:
+        if lab is None: xx += size * 0.6; continue
+        if plus: text_a(img, (xx + size * 0.35, y + size * 0.9), "+", F(size * 0.8, "Bold"), DIM, a, "mm"); xx += size * 0.7
+        w = max(size * 1.7, ff.getlength(lab) + size * 1.0); p = press * 5
+        dr.rounded_rectangle([xx, y + 8, xx + w, y + size * 1.8 + 8], 12, fill=mix(BG, (8, 9, 12), a))
+        dr.rounded_rectangle([xx, y + p, xx + w, y + size * 1.8 + p], 12, fill=mix(BG, PANEL2, a), outline=mix(BG, col, a), width=3)
+        text_a(img, (xx + w / 2, y + size * 0.9 + p), lab, ff, TXT, a, "mm"); xx += w
+    return xx - x
+
+def _fuzzy(q, s):
+    it = iter(s.lower()); return all(ch in it for ch in q.lower())
+
+def sc_vsc(img, v, t, d):
+    ops, ws = vsc_ops(v); span = d * v.get("span", 0.82); t0 = v.get("delay", 0.6); tot = sum(ws)
+    k, frac, acc = len(ops), 1.0, t0
+    for i, w in enumerate(ws):
+        dur = (span - t0) * w / tot
+        if t < acc + dur: k, frac = i, (t - acc) / dur; break
+        acc += dur
+    if t < t0: k, frac = 0, 0.0
+    pf = max(0.0, (frac - 0.28) / 0.62) if k < len(ops) else 1.0  # keys first, then the edit happens
+    st = vsc_state(v, k, pf); prev_changed = st.get("changed", set())
+    dr = ImageDraw.Draw(img); side = st.get("side"); term = st.get("term")
+    box = [60, 130, 1300, 1000]; window(img, box, st.get("file", "main.py"))
+    ex0 = box[0]
+    if side:  # explorer column
+        dr.rectangle([box[0] + 2, box[1] + 52, box[0] + 300, box[3] - 40], fill=(20, 22, 28))
+        text_a(img, (box[0] + 24, box[1] + 76), "EXPLORER", F(18, "Bold"), DIM)
+        for i, n in enumerate(side):
+            y = box[1] + 120 + i * 40; on = n == st.get("file")
+            if on: dr.rectangle([box[0] + 2, y - 6, box[0] + 300, y + 30], fill=mix(PANEL2, ACC, 0.18))
+            text_a(img, (box[0] + 30, y), n, F(20, "mono"), TXT if on else (190, 196, 206))
+        ex0 = box[0] + 300
+    size = v.get("size", 26); f = F(size, "mono"); cw = f.getlength("M"); lh = v.get("lh", 44)
+    x = ex0 + 90; y0 = box[1] + 80; rows = st["lines"]
+    th = 0 if not term else min(330, 70 + 36 * len(term))
+    maxrows = int((box[3] - 40 - th - y0) // lh)
+    top = 0
+    if st["car"]:
+        r = st["car"][-1][0]
+        if r >= maxrows: top = r - maxrows + 2
+    flash = 1 - min(1.0, max(0.0, (frac - 0.9) / 0.1)) if k < len(ops) else 0
+    for i in range(top, min(len(rows), top + maxrows)):
+        yy = y0 + (i - top) * lh; ln = rows[i]
+        if i in prev_changed and k < len(ops) and pf > 0: dr.rectangle([ex0 + 4, yy - 6, box[2] - 4, yy + lh - 8], fill=mix(PANEL, ACC, 0.13))
+        if any(r == i for r, _, _ in st["car"]): dr.rectangle([ex0 + 4, yy - 6, box[2] - 4, yy + lh - 8], outline=(44, 49, 60), width=2)
+        dr.text((x - 64, yy), f"{i + 1:>2}", font=f, fill=TXT if any(r == i for r, _, _ in st["car"]) else (78, 86, 102))
+        for r, c0, c1 in st["car"]:
+            if r == i and c1 > c0: dr.rectangle([x + c0 * cw, yy - 4, x + c1 * cw, yy + size + 8], fill=mix(PANEL, ACC, 0.42))
+        cx = x
+        for s, c in colorize(ln, v.get("lang", "py")): dr.text((cx, yy), s, font=f, fill=c); cx += f.getlength(s)
+        for r, c0, c1 in st["car"]:
+            if r == i and (int(t * 2.5) % 2 == 0 or len(st["car"]) > 1):
+                cxx = x + c1 * cw; dr.rectangle([cxx - 1, yy - 4, cxx + 2, yy + size + 8], fill=ACC)
+    # mouse pointer for clicks
+    if k < len(ops) and ops[k].get("mouse"):
+        r, c = ops[k]["mouse"]; px, py = x + c * cw + 4, y0 + (r - 1 - top) * lh + 14
+        dr.polygon([(px, py), (px, py + 34), (px + 9, py + 26), (px + 16, py + 40), (px + 22, py + 37), (px + 15, py + 24), (px + 26, py + 24)], fill=(255, 255, 255), outline=BG)
+    # terminal panel
+    if term:
+        ty = box[3] - 40 - th; dr.rectangle([ex0 + 2, ty, box[2] - 2, box[3] - 40], fill=(12, 13, 16)); dr.line([ex0 + 2, ty, box[2] - 2, ty], fill=LINE, width=2)
+        text_a(img, (ex0 + 30, ty + 18), "TERMINAL", F(18, "Bold"), TXT); dr.line([ex0 + 30, ty + 44, ex0 + 128, ty + 44], fill=ACC, width=2)
+        for i, ln in enumerate(term[-int((th - 70) // 36):]):
+            cx = ex0 + 30
+            for s, c in colorize(ln, "sh"): dr.text((cx, ty + 62 + i * 36), s, font=F(22, "mono"), fill=c); cx += F(22, "mono").getlength(s)
+    # status bar
+    dr.rectangle([box[0] + 2, box[3] - 40, box[2] - 2, box[3] - 2], fill=mix(PANEL2, ACC, 0.25))
+    if st["car"]:
+        r, c0, c1 = st["car"][-1]; sb = f"Ln {r + 1}, Col {c1 + 1}"
+        if len(st["car"]) > 1: sb += f"   ({len(st['car'])} selections)"
+        elif c1 > c0: sb += f"   ({c1 - c0} selected)"
+        text_a(img, (box[2] - 30, box[3] - 21), sb + "    Python", F(20, "Medium"), TXT, 1, "rm")
+    # quick-open / command-palette overlay
+    if k < len(ops):
+        pal = [a for a in ops[k]["do"] if a[0] == "palette"]
+        if pal and 0 < frac < 0.9:
+            _, mode, q, items = pal[0]; qq = q[:int(len(q) * min(1, max(0, (frac - 0.25) / 0.45)))]
+            shown = [it for it in items if _fuzzy(qq, it)][:6]
+            px0, px1 = (box[0] + box[2]) / 2 - 420, (box[0] + box[2]) / 2 + 420; py = box[1] + 60
+            sh = 70 + 50 * max(1, len(shown))
+            dr.rounded_rectangle([px0 + 8, py + 12, px1 + 8, py + sh + 12], 14, fill=(5, 6, 8))
+            dr.rounded_rectangle([px0, py, px1, py + sh], 14, fill=(30, 33, 41), outline=ACC, width=2)
+            dr.rounded_rectangle([px0 + 16, py + 14, px1 - 16, py + 58], 8, fill=(18, 20, 25), outline=LINE)
+            dr.text((px0 + 32, py + 36), (mode + qq) if mode else qq, font=F(24, "mono"), fill=TXT, anchor="lm")
+            for i, it in enumerate(shown):
+                yy = py + 70 + i * 50
+                if i == 0: dr.rectangle([px0 + 6, yy, px1 - 6, yy + 46], fill=mix((30, 33, 41), ACC, 0.3))
+                dr.text((px0 + 32, yy + 23), it, font=F(24, "Medium"), fill=TXT, anchor="lm")
+        gt = [a for a in ops[k]["do"] if a[0] == "goto"]
+        if gt and 0 < frac < 0.9:
+            px0 = (box[0] + box[2]) / 2 - 360; py = box[1] + 60; q = str(gt[0][1])[:int(len(str(gt[0][1])) * min(1, max(0, (frac - 0.25) / 0.3)) + 0.999)] if frac > 0.25 else ""
+            dr.rounded_rectangle([px0, py, px0 + 720, py + 110], 14, fill=(30, 33, 41), outline=ACC, width=2)
+            dr.rounded_rectangle([px0 + 16, py + 14, px0 + 704, py + 58], 8, fill=(18, 20, 25), outline=LINE)
+            dr.text((px0 + 32, py + 36), ":" + q, font=F(24, "mono"), fill=TXT, anchor="lm")
+            dr.text((px0 + 32, py + 84), f"Go to line {q}." if q else "Type a line number to go to.", font=F(22, "Medium"), fill=DIM, anchor="lm")
+        rn = [a for a in ops[k]["do"] if a[0] == "rename"]
+        if rn and 0.2 < frac < 0.9:
+            r, c0, _ = st["car"][-1]; nm = rn[0][1][:int(len(rn[0][1]) * min(1, (frac - 0.3) / 0.45))] if frac > 0.3 else rows[r][slice(*_wordat(rows[r], c0))]
+            bx, by = x + c0 * cw - 10, y0 + (r - top) * lh + lh
+            dr.rounded_rectangle([bx, by, bx + 420, by + 96], 10, fill=(30, 33, 41), outline=ACC, width=2)
+            dr.rounded_rectangle([bx + 12, by + 12, bx + 408, by + 52], 6, fill=(18, 20, 25), outline=ACC)
+            dr.text((bx + 24, by + 32), nm, font=F(22, "mono"), fill=TXT, anchor="lm")
+            dr.text((bx + 24, by + 74), "Enter to Rename", font=F(18, "Medium"), fill=DIM, anchor="lm")
+    # HUD
+    hx = 1340; dr.rounded_rectangle([hx, 130, 1860, 1000], 20, fill=PANEL, outline=LINE, width=2)
+    text_a(img, (hx + 36, 176), v.get("hud", "SHORTCUT"), F(22, "Bold"), ACC)
+    if k < len(ops) and t >= t0:
+        o = ops[k]; a = ease(frac / 0.12); press = 1.0 if 0.12 < frac < 0.3 else 0.0
+        text_a(img, (hx + 36, 228), "Windows / Linux", F(20, "Medium"), DIM, a)
+        _keycaps(img, hx + 36, 262, o["keys"], 30, ACC, a, press)
+        text_a(img, (hx + 36, 352), "Mac", F(20, "Medium"), DIM, a)
+        _keycaps(img, hx + 36, 386, o.get("mac", o["keys"]), 24, SKY, a, press)
+        for i, ln in enumerate(wrap(o.get("name", ""), F(34, "Bold"), 450)[:2]): text_a(img, (hx + 36, 470 + i * 46), ln, F(34, "Bold"), TXT, a)
+        if o.get("count"): text_a(img, (hx + 460, 176), o["count"], F(24, "Bold"), TXT, a, "ra")
+    done = ops[:k] if k < len(ops) else ops
+    if done:
+        text_a(img, (hx + 36, 600), "HISTORY", F(18, "Bold"), DIM)
+        hist = []
+        for o in done:
+            if hist and hist[-1][0] == o["keys"]: hist[-1][1] += 1
+            else: hist.append([o["keys"], 1, o.get("name", "")])
+        for i, (kk, n, nm) in enumerate(hist[-6:]):
+            yy = 640 + i * 56; txt = kk + (f"  ×{n}" if n > 1 else "")
+            dr.rounded_rectangle([hx + 30, yy, hx + 490, yy + 46], 10, fill=PANEL2)
+            dr.text((hx + 46, yy + 23), txt, font=F(20, "monob"), fill=ACC, anchor="lm")
+            dr.text((hx + 476, yy + 23), nm[:22], font=F(18, "Medium"), fill=DIM, anchor="rm")
 
 SC = {k[3:]: f for k, f in list(globals().items()) if k.startswith("sc_")}
 

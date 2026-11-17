@@ -9,6 +9,7 @@ python3 -I lab_brand.py thumbterm "LINE ONE" "LINE TWO" "$ cmd|output|$ cmd" out
 python3 -I lab_brand.py thumbquery "LINE ONE" "LINE TWO" "=QUERY()" "Lena=1670|Omar=1530" out.jpg orange   (EP08: ranked report card with bars over a faded raw table)
 python3 -I lab_brand.py thumbweb "LINE ONE" "LINE TWO" "<html line>|<html line>" screenshot.png out.jpg periwinkle   (EP09: code card behind, browser with the REAL page screenshot in front)
 python3 -I lab_brand.py thumbpdf "LINE ONE" "LINE TWO" page.png "h1,h2|a,b|c,d" out.jpg ruby   (EP10: REAL PDF page tilted left, arrow, clean spreadsheet grid right)
+python3 -I lab_brand.py thumbkeys "LINE ONE" "LINE TWO" "Ctrl+D|Alt+Up" out.jpg jade   (EP13: mini editor with 3 multi-cursor selections + big 3D keycap combos)
 python3 -I lab_brand.py thumb "LINE ONE" "LINE TWO" "code snippet line" out.jpg [accent: lime|coral|sky]"""
 import sys; sys.path.insert(0, ".")
 import tutor as T
@@ -213,6 +214,33 @@ elif sys.argv[1] == "thumbpdf":  # EP10 layout: text top-left; bottom-right a RE
     x2 = 50 + T.F(100, "Bold").getlength(l1 + " ")
     d.text((x2, 170), l2, font=T.F(100, "Bold"), fill=acc, anchor="lm", stroke_width=4, stroke_fill=T.BG)
     if len(sys.argv) > 8: d.text((640, 640), sys.argv[8], font=T.F(30, "Medium"), fill=T.DIM, anchor="lm")
+    img.convert("RGB").save(out, quality=92); print("thumb ok")
+elif sys.argv[1] == "thumbkeys":  # EP13 layout: text left; right a mini editor with 3 glowing multi-cursor selections, big 3D keycap combos in front
+    l1, l2, combos, out = sys.argv[2:6]; acc = {"lime": T.LIME, "coral": T.CORAL, "sky": T.SKY, "violet": T.VIO, "yellow": T.YEL, "jade": (70, 225, 120)}[sys.argv[6] if len(sys.argv) > 6 else "jade"]
+    T.ACC = acc; T.W, T.H = 1280, 720; img = T.make_bg(1280, 720)
+    box = [650, 110, 1250, 470]; T.window(img, box, "cart.py"); d = ImageDraw.Draw(img); f = T.F(24, "mono"); cw = f.getlength("M")
+    code = ["subtotal = sum(prices)", 'print("Sub:", subtotal)', 'print("Tax:", subtotal * TAX)']
+    for i, ln in enumerate(code):
+        y = 190 + i * 52; j = ln.find("subtotal")
+        d.rectangle([680 + j * cw, y - 4, 680 + (j + 8) * cw, y + 30], fill=T.mix(T.PANEL, acc, 0.45))
+        cx = 680
+        for s2, c in T.colorize(ln): d.text((cx, y), s2, font=f, fill=c); cx += f.getlength(s2)
+        d.rectangle([680 + (j + 8) * cw - 1, y - 6, 680 + (j + 8) * cw + 3, y + 32], fill=acc)
+    ARW = {"Up": "↑", "Down": "↓"}
+    for r, combo in enumerate(combos.split("|")):
+        keys = combo.split("+"); fk = T.F(46, "Bold"); ws = [max(96, fk.getlength(ARW.get(k, k)) + 50) for k in keys]
+        tot = sum(ws) + 44 * (len(keys) - 1); x = 1250 - tot - (60 if r else 0); y = 420 + r * 130
+        for k, w in zip(keys, ws):
+            d.rounded_rectangle([x, y + 12, x + w, y + 112], 18, fill=(6, 7, 9))
+            d.rounded_rectangle([x, y, x + w, y + 100], 18, fill=T.PANEL2, outline=acc, width=4)
+            lab = ARW.get(k, k); d.text((x + w / 2, y + 50), lab, font=T.F(46, "monob") if lab in ARW.values() else fk, fill=T.TXT, anchor="mm")
+            if k != keys[-1]: d.text((x + w + 22, y + 50), "+", font=T.F(44, "Bold"), fill=acc, anchor="mm")
+            x += w + 44
+    d.rounded_rectangle([40, 40, 300, 92], 26, fill=acc); d.text((170, 66), "SHORTCUT LAB", font=T.F(26, "Bold"), fill=T.BG, anchor="mm")
+    for i, (txt, col) in enumerate([(l1, T.TXT), (l2, acc)]):
+        fs = 120
+        while T.F(fs, "Bold").getlength(txt) > 580: fs -= 4
+        d.text((50, 250 + i * 150), txt, font=T.F(fs, "Bold"), fill=col, anchor="lm", stroke_width=4, stroke_fill=T.BG)
     img.convert("RGB").save(out, quality=92); print("thumb ok")
 else:
     l1, l2, code, out = sys.argv[2:6]; acc = {"lime": T.LIME, "coral": T.CORAL, "sky": T.SKY, "violet": T.VIO, "yellow": T.YEL}[sys.argv[6] if len(sys.argv) > 6 else "lime"]

@@ -1,0 +1,59 @@
+{
+  "version": 1,
+  "channel_id": "UCXGqR8k1RMbfYdVleIuJKzA",
+  "created_at": "2026-11-17T08:50:00-03:00",
+  "items": [
+    {
+      "key": "lab-ep13-long",
+      "kind": "long",
+      "video": "video.mp4",
+      "title": "VS Code Shortcuts That Save Hours (Multi-Cursor, Move Lines, Command Palette for Beginners)",
+      "description": "The VS Code keyboard shortcuts that save hours, shown for Windows, Linux and Mac side by side: open any file in a second, move and copy whole lines, edit many places at once with multiple cursors, and rename safely with F2. Step by step for beginners, including the Ctrl+D mistake that silently changes the wrong words, and every result on screen is the real output of the code shown.\n\nChapters\n0:00 The result\n0:26 Why shortcuts matter\n0:42 The plan\n0:57 Ctrl vs Cmd\n1:11 Ctrl+P: open any file\n1:33 Ctrl+G and the terminal\n1:53 Ctrl+Shift+P: the Command Palette\n2:11 Move a line: Alt+Up/Down\n2:24 Copy a line: Shift+Alt+Down\n2:44 Comment and delete lines\n3:28 Multiple cursors: Ctrl+D\n3:49 The mistake: selecting by hand first\n4:13 Ctrl+Shift+L: all matches at once\n4:47 Cursor below: Ctrl+Alt+Down\n5:38 Rename safely: F2\n6:13 Other common mistakes\n6:35 Cheat sheet\n6:56 Pro tips\n7:29 How to make them stick\n7:48 Recap\n\nShortcuts (Windows / Linux  |  Mac)\nCtrl+P  |  Cmd+P  -  Quick Open: jump to any file\nCtrl+Shift+P (or F1)  |  Cmd+Shift+P  -  Command Palette: every command\nCtrl+G  |  Ctrl+G  -  Go to line\nCtrl+B  |  Cmd+B  -  Show / hide the sidebar\nCtrl+`  |  Ctrl+`  -  Open the terminal\nAlt+Up / Alt+Down  |  Option+Up / Option+Down  -  Move the line\nShift+Alt+Down  |  Shift+Option+Down  -  Copy the line (Linux: Ctrl+Shift+Alt+Down)\nCtrl+/  |  Cmd+/  -  Comment / uncomment\nCtrl+Shift+K  |  Cmd+Shift+K  -  Delete the line\nCtrl+C / Ctrl+X with nothing selected  -  Copy / cut the whole line\nCtrl+D  |  Cmd+D  -  Select the word, then add the next match\nCtrl+Shift+L  |  Cmd+Shift+L  -  Select all matches\nCtrl+Alt+Down  |  Cmd+Option+Down  -  Add a cursor below (Linux: Shift+Alt+Down)\nAlt+Click  |  Option+Click  -  Add a cursor anywhere\nEnd  |  Cmd+Right  -  Jump to end of line (works with many cursors)\nCtrl+Enter / Ctrl+Shift+Enter  |  Cmd+Enter / Cmd+Shift+Enter  -  New line below / above\nF2  -  Rename symbol (code only, not comments or text)\nShift+Alt+Right  |  Ctrl+Shift+Cmd+Right  -  Expand selection\nCtrl+K then Ctrl+S  |  Cmd+K then Cmd+S  -  Keyboard Shortcuts editor\n\nThe Ctrl+D mistake\nStart Ctrl+D from a plain cursor inside the word: it matches the whole word with the same upper/lower case.\nIf you select the text by hand first, Ctrl+D follows the Find options (by default: any case, also inside other words), so \"total\" also grabs \"Total\" and \"Subtotal\".\n\ncart.py (start)\nprices = {\n    \"apple\": 1.20,\n    \"bread\": 2.50,\n    \"milk\": 0.99,\n}\ntax = 0.08\n\ntotal = sum(prices.values())\nprint(\"Total:\", round(total * (1 + tax), 2))\nprint(\"Subtotal:\", round(total, 2))\nprint(\"DEBUG\", prices)\n\ncart.py (after the shortcuts)\nprices = {\n    \"apple\": 1.20,\n    \"bread\": 2.50,\n    \"milk\": 0.99,\n    \"eggs\": 3.10,\n}\nTAX = 0.08\n\nsubtotal = sum(prices.values())\nprint(\"Subtotal:\", round(subtotal, 2))\nprint(\"Total:\", round(subtotal * (1 + TAX), 2))\n\nlist.py (start: one word per line)\napple\nbread\nmilk\neggs\ncoffee\n\nlist.py (after multiple cursors)\nitems = [\n    \"apple\",\n    \"bread\",\n    \"milk\",\n    \"eggs\",\n    \"coffee\",\n]\nprint(len(items), \"items:\", \", \".join(items))\n\nreport.py (after F2 rename)\n# calc: quantity times price\ndef line_total(qty, price):\n    return qty * price\n\norders = [(\"apple\", 3, 1.20), (\"milk\", 2, 0.99)]\nprint(\"calc for each order:\")\nfor name, qty, price in orders:\n    print(name, line_total(qty, price))\n\n—\nShortcut Lab: software and AI tutorials that save you hours. A new tutorial every day.\nSubscribe so you don't miss the next shortcut.\n\nNarration uses a synthetic voice. All code shown is run and checked before publishing.\n#vscode #programming #python",
+      "tags": [
+        "vs code shortcuts",
+        "visual studio code shortcuts",
+        "vscode tips",
+        "vs code for beginners",
+        "vscode tutorial",
+        "multi cursor vscode",
+        "vs code multiple cursors",
+        "command palette",
+        "vscode keyboard shortcuts",
+        "ctrl+d vscode",
+        "move line vscode",
+        "coding productivity",
+        "python for beginners",
+        "programming tips",
+        "vs code mac shortcuts"
+      ],
+      "thumbnail": "thumbnail.jpg",
+      "captions": "legendas.srt",
+      "publish_at": "2026-11-17T19:00:00-03:00",
+      "if_late": "public_now",
+      "made_for_kids": false,
+      "altered_content": true,
+      "pinned_comment": "Which shortcut was new to you, and which one do you already use every day? Tell me below."
+    },
+    {
+      "key": "lab-ep13-short",
+      "kind": "short",
+      "video": "vertical.mp4",
+      "title": "VS Code: Edit 5 Lines at Once #shorts",
+      "description": "Five cursors, one typing: a plain list becomes Python in seconds, then Ctrl+D edits every match at once.\nFull tutorial on the channel: \"VS Code Shortcuts That Save Hours (Multi-Cursor, Move Lines, Command Palette for Beginners)\".\n#vscode #programming #shorts",
+      "tags": [
+        "vs code",
+        "vscode shortcuts",
+        "multi cursor",
+        "coding tips",
+        "shorts"
+      ],
+      "captions": null,
+      "publish_at": "2026-11-17T20:30:00-03:00",
+      "if_late": "public_now",
+      "made_for_kids": false,
+      "altered_content": true,
+      "related_key": "lab-ep13-long",
+      "pinned_comment": "Which shortcut should I show next? Full tutorial: VS Code Shortcuts That Save Hours (Multi-Cursor, Move Lines, Command Palette for Beginners)"
+    }
+  ]
+}

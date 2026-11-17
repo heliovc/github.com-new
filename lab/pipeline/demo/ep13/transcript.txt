@@ -1,0 +1,16 @@
+### cart2
+$ python3 cart.py
+Subtotal: 7.79
+Total: 8.41
+### cart3
+$ python3 cart.py
+Subtotal: 7.79
+Total: 8.41
+### list
+$ python3 list.py
+5 items: apple, bread, milk, eggs, coffee
+### report2
+$ python3 report.py
+calc for each order:
+apple 3.5999999999999996
+milk 1.98
