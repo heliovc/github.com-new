@@ -7,7 +7,7 @@ ou "gauge" (termômetro horizontal com escala, criado no rank #3 — bom para ta
 ou "bubbles" (bolhas com área proporcional ao valor, criado no rank #4 — bom para tamanhos/bases de clientes)
 ou "pits" (buracos, rank #5) ou "piles" (pilhas de notas, criado no rank #6 — bom para dívidas/valores em R$)
 ou "towers" (arranha-céus com janelas, criado no rank #7 — bom para tamanho de empresas/bancos)
-ou "phones" (celulares cuja tela enche, com piso de escala THEME["floor"], criado no rank #8 — bom para valores próximos)\nou "coins" (pilhas de moedas, criado no rank #9 — bom para lucros/valores em R$)\nou "thermo" (termômetros verticais, criado no rank #10 — bom para taxas de juros)\nou "crowd" (colunas de bonequinhos, 1 boneco = THEME["per_icon"], criado no rank #11 — bom para número de clientes/pessoas)\nou "donut" (rosca com fatias de um total, criado no rank #12 — bom para "para onde vai o dinheiro"; cor por item em it["col"])\nou "waffle" (grade 10x10 = 100%, criado no rank #13 — bom para pesos/percentuais de um total; cor por item em it["col"]).
+ou "phones" (celulares cuja tela enche, com piso de escala THEME["floor"], criado no rank #8 — bom para valores próximos)\nou "coins" (pilhas de moedas, criado no rank #9 — bom para lucros/valores em R$)\nou "thermo" (termômetros verticais, criado no rank #10 — bom para taxas de juros)\nou "crowd" (colunas de bonequinhos, 1 boneco = THEME["per_icon"], criado no rank #11 — bom para número de clientes/pessoas)\nou "donut" (rosca com fatias de um total, criado no rank #12 — bom para "para onde vai o dinheiro"; cor por item em it["col"])\nou "waffle" (grade 10x10 = 100%, criado no rank #13 — bom para pesos/percentuais de um total; cor por item em it["col"])\nou "shops" (fileiras de lojinhas, 1 = THEME["per_icon"], criado no rank #14 — bom para número de empresas).
 Tudo desenhado por código; narração Kokoro (pm_alex, pt-br); legenda grande queimada. Layout seguro p/ UI do Shorts:
 legenda y=1585, @ y=1690, fonte y=1745.
 """
@@ -508,8 +508,32 @@ def chart_w(img, items, th, upto, t, cur_rank):
     if upto == 1 and th.get("rest_label"):
         d.text((W / 2, yl + 54), th["rest_label"], font=F(28, "Bold"), fill=(120, 132, 160), anchor="mm")
 
+def chart_s(img, items, th, upto, t, cur_rank):
+    """Criado no rank #14 (estados com mais empresas inadimplentes): 5 fileiras de lojinhas (1º no topo, y 760..1400);
+    cada lojinha = THEME["per_icon"] na unidade de it["num"]; até 16 por linha, 2 linhas por fileira (máx. 32).
+    Não revelado: "?"; atual: lojinhas acendem da esquerda para a direita; a última fica cortada na fração."""
+    d = ImageDraw.Draw(img); per = th.get("per_icon", 100.0); acc = tuple(th["accent"]); acc2 = tuple(th["accent2"])
+    order = sorted(items, key=lambda x: x["rank"]); y0, rh = 770, 132; x0, iw, ih, per_line = 230, 50, 48, 16
+    for k, it in enumerate(order):
+        y = y0 + k * rh; on = it["rank"] == cur_rank
+        d.text((70, y + 10), f"{it['rank']}º", font=F(30, "Black"), fill=acc2, anchor="lm")
+        if it["rank"] < upto:
+            d.text((x0 + 20, y + 48), "?", font=F(60, "Black"), fill=(100, 112, 140), anchor="lm"); continue
+        d.text((70, y + 52), it["short"], font=F(46, "Black"), fill=WHITE if on else (200, 205, 220), anchor="lm")
+        d.text((70, y + 94), val_str(it, it["num"]), font=F(24, "ExtraBold"), fill=acc if on else (170, 176, 195), anchor="lm")
+        col = acc if on else tuple(int(c * 0.55) for c in acc)
+        n = it["num"] / per; fr = ease(t / 1.6) if on else 1.0; shown = n * fr
+        for j in range(int(shown) + 1):
+            part = min(1.0, shown - j)
+            if part <= 0.05: break
+            row, c = divmod(j, per_line); bx = x0 + c * iw; by = y + row * (ih + 10)
+            w = (iw - 8) * part
+            d.rectangle([bx, by + 14, bx + w, by + ih], fill=col)
+            d.polygon([(bx - 3, by + 16), (bx + 3, by), (bx + min(w, iw - 8) - 3, by), (bx + min(w, iw - 8) + 3, by + 16)], fill=acc2 if on else tuple(int(c2 * 0.55) for c2 in acc2))
+            if part > 0.6: d.rectangle([bx + 14, by + 26, bx + 28, by + ih], fill=BG1)
+
 def chart(img, items, th, upto, t, cur_rank):
-    {"waffle": chart_w, "donut": chart_d, "crowd": chart_cr, "thermo": chart_th, "vbars": chart_v, "gauge": chart_g, "bubbles": chart_b, "pits": chart_p, "piles": chart_n, "towers": chart_t, "phones": chart_ph, "coins": chart_c}.get(th.get("chart"), chart_h)(img, items, th, upto, t, cur_rank)
+    {"shops": chart_s, "waffle": chart_w, "donut": chart_d, "crowd": chart_cr, "thermo": chart_th, "vbars": chart_v, "gauge": chart_g, "bubbles": chart_b, "pits": chart_p, "piles": chart_n, "towers": chart_t, "phones": chart_ph, "coins": chart_c}.get(th.get("chart"), chart_h)(img, items, th, upto, t, cur_rank)
 
 def seg_hook(img, sc, th, t, dur, items):
     ease = lambda x: 1.0  # frame 1 = thumbnail: gancho inteiro visível desde o frame 0 (rank #3)
@@ -532,6 +556,8 @@ def seg_hook(img, sc, th, t, dur, items):
         if sc.get("tease"): text(img, (W / 2, 710), sc["tease"], 64, th["accent"], a=1.0)
     elif th.get("chart") == "pits":
         if sc.get("tease"): text(img, (W / 2, 650), sc["tease"], 64, th["accent"], a=1.0)
+    elif th.get("chart") == "shops":
+        if sc.get("tease"): text(img, (W / 2, 680), sc["tease"], 50, th["accent"], a=1.0)
     elif th.get("chart") == "waffle":
         if sc.get("tease"): text(img, (W / 2, 640), sc["tease"], 54, th["accent"], a=1.0)
     elif th.get("chart") == "donut":
