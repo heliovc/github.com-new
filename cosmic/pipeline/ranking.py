@@ -28,6 +28,9 @@ vis.type == "wind" / THEME.hook/outro == "wind": planeta com faixas e nuvens cor
 vis.type == "crater" / THEME.hook/outro == "crater": cratera vista de cima EM ESCALA (4 px/km) sobre chão rochoso; um rastro cai, a cratera
   abre com flash, borda e anel central (vis.erosion 0–1 apaga a borda das antigas) + barra de uma maratona (42 km) como régua; outro = as 5
   bordas concêntricas em escala com cores vis.ring (rank13).
+vis.type == "orbityear" / THEME.hook/outro == "orbityear": órbita do mundo EM ESCALA em volta de um Sol minúsculo (órbita da Terra na mesma escala),
+  uma volta com tempo de Kepler (lento longe do Sol) + contador de anos terrestres + "sped up N×" + régua log 1–20.000 anos; vis.a (UA), vis.e,
+  vis.yr, vis.col, vis.ang; outro = as 5 órbitas na mesma escala (rank14).
 Tudo desenhado por código; narração Kokoro (VOICE, padrão af_heart); legenda grande queimada.
 """
 import sys, os, re, math, json, subprocess, importlib.util, random
@@ -787,6 +790,77 @@ def crater_vis(img, it, th, t, dur):
     if v.get("note"): text(img, (W / 2, 1260), v["note"], 40, (240, 232, 220), w="ExtraBold", a=ease((t - 1.6) / 0.5))
 
 
+# ---- rank14: orbityear (one full "year" of a far world: its orbit TO SCALE around a tiny Sun, Earth's orbit drawn at the same scale,
+#      the world laps once with Kepler timing (slow far out), an Earth-years counter + "sped up N×"; log ruler 1 -> 20,000 years) ----
+OY_X0, OY_X1, OY_LO, OY_HI = 110, 970, 0.0, math.log10(20000)
+OY_REFS = [(1, "Earth"), (11.9, "Jupiter"), (164.8, "Neptune")]
+def oy_x(yr): return lerp(OY_X0, OY_X1, (math.log10(yr) - OY_LO) / (OY_HI - OY_LO))
+def oy_ruler(img, th, shown, cur=None, y=1120, prog=1.0):
+    d = ImageDraw.Draw(img)
+    d.rounded_rectangle([OY_X0, y - 10, OY_X1, y + 10], 10, fill=(34, 30, 52))
+    for k in (1, 10, 100, 1000, 10000):
+        x = oy_x(k); d.line([(x, y - 22), (x, y + 22)], fill=(120, 125, 160), width=3)
+        d.text((x, y + 46), f"{k:,} yr", font=F(24, "Bold"), fill=(150, 155, 190), anchor="mm")
+    for yr, lab in OY_REFS:
+        x = oy_x(yr); d.line([(x, y - 56), (x, y - 12)], fill=(200, 200, 215), width=2)
+        d.text((x, y - 72), lab, font=F(24, "SemiBold"), fill=(200, 205, 220), anchor="mm")
+    for o in shown:
+        v = o["vis"]; col = tuple(v["col"]); yr = v["yr"] if o is not cur else max(1.0, v["yr"] ** max(0.0, min(1.0, prog)))
+        x = oy_x(yr); r = 19 if o is cur else 12
+        d.ellipse([x - r, y - r, x + r, y + r], fill=col, outline=(255, 255, 255), width=3)
+        if o is not cur: d.text((x, y + 82 + {5: 0, 4: 30, 3: 60, 2: 90}.get(o["rank"], 0)), o["short"], font=F(24, "ExtraBold"), fill=col, anchor="mm")
+
+def oy_kepler(M, e):
+    E = M
+    for _ in range(12): E = E - (E - e * math.sin(E) - M) / (1 - e * math.cos(E))
+    return E
+
+def oy_orbit(img, cx, cy, a_au, e, frac, col, span=820, tilt=0.42, earth=True, label=True, trail=True, ang=0.5, a=1.0, at_sun=False, k=None):
+    """ellipse with the Sun at a focus; frac = fraction of the orbit done (0..1, mean anomaly). Returns the world's (x, y)"""
+    k = k or span / (2 * a_au); b_au = a_au * math.sqrt(1 - e * e)
+    cosA, sinA = math.cos(ang), math.sin(ang)
+    def P(E):
+        x, y = a_au * (math.cos(E) - e), b_au * math.sin(E)
+        xr, yr = x * cosA - y * sinA, x * sinA + y * cosA
+        return cx + xr * k, cy + yr * k * tilt
+    # centre the drawing on the ellipse centre, not the Sun
+    ox = a_au * e * cosA * k; oy = a_au * e * sinA * k * tilt
+    if at_sun: ox, oy = 0.0, 0.0
+    def Pc(E): x, y = P(E); return x + ox, y + oy
+    lay = Image.new("RGBA", img.size, (0, 0, 0, 0)); dl = ImageDraw.Draw(lay)
+    pts = [Pc(2 * math.pi * j / 240) for j in range(241)]
+    for j in range(0, 240, 2): dl.line([pts[j], pts[j + 1]], fill=col + (int(110 * a),), width=3)
+    if trail and frac > 0:
+        Ecur = oy_kepler(2 * math.pi * frac, e); n = max(2, int(120 * Ecur / (2 * math.pi)) + 2)
+        tp = [Pc(Ecur * j / (n - 1)) for j in range(n)]
+        dl.line(tp, fill=col + (int(235 * a),), width=6)
+    img.alpha_composite(lay)
+    R.paste_c(img, R.sun_sprite(5), cx + ox, cy + oy, a)
+    d = ImageDraw.Draw(img); sx, sy = cx + ox, cy + oy
+    if earth:
+        er = max(1.5, 1.0 * k)
+        d.ellipse([sx - er, sy - er * tilt, sx + er, sy + er * tilt], outline=(110, 170, 255), width=2)
+        if label:
+            sg = -1 if sx > W / 2 else 1
+            d.line([(sx + 8 * sg, sy + 10), (sx + 70 * sg, sy + 80)], fill=(140, 190, 255), width=2)
+            d.text((sx + 76 * sg, sy + 92), "Sun + Earth's orbit", font=F(26, "Bold"), fill=(150, 195, 255), anchor="lm" if sg > 0 else "rm")
+    E = oy_kepler(2 * math.pi * (frac % 1.0), e); wx, wy = Pc(E)
+    R.paste_c(img, R.planet_sprite(16, col, light=(-0.8, -0.3)), wx, wy, a)
+    return wx, wy
+
+def orbityear_vis(img, it, th, t, dur):
+    v = it["vis"]; col = tuple(v["col"]); lap = max(2.5, dur - 1.6)
+    frac = min(1.0, max(0.0, (t - 0.5) / lap))
+    oy_orbit(img, W / 2, 760, v["a"], v["e"], frac, col, span=v.get("span", 860), ang=v.get("ang", 0.5))
+    yrs = v["yr"] * frac
+    text(img, (W / 2, 470), f"{yrs:,.0f} Earth years", 54, (255, 255, 255), a=ease((t - 0.3) / 0.4))
+    sped = v["yr"] * 365.25 * 86400 / lap
+    big = f"{sped / 1e9:,.0f} billion" if sped >= 1e9 else f"{sped / 1e6:,.0f} million"
+    text(img, (W / 2, 528), f"one full year, sped up about {big} times", 30, (180, 185, 210), w="Bold", a=ease((t - 0.5) / 0.4))
+    oy_ruler(img, th, [o for o in ALL_ITEMS if o["rank"] > it["rank"]] + [it], cur=it, prog=max(0.0, min(1.0, frac * 1.3)))
+    if v.get("note"): text(img, (W / 2, 1010), v["note"], 38, tuple(th["accent2"]), w="ExtraBold", a=ease((t - 1.4) / 0.5))
+
+
 def caption_chunks(say, t0, dur):
     words = say.split(); groups, g = [], []
     for w in words:
@@ -809,6 +883,15 @@ def draw_caption(img, chunks, gt, y=1585):
 
 def seg_hook(img, sc, th, t, dur):
     col = tuple(th["star_col"]); acc = tuple(th["accent"])
+    if th.get("hook") == "orbityear":
+        # frame 0: the big number + Sedna's long orbit already drawn, the world crawling far out, a "?" on it
+        o = [x for x in ALL_ITEMS if x["rank"] == 1][0]; v = o["vis"]
+        wx, wy = oy_orbit(img, W / 2, 860, v["a"], v["e"], 0.5 + 0.02 * t, tuple(v["col"]), span=900, ang=v.get("ang", 0.5), trail=False)
+        d = ImageDraw.Draw(img); d.text((wx, wy - 90), "?", font=F(130, "Black"), fill=tuple(th["accent"]), anchor="mm")
+        text(img, (W / 2, 220), sc.get("big", ""), 136, tuple(th["accent"]), stroke=3)
+        text(img, (W / 2, 335), sc["top"].upper(), 52, (255, 255, 255))
+        text(img, (W / 2, 1320), sc["sub"], 46, tuple(th["accent2"]), w="ExtraBold")
+        return
     if th.get("hook") == "crater":
         # frame 0: the big number + the #1 crater already open on the ground (eroded rim), a "?" in the middle, a second streak coming in
         img.alpha_composite(cr_ground(), (0, 860 - 450)); cr_crater(img, W / 2, 860, 160, 1.0, 0.5)
@@ -1000,6 +1083,8 @@ def seg_item(img, it, th, t, dur):
         wind_vis(img, it, th, t, dur)
     if v["type"] == "crater":
         crater_vis(img, it, th, t, dur)
+    if v["type"] == "orbityear":
+        orbityear_vis(img, it, th, t, dur)
     # number
     p = easeio((t - 0.5) / 1.6)
     num = it["num"]
@@ -1012,6 +1097,20 @@ def seg_item(img, it, th, t, dur):
 
 def seg_outro(img, sc, th, t, dur):
     a = ease(t / 0.5)
+    if th.get("outro") == "orbityear":
+        # all five orbits at ONE common scale around the same Sun: four small rings and Sedna's long needle
+        k1 = 980 / (506.0 * 1.85)
+        for o in sorted(ALL_ITEMS, key=lambda o: o["rank"]):
+            v = o["vis"]
+            oy_orbit(img, 95, 600, v["a"], v["e"], (0.3 + t * 0.03) % 1.0, tuple(v["col"]), k=k1, ang=math.pi + 0.12 if o["rank"] == 1 else v.get("ang", 0.5),
+                     earth=False, trail=False, at_sun=True)
+        text(img, (W / 2, 400), "all five, same scale", 34, (200, 205, 225), w="Bold")
+        oy_ruler(img, th, ALL_ITEMS, cur=None, y=860)
+        if th.get("outro_note"): text(img, (W / 2, 1100), th["outro_note"], 42, tuple(th["accent2"]), w="ExtraBold", a=a)
+        text(img, (W / 2, 1230), "WHICH WORLD", 96, (255, 255, 255), a=ease((t - 0.3) / 0.5))
+        text(img, (W / 2, 1320), "SHOULD WE PUT NEXT?", 58, tuple(th["accent"]), a=ease((t - 0.5) / 0.5))
+        text(img, (W / 2, 1460), "SUBSCRIBE to Cosmic Scale", 56, tuple(th["accent"]), a=ease((t - 0.8) / 0.5))
+        return
     if th.get("outro") == "crater":
         img.alpha_composite(cr_ground(), (0, 700 - 450))
         for i, o in enumerate(sorted(ALL_ITEMS, key=lambda o: o["rank"])):

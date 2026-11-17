@@ -50,6 +50,17 @@ EP14 added scenes: oceancut (side cross-section TO SCALE: sky / ocean v.depth km
   index meter 0-60 with WHO "extreme" 11+). Palette abyss teal / impact orange / foam white. Structure NEW: "drop test" (same ocean, five
   rocks, each a chapter). Learned: 1,348 words + 28 scenes = 7.9 min -> ~1,400 words for 8.1 min; three renders in parallel on 4 cores
   are fine (~25 min). ranking.py: vis "crater" (rank13). scale_short.py: vis "bhfit" (scale07, M87* horizon vs the solar system).
+EP15 added scenes: signalrun (Earth -> Voyager 1 track on a SQUARE-ROOT scale with landmarks + light times; a radio pulse travels v.h0 -> v.h1
+  hours, v.log = log time for sub-second starts; light-time clock + distance readout; v.focus rings a landmark), signaldial (chapter card: a
+  24-hour dial filling to v.h, v.stamp in the centre, kicker/title/sub/fact at right), heliobubble (the Sun's bubble TO SCALE: termination
+  shock 94 AU + heliopause 121 AU with a tail, both Voyagers' tracks from piecewise year->AU tables, year counter; mode shock | pause | out;
+  v.chart = particle-trend chart, labelled as an illustration), powerdown (watt meter 470 W -> v.w_end + 10 instrument lamps, 2 stay on),
+  whisper (22 W leaves Voyager, ~4e-19 W reaches a 70 m dish, written out zero by zero), pixeldot (our own re-drawing of the Pale Blue
+  Dot frame + pixel-grid zoom, Earth = a disc of 12% of one pixel). Helper voyager15() draws the spacecraft. Palette golden-record gold /
+  DSN green / plasma violet. Structure NEW: "one message, hour by hour" (chapters = moments on a 24-hour light-time dial).
+  Learned: science.nasa.gov is blocked for WebFetch here too -> web search only; 1,313 words + 32 scenes = 8.05 min; a polygon built
+  with (-c) ** 1.4 for c > 0 returns complex numbers -> use max(0, -c); the full 8-min render takes ~45 min on this machine.
+  ranking.py: vis "orbityear" (rank14). scale_short.py: vis "moonorbit" (scale08).
 EP06 added scenes: spinglobe (globe + speed by latitude; top=True rings; slow=True), pendulum, fling, bulge, yearday, dayclock (teal / amber palette)
 """
 import sys, os, re, math, subprocess, importlib.util, json, random, hashlib
@@ -3827,6 +3838,238 @@ def sc_plume(img, v, t, dur):
         d.text((1480, y), f"{uv:.0f}", font=F(54, "Black"), fill=WHITE, anchor="rm")
     if v.get("head"): alpha_text(img, (W / 2, 100), v["head"], F(54, "ExtraBold"), WHITE, ease(t / 0.5))
     caption(img, v.get("caption"), ease((t - 2.2) / 0.5), y=H - 50)
+
+# ---------------- EP15 scenes: Voyager 1, one light-day away ----------------
+GOLD15, DSN15, PLASMA15, NAVY15, PALE15 = (240, 190, 80), (90, 230, 150), (170, 120, 255), (8, 12, 30), (200, 220, 255)
+AU_S15 = 499.005  # light-seconds per AU
+V1_AU15 = 173.1
+LM15 = [("Sun", 1.0), ("Jupiter", 5.2), ("Saturn", 9.5), ("Neptune", 30.1), ("Pale Blue Dot", 40.0), ("Termination shock", 94.0),
+        ("Heliopause", 121.0), ("Voyager 1", V1_AU15)]
+
+def _hms15(s):
+    if s < 60: return f"{s:,.1f} s"
+    h = int(s // 3600); m = int(s % 3600 // 60); sec = int(s % 60)
+    return f"{h:d}:{m:02d}:{sec:02d}"
+
+def voyager15(img, x, y, s=1.0, ang=-0.4, a=1.0):
+    """code-drawn Voyager: dish (white), bus (dark gold), magnetometer boom (long thin), RTG boom with 3 cylinders"""
+    lay = Image.new("RGBA", (int(260 * s) + 40, int(260 * s) + 40), (0, 0, 0, 0)); d = ImageDraw.Draw(lay)
+    c = lay.width / 2
+    def P(px, py):
+        ca, sa = math.cos(ang), math.sin(ang); return (c + (px * ca - py * sa) * s, c + (px * sa + py * ca) * s)
+    d.line([P(0, 0), P(-120, 40)], fill=(170, 170, 180, int(255 * a)), width=max(1, int(2 * s)))  # magnetometer boom
+    d.line([P(0, 0), P(70, 60)], fill=(150, 150, 160, int(255 * a)), width=max(2, int(4 * s)))   # RTG boom
+    for k in range(3):
+        q = P(46 + k * 12, 40 + k * 10); r = 6 * s; d.ellipse([q[0] - r, q[1] - r, q[0] + r, q[1] + r], fill=(110, 105, 100, int(255 * a)))
+    b = [P(-14, 6), P(14, 6), P(14, 26), P(-14, 26)]; d.polygon(b, fill=(190, 150, 70, int(255 * a)))
+    dish = [P(60 * math.cos(u) * 0.95, -6 + 14 * math.sin(u)) for u in [i * math.pi / 20 for i in range(41)]]
+    d.polygon(dish, fill=(236, 238, 245, int(255 * a))); d.line([P(0, -6), P(0, -40)], fill=(220, 220, 230, int(255 * a)), width=max(1, int(2 * s)))
+    img.alpha_composite(lay, (int(x - c), int(y - c)))
+
+def _sx15(au, x0=170, x1=1730): return x0 + (x1 - x0) * math.sqrt(max(0.0, au) / V1_AU15)
+
+def sc_signalrun(img, v, t, dur):
+    """Earth -> Voyager 1 track on a SQUARE-ROOT scale with landmarks; a radio pulse travels from v.h0 to v.h1 hours (light time),
+    passed landmarks light up, clock = time since sending; v.focus = landmark name to ring"""
+    d = ImageDraw.Draw(img); y = 600; x0, x1 = 170, 1730
+    p = easeio((t - 0.4) / max(1.0, dur * 0.75))
+    h0, h1 = v.get("h0", 0.0), v.get("h1", 24.0); hrs = lerp(h0, h1, p) if v.get("log") is None else math.exp(lerp(math.log(max(1e-4, h0)), math.log(h1), p))
+    au = hrs * 3600 / AU_S15; px = _sx15(min(au, V1_AU15))
+    d.line([(x0, y), (x1, y)], fill=(50, 62, 100), width=4)
+    lay = Image.new("RGBA", img.size, (0, 0, 0, 0)); dl = ImageDraw.Draw(lay)
+    for j in range(26):
+        u = j / 26; dl.line([(px - 300 * u, y), (px - 300 * (u + 0.04), y)], fill=DSN15 + (int(230 * (1 - u)),), width=8)
+    img.alpha_composite(lay)
+    R_e = 22; paste_c(img, earth_sprite(R_e, glow=None), x0 - 40, y)
+    d = ImageDraw.Draw(img); d.text((x0 - 40, y + 50), "Earth", font=F(28, "Bold"), fill=WHITE, anchor="mm")
+    for i, (n, a_) in enumerate(LM15):
+        x = _sx15(a_); hit = au >= a_ - 1e-6; col = GOLD15 if hit else (110, 120, 150)
+        if n == "Voyager 1":
+            voyager15(img, x + 10, y - 6, 0.55, ang=-0.3); d = ImageDraw.Draw(img)
+            d.text((x, y + 70), "Voyager 1", font=F(30, "Black"), fill=GOLD15 if hit else WHITE, anchor="mm")
+            continue
+        up = i % 2 == 0
+        d.line([(x, y - 16), (x, y + 16)], fill=col, width=4)
+        ly = y - 60 if up else y + 60
+        d.text((x, ly), n, font=F(28, "Bold"), fill=col, anchor="mm")
+        d.text((x, ly + (-34 if up else 34)), _hms15(a_ * AU_S15), font=F(24, "SemiBold"), fill=DIM if not hit else WHITE, anchor="mm")
+        if v.get("focus") == n:
+            q = 0.5 + 0.5 * math.sin(t * 4); d.ellipse([x - 34, y - 34, x + 34, y + 34], outline=mix(col, WHITE, q), width=4)
+    R_p = radial(70, [(0, (255, 255, 255, 255)), (0.4, DSN15 + (200,)), (1, DSN15 + (0,))]); paste_c(img, R_p, px, y)
+    d = ImageDraw.Draw(img)
+    d.text((W / 2, 230), _hms15(hrs * 3600), font=F(120, "Black"), fill=DSN15, anchor="mm")
+    d.text((W / 2, 320), "since the message left Earth", font=F(34, "SemiBold"), fill=DIM, anchor="mm")
+    d.text((W / 2, 880), f"{au * 149.6:,.1f} million km" if au < 7 else f"{au * 0.1496:,.2f} billion km", font=F(56, "Black"), fill=WHITE, anchor="mm")
+    d.text((x1, y - 150), "square-root scale", font=F(24, "SemiBold"), fill=DIM, anchor="rm")
+    if v.get("head"): alpha_text(img, (W / 2, 120), v["head"], F(44, "ExtraBold"), WHITE, ease(t / 0.5))
+    caption(img, v.get("caption"), ease((t - 2.0) / 0.5), y=H - 70)
+
+def sc_signaldial(img, v, t, dur):
+    """chapter card: a 24-hour dial filling to v.h (hours of light time), v.stamp in the middle, v.title / v.sub / v.fact at right"""
+    cx, cy, Rr = 500, 560, 330; d = ImageDraw.Draw(img)
+    hv = v.get("h", 0.0); p = easeio((t - 0.2) / 1.6)
+    d.ellipse([cx - Rr, cy - Rr, cx + Rr, cy + Rr], outline=(40, 50, 80), width=26)
+    lay = Image.new("RGBA", img.size, (0, 0, 0, 0)); dl = ImageDraw.Draw(lay)
+    frac = min(1.0, max(0.0, hv / 24.0)) * p
+    if frac > 0.0005: dl.arc([cx - Rr, cy - Rr, cx + Rr, cy + Rr], -90, -90 + 360 * max(frac, 0.004), fill=DSN15 + (255,), width=26)
+    img.alpha_composite(lay); d = ImageDraw.Draw(img)
+    for k in range(24):
+        a = -math.pi / 2 + 2 * math.pi * k / 24; r1, r2 = Rr + 26, Rr + (46 if k % 6 == 0 else 36)
+        d.line([(cx + r1 * math.cos(a), cy + r1 * math.sin(a)), (cx + r2 * math.cos(a), cy + r2 * math.sin(a))], fill=(140, 150, 180), width=3)
+        if k % 6 == 0: d.text((cx + (Rr + 80) * math.cos(a), cy + (Rr + 80) * math.sin(a)), f"{k}h", font=F(30, "Bold"), fill=DIM, anchor="mm")
+    ang = -math.pi / 2 + 2 * math.pi * frac
+    paste_c(img, radial(64, [(0, (255, 255, 255, 255)), (1, DSN15 + (0,))]), cx + Rr * math.cos(ang), cy + Rr * math.sin(ang))
+    d = ImageDraw.Draw(img)
+    d.text((cx, cy - 40), v.get("stamp", ""), font=F(110 if len(v.get("stamp", "")) < 8 else 84, "Black"), fill=WHITE, anchor="mm")
+    d.text((cx, cy + 50), v.get("unit", "after sending"), font=F(32, "SemiBold"), fill=DIM, anchor="mm")
+    a1, a2, a3 = ease((t - 0.3) / 0.5), ease((t - 0.7) / 0.5), ease((t - 1.1) / 0.5)
+    alpha_text(img, (980, 380), v.get("kicker", ""), F(36, "Bold"), DSN15, a1, anchor="lm")
+    lines = v.get("title", "").split("\n")
+    for i, l in enumerate(lines): alpha_text(img, (980, 470 + i * 96), l, F(84, "Black"), WHITE, a1, anchor="lm", dy=(1 - a1) * 30)
+    yy = 470 + len(lines) * 96
+    alpha_text(img, (980, yy), v.get("sub", ""), F(40, "SemiBold"), GOLD15, a2, anchor="lm")
+    if v.get("fact"): alpha_text(img, (980, yy + 70), v["fact"], F(34, "Medium"), PALE15, a3, anchor="lm")
+
+def sc_heliobubble(img, v, t, dur):
+    """the Sun's bubble seen from the side: termination shock (94 AU) + heliopause (121 AU) TO SCALE on the nose, a tail away from the
+    interstellar wind; Voyager 1 (up-right) and Voyager 2 (down-right) tracks grow with a year counter; mode shock | pause | out;
+    v.chart = particle chart at right (solar particles fall, cosmic rays rise at the crossing; illustration)"""
+    mode = v.get("mode", "pause"); cx, cy, k = 820, 600, 3.3
+    d = ImageDraw.Draw(img); p = easeio((t - 0.3) / max(1.0, dur * 0.7))
+    lay = Image.new("RGBA", img.size, (0, 0, 0, 0)); dl = ImageDraw.Draw(lay)
+    def shell(r_au, col, a, w, fill=None):
+        rr = r_au * k; pts = []
+        for j in range(181):
+            th = math.pi * j / 180 * 2; c = math.cos(th)
+            r = rr * (1 + 0.9 * max(0.0, -c) ** 1.4)  # tail stretched to the left
+            pts.append((cx + r * c, cy + r * math.sin(th) * (0.86 + 0.06 * c)))
+        if fill: dl.polygon(pts, fill=fill)
+        dl.line(pts + [pts[0]], fill=col + (a,), width=w)
+    shell(121, PLASMA15, 230 if mode != "shock" else 120, 5, fill=(60, 40, 120, 40))
+    shell(94, GOLD15, 220 if mode != "pause" else 110, 4)
+    for j in range(14):  # interstellar wind streaks from the right
+        yy = 160 + j * 62; xx = (W + 200 - (t * 160 + j * 97) % 700)
+        dl.line([(xx, yy), (xx + 90, yy)], fill=(150, 160, 220, 70), width=2)
+    img.alpha_composite(lay)
+    paste_c(img, sun_sprite(8), cx, cy); d = ImageDraw.Draw(img)
+    yr_end = {"shock": 2004.96, "pause": 2012.65, "out": 2026.9}[mode]
+    yr = lerp(1977.7, yr_end, p)
+    def au_at(year, craft):  # piecewise-linear from known points (approx.)
+        pts = [(1977.7, 0), (1979.2, 5.2), (1980.9, 9.5), (1990.1, 40), (2004.96, 94), (2012.65, 121), (2026.9, 173.1)] if craft == 1 else \
+              [(1977.6, 0), (1979.5, 5.2), (1981.6, 9.5), (1986.1, 19.2), (1989.6, 30), (2007.7, 84), (2018.85, 119), (2026.9, 145)]
+        for (y0, a0), (y1, a1) in zip(pts, pts[1:]):
+            if year <= y1: return lerp(a0, a1, (year - y0) / (y1 - y0))
+        return pts[-1][1]
+    for craft, ang, col in [(1, math.radians(-34), GOLD15), (2, math.radians(30), PALE15)]:
+        r = au_at(yr, craft) * k; x1, y1 = cx + r * math.cos(ang), cy + r * math.sin(ang) * 0.92
+        d.line([(cx, cy), (x1, y1)], fill=col, width=3)
+        if craft == 1: voyager15(img, x1, y1, 0.36, ang=-0.6); d = ImageDraw.Draw(img)
+        else: d.ellipse([x1 - 6, y1 - 6, x1 + 6, y1 + 6], fill=col)
+        d.text((x1 + 30, y1 - 24 if craft == 1 else y1 + 24), f"Voyager {craft}", font=F(28, "Bold"), fill=col, anchor="lm")
+    d.text((cx + 94 * k * 0.72, cy - 94 * k * 0.66 - 30), "termination shock · 94 AU", font=F(26, "Bold"), fill=GOLD15, anchor="rm")
+    d.text((cx + 121 * k * 0.5, cy + 121 * k * 0.92 * 0.86 + 34), "heliopause · 121 AU", font=F(26, "Bold"), fill=PLASMA15, anchor="mm")
+    d.text((cx - 470, cy), "the Sun's bubble", font=F(30, "SemiBold"), fill=(150, 140, 210), anchor="mm")
+    d.text((1700, 140), f"{int(yr)}", font=F(96, "Black"), fill=WHITE, anchor="mm")
+    if v.get("chart"):
+        x0, y0, cw, ch = 1380, 640, 470, 300
+        d.rounded_rectangle([x0 - 20, y0 - 60, x0 + cw + 20, y0 + ch + 60], 18, fill=(8, 10, 24))
+        d.text((x0, y0 - 30), "particles hitting Voyager 1, 2012", font=F(24, "Bold"), fill=DIM, anchor="lm")
+        q = p; n = 80
+        for name, col, f in [("from the Sun", GOLD15, lambda u: 0.8 - 0.75 / (1 + math.exp(-(u - 0.62) * 40))),
+                             ("from deep space", PLASMA15, lambda u: 0.35 + 0.35 / (1 + math.exp(-(u - 0.62) * 40)))]:
+            pts = [(x0 + cw * j / n, y0 + ch * (1 - f(j / n))) for j in range(int(n * q) + 1)]
+            if len(pts) > 1: d.line(pts, fill=col, width=4)
+            d.text((x0 + cw, y0 + ch * (1 - f(1.0)) - 22), name, font=F(22, "Bold"), fill=col, anchor="rm")
+        d.text((x0 + cw / 2, y0 + ch + 34), "illustration of the measured trend", font=F(20, "SemiBold"), fill=DIM, anchor="mm")
+    if v.get("head"): alpha_text(img, (W / 2 - 120, 110), v["head"], F(50, "ExtraBold"), WHITE, ease(t / 0.5))
+    caption(img, v.get("caption"), ease((t - 2.0) / 0.5), y=H - 60)
+
+INSTR15 = [("Imaging cameras", 0), ("Infrared", 0), ("Photopolarimeter", 0), ("Plasma", 0), ("Planetary radio", 0), ("Ultraviolet", 0),
+           ("Cosmic rays", 0), ("Low-energy particles", 0), ("Magnetometer", 1), ("Plasma waves", 1)]
+def sc_powerdown(img, v, t, dur):
+    """power meter (470 W at launch -> v.w_end, 'less than half') + a panel of 10 instrument lamps switching off one by one (2 stay on)"""
+    p = easeio((t - 0.4) / max(1.0, dur * 0.7)); d = ImageDraw.Draw(img)
+    mx, my0, my1 = 260, 900, 260
+    d.rounded_rectangle([mx - 70, my1 - 20, mx + 70, my0 + 20], 30, fill=(16, 20, 40), outline=(60, 70, 110), width=3)
+    w = lerp(470, v.get("w_end", 225), p); yy = lerp(my0, my1, w / 500)
+    col = mix(DSN15, (255, 120, 80), p)
+    d.rounded_rectangle([mx - 50, yy, mx + 50, my0], 20, fill=col)
+    for ww in (0, 100, 200, 300, 400, 500):
+        y = lerp(my0, my1, ww / 500); d.line([(mx + 74, y), (mx + 92, y)], fill=DIM, width=3); d.text((mx + 104, y), f"{ww} W", font=F(24, "SemiBold"), fill=DIM, anchor="lm")
+    d.text((mx, 190), "POWER", font=F(40, "Black"), fill=WHITE, anchor="mm")
+    d.text((mx, 975), f"{int(lerp(1977, 2026, p))}", font=F(54, "Black"), fill=WHITE, anchor="mm")
+    d.text((mx, 1030), "less than half left" if p > 0.9 else "", font=F(28, "Bold"), fill=(255, 140, 100), anchor="mm")
+    x0, y0 = 620, 230; cw, chh = 600, 140
+    off_n = int(round(8 * min(1.0, p * 1.05)))
+    for i, (name, stays) in enumerate(INSTR15):
+        c, r = i % 2, i // 2; x = x0 + c * cw; y = y0 + r * chh
+        on = stays or i >= off_n
+        d.rounded_rectangle([x, y, x + cw - 40, y + chh - 30], 22, fill=(14, 18, 36) if not on else (16, 40, 34), outline=DSN15 if on else (60, 66, 90), width=3)
+        lc = DSN15 if on else (60, 60, 70)
+        if on: paste_c(img, radial(90, [(0, DSN15 + (200,)), (1, DSN15 + (0,))]), x + 54, y + (chh - 30) / 2); d = ImageDraw.Draw(img)
+        d.ellipse([x + 38, y + (chh - 30) / 2 - 16, x + 70, y + (chh - 30) / 2 + 16], fill=lc)
+        d.text((x + 96, y + (chh - 30) / 2), name, font=F(36, "Bold"), fill=WHITE if on else (110, 115, 135), anchor="lm")
+        d.text((x + cw - 64, y + (chh - 30) / 2), "ON" if on else "OFF", font=F(30, "Black"), fill=DSN15 if on else (110, 115, 135), anchor="rm")
+    if v.get("head"): alpha_text(img, (1210, 140), v["head"], F(48, "ExtraBold"), WHITE, ease(t / 0.5))
+    caption(img, v.get("caption"), ease((t - 2.0) / 0.5), y=H - 60)
+
+def _dish15(d, x, y, s, col=(210, 215, 228)):
+    d.chord([x - 150 * s, y - 120 * s, x + 150 * s, y + 60 * s], 200, 340, fill=col)
+    d.polygon([(x - 20 * s, y + 20 * s), (x + 20 * s, y + 20 * s), (x + 40 * s, y + 170 * s), (x - 40 * s, y + 170 * s)], fill=(150, 155, 170))
+    d.line([(x, y - 30 * s), (x, y - 120 * s)], fill=col, width=max(2, int(5 * s)))
+
+def sc_whisper(img, v, t, dur):
+    """22 W leaves Voyager, ~4×10^-19 W reaches a 70 m dish: the power written out with all its zeros, falling as 1/distance²"""
+    d = ImageDraw.Draw(img); p = easeio((t - 0.3) / max(1.0, dur * 0.65))
+    voyager15(img, 1640, 300, 1.0, ang=-0.2); d = ImageDraw.Draw(img)
+    _dish15(d, 260, 680, 1.0); d.text((260, 880), "70 m dish, Deep Space Network", font=F(28, "Bold"), fill=WHITE, anchor="mm")
+    lay = Image.new("RGBA", img.size, (0, 0, 0, 0)); dl = ImageDraw.Draw(lay)
+    for j in range(7):
+        q = ((t * 0.35 + j / 7) % 1.0); rr = 60 + q * 1500
+        dl.arc([1640 - rr, 300 - rr, 1640 + rr, 300 + rr], 110, 190, fill=DSN15 + (int(200 * (1 - q) ** 1.5),), width=4)
+    img.alpha_composite(lay); d = ImageDraw.Draw(img)
+    d.text((1640, 470), "leaves Voyager: 22 W", font=F(46, "Black"), fill=GOLD15, anchor="mm")
+    d.text((1640, 525), "about a fridge light bulb", font=F(30, "SemiBold"), fill=DIM, anchor="mm")
+    zeros = int(round(18 * p)); s = "0." + "0" * zeros + ("4" if zeros == 18 else "")
+    d.text((1180, 760), s + " W", font=F(64 if zeros < 14 else 56, "Black"), fill=DSN15, anchor="mm")
+    d.text((1180, 840), "arrives at the dish (our estimate)", font=F(32, "SemiBold"), fill=WHITE, anchor="mm")
+    if p > 0.95: d.text((1180, 900), "less than a billionth of a billionth of a watt", font=F(34, "Bold"), fill=GOLD15, anchor="mm")
+    if v.get("head"): alpha_text(img, (W / 2, 120), v["head"], F(50, "ExtraBold"), WHITE, ease(t / 0.5))
+    caption(img, v.get("caption"), ease((t - 2.4) / 0.5), y=H - 60)
+
+def sc_pixeldot(img, v, t, dur):
+    """our own re-drawing of the Pale Blue Dot idea: a camera frame with scattered-light bands; a pixel grid zooms in on one pixel and
+    Earth fills only 0.12 of it (mode frame | zoom)"""
+    mode = v.get("mode", "zoom"); d = ImageDraw.Draw(img)
+    fx0, fy0, fs = 160, 170, 760
+    lay = Image.new("RGBA", img.size, (0, 0, 0, 0)); dl = ImageDraw.Draw(lay)
+    dl.rectangle([fx0, fy0, fx0 + fs, fy0 + fs], fill=(10, 8, 10, 255))
+    for j, (off, wdt, a_) in enumerate([(0.18, 60, 70), (0.42, 110, 95), (0.68, 70, 60)]):
+        x = fx0 + fs * off
+        dl.polygon([(x, fy0), (x + wdt, fy0), (x + wdt + 160, fy0 + fs), (x + 160, fy0 + fs)], fill=(200, 140, 90, a_))
+    img.alpha_composite(lay.filter(ImageFilter.GaussianBlur(14))); d = ImageDraw.Draw(img)
+    d.rectangle([fx0, fy0, fx0 + fs, fy0 + fs], outline=(120, 120, 140), width=3)
+    ex, ey = fx0 + fs * 0.5 + 92, fy0 + fs * 0.62
+    d.ellipse([ex - 2, ey - 2, ex + 2, ey + 2], fill=(170, 200, 255))
+    q = 0.5 + 0.5 * math.sin(t * 3); d.ellipse([ex - 30, ey - 30, ex + 30, ey + 30], outline=mix(GOLD15, WHITE, q), width=3)
+    d.text((fx0 + fs / 2, fy0 + fs + 40), "our re-drawing: 14 February 1990, 6 billion km", font=F(26, "SemiBold"), fill=DIM, anchor="mm")
+    if mode == "zoom":
+        z = ease((t - 0.8) / 1.2); gx, gy, gs = 1100, 210, 680
+        d.line([(ex + 30, ey - 30), (lerp(ex, gx, z), lerp(ey, gy, z))], fill=GOLD15, width=2)
+        d.line([(ex + 30, ey + 30), (lerp(ex, gx, z), lerp(ey, gy + gs, z))], fill=GOLD15, width=2)
+        if z > 0.05:
+            n = 5; c = gs / n
+            for i in range(n):
+                for j in range(n):
+                    shade = 18 + ((i * 7 + j * 3) % 5) * 4
+                    d.rectangle([gx + i * c, gy + j * c, gx + (i + 1) * c - 3, gy + (j + 1) * c - 3], fill=(shade, shade - 4, shade - 6))
+            ci = gx + 2 * c; cj = gy + 2 * c
+            d.rectangle([ci, cj, ci + c - 3, cj + c - 3], outline=GOLD15, width=4)
+            er = math.sqrt(0.12 / math.pi) * c  # a disc whose area is 12% of the pixel
+            d.ellipse([ci + c / 2 - er, cj + c / 2 - er, ci + c / 2 + er, cj + c / 2 + er], fill=(120, 170, 255))
+            d.text((gx + gs / 2, gy + gs + 50), "EARTH = 0.12 of ONE pixel", font=F(46, "Black"), fill=WHITE, anchor="mm")
+    if v.get("head"): alpha_text(img, (W / 2, 100), v["head"], F(46, "ExtraBold"), WHITE, ease(t / 0.5))
+    caption(img, v.get("caption"), ease((t - 2.4) / 0.5), y=H - 50)
 
 
 SC = {k[3:]: f for k, f in globals().items() if k.startswith("sc_")}

@@ -23,6 +23,9 @@ Visuais (vis.type):
              vis.mode = hook (buraco negro + órbitas até Netuno; rows = 4 órbitas de Netuno lado a lado) | zoom (começa nos planetas e
              afasta em log até o horizonte aparecer) | mass (Sol minúsculo + contador de Sóis) | voyager (linha da Voyager 1, 1977 -> 2026,
              173 UA, sai da borda por pouco) | light (pulso de luz atravessando o diâmetro, contador até 35,6 h) (scale07).
+  "moonorbit": a órbita inteira da Lua DENTRO do Sol, em escala (Terra no centro do Sol; raio do Sol 696.000 km, Lua a 384.400 km);
+             vis.mode = hook (Sol translúcido + órbita + Lua girando) | orbit (zoom log da Terra até a órbita, contador de km) | room
+             (barras raio x distância + 311.600 km de folga) | trip (ponto no ritmo da Apollo 11 atravessa o Sol, contador até 11,5 dias) (scale08).
 Reaproveita render.py (sprites, fontes) e ranking.py (fundo, texto, legendas).
 """
 import sys, os, math, json, subprocess, importlib.util, random
@@ -522,6 +525,79 @@ def bhfit_vis(img, v, th, t, dur, bp):
         d.text((cx, cy - 120), f"{35.6 * bp:.1f} h", font=F(110, "Black"), fill=(255, 245, 170), anchor="mm")
         d.text((cx, cy + 110), "for light to cross it", font=F(40, "ExtraBold"), fill=(255, 255, 255), anchor="mm")
 
+# ---- scale08: the Moon's whole orbit inside the Sun (Earth at the Sun's centre, everything TO SCALE: Sun r 696,000 km, Moon orbit r 384,400 km) ----
+SUN_R8, MOON_A8, MOON_APO8, EARTH_R8, MOON_R8 = 696000, 384400, 405500, 6371, 1737
+_sun8 = None
+def sun_slice8(img, cx, cy, rpx, t, a=1.0):
+    """the Sun as a translucent disc so what's inside shows through: limb glow + soft granulation rings"""
+    global _sun8
+    if a <= 0: return
+    if _sun8 is None:
+        _sun8 = R.radial(int(470 * 2.9), [(0, (255, 170, 60, 120)), (0.66, (255, 140, 40, 110)), (0.69, (255, 230, 150, 230)), (0.72, (255, 150, 50, 120)), (1, (255, 100, 20, 0))])
+    spr = _sun8 if abs(rpx - 470) < 1 else _sun8.resize((int(rpx * 2.9), int(rpx * 2.9)), Image.BILINEAR)
+    R.paste_c(img, spr, cx, cy, a)
+    lay = Image.new("RGBA", img.size, (0, 0, 0, 0)); dl = ImageDraw.Draw(lay); rng = random.Random(8)
+    for i in range(70):
+        ang = rng.uniform(0, 2 * math.pi); rr = rpx * math.sqrt(rng.uniform(0.0, 0.92)); sz = rng.uniform(10, 30) * (1 + 0.15 * math.sin(t * 2 + i))
+        x, y = cx + rr * math.cos(ang), cy + rr * math.sin(ang)
+        dl.ellipse([x - sz * 0.6, y - sz * 0.6, x + sz * 0.6, y + sz * 0.6], fill=(255, 200, 110, 14))
+    img.alpha_composite(lay)
+
+def moonorbit_vis(img, v, th, t, dur, bp):
+    """mode hook (translucent Sun, Earth at its centre, the Moon's orbit drawn inside, Moon circling) | orbit (zoom in from Earth to the
+    Moon's orbit, distance counter) | room (radius bars: 384,400 vs 696,000 km, the 311,600 km to spare highlighted) | trip (an Apollo-pace
+    dot crosses the Sun's diameter, days counter to 11.5)"""
+    acc, acc2 = tuple(th["accent"]), tuple(th["accent2"]); mode = v.get("mode", "hook"); cx, cy = W / 2, 930
+    rpx = 470; k = rpx / SUN_R8
+    if mode == "orbit":
+        z = math.exp(lerp(math.log(rpx / 20000.0), math.log(k), min(1.0, bp / 0.7)))  # px per km: start near Earth, end at the hook scale
+        sun_slice8(img, cx, cy, rpx, t, a=ease((bp - 0.7) / 0.3))
+    else:
+        z = k; sun_slice8(img, cx, cy, rpx, t)
+    d = ImageDraw.Draw(img)
+    mo = MOON_A8 * z
+    if mode != "trip":
+        lay = Image.new("RGBA", img.size, (0, 0, 0, 0)); dl = ImageDraw.Draw(lay)
+        dl.ellipse([cx - mo, cy - mo, cx + mo, cy + mo], outline=acc2 + (230,), width=4)
+        img.alpha_composite(lay)
+        er = max(5, EARTH_R8 * z); R.paste_c(img, R.earth_sprite(int(er), glow=None), cx, cy)
+        ang = -math.pi / 2 + t * 0.6; mx, my = cx + mo * math.cos(ang), cy + mo * math.sin(ang)
+        R.paste_c(img, R.planet_sprite(max(7, int(MOON_R8 * z)), (225, 225, 230)), mx, my)
+        d = ImageDraw.Draw(img)
+        if MOON_R8 * z < 7: d.ellipse([mx - 22, my - 22, mx + 22, my + 22], outline=(255, 255, 255), width=3)
+        if mode in ("hook", "orbit"):
+            text(img, (cx, cy + mo + 46), "the Moon's orbit", 36, acc2, w="ExtraBold")
+            text(img, (cx + 70, cy - 30), "Earth", 30, (170, 210, 255), w="Bold", anchor="lm")
+        if mode == "orbit":
+            text(img, (W / 2, 1450), f"{MOON_A8 * min(1, bp * 1.6):,.0f} km", 64, acc2)
+        if mode == "hook":
+            text(img, (W / 2, 1440), "to scale", 36, (230, 232, 240), w="ExtraBold")
+    if mode == "room":
+        y1, y2 = 1360, 1440; x0 = cx
+        ln = MOON_A8 * z * min(1, bp * 1.5); ls = SUN_R8 * z * min(1, bp * 1.5)
+        d.line([(x0, cy), (x0 + ls, cy)], fill=acc, width=5); d.line([(x0, cy - 14), (x0 + ln, cy - 14)], fill=acc2, width=5)
+        d.rounded_rectangle([100, y1 - 40, 980, y2 + 70], 24, fill=(14, 8, 4))
+        d.text((140, y1), "Moon's distance", font=F(34, "Bold"), fill=acc2, anchor="lm"); d.text((940, y1), "384,400 km", font=F(40, "Black"), fill=acc2, anchor="rm")
+        d.text((140, y2), "Sun's radius", font=F(34, "Bold"), fill=acc, anchor="lm"); d.text((940, y2), "696,000 km", font=F(40, "Black"), fill=acc, anchor="rm")
+        if bp > 0.6:
+            q = ease((bp - 0.6) / 0.3)
+            lay = Image.new("RGBA", img.size, (0, 0, 0, 0)); dl = ImageDraw.Draw(lay)
+            dl.rectangle([x0 + MOON_A8 * z, cy - 40, x0 + SUN_R8 * z, cy + 40], fill=(140, 255, 160, int(90 * q)))
+            img.alpha_composite(lay)
+            text(img, (W - 40, cy - 80), "311,600 km", 40, (160, 255, 170), w="Black", a=q, anchor="rm")
+            text(img, (W - 40, cy + 80), "to spare", 34, (160, 255, 170), w="ExtraBold", a=q, anchor="rm")
+    if mode == "trip":
+        x0, x1 = cx - rpx, cx + rpx; x = lerp(x0, x1, bp)
+        d.line([(x0, cy), (x, cy)], fill=(255, 255, 255), width=4)
+        R.paste_c(img, R.radial(60, [(0, (255, 255, 255, 255)), (1, acc2 + (0,))]), x, cy)
+        d = ImageDraw.Draw(img)
+        # the Moon trip at the same pace, for scale: Earth -> Moon in 3.2 days
+        mo_px = MOON_A8 * z; yy = cy + rpx + 110
+        d.line([(x0, yy), (x0 + mo_px, yy)], fill=acc2, width=6); d.text((x0, yy - 30), "Earth to Moon: 3.2 days (Apollo 11)", font=F(30, "Bold"), fill=acc2, anchor="lm")
+        d.rounded_rectangle([cx - 230, cy - 230, cx + 230, cy - 80], 24, fill=(14, 8, 4))
+        d.text((cx, cy - 170), f"{11.5 * bp:.1f} days", font=F(72, "Black"), fill=(255, 255, 255), anchor="mm")
+        d.text((cx, cy - 110), "at Apollo's pace", font=F(30, "ExtraBold"), fill=acc, anchor="mm")
+
 def chrome(img, th, gt, total):
     d = ImageDraw.Draw(img)
     d.rectangle([0, 0, int(W * gt / total), 10], fill=tuple(th["accent"]))
@@ -577,6 +653,11 @@ def frame(m, durs, gt, chunks, arr):
         text(img, (W / 2, 280), hl["top"], 52, (255, 255, 255), stroke=3)
     elif v["type"] == "bhfit":
         bhfit_vis(img, v, th, t, d, easeio((t - 0.2) / max(0.8, d * 0.8)))
+        hl = v.get("head") or m.BIG
+        text(img, (W / 2, 170), hl["num"], 124 if len(hl["num"]) < 12 else 100, tuple(th["accent"]), stroke=4)
+        text(img, (W / 2, 280), hl["top"], 52, (255, 255, 255), stroke=3)
+    elif v["type"] == "moonorbit":
+        moonorbit_vis(img, v, th, t, d, easeio((t - 0.2) / max(0.8, d * 0.8)))
         hl = v.get("head") or m.BIG
         text(img, (W / 2, 170), hl["num"], 124 if len(hl["num"]) < 12 else 100, tuple(th["accent"]), stroke=4)
         text(img, (W / 2, 280), hl["top"], 52, (255, 255, 255), stroke=3)
