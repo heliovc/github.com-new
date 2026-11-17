@@ -1470,5 +1470,23 @@
   "publish_at": "2026-11-18T12:30:00-03:00",
   "related_key": "cosmic-ep15-long",
   "pinned_comment": "Would you wait two days for a reply? Full video: Voyager 1 Is Now 1 Light-Day Away. A Message Takes 24 Hours"
+ },
+ "ptd-rank14-short": {
+  "attempts": 1,
+  "status": "published",
+  "url": "https://youtu.be/L7nchEJVNRQ",
+  "by": "robo",
+  "visibility": "schedule",
+  "when": "2026-11-17T12:30:00-03:00",
+  "at": "2026-11-17T07:55:18.325486-03:00",
+  "error": null,
+  "channel_id": "UCd_BGmJ5gbQ0kECAxmbvQHA",
+  "title": "Os 5 estados com mais empresas no vermelho (o nº 1 supera os outros 4 juntos) #shorts",
+  "kind": "short",
+  "publish_at": "2026-11-17T12:30:00-03:00",
+  "related_key": "ptd-ep15-long",
+  "pinned_comment": "Por que você acha que tanta empresa está com conta atrasada agora? Vídeo completo: Score de crédito: a prova secreta que decide quanto juro você paga",
+  "related_attempts": 1,
+  "related_error": "vídeo XnCvK_tV7_s não apareceu na lista do 'Vídeo relacionado' (nao-achei) (20261117-075626-erro-related-ptd-rank14-short.png)"
  }
 }
