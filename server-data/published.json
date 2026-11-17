@@ -1488,5 +1488,36 @@
   "pinned_comment": "Por que você acha que tanta empresa está com conta atrasada agora? Vídeo completo: Score de crédito: a prova secreta que decide quanto juro você paga",
   "related_attempts": 2,
   "related_done": "2026-11-17T08:02:23.655505-03:00"
+ },
+ "lab-ep13-long": {
+  "attempts": 1,
+  "status": "published",
+  "url": "https://youtu.be/T-_8nsdBLss",
+  "by": "robo",
+  "visibility": "schedule",
+  "when": "2026-11-17T18:30:00-03:00",
+  "at": "2026-11-17T09:15:05.327989-03:00",
+  "error": null,
+  "channel_id": "UCXGqR8k1RMbfYdVleIuJKzA",
+  "title": "VS Code Shortcuts That Save Hours (Multi-Cursor, Move Lines, Command Palette for Beginners)",
+  "kind": "long",
+  "publish_at": "2026-11-17T18:30:00-03:00",
+  "pinned_comment": "Which shortcut was new to you, and which one do you already use every day? Tell me below."
+ },
+ "lab-ep13-short": {
+  "attempts": 1,
+  "status": "published",
+  "url": "https://youtu.be/OkG52rWuTYI",
+  "by": "robo",
+  "visibility": "schedule",
+  "when": "2026-11-17T20:00:00-03:00",
+  "at": "2026-11-17T09:18:12.815490-03:00",
+  "error": null,
+  "channel_id": "UCXGqR8k1RMbfYdVleIuJKzA",
+  "title": "VS Code: Edit 5 Lines at Once #shorts",
+  "kind": "short",
+  "publish_at": "2026-11-17T20:00:00-03:00",
+  "related_key": "lab-ep13-long",
+  "pinned_comment": "Which shortcut should I show next? Full tutorial: VS Code Shortcuts That Save Hours (Multi-Cursor, Move Lines, Command Palette for Beginners)"
  }
 }
