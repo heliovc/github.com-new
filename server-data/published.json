@@ -1571,7 +1571,9 @@
   "related_key": "cosmic-ep15-long",
   "pinned_comment": "Where should we send the next one? Full video: Voyager 1 Is Now 1 Light-Day Away. A Message Takes 24 Hours",
   "related_attempts": 1,
-  "related_done": "2026-11-18T08:46:46.009520-03:00"
+  "related_done": "2026-11-18T08:46:46.009520-03:00",
+  "comment_attempts": 1,
+  "comment_done": "2026-11-18T13:41:45.771989-03:00"
  },
  "cosmic-ep16-long": {
   "attempts": 1,
