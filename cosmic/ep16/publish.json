@@ -1,0 +1,102 @@
+{
+ "version": 1,
+ "channel_id": "UCsYYjUbmq4n3lAKgw2F2IJw",
+ "created_at": "2026-11-18T06:30:09-03:00",
+ "items": [
+  {
+   "key": "cosmic-rank15-short",
+   "kind": "short",
+   "video": "ranking.mp4",
+   "title": "Top 5 Farthest Things Humans Ever Built (#1 Is a Light-Day Away) #shorts",
+   "description": "The five most distant spacecraft, ranked by distance from the Sun, on one track drawn to scale (square-root).\nFull video: Voyager 1 Is Now 1 Light-Day Away. A Message Takes 24 Hours\n\nSources\n• NASA/JPL: Voyager 1 reaches one light-day (about 25.9 billion km) from Earth on 18 November 2026; Voyager 1 and 2 launched in 1977 and still return data\n• NASA: Pioneer 10 launched 1972, first spacecraft to fly past Jupiter, carries the Pioneer plaque, last signal January 2003; Pioneer 11 launched 1973, first spacecraft to fly past Saturn (1979), last contact 1995\n• NASA / Johns Hopkins APL: New Horizons launched January 2006, flew past Pluto in July 2015 and Arrokoth in 2019\n• Voyager 2 passed Pioneer 10 in distance from the Sun in July 2023 at about 133.9 AU (JPL-based tables)\n• Own estimates for November 2026: last published distances from the Sun (Heavens-Above / JPL-based tables) advanced at each probe's speed — Voyager 2 ≈ 145 AU, Pioneer 10 ≈ 142 AU, Pioneer 11 ≈ 120 AU, New Horizons ≈ 66 AU; 1 AU = 149.6 million km; light time = AU × 499 s\n\nVisuals are original. Narration uses a synthetic voice.\n#shorts #space #voyager1 #nasa",
+   "tags": [
+    "farthest spacecraft",
+    "voyager 1",
+    "voyager 2",
+    "pioneer 10",
+    "new horizons",
+    "top 5",
+    "space",
+    "shorts"
+   ],
+   "publish_at": "2026-11-18T13:00:00-03:00",
+   "related_key": "cosmic-ep15-long",
+   "pinned_comment": "Where should we send the next one? Full video: Voyager 1 Is Now 1 Light-Day Away. A Message Takes 24 Hours",
+   "if_late": "public_now",
+   "made_for_kids": false,
+   "altered_content": true
+  },
+  {
+   "key": "cosmic-ep16-long",
+   "kind": "long",
+   "video": "video.mp4",
+   "thumbnail": "thumbnail.jpg",
+   "captions": "legendas.srt",
+   "title": "Why Can't We See the Edge of the Universe? Far Galaxies Look Bigger",
+   "description": "Point a telescope far enough and something strange happens: an identical galaxy starts to look BIGGER the farther away it is. That clue leads to the five walls between us and the edge of the universe: time, the stretch, the fade, the funhouse mirror and the fog. And then the last question: is there an edge at all?\n\nChapters\n0:00 Farther away, but it looks bigger?\n0:27 Wall 1: time\n1:15 Wall 2: the stretch\n2:20 Wall 3: dimmer and slower\n3:23 Wall 4: the funhouse mirror\n4:32 Wall 5: the fog\n5:37 The dark ages and other messengers\n6:23 Everyone has their own horizon\n6:58 Is there an edge at all?\n7:37 Five walls, and what's next\n\nSources\n• Planck Collaboration (2018): age of the universe 13.787 ± 0.020 billion years; H0 = 67.66 km/s/Mpc, matter density 0.311; spatial curvature consistent with flat (Ωk = 0.0007 ± 0.0019 with BAO)\n• Naidu et al. (2025), Open Journal of Astrophysics (2026): MoM-z14 confirmed with JWST at redshift 14.44, about 280 million years after the Big Bang\n• NASA/STScI: James Webb Space Telescope observes 0.6 to 28.5 µm, 6.5 m mirror, tennis-court-sized sunshield, instruments below about 50 K; Hubble 2.4 m mirror observes ultraviolet, visible and near-infrared (to about 1.7 µm)\n• R. M. White et al. (2024), MNRAS 533, 3365, Dark Energy Survey: 1,504 Type Ia supernovae (redshift 0.1 to 1.2) show light-curve widths stretched by (1 + z), as expected from cosmic time dilation\n• F. Hoyle (1959): in an expanding universe the apparent angular size of objects reaches a minimum and then grows with distance\n• Tolman surface-brightness test: in an expanding universe surface brightness falls as (1 + z)^4\n• NASA (WMAP/Planck): the cosmic microwave background was released about 380,000 years after the Big Bang at about 3,000 K; today 2.725 K\n• NASA: the cosmic neutrino background (decoupled about 1 second after the Big Bang) and primordial gravitational waves have not yet been detected directly\n• Own calculations (flat ΛCDM with the Planck 2018 values above): radius of the observable universe 46.2 billion light-years; cosmic event horizon 16.6 billion light-years; redshift 1 = 7.9 billion years of lookback; MoM-z14 was 2.19 billion light-years away when its light left and is 33.9 billion light-years away today; maximum distance-at-emission 5.85 billion light-years at redshift 1.59; the apparent size of a 100,000 light-year galaxy is smallest near redshift 1.6 (3.5 arcseconds) and grows to 9.4 arcseconds at redshift 14.44; (1+z)^4 = 16 at z = 1 and about 56,800 at z = 14.44; Lyman-alpha 121.6 nm × 15.44 ≈ 1.88 µm; CMB emitted about 42 million light-years away, now about 45.3 billion light-years\n\n—\nCosmic Scale: the universe, measured in a way you can feel.\nSubscribe for a new space video every week.\nVisuals and animations are original. Narration uses a synthetic voice.\n#space #universe #science",
+   "tags": [
+    "edge of the universe",
+    "observable universe",
+    "why can't we see the edge of the universe",
+    "cosmic microwave background",
+    "redshift",
+    "james webb",
+    "MoM-z14",
+    "expanding universe",
+    "space",
+    "science"
+   ],
+   "publish_at": "2026-11-18T17:00:00-03:00",
+   "pinned_comment": "If you could see past the fog wall, what would you hope to find?",
+   "if_late": "public_now",
+   "made_for_kids": false,
+   "altered_content": true
+  },
+  {
+   "key": "cosmic-scale09-short",
+   "kind": "short",
+   "video": "scale.mp4",
+   "title": "Every Other Planet Fits Inside Jupiter (With Room for 435 Earths) #shorts",
+   "description": "Pour all seven other planets into Jupiter, by volume: Saturn alone fills 58%, and a third is still empty.\nFull video: What If Jupiter Became a Star? It Would Need 80 Jupiters\n\nSources\n• NASA Planetary Fact Sheet (NSSDC): volumes in 10^10 km³ — Jupiter 143,128; Saturn 82,713; Uranus 6,833; Neptune 6,254; Earth 108.321; Venus 92.843; Mars 16.318; Mercury 6.083\n• Own calculations: Jupiter holds 143,128 / 108.321 ≈ 1,321 Earths by volume; Saturn = 57.8% of Jupiter; with Uranus and Neptune 66.9%; the four rocky planets 223.6 = 0.16%; all seven 96,024 = 67.1%; empty 47,104 ≈ 435 Earths (volumes only, as if melted and poured; real planets are not compressible like this)\n\nVisuals are original. Narration uses a synthetic voice.\n#shorts #space #jupiter #scale",
+   "tags": [
+    "jupiter size",
+    "planets inside jupiter",
+    "size comparison",
+    "jupiter vs earth",
+    "solar system",
+    "space to scale",
+    "space",
+    "shorts"
+   ],
+   "publish_at": "2026-11-18T19:00:00-03:00",
+   "related_key": "cosmic-ep10-long",
+   "pinned_comment": "Did you expect that much room left? Full video: What If Jupiter Became a Star? It Would Need 80 Jupiters",
+   "if_late": "public_now",
+   "made_for_kids": false,
+   "altered_content": true
+  },
+  {
+   "key": "cosmic-ep16-short",
+   "kind": "short",
+   "video": "vertical.mp4",
+   "title": "The Farthest Galaxy Looks BIGGER Than Closer Ones. Here's Why #shorts",
+   "description": "An identical galaxy looks smallest around redshift 1.6, then bigger the farther you go. MoM-z14's light left when it was only about 2.2 billion light-years away.\nFull video: Why Can't We See the Edge of the Universe? Far Galaxies Look Bigger\n\nSources\n• Naidu et al. (2025): MoM-z14 confirmed by JWST at redshift 14.44\n• Planck Collaboration (2018): cosmological parameters (H0 = 67.66, matter density 0.311)\n• Own calculations (flat ΛCDM): MoM-z14 was 2.19 billion light-years away when its light left, 33.9 billion today; a 100,000 light-year galaxy looks smallest near redshift 1.6 (3.5 arcseconds) and 9.4 arcseconds at redshift 14.44\n\nVisuals are original. Narration uses a synthetic voice.\n#shorts #space #universe #jwst",
+   "tags": [
+    "edge of the universe",
+    "farthest galaxy",
+    "MoM-z14",
+    "james webb",
+    "redshift",
+    "expanding universe",
+    "space",
+    "shorts"
+   ],
+   "publish_at": "2026-11-18T21:00:00-03:00",
+   "related_key": "cosmic-ep16-long",
+   "pinned_comment": "Did you expect far galaxies to look bigger? Full video: Why Can't We See the Edge of the Universe? Far Galaxies Look Bigger",
+   "if_late": "public_now",
+   "made_for_kids": false,
+   "altered_content": true
+  }
+ ]
+}

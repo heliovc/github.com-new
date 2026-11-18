@@ -1,0 +1,503 @@
+1
+00:00:00,200 --> 00:00:02,911
+Here's something that sounds like a mistake.
+
+2
+00:00:02,911 --> 00:00:07,472
+Point a telescope at a galaxy, then at an identical one much farther away.
+
+3
+00:00:07,472 --> 00:00:09,444
+The far one should look smaller.
+
+4
+00:00:09,444 --> 00:00:11,108
+And it does, up to a point.
+
+5
+00:00:11,108 --> 00:00:15,176
+Then, if you keep going, the farther galaxy starts to look bigger.
+
+6
+00:00:15,875 --> 00:00:17,586
+That's not an optical trick.
+
+7
+00:00:17,586 --> 00:00:23,023
+It's a clue about why nobody, with any telescope, will ever see the edge of the universe.
+
+8
+00:00:23,023 --> 00:00:24,978
+There are five walls in the way.
+
+9
+00:00:24,978 --> 00:00:26,628
+Let's hit them, one by one.
+
+10
+00:00:27,327 --> 00:00:28,853
+Wall number one is time.
+
+11
+00:00:28,853 --> 00:00:31,332
+Light is fast, but not infinitely fast.
+
+12
+00:00:31,332 --> 00:00:33,938
+So when you look far, you also look back.
+
+13
+00:00:33,938 --> 00:00:36,290
+The Sun you see is eight minutes old.
+
+14
+00:00:36,290 --> 00:00:39,786
+The Andromeda galaxy, two and a half million years old.
+
+15
+00:00:40,486 --> 00:00:41,698
+Now go much deeper.
+
+16
+00:00:41,698 --> 00:00:49,990
+At a redshift of one, a number astronomers use for distance in time, you're seeing light that left almost eight billion years ago.
+
+17
+00:00:49,990 --> 00:00:51,584
+Before the Earth existed.
+
+18
+00:00:51,584 --> 00:00:53,052
+Before the Sun existed.
+
+19
+00:00:53,752 --> 00:00:58,026
+And the universe itself is only thirteen point eight billion years old.
+
+20
+00:00:58,026 --> 00:00:59,471
+So there's a hard limit.
+
+21
+00:00:59,471 --> 00:01:02,782
+You can't receive light that's older than the universe.
+
+22
+00:01:02,782 --> 00:01:07,056
+Whatever is out there beyond that, its light simply hasn't arrived yet.
+
+23
+00:01:07,056 --> 00:01:07,538
+Not dim.
+
+24
+00:01:07,538 --> 00:01:08,200
+Not hidden.
+
+25
+00:01:08,200 --> 00:01:09,525
+Just still on its way.
+
+26
+00:01:09,525 --> 00:01:15,064
+Every year that passes, a little more of it gets here, and our view grows a tiny bit deeper.
+
+27
+00:01:15,763 --> 00:01:17,671
+Wall number two is the stretch.
+
+28
+00:01:17,671 --> 00:01:21,487
+While that ancient light travels, space expands underneath it.
+
+29
+00:01:21,487 --> 00:01:23,333
+And the light expands with it.
+
+30
+00:01:23,333 --> 00:01:25,363
+Its waves get longer, and redder.
+
+31
+00:01:26,063 --> 00:01:29,845
+The farthest galaxy ever confirmed is called MoM z fourteen.
+
+32
+00:01:29,845 --> 00:01:34,886
+Its light left when the universe was about two hundred eighty million years old.
+
+33
+00:01:34,886 --> 00:01:40,432
+Ultraviolet light from its young, hot stars arrives here more than fifteen times longer.
+
+34
+00:01:40,432 --> 00:01:43,331
+Pushed right past red, deep into the infrared.
+
+35
+00:01:43,331 --> 00:01:46,607
+Invisible to your eyes, and to Hubble's best camera.
+
+36
+00:01:47,307 --> 00:01:49,999
+And that stretch is also a measuring tape.
+
+37
+00:01:49,999 --> 00:01:57,304
+A redshift of fourteen point four four means every wave arrives fifteen point four four times longer than it left.
+
+38
+00:01:57,304 --> 00:02:04,737
+Which means the universe itself has grown fifteen point four four times in every direction since that light set off.
+
+39
+00:02:05,437 --> 00:02:15,657
+That's exactly why the James Webb telescope was built for infrared, with a sunshield the size of a tennis court, keeping it colder than minus two hundred twenty degrees.
+
+40
+00:02:15,657 --> 00:02:19,709
+A warm telescope would glow in the same light it's trying to catch.
+
+41
+00:02:20,409 --> 00:02:22,777
+Wall number three is a double penalty.
+
+42
+00:02:22,777 --> 00:02:24,958
+Far away things are dim, of course.
+
+43
+00:02:24,958 --> 00:02:30,691
+But in an expanding universe, they get dimmer much faster than distance alone would explain.
+
+44
+00:02:31,391 --> 00:02:34,074
+Each photon loses energy as it's stretched.
+
+45
+00:02:34,074 --> 00:02:37,630
+And the photons also arrive spread out, fewer per second.
+
+46
+00:02:37,630 --> 00:02:45,178
+Put those effects together, and the surface brightness of a galaxy falls with one plus the redshift, to the fourth power.
+
+47
+00:02:45,178 --> 00:02:47,985
+At redshift one, that's sixteen times dimmer.
+
+48
+00:02:47,985 --> 00:02:54,410
+For MoM z fourteen, about fifty seven thousand times dimmer, on top of the normal fading with distance.
+
+49
+00:02:55,110 --> 00:02:56,988
+And here's the strangest part.
+
+50
+00:02:56,988 --> 00:02:59,931
+The distant universe is playing in slow motion.
+
+51
+00:02:59,931 --> 00:03:05,253
+An exploding star called a type one A supernova brightens and fades over a few weeks.
+
+52
+00:03:05,253 --> 00:03:10,199
+In twenty twenty four, the Dark Energy Survey compared fifteen hundred of them.
+
+53
+00:03:10,199 --> 00:03:12,953
+The ones at redshift one took twice as long.
+
+54
+00:03:12,953 --> 00:03:16,209
+Exactly the stretch the expanding universe predicts.
+
+55
+00:03:16,909 --> 00:03:19,931
+So the far universe is redder, dimmer, and slower.
+
+56
+00:03:19,931 --> 00:03:23,437
+Every step outward, it gets harder to see anything at all.
+
+57
+00:03:24,137 --> 00:03:26,363
+Wall number four is the funhouse mirror.
+
+58
+00:03:26,363 --> 00:03:29,647
+Remember the galaxy that looked bigger when it was farther?
+
+59
+00:03:29,647 --> 00:03:30,259
+Here's why.
+
+60
+00:03:30,959 --> 00:03:35,667
+The light from MoM z fourteen has traveled thirteen and a half billion years.
+
+61
+00:03:35,667 --> 00:03:40,681
+But when it left, that galaxy wasn't thirteen and a half billion light years away.
+
+62
+00:03:40,681 --> 00:03:46,551
+Using the standard model of the universe, we calculated it was only about two point two billion.
+
+63
+00:03:46,551 --> 00:03:50,586
+The universe was smaller then, and everything was closer together.
+
+64
+00:03:51,286 --> 00:03:54,701
+So we see it at the size it had, at that closer distance.
+
+65
+00:03:54,701 --> 00:04:00,393
+Its image is like an old photo, taken up close, that took billions of years to be mailed to us.
+
+66
+00:04:00,393 --> 00:04:03,508
+That's why it looks larger than galaxies in between.
+
+67
+00:04:03,508 --> 00:04:07,762
+The astronomer Fred Hoyle pointed this out back in nineteen fifty nine.
+
+68
+00:04:07,762 --> 00:04:11,297
+It falls straight out of the math of an expanding universe.
+
+69
+00:04:11,997 --> 00:04:15,825
+Now trace every light ray we receive, back to where it started.
+
+70
+00:04:15,825 --> 00:04:17,648
+They make this teardrop shape.
+
+71
+00:04:17,648 --> 00:04:20,747
+And the widest point of the teardrop is a surprise.
+
+72
+00:04:20,747 --> 00:04:26,946
+No light that reaches us today left from farther than about five point eight billion light years away.
+
+73
+00:04:26,946 --> 00:04:32,050
+The deepest pictures ever taken show things that were, at the time, relatively near.
+
+74
+00:04:32,750 --> 00:04:34,789
+Wall number five is the real wall.
+
+75
+00:04:34,789 --> 00:04:38,446
+Go back far enough, and the universe stops being transparent.
+
+76
+00:04:39,146 --> 00:04:44,528
+For its first three hundred eighty thousand years, the universe was a hot glowing plasma.
+
+77
+00:04:44,528 --> 00:04:46,705
+Electrons weren't attached to atoms.
+
+78
+00:04:46,705 --> 00:04:50,575
+They floated free, and light couldn't travel in a straight line.
+
+79
+00:04:50,575 --> 00:04:54,566
+A photon would hit an electron, bounce, hit another, bounce again.
+
+80
+00:04:54,566 --> 00:04:56,319
+Like headlights in thick fog.
+
+81
+00:04:57,019 --> 00:05:03,271
+Then it cooled to about three thousand degrees, roughly as hot as the filament of an old light bulb.
+
+82
+00:05:03,271 --> 00:05:05,584
+Electrons finally settled into atoms.
+
+83
+00:05:05,584 --> 00:05:11,398
+The fog cleared, and the light that was there at that moment has been flying free ever since.
+
+84
+00:05:12,098 --> 00:05:15,136
+That light is still arriving, from every direction.
+
+85
+00:05:15,136 --> 00:05:21,449
+Stretched about eleven hundred times, it's now microwaves, at less than three degrees above absolute zero.
+
+86
+00:05:21,449 --> 00:05:23,355
+The cosmic microwave background.
+
+87
+00:05:23,355 --> 00:05:26,094
+It's the farthest thing we can see with light.
+
+88
+00:05:26,094 --> 00:05:31,395
+The glowing gas that sent it was only about forty two million light years away back then.
+
+89
+00:05:31,395 --> 00:05:36,695
+Today, by our calculation, that same matter is about forty five billion light years away.
+
+90
+00:05:37,395 --> 00:05:40,331
+After the fog cleared, the universe went dark.
+
+91
+00:05:40,331 --> 00:05:42,884
+No stars yet, just cooling hydrogen gas.
+
+92
+00:05:42,884 --> 00:05:45,501
+Astronomers call it the cosmic dark ages.
+
+93
+00:05:45,501 --> 00:05:52,011
+Webb is now catching the very end of it, galaxies only a few hundred million years after the Big Bang.
+
+94
+00:05:52,011 --> 00:06:00,371
+Radio telescopes are trying to hear the hydrogen itself, a faint signal born at twenty one centimeters, stretched by now to meters.
+
+95
+00:06:01,071 --> 00:06:04,822
+Behind that glow is a wall no telescope will ever see through.
+
+96
+00:06:04,822 --> 00:06:07,604
+Not because it's far, but because it's opaque.
+
+97
+00:06:07,604 --> 00:06:10,870
+To look past it, we'd need something other than light.
+
+98
+00:06:10,870 --> 00:06:15,769
+Ghostly particles called neutrinos, released about one second after the Big Bang.
+
+99
+00:06:15,769 --> 00:06:18,672
+Or ripples in space itself, gravitational waves.
+
+100
+00:06:18,672 --> 00:06:20,184
+Both should be out there.
+
+101
+00:06:20,184 --> 00:06:22,725
+Neither has been caught from that era yet.
+
+102
+00:06:23,425 --> 00:06:29,917
+So every direction we look, the view ends at that glowing shell, about forty six billion light years away.
+
+103
+00:06:29,917 --> 00:06:32,612
+Which means we're at the center of our view.
+
+104
+00:06:32,612 --> 00:06:33,776
+But so is everyone.
+
+105
+00:06:33,776 --> 00:06:41,003
+An alien astronomer in MoM z fourteen would see their own bubble, centered on them, reaching places we will never see.
+
+106
+00:06:41,703 --> 00:06:43,538
+And it shrinks in a sense, too.
+
+107
+00:06:43,538 --> 00:06:54,311
+Because the expansion is speeding up, light that a galaxy sends today will only ever reach us if that galaxy is less than about sixteen and a half billion light years away right now.
+
+108
+00:06:54,311 --> 00:06:57,981
+Farther than that, and its present is cut off from us forever.
+
+109
+00:06:58,681 --> 00:07:00,511
+And what's beyond the horizon?
+
+110
+00:07:00,511 --> 00:07:02,097
+Probably more of the same.
+
+111
+00:07:02,097 --> 00:07:09,477
+The ancient glow looks almost identical in every direction, the same temperature to about one part in a hundred thousand.
+
+112
+00:07:09,477 --> 00:07:15,577
+Nothing in it hints that our patch is special, or that the galaxies stop just past where we can see.
+
+113
+00:07:16,277 --> 00:07:18,499
+So is there an edge out there at all?
+
+114
+00:07:18,499 --> 00:07:23,003
+The Planck satellite measured the geometry of space from that ancient glow.
+
+115
+00:07:23,003 --> 00:07:26,306
+It came out flat, to within about a fifth of a percent.
+
+116
+00:07:26,306 --> 00:07:28,348
+A flat universe can go on forever.
+
+117
+00:07:28,348 --> 00:07:32,131
+Or be curved so gently, on a scale so huge, that we can't tell.
+
+118
+00:07:32,131 --> 00:07:37,055
+Either way, there is no sign of a wall, or a border, or a place where space stops.
+
+119
+00:07:37,755 --> 00:07:38,795
+That's the twist.
+
+120
+00:07:38,795 --> 00:07:43,628
+We can't see the edge of the universe, because there's probably no edge to see.
+
+121
+00:07:43,628 --> 00:07:46,197
+What we have instead is a horizon in time.
+
+122
+00:07:46,197 --> 00:07:48,827
+Five walls, and beyond them, more universe.
+
+123
+00:07:49,527 --> 00:07:53,600
+Next time, we come back to something closer, but way bigger than it looks.
+
+124
+00:07:53,600 --> 00:07:58,994
+We'll put the biggest star ever measured in place of our Sun, and see what happens to the planets.
+
+125
+00:07:58,994 --> 00:08:01,580
+Subscribe to Cosmic Scale so you don't miss it.
+
+126
+00:08:01,580 --> 00:08:06,423
+And tell me in the comments, if you could see past the fog, what would you hope to find?
