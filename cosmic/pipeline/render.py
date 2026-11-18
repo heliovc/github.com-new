@@ -61,6 +61,17 @@ EP15 added scenes: signalrun (Earth -> Voyager 1 track on a SQUARE-ROOT scale wi
   Learned: science.nasa.gov is blocked for WebFetch here too -> web search only; 1,313 words + 32 scenes = 8.05 min; a polygon built
   with (-c) ** 1.4 for c > 0 returns complex numbers -> use max(0, -c); the full 8-min render takes ~45 min on this machine.
   ranking.py: vis "orbityear" (rank14). scale_short.py: vis "moonorbit" (scale08).
+EP16 added scenes: zdial (chapter card: half-circle redshift dial on log(1+z) 0 -> 1,100, needle swings to v.z, live readouts of lookback /
+  distance when the light left / distance now from cosmo16.py (flat ΛCDM, Planck 2018), 5 "wall" bricks with v.n lit), lightcone (the teardrop:
+  distance-at-emission vs cosmic time, both sides; a photon dot rides to v.z with readout box; v.max rings the 5.8 Gly widest point;
+  v.event = event-horizon callout), angsize (telescope eyepiece with one 100,000 ly galaxy reddening as it moves z0 -> z1 + apparent-size
+  curve with the minimum near z≈1.6; v.dim fades it and shows (1+z)^4), slowmo (two Type Ia-like light curves: nearby vs v.z stretched by
+  1+z, day cursor, flashing stars; labelled illustrative), fogwall (mode fog = protons/electrons/zig-zag photons under an orange haze; mode
+  clear = electrons pair into atoms, photons fly straight). New helper module cosmo16.py (age, lookback, d_then, chi, EVENT).
+  Palette infrared crimson / fog amber / deep teal. Structure NEW: "five walls" (each chapter a reason the edge stays hidden).
+  Learned: render.py runs with -I, so a sibling module needs sys.path.insert(0, HERE) before import; EP03 already used horizons/stretch,
+  so keep EP16's horizon beat short and visual-new (lightcone event mode). EP16 promised EP17: the biggest star in place of our Sun.
+  ranking.py: vis "probes" (rank15). scale_short.py: vis "jupfill" (scale09, planets poured into Jupiter by volume).
 EP06 added scenes: spinglobe (globe + speed by latitude; top=True rings; slow=True), pendulum, fling, bulge, yearday, dayclock (teal / amber palette)
 """
 import sys, os, re, math, subprocess, importlib.util, json, random, hashlib
@@ -4070,6 +4081,237 @@ def sc_pixeldot(img, v, t, dur):
             d.text((gx + gs / 2, gy + gs + 50), "EARTH = 0.12 of ONE pixel", font=F(46, "Black"), fill=WHITE, anchor="mm")
     if v.get("head"): alpha_text(img, (W / 2, 100), v["head"], F(46, "ExtraBold"), WHITE, ease(t / 0.5))
     caption(img, v.get("caption"), ease((t - 2.4) / 0.5), y=H - 50)
+
+
+# ---------------- scenes (EP16: why can't we see the edge of the universe?) ----------------
+sys.path.insert(0, HERE); import cosmo16 as CM16
+RED16, AMB16, TEAL16, PALE16 = (255, 84, 84), (255, 178, 70), (70, 210, 200), (255, 228, 214)
+def _zx16(z, x0, x1): return lerp(x0, x1, math.log10(1 + z) / math.log10(1 + 1100))
+def _fmt_ly16(gly):
+    if gly >= 1: return f"{gly:,.1f} billion ly"
+    if gly >= 0.001: return f"{gly * 1000:,.0f} million ly"
+    return f"{gly * 1e6:,.1f} thousand ly" if gly >= 1e-6 else "here"
+
+def sc_zdial(img, v, t, dur):
+    """chapter card: a half-circle redshift dial on a log(1+z) scale (0 -> 1,100), needle swings to v.z; live readouts of lookback time,
+    distance when the light left and distance now (flat ΛCDM, cosmo16); kicker / title / sub at right; wall number n = bricks lit"""
+    cx, cy, Rr = 560, 760, 400; p = easeio((t - 0.2) / 1.8); z = v.get("z", 0.0)
+    zz = (1 + z) ** p - 1  # swing on log(1+z)
+    lay = Image.new("RGBA", img.size, (0, 0, 0, 0)); dl = ImageDraw.Draw(lay)
+    for k in range(120):
+        u0, u1 = k / 120, (k + 1) / 120
+        col = mix(mix((150, 120, 255), RED16, min(1, u0 * 1.6)), AMB16, max(0, (u0 - 0.6) / 0.4))
+        dl.arc([cx - Rr, cy - Rr, cx + Rr, cy + Rr], 180 + 180 * u0, 180 + 180 * u1 + 0.4, fill=col + (110 if u0 > math.log10(1 + zz) / math.log10(1101) else 255,), width=30)
+    img.alpha_composite(lay); d = ImageDraw.Draw(img)
+    for zt, lab in [(0, "0"), (0.5, "0.5"), (1, "1"), (3, "3"), (10, "10"), (100, "100"), (1100, "1,100")]:
+        u = math.log10(1 + zt) / math.log10(1101); a = math.pi + math.pi * u
+        d.line([(cx + (Rr + 22) * math.cos(a), cy + (Rr + 22) * math.sin(a)), (cx + (Rr + 44) * math.cos(a), cy + (Rr + 44) * math.sin(a))], fill=(200, 190, 200), width=4)
+        d.text((cx + (Rr + 82) * math.cos(a), cy + (Rr + 82) * math.sin(a)), lab, font=F(30, "Bold"), fill=DIM, anchor="mm")
+    u = math.log10(1 + zz) / math.log10(1101); a = math.pi + math.pi * u
+    d.line([(cx, cy), (cx + (Rr - 40) * math.cos(a), cy + (Rr - 40) * math.sin(a))], fill=WHITE, width=8)
+    d.ellipse([cx - 22, cy - 22, cx + 22, cy + 22], fill=WHITE)
+    d.text((cx, cy - 250), "REDSHIFT", font=F(30, "Bold"), fill=DIM, anchor="mm")
+    d.text((cx, cy - 175), (f"{zz:,.0f}" if zz >= 100 else f"{zz:.2f}"), font=F(104, "Black"), fill=WHITE, anchor="mm")
+    lb = CM16.lookback(zz) if zz > 1e-4 else 0.0
+    rows = [("light left", (f"{lb:.2f} billion years ago" if lb >= 0.01 else "just now")),
+            ("it was", _fmt_ly16(CM16.d_then(zz)) if zz > 1e-4 else "—"), ("it is now", _fmt_ly16(CM16.chi(zz)) if zz > 1e-4 else "—")]
+    for i, (k, val) in enumerate(rows):
+        d.text((cx - 360, cy + 70 + i * 52), k, font=F(30, "SemiBold"), fill=DIM, anchor="lm")
+        d.text((cx + 360, cy + 70 + i * 52), val, font=F(32, "ExtraBold"), fill=PALE16, anchor="rm")
+    n = v.get("n", 0)
+    for k in range(5):
+        x = 1060 + k * 150; on = k < n
+        col = (RED16 if k == n - 1 else (120, 60, 60)) if on else (40, 36, 46)
+        d.rounded_rectangle([x, 250, x + 128, 300], 8, fill=col)
+        d.text((x + 64, 275), str(k + 1), font=F(28, "Black"), fill=WHITE if on else DIM, anchor="mm")
+    a1, a2 = ease((t - 0.3) / 0.5), ease((t - 0.8) / 0.5)
+    alpha_text(img, (1060, 400), v.get("kicker", ""), F(38, "Bold"), AMB16, a1, anchor="lm")
+    lines = v.get("title", "").split("\n")
+    for i, l in enumerate(lines): alpha_text(img, (1060, 500 + i * 100), l, F(92, "Black"), WHITE, a1, anchor="lm", dy=(1 - a1) * 30)
+    alpha_text(img, (1060, 500 + len(lines) * 100), v.get("sub", ""), F(42, "SemiBold"), RED16, a2, anchor="lm")
+    d = ImageDraw.Draw(img); d.text((W - 60, H - 60), "our calculation: flat ΛCDM, Planck 2018 values", font=F(24, "Medium"), fill=(110, 110, 130), anchor="rm")
+
+_lc16 = None
+def _lc_table16():
+    global _lc16
+    if _lc16 is None:
+        zs = np.concatenate([np.linspace(0, 3, 300), np.logspace(math.log10(3.01), math.log10(1100), 300)])
+        _lc16 = (zs, np.array([CM16.age(z) for z in zs]), np.array([CM16.d_then(z) for z in zs]))
+    return _lc16
+
+def sc_lightcone(img, v, t, dur):
+    """the teardrop: x = distance of the source when its light left (Gly, both sides), y = cosmic time (Big Bang at the bottom, now at the
+    top); a photon dot rides down the curve to v.z with a dashed path; v.max marks the widest point 5.8 Gly; v.event adds the event horizon"""
+    zs, ages, dth = _lc_table16(); x0c, yb, yt = 820, 960, 200; sx = 122   # px per Gly
+    def P(dist, age, side=1): return (x0c + side * dist * sx, lerp(yb, yt, age / CM16.AGE))
+    d = ImageDraw.Draw(img)
+    d.line([(x0c, yb), (x0c, yt - 20)], fill=(70, 70, 90), width=3)
+    for gy in (0, 2, 4, 6):
+        for sd in (-1, 1):
+            if gy == 0 and sd == -1: continue
+            xg = x0c + sd * gy * sx; d.line([(xg, yb), (xg, yb + 14)], fill=DIM, width=3); d.text((xg, yb + 38), f"{gy}", font=F(26, "Bold"), fill=DIM, anchor="mm")
+    d.text((x0c, yb + 78), "distance when the light left (billion light-years)", font=F(28, "SemiBold"), fill=DIM, anchor="mm")
+    for ag, lab in [(0, "Big Bang"), (5, "5 billion yrs"), (10, "10 billion yrs"), (CM16.AGE, "today")]:
+        y = lerp(yb, yt, ag / CM16.AGE); d.text((x0c + 14, y - 18), lab, font=F(24, "Bold"), fill=DIM, anchor="lm"); d.line([(x0c - 10, y), (x0c + 10, y)], fill=DIM, width=2)
+    lay = Image.new("RGBA", img.size, (0, 0, 0, 0)); dl = ImageDraw.Draw(lay)
+    for side in (-1, 1):
+        pts = [P(dd, aa, side) for dd, aa in zip(dth, ages)]
+        dl.line(pts, fill=RED16 + (70,), width=16); dl.line(pts, fill=RED16 + (255,), width=5)
+    if v.get("event"):
+        q = ease((t - 0.5) / 1.0)
+        dl.rounded_rectangle([40, 160, 525, 400], 22, fill=(6, 22, 24, int(235 * q)), outline=TEAL16 + (int(200 * q),), width=3)
+        dl.text((282, 200), "EVENT HORIZON, TODAY", font=F(30, "Bold"), fill=TEAL16 + (int(255 * q),), anchor="mm")
+        dl.text((282, 268), "16.6 billion ly", font=F(56, "Black"), fill=(255, 255, 255, int(255 * q)), anchor="mm")
+        dl.text((282, 340), "light sent now from beyond it", font=F(26, "SemiBold"), fill=(200, 210, 215, int(255 * q)), anchor="mm")
+        dl.text((282, 372), "will never reach us", font=F(26, "SemiBold"), fill=(200, 210, 215, int(255 * q)), anchor="mm")
+    img.alpha_composite(lay); d = ImageDraw.Draw(img)
+    paste_c(img, earth_sprite(14, glow=None), x0c, yt)
+    z = v.get("z", 1.0); p = easeio((t - 0.4) / max(1.0, dur * 0.6))
+    zt = (1 + z) ** p - 1; dd = CM16.d_then(zt); aa = CM16.age(zt)
+    # photon path: from the source point back up to Earth along the curve
+    sel = zs <= zt
+    pts = [P(a_, b_) for a_, b_ in zip(dth[sel], ages[sel])] + [P(dd, aa)]
+    if len(pts) > 1: d.line(pts, fill=AMB16, width=7)
+    sx_, sy_ = P(dd, aa)
+    paste_c(img, radial(80, [(0, (255, 255, 255, 255)), (0.35, AMB16 + (220,)), (1, AMB16 + (0,))]), sx_, sy_)
+    d = ImageDraw.Draw(img)
+    box = Image.new("RGBA", img.size, (0, 0, 0, 0)); ImageDraw.Draw(box).rounded_rectangle([1535, 330, 1905, 700], 24, fill=(18, 8, 10, 230), outline=RED16 + (120,), width=2); img.alpha_composite(box)
+    d = ImageDraw.Draw(img)
+    d.text((1725, 380), f"redshift {zt:.2f}", font=F(36, "Bold"), fill=AMB16, anchor="mm")
+    d.text((1725, 460), _fmt_ly16(dd).replace(" ly", ""), font=F(52, "Black"), fill=WHITE, anchor="mm")
+    d.text((1725, 515), "light-years away, back then", font=F(25, "SemiBold"), fill=DIM, anchor="mm")
+    d.text((1725, 590), f"{CM16.chi(zt):.1f} billion", font=F(44, "Black"), fill=PALE16, anchor="mm")
+    d.text((1725, 640), "light-years away today", font=F(28, "SemiBold"), fill=DIM, anchor="mm")
+    if v.get("max"):
+        q = 0.5 + 0.5 * math.sin(t * 4); mx, my = P(5.846, CM16.age(1.59))
+        d.ellipse([mx - 30, my - 30, mx + 30, my + 30], outline=mix(AMB16, WHITE, q), width=5)
+        d.text((mx + 40, my + 60), "widest: 5.8 billion ly", font=F(34, "Black"), fill=AMB16, anchor="lm")
+    if v.get("head"): alpha_text(img, (W / 2, 90), v["head"], F(48, "ExtraBold"), WHITE, ease(t / 0.5))
+
+def _galaxy_small16(r, a=1.0, col=(255, 225, 190)):
+    g = galaxy_sprite(); s = max(4, int(2 * r)); return g.resize((s, s), Image.LANCZOS)
+
+def sc_angsize(img, v, t, dur):
+    """one galaxy (same real size, 100,000 ly) moved from v.z0 to v.z1: left = telescope eyepiece showing its apparent size (arcsec, angular
+    diameter distance), right = the size curve vs log(1+z) with a dot and the minimum near z≈1.6 marked; v.dim adds the (1+z)^4 fade"""
+    p = easeio((t - 0.4) / max(1.0, dur * 0.7)); z0, z1 = v.get("z0", 0.1), v.get("z1", 14.44)
+    z = (1 + z0) * ((1 + z1) / (1 + z0)) ** p - 1
+    ang = 1e-4 / CM16.d_then(z) * 206265  # arcsec
+    ex, ey, ER = 500, 580, 330
+    lay = Image.new("RGBA", img.size, (0, 0, 0, 0)); dl = ImageDraw.Draw(lay)
+    dl.ellipse([ex - ER - 18, ey - ER - 18, ex + ER + 18, ey + ER + 18], fill=(60, 56, 66, 255))
+    dl.ellipse([ex - ER, ey - ER, ex + ER, ey + ER], fill=(3, 3, 8, 255))
+    img.alpha_composite(lay)
+    rng = random.Random(16); d = ImageDraw.Draw(img)
+    for _ in range(70):
+        a_, r_ = rng.uniform(0, 2 * math.pi), ER * math.sqrt(rng.random()) * 0.95
+        x, y = ex + r_ * math.cos(a_), ey + r_ * math.sin(a_); d.ellipse([x - 1, y - 1, x + 1, y + 1], fill=(150, 150, 175))
+    rpx = min(ER * 0.98, ang * 21.0)  # 21 px per arcsec
+    fade = 1.0
+    if v.get("dim"): fade = max(0.18, 1 / ((1 + z) / (1 + z0)) ** 1.1)
+    gs = _galaxy_small16(rpx)
+    redcol = mix((255, 255, 255), (255, 90, 60), min(1, math.log10(1 + z) / 1.2))
+    arr = np.asarray(gs).astype(np.float32); arr[..., 0] *= redcol[0] / 255; arr[..., 1] *= redcol[1] / 255; arr[..., 2] *= redcol[2] / 255; arr[..., 3] = np.minimum(255, arr[..., 3] * 1.6) * fade
+    paste_c(img, Image.fromarray(np.clip(arr, 0, 255).astype(np.uint8), "RGBA"), ex, ey)
+    d = ImageDraw.Draw(img)
+    d.text((ex, ey + ER + 60), f"looks {ang:.1f} arcseconds wide", font=F(40, "Black"), fill=WHITE, anchor="mm")
+    d.text((ex, ey + ER + 108), "same galaxy, 100,000 light-years across", font=F(28, "SemiBold"), fill=DIM, anchor="mm")
+    # curve
+    gx0, gx1, gy0, gy1 = 1000, 1820, 840, 330
+    zz = np.logspace(-1.3, math.log10(20), 160); aa = np.array([1e-4 / CM16.d_then(q) * 206265 for q in zz])
+    def G(zv, av): return (lerp(gx0, gx1, (math.log10(1 + zv) - math.log10(1 + zz[0])) / (math.log10(21) - math.log10(1 + zz[0]))), lerp(gy0, gy1, (min(av, 20) - 0) / 20))
+    d.line([(gx0, gy0), (gx1, gy0)], fill=(90, 90, 110), width=3); d.line([(gx0, gy0), (gx0, gy1)], fill=(90, 90, 110), width=3)
+    d.line([G(a_, b_) for a_, b_ in zip(zz, aa)], fill=RED16, width=6)
+    for zt in (0.1, 0.5, 1, 1.6, 3, 10):
+        x, _ = G(zt, 0); d.text((x, gy0 + 34), f"{zt:g}", font=F(26, "Bold"), fill=DIM, anchor="mm")
+    d.text(((gx0 + gx1) / 2, gy0 + 80), "redshift (farther →)", font=F(28, "SemiBold"), fill=DIM, anchor="mm")
+    d.text((gx0 - 16, gy1 - 30), "apparent size", font=F(28, "SemiBold"), fill=DIM, anchor="lm")
+    mx, my = G(1.6, 1e-4 / CM16.d_then(1.6) * 206265)
+    d.line([(mx, my + 20), (mx, gy0)], fill=AMB16, width=2); d.text((mx, my + 50), "smallest ≈ 1.6", font=F(26, "Bold"), fill=AMB16, anchor="mm")
+    px_, py_ = G(z, ang); paste_c(img, radial(60, [(0, (255, 255, 255, 255)), (0.4, AMB16 + (220,)), (1, AMB16 + (0,))]), px_, py_)
+    d = ImageDraw.Draw(img)
+    d.text((1410, 250), f"redshift {z:.2f}", font=F(44, "Black"), fill=AMB16, anchor="mm")
+    if v.get("dim"):
+        k = (1 + z) ** 4
+        d.text((1410, 960), f"surface brightness ÷ {k:,.0f}", font=F(46, "Black"), fill=RED16, anchor="mm")
+    if v.get("head"): alpha_text(img, (W / 2, 90), v["head"], F(50, "ExtraBold"), WHITE, ease(t / 0.5))
+
+def _sn16(tt):  # normalised Type Ia-like light curve vs rest-frame days (rise ~18 d, decline)
+    if tt < 0: return 0.0
+    if tt < 18: return (tt / 18) ** 2 * (3 - 2 * tt / 18)
+    return math.exp(-(tt - 18) / 22) * 0.92 + 0.08 * math.exp(-(tt - 18) / 80)
+
+def sc_slowmo(img, v, t, dur):
+    """two supernova light curves on the same day axis: nearby (rest frame) and at redshift v.z (stretched ×(1+z)); a cursor sweeps the
+    days, each star flashes with its current brightness and a day counter"""
+    s = 1 + v.get("z", 1.0); p = easeio((t - 0.3) / max(1.0, dur * 0.8)); day = lerp(0, 120, p)
+    rows = [("NEARBY", 1.0, TEAL16, 420), (f"REDSHIFT {v.get('z', 1.0):g}", s, RED16, 790)]
+    x0, x1 = 560, 1820; d = ImageDraw.Draw(img)
+    for name, k, col, yb in rows:
+        h = 230
+        d.line([(x0, yb), (x1, yb)], fill=(90, 90, 110), width=3)
+        for dd in range(0, 121, 20):
+            x = lerp(x0, x1, dd / 120); d.line([(x, yb), (x, yb + 10)], fill=DIM, width=2); d.text((x, yb + 32), f"{dd}", font=F(24, "Bold"), fill=DIM, anchor="mm")
+        full = [(lerp(x0, x1, dd / 120), yb - h * _sn16(dd / k)) for dd in np.linspace(0, 120, 240)]
+        d.line(full, fill=mix(col, (20, 20, 30), 0.7), width=4)
+        now = [(lerp(x0, x1, dd / 120), yb - h * _sn16(dd / k)) for dd in np.linspace(0, day, max(2, int(240 * p)))]
+        d.line(now, fill=col, width=7)
+        b = _sn16(day / k)
+        paste_c(img, radial(int(90 + 260 * b) // 2 * 2 + 2, [(0, (255, 255, 255, int(255 * min(1, 0.2 + b)))), (0.3, col + (int(200 * b),)), (1, col + (0,))]), 300, yb - 110)
+        d = ImageDraw.Draw(img)
+        d.text((300, yb - 240), name, font=F(34, "Black"), fill=col, anchor="mm")
+        d.text((300, yb + 40), f"peak at day {18 * k:.0f}", font=F(28, "SemiBold"), fill=DIM, anchor="mm")
+    d.text((W / 2, 900), f"day {day:.0f} on our clock", font=F(48, "Black"), fill=WHITE, anchor="mm")
+    d.text((W / 2, 955), "illustrative light curve; the stretch factor 1 + z is the measured one (Dark Energy Survey, 2024)", font=F(26, "Medium"), fill=DIM, anchor="mm")
+    if v.get("head"): alpha_text(img, (W / 2, 110), v["head"], F(50, "ExtraBold"), WHITE, ease(t / 0.5))
+
+_fog16 = None
+def _fog_parts16():
+    global _fog16
+    if _fog16 is None:
+        rng = np.random.default_rng(160)
+        _fog16 = {"e": rng.uniform([120, 160], [1800, 940], (260, 2)), "p": rng.uniform([120, 160], [1800, 940], (130, 2)),
+                  "ph": [(rng.uniform(200, 1700), rng.uniform(250, 850), rng.uniform(0, 2 * math.pi)) for _ in range(14)], "seed": 7}
+    return _fog16
+
+def sc_fogwall(img, v, t, dur):
+    """plasma era: mode fog = free electrons (small blue) + protons (red) jitter, photons (amber) zig-zag with short random hops, orange
+    haze + temperature 3,000+ K; mode clear = electrons pair with protons into atoms, haze fades, photons fly straight off-screen"""
+    P_ = _fog_parts16(); mode = v.get("mode", "fog")
+    q = 0.0 if mode == "fog" else easeio((t - 0.6) / max(1.0, dur * 0.45))
+    haze = Image.new("RGBA", img.size, (255, 120, 40, int(95 * (1 - q)))); img.alpha_composite(haze)
+    d = ImageDraw.Draw(img)
+    for i, (x, y) in enumerate(P_["p"]):
+        jx, jy = math.sin(t * 3 + i) * 3, math.cos(t * 2.6 + i * 1.7) * 3
+        d.ellipse([x + jx - 7, y + jy - 7, x + jx + 7, y + jy + 7], fill=(255, 100, 90))
+        e = P_["e"][i]
+        ex_, ey_ = lerp(e[0], x + 16 * math.cos(t * 5 + i), q), lerp(e[1], y + 16 * math.sin(t * 5 + i), q)
+        if q > 0.6: d.ellipse([x + jx - 16, y + jy - 16, x + jx + 16, y + jy + 16], outline=(140, 170, 255), width=2)
+        d.ellipse([ex_ - 4, ey_ - 4, ex_ + 4, ey_ + 4], fill=(120, 170, 255))
+    for i, (x, y) in enumerate(P_["e"][130:]):
+        jx = math.sin(t * 4 + i) * 6; a_ = 1 - q
+        if a_ > 0.05: d.ellipse([x + jx - 4, y - 4, x + jx + 4, y + 4], fill=mix(SPACE, (120, 170, 255), a_))
+    lay = Image.new("RGBA", img.size, (0, 0, 0, 0)); dl = ImageDraw.Draw(lay)
+    for k, (px, py, th) in enumerate(P_["ph"]):
+        rng = random.Random(k * 31 + int(t * 3)); pts = [(px, py)]
+        if mode == "fog":
+            x, y = px, py
+            for j in range(9):
+                r2 = random.Random(k * 97 + j + int(t * 2.5)); a_ = r2.uniform(0, 2 * math.pi); L = r2.uniform(30, 80)
+                x, y = x + L * math.cos(a_), y + L * math.sin(a_); pts.append((x, y))
+        else:
+            L = 120 + t * 420; pts.append((px + L * math.cos(th), py + L * math.sin(th)))
+        dl.line(pts, fill=AMB16 + (220,), width=4); dl.ellipse([pts[-1][0] - 7, pts[-1][1] - 7, pts[-1][0] + 7, pts[-1][1] + 7], fill=(255, 240, 200, 255))
+    img.alpha_composite(lay); d = ImageDraw.Draw(img)
+    T = 3000 * 1.3 if mode == "fog" else lerp(3000, 2900, q)
+    box = Image.new("RGBA", img.size, (0, 0, 0, 0)); ImageDraw.Draw(box).rounded_rectangle([1460, 820, 1880, 1010], 22, fill=(16, 8, 6, 230)); img.alpha_composite(box)
+    d = ImageDraw.Draw(img)
+    d.text((1670, 880), (f"{T:,.0f} K+" if mode == "fog" else "≈ 3,000 K"), font=F(64, "Black"), fill=AMB16, anchor="mm")
+    d.text((1670, 950), ("light trapped: fog" if mode == "fog" else "atoms form: light flies free"), font=F(30, "Bold"), fill=WHITE, anchor="mm")
+    lg = [((255, 100, 90), "proton"), ((120, 170, 255), "electron"), (AMB16, "light")]
+    for i, (c, n) in enumerate(lg):
+        d.ellipse([80, 870 + i * 44, 98, 888 + i * 44], fill=c); d.text((112, 879 + i * 44), n, font=F(28, "Bold"), fill=WHITE, anchor="lm")
+    if v.get("head"): alpha_text(img, (W / 2, 80), v["head"], F(52, "ExtraBold"), WHITE, ease(t / 0.5))
 
 
 SC = {k[3:]: f for k, f in globals().items() if k.startswith("sc_")}

@@ -26,6 +26,9 @@ Visuais (vis.type):
   "moonorbit": a órbita inteira da Lua DENTRO do Sol, em escala (Terra no centro do Sol; raio do Sol 696.000 km, Lua a 384.400 km);
              vis.mode = hook (Sol translúcido + órbita + Lua girando) | orbit (zoom log da Terra até a órbita, contador de km) | room
              (barras raio x distância + 311.600 km de folga) | trip (ponto no ritmo da Apollo 11 atravessa o Sol, contador até 11,5 dias) (scale08).
+  "jupfill": Júpiter como globo de vidro (raio 430 px) enchido POR VOLUME com os outros 7 planetas em camadas coloridas (altura do
+             líquido resolve f = x²(3 − 2x)); vis.mode = hook (os 7 dentro, linha em 67%) | pour (vis.before = já despejados, vis.add =
+             caem em escala neste beat e o nível sobe) | room (o terço vazio brilha + contador de Terras até 435) (scale09).
 Reaproveita render.py (sprites, fontes) e ranking.py (fundo, texto, legendas).
 """
 import sys, os, math, json, subprocess, importlib.util, random
@@ -598,6 +601,72 @@ def moonorbit_vis(img, v, th, t, dur, bp):
         d.text((cx, cy - 170), f"{11.5 * bp:.1f} days", font=F(72, "Black"), fill=(255, 255, 255), anchor="mm")
         d.text((cx, cy - 110), "at Apollo's pace", font=F(30, "ExtraBold"), fill=acc, anchor="mm")
 
+# ---- scale09: every other planet poured into Jupiter, by volume ----
+VOL9 = {"Jupiter": 143128.0, "Saturn": 82713.0, "Uranus": 6833.0, "Neptune": 6254.0, "Earth": 108.321, "Venus": 92.843, "Mars": 16.318, "Mercury": 6.083}  # 10^10 km^3, NASA fact sheet
+COL9 = {"Saturn": (226, 196, 130), "Uranus": (150, 225, 230), "Neptune": (80, 120, 240), "Earth": (90, 170, 255), "Venus": (240, 200, 140), "Mars": (220, 110, 70), "Mercury": (170, 165, 160)}
+POUR9 = ["Saturn", "Uranus", "Neptune", "Venus", "Earth", "Mars", "Mercury"]
+RKM9 = {"Saturn": 58232, "Uranus": 25362, "Neptune": 24622, "Earth": 6371, "Venus": 6052, "Mars": 3390, "Mercury": 2440}
+_jf9 = {}
+def _h9(f):
+    """height (fraction of the diameter) of a liquid filling fraction f of a sphere's volume: f = x^2 (3 - 2x) with x = h / 2R"""
+    lo, hi = 0.0, 1.0
+    for _ in range(40):
+        m = (lo + hi) / 2
+        if m * m * (3 - 2 * m) < f: lo = m
+        else: hi = m
+    return (lo + hi) / 2
+def jupfill_vis(img, v, th, t, dur, bp):
+    """Jupiter as a glass globe (r 430 px) filled by volume with the other planets as coloured layers; vis.mode = hook (full: all seven
+    poured, 67% line) | pour (vis.add = planets poured in this beat: each falls in to scale, then the level rises) | room (empty third
+    glows + Earth-sized dots counter up to 435)"""
+    acc, acc2 = tuple(th["accent"]), tuple(th["accent2"]); mode = v.get("mode", "hook"); cx, cy, Rj = W / 2, 960, 430
+    add = v.get("add", []); before = v.get("before", [])
+    if mode in ("hook", "room"): before, add = POUR9, []
+    prog = {n: 1.0 for n in before}
+    for i, n in enumerate(add):
+        prog[n] = ease((bp - i / max(1, len(add))) * max(1, len(add)))
+    key = int(cx)
+    if "base" not in _jf9: _jf9["base"] = R.jup10(Rj, 0.0)
+    base = _jf9["base"].copy(); al = base.getchannel("A").point(lambda q: int(q * 0.38)); base.putalpha(al)
+    R.paste_c(img, base, cx, cy)
+    # liquid layers
+    size = 2 * Rj; yy, xx = np.mgrid[0:size, 0:size].astype(np.float32)
+    inside = ((xx - Rj) ** 2 + (yy - Rj) ** 2) <= (Rj - 3) ** 2
+    hfrac = 1 - yy / size  # 0 at the bottom
+    rgba = np.zeros((size, size, 4), np.float32); cum = 0.0
+    for n in POUR9:
+        p = prog.get(n, 0.0)
+        if p <= 0: continue
+        f0 = cum; cum += VOL9[n] / VOL9["Jupiter"] * p
+        h0, h1 = _h9(f0), _h9(cum); band = inside & (hfrac >= h0) & (hfrac < max(h1, h0 + 0.004 if n in ("Earth", "Venus", "Mars", "Mercury") else h1))
+        c = COL9[n]; rgba[band, 0], rgba[band, 1], rgba[band, 2], rgba[band, 3] = c[0], c[1], c[2], 225
+    wave = (np.sin(xx / 30 + t * 3) * 0.004)
+    lay = Image.fromarray(rgba.astype(np.uint8), "RGBA"); img.alpha_composite(lay, (int(cx - Rj), int(cy - Rj)))
+    d = ImageDraw.Draw(img)
+    d.ellipse([cx - Rj, cy - Rj, cx + Rj, cy + Rj], outline=(255, 225, 180), width=5)
+    lvl = cy + Rj - 2 * Rj * _h9(cum)
+    if cum > 0:
+        hw = math.sqrt(max(0, Rj ** 2 - (lvl - cy) ** 2))
+        d.line([(cx - hw, lvl), (cx + hw, lvl)], fill=(255, 255, 255), width=4)
+        text(img, (cx, lvl + 50), f"{cum * 100:.1f}% full", 46, (255, 255, 255), stroke=4)
+    # falling planets to scale
+    for i, n in enumerate(add):
+        p0 = (bp - i / max(1, len(add))) * max(1, len(add))
+        if 0 < p0 < 1:
+            r = RKM9[n] / 71492 * Rj; y = lerp(300 - r, lvl, ease(min(1, p0 * 1.4)))
+            R.paste_c(img, R.planet_sprite(max(4, int(r)), COL9[n]), cx + (i - 1) * 60, y, a=1 - max(0, (p0 - 0.7) / 0.3))
+            d = ImageDraw.Draw(img); text(img, (cx + (i - 1) * 60, y - r - 40), n, 40, COL9[n], w="Black", stroke=3)
+    if mode == "room":
+        q = 0.5 + 0.5 * math.sin(t * 4)
+        mask = inside & (hfrac >= _h9(cum)); g = np.zeros((size, size, 4), np.uint8); g[mask] = (140, 255, 170, int(40 + 50 * q))
+        img.alpha_composite(Image.fromarray(g, "RGBA"), (int(cx - Rj), int(cy - Rj)))
+        n_e = int(435 * min(1, bp * 1.2)); er = 6371 / 71492 * Rj
+        R.paste_c(img, R.earth_sprite(int(er), glow=None), cx, cy - Rj * 0.55)
+        text(img, (cx, cy - Rj * 0.55 + er + 34), "1 Earth, to scale", 32, (200, 230, 255), w="ExtraBold", stroke=3)
+        text(img, (W / 2, 1460), f"{n_e} Earths fit in the gap", 50, (160, 255, 180))
+    if mode == "hook":
+        text(img, (W / 2, 1460), "all 7 other planets, by volume", 40, (235, 235, 245), w="ExtraBold")
+
 def chrome(img, th, gt, total):
     d = ImageDraw.Draw(img)
     d.rectangle([0, 0, int(W * gt / total), 10], fill=tuple(th["accent"]))
@@ -658,6 +727,11 @@ def frame(m, durs, gt, chunks, arr):
         text(img, (W / 2, 280), hl["top"], 52, (255, 255, 255), stroke=3)
     elif v["type"] == "moonorbit":
         moonorbit_vis(img, v, th, t, d, easeio((t - 0.2) / max(0.8, d * 0.8)))
+        hl = v.get("head") or m.BIG
+        text(img, (W / 2, 170), hl["num"], 124 if len(hl["num"]) < 12 else 100, tuple(th["accent"]), stroke=4)
+        text(img, (W / 2, 280), hl["top"], 52, (255, 255, 255), stroke=3)
+    elif v["type"] == "jupfill":
+        jupfill_vis(img, v, th, t, d, easeio((t - 0.2) / max(0.8, d * 0.8)))
         hl = v.get("head") or m.BIG
         text(img, (W / 2, 170), hl["num"], 124 if len(hl["num"]) < 12 else 100, tuple(th["accent"]), stroke=4)
         text(img, (W / 2, 280), hl["top"], 52, (255, 255, 255), stroke=3)

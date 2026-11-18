@@ -31,6 +31,9 @@ vis.type == "crater" / THEME.hook/outro == "crater": cratera vista de cima EM ES
 vis.type == "orbityear" / THEME.hook/outro == "orbityear": órbita do mundo EM ESCALA em volta de um Sol minúsculo (órbita da Terra na mesma escala),
   uma volta com tempo de Kepler (lento longe do Sol) + contador de anos terrestres + "sped up N×" + régua log 1–20.000 anos; vis.a (UA), vis.e,
   vis.yr, vis.col, vis.ang; outro = as 5 órbitas na mesma escala (rank14).
+vis.type == "probes" / THEME.hook/outro == "probes": sonda desenhada por código (vis.kind = voyager | pioneer | horizons) + "a luz leva N horas"
+  + selo STILL TALKING / SILENT SINCE + trilha Sol -> 180 UA em escala de raiz quadrada (Netuno, fim da bolha do Sol) com a sonda saindo
+  do Sol até vis.au; gancho = pulso de luz correndo na trilha até um "?"; outro = as 5 na mesma trilha (rank15).
 Tudo desenhado por código; narração Kokoro (VOICE, padrão af_heart); legenda grande queimada.
 """
 import sys, os, re, math, json, subprocess, importlib.util, random
@@ -860,6 +863,58 @@ def orbityear_vis(img, it, th, t, dur):
     oy_ruler(img, th, [o for o in ALL_ITEMS if o["rank"] > it["rank"]] + [it], cur=it, prog=max(0.0, min(1.0, frac * 1.3)))
     if v.get("note"): text(img, (W / 2, 1010), v["note"], 38, tuple(th["accent2"]), w="ExtraBold", a=ease((t - 1.4) / 0.5))
 
+# ---- rank15: farthest human-made objects ----
+PR_X0, PR_X1, PR_MAX = 110, 970, 180.0
+def pr_x(au): return lerp(PR_X0, PR_X1, math.sqrt(max(0.0, au) / PR_MAX))
+def pr_icon(img, kind, x, y, s=1.0, ang=0.0, a=1.0):
+    if kind == "voyager":
+        R.voyager15(img, x, y, s, ang=ang - 0.3, a=a); return
+    lay = Image.new("RGBA", (int(300 * s) + 40, int(300 * s) + 40), (0, 0, 0, 0)); d = ImageDraw.Draw(lay); c = lay.width / 2
+    def P(px, py):
+        ca, sa = math.cos(ang), math.sin(ang); return (c + (px * ca - py * sa) * s, c + (px * sa + py * ca) * s)
+    A = int(255 * a)
+    if kind == "pioneer":
+        d.line([P(0, 10), P(-110, 70)], fill=(160, 160, 170, A), width=max(2, int(4 * s))); d.line([P(0, 10), P(110, 70)], fill=(160, 160, 170, A), width=max(2, int(4 * s)))
+        for sx_ in (-1, 1):
+            q = P(sx_ * 96, 62); r = 9 * s; d.ellipse([q[0] - r, q[1] - r, q[0] + r, q[1] + r], fill=(120, 110, 100, A))
+        hexa = [P(22 * math.cos(k * math.pi / 3), 22 + 14 * math.sin(k * math.pi / 3)) for k in range(6)]; d.polygon(hexa, fill=(200, 170, 90, A))
+        dish = [P(78 * math.cos(u), -2 + 16 * math.sin(u)) for u in [i * math.pi / 20 for i in range(41)]]; d.polygon(dish, fill=(238, 238, 245, A))
+        d.line([P(0, -2), P(0, -46)], fill=(225, 225, 235, A), width=max(1, int(2 * s)))
+    else:  # new horizons
+        tri = [P(-46, 40), P(46, 40), P(0, -30)]; d.polygon(tri, fill=(214, 176, 80, A))
+        dish = [P(44 * math.cos(u), -34 + 10 * math.sin(u)) for u in [i * math.pi / 20 for i in range(41)]]; d.polygon(dish, fill=(240, 240, 248, A))
+        d.line([P(30, 30), P(80, 50)], fill=(80, 80, 90, A), width=max(3, int(10 * s)))
+    img.alpha_composite(lay, (int(x - c), int(y - c)))
+def pr_track(img, th, shown, cur=None, prog=1.0, y=1000, a=1.0):
+    d = ImageDraw.Draw(img); acc2 = tuple(th["accent2"])
+    d.line([(PR_X0, y), (PR_X1, y)], fill=(60, 70, 110), width=6)
+    R.paste_c(img, R.sun_sprite(9), PR_X0, y); d = ImageDraw.Draw(img)
+    for au, lab in [(30.1, "Neptune"), (121, "Sun's bubble ends")]:
+        x = pr_x(au); d.line([(x, y - 70), (x, y + 70)], fill=(120, 125, 160), width=3)
+        d.text((x, y + 92), lab, font=F(24, "Bold"), fill=(160, 165, 195), anchor="mm")
+    for au in (1, 10, 50, 100, 150):
+        x = pr_x(au); d.line([(x, y - 12), (x, y + 12)], fill=(110, 115, 150), width=2)
+        d.text((x, y - 32), f"{au} AU", font=F(20, "SemiBold"), fill=(120, 125, 160), anchor="mm")
+    for o in shown:
+        v = o["vis"]; au = v["au"] * (prog if o is cur else 1.0); x = pr_x(au); col = tuple(v["col"])
+        r = 16 if o is cur else 10; d.ellipse([x - r, y - r, x + r, y + r], fill=col, outline=(255, 255, 255), width=3)
+        if o is not cur: d.text((x, y + 124 + {5: 0, 4: 26, 3: 52, 2: 78}.get(o["rank"], 0)), o["short"], font=F(24, "ExtraBold"), fill=col, anchor="mm")
+    d.text((PR_X1, y - 70), "square-root scale", font=F(22, "SemiBold"), fill=(120, 125, 160), anchor="rm")
+def probes_vis(img, it, th, t, dur):
+    v = it["vis"]; col = tuple(v["col"]); acc2 = tuple(th["accent2"])
+    prog = easeio((t - 0.4) / max(1.2, dur * 0.6))
+    pr_icon(img, v["kind"], W / 2, 590, 1.9, ang=0.15 * math.sin(t * 0.8))
+    lt = v["au"] * prog * 499.0 / 3600
+    text(img, (W / 2, 790), f"light needs {lt:.1f} hours to get there", 38, (255, 255, 255), w="ExtraBold", a=ease((t - 0.4) / 0.4))
+    alive = v.get("alive", True)
+    pill = "STILL TALKING TO EARTH" if alive else v.get("silent", "SILENT")
+    lay = Image.new("RGBA", img.size, (0, 0, 0, 0)); dl = ImageDraw.Draw(lay)
+    w_ = F(30, "Black").getlength(pill) + 60; pc = (90, 230, 150) if alive else (150, 150, 165)
+    dl.rounded_rectangle([W / 2 - w_ / 2, 850, W / 2 + w_ / 2, 905], 28, fill=pc + (60,), outline=pc + (255,), width=3); img.alpha_composite(lay)
+    text(img, (W / 2, 878), pill, 30, pc)
+    pr_track(img, th, [o for o in ALL_ITEMS if o["rank"] > it["rank"]] + [it], cur=it, prog=prog, y=1000)
+    if v.get("note"): text(img, (W / 2, 1300), v["note"], 36, acc2, w="ExtraBold", a=ease((t - 1.4) / 0.5))
+
 
 def caption_chunks(say, t0, dur):
     words = say.split(); groups, g = [], []
@@ -883,6 +938,21 @@ def draw_caption(img, chunks, gt, y=1585):
 
 def seg_hook(img, sc, th, t, dur):
     col = tuple(th["star_col"]); acc = tuple(th["accent"])
+    if th.get("hook") == "probes":
+        # frame 0: the big number + the Sun-to-#1 track drawn, a light pulse running along it toward a "?"
+        y = 1000; d = ImageDraw.Draw(img)
+        d.line([(PR_X0, y), (PR_X1, y)], fill=(60, 70, 110), width=6); R.paste_c(img, R.sun_sprite(9), PR_X0, y)
+        px = lerp(PR_X0, PR_X1, (0.25 + t * 0.4) % 1.0)
+        R.paste_c(img, R.radial(80, [(0, (255, 255, 255, 255)), (0.4, tuple(th["accent2"]) + (200,)), (1, tuple(th["accent2"]) + (0,))]), px, y)
+        d = ImageDraw.Draw(img); d.text((PR_X1 - 10, y - 110), "?", font=F(150, "Black"), fill=tuple(th["accent"]), anchor="mm")
+        pr_icon(img, "voyager", PR_X1 - 40, y + 20, 0.5, a=0.5)
+        d = ImageDraw.Draw(img); d.text((px, y - 50), "light", font=F(30, "Black"), fill=tuple(th["accent2"]), anchor="mm")
+        text(img, (W / 2, 640), "Sun  →  #1", 64, (255, 255, 255))
+        text(img, (W / 2, 720), "even at 300,000 km every second", 38, (200, 205, 225), w="Bold")
+        text(img, (W / 2, 220), sc.get("big", ""), 140, tuple(th["accent"]), stroke=3)
+        text(img, (W / 2, 335), sc["top"].upper(), 52, (255, 255, 255))
+        text(img, (W / 2, 1320), sc["sub"], 46, tuple(th["accent2"]), w="ExtraBold")
+        return
     if th.get("hook") == "orbityear":
         # frame 0: the big number + Sedna's long orbit already drawn, the world crawling far out, a "?" on it
         o = [x for x in ALL_ITEMS if x["rank"] == 1][0]; v = o["vis"]
@@ -1085,6 +1155,8 @@ def seg_item(img, it, th, t, dur):
         crater_vis(img, it, th, t, dur)
     if v["type"] == "orbityear":
         orbityear_vis(img, it, th, t, dur)
+    if v["type"] == "probes":
+        probes_vis(img, it, th, t, dur)
     # number
     p = easeio((t - 0.5) / 1.6)
     num = it["num"]
@@ -1097,6 +1169,16 @@ def seg_item(img, it, th, t, dur):
 
 def seg_outro(img, sc, th, t, dur):
     a = ease(t / 0.5)
+    if th.get("outro") == "probes":
+        pr_track(img, th, ALL_ITEMS, cur=None, y=760)
+        for o in ALL_ITEMS:
+            v = o["vis"]; x = pr_x(v["au"]); d = ImageDraw.Draw(img)
+            d.text((x, 640 - {5: 0, 4: 0, 3: 0, 2: 60, 1: 0}.get(o["rank"], 0)), f"#{o['rank']}", font=F(34, "Black"), fill=tuple(v["col"]), anchor="mm")
+        if th.get("outro_note"): text(img, (W / 2, 1060), th["outro_note"], 42, tuple(th["accent2"]), w="ExtraBold", a=a)
+        text(img, (W / 2, 1200), "WHERE SHOULD WE", 84, (255, 255, 255), a=ease((t - 0.3) / 0.5))
+        text(img, (W / 2, 1290), "SEND ONE NEXT?", 70, tuple(th["accent"]), a=ease((t - 0.5) / 0.5))
+        text(img, (W / 2, 1440), "SUBSCRIBE to Cosmic Scale", 56, tuple(th["accent"]), a=ease((t - 0.8) / 0.5))
+        return
     if th.get("outro") == "orbityear":
         # all five orbits at ONE common scale around the same Sun: four small rings and Sedna's long needle
         k1 = 980 / (506.0 * 1.85)
