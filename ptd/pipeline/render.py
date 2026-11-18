@@ -1015,7 +1015,96 @@ def sc_gauge(img, v, t, dur):
         alpha_text(img, (cx, cy - 150), fmt_num(val * p, 0), F(150, "Black"), hexc(c), ease((t - 0.6) / 0.4))
     if v.get("caption"): dr.text((W / 2, H - 70), v["caption"], font=F(28, "Medium"), fill=DIM, anchor="mm")
 
-SC = {"exam": sc_exam, "gauge": sc_gauge, "onion": sc_onion, "floor": sc_floor, "clause": sc_clause, "round": sc_round, "ticker": sc_ticker, "scoreboard": sc_scoreboard, "title": sc_title, "bignumber": sc_bignumber, "flow": sc_flow, "split": sc_split, "bullets": sc_bullets,
+def _tag_shape(d2, x0, y0, x1, y1, fill, alpha, outline=None):
+    """Etiqueta de preço com ponta à esquerda e furo. Retorna o centro do furo."""
+    tip = x0 - (y1 - y0) * 0.28; my = (y0 + y1) / 2
+    pts = [(tip, my), (x0, y0), (x1, y0), (x1, y1), (x0, y1)]
+    d2.polygon(pts, fill=fill + (int(255 * alpha),), outline=(outline + (int(255 * alpha),)) if outline else None)
+    hx = x0 - (x0 - tip) * 0.15; hr = (y1 - y0) * 0.045
+    d2.ellipse([hx - hr, my - hr, hx + hr, my + hr], fill=BG1 + (int(255 * alpha),))
+    return hx, my
+
+def sc_tag(img, v, t, dur):
+    """Criado no EP16: as etiquetas de preço de uma dívida. À esquerda, uma etiqueta de papel pendurada por um barbante:
+    kicker (texto pequeno no topo), old (preço antigo, aparece e é riscado), price (preço novo, grande), note (embaixo).
+    À direita: 'ETIQUETA n · label' (ou kicker se n=0), title (\n quebra), sub; e 5 mini-etiquetas de progresso.
+    recap=[[preço, rótulo], ...] (5 itens) desenha as 5 etiquetas lado a lado (fechamento)."""
+    dr = ImageDraw.Draw(img)
+    PAPER, INK, STRIKE = (238, 226, 196), (40, 48, 70), (205, 60, 60)
+    if v.get("recap"):
+        rc = v["recap"]; n = len(rc); cw = 300; gap = 50; x0 = W / 2 - (n * cw + (n - 1) * gap) / 2 + 40
+        if v.get("title"): alpha_text(img, (W / 2, 170), v["title"], F(70, "ExtraBold"), WHITE, ease(t / 0.5))
+        for i, (pr, lab) in enumerate(rc):
+            a = ease((t - 0.3 - i * 0.45) / 0.5)
+            if a <= 0: continue
+            x = x0 + i * (cw + gap); y0, y1 = 420 - (1 - a) * 40, 700 - (1 - a) * 40
+            lay = Image.new("RGBA", img.size, (0, 0, 0, 0)); d2 = ImageDraw.Draw(lay)
+            hx, hy = _tag_shape(d2, x, y0, x + cw - 60, y1, PAPER, a)
+            d2.line([(hx, hy), (hx + 30, 300)], fill=(200, 200, 210, int(200 * a)), width=3)
+            img.alpha_composite(lay)
+            cx = x + (cw - 60) / 2
+            alpha_text(img, (cx, y0 + 50), f"{i + 1}", F(40, "Black"), STRIKE, a)
+            pls = pr.split("\n"); fs = 54
+            while max(F(fs, "Black").getlength(p_) for p_ in pls) > cw - 90 and fs > 26: fs -= 2
+            for j, p_ in enumerate(pls):
+                alpha_text(img, (cx, (y0 + y1) / 2 + 20 + (j - (len(pls) - 1) / 2) * fs * 1.1), p_, F(fs, "Black"), INK, a)
+            for j, ln in enumerate(lab.split("\n")):
+                alpha_text(img, (cx - 20, y1 + 60 + j * 46), ln, F(36, "Bold"), WHITE, a)
+        if v.get("caption"): dr.text((W / 2, H - 60), v["caption"], font=F(28, "Medium"), fill=DIM, anchor="mm")
+        return
+    n = v.get("n", 0)
+    a0 = ease(t / 0.6); sw = math.sin(t * 1.6) * 6 * max(0.0, 1 - t / 4)
+    x0, y0, x1, y1 = 260, 300 + (1 - a0) * 60 + sw, 860, 860 + (1 - a0) * 60 + sw
+    lay = Image.new("RGBA", img.size, (0, 0, 0, 0)); d2 = ImageDraw.Draw(lay)
+    _tag_shape(d2, x0 + 14, y0 + 16, x1 + 14, y1 + 16, (0, 0, 0), 0.45 * a0)
+    hx, hy = _tag_shape(d2, x0, y0, x1, y1, PAPER, a0)
+    d2.line([(hx, hy), (hx - 30, 110)], fill=(210, 210, 220, int(230 * a0)), width=4)
+    d2.line([(x0 + 40, y0 + 120), (x1 - 40, y0 + 120)], fill=(200, 185, 150, int(255 * a0)), width=3)
+    img.alpha_composite(lay)
+    cx = (x0 + x1) / 2 + 30
+    alpha_text(img, (cx, y0 + 65), v.get("kicker", f"ETIQUETA {n}" if n > 0 else "SUA DÍVIDA"), F(40, "Black"), (140, 110, 70), a0)
+    yp = y0 + (230 if (v.get("old") and v.get("price")) else 300)
+    if v.get("old"):
+        ao = ease((t - 0.4) / 0.4)
+        alpha_text(img, (cx, yp), v["old"], F(96, "Black"), (120, 120, 135) if v.get("price") else INK, ao)
+        if v.get("price"):
+            sk = ease((t - 1.0) / 0.5)
+            if sk > 0:
+                lw = F(96, "Black").getlength(v["old"])
+                ImageDraw.Draw(img).line([(cx - lw / 2 - 10, yp + 4), (cx - lw / 2 - 10 + (lw + 20) * sk, yp + 4)], fill=STRIKE, width=10)
+            yp += 150
+    if v.get("price"):
+        ap = ease((t - (1.5 if v.get("old") else 0.5)) / 0.5)
+        fs = 120
+        while F(fs, "Black").getlength(v["price"]) > (x1 - x0) - 80 and fs > 56: fs -= 4
+        alpha_text(img, (cx, yp), v["price"], F(fs, "Black"), hexc(v.get("price_col", "#C8372D")), ap, dy=(1 - ap) * 20)
+    if v.get("note"):
+        an = ease((t - 2.0) / 0.5)
+        for j, ln in enumerate(v["note"].split("\n")):
+            alpha_text(img, (cx, y1 - 62 + j * 40 - (40 if "\n" in v["note"] else 0)), ln, F(32, "Bold"), (110, 100, 90), an)
+    a1, a2, a3 = ease((t - 0.4) / 0.5), ease((t - 0.7) / 0.5), ease((t - 1.0) / 0.5)
+    x = 1000
+    head = f"ETIQUETA {n}  ·  {v.get('label', '')}" if n > 0 else v.get("label", "")
+    hs = 46
+    while head and F(hs, "Black").getlength(head) > W - x - 50 and hs > 30: hs -= 2
+    if head: alpha_text(img, (x, 280), head, F(hs, "Black"), AMBER, a1, anchor="lm", dy=(1 - a1) * 30)
+    lines = v.get("title", "").split("\n")
+    for i, l in enumerate(lines):
+        fs = 96
+        while F(fs, "ExtraBold").getlength(l) > W - x - 70 and fs > 56: fs -= 2
+        alpha_text(img, (x, 400 + i * 106), l, F(fs, "ExtraBold"), WHITE, a2, anchor="lm", dy=(1 - a2) * 30)
+    yb = 400 + len(lines) * 106
+    if v.get("sub"): alpha_text(img, (x, yb), v["sub"], F(42, "SemiBold"), (150, 200, 240), a3, anchor="lm")
+    if n > 0:
+        lay = Image.new("RGBA", img.size, (0, 0, 0, 0)); d2 = ImageDraw.Draw(lay)
+        for k in range(5):
+            on = k + 1 <= n; col = AMBER if k + 1 == n else ((200, 190, 160) if on else (60, 72, 96))
+            bx = x + 30 + k * 110
+            _tag_shape(d2, bx, 860, bx + 70, 910, col, a3)
+        img.alpha_composite(lay)
+    if v.get("caption"): dr.text((W / 2, H - 50), v["caption"], font=F(28, "Medium"), fill=DIM, anchor="mm")
+
+SC = {"tag": sc_tag, "exam": sc_exam, "gauge": sc_gauge, "onion": sc_onion, "floor": sc_floor, "clause": sc_clause, "round": sc_round, "ticker": sc_ticker, "scoreboard": sc_scoreboard, "title": sc_title, "bignumber": sc_bignumber, "flow": sc_flow, "split": sc_split, "bullets": sc_bullets,
       "bars": sc_bars, "compare": sc_compare, "timeline": sc_timeline, "cards": sc_cards, "line": sc_line,
       "receipt": sc_receipt, "stack": sc_stack, "journey": sc_journey, "calendar": sc_calendar, "obit": sc_obit, "race": sc_race, "act": sc_act, "ledger": sc_ledger, "blackbox": sc_blackbox, "flight": sc_flight, "court": sc_court, "dossier": sc_dossier}
 

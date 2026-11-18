@@ -1,0 +1,619 @@
+1
+00:00:00,150 --> 00:00:03,746
+Imagine uma dívida de mil reais no cartão, atrasada há dois anos.
+
+2
+00:00:03,746 --> 00:00:07,840
+Um dia, sem te avisar antes, o banco vende essa dívida para outra empresa.
+
+3
+00:00:07,840 --> 00:00:08,449
+Por quanto?
+
+4
+00:00:08,449 --> 00:00:10,496
+Muitas vezes, por menos de cem reais.
+
+5
+00:00:10,496 --> 00:00:15,475
+Nos Estados Unidos, um estudo do governo encontrou uma média de quatro centavos por dólar.
+
+6
+00:00:15,475 --> 00:00:17,024
+Aqui, seriam quarenta reais.
+
+7
+00:00:17,624 --> 00:00:20,763
+E agora o governo brasileiro quer entrar nesse mercado.
+
+8
+00:00:20,763 --> 00:00:29,037
+Em setembro, uma medida provisória autorizou a União a comprar dívidas atrasadas dos bancos, em leilão, pagando no máximo dez por cento do valor.
+
+9
+00:00:29,037 --> 00:00:30,749
+É o Desenrola três ponto zero.
+
+10
+00:00:30,749 --> 00:00:33,603
+E o leilão está previsto para as próximas semanas.
+
+11
+00:00:34,203 --> 00:00:41,074
+Para entender por que alguém vende mil reais por cem, ou menos, a gente vai seguir as etiquetas de preço de uma dívida.
+
+12
+00:00:41,074 --> 00:00:41,652
+São cinco.
+
+13
+00:00:41,652 --> 00:00:47,195
+Do valor que está no contrato até o valor que aparece no seu celular, no feirão de renegociação.
+
+14
+00:00:47,795 --> 00:00:50,326
+E guarde uma pergunta para o meio do caminho.
+
+15
+00:00:50,326 --> 00:00:55,277
+Se a empresa que compra paga tão pouco, por que ela não te dá cem por cento de desconto?
+
+16
+00:00:55,277 --> 00:00:57,246
+A resposta está na etiqueta quatro.
+
+17
+00:00:57,845 --> 00:00:59,478
+Etiqueta um: o valor de face.
+
+18
+00:00:59,478 --> 00:01:02,406
+É o número que está no contrato, mais juros e multa.
+
+19
+00:01:02,406 --> 00:01:04,321
+É o que o banco diz que você deve.
+
+20
+00:01:04,321 --> 00:01:06,404
+No papel, essa dívida vale mil reais.
+
+21
+00:01:06,404 --> 00:01:07,925
+Na prática, vale bem menos.
+
+22
+00:01:07,925 --> 00:01:09,558
+E o próprio banco sabe disso.
+
+23
+00:01:10,158 --> 00:01:11,557
+Uma dívida é uma promessa.
+
+24
+00:01:11,557 --> 00:01:14,034
+E uma promessa que já foi quebrada vale menos.
+
+25
+00:01:14,034 --> 00:01:20,926
+Quando o atraso cresce, as regras contábeis obrigam o banco a separar dinheiro para cobrir a perda provável, a chamada provisão.
+
+26
+00:01:20,926 --> 00:01:23,995
+Com o tempo, a dívida pode sair do balanço como prejuízo.
+
+27
+00:01:23,995 --> 00:01:28,142
+Mas o direito de cobrar continua existindo, e é esse direito que vai à venda.
+
+28
+00:01:28,742 --> 00:01:29,828
+E cobrar custa caro.
+
+29
+00:01:29,828 --> 00:01:34,067
+Precisa de central de atendimento, de carta, de sistema, às vezes de advogado.
+
+30
+00:01:34,067 --> 00:01:39,610
+Para o banco, muitas vezes compensa transformar a promessa quebrada em dinheiro hoje, mesmo que pouco.
+
+31
+00:01:39,610 --> 00:01:48,304
+Numa pesquisa da consultoria EY com quem atua nesse mercado, o motivo mais citado para vender carteiras foi justamente esse: ganhar liquidez, dinheiro em caixa.
+
+32
+00:01:48,904 --> 00:01:50,879
+Etiqueta dois: o preço no atacado.
+
+33
+00:01:50,879 --> 00:01:53,145
+O banco não vende a sua dívida sozinha.
+
+34
+00:01:53,145 --> 00:01:57,618
+Ele junta milhares, às vezes milhões de dívidas, num pacote chamado carteira.
+
+35
+00:01:57,618 --> 00:01:59,536
+E vende esse pacote com desconto.
+
+36
+00:01:59,536 --> 00:02:01,918
+O mercado chama esse desconto de deságio.
+
+37
+00:02:02,518 --> 00:02:03,969
+De quanto é esse desconto?
+
+38
+00:02:03,969 --> 00:02:11,451
+Na pesquisa da EY, feita no começo de dois mil e vinte e seis, a resposta mais comum foi um deságio entre oitenta e noventa por cento.
+
+39
+00:02:11,451 --> 00:02:15,081
+Ou seja, a dívida de mil reais sai por algo entre cem e duzentos.
+
+40
+00:02:15,081 --> 00:02:19,883
+E quase um em cada dez espera descontos de noventa e cinco a noventa e nove por cento.
+
+41
+00:02:20,483 --> 00:02:22,791
+E quanto mais velha a dívida, mais barata.
+
+42
+00:02:22,791 --> 00:02:25,373
+O estudo mais detalhado sobre isso é americano.
+
+43
+00:02:25,373 --> 00:02:32,956
+A FTC, a agência de defesa do consumidor dos Estados Unidos, analisou mais de cinco mil carteiras, com cerca de noventa milhões de contas.
+
+44
+00:02:32,956 --> 00:02:36,198
+Em média, os compradores pagaram quatro centavos por dólar.
+
+45
+00:02:36,198 --> 00:02:39,550
+Dívidas com menos de três anos saíam por quase oito centavos.
+
+46
+00:02:39,550 --> 00:02:42,243
+As de seis a quinze anos, por pouco mais de dois.
+
+47
+00:02:42,843 --> 00:02:43,940
+O motivo é simples.
+
+48
+00:02:43,940 --> 00:02:46,075
+Com o tempo, a chance de receber cai.
+
+49
+00:02:46,075 --> 00:02:49,077
+A pessoa troca de telefone, de endereço, de emprego.
+
+50
+00:02:49,077 --> 00:02:56,176
+E a dívida vai chegando perto de um limite que a gente vai ver mais adiante: o prazo em que ela deixa de poder ser cobrada.
+
+51
+00:02:56,776 --> 00:02:58,859
+Etiqueta três: quem paga esse preço.
+
+52
+00:02:58,859 --> 00:03:02,098
+No Brasil, existe uma indústria inteira dedicada a isso.
+
+53
+00:03:02,098 --> 00:03:08,520
+Empresas de recuperação de crédito, securitizadoras e fundos de investimento especializados em dívida atrasada.
+
+54
+00:03:08,520 --> 00:03:12,627
+Eles compram o direito de cobrar e assumem o risco de não receber nada.
+
+55
+00:03:13,227 --> 00:03:14,774
+A maior delas é a Recovery.
+
+56
+00:03:14,774 --> 00:03:16,435
+Ela pertencia ao BTG Pactual.
+
+57
+00:03:16,435 --> 00:03:24,684
+No último dia de dois mil e quinze, o Itaú anunciou a compra de oitenta e dois por cento da empresa, por seiscentos e quarenta milhões de reais.
+
+58
+00:03:24,684 --> 00:03:31,616
+Hoje, segundo a própria Recovery, ela administra mais de cento e quarenta e quatro bilhões de reais em dívidas atrasadas.
+
+59
+00:03:32,216 --> 00:03:34,879
+São mais de trinta e três milhões de devedores.
+
+60
+00:03:34,879 --> 00:03:41,055
+Para ter uma ideia, é como se um em cada cinco adultos brasileiros tivesse uma dívida nas mãos dessa empresa.
+
+61
+00:03:41,055 --> 00:03:46,382
+E ela diz ter entre vinte e cinco e trinta por cento de todo o mercado de compra de carteiras.
+
+62
+00:03:46,981 --> 00:03:48,952
+E esse mercado está crescendo rápido.
+
+63
+00:03:48,952 --> 00:03:55,185
+Segundo a Deloitte, os credores venderam trinta vírgula dois bilhões de reais em dívidas em dois mil e vinte e cinco.
+
+64
+00:03:55,185 --> 00:04:01,843
+Para dois mil e vinte e seis, as projeções vão de quarenta bilhões, na conta da Recovery, a cinquenta e dois, na da Deloitte.
+
+65
+00:04:01,843 --> 00:04:04,453
+Só no primeiro semestre, foram dezessete bilhões.
+
+66
+00:04:05,054 --> 00:04:05,888
+Por que agora?
+
+67
+00:04:05,888 --> 00:04:08,212
+Porque nunca houve tanta gente devendo.
+
+68
+00:04:08,212 --> 00:04:13,159
+Em outubro, a Serasa contou oitenta e quatro vírgula seis milhões de inadimplentes.
+
+69
+00:04:13,159 --> 00:04:15,245
+Mais da metade dos adultos do país.
+
+70
+00:04:15,245 --> 00:04:18,643
+E muita dívida atrasada significa muita carteira à venda.
+
+71
+00:04:19,243 --> 00:04:21,509
+Etiqueta quatro: a conta de quem compra.
+
+72
+00:04:21,509 --> 00:04:24,059
+E aqui está a resposta da pergunta do começo.
+
+73
+00:04:24,059 --> 00:04:26,552
+Vamos fazer um exemplo com números redondos.
+
+74
+00:04:26,552 --> 00:04:31,424
+É um exemplo ilustrativo, para entender a lógica, não o resultado de uma empresa real.
+
+75
+00:04:32,024 --> 00:04:34,561
+Uma empresa compra cem dívidas de mil reais.
+
+76
+00:04:34,561 --> 00:04:35,887
+Valor de face: cem mil.
+
+77
+00:04:35,887 --> 00:04:38,078
+Ela paga dez por cento: dez mil reais.
+
+78
+00:04:38,078 --> 00:04:39,000
+Começa a cobrar.
+
+79
+00:04:39,000 --> 00:04:43,958
+A maioria das pessoas não vai pagar nunca, porque não pode ou porque não é encontrada.
+
+80
+00:04:43,958 --> 00:04:45,976
+Digamos que só vinte fechem acordo.
+
+81
+00:04:46,576 --> 00:04:51,057
+Se ela der sessenta por cento de desconto, cada acordo rende quatrocentos reais.
+
+82
+00:04:51,057 --> 00:04:52,401
+Vinte acordos: oito mil.
+
+83
+00:04:52,401 --> 00:04:53,521
+Ela perdeu dinheiro.
+
+84
+00:04:53,521 --> 00:04:58,842
+Se der trinta por cento de desconto, cada acordo rende setecentos, e o total vai a catorze mil.
+
+85
+00:04:58,842 --> 00:05:01,979
+Sobram quatro mil, antes de pagar os custos de cobrança.
+
+86
+00:05:02,579 --> 00:05:03,752
+Percebe o equilíbrio?
+
+87
+00:05:03,752 --> 00:05:06,099
+Desconto grande demais, a conta não fecha.
+
+88
+00:05:06,099 --> 00:05:08,222
+Desconto pequeno demais, ninguém paga.
+
+89
+00:05:08,222 --> 00:05:10,512
+Essa empresa vive de achar o ponto certo.
+
+90
+00:05:10,512 --> 00:05:17,384
+E, cada vez mais, usa dados para isso: quem tem mais chance de pagar, por qual canal, com qual oferta, em quantas parcelas.
+
+91
+00:05:17,984 --> 00:05:21,611
+Por isso, o desconto de noventa por cento no feirão não é caridade.
+
+92
+00:05:21,611 --> 00:05:26,320
+Se a dívida foi comprada por cinco por cento do valor, receber dez já dobra o dinheiro.
+
+93
+00:05:26,320 --> 00:05:30,109
+O seu desconto e o lucro de quem comprou podem existir ao mesmo tempo.
+
+94
+00:05:30,109 --> 00:05:33,195
+E é por isso que a primeira oferta quase nunca é a única.
+
+95
+00:05:33,795 --> 00:05:36,982
+E um número da Recovery mostra o aperto do consumidor.
+
+96
+00:05:36,982 --> 00:05:40,109
+Hoje, só dez por cento dos acordos são pagos à vista.
+
+97
+00:05:40,109 --> 00:05:42,116
+Já foram trinta e cinco por cento.
+
+98
+00:05:42,116 --> 00:05:44,653
+Os outros noventa por cento são parcelados.
+
+99
+00:05:45,253 --> 00:05:47,671
+Etiqueta cinco: o preço que chega até você.
+
+100
+00:05:47,671 --> 00:05:52,844
+É a oferta do feirão, a mensagem no aplicativo, a ligação de um número que você não conhece.
+
+101
+00:05:52,844 --> 00:05:57,904
+E é aqui que entra a grande novidade de dois mil e vinte e seis: o governo como comprador.
+
+102
+00:05:58,504 --> 00:06:08,658
+Pela medida provisória mil trezentos e noventa e três, de setembro, a União pode comprar carteiras de dívidas de pessoas físicas, com valor original de até dez mil reais, em leilão.
+
+103
+00:06:08,658 --> 00:06:13,426
+A regra: deságio mínimo de noventa por cento, e ganha quem oferecer o maior desconto.
+
+104
+00:06:13,426 --> 00:06:16,680
+O gasto do governo tem um teto de quinze bilhões de reais.
+
+105
+00:06:17,280 --> 00:06:22,941
+Em outubro, o Ministério da Fazenda chamou bancos, fundos e securitizadoras para oferecer as carteiras.
+
+106
+00:06:22,941 --> 00:06:26,678
+O ministro falou em até noventa bilhões de reais em dívidas antigas.
+
+107
+00:06:26,678 --> 00:06:30,855
+Com noventa por cento de desconto, o governo pagaria no máximo nove bilhões.
+
+108
+00:06:30,855 --> 00:06:37,120
+Pela medida, o devedor poderá quitar com um desconto de até o mesmo percentual que a União conseguiu, ou parcelar.
+
+109
+00:06:37,720 --> 00:06:40,057
+Mas atenção: as regras ainda podem mudar.
+
+110
+00:06:40,057 --> 00:06:43,135
+A medida provisória precisa ser votada pelo Congresso.
+
+111
+00:06:43,135 --> 00:06:49,177
+A comissão que analisa o texto foi instalada nesta semana, com votação prevista para o começo de dezembro.
+
+112
+00:06:49,177 --> 00:06:52,653
+E o leilão, previsto para novembro, pode ficar para dezembro.
+
+113
+00:06:53,254 --> 00:06:56,829
+Na prática, o governo vira um comprador de dívida, como a Recovery.
+
+114
+00:06:56,829 --> 00:07:01,952
+Com uma diferença de objetivo: a ideia é passar o desconto para quem deve, e não lucrar com ele.
+
+115
+00:07:01,952 --> 00:07:04,887
+A minha análise: o programa depende do preço do leilão.
+
+116
+00:07:04,887 --> 00:07:08,036
+Se o desconto final for grande de verdade, o alívio é real.
+
+117
+00:07:08,036 --> 00:07:10,491
+Se for pequeno, a conta do devedor muda pouco.
+
+118
+00:07:11,091 --> 00:07:14,357
+Agora, o que você precisa saber se a sua dívida foi vendida.
+
+119
+00:07:14,357 --> 00:07:17,568
+Primeiro: a venda é legal e não depende da sua autorização.
+
+120
+00:07:17,568 --> 00:07:23,337
+Mas, pelo artigo duzentos e noventa do Código Civil, ela só vale contra você depois que você é notificado.
+
+121
+00:07:23,337 --> 00:07:26,657
+Se você pagou o credor antigo antes de saber, está protegido.
+
+122
+00:07:26,657 --> 00:07:31,230
+E atenção: para o Superior Tribunal de Justiça, a falta de aviso não apaga a dívida.
+
+123
+00:07:31,830 --> 00:07:35,448
+Segundo: a dívida passa como era, com o mesmo contrato por trás.
+
+124
+00:07:35,448 --> 00:07:40,537
+Por isso, vale conferir se a cobrança identifica o contrato original: número, valor, data.
+
+125
+00:07:40,537 --> 00:07:41,215
+E desconfie.
+
+126
+00:07:41,215 --> 00:07:44,834
+Golpista também manda mensagem dizendo que comprou a sua dívida.
+
+127
+00:07:44,834 --> 00:07:48,000
+Negocie só por canais oficiais, que você mesmo procurou.
+
+128
+00:07:48,600 --> 00:07:49,796
+Terceiro: o relógio.
+
+129
+00:07:49,796 --> 00:07:55,057
+Pelo Código de Defesa do Consumidor, o nome só pode ficar negativado por até cinco anos.
+
+130
+00:07:55,057 --> 00:08:00,318
+Para a maior parte das dívidas de consumo, o prazo de prescrição também é de cinco anos.
+
+131
+00:08:00,318 --> 00:08:07,253
+E, em dois mil e vinte e três, o STJ decidiu que dívida prescrita não pode ser cobrada nem na Justiça nem fora dela.
+
+132
+00:08:07,253 --> 00:08:09,465
+Nada de ligação ou mensagem cobrando.
+
+133
+00:08:09,465 --> 00:08:15,922
+Em dois mil e vinte e quatro, a mesma turma disse que ela ainda pode aparecer numa plataforma de negociação.
+
+134
+00:08:16,522 --> 00:08:18,215
+Então, quem ganha nesse mercado?
+
+135
+00:08:18,215 --> 00:08:20,861
+O banco ganha dinheiro em caixa e limpa o balanço.
+
+136
+00:08:20,861 --> 00:08:24,247
+O comprador ganha na diferença entre o que pagou e o que recebe.
+
+137
+00:08:24,247 --> 00:08:28,268
+E o devedor pode ganhar um desconto que o banco original dificilmente daria.
+
+138
+00:08:28,268 --> 00:08:33,824
+O lado ruim é a cobrança insistente, e a dívida antiga que reaparece quando você já tinha esquecido dela.
+
+139
+00:08:34,424 --> 00:08:36,367
+Recapitulando as cinco etiquetas.
+
+140
+00:08:36,367 --> 00:08:37,663
+Mil reais no contrato.
+
+141
+00:08:37,663 --> 00:08:39,842
+Algo entre cem e duzentos no atacado.
+
+142
+00:08:39,842 --> 00:08:41,433
+Um comprador especializado.
+
+143
+00:08:41,433 --> 00:08:43,966
+Uma conta de probabilidade, acordo ou nada.
+
+144
+00:08:43,966 --> 00:08:45,909
+E um desconto que chega até você.
+
+145
+00:08:45,909 --> 00:08:50,445
+A mesma dívida, com preços completamente diferentes, dependendo de quem olha.
+
+146
+00:08:51,045 --> 00:08:52,861
+E a lição deste episódio é esta.
+
+147
+00:08:52,861 --> 00:08:55,416
+Uma dívida atrasada não é só um problema seu.
+
+148
+00:08:55,416 --> 00:08:59,219
+É um produto, que se compra e se vende, com preço, mercado e lucro.
+
+149
+00:08:59,219 --> 00:09:01,320
+Saber disso não muda o que você deve.
+
+150
+00:09:01,320 --> 00:09:04,442
+Mas muda o jeito de ler a próxima proposta de desconto.
+
+151
+00:09:05,042 --> 00:09:09,688
+Este vídeo é informativo e não é recomendação financeira, nem de investimento.
+
+152
+00:09:09,688 --> 00:09:12,488
+É só o mapa de um mercado que quase ninguém vê.
+
+153
+00:09:13,088 --> 00:09:17,052
+E se o problema não for uma dívida, mas um Pix mandado para um golpista?
+
+154
+00:09:17,052 --> 00:09:19,034
+No próximo episódio: o golpe do Pix.
+
+155
+00:09:19,034 --> 00:09:25,696
+Para onde vai o dinheiro em poucos segundos, quem tem que devolver, e o mecanismo de devolução que quase ninguém conhece.

@@ -1,0 +1,62 @@
+# Gera o publish.json do EP16 (quarta 18/11/2026: ranking #15 12:00, longo 18:00 e Short do episódio 19:00).
+# O ranking aponta para o EP15 (score/inadimplência, já publicado), porque às 12:00 o EP16 ainda não está no ar.
+# Uso: python3 pub_ep16.py out/ep16/durs.json ep16/publish.json "<created_at>"
+import json, sys
+durs = json.load(open(sys.argv[1]))
+def ts(i):
+    s = int(sum(durs[:i])); return f"{s//60}:{s%60:02d}"
+caps = [(0, "Mil reais por quarenta?"), (4, "Etiqueta 1: o valor de face"), (7, "Etiqueta 2: o preço no atacado"),
+        (11, "Etiqueta 3: quem compra"), (16, "Etiqueta 4: a conta do comprador"), (22, "Etiqueta 5: o seu preço e o Desenrola 3.0"),
+        (27, "Se a sua dívida foi vendida"), (30, "Quem ganha"), (31, "As cinco etiquetas"), (34, "Próximo episódio")]
+chap = "\n".join(f"{ts(i)} {t}" for i, t in caps)
+LONG_TITLE = "Quem compra a sua dívida (e por que pode te dar 90% de desconto)"
+desc = f"""Quando uma dívida atrasa, o banco pode vender o direito de cobrar para outra empresa, com deságio de 80% a 90% ou mais. Neste episódio, a mesma dívida de R$ 1.000 (exemplo ilustrativo) é seguida por cinco etiquetas de preço: o valor de face, o preço no atacado, quem compra, a conta do comprador e o preço que chega até você. E o Desenrola 3.0, em que a União entra nesse mercado comprando carteiras com desconto mínimo de 90%.
+
+Capítulos
+{chap}
+
+Fontes
+- EY-Parthenon, Panorama do Mercado de Ativos Problemáticos 2026 (pesquisa de fev-mar/2026): deságio esperado de 80% a 90% para 36% dos respondentes, 90% a 95% para 18%, 95% a 99% para 9% e 70% a 80% para 18%; liquidez como principal motivo para ceder carteiras (29%)
+- Federal Trade Commission (EUA), The Structure and Practices of the Debt Buying Industry (janeiro de 2013): mais de 5.000 carteiras e cerca de 90 milhões de contas; média de 4 centavos por dólar; 7,9 centavos para dívidas com menos de 3 anos e 2,2 centavos para dívidas de 6 a 15 anos
+- Itaú Unibanco, comunicado de 31/12/2015 (e Reuters): compra de 81,94% da Recovery do Brasil, do BTG Pactual, por R$ 640 milhões
+- Recovery, via Bloomberg Línea e Trade Map (2026): mais de R$ 144 bilhões em créditos inadimplidos sob gestão, mais de 33 milhões de clientes, 25% a 30% do mercado, R$ 34 bilhões vendidos em 2025, projeção de R$ 40 bilhões em 2026 (R$ 17 bilhões no 1º semestre); 10% dos acordos à vista (já foram 35%)
+- Deloitte, pesquisa sobre o mercado de créditos não performados, ciclo 2025/2026: R$ 30,2 bilhões cedidos em 2025 e projeção de R$ 52,3 bilhões em 2026
+- Serasa, Mapa da Inadimplência de outubro de 2026, via imprensa: 84,6 milhões de inadimplentes, 51,32% da população adulta
+- Medida Provisória 1.393, de 25/09/2026 (Desenrola 3.0): compra de carteiras de pessoas físicas com valor original de até R$ 10 mil, deságio mínimo de 90%, despesa da União limitada a R$ 15 bilhões; devedor pode quitar com deságio de até o mesmo percentual ou parcelar
+- Ministério da Fazenda, Portaria 3.127/2026 (chamada de 22 a 30/10/2026) e declarações do ministro Dario Durigan (até R$ 90 bilhões em dívidas), via imprensa; comissão mista da MP instalada em 17/11/2026, com votação prevista para 02/12/2026
+- Resolução CMN 4.966/2021 (provisões); Código Civil, arts. 290, 292 e 206, §5º, I; Código de Defesa do Consumidor, art. 43, §1º; STJ, REsp 2.088.100/SP (2023) e REsp 2.103.726/SP (2024)
+- Cálculos do canal: exemplo da dívida de R$ 1.000, exemplo das 100 dívidas compradas a 10% (EXEMPLO ILUSTRATIVO) e proporção de devedores da Recovery entre os adultos.
+
+As regras do Desenrola 3.0 ainda dependem da votação da medida provisória e de regulamentação.
+
+Este vídeo é informativo e não é recomendação financeira. Narração com voz sintética; roteiro, pesquisa e visual próprios. "Análise" na tela = interpretação do canal.
+
+#dividas #desenrola #renegociacao #inadimplencia #portrasdodinheiro"""
+tags = ["divida vendida", "cessão de crédito", "recovery", "desenrola 3.0", "desenrola", "renegociação de dívidas", "feirão limpa nome",
+        "divida prescrita", "carteira de credito", "npl", "inadimplencia", "nome sujo", "educacao financeira", "por tras do dinheiro"]
+SH_TITLE = "Sua dívida de R$ 1.000 pode ter sido vendida por R$ 100 #shorts"
+RK_TITLE = "5 cifras bilionárias por trás da sua dívida vendida (o nº 1 passa de R$ 140 bi) #shorts"
+EP15 = "Score de crédito: a prova secreta que decide quanto juro você paga"
+data = {"version": 1, "channel_id": "UCd_BGmJ5gbQ0kECAxmbvQHA", "created_at": sys.argv[3], "items": [
+  {"key": "ptd-rank15-short", "kind": "short", "video": "ranking.mp4", "title": RK_TITLE,
+   "description": "O mercado de dívidas vendidas em 5 cifras: 5) R$ 640 milhões, o preço de 82% da Recovery pago pelo Itaú em 2015; 4) R$ 15 bilhões, o teto para a União comprar dívidas no Desenrola 3.0; 3) R$ 30,2 bilhões em dívidas vendidas em 2025; 2) R$ 90 bilhões em dívidas antigas que os bancos podem oferecer ao governo; 1) R$ 144 bilhões em dívidas atrasadas administradas pela Recovery. Fontes: comunicado do Itaú (31/12/2015) e Reuters; MP 1.393/2026; Deloitte, pesquisa de NPL 2025/2026; Ministério da Fazenda (out/2026), via imprensa; Recovery, via Bloomberg Línea (2026). Este vídeo é informativo e não é recomendação financeira. Voz sintética.\n#shorts #dividas #desenrola #recovery",
+   "tags": ["divida vendida", "desenrola 3.0", "recovery", "dividas", "shorts", "por tras do dinheiro"],
+   "publish_at": "2026-11-18T12:00:00-03:00", "if_late": "public_now", "made_for_kids": False, "altered_content": True,
+   "related_key": "ptd-ep15-long",
+   "pinned_comment": "Você sabia que a sua dívida pode ser vendida para outra empresa? Vídeo completo: " + EP15},
+  {"key": "ptd-ep16-long", "kind": "long", "video": "video.mp4", "title": LONG_TITLE, "description": desc, "tags": tags,
+   "thumbnail": "thumbnail.jpg", "captions": "legendas.srt", "publish_at": "2026-11-18T18:00:00-03:00", "if_late": "public_now",
+   "made_for_kids": False, "altered_content": True,
+   "pinned_comment": "Na sua opinião, é justo um banco vender a dívida de alguém por 10% do valor, e o comprador cobrar mais? Conta aqui."},
+  {"key": "ptd-ep16-short", "kind": "short", "video": "vertical.mp4", "title": SH_TITLE,
+   "description": "Uma dívida de R$ 1.000 atrasada pode ser vendida em pacote, com deságio de 80% a 90% (faixa mais citada na pesquisa EY-Parthenon 2026). Por isso, um desconto de 90% no feirão pode ainda dar lucro a quem comprou (exemplo ilustrativo, cálculo do canal). Vídeo completo no canal: \"" + LONG_TITLE + "\". Este vídeo é informativo e não é recomendação financeira. Voz sintética.\n#shorts #dividas #renegociacao #desenrola",
+   "tags": ["divida vendida", "renegociação", "desenrola", "dividas", "shorts", "por tras do dinheiro"],
+   "publish_at": "2026-11-18T19:00:00-03:00", "if_late": "public_now", "made_for_kids": False, "altered_content": True,
+   "related_key": "ptd-ep16-long",
+   "pinned_comment": "Você já recebeu cobrança de uma empresa que não conhecia? Vídeo completo: " + LONG_TITLE},
+]}
+for it in data["items"]:
+    assert len(it["title"]) <= 100 and len(it["description"]) <= 5000, it["key"]
+    assert "<" not in it["title"] + it["description"] and ">" not in it["title"] + it["description"]
+json.dump(data, open(sys.argv[2], "w"), ensure_ascii=False, indent=1)
+print(chap); print("total", round(sum(durs)), "s", len(desc))
