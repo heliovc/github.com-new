@@ -1661,7 +1661,9 @@
   "title": "Quem compra a sua dívida (e por que pode te dar 90% de desconto)",
   "kind": "long",
   "publish_at": "2026-11-18T18:15:00-03:00",
-  "pinned_comment": "Na sua opinião, é justo um banco vender a dívida de alguém por 10% do valor, e o comprador cobrar mais? Conta aqui."
+  "pinned_comment": "Na sua opinião, é justo um banco vender a dívida de alguém por 10% do valor, e o comprador cobrar mais? Conta aqui.",
+  "comment_attempts": 1,
+  "comment_done": "2026-11-18T18:23:10.489860-03:00"
  },
  "ptd-ep16-short": {
   "attempts": 1,
@@ -1677,7 +1679,9 @@
   "kind": "short",
   "publish_at": "2026-11-18T19:15:00-03:00",
   "related_key": "ptd-ep16-long",
-  "pinned_comment": "Você já recebeu cobrança de uma empresa que não conhecia? Vídeo completo: Quem compra a sua dívida (e por que pode te dar 90% de desconto)"
+  "pinned_comment": "Você já recebeu cobrança de uma empresa que não conhecia? Vídeo completo: Quem compra a sua dívida (e por que pode te dar 90% de desconto)",
+  "related_attempts": 1,
+  "related_done": "2026-11-18T18:25:27.902425-03:00"
  },
  "lab-ep14-long": {
   "attempts": 1,
