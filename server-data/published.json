@@ -1589,8 +1589,8 @@
   "kind": "long",
   "publish_at": "2026-11-18T17:30:00-03:00",
   "pinned_comment": "If you could see past the fog wall, what would you hope to find?",
-  "comment_attempts": 1,
-  "comment_error": "Page.goto: Timeout 60000ms exceeded.\nCall log:\n  - navigating to \"https://www.youtube.com/watch?v=Dnmm8Ic6wqo\", waiting until \"domcontentloaded\"\n (20261118-174249-erro-comment-cosmic-ep16-long.png)"
+  "comment_attempts": 2,
+  "comment_error": "Page.goto: Timeout 60000ms exceeded.\nCall log:\n  - navigating to \"https://www.youtube.com/watch?v=Dnmm8Ic6wqo\", waiting until \"domcontentloaded\"\n (20261118-175253-erro-comment-cosmic-ep16-long.png)"
  },
  "cosmic-scale09-short": {
   "attempts": 1,
@@ -1625,8 +1625,8 @@
   "publish_at": "2026-11-18T21:30:00-03:00",
   "related_key": "cosmic-ep16-long",
   "pinned_comment": "Did you expect far galaxies to look bigger? Full video: Why Can't We See the Edge of the Universe? Far Galaxies Look Bigger",
-  "related_attempts": 1,
-  "related_error": "Page.goto: Timeout 60000ms exceeded.\nCall log:\n  - navigating to \"https://studio.youtube.com/video/yZPFmJr1O04/edit\", waiting until \"domcontentloaded\"\n (20261118-174548-erro-related-cosmic-ep16-short.png)"
+  "related_attempts": 2,
+  "related_done": "2026-11-18T17:56:54.492788-03:00"
  },
  "ptd-rank15-short": {
   "attempts": 1,
