@@ -1457,7 +1457,9 @@
   "title": "Voyager 1 Is Now 1 Light-Day Away. A Message Takes 24 Hours",
   "kind": "long",
   "publish_at": "2026-11-18T08:30:00-03:00",
-  "pinned_comment": "What would you put in a message to Voyager 1, knowing it takes a full day to arrive?"
+  "pinned_comment": "What would you put in a message to Voyager 1, knowing it takes a full day to arrive?",
+  "comment_attempts": 1,
+  "comment_done": "2026-11-18T08:42:53.184012-03:00"
  },
  "cosmic-ep15-short": {
   "attempts": 1,
@@ -1473,7 +1475,9 @@
   "kind": "short",
   "publish_at": "2026-11-18T12:30:00-03:00",
   "related_key": "cosmic-ep15-long",
-  "pinned_comment": "Would you wait two days for a reply? Full video: Voyager 1 Is Now 1 Light-Day Away. A Message Takes 24 Hours"
+  "pinned_comment": "Would you wait two days for a reply? Full video: Voyager 1 Is Now 1 Light-Day Away. A Message Takes 24 Hours",
+  "related_attempts": 1,
+  "related_done": "2026-11-18T08:44:40.731485-03:00"
  },
  "ptd-rank14-short": {
   "attempts": 1,
@@ -1563,7 +1567,9 @@
   "kind": "short",
   "publish_at": "2026-11-18T13:30:00-03:00",
   "related_key": "cosmic-ep15-long",
-  "pinned_comment": "Where should we send the next one? Full video: Voyager 1 Is Now 1 Light-Day Away. A Message Takes 24 Hours"
+  "pinned_comment": "Where should we send the next one? Full video: Voyager 1 Is Now 1 Light-Day Away. A Message Takes 24 Hours",
+  "related_attempts": 1,
+  "related_done": "2026-11-18T08:46:46.009520-03:00"
  },
  "cosmic-ep16-long": {
   "attempts": 1,
