@@ -1699,5 +1699,20 @@
   "publish_at": "2026-11-18T21:00:00-03:00",
   "related_key": "lab-ep14-long",
   "pinned_comment": "Which boring Excel job should I automate next? Full tutorial: Merge Hundreds of Excel Files into One with Python (pandas for Beginners)"
+ },
+ "quiet-ep08-long": {
+  "attempts": 1,
+  "status": "published",
+  "url": "https://youtu.be/YeKVk_Rl_MA",
+  "by": "robo",
+  "visibility": "schedule",
+  "when": "2026-11-18T21:15:00-03:00",
+  "at": "2026-11-18T09:45:37.120081-03:00",
+  "error": null,
+  "channel_id": "UCNrw11y7QKt0fWCrJ84QZ-g",
+  "title": "Ancient Greek History for Sleep: An Evening in Athens by Lamplight (48 Min)",
+  "kind": "long",
+  "publish_at": "2026-11-18T21:15:00-03:00",
+  "pinned_comment": "Where should our next quiet evening take us after Athens?"
  }
 }
