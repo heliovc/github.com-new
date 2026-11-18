@@ -1668,5 +1668,36 @@
   "publish_at": "2026-11-18T19:15:00-03:00",
   "related_key": "ptd-ep16-long",
   "pinned_comment": "Você já recebeu cobrança de uma empresa que não conhecia? Vídeo completo: Quem compra a sua dívida (e por que pode te dar 90% de desconto)"
+ },
+ "lab-ep14-long": {
+  "attempts": 1,
+  "status": "published",
+  "url": "https://youtu.be/i5Wk75FeJLA",
+  "by": "robo",
+  "visibility": "schedule",
+  "when": "2026-11-18T19:30:00-03:00",
+  "at": "2026-11-18T09:14:24.922414-03:00",
+  "error": null,
+  "channel_id": "UCXGqR8k1RMbfYdVleIuJKzA",
+  "title": "Merge Hundreds of Excel Files into One with Python (pandas for Beginners)",
+  "kind": "long",
+  "publish_at": "2026-11-18T19:30:00-03:00",
+  "pinned_comment": "How many files do you merge by hand every month? Tell me below, and I'll show you how to clean them next."
+ },
+ "lab-ep14-short": {
+  "attempts": 1,
+  "status": "published",
+  "url": "https://youtu.be/_6gdW7rdeTk",
+  "by": "robo",
+  "visibility": "schedule",
+  "when": "2026-11-18T21:00:00-03:00",
+  "at": "2026-11-18T09:17:54.010547-03:00",
+  "error": null,
+  "channel_id": "UCXGqR8k1RMbfYdVleIuJKzA",
+  "title": "Merge 240 Excel Files in 2 Seconds #shorts",
+  "kind": "short",
+  "publish_at": "2026-11-18T21:00:00-03:00",
+  "related_key": "lab-ep14-long",
+  "pinned_comment": "Which boring Excel job should I automate next? Full tutorial: Merge Hundreds of Excel Files into One with Python (pandas for Beginners)"
  }
 }
