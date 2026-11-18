@@ -1608,7 +1608,9 @@
   "related_key": "cosmic-ep10-long",
   "pinned_comment": "Did you expect that much room left? Full video: What If Jupiter Became a Star? It Would Need 80 Jupiters",
   "related_attempts": 1,
-  "related_done": "2026-11-18T06:57:09.029824-03:00"
+  "related_done": "2026-11-18T06:57:09.029824-03:00",
+  "comment_attempts": 1,
+  "comment_done": "2026-11-18T19:44:54.813258-03:00"
  },
  "cosmic-ep16-short": {
   "attempts": 1,
@@ -1698,7 +1700,9 @@
   "title": "Merge Hundreds of Excel Files into One with Python (pandas for Beginners)",
   "kind": "long",
   "publish_at": "2026-11-18T19:30:00-03:00",
-  "pinned_comment": "How many files do you merge by hand every month? Tell me below, and I'll show you how to clean them next."
+  "pinned_comment": "How many files do you merge by hand every month? Tell me below, and I'll show you how to clean them next.",
+  "comment_attempts": 1,
+  "comment_done": "2026-11-18T19:47:20.975297-03:00"
  },
  "lab-ep14-short": {
   "attempts": 1,
@@ -1714,7 +1718,9 @@
   "kind": "short",
   "publish_at": "2026-11-18T21:00:00-03:00",
   "related_key": "lab-ep14-long",
-  "pinned_comment": "Which boring Excel job should I automate next? Full tutorial: Merge Hundreds of Excel Files into One with Python (pandas for Beginners)"
+  "pinned_comment": "Which boring Excel job should I automate next? Full tutorial: Merge Hundreds of Excel Files into One with Python (pandas for Beginners)",
+  "related_attempts": 1,
+  "related_done": "2026-11-18T19:49:01.082562-03:00"
  },
  "quiet-ep08-long": {
   "attempts": 1,

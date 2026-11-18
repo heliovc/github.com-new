@@ -1,9 +1,11 @@
 {
- "last_run": "2026-11-18T19:23:16.565398-03:00",
+ "last_run": "2026-11-18T19:49:06.051779-03:00",
  "pending": 0,
- "post_tasks": 1,
+ "post_tasks": 3,
  "errors": [],
  "published_now": [
-  "ptd-ep16-short: comment comentário fixado"
+  "cosmic-scale09-short: comment comentário fixado",
+  "lab-ep14-long: comment comentário fixado",
+  "lab-ep14-short: related vinculado a i5Wk75FeJLA"
  ]
 }
