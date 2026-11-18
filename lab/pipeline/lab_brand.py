@@ -10,6 +10,7 @@ python3 -I lab_brand.py thumbquery "LINE ONE" "LINE TWO" "=QUERY()" "Lena=1670|O
 python3 -I lab_brand.py thumbweb "LINE ONE" "LINE TWO" "<html line>|<html line>" screenshot.png out.jpg periwinkle   (EP09: code card behind, browser with the REAL page screenshot in front)
 python3 -I lab_brand.py thumbpdf "LINE ONE" "LINE TWO" page.png "h1,h2|a,b|c,d" out.jpg ruby   (EP10: REAL PDF page tilted left, arrow, clean spreadsheet grid right)
 python3 -I lab_brand.py thumbkeys "LINE ONE" "LINE TWO" "Ctrl+D|Alt+Up" out.jpg jade   (EP13: mini editor with 3 multi-cursor selections + big 3D keycap combos)
+python3 -I lab_brand.py thumbmerge "LINE ONE" "LINE TWO" "5,718 rows" out.jpg cobalt   (EP14: pile of small workbooks -> arrow -> one merged sheet + row badge)
 python3 -I lab_brand.py thumb "LINE ONE" "LINE TWO" "code snippet line" out.jpg [accent: lime|coral|sky]"""
 import sys; sys.path.insert(0, ".")
 import tutor as T
@@ -241,6 +242,33 @@ elif sys.argv[1] == "thumbkeys":  # EP13 layout: text left; right a mini editor 
         fs = 120
         while T.F(fs, "Bold").getlength(txt) > 580: fs -= 4
         d.text((50, 250 + i * 150), txt, font=T.F(fs, "Bold"), fill=col, anchor="lm", stroke_width=4, stroke_fill=T.BG)
+    img.convert("RGB").save(out, quality=92); print("thumb ok")
+elif sys.argv[1] == "thumbmerge":  # EP14 layout: text left; right a cascading pile of small spreadsheet cards -> arrow -> one big merged sheet with a row badge
+    l1, l2, badge, out = sys.argv[2:6]; acc = {"lime": T.LIME, "coral": T.CORAL, "sky": T.SKY, "violet": T.VIO, "yellow": T.YEL, "cobalt": (95, 120, 255)}[sys.argv[6] if len(sys.argv) > 6 else "cobalt"]
+    T.ACC = acc; T.W, T.H = 1280, 720; img = T.make_bg(1280, 720)
+    cols = [(108, 196, 255), (255, 211, 105), (80, 220, 190), (255, 160, 200), (190, 150, 255), (255, 170, 90)]
+    for i in range(14):  # pile of small workbooks, back to front
+        cw, ch = 150, 110; card = Image.new("RGBA", (cw, ch), (0, 0, 0, 0)); dc = ImageDraw.Draw(card)
+        c = cols[i % len(cols)]; dc.rounded_rectangle([0, 0, cw - 1, ch - 1], 12, fill=T.PANEL2, outline=c, width=3)
+        dc.rectangle([3, 3, cw - 4, 26], fill=T.mix(T.PANEL2, c, 0.55))
+        for r in range(3):
+            for k in range(3): dc.rectangle([12 + k * 44, 36 + r * 22, 48 + k * 44, 50 + r * 22], fill=T.mix(T.PANEL2, (200, 206, 216), 0.25))
+        rc = card.rotate((i * 37) % 29 - 14, expand=True, resample=Image.BICUBIC)
+        x = 585 + (i % 4) * 44 + (i // 4) * 10; y = 120 + (i // 4) * 120 + (i % 3) * 18
+        img.alpha_composite(rc, (int(x), int(y)))
+    d = ImageDraw.Draw(img); d.text((945, 380), "→", font=T.F(96, "monob"), fill=acc, anchor="mm", stroke_width=4, stroke_fill=T.BG)
+    bx = [995, 170, 1250, 590]; T.window(img, bx, "", kind="term"); d = ImageDraw.Draw(img)
+    for r in range(11):
+        y = 240 + r * 30; c = cols[(r // 2) % len(cols)]
+        d.rectangle([1010, y, 1016, y + 24], fill=c)
+        d.rectangle([1024, y, 1234, y + 24], fill=T.mix(T.PANEL, acc, 0.35) if r == 0 else (T.PANEL if r % 2 else T.PANEL2))
+    d.rounded_rectangle([1010, 600, 1250, 664], 32, fill=acc); d.text((1130, 632), badge, font=T.F(32, "Bold"), fill=T.BG, anchor="mm")
+    d.rounded_rectangle([40, 40, 300, 92], 26, fill=acc); d.text((170, 66), "SHORTCUT LAB", font=T.F(26, "Bold"), fill=T.BG, anchor="mm")
+    for i, (txt, col) in enumerate([(l1, T.TXT), (l2, acc)]):
+        fs = 124
+        while T.F(fs, "Bold").getlength(txt) > 540: fs -= 4
+        d.text((50, 270 + i * 160), txt, font=T.F(fs, "Bold"), fill=col, anchor="lm", stroke_width=5, stroke_fill=T.BG)
+    d.text((54, 560), "Python  ·  pandas  ·  for beginners", font=T.F(30, "Medium"), fill=T.DIM, anchor="lm")
     img.convert("RGB").save(out, quality=92); print("thumb ok")
 else:
     l1, l2, code, out = sys.argv[2:6]; acc = {"lime": T.LIME, "coral": T.CORAL, "sky": T.SKY, "violet": T.VIO, "yellow": T.YEL}[sys.argv[6] if len(sys.argv) > 6 else "lime"]

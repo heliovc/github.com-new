@@ -1,0 +1,94 @@
+### versions
+3.1.1 3.1.5
+### ls
+2026-01_store01.xlsx
+2026-01_store02.xlsx
+2026-01_store03.xlsx
+...
+2026-12_store19.xlsx
+2026-12_store20.xlsx
+240
+### peek
+        Date     Product  Units  Price
+0 2026-01-03    Espresso      5    2.5
+1 2026-01-04      Muffin     11    2.9
+2 2026-01-08  Cappuccino      6    3.6
+3 2026-01-09       Bagel      3    2.4
+4 2026-01-15       Bagel      5    2.4
+(19, 4)
+### wrong_folder
+Files found: 0
+Traceback (most recent call last):
+  File "/root/lab/ep14work/project/merge.py", line 13, in <module>
+    merged = pd.concat(frames, ignore_index=True)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/dist-packages/pandas/core/reshape/concat.py", line 426, in concat
+    objs, keys, ndims = _clean_keys_and_objs(objs, keys)
+                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/dist-packages/pandas/core/reshape/concat.py", line 842, in _clean_keys_and_objs
+    raise ValueError("No objects to concatenate")
+ValueError: No objects to concatenate
+### merge
+Files found: 240
+Rows: 5718
+Saved all_sales.xlsx
+### check
+(5718, 6)
+['Date', 'Product', 'Units', 'Price', 'Source', 'Qty']
+Date          0
+Product       0
+Units        25
+Price         0
+Source        0
+Qty        5693
+dtype: int64
+### find_bad
+Source
+2026-09_store07.xlsx    25
+Name: count, dtype: int64
+### lockfile
+Files found: 241
+Traceback (most recent call last):
+  File "/root/lab/ep14work/project/merge.py", line 9, in <module>
+    df = pd.read_excel(f)
+         ^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/dist-packages/pandas/io/excel/_base.py", line 513, in read_excel
+    io = ExcelFile(
+         ^^^^^^^^^^
+  File "/usr/local/lib/python3.11/dist-packages/pandas/io/excel/_base.py", line 1683, in __init__
+    raise ValueError(
+ValueError: Excel file format cannot be determined, you must specify an engine manually.
+### merge_final
+Files found: 241
+Skipping lock file: ~$2026-11_store04.xlsx
+Rows: 5718
+Missing values: 0
+Saved all_sales.xlsx
+### check2
+(5718, 5)
+['Date', 'Product', 'Units', 'Price', 'Source']
+Date       0
+Product    0
+Units      0
+Price      0
+Source     0
+dtype: int64
+### summary
+Store
+store09    6217.8
+store05    6004.0
+store06    5770.1
+store14    5734.6
+store04    5728.3
+Name: Revenue, dtype: float64
+Saved report.xlsx
+### sheets
+['Q1', 'Q2', 'Q3', 'Q4']
+(24, 3)
+### sheets_tag
+  Sheet  Row       Date     Product  Units
+0    Q1    0 2026-01-01    Espresso     35
+1    Q1    1 2026-02-02  Cappuccino     27
+2    Q1    2 2026-03-03      Muffin     16
+### timing
+2.283 s

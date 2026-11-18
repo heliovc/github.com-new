@@ -21,6 +21,9 @@ Scene types: title, steps, code, term, files, tip, keys, compare, chat, outro, t
   matches, cursor below, move/copy/delete line, toggle comment, F2 rename (identifiers only), go-to-line box, quick-open/command palette
   with a live fuzzy filter, terminal panel + explorer toggles; keycap HUD with Windows/Linux + Mac keys and a shortcut history;
   the edit engine runs at render time and ep13 runs the resulting files for the real terminal output)
+  merge (EP14: a folder window with one tile per REAL workbook feeding a combined sheet - files are read slow-then-fast, each flies
+  in as a chip, the sheet keeps the newest blocks (real first row + "... N more rows") with a colored Source stripe, live file/row
+  counters add the REAL row counts; naive=True shows the "Qty" file as NaN, a lock file stops the run with the real error unless skip=True)
 Identity: charcoal #0F1115, lime #B6F35C, coral #FF7A59, sky #6CC4FF, Poppins + DejaVu Sans Mono.
 """
 import sys, os, re, math, json, hashlib, subprocess, importlib.util
@@ -1276,6 +1279,91 @@ def sc_vsc(img, v, t, d):
             dr.rounded_rectangle([hx + 30, yy, hx + 490, yy + 46], 10, fill=PANEL2)
             dr.text((hx + 46, yy + 23), txt, font=F(20, "monob"), fill=ACC, anchor="lm")
             dr.text((hx + 476, yy + 23), nm[:22], font=F(18, "Medium"), fill=DIM, anchor="rm")
+
+# ---- EP14: merge - a folder window with one tile per REAL workbook (left) feeding a combined sheet (right). Files are read in order
+# (slow at first, then accelerating), each one flies into the sheet as a chip; the sheet keeps the newest blocks (real first row of the
+# file + "... N more rows") with a colored Source stripe, and live counters add the REAL row counts. flags: "qty" (column named Qty ->
+# Units shows NaN when naive=True), "lock" (Excel lock file: stops the run with an error banner unless skip=True)
+MCOL = [(108, 196, 255), (255, 211, 105), (80, 220, 190), (255, 160, 200), (190, 150, 255), (255, 170, 90)]
+def sc_merge(img, v, t, d):
+    files = v["files"]; n = len(files); dr = ImageDraw.Draw(img)
+    span = d * v.get("span", 0.7); acc = v.get("accel", 2.0); t0 = 0.5
+    def t_of(i): return t0 + span * ((i + 1) / n) ** (1 / acc)
+    p = max(0.0, min(1.0, (t - t0) / span)); k = int(n * p ** acc + 1e-9)  # files fully read
+    stop = None
+    for i, f in enumerate(files):
+        if f.get("flag") == "lock" and not v.get("skip"): stop = i; break
+    if stop is not None: k = min(k, stop)
+    a = ease(t / 0.4)
+    # left: folder window + tile grid
+    lx0, ly0, lx1, ly1 = 90, 150, 900, 990; window(img, [lx0, ly0, lx1, ly1], v.get("folder", "reports/"), kind="term")
+    cols = v.get("cols", 16); rows = (n + cols - 1) // cols; gw, gh = lx1 - lx0 - 80, ly1 - ly0 - 190
+    tw = min(gw / cols, 110); th = min(gh / rows, tw * 1.1); gx = lx0 + 40 + (gw - tw * cols) / 2; gy = ly0 + 90
+    pos = []
+    for i, f in enumerate(files):
+        r, c = divmod(i, cols); x, y = gx + c * tw, gy + r * th; pos.append((x + tw / 2, y + th / 2))
+        fl = f.get("flag", ""); done = i < k; err = stop is not None and i == stop and t >= t_of(i) - 0.05
+        col = CORAL if (fl == "lock") else (YEL if fl == "qty" and v.get("naive") else ACC)
+        if fl == "lock" and v.get("skip"): col = DIM
+        fill = mix(PANEL2, col, 0.75) if done or err else PANEL2
+        if fl == "lock" and v.get("skip") and done: fill = PANEL
+        dr.rounded_rectangle([x + 3, y + 3, x + tw - 3, y + th - 3], max(3, int(tw / 9)), fill=mix(BG, fill, a), outline=mix(BG, col if (done or err) else LINE, a), width=1 if tw < 60 else 2)
+        if tw >= 30:  # tiny spreadsheet glyph
+            gc = mix(fill, BG, 0.45)
+            for j in range(3): dr.line([x + tw * 0.25, y + th * (0.32 + j * 0.18), x + tw * 0.75, y + th * (0.32 + j * 0.18)], fill=gc, width=max(1, int(tw / 22)))
+        if (err or (fl == "lock" and v.get("skip") and done)) and tw >= 20:
+            dr.line([x + 7, y + 7, x + tw - 7, y + th - 7], fill=CORAL, width=3); dr.line([x + tw - 7, y + 7, x + 7, y + th - 7], fill=CORAL, width=3)
+        if tw >= 90: text_a(img, (x + tw / 2, y + th - 14), f["name"][:12], F(14, "mono"), TXT, a, "mm")
+    text_a(img, ((lx0 + lx1) / 2, ly1 - 60), f"{n} files", F(26, "SemiBold"), DIM, a, "mm")
+    # right: combined sheet
+    rx0, ry0, rx1, ry1 = 960, 150, 1840, 990; window(img, [rx0, ry0, rx1, ry1], v.get("out", "all_sales.xlsx"), kind="term")
+    hdr = ["Date", "Product", "Units", "Price", "Source"]; cw = [150, 150, 90, 90, 330]; cx = [rx0 + 30]
+    for w_ in cw: cx.append(cx[-1] + w_)
+    hy = ry0 + 72; rh = 40
+    dr.rectangle([rx0 + 20, hy, rx1 - 20, hy + rh], fill=mix(BG, PANEL2, a))
+    for j, h_ in enumerate(hdr): text_a(img, (cx[j] + 10, hy + rh / 2), h_, F(22, "SemiBold"), ACC, a, "lm")
+    if v.get("naive") and k > 0 and any(f.get("flag") == "qty" for f in files[:k]):
+        dr.rectangle([rx1 - 110, hy, rx1 - 20, hy + rh], fill=mix(PANEL2, YEL, 0.3)); text_a(img, (rx1 - 65, hy + rh / 2), "Qty", F(22, "SemiBold"), YEL, 1, "mm")
+    nb = 7; blocks = [b for b in range(k) if files[b].get("flag") != "lock"][-nb:]; fs = F(21, "mono"); y = hy + rh + 6
+    for b in blocks:
+        f = files[b]; s = f["sample"][0]; col = MCOL[b % len(MCOL)]; fresh = max(0.0, min(1.0, (t - t_of(b)) / 0.25))
+        dr.rectangle([rx0 + 20, y, rx0 + 26, y + rh * 2 - 8], fill=col)
+        units = "NaN" if (f.get("flag") == "qty" and v.get("naive")) else str(s[2])
+        vals = [s[0], s[1], units, f"{s[3]:.2f}", f["name"]]
+        for j, val in enumerate(vals):
+            c = YEL if (val == "NaN") else (col if j == 4 else TXT)
+            if j in (2, 3): text_a(img, (cx[j + 1] - 12, y + rh / 2 - 4), val, fs, c, fresh, "rm")
+            else: text_a(img, (cx[j] + 10, y + rh / 2 - 4), val, fs, c, fresh, "lm")
+        if v.get("naive") and f.get("flag") == "qty": text_a(img, (rx1 - 65, y + rh / 2 - 4), str(s[2]), fs, YEL, fresh, "mm")
+        text_a(img, (cx[0] + 10, y + rh * 1.5 - 6), f"... {f['rows'] - 1} more rows from this file", F(18, "Medium"), DIM, fresh)
+        y += rh * 2
+    # counters
+    rows_now = sum(f.get("rows", 0) for f in files[:k]); real_n = sum(1 for f in files if f.get("flag") != "lock")
+    by = ry1 - 92; dr.rounded_rectangle([rx0 + 20, by, rx1 - 20, by + 66], 14, fill=mix(BG, PANEL2, a))
+    nf = sum(1 for f in files[:k] if not (f.get("flag") == "lock"))
+    text_a(img, (rx0 + 50, by + 33), f"files read  {nf} / {real_n}", F(26, "monob"), TXT, a, "lm")
+    text_a(img, (rx1 - 50, by + 33), f"rows  {rows_now:,}", F(26, "monob"), ACC, a, "rm")
+    # flying chips (files read during the last 0.45 s)
+    for i in range(max(0, k - 30), min(n, k + 1)):
+        if stop is not None and i >= stop: break
+        ft = t - (t_of(i) - 0.45); u = ft / 0.45
+        if not (0 <= u <= 1): continue
+        sx, sy = pos[i]; ex, ey = rx0 + 40, hy + rh + 6 + min(nb, max(1, len(blocks))) * rh * 2 - rh; ue = ease(u)
+        mx, my = (sx + ex) / 2, min(sy, ey) - 140
+        X = (1 - ue) ** 2 * sx + 2 * (1 - ue) * ue * mx + ue ** 2 * ex; Y = (1 - ue) ** 2 * sy + 2 * (1 - ue) * ue * my + ue ** 2 * ey
+        col = MCOL[i % len(MCOL)]
+        if span / n > 0.25:
+            fw = F(18, "mono").getlength(files[i]["name"]) + 24
+            dr.rounded_rectangle([X - fw / 2, Y - 16, X + fw / 2, Y + 16], 16, fill=mix(PANEL, col, 0.35), outline=col, width=2)
+            dr.text((X, Y), files[i]["name"], font=F(18, "mono"), fill=TXT, anchor="mm")
+        else: dr.ellipse([X - 7, Y - 7, X + 7, Y + 7], fill=col)
+    if stop is not None and t >= t_of(stop):
+        e = v.get("error", "Error"); fe = F(26, "SemiBold"); ew = fe.getlength(e) + 60; ey0 = 1000
+        ka = ease((t - t_of(stop)) / 0.3)
+        dr.rounded_rectangle([W / 2 - ew / 2, ey0, W / 2 + ew / 2, ey0 + 56], 28, fill=mix(BG, CORAL, ka)); dr.text((W / 2, ey0 + 28), e, font=fe, fill=BG, anchor="mm")
+    elif v.get("note") and t > t0 + span:
+        ka = ease((t - t0 - span) / 0.4); fe = F(28, "SemiBold"); ew = fe.getlength(v["note"]) + 60
+        dr.rounded_rectangle([W / 2 - ew / 2, 1000, W / 2 + ew / 2, 1056], 28, fill=mix(BG, ACC, ka)); dr.text((W / 2, 1028), v["note"], font=fe, fill=BG, anchor="mm")
 
 SC = {k[3:]: f for k, f in list(globals().items()) if k.startswith("sc_")}
 
