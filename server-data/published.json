@@ -1797,7 +1797,9 @@
   "kind": "short",
   "publish_at": "2026-11-19T19:15:00-03:00",
   "related_key": "cosmic-ep04-long",
-  "pinned_comment": "What should we squeeze into a black hole next? Full video: What Happens If You Fall Into a Black Hole?"
+  "pinned_comment": "What should we squeeze into a black hole next? Full video: What Happens If You Fall Into a Black Hole?",
+  "comment_attempts": 1,
+  "comment_done": "2026-11-19T19:23:20.326535-03:00"
  },
  "ptd-rank16-short": {
   "attempts": 1,
