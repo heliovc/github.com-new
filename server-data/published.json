@@ -1812,5 +1812,36 @@
   "pinned_comment": "Você ou alguém da sua família já caiu em golpe? Registrou boletim de ocorrência? Vídeo completo: O golpe dos descontos no INSS: como R$ 6,3 bilhões saíram dos aposentados",
   "related_attempts": 1,
   "related_done": "2026-11-19T07:46:44.589982-03:00"
+ },
+ "lab-ep15-long": {
+  "attempts": 1,
+  "status": "published",
+  "url": "https://youtu.be/CyEH1JnS4sc",
+  "by": "robo",
+  "visibility": "schedule",
+  "when": "2026-11-19T19:45:00-03:00",
+  "at": "2026-11-19T09:14:27.617943-03:00",
+  "error": null,
+  "channel_id": "UCXGqR8k1RMbfYdVleIuJKzA",
+  "title": "Clean Messy Data with Python: Spaces, Duplicates, Dates and Text Numbers (pandas for Beginners)",
+  "kind": "long",
+  "publish_at": "2026-11-19T19:45:00-03:00",
+  "pinned_comment": "What's the messiest thing you've found in a spreadsheet? Tell me below and I might clean it in a future video."
+ },
+ "lab-ep15-short": {
+  "attempts": 1,
+  "status": "published",
+  "url": "https://youtu.be/5cLANvNs03U",
+  "by": "robo",
+  "visibility": "schedule",
+  "when": "2026-11-19T21:15:00-03:00",
+  "at": "2026-11-19T09:17:36.486519-03:00",
+  "error": null,
+  "channel_id": "UCXGqR8k1RMbfYdVleIuJKzA",
+  "title": "Messy Data Lied by $200,000 #shorts",
+  "kind": "short",
+  "publish_at": "2026-11-19T21:15:00-03:00",
+  "related_key": "lab-ep15-long",
+  "pinned_comment": "Which data mess do you fight most: dates, duplicates or spaces? Full tutorial: Clean Messy Data with Python: Spaces, Duplicates, Dates and Text Numbers (pandas for Beginners)"
  }
 }
