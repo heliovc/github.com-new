@@ -1,0 +1,325 @@
+{
+ "note": "Fila de vídeos antigos para TikTok via Buffer. Rotina: postar 2/dia os próximos com posted=null, marcar posted com data e post id.",
+ "items": [
+  {
+   "n": 1,
+   "file": "cosmic/ep05/vertical.mp4",
+   "url": "https://raw.githubusercontent.com/heliovc/github.com-new/94e7131b543b74b505d50fea9793bdb50de6a2fe/cosmic/ep05/vertical.mp4",
+   "dur": 80.5,
+   "caption": "Earth Would Be INSIDE This Star 🌌\n\nFull videos on YouTube: Cosmic Scale\n#space #universe #astronomy #science #whatif",
+   "posted": null
+  },
+  {
+   "n": 2,
+   "file": "cosmic/ep04/vertical.mp4",
+   "url": "https://raw.githubusercontent.com/heliovc/github.com-new/56bfa25d2962a9510c6935eaf003bc0af82bec39/cosmic/ep04/vertical.mp4",
+   "dur": 75.2,
+   "caption": "A Small Black Hole Kills You. A Giant One Doesn't. 🌌\n\nFull videos on YouTube: Cosmic Scale\n#space #universe #astronomy #science #whatif",
+   "posted": null
+  },
+  {
+   "n": 3,
+   "file": "cosmic/ep03/vertical.mp4",
+   "url": "https://raw.githubusercontent.com/heliovc/github.com-new/b9057865a3cf992f02d4f881de964478c8ee1a4a/cosmic/ep03/vertical.mp4",
+   "dur": 69.4,
+   "caption": "The Universe Is 13.8 Billion Years Old. So Why Is the Edge 46 Billion Light-Years Away? 🌌\n\nFull videos on YouTube: Cosmic Scale\n#space #universe #astronomy #science #whatif",
+   "posted": null
+  },
+  {
+   "n": 4,
+   "file": "cosmic/ep07/vertical.mp4",
+   "url": "https://raw.githubusercontent.com/heliovc/github.com-new/ecd3c5229f3de71d1ab29fc2087082c5fa550359/cosmic/ep07/vertical.mp4",
+   "dur": 59.1,
+   "caption": "A Teaspoon of This Star Weighs More Than Every Human on Earth 🌌\n\nFull videos on YouTube: Cosmic Scale\n#space #universe #astronomy #science #whatif",
+   "posted": null
+  },
+  {
+   "n": 5,
+   "file": "cosmic/2026-11-19/scale.mp4",
+   "url": "https://raw.githubusercontent.com/heliovc/github.com-new/fafb7334bc5c18179e574f4f20d4e28b45c9c594/cosmic/2026-11-19/scale.mp4",
+   "dur": null,
+   "caption": "If Earth Were a Basketball, the Space Station Would Fly 7 mm Above It 🌌\n\nFull videos on YouTube: Cosmic Scale\n#space #scale #universe #astronomy #science",
+   "posted": null
+  },
+  {
+   "n": 6,
+   "file": "cosmic/2026-11-19/ranking.mp4",
+   "url": "https://raw.githubusercontent.com/heliovc/github.com-new/fafb7334bc5c18179e574f4f20d4e28b45c9c594/cosmic/2026-11-19/ranking.mp4",
+   "dur": null,
+   "caption": "Top 5 Biggest Asteroids (#1 Is Also a Dwarf Planet) 🌌\n\nFull videos on YouTube: Cosmic Scale\n#space #astronomy #top5 #universe #science",
+   "posted": null
+  },
+  {
+   "n": 7,
+   "file": "cosmic/ep01/vertical.mp4",
+   "url": "https://raw.githubusercontent.com/heliovc/github.com-new/3cab46787da7e7abe3a277852a7b58167dbbf714/cosmic/ep01/vertical.mp4",
+   "dur": 74.6,
+   "caption": "For 1 Second, the Sun Disappears. What Happens to Earth? 🌌\n\nFull videos on YouTube: Cosmic Scale\n#space #universe #astronomy #science #whatif",
+   "posted": null
+  },
+  {
+   "n": 8,
+   "file": "cosmic/2026-11-19/scale2.mp4",
+   "url": "https://raw.githubusercontent.com/heliovc/github.com-new/fafb7334bc5c18179e574f4f20d4e28b45c9c594/cosmic/2026-11-19/scale2.mp4",
+   "dur": null,
+   "caption": "Squeeze Earth Into a Marble and It Becomes a Black Hole 🌌\n\nFull videos on YouTube: Cosmic Scale\n#space #scale #universe #astronomy #science",
+   "posted": null
+  },
+  {
+   "n": 9,
+   "file": "cosmic/ep03/ranking.mp4",
+   "url": "https://raw.githubusercontent.com/heliovc/github.com-new/b9057865a3cf992f02d4f881de964478c8ee1a4a/cosmic/ep03/ranking.mp4",
+   "dur": 74.0,
+   "caption": "Top 5 Fastest Things Ever Measured 🌌\n\nFull videos on YouTube: Cosmic Scale\n#space #astronomy #top5 #universe #science",
+   "posted": null
+  },
+  {
+   "n": 10,
+   "file": "cosmic/ep02/vertical.mp4",
+   "url": "https://raw.githubusercontent.com/heliovc/github.com-new/35faae998520e84534ea964442fb9ebe65b68ba5/cosmic/ep02/vertical.mp4",
+   "dur": 82.6,
+   "caption": "What If the Sun Disappeared Forever? 🌌\n\nFull videos on YouTube: Cosmic Scale\n#space #universe #astronomy #science #whatif",
+   "posted": null
+  },
+  {
+   "n": 11,
+   "file": "cosmic/ep08/scale.mp4",
+   "url": "https://raw.githubusercontent.com/heliovc/github.com-new/dd33f60478386a46877169259ebbb61f1268194c/cosmic/ep08/scale.mp4",
+   "dur": 31.3,
+   "caption": "Every Planet Fits Between Earth and the Moon (But Only Sometimes) 🌌\n\nFull videos on YouTube: Cosmic Scale\n#space #scale #universe #astronomy #science",
+   "posted": null
+  },
+  {
+   "n": 12,
+   "file": "cosmic/ep05/ranking.mp4",
+   "url": "https://raw.githubusercontent.com/heliovc/github.com-new/94e7131b543b74b505d50fea9793bdb50de6a2fe/cosmic/ep05/ranking.mp4",
+   "dur": 61.2,
+   "caption": "Top 5 Hottest Planets Ever Measured 🌌\n\nFull videos on YouTube: Cosmic Scale\n#space #astronomy #top5 #universe #science",
+   "posted": null
+  },
+  {
+   "n": 13,
+   "file": "cosmic/ep06/vertical.mp4",
+   "url": "https://raw.githubusercontent.com/heliovc/github.com-new/877d744e1f4c5025a0e86c11bb895fe94c53d8ab/cosmic/ep06/vertical.mp4",
+   "dur": 76.4,
+   "caption": "If Earth Stopped Spinning, You'd Fly at 1,670 km/h 🌌\n\nFull videos on YouTube: Cosmic Scale\n#space #universe #astronomy #science #whatif",
+   "posted": null
+  },
+  {
+   "n": 14,
+   "file": "cosmic/ep09/scale.mp4",
+   "url": "https://raw.githubusercontent.com/heliovc/github.com-new/ecd3c5229f3de71d1ab29fc2087082c5fa550359/cosmic/ep09/scale.mp4",
+   "dur": 30.3,
+   "caption": "Earth Fits Inside a Storm on Jupiter. Barely. 🌌\n\nFull videos on YouTube: Cosmic Scale\n#space #scale #universe #astronomy #science",
+   "posted": null
+  },
+  {
+   "n": 15,
+   "file": "cosmic/ep06/ranking.mp4",
+   "url": "https://raw.githubusercontent.com/heliovc/github.com-new/877d744e1f4c5025a0e86c11bb895fe94c53d8ab/cosmic/ep06/ranking.mp4",
+   "dur": 74.2,
+   "caption": "Top 5 Biggest Black Holes Ever Measured 🌌\n\nFull videos on YouTube: Cosmic Scale\n#space #astronomy #top5 #universe #science",
+   "posted": null
+  },
+  {
+   "n": 16,
+   "file": "cosmic/ep08/vertical.mp4",
+   "url": "https://raw.githubusercontent.com/heliovc/github.com-new/dd33f60478386a46877169259ebbb61f1268194c/cosmic/ep08/vertical.mp4",
+   "dur": 42.7,
+   "caption": "If the Moon Fell, You'd Have 4 Days. The Last 10 Minutes Look Like This 🌌\n\nFull videos on YouTube: Cosmic Scale\n#space #universe #astronomy #science #whatif",
+   "posted": null
+  },
+  {
+   "n": 17,
+   "file": "cosmic/ep10/scale.mp4",
+   "url": "https://raw.githubusercontent.com/heliovc/github.com-new/ad1f00b3b0043fbf4e22bad7cd6156f50ef259ef/cosmic/ep10/scale.mp4",
+   "dur": 30.9,
+   "caption": "This Star Fits Inside Jupiter. It Weighs 85 Jupiters. 🌌\n\nFull videos on YouTube: Cosmic Scale\n#space #scale #universe #astronomy #science",
+   "posted": null
+  },
+  {
+   "n": 18,
+   "file": "cosmic/ep08/ranking.mp4",
+   "url": "https://raw.githubusercontent.com/heliovc/github.com-new/dd33f60478386a46877169259ebbb61f1268194c/cosmic/ep08/ranking.mp4",
+   "dur": 62.5,
+   "caption": "Top 5 Closest Stars to the Sun (#1 Is 40 Trillion km Away) 🌌\n\nFull videos on YouTube: Cosmic Scale\n#space #astronomy #top5 #universe #science",
+   "posted": null
+  },
+  {
+   "n": 19,
+   "file": "cosmic/ep09/vertical.mp4",
+   "url": "https://raw.githubusercontent.com/heliovc/github.com-new/ecd3c5229f3de71d1ab29fc2087082c5fa550359/cosmic/ep09/vertical.mp4",
+   "dur": 45.9,
+   "caption": "The Night Sky Isn't Actually Black. You Just Can't See It 🌌\n\nFull videos on YouTube: Cosmic Scale\n#space #universe #astronomy #science #whatif",
+   "posted": null
+  },
+  {
+   "n": 20,
+   "file": "cosmic/ep11/scale.mp4",
+   "url": "https://raw.githubusercontent.com/heliovc/github.com-new/7c79cbf7aa25c4c9f4f98385d1859d0aeefb636a/cosmic/ep11/scale.mp4",
+   "dur": 30.1,
+   "caption": "Saturn's Rings Are Thinner Than a Building (and 273,000 km Wide) 🌌\n\nFull videos on YouTube: Cosmic Scale\n#space #scale #universe #astronomy #science",
+   "posted": null
+  },
+  {
+   "n": 21,
+   "file": "cosmic/ep09/ranking.mp4",
+   "url": "https://raw.githubusercontent.com/heliovc/github.com-new/ecd3c5229f3de71d1ab29fc2087082c5fa550359/cosmic/ep09/ranking.mp4",
+   "dur": 57.5,
+   "caption": "Top 5 Brightest Stars in the Night Sky (#2 Is 10,000 Suns) 🌌\n\nFull videos on YouTube: Cosmic Scale\n#space #astronomy #top5 #universe #science",
+   "posted": null
+  },
+  {
+   "n": 22,
+   "file": "cosmic/ep10/vertical.mp4",
+   "url": "https://raw.githubusercontent.com/heliovc/github.com-new/ad1f00b3b0043fbf4e22bad7cd6156f50ef259ef/cosmic/ep10/vertical.mp4",
+   "dur": 39.8,
+   "caption": "If Jupiter Became a Star, Its 4 Big Moons Would End Up INSIDE It 🌌\n\nFull videos on YouTube: Cosmic Scale\n#space #universe #astronomy #science #whatif",
+   "posted": null
+  },
+  {
+   "n": 23,
+   "file": "cosmic/ep12/scale.mp4",
+   "url": "https://raw.githubusercontent.com/heliovc/github.com-new/76e9516b4cf5eeeec8c22479ee68f671c2e41704/cosmic/ep12/scale.mp4",
+   "dur": 35.2,
+   "caption": "1.3 Million Earths Fit Inside the Sun 🌌\n\nFull videos on YouTube: Cosmic Scale\n#space #scale #universe #astronomy #science",
+   "posted": null
+  },
+  {
+   "n": 24,
+   "file": "cosmic/ep10/ranking.mp4",
+   "url": "https://raw.githubusercontent.com/heliovc/github.com-new/ad1f00b3b0043fbf4e22bad7cd6156f50ef259ef/cosmic/ep10/ranking.mp4",
+   "dur": 56.1,
+   "caption": "Top 5 Coldest Places in the Universe (#1 Is Colder Than Space) 🌌\n\nFull videos on YouTube: Cosmic Scale\n#space #astronomy #top5 #universe #science",
+   "posted": null
+  },
+  {
+   "n": 25,
+   "file": "cosmic/ep11/vertical.mp4",
+   "url": "https://raw.githubusercontent.com/heliovc/github.com-new/7c79cbf7aa25c4c9f4f98385d1859d0aeefb636a/cosmic/ep11/vertical.mp4",
+   "dur": 46.6,
+   "caption": "If Earth Had Rings, New York Would See an Arch. Quito, Just a Line 🌌\n\nFull videos on YouTube: Cosmic Scale\n#space #universe #astronomy #science #whatif",
+   "posted": null
+  },
+  {
+   "n": 26,
+   "file": "cosmic/ep13/scale.mp4",
+   "url": "https://raw.githubusercontent.com/heliovc/github.com-new/8b9277edbc6297a4ed70290070f3a3dcb5408256/cosmic/ep13/scale.mp4",
+   "dur": 35.1,
+   "caption": "Pluto Is Smaller Than the United States 🌌\n\nFull videos on YouTube: Cosmic Scale\n#space #scale #universe #astronomy #science",
+   "posted": null
+  },
+  {
+   "n": 27,
+   "file": "cosmic/ep11/ranking.mp4",
+   "url": "https://raw.githubusercontent.com/heliovc/github.com-new/7c79cbf7aa25c4c9f4f98385d1859d0aeefb636a/cosmic/ep11/ranking.mp4",
+   "dur": 56.5,
+   "caption": "Top 5 Tallest Mountains in the Solar System (Everest Doesn't Make It) 🌌\n\nFull videos on YouTube: Cosmic Scale\n#space #astronomy #top5 #universe #science",
+   "posted": null
+  },
+  {
+   "n": 28,
+   "file": "cosmic/ep12/vertical.mp4",
+   "url": "https://raw.githubusercontent.com/heliovc/github.com-new/76e9516b4cf5eeeec8c22479ee68f671c2e41704/cosmic/ep12/vertical.mp4",
+   "dur": 32.3,
+   "caption": "Mars Landed in 7 Minutes. Earth Heard About It 11 Minutes Later 🌌\n\nFull videos on YouTube: Cosmic Scale\n#space #universe #astronomy #science #whatif",
+   "posted": null
+  },
+  {
+   "n": 29,
+   "file": "cosmic/ep14/scale.mp4",
+   "url": "https://raw.githubusercontent.com/heliovc/github.com-new/11f39440754f17c32ac819182fcc2a75a2527c94/cosmic/ep14/scale.mp4",
+   "dur": 37.8,
+   "caption": "Our Entire Solar System Fits Inside This Black Hole 🌌\n\nFull videos on YouTube: Cosmic Scale\n#space #scale #universe #astronomy #science",
+   "posted": null
+  },
+  {
+   "n": 30,
+   "file": "cosmic/ep12/ranking.mp4",
+   "url": "https://raw.githubusercontent.com/heliovc/github.com-new/76e9516b4cf5eeeec8c22479ee68f671c2e41704/cosmic/ep12/ranking.mp4",
+   "dur": 55.5,
+   "caption": "Top 5 Fastest-Spinning Objects Ever Measured (#1 Spins 716 Times a Second) 🌌\n\nFull videos on YouTube: Cosmic Scale\n#space #astronomy #top5 #universe #science",
+   "posted": null
+  },
+  {
+   "n": 31,
+   "file": "cosmic/ep13/vertical.mp4",
+   "url": "https://raw.githubusercontent.com/heliovc/github.com-new/8b9277edbc6297a4ed70290070f3a3dcb5408256/cosmic/ep13/vertical.mp4",
+   "dur": 41.3,
+   "caption": "Mercury Is 8 Times Closer Than Jupiter. It Takes Longer to Reach 🌌\n\nFull videos on YouTube: Cosmic Scale\n#space #universe #astronomy #science #whatif",
+   "posted": null
+  },
+  {
+   "n": 32,
+   "file": "cosmic/ep15/scale.mp4",
+   "url": "https://raw.githubusercontent.com/heliovc/github.com-new/cd7f66a27ac3ca9e8586a8ae14588a9273bc8600/cosmic/ep15/scale.mp4",
+   "dur": 31.7,
+   "caption": "The Moon's Entire Orbit Fits Inside the Sun 🌌\n\nFull videos on YouTube: Cosmic Scale\n#space #scale #universe #astronomy #science",
+   "posted": null
+  },
+  {
+   "n": 33,
+   "file": "cosmic/ep13/ranking.mp4",
+   "url": "https://raw.githubusercontent.com/heliovc/github.com-new/8b9277edbc6297a4ed70290070f3a3dcb5408256/cosmic/ep13/ranking.mp4",
+   "dur": 59.0,
+   "caption": "Top 5 Fastest Winds Ever Measured (#1 Is 33,000 km/h) 🌌\n\nFull videos on YouTube: Cosmic Scale\n#space #astronomy #top5 #universe #science",
+   "posted": null
+  },
+  {
+   "n": 34,
+   "file": "cosmic/ep14/vertical.mp4",
+   "url": "https://raw.githubusercontent.com/heliovc/github.com-new/11f39440754f17c32ac819182fcc2a75a2527c94/cosmic/ep14/vertical.mp4",
+   "dur": 53.8,
+   "caption": "The Ocean Is Too Shallow to Stop This Asteroid 🌌\n\nFull videos on YouTube: Cosmic Scale\n#space #universe #astronomy #science #whatif",
+   "posted": null
+  },
+  {
+   "n": 35,
+   "file": "cosmic/ep16/scale.mp4",
+   "url": "https://raw.githubusercontent.com/heliovc/github.com-new/cd7f66a27ac3ca9e8586a8ae14588a9273bc8600/cosmic/ep16/scale.mp4",
+   "dur": 30.0,
+   "caption": "Every Other Planet Fits Inside Jupiter (With Room for 435 Earths) 🌌\n\nFull videos on YouTube: Cosmic Scale\n#space #scale #universe #astronomy #science",
+   "posted": null
+  },
+  {
+   "n": 36,
+   "file": "cosmic/ep14/ranking.mp4",
+   "url": "https://raw.githubusercontent.com/heliovc/github.com-new/11f39440754f17c32ac819182fcc2a75a2527c94/cosmic/ep14/ranking.mp4",
+   "dur": 59.0,
+   "caption": "Top 5 Biggest Impact Craters on Earth (#2 Killed the Dinosaurs) 🌌\n\nFull videos on YouTube: Cosmic Scale\n#space #astronomy #top5 #universe #science",
+   "posted": null
+  },
+  {
+   "n": 37,
+   "file": "cosmic/ep15/vertical.mp4",
+   "url": "https://raw.githubusercontent.com/heliovc/github.com-new/cd7f66a27ac3ca9e8586a8ae14588a9273bc8600/cosmic/ep15/vertical.mp4",
+   "dur": 37.2,
+   "caption": "A Message to Voyager 1 Takes 24 Hours. The Nearest Star Is 1,549 Times Farther 🌌\n\nFull videos on YouTube: Cosmic Scale\n#space #universe #astronomy #science #whatif",
+   "posted": null
+  },
+  {
+   "n": 38,
+   "file": "cosmic/ep15/ranking.mp4",
+   "url": "https://raw.githubusercontent.com/heliovc/github.com-new/cd7f66a27ac3ca9e8586a8ae14588a9273bc8600/cosmic/ep15/ranking.mp4",
+   "dur": 51.6,
+   "caption": "Top 5 Longest Years in the Solar System (#1 Lasts 11,400 Years) 🌌\n\nFull videos on YouTube: Cosmic Scale\n#space #astronomy #top5 #universe #science",
+   "posted": null
+  },
+  {
+   "n": 39,
+   "file": "cosmic/ep16/vertical.mp4",
+   "url": "https://raw.githubusercontent.com/heliovc/github.com-new/cd7f66a27ac3ca9e8586a8ae14588a9273bc8600/cosmic/ep16/vertical.mp4",
+   "dur": 56.4,
+   "caption": "The Farthest Galaxy Looks BIGGER Than Closer Ones. Here's Why 🌌\n\nFull videos on YouTube: Cosmic Scale\n#space #universe #astronomy #science #whatif",
+   "posted": null
+  },
+  {
+   "n": 40,
+   "file": "cosmic/ep16/ranking.mp4",
+   "url": "https://raw.githubusercontent.com/heliovc/github.com-new/cd7f66a27ac3ca9e8586a8ae14588a9273bc8600/cosmic/ep16/ranking.mp4",
+   "dur": 51.1,
+   "caption": "Top 5 Farthest Things Humans Ever Built (#1 Is a Light-Day Away) 🌌\n\nFull videos on YouTube: Cosmic Scale\n#space #astronomy #top5 #universe #science",
+   "posted": null
+  }
+ ]
+}
