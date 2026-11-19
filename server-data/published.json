@@ -1834,7 +1834,9 @@
   "title": "Clean Messy Data with Python: Spaces, Duplicates, Dates and Text Numbers (pandas for Beginners)",
   "kind": "long",
   "publish_at": "2026-11-19T19:45:00-03:00",
-  "pinned_comment": "What's the messiest thing you've found in a spreadsheet? Tell me below and I might clean it in a future video."
+  "pinned_comment": "What's the messiest thing you've found in a spreadsheet? Tell me below and I might clean it in a future video.",
+  "comment_attempts": 1,
+  "comment_done": "2026-11-19T19:52:44.196683-03:00"
  },
  "lab-ep15-short": {
   "attempts": 1,
@@ -1850,7 +1852,9 @@
   "kind": "short",
   "publish_at": "2026-11-19T21:15:00-03:00",
   "related_key": "lab-ep15-long",
-  "pinned_comment": "Which data mess do you fight most: dates, duplicates or spaces? Full tutorial: Clean Messy Data with Python: Spaces, Duplicates, Dates and Text Numbers (pandas for Beginners)"
+  "pinned_comment": "Which data mess do you fight most: dates, duplicates or spaces? Full tutorial: Clean Messy Data with Python: Spaces, Duplicates, Dates and Text Numbers (pandas for Beginners)",
+  "related_attempts": 1,
+  "related_done": "2026-11-19T19:54:13.774202-03:00"
  },
  "quiet-ep09-long": {
   "attempts": 1,
