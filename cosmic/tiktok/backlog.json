@@ -1,5 +1,5 @@
 {
- "note": "Fila de vídeos antigos para TikTok via Buffer. Rotina: postar 2/dia os próximos com posted=null, marcar posted com data e post id.",
+ "note": "Fila de Shorts antigos para TikTok (Buffer, canal scalecosmic id 6aff4d50ece6dfde5f24347d). 2 por dia, 13:30 e 22:30 BRT. A rotina diaria confere no Buffer (list_posts) o que ja foi agendado/enviado comparando o texto da legenda.",
  "items": [
   {
    "n": 1,
@@ -7,7 +7,10 @@
    "url": "https://raw.githubusercontent.com/heliovc/github.com-new/94e7131b543b74b505d50fea9793bdb50de6a2fe/cosmic/ep05/vertical.mp4",
    "dur": 80.5,
    "caption": "Earth Would Be INSIDE This Star 🌌\n\nFull videos on YouTube: Cosmic Scale\n#space #universe #astronomy #science #whatif",
-   "posted": null
+   "posted": {
+    "buffer_id": "6aff4d931faad6241d6f78b5",
+    "due": "2026-11-19 17:00"
+   }
   },
   {
    "n": 2,
@@ -15,7 +18,10 @@
    "url": "https://raw.githubusercontent.com/heliovc/github.com-new/56bfa25d2962a9510c6935eaf003bc0af82bec39/cosmic/ep04/vertical.mp4",
    "dur": 75.2,
    "caption": "A Small Black Hole Kills You. A Giant One Doesn't. 🌌\n\nFull videos on YouTube: Cosmic Scale\n#space #universe #astronomy #science #whatif",
-   "posted": null
+   "posted": {
+    "buffer_id": "6aff4dab7b9591279a9f68d2",
+    "due": "2026-11-19 22:30"
+   }
   },
   {
    "n": 3,
@@ -23,7 +29,10 @@
    "url": "https://raw.githubusercontent.com/heliovc/github.com-new/b9057865a3cf992f02d4f881de964478c8ee1a4a/cosmic/ep03/vertical.mp4",
    "dur": 69.4,
    "caption": "The Universe Is 13.8 Billion Years Old. So Why Is the Edge 46 Billion Light-Years Away? 🌌\n\nFull videos on YouTube: Cosmic Scale\n#space #universe #astronomy #science #whatif",
-   "posted": null
+   "posted": {
+    "buffer_id": "6aff4dac3453a3eac505afd7",
+    "due": "2026-11-20 13:30"
+   }
   },
   {
    "n": 4,
@@ -31,7 +40,10 @@
    "url": "https://raw.githubusercontent.com/heliovc/github.com-new/ecd3c5229f3de71d1ab29fc2087082c5fa550359/cosmic/ep07/vertical.mp4",
    "dur": 59.1,
    "caption": "A Teaspoon of This Star Weighs More Than Every Human on Earth 🌌\n\nFull videos on YouTube: Cosmic Scale\n#space #universe #astronomy #science #whatif",
-   "posted": null
+   "posted": {
+    "buffer_id": "6aff4dad567ee294f72566f4",
+    "due": "2026-11-20 22:30"
+   }
   },
   {
    "n": 5,
@@ -39,7 +51,10 @@
    "url": "https://raw.githubusercontent.com/heliovc/github.com-new/fafb7334bc5c18179e574f4f20d4e28b45c9c594/cosmic/2026-11-19/scale.mp4",
    "dur": null,
    "caption": "If Earth Were a Basketball, the Space Station Would Fly 7 mm Above It 🌌\n\nFull videos on YouTube: Cosmic Scale\n#space #scale #universe #astronomy #science",
-   "posted": null
+   "posted": {
+    "buffer_id": "6aff4daeb73c7ba056fa0713",
+    "due": "2026-11-21 13:30"
+   }
   },
   {
    "n": 6,
@@ -47,7 +62,10 @@
    "url": "https://raw.githubusercontent.com/heliovc/github.com-new/fafb7334bc5c18179e574f4f20d4e28b45c9c594/cosmic/2026-11-19/ranking.mp4",
    "dur": null,
    "caption": "Top 5 Biggest Asteroids (#1 Is Also a Dwarf Planet) 🌌\n\nFull videos on YouTube: Cosmic Scale\n#space #astronomy #top5 #universe #science",
-   "posted": null
+   "posted": {
+    "buffer_id": "6aff4dae567ee294f7256726",
+    "due": "2026-11-21 22:30"
+   }
   },
   {
    "n": 7,
@@ -55,7 +73,10 @@
    "url": "https://raw.githubusercontent.com/heliovc/github.com-new/3cab46787da7e7abe3a277852a7b58167dbbf714/cosmic/ep01/vertical.mp4",
    "dur": 74.6,
    "caption": "For 1 Second, the Sun Disappears. What Happens to Earth? 🌌\n\nFull videos on YouTube: Cosmic Scale\n#space #universe #astronomy #science #whatif",
-   "posted": null
+   "posted": {
+    "buffer_id": "6aff4db0b73c7ba056fa0878",
+    "due": "2026-11-22 13:30"
+   }
   },
   {
    "n": 8,
@@ -63,7 +84,10 @@
    "url": "https://raw.githubusercontent.com/heliovc/github.com-new/fafb7334bc5c18179e574f4f20d4e28b45c9c594/cosmic/2026-11-19/scale2.mp4",
    "dur": null,
    "caption": "Squeeze Earth Into a Marble and It Becomes a Black Hole 🌌\n\nFull videos on YouTube: Cosmic Scale\n#space #scale #universe #astronomy #science",
-   "posted": null
+   "posted": {
+    "buffer_id": "6aff4db0b73c7ba056fa08ca",
+    "due": "2026-11-22 22:30"
+   }
   },
   {
    "n": 9,
