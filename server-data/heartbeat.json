@@ -1,10 +1,6 @@
 {
- "last_run": "2026-11-19T09:17:38.644724-03:00",
- "pending": 2,
+ "last_run": "2026-11-19T09:30:52.609964-03:00",
+ "pending": 0,
  "post_tasks": 0,
- "errors": [],
- "published_now": [
-  "lab-ep15-long: https://youtu.be/CyEH1JnS4sc",
-  "lab-ep15-short: https://youtu.be/5cLANvNs03U"
- ]
+ "errors": []
 }
