@@ -1794,5 +1794,23 @@
   "publish_at": "2026-11-19T19:15:00-03:00",
   "related_key": "cosmic-ep04-long",
   "pinned_comment": "What should we squeeze into a black hole next? Full video: What Happens If You Fall Into a Black Hole?"
+ },
+ "ptd-rank16-short": {
+  "attempts": 1,
+  "status": "published",
+  "url": "https://youtu.be/5SbYU_NGdqk",
+  "by": "robo",
+  "visibility": "schedule",
+  "when": "2026-11-19T12:15:00-03:00",
+  "at": "2026-11-19T07:44:42.908949-03:00",
+  "error": null,
+  "channel_id": "UCd_BGmJ5gbQ0kECAxmbvQHA",
+  "title": "Os 5 estados onde mais se cai em golpe no Brasil (no nº 1, 1 registro a cada 55 pessoas) #shorts",
+  "kind": "short",
+  "publish_at": "2026-11-19T12:15:00-03:00",
+  "related_key": "ptd-ep11-long",
+  "pinned_comment": "Você ou alguém da sua família já caiu em golpe? Registrou boletim de ocorrência? Vídeo completo: O golpe dos descontos no INSS: como R$ 6,3 bilhões saíram dos aposentados",
+  "related_attempts": 1,
+  "related_done": "2026-11-19T07:46:44.589982-03:00"
  }
 }
