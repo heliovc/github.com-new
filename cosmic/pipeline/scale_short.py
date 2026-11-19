@@ -29,6 +29,14 @@ Visuais (vis.type):
   "jupfill": Júpiter como globo de vidro (raio 430 px) enchido POR VOLUME com os outros 7 planetas em camadas coloridas (altura do
              líquido resolve f = x²(3 − 2x)); vis.mode = hook (os 7 dentro, linha em 67%) | pour (vis.before = já despejados, vis.add =
              caem em escala neste beat e o nível sobe) | room (o terço vazio brilha + contador de Terras até 435) (scale09).
+  "ballearth": a Terra encolhida para uma bola de basquete (23,9 cm; 12.742 km -> 1 mm = 53,3 km); vis.mode = hook (bola + anel da estação
+             espacial a 7,5 mm) | shrink (Terra -> bola, contador km -> cm, costuras aparecem) | edge (lupa na borda: limite do espaço
+             100 km = 1,9 mm x moeda 1,75 mm) | iss (lupa: 400 km = 7,5 mm x lápis 7 mm) | moon (câmera corre 7,2 m até a Lua do tamanho de
+             uma bola de tênis, contador em metros) (scale10).
+  "marble": a Terra espremida numa bolinha de gude = buraco negro (diâmetro de Schwarzschild 17,7 mm); vis.mode = hook (buraco negro sobre
+             régua em cm em tamanho real) | mass (balança Terra x bolinha) | squeeze (Terra encolhe em escala log passando por Lua, cidade,
+             campo, pessoa, bolinha; flash) | sun (Sol espremido = 5,9 km; bonequinho andando numa barra 0–6 km) | star (estrela gigante
+             colapsa) (scale11).
 Reaproveita render.py (sprites, fontes) e ranking.py (fundo, texto, legendas).
 """
 import sys, os, math, json, subprocess, importlib.util, random
@@ -667,6 +675,172 @@ def jupfill_vis(img, v, th, t, dur, bp):
     if mode == "hook":
         text(img, (W / 2, 1460), "all 7 other planets, by volume", 40, (235, 235, 245), w="ExtraBold")
 
+# ---- scale10: Earth shrunk to a basketball (24 cm): edge of space 1.9 mm, ISS 7.5 mm, Moon 7.2 m ----
+BALL_KM10 = 12742.0; BALL_CM10 = 23.9
+def _ball10(img, cx, cy, r, seams=1.0, t=0.0):
+    R.paste_c(img, R.earth_sprite(int(r), glow=None), cx, cy)
+    if seams > 0:
+        lay = Image.new("RGBA", img.size, (0, 0, 0, 0)); d = ImageDraw.Draw(lay); A = int(150 * seams)
+        d.line([(cx - r, cy), (cx + r, cy)], fill=(20, 20, 30, A), width=max(2, int(r * 0.02)))
+        d.line([(cx, cy - r), (cx, cy + r)], fill=(20, 20, 30, A), width=max(2, int(r * 0.02)))
+        for sx_ in (-1, 1):
+            d.arc([cx + sx_ * r * 0.55 - r * 0.9, cy - r * 0.95, cx + sx_ * r * 0.55 + r * 0.9, cy + r * 0.95],
+                  90 if sx_ < 0 else 270, 270 if sx_ < 0 else 90, fill=(20, 20, 30, A), width=max(2, int(r * 0.02)))
+        m = Image.new("L", img.size, 0); ImageDraw.Draw(m).ellipse([cx - r, cy - r, cx + r, cy + r], fill=255)
+        lay.putalpha(Image.fromarray(np.minimum(np.array(lay.getchannel("A")), np.array(m)))); img.alpha_composite(lay)
+        d = ImageDraw.Draw(img); d.ellipse([cx - r, cy - r, cx + r, cy + r], outline=(230, 140, 60), width=max(2, int(r * 0.025)))
+
+def _lens10(img, cx, cy, lr, ball_cx, ball_cy, br, th, alt_mm, ref, t, bp):
+    """magnifier on the ball's edge: px_per_mm chosen so the layer fills ~85% of the lens; ref = (label, mm, colour)"""
+    acc, acc2 = tuple(th["accent"]), tuple(th["accent2"])
+    d = ImageDraw.Draw(img)
+    d.line([(ball_cx + br * 0.71, ball_cy - br * 0.71), (cx - lr * 0.71, cy + lr * 0.71)], fill=(200, 205, 230), width=4)
+    lay = Image.new("RGBA", (2 * lr, 2 * lr), (6, 8, 20, 255)); dl = ImageDraw.Draw(lay)
+    ppm = lr * 1.25 / max(alt_mm, ref[1])
+    gy = lr * 1.55  # ground line inside the lens
+    dl.rectangle([0, gy, 2 * lr, 2 * lr], fill=(60, 110, 200, 255))
+    dl.rectangle([0, gy, 2 * lr, gy + 10], fill=(140, 200, 255, 255))
+    for k in range(18):  # atmosphere glow, fading with height
+        y = gy - k * 0.25 * ppm
+        dl.rectangle([0, y - 0.25 * ppm, 2 * lr, y], fill=(90, 160, 255, int(70 * (1 - k / 18) ** 2)))
+    a = ease(bp * 2)
+    ya = gy - alt_mm * ppm * a
+    dl.line([(0, ya), (2 * lr, ya)], fill=acc + (255,), width=4)
+    # reference object, to scale, standing on the ground
+    rx = lr * (1.2 if ref[0].startswith("pencil") else 1.45); rh = ref[1] * ppm
+    if ref[0].startswith("pencil"):
+        rr = rh / 2; dl.regular_polygon((rx, gy - rr, rr), 6, fill=(250, 200, 60, 255)); dl.ellipse([rx - rr * 0.3, gy - rr * 1.3, rx + rr * 0.3, gy - rr * 0.7], fill=(60, 50, 40, 255))
+    else:
+        dl.rounded_rectangle([rx - 70, gy - rh, rx + 70, gy], 6, fill=(200, 200, 210, 255), outline=(255, 255, 255, 255), width=2)
+    m = Image.new("L", (2 * lr, 2 * lr), 0); ImageDraw.Draw(m).ellipse([0, 0, 2 * lr - 1, 2 * lr - 1], fill=255); lay.putalpha(m)
+    img.alpha_composite(lay, (int(cx - lr), int(cy - lr)))
+    d = ImageDraw.Draw(img); d.ellipse([cx - lr, cy - lr, cx + lr, cy + lr], outline=(230, 235, 255), width=8)
+    text(img, (cx - lr * 0.35, cy - lr + (gy - alt_mm * ppm * a) - 34), f"{alt_mm * a:.1f} mm", 44, acc, stroke=4)
+    text(img, (cx + lr * 0.45, cy + lr + 44), ref[0], 34, (240, 230, 200), w="ExtraBold", stroke=3)
+
+def ballearth_vis(img, v, th, t, dur, bp):
+    """Earth shrunk to a basketball; vis.mode = hook (ball + ISS ring 7.5 mm up, ISS orbiting) | shrink (Earth -> ball, size counter
+    12,742 km -> 24 cm, seams fade in) | edge (lens on the rim: edge of space 1.9 mm vs a coin 1.75 mm) | iss (lens: ISS 7.5 mm vs a
+    pencil 7 mm) | moon (camera pans 7.2 m from the ball to a tennis-ball Moon, metre counter)"""
+    acc, acc2 = tuple(th["accent"]), tuple(th["accent2"]); mode = v.get("mode", "hook"); k = BALL_CM10 * 10 / BALL_KM10  # mm per km
+    if mode == "hook":
+        cx, cy, r = W / 2, 930, 330
+        _ball10(img, cx, cy, r, 1.0, t)
+        rr = r * (1 + 400 / 6371.0); d = ImageDraw.Draw(img)
+        d.ellipse([cx - rr, cy - rr, cx + rr, cy + rr], outline=acc2, width=3)
+        ang = -1.0 + t * 0.9; ix, iy = cx + rr * math.cos(ang), cy + rr * math.sin(ang)
+        d.rectangle([ix - 14, iy - 3, ix + 14, iy + 3], fill=(230, 230, 240)); d.rectangle([ix - 3, iy - 8, ix + 3, iy + 8], fill=(200, 170, 90))
+        text(img, (cx + r * 0.62, cy - r - 70), "space station", 40, acc2, w="ExtraBold", stroke=3)
+        text(img, (W / 2, 1420), "Earth = one basketball", 46, (255, 255, 255), w="ExtraBold", stroke=3)
+    elif mode == "shrink":
+        cx, cy = W / 2, 930; p = bp
+        r = lerp(470, 330, p); _ball10(img, cx, cy, r, max(0.0, (p - 0.5) * 2), t)
+        km = 10 ** lerp(math.log10(BALL_KM10 * 1e5), math.log10(BALL_CM10), p)  # in cm
+        s = f"{km / 1e5:,.0f} km" if km >= 1e5 else (f"{km / 100:,.0f} m" if km >= 100 else f"{km:,.0f} cm")
+        d = ImageDraw.Draw(img); d.line([(cx - r, cy + r + 40), (cx + r, cy + r + 40)], fill=acc2, width=5)
+        for x in (cx - r, cx + r): d.line([(x, cy + r + 25), (x, cy + r + 55)], fill=acc2, width=5)
+        text(img, (cx, cy + r + 100), s, 70, acc2, stroke=4)
+    elif mode in ("edge", "iss"):
+        bcx, bcy, br = 330, 1050, 230
+        _ball10(img, bcx, bcy, br, 1.0, t)
+        if mode == "edge": _lens10(img, 700, 720, 300, bcx, bcy, br, th, 100 * k, ("coin: 1.75 mm thick", 1.75), t, bp)
+        else: _lens10(img, 700, 720, 300, bcx, bcy, br, th, 400 * k, ("pencil: 7 mm wide", 7.0), t, bp)
+        text(img, (W / 2, 1420), "edge of space (100 km)" if mode == "edge" else "space station (400 km)", 44, (255, 255, 255), w="ExtraBold", stroke=3)
+    elif mode == "moon":
+        ppcm = 6.0  # px per cm
+        dist_cm = 384400 * k / 10; off = easeio(bp) * (180 + dist_cm * ppcm - (W - 260))
+        y = 900; bx = 180 - off; mx = bx + dist_cm * ppcm
+        d = ImageDraw.Draw(img)
+        d.line([(max(0, bx), y + 120), (min(W, mx), y + 120)], fill=acc2, width=4)
+        for m_ in range(0, 8):
+            x = bx + m_ * 100 * ppcm
+            if -50 < x < W + 50:
+                d.line([(x, y + 100), (x, y + 140)], fill=acc2, width=4); d.text((x, y + 170), f"{m_} m", font=F(34, "Bold"), fill=acc2, anchor="mm")
+        _ball10(img, bx, y, BALL_CM10 / 2 * ppcm, 1.0, t)
+        R.paste_c(img, R.planet_sprite(max(4, int(3474.8 * k / 20 * ppcm)), (190, 190, 195)), mx, y)
+        if mx < W + 40: text(img, (mx, y - 80), "the Moon: a tennis ball", 36, (230, 230, 240), w="ExtraBold", stroke=3, anchor="mm")
+        text(img, (W / 2, 640), f"{easeio(bp) * dist_cm / 100:.1f} m", 110, acc, stroke=4)
+        text(img, (W / 2, 1420), "Earth to Moon, same scale", 44, (255, 255, 255), w="ExtraBold", stroke=3)
+
+# ---- scale11: Earth squeezed into a marble = a black hole (Schwarzschild diameter 17.7 mm) ----
+def _marble11(img, cx, cy, r, t, a=1.0):
+    """black hole the size of a marble: shadow + photon ring + glow (bh_static scaled so the shadow diameter = 2r)"""
+    spr = R.bh_static(int(r / 1.42)); R.paste_c(img, spr, cx, cy, a)
+    lay = Image.new("RGBA", img.size, (0, 0, 0, 0)); d = ImageDraw.Draw(lay)
+    d.ellipse([cx - r * 0.55, cy - r * 0.75, cx - r * 0.15, cy - r * 0.45], fill=(255, 255, 255, int(40 * a)))
+    img.alpha_composite(lay)
+
+def _ruler11(img, x0, y, ppcm, ncm, th, a=1.0):
+    d = ImageDraw.Draw(img); lay = Image.new("RGBA", img.size, (0, 0, 0, 0)); dl = ImageDraw.Draw(lay)
+    dl.rounded_rectangle([x0 - 20, y, x0 + ncm * ppcm + 20, y + 110], 10, fill=(235, 215, 160, int(240 * a))); img.alpha_composite(lay)
+    d = ImageDraw.Draw(img)
+    for mm in range(0, ncm * 10 + 1):
+        x = x0 + mm * ppcm / 10; h = 50 if mm % 10 == 0 else (32 if mm % 5 == 0 else 18)
+        d.line([(x, y), (x, y + h)], fill=(40, 30, 20), width=3 if mm % 10 == 0 else 2)
+        if mm % 10 == 0: d.text((x, y + 80), f"{mm // 10}", font=F(30, "Black"), fill=(40, 30, 20), anchor="mm")
+    d.text((x0 + ncm * ppcm - 10, y + 80), "cm", font=F(26, "Bold"), fill=(40, 30, 20), anchor="rm")
+
+SQ11 = [(12742e3, "Earth"), (3474.8e3, "the Moon's size"), (20e3, "a city"), (100.0, "a football field"), (1.7, "a person"), (0.0177, "a marble")]
+def marble_vis(img, v, th, t, dur, bp):
+    """Earth squeezed into a marble-sized black hole; vis.mode = hook (marble black hole over a real-size cm ruler: 1.77 cm) | mass (balance:
+    Earth vs the marble, level) | squeeze (Earth shrinks on a log scale past Moon / city / field / person / marble, counter in km -> cm;
+    ends in a flash) | sun (the Sun squeezed: 5.9 km across, walking figure on a 0–6 km bar, ~1 h 10 min) | star (giant star collapses)"""
+    acc, acc2 = tuple(th["accent"]), tuple(th["accent2"]); mode = v.get("mode", "hook")
+    if mode == "hook":
+        ppcm = 150; cx, cy = W / 2, 860; r = 1.774 / 2 * ppcm
+        _marble11(img, cx, cy, r, t)
+        x0 = cx - r; _ruler11(img, cx - 1.5 * ppcm - r * 0 , 1100, ppcm, 3, th)
+        d = ImageDraw.Draw(img)
+        for x in (cx - r, cx + r): d.line([(x, cy + r + 10), (x, 1095)], fill=acc2, width=3)
+        text(img, (W / 2, 1300), "all of Earth's mass", 48, (255, 255, 255), w="ExtraBold", stroke=3)
+    elif mode == "mass":
+        cx, py = W / 2, 760; tilt = 0.06 * math.sin(t * 2.2) * (1 - min(1, bp * 1.3))
+        d = ImageDraw.Draw(img); L = 380
+        lx, ly = cx - L * math.cos(tilt), py - L * math.sin(tilt); rx, ry = cx + L * math.cos(tilt), py + L * math.sin(tilt)
+        d.polygon([(cx, py), (cx - 70, py + 520), (cx + 70, py + 520)], fill=(70, 75, 110)); d.line([(lx, ly), (rx, ry)], fill=(210, 215, 240), width=12)
+        for x, y in ((lx, ly), (rx, ry)):
+            d.line([(x, y), (x - 110, y + 180)], fill=(170, 175, 200), width=3); d.line([(x, y), (x + 110, y + 180)], fill=(170, 175, 200), width=3)
+            d.arc([x - 130, y + 140, x + 130, y + 220], 0, 180, fill=(210, 215, 240), width=8)
+        R.paste_c(img, R.earth_sprite(110, glow=None), lx, ly + 75)
+        _marble11(img, rx, ry + 170, 14, t)
+        text(img, (lx, ly + 260), "Earth", 44, (140, 200, 255), stroke=3); text(img, (rx, ry + 260), "the marble", 44, acc, stroke=3)
+        text(img, (W / 2, 1360), "5.97 × 10²⁴ kg each", 56, acc2, stroke=4)
+    elif mode == "squeeze":
+        cx, cy = W / 2, 900; p = min(1.0, bp * 1.08)
+        lg = lerp(math.log10(SQ11[0][0]), math.log10(SQ11[-1][0]), p); size = 10 ** lg
+        r = lerp(400, 30, p)
+        if p < 0.995: R.paste_c(img, R.earth_sprite(max(4, int(r)), glow=None), cx, cy)
+        else: _marble11(img, cx, cy, 30, t)
+        if p > 0.95:
+            fl = 1 - abs(p - 0.975) / 0.025; R.paste_c(img, R.radial(500, [(0, (255, 255, 255, int(255 * max(0, fl)))), (1, (255, 255, 255, 0))]), cx, cy)
+        lab = [s for s in SQ11 if s[0] >= size * 0.999][-1][1]
+        s = f"{size / 1e3:,.0f} km" if size >= 1e3 else (f"{size:,.0f} m" if size >= 1 else f"{size * 100:.1f} cm")
+        text(img, (W / 2, 1360), s, 96, acc, stroke=4)
+        text(img, (W / 2, 1450), "now: " + lab, 42, (255, 255, 255), w="ExtraBold", stroke=3)
+        text(img, (W / 2, 420), "squeezed 720 million times", 44, acc2, w="ExtraBold", stroke=3, a=ease((p - 0.6) * 4))
+    elif mode == "sun":
+        y = 840; x0, x1 = 120, 960; kpx = (x1 - x0) / 6.0
+        d = ImageDraw.Draw(img)
+        rr = 5.907 / 2 * kpx; cx = x0 + rr
+        lay = Image.new("RGBA", img.size, (0, 0, 0, 0)); ImageDraw.Draw(lay).ellipse([cx - rr, y - rr, cx + rr, y + rr], fill=(2, 2, 6, 255), outline=(255, 190, 110, 255), width=6)
+        img.alpha_composite(R.radial(int(rr * 3), [(0, (255, 160, 60, 0)), (0.6, (255, 160, 60, 0)), (0.68, (255, 170, 80, 160)), (1, (255, 120, 40, 0))]), (int(cx - rr * 1.5), int(y - rr * 1.5)))
+        img.alpha_composite(lay); d = ImageDraw.Draw(img)
+        by = y + rr + 70; d.line([(x0, by), (x1, by)], fill=acc2, width=5)
+        for km in range(7):
+            x = x0 + km * kpx; d.line([(x, by - 15), (x, by + 15)], fill=acc2, width=4); d.text((x, by + 45), f"{km} km", font=F(28, "Bold"), fill=acc2, anchor="mm")
+        p = easeio(bp); wx = x0 + p * 5.907 * kpx; ph = t * 8
+        d.ellipse([wx - 12, by - 120, wx + 12, by - 96], fill=(255, 255, 255)); d.line([(wx, by - 96), (wx, by - 50)], fill=(255, 255, 255), width=6)
+        for sgn in (-1, 1): d.line([(wx, by - 50), (wx + sgn * 16 * math.sin(ph), by - 8)], fill=(255, 255, 255), width=6)
+        mins = p * 5.907 / 5 * 60
+        text(img, (W / 2, 1450), f"walking across: {int(mins) // 60} h {int(mins) % 60:02d} min", 50, (255, 255, 255), w="ExtraBold", stroke=3)
+    elif mode == "star":
+        cx, cy = W / 2, 900; p = bp
+        rs = 380 * (1 - ease((p - 0.35) / 0.4)) + 10
+        if p < 0.78: R.paste_c(img, R.radial(int(rs * 2.6), [(0, (230, 240, 255, 255)), (0.33, (170, 200, 255, 255)), (0.4, (120, 160, 255, 120)), (1, (80, 120, 255, 0))]), cx, cy)
+        else: _marble11(img, cx, cy, 40, t)
+        if 0.72 < p < 0.86: R.paste_c(img, R.radial(700, [(0, (255, 255, 255, int(255 * (1 - abs(p - 0.79) / 0.07)))), (1, (255, 255, 255, 0))]), cx, cy)
+        text(img, (W / 2, 1420), "only giant stars get crushed this far", 42, (255, 255, 255), w="ExtraBold", stroke=3)
+
 def chrome(img, th, gt, total):
     d = ImageDraw.Draw(img)
     d.rectangle([0, 0, int(W * gt / total), 10], fill=tuple(th["accent"]))
@@ -732,6 +906,11 @@ def frame(m, durs, gt, chunks, arr):
         text(img, (W / 2, 280), hl["top"], 52, (255, 255, 255), stroke=3)
     elif v["type"] == "jupfill":
         jupfill_vis(img, v, th, t, d, easeio((t - 0.2) / max(0.8, d * 0.8)))
+        hl = v.get("head") or m.BIG
+        text(img, (W / 2, 170), hl["num"], 124 if len(hl["num"]) < 12 else 100, tuple(th["accent"]), stroke=4)
+        text(img, (W / 2, 280), hl["top"], 52, (255, 255, 255), stroke=3)
+    elif v["type"] in ("ballearth", "marble"):
+        (ballearth_vis if v["type"] == "ballearth" else marble_vis)(img, v, th, t, d, easeio((t - 0.2) / max(0.8, d * 0.8)))
         hl = v.get("head") or m.BIG
         text(img, (W / 2, 170), hl["num"], 124 if len(hl["num"]) < 12 else 100, tuple(th["accent"]), stroke=4)
         text(img, (W / 2, 280), hl["top"], 52, (255, 255, 255), stroke=3)

@@ -1,0 +1,77 @@
+{
+ "version": 1,
+ "channel_id": "UCsYYjUbmq4n3lAKgw2F2IJw",
+ "created_at": "2026-11-19T07:00:00-03:00",
+ "items": [
+  {
+   "key": "cosmic-rank16-short",
+   "kind": "short",
+   "video": "ranking.mp4",
+   "title": "Top 5 Biggest Asteroids (#1 Is Also a Dwarf Planet) #shorts",
+   "description": "The five biggest asteroids, counted down from #5 to #1, each one drawn to the same scale.\nFull video: What If an Asteroid Hit the Ocean? A 10 km Rock Would Hit the Seafloor\n\nSources\n• NASA / JPL (Dawn mission): Ceres is 939.4 km across, the largest object in the asteroid belt, recognized as a dwarf planet, holds about 25% of the belt's mass; its bright spots in Occator crater are salt (sodium carbonate) deposits\n• NASA / JPL (Dawn mission): Vesta has a mean diameter of 525.4 km; the central peak of its Rheasilvia basin is about 22 km high\n• Marsset et al. 2020 (Nature Astronomy): Pallas is about 511 km across; its orbit is inclined about 35° to the plane of the planets; no spacecraft has visited it\n• Vernazza et al. 2019 (ESO VLT/SPHERE, Nature Astronomy): Hygiea is about 434 km across and nearly spherical — a candidate for the smallest dwarf planet\n• Hanuš et al. 2020 (ESO VLT): Interamnia about 332 km across (older estimates 306–326 km); named after Teramo, Italy (Latin: Interamnia)\n• Own calculations: time to drive around each one at 100 km/h = π × diameter / 100 (Interamnia ≈ 10 h, Ceres ≈ 30 h)\n\nVisuals are original. Narration uses a synthetic voice.\n#shorts #space #asteroids #ceres",
+   "tags": [
+    "biggest asteroids",
+    "ceres",
+    "vesta",
+    "pallas",
+    "hygiea",
+    "asteroid belt",
+    "top 5",
+    "space",
+    "shorts"
+   ],
+   "publish_at": "2026-11-19T13:00:00-03:00",
+   "related_key": "cosmic-ep14-long",
+   "pinned_comment": "Which asteroid should we land on first? Full video: What If an Asteroid Hit the Ocean? A 10 km Rock Would Hit the Seafloor",
+   "if_late": "public_now",
+   "made_for_kids": false,
+   "altered_content": true
+  },
+  {
+   "key": "cosmic-scale10-short",
+   "kind": "short",
+   "video": "scale.mp4",
+   "title": "If Earth Were a Basketball, the Space Station Would Fly 7 mm Above It #shorts",
+   "description": "Shrink Earth to a basketball: the edge of space is thinner than a coin, the space station flies 7.5 mm up, and the Moon is a tennis ball 7 m away.\nFull video: What If the Moon Crashed Into Earth? You'd Have 4 Days\n\nSources\n• NASA Earth Fact Sheet: Earth's mean diameter 12,742 km; Moon mean distance 384,400 km; Moon diameter 3,474.8 km\n• NASA: the International Space Station orbits at about 400 km (roughly 250 miles) altitude\n• Kármán line: the commonly used boundary of space at 100 km altitude (FAI)\n• Size 7 basketball: about 75 cm circumference, 23.9 cm diameter\n• Own calculations at 23.9 cm per 12,742 km: 100 km = 1.9 mm, 400 km = 7.5 mm, Moon distance = 7.2 m, Moon diameter = 6.5 cm (tennis ball ≈ 6.7 cm)\n\nVisuals are original. Narration uses a synthetic voice.\n#shorts #space #earth #scale",
+   "tags": [
+    "earth to scale",
+    "basketball earth",
+    "space station",
+    "edge of space",
+    "moon distance",
+    "scale comparison",
+    "space",
+    "shorts"
+   ],
+   "publish_at": "2026-11-19T17:00:00-03:00",
+   "related_key": "cosmic-ep08-long",
+   "pinned_comment": "Did you think space was that close? Full video: What If the Moon Crashed Into Earth? You'd Have 4 Days",
+   "if_late": "public_now",
+   "made_for_kids": false,
+   "altered_content": true
+  },
+  {
+   "key": "cosmic-scale11-short",
+   "kind": "short",
+   "video": "scale2.mp4",
+   "title": "Squeeze Earth Into a Marble and It Becomes a Black Hole #shorts",
+   "description": "All of Earth's mass, squeezed to 1.77 cm: that is Earth's event horizon. The Sun would need to be just 5.9 km wide.\nFull video: What Happens If You Fall Into a Black Hole?\n\nSources\n• NASA Earth Fact Sheet: Earth's mass 5.972 × 10^24 kg, mean diameter 12,742 km; NASA Sun Fact Sheet: Sun's mass 1.989 × 10^30 kg\n• Schwarzschild radius r = 2GM/c² (G = 6.674 × 10^-11, c = 299,792 km/s)\n• Own calculations: Earth r = 8.87 mm (17.7 mm across, about a marble); Sun r = 2.95 km (5.9 km across, about 70 minutes on foot at 5 km/h); squeeze factor 12,742 km / 17.7 mm ≈ 720 million\n• NASA: stellar-mass black holes form when massive stars collapse at the end of their lives\n\nVisuals are original. Narration uses a synthetic voice.\n#shorts #space #blackhole #physics",
+   "tags": [
+    "black hole",
+    "earth black hole",
+    "schwarzschild radius",
+    "marble",
+    "event horizon",
+    "scale comparison",
+    "space",
+    "shorts"
+   ],
+   "publish_at": "2026-11-19T19:00:00-03:00",
+   "related_key": "cosmic-ep04-long",
+   "pinned_comment": "What should we squeeze into a black hole next? Full video: What Happens If You Fall Into a Black Hole?",
+   "if_late": "public_now",
+   "made_for_kids": false,
+   "altered_content": true
+  }
+ ]
+}

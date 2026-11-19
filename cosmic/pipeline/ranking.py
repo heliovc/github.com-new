@@ -34,6 +34,9 @@ vis.type == "orbityear" / THEME.hook/outro == "orbityear": órbita do mundo EM E
 vis.type == "probes" / THEME.hook/outro == "probes": sonda desenhada por código (vis.kind = voyager | pioneer | horizons) + "a luz leva N horas"
   + selo STILL TALKING / SILENT SINCE + trilha Sol -> 180 UA em escala de raiz quadrada (Netuno, fim da bolha do Sol) com a sonda saindo
   do Sol até vis.au; gancho = pulso de luz correndo na trilha até um "?"; outro = as 5 na mesma trilha (rank15).
+vis.type == "rocks" / THEME.hook/outro == "rocks": asteroide desenhado por código (contorno irregular por harmônicos vis.lump, crateras,
+  vis.spot = manchas claras de Ceres) EM ESCALA (0,72 px/km) girando devagar + barra de 100 km + "dar a volta de carro a 100 km/h: N h";
+  gancho = silhueta escura de Ceres com "?"; outro = os 5 lado a lado na mesma escala (rank16).
 Tudo desenhado por código; narração Kokoro (VOICE, padrão af_heart); legenda grande queimada.
 """
 import sys, os, re, math, json, subprocess, importlib.util, random
@@ -915,6 +918,45 @@ def probes_vis(img, it, th, t, dur):
     pr_track(img, th, [o for o in ALL_ITEMS if o["rank"] > it["rank"]] + [it], cur=it, prog=prog, y=1000)
     if v.get("note"): text(img, (W / 2, 1300), v["note"], 36, acc2, w="ExtraBold", a=ease((t - 1.4) / 0.5))
 
+# ---- rank16: biggest asteroids ----
+RK_K = 0.72  # px per km
+_rk = {}
+def rk_rock(km, lump, col, seed, spot=False):
+    """lumpy asteroid sprite EM ESCALA (RK_K px/km): noisy outline + lit shading + craters; spot = Ceres' bright Occator spots"""
+    key = (km, lump, col, seed, spot)
+    if key in _rk: return _rk[key]
+    r = km / 2 * RK_K; S = int(r * 2.6) + 8; c = S / 2
+    rng = random.Random(seed); harm = [(rng.uniform(0, 6.283), rng.uniform(0.4, 1.0) / (k ** 1.2)) for k in range(2, 7)]
+    yy, xx = np.mgrid[0:S, 0:S].astype(np.float32); dx, dy = xx - c, yy - c; ang = np.arctan2(dy, dx); d = np.sqrt(dx * dx + dy * dy)
+    rad = np.ones_like(ang)
+    for k, (ph, am) in enumerate(harm, start=2): rad += lump * am * np.cos(k * ang + ph)
+    rr = r * rad; inside = d <= rr
+    nz = np.clip(-(dx / r) * 0.6 - (dy / r) * 0.5 + 0.55, 0.15, 1.2)
+    base = np.array(col, np.float32)
+    out = np.zeros((S, S, 4), np.float32); out[..., :3] = base * nz[..., None]; out[..., 3] = inside * 255
+    im = Image.fromarray(np.clip(out, 0, 255).astype(np.uint8), "RGBA"); dd = ImageDraw.Draw(im)
+    for i in range(int(14 + r / 12)):
+        a_ = rng.uniform(0, 6.283); q = rng.uniform(0, 0.8) * r; cr = rng.uniform(0.03, 0.14) * r
+        x, y = c + q * math.cos(a_), c + q * math.sin(a_)
+        dd.ellipse([x - cr, y - cr, x + cr, y + cr], fill=tuple(int(v * 0.6) for v in col) + (150,), outline=tuple(min(255, int(v * 1.25)) for v in col) + (120,), width=max(1, int(cr * 0.15)))
+    if spot:
+        dd.ellipse([c - r * 0.05, c - r * 0.25, c + r * 0.05, c - r * 0.15], fill=(255, 255, 250, 255)); dd.ellipse([c + r * 0.07, c - r * 0.2, c + r * 0.11, c - r * 0.16], fill=(240, 240, 235, 255))
+    al = np.array(im.getchannel("A")); al[~inside] = 0; im.putalpha(Image.fromarray(al))
+    _rk[key] = im; return im
+
+def rocks_vis(img, it, th, t, dur):
+    v = it["vis"]; acc2 = tuple(th["accent2"])
+    g = ease((t - 0.2) / 0.8)
+    spr = rk_rock(v["km"], v["lump"], tuple(v["col"]), v.get("seed", 1), v.get("spot", False))
+    rot = spr.rotate(t * 6, resample=Image.BICUBIC)
+    R.paste_c(img, rot, W / 2, 740, g)
+    d = ImageDraw.Draw(img); r = v["km"] / 2 * RK_K
+    # 100 km scale bar
+    d.line([(W - 120 - 100 * RK_K, 470), (W - 120, 470)], fill=(230, 230, 240), width=6); d.text((W - 120 - 50 * RK_K, 440), "100 km", font=F(28, "Bold"), fill=(230, 230, 240), anchor="mm")
+    hrs = math.pi * v["km"] / 100 * ease((t - 0.6) / max(1.0, dur * 0.5))
+    text(img, (W / 2, 1140), f"driving around it at 100 km/h: {hrs:.0f} h", 40, (255, 255, 255), w="ExtraBold", a=ease((t - 0.5) / 0.4), stroke=3)
+    if v.get("note"): text(img, (W / 2, 1290), v["note"], 38, acc2, w="ExtraBold", a=ease((t - 1.2) / 0.5), stroke=3)
+
 
 def caption_chunks(say, t0, dur):
     words = say.split(); groups, g = [], []
@@ -938,6 +980,15 @@ def draw_caption(img, chunks, gt, y=1585):
 
 def seg_hook(img, sc, th, t, dur):
     col = tuple(th["star_col"]); acc = tuple(th["accent"])
+    if th.get("hook") == "rocks":
+        # frame 0: the big number + Ceres already on screen to scale (as a dark silhouette with a "?"), a 100 km bar for scale
+        o = [x for x in ALL_ITEMS if x["rank"] == 1][0]; v = o["vis"]
+        spr = rk_rock(v["km"], v["lump"], (60, 55, 70), v.get("seed", 1)); R.paste_c(img, spr.rotate(t * 6, resample=Image.BICUBIC), W / 2, 820)
+        d = ImageDraw.Draw(img); d.text((W / 2, 820), "?", font=F(240, "Black"), fill=tuple(th["accent"]), anchor="mm")
+        text(img, (W / 2, 220), sc.get("big", ""), 140, tuple(th["accent"]), stroke=3)
+        text(img, (W / 2, 335), sc["top"].upper(), 52, (255, 255, 255))
+        text(img, (W / 2, 1300), sc["sub"], 46, tuple(th["accent2"]), w="ExtraBold")
+        return
     if th.get("hook") == "probes":
         # frame 0: the big number + the Sun-to-#1 track drawn, a light pulse running along it toward a "?"
         y = 1000; d = ImageDraw.Draw(img)
@@ -1157,6 +1208,8 @@ def seg_item(img, it, th, t, dur):
         orbityear_vis(img, it, th, t, dur)
     if v["type"] == "probes":
         probes_vis(img, it, th, t, dur)
+    if v["type"] == "rocks":
+        rocks_vis(img, it, th, t, dur)
     # number
     p = easeio((t - 0.5) / 1.6)
     num = it["num"]
@@ -1169,6 +1222,24 @@ def seg_item(img, it, th, t, dur):
 
 def seg_outro(img, sc, th, t, dur):
     a = ease(t / 0.5)
+    if th.get("outro") == "rocks":
+        # all five side by side at one scale (0.45 px/km), biggest first, plus the Moon's edge for scale
+        x = 70; k3 = 0.45; d = ImageDraw.Draw(img)
+        for o in sorted(ALL_ITEMS, key=lambda o: o["rank"]):
+            v = o["vis"]; w = v["km"] * k3; spr = rk_rock(v["km"], v["lump"], tuple(v["col"]), v.get("seed", 1), v.get("spot", False))
+            sm = spr.resize((max(4, int(spr.width * k3 / RK_K)), max(4, int(spr.height * k3 / RK_K))))
+            cx_ = x + w / 2 if o["rank"] == 1 else None
+            if o["rank"] == 1: R.paste_c(img, sm, 70 + w / 2, 600)
+            else:
+                col_i = o["rank"] - 2; xx = 70 + 939 * k3 + 30 + (col_i % 2) * 250; yy = 470 + (col_i // 2) * 270
+                R.paste_c(img, sm, xx + v["km"] * k3 / 2, yy + 20)
+                d = ImageDraw.Draw(img); d.text((xx + v["km"] * k3 / 2, yy + 20 + v["km"] * k3 / 2 + 26), f"#{o['rank']}", font=F(30, "Black"), fill=tuple(v["col"]), anchor="mm")
+        d = ImageDraw.Draw(img); d.text((70 + 939 * k3 / 2, 600 + 939 * k3 / 2 + 30), "#1", font=F(34, "Black"), fill=tuple(th["accent"]), anchor="mm")
+        if th.get("outro_note"): text(img, (W / 2, 1010), th["outro_note"], 42, tuple(th["accent2"]), w="ExtraBold", a=a)
+        text(img, (W / 2, 1180), "WHICH ROCK", 96, (255, 255, 255), a=ease((t - 0.3) / 0.5))
+        text(img, (W / 2, 1275), "SHOULD WE VISIT NEXT?", 58, tuple(th["accent"]), a=ease((t - 0.5) / 0.5))
+        text(img, (W / 2, 1440), "SUBSCRIBE to Cosmic Scale", 56, tuple(th["accent"]), a=ease((t - 0.8) / 0.5))
+        return
     if th.get("outro") == "probes":
         pr_track(img, th, ALL_ITEMS, cur=None, y=760)
         for o in ALL_ITEMS:

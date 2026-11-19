@@ -73,6 +73,11 @@ EP16 added scenes: zdial (chapter card: half-circle redshift dial on log(1+z) 0 
   so keep EP16's horizon beat short and visual-new (lightcone event mode). EP16 promised EP17: the biggest star in place of our Sun.
   ranking.py: vis "probes" (rank15). scale_short.py: vis "jupfill" (scale09, planets poured into Jupiter by volume).
 EP06 added scenes: spinglobe (globe + speed by latitude; top=True rings; slow=True), pendulum, fling, bulge, yearday, dayclock (teal / amber palette)
+2026-11-19 (Thursday, Shorts-only day after EP16): ranking.py vis "rocks" (rank16, lumpy asteroids to scale + drive-around counter);
+  scale_short.py vis "ballearth" (scale10, Earth as a basketball + magnifier with to-scale coin/pencil + 7 m pan to the Moon) and "marble"
+  (scale11, Earth squeezed to its 17.7 mm Schwarzschild size; ruler, balance, log squeeze, Sun = 5.9 km walk).
+  Learned: python3 -I may load a broken Debian PIL (/usr/lib/python3/dist-packages) -> python3 -m pip install --force-reinstall pillow.
+  Hook check: the spoken hook must say exactly what the big number measures (ISS 7.5 mm, not "space").
 """
 import sys, os, re, math, subprocess, importlib.util, json, random, hashlib
 import numpy as np
