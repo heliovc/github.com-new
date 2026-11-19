@@ -7,7 +7,7 @@ ou "gauge" (termômetro horizontal com escala, criado no rank #3 — bom para ta
 ou "bubbles" (bolhas com área proporcional ao valor, criado no rank #4 — bom para tamanhos/bases de clientes)
 ou "pits" (buracos, rank #5) ou "piles" (pilhas de notas, criado no rank #6 — bom para dívidas/valores em R$)
 ou "towers" (arranha-céus com janelas, criado no rank #7 — bom para tamanho de empresas/bancos)
-ou "phones" (celulares cuja tela enche, com piso de escala THEME["floor"], criado no rank #8 — bom para valores próximos)\nou "coins" (pilhas de moedas, criado no rank #9 — bom para lucros/valores em R$)\nou "thermo" (termômetros verticais, criado no rank #10 — bom para taxas de juros)\nou "crowd" (colunas de bonequinhos, 1 boneco = THEME["per_icon"], criado no rank #11 — bom para número de clientes/pessoas)\nou "donut" (rosca com fatias de um total, criado no rank #12 — bom para "para onde vai o dinheiro"; cor por item em it["col"])\nou "waffle" (grade 10x10 = 100%, criado no rank #13 — bom para pesos/percentuais de um total; cor por item em it["col"])\nou "shops" (fileiras de lojinhas, 1 = THEME["per_icon"], criado no rank #14 — bom para número de empresas).
+ou "phones" (celulares cuja tela enche, com piso de escala THEME["floor"], criado no rank #8 — bom para valores próximos)\nou "coins" (pilhas de moedas, criado no rank #9 — bom para lucros/valores em R$)\nou "thermo" (termômetros verticais, criado no rank #10 — bom para taxas de juros)\nou "crowd" (colunas de bonequinhos, 1 boneco = THEME["per_icon"], criado no rank #11 — bom para número de clientes/pessoas)\nou "donut" (rosca com fatias de um total, criado no rank #12 — bom para "para onde vai o dinheiro"; cor por item em it["col"])\nou "waffle" (grade 10x10 = 100%, criado no rank #13 — bom para pesos/percentuais de um total; cor por item em it["col"])\nou "shops" (fileiras de lojinhas, 1 = THEME["per_icon"], criado no rank #14 — bom para número de empresas)\nou "hooks" (linhas de pesca com anzol, piso THEME["floor"], criado no rank #16 — bom para golpes/fraudes).
 Tudo desenhado por código; narração Kokoro (pm_alex, pt-br); legenda grande queimada. Layout seguro p/ UI do Shorts:
 legenda y=1585, @ y=1690, fonte y=1745.
 """
@@ -532,8 +532,40 @@ def chart_s(img, items, th, upto, t, cur_rank):
             d.polygon([(bx - 3, by + 16), (bx + 3, by), (bx + min(w, iw - 8) - 3, by), (bx + min(w, iw - 8) + 3, by + 16)], fill=acc2 if on else tuple(int(c2 * 0.55) for c2 in acc2))
             if part > 0.6: d.rectangle([bx + 14, by + 26, bx + 28, by + ih], fill=BG1)
 
+def chart_k(img, items, th, upto, t, cur_rank):
+    """Criado no rank #16 (estados com mais golpes por habitante): 5 linhas de pesca com anzol (5º à esquerda), presas numa
+    vara em y=THEME["rod_y"]; a linha desce até uma profundidade proporcional ao valor, com piso THEME["floor"] (avisado em
+    THEME["floor_note"]). Não revelado: "?"; atual: a linha desce e o anzol acende."""
+    d = ImageDraw.Draw(img); acc = tuple(th["accent"]); acc2 = tuple(th["accent2"])
+    mx = max(i["num"] for i in items); fl = th.get("floor", 0)
+    order = sorted(items, key=lambda x: -x["rank"]); rod = th.get("rod_y", 770); bot = 1300; cw = 190
+    x0 = W / 2 - 5 * cw / 2
+    d.rounded_rectangle([60, rod - 10, W - 60, rod + 6], 8, fill=(120, 96, 70))
+    if th.get("floor_note"): d.text((W / 2, rod - 42), th["floor_note"], font=F(24, "SemiBold"), fill=(120, 132, 160), anchor="mm")
+    for k, it in enumerate(order):
+        cx = x0 + k * cw + cw / 2 + 22; on = it["rank"] == cur_rank
+        d.ellipse([cx - 9, rod - 2, cx + 9, rod + 16], outline=(170, 150, 120), width=4)
+        if it["rank"] < upto:
+            d.line([cx, rod + 14, cx, rod + 90], fill=(70, 80, 105), width=3)
+            d.text((cx - 10, rod + 150), "?", font=F(64, "Black"), fill=(100, 112, 140), anchor="mm"); continue
+        p = ease(t / 1.3) if on else 1.0
+        frac = 0.12 + 0.88 * max(0.0, (it["num"] - fl) / max(1e-6, mx - fl))
+        y = rod + 14 + (bot - rod - 14) * frac * p
+        col = acc if on else tuple(int(c * 0.6) for c in acc)
+        d.line([cx, rod + 14, cx, y], fill=(200, 205, 220) if on else (95, 105, 130), width=3)
+        sh = 80; r = 32
+        d.line([cx, y, cx, y + sh], fill=col, width=11)
+        d.arc([cx - 2 * r, y + sh - r, cx, y + sh + r], 0, 180, fill=col, width=11)
+        d.line([cx - 2 * r, y + sh, cx - 2 * r, y + sh - 26], fill=col, width=11)
+        d.polygon([(cx - 2 * r - 5, y + sh - 22), (cx - 2 * r + 14, y + sh - 6), (cx - 2 * r - 5, y + sh - 2)], fill=col)
+        d.ellipse([cx - 9, y - 9, cx + 9, y + 9], outline=col, width=5)
+        fs = 40
+        while F(fs, "Black").getlength(val_str(it, it["num"])) > cw - 10 and fs > 22: fs -= 2
+        d.text((cx - r, y + sh + r + 40), val_str(it, it["num"] * p), font=F(fs, "Black"), fill=WHITE if on else (190, 196, 215), anchor="mm")
+        d.text((cx - r, y + sh + r + 86), it["short"], font=F(36, "Black"), fill=acc2 if on else tuple(int(c * 0.7) for c in acc2), anchor="mm")
+
 def chart(img, items, th, upto, t, cur_rank):
-    {"shops": chart_s, "waffle": chart_w, "donut": chart_d, "crowd": chart_cr, "thermo": chart_th, "vbars": chart_v, "gauge": chart_g, "bubbles": chart_b, "pits": chart_p, "piles": chart_n, "towers": chart_t, "phones": chart_ph, "coins": chart_c}.get(th.get("chart"), chart_h)(img, items, th, upto, t, cur_rank)
+    {"hooks": chart_k, "shops": chart_s, "waffle": chart_w, "donut": chart_d, "crowd": chart_cr, "thermo": chart_th, "vbars": chart_v, "gauge": chart_g, "bubbles": chart_b, "pits": chart_p, "piles": chart_n, "towers": chart_t, "phones": chart_ph, "coins": chart_c}.get(th.get("chart"), chart_h)(img, items, th, upto, t, cur_rank)
 
 def seg_hook(img, sc, th, t, dur, items):
     ease = lambda x: 1.0  # frame 1 = thumbnail: gancho inteiro visível desde o frame 0 (rank #3)
@@ -556,6 +588,8 @@ def seg_hook(img, sc, th, t, dur, items):
         if sc.get("tease"): text(img, (W / 2, 710), sc["tease"], 64, th["accent"], a=1.0)
     elif th.get("chart") == "pits":
         if sc.get("tease"): text(img, (W / 2, 650), sc["tease"], 64, th["accent"], a=1.0)
+    elif th.get("chart") == "hooks":
+        if sc.get("tease"): text(img, (W / 2, 660), sc["tease"], 50, th["accent"], a=1.0)
     elif th.get("chart") == "shops":
         if sc.get("tease"): text(img, (W / 2, 680), sc["tease"], 50, th["accent"], a=1.0)
     elif th.get("chart") == "waffle":

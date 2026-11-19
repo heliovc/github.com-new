@@ -1,0 +1,21 @@
+# Gera rank16/publish.json (quinta 19/11/2026: dia sem longo, só o ranking).
+import json, sys, os
+out = sys.argv[1] if len(sys.argv) > 1 else "rank16"
+RK_TITLE = "Os 5 estados onde mais se cai em golpe no Brasil (no nº 1, 1 registro a cada 55 pessoas) #shorts"
+desc = ("O Brasil registrou 2,26 milhões de estelionatos em 2025, uma taxa de 1.059 por 100 mil habitantes. Os 5 estados com a maior taxa: "
+        "5) Santa Catarina, 1.294,8; 4) Rondônia, 1.329,6; 3) Paraná, 1.339,1; 2) Distrito Federal, 1.717,0; 1) São Paulo, 1.808,3 "
+        "por 100 mil habitantes (cerca de 1 registro a cada 55 moradores, cálculo do canal). A taxa conta boletins registrados "
+        "(estelionato comum e por fraude eletrônica), não todos os golpes que acontecem: onde se registra mais, a taxa também sobe. "
+        "Fonte: Fórum Brasileiro de Segurança Pública, Anuário Brasileiro de Segurança Pública 2026 (dados de 2025), via imprensa. "
+        "Este vídeo é informativo e não é recomendação financeira. Voz sintética.\n#shorts #golpe #estelionato #seguranca")
+items = [{"key": "ptd-rank16-short", "kind": "short", "video": "ranking.mp4", "title": RK_TITLE, "description": desc,
+  "tags": ["golpe", "estelionato", "golpes digitais", "anuario seguranca publica", "golpe do pix", "shorts", "por tras do dinheiro"],
+  "publish_at": "2026-11-19T12:00:00-03:00", "if_late": "public_now", "made_for_kids": False, "altered_content": True,
+  "related_key": "ptd-ep11-long",
+  "pinned_comment": "Você ou alguém da sua família já caiu em golpe? Registrou boletim de ocorrência? Vídeo completo: O golpe dos descontos no INSS: como R$ 6,3 bilhões saíram dos aposentados"}]
+for it in items:
+    assert len(it["title"]) <= 100 and len(it["description"]) <= 5000, it["key"]
+    assert "<" not in it["title"] + it["description"] and ">" not in it["title"] + it["description"]
+json.dump({"version": 1, "channel_id": "UCd_BGmJ5gbQ0kECAxmbvQHA", "created_at": "2026-11-19T07:30:00-03:00", "items": items},
+          open(os.path.join(out, "publish.json"), "w"), ensure_ascii=False, indent=1)
+print("ok")
