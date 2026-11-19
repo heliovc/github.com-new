@@ -24,6 +24,9 @@ Scene types: title, steps, code, term, files, tip, keys, compare, chat, outro, t
   merge (EP14: a folder window with one tile per REAL workbook feeding a combined sheet - files are read slow-then-fast, each flies
   in as a chip, the sheet keeps the newest blocks (real first row + "... N more rows") with a colored Source stripe, live file/row
   counters add the REAL row counts; naive=True shows the "Qty" file as NaN, a lock file stops the run with the real error unless skip=True)
+  clean (EP15: a REAL messy table on the right + a rail of cleaning steps on the left; per step a scan bar sweeps the touched columns,
+  every cell that really changes flashes coral -> accent and morphs old -> new, extra spaces are drawn as visible dots, NaN glows,
+  removed rows are struck and collapse; badges + counters show the REAL whole-file numbers. frm/upto pick the steps to animate)
 Identity: charcoal #0F1115, lime #B6F35C, coral #FF7A59, sky #6CC4FF, Poppins + DejaVu Sans Mono.
 """
 import sys, os, re, math, json, hashlib, subprocess, importlib.util
@@ -1364,6 +1367,108 @@ def sc_merge(img, v, t, d):
     elif v.get("note") and t > t0 + span:
         ka = ease((t - t0 - span) / 0.4); fe = F(28, "SemiBold"); ew = fe.getlength(v["note"]) + 60
         dr.rounded_rectangle([W / 2 - ew / 2, 1000, W / 2 + ew / 2, 1056], 28, fill=mix(BG, ACC, ka)); dr.text((W / 2, 1028), v["note"], font=fe, fill=BG, anchor="mm")
+
+# ---- EP15: clean - a REAL messy table (rows from clean.json) on the right, the cleaning steps on a rail at the left. Each step
+# lights its chip, a scan bar sweeps the columns it touches: every cell that really changes flashes and morphs old -> new,
+# extra spaces are drawn as visible dots, NaN cells glow, removed rows get struck through and collapse; per-step badges and the
+# bottom counters show the REAL whole-file numbers (cells changed, rows removed, rows left).
+def _vis_spaces(s):
+    if s == "NaN" or s.strip() == s: return s, 0, 0
+    l = len(s) - len(s.lstrip(" ")); r = len(s) - len(s.rstrip(" ")); return "·" * l + s.strip() + "·" * r, l, r
+def sc_clean(img, v, t, d):
+    data = v["data"]; steps = data["steps"]; cols = data["cols"]; rows = data["rows"]
+    frm, upto = v.get("frm", 0), v.get("upto", len(steps)); ns = max(1, upto - frm)
+    t0 = 0.6; span = d * v.get("span", 0.75); slot = span / ns
+    cur = frm + int(max(0, t - t0) // slot) if t > t0 else frm; u = ((t - t0) % slot) / slot if t > t0 else 0.0
+    if t >= t0 + span: cur, u = upto, 0.0
+    a = ease(t / 0.4); dr = ImageDraw.Draw(img); col_hi = v.get("color", ACC)
+    # left rail
+    text_a(img, (60, 165), v.get("rail", "CLEANING STEPS"), F(24, "Bold"), DIM, a)
+    for i, st in enumerate(steps):
+        y = 210 + i * 128; done = i < cur; act = i == cur and cur < upto and t > t0
+        on = done or act; c = col_hi if on else LINE
+        dr.rounded_rectangle([50, y, 510, y + 112], 16, fill=mix(BG, mix(PANEL, col_hi, 0.16) if act else PANEL, a), outline=mix(BG, c, a), width=3 if act else 2)
+        dr.ellipse([70, y + 18, 110, y + 58], fill=mix(BG, col_hi if on else PANEL2, a))
+        text_a(img, (90, y + 38), "✓" if done else str(i + 1), F(22, "monob"), BG if on else DIM, a, "mm")
+        text_a(img, (126, y + 38), st["name"], F(25, "SemiBold"), TXT if on or i >= frm else DIM, a, "lm")
+        fc = 17
+        while F(fc, "mono").getlength(st["code"]) > 420 and fc > 12: fc -= 1
+        text_a(img, (72, y + 86), st["code"], F(fc, "mono"), mix(DIM, col_hi, 0.5) if on else (90, 98, 115), a, "lm")
+        if done or (act and u > 0.7):
+            k = 1.0 if done else ease((u - 0.7) / 0.2)
+            lab = (f"-{st['removed']} rows" if st["removed"] and not st["changed"] else
+                   f"{st['changed']:,} cells" + (f" · -{st['removed']} rows" if st["removed"] else ""))
+            fb = F(18, "Bold"); bw = fb.getlength(lab) + 24
+            dr.rounded_rectangle([490 - bw, y - 12, 490, y + 18], 15, fill=mix(BG, CORAL if st["removed"] else col_hi, k))
+            text_a(img, (490 - bw / 2, y + 3), lab, fb, BG, k, "mm")
+    # table window
+    x0, y0, x1, y1 = 560, 150, 1870, 990; window(img, [x0, y0, x1, y1], v.get("file", "orders.csv"), kind="term")
+    fs = F(22, "mono"); cw = fs.getlength("M")
+    widths = [cw * 4 + 20]
+    for j, c in enumerate(cols):
+        m = max([len(c)] + [len(_vis_spaces(r["vals"][k][j])[0]) for r in rows for k in range(len(r["vals"])) if r["vals"][k]])
+        widths.append(cw * m + 26)
+    sc = min(1.0, (x1 - x0 - 50) / sum(widths)); widths = [w_ * sc for w_ in widths]
+    cx = [x0 + 25]
+    for w_ in widths: cx.append(cx[-1] + w_)
+    hy = y0 + 70; rh = 52
+    touched = steps[cur]["cols"] if cur < upto and t > t0 else []
+    for j, c in enumerate(cols):
+        if c in touched:
+            dr.rectangle([cx[j + 1] + 2, hy, cx[j + 2] - 2, hy + rh * 12], fill=mix(PANEL, col_hi, 0.10))
+    dr.rectangle([x0 + 20, hy, x1 - 20, hy + rh - 10], fill=PANEL2)
+    text_a(img, (cx[0] + 8, hy + rh / 2 - 5), "", fs, DIM)
+    for j, c in enumerate(cols): text_a(img, (cx[j + 1] + 12, hy + rh / 2 - 5), c, F(22, "monob"), col_hi if c in touched else TXT, 1, "lm")
+    def alive(r, k): return r["vals"][min(k, len(r["vals"]) - 1)] is not None
+    k0 = cur; k1 = min(cur + 1, len(steps)) if cur < upto else cur
+    coll = ease((u - 0.72) / 0.25) if (cur < upto and t > t0) else 0.0
+    scan_y = hy + rh + u / 0.7 * rh * 11 if u < 0.7 else None
+    pa = pb = 0
+    for r in rows:
+        if not alive(r, k0): continue
+        ya = hy + rh + pa * rh; yb = hy + rh + pb * rh
+        gone = not alive(r, k1)
+        y = ya if not coll else (ya + (yb - ya) * coll)
+        passed = (u >= 0.7) or (scan_y is not None and scan_y > ya + rh / 2) or cur >= upto
+        if cur >= upto: passed = False
+        before = r["vals"][k0]; after = r["vals"][k1] if not gone else before
+        ra = 1.0 - (coll if gone else 0)
+        if ra <= 0.02: pa += 1; continue
+        text_a(img, (cx[0] + 8, y + rh / 2 - 5), str(r["idx"]), fs, (90, 98, 115), ra, "lm")
+        for j, c in enumerate(cols):
+            old, new = before[j], after[j]; ch = passed and old != new
+            k = ease((t - t0 - (cur - frm) * slot - slot * min(0.7, max(0, (ya - hy - rh) / (rh * 11)) * 0.7)) / 0.35) if ch else 0
+            val = new if (ch and k > 0.5) else old
+            sv, l, rr = _vis_spaces(val)
+            if ch:
+                fl = 1 - abs(k - 0.5) * 2
+                dr.rounded_rectangle([cx[j + 1] + 4, y + 4, cx[j + 2] - 4, y + rh - 14], 8, fill=mix(PANEL, col_hi if k > 0.5 else CORAL, 0.25 + 0.35 * fl))
+            base = TXT if not ch else (col_hi if k > 0.5 else CORAL)
+            if val == "NaN": base = mix(CORAL, YEL, 0.5) if not ch else base
+            xx = cx[j + 1] + 12
+            if l or rr:
+                text_a(img, (xx, y + rh / 2 - 5), "·" * l, fs, CORAL, ra, "lm"); xx2 = xx + fs.getlength("·" * l)
+                text_a(img, (xx2, y + rh / 2 - 5), val.strip(), fs, base, ra, "lm"); xx3 = xx2 + fs.getlength(val.strip())
+                text_a(img, (xx3, y + rh / 2 - 5), "·" * rr, fs, CORAL, ra, "lm")
+            else:
+                text_a(img, (xx, y + rh / 2 - 5), sv, fs, base, ra * (1 if not (ch and abs(k - 0.5) < 0.12) else 0.4), "lm")
+        if gone and passed:
+            ka = ease((u - (ya - hy - rh) / (rh * 11) * 0.7) / 0.1) if u < 0.72 else 1
+            dr.line([cx[0], y + rh / 2 - 5, cx[0] + (cx[-1] - cx[0]) * ka, y + rh / 2 - 5], fill=CORAL, width=3)
+        pa += 1
+        if not gone: pb += 1
+    if scan_y is not None and cur < upto and t > t0:
+        dr.rectangle([x0 + 20, scan_y - 2, x1 - 20, scan_y + 2], fill=col_hi)
+    # counters (REAL whole-file numbers)
+    nrows = data["rows0"] if cur == 0 else steps[cur - 1]["rows"]
+    fixed = sum(s_["changed"] for s_ in steps[:cur]); by = y1 - 90
+    dr.rounded_rectangle([x0 + 20, by, x1 - 20, by + 66], 14, fill=PANEL2)
+    text_a(img, (x0 + 50, by + 33), f"rows  {data['rows0']:,}  →  {nrows:,}", F(26, "monob"), TXT, a, "lm")
+    text_a(img, (x1 - 50, by + 33), f"cells fixed  {fixed:,}", F(26, "monob"), col_hi, a, "rm")
+    text_a(img, ((x0 + x1) / 2 + 60, by - 22), f"showing {len(rows)} of the {data['rows0']:,} rows  ·  real values", F(18, "Medium"), DIM, a, "mm")
+    if v.get("note") and t > t0 + span:
+        ka = ease((t - t0 - span) / 0.4); fe = F(28, "SemiBold"); ew = fe.getlength(v["note"]) + 60
+        dr.rounded_rectangle([W / 2 - ew / 2, 1000, W / 2 + ew / 2, 1056], 28, fill=mix(BG, col_hi, ka)); dr.text((W / 2, 1028), v["note"], font=fe, fill=BG, anchor="mm")
 
 SC = {k[3:]: f for k, f in list(globals().items()) if k.startswith("sc_")}
 

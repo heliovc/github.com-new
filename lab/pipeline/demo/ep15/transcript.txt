@@ -1,0 +1,117 @@
+### versions
+3.1.1
+### csvhead
+OrderID,Date,Customer,City,Product,Qty,Price,Status
+A1001,2026-04-17,Liam Park,DENVER,Desk Lamp,3,$34.90,Pending
+A1002,07/01/2026,Theo Lane,Boston,Monitor,4,1299.00,Shipped
+A1003,01/10/2026,Ava Brooks   ,Austin,Keyboard,1,$59.00,cancelled
+A1004,09/15/2026,Nora Park,Seattle,Keyboard,1,59.00,Shipped   
+A1005,"September 10, 2026",NORA RIVERA,boston,Mouse,4,19.50,cancelled
+### look
+  OrderID                Date       Customer  ...  Qty    Price      Status
+0   A1001          2026-04-17      Liam Park  ...  3.0   $34.90     Pending
+1   A1002          07/01/2026      Theo Lane  ...  4.0  1299.00     Shipped
+2   A1003          01/10/2026  Ava Brooks     ...  1.0   $59.00   cancelled
+3   A1004          09/15/2026      Nora Park  ...  1.0    59.00  Shipped   
+4   A1005  September 10, 2026    NORA RIVERA  ...  4.0    19.50   cancelled
+5   A1006          2026-02-11    Owen Rivera  ...  1.0   $74.00     pending
+
+[6 rows x 8 columns]
+(1000, 8)
+### health
+Rows: 1000
+Duplicate rows: 29
+Cities: 50
+Empty cells:
+OrderID      0
+Date         0
+Customer    20
+City        42
+Product      0
+Qty         30
+Price        0
+Status       0
+dtype: int64
+### forgot
+Cities: 50
+Cities: 6
+City
+Chicago    172
+Austin     171
+Miami      166
+Denver     153
+Boston     153
+Seattle    143
+Name: count, dtype: int64
+### dupes_order
+Duplicates before fixing text: 29
+Duplicates after fixing text: 60
+### status
+Status
+shipped      693
+pending      182
+cancelled     77
+shiped        48
+Name: count, dtype: int64
+### dates_bad
+Traceback (most recent call last):
+  File "/tmp/claude-0/ep15work/project/dates_bad.py", line 4, in <module>
+    df["Date"] = pd.to_datetime(df["Date"])
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/dist-packages/pandas/core/tools/datetimes.py", line 1239, in to_datetime
+    values = convert_listlike(arg._values, format)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/dist-packages/pandas/core/tools/datetimes.py", line 484, in _convert_listlike_datetimes
+    return _array_strptime_with_fallback(arg, name, utc, format, exact, errors)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/dist-packages/pandas/core/tools/datetimes.py", line 518, in _array_strptime_with_fallback
+    result, tz_out = array_strptime(arg, fmt, exact=exact, errors=errors, utc=utc)
+                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "pandas/_libs/tslibs/strptime.pyx", line 644, in pandas._libs.tslibs.strptime.array_strptime
+  File "pandas/_libs/tslibs/strptime.pyx", line 561, in pandas._libs.tslibs.strptime.array_strptime
+  File "pandas/_libs/tslibs/strptime.pyx", line 701, in pandas._libs.tslibs.strptime._parse_with_format
+ValueError: time data "07/01/2026" doesn't match format "%Y-%m-%d". You might want to try:
+    - passing `format` if your strings have a consistent format;
+    - passing `format='ISO8601'` if your strings are all ISO8601 but not necessarily in exactly the same format;
+    - passing `format='mixed'`, and the format will be inferred for each element individually. You might want to use `dayfirst` alongside this.
+### price_bad
+Traceback (most recent call last):
+  File "pandas/_libs/lib.pyx", line 2766, in pandas._libs.lib.maybe_convert_numeric
+ValueError: Unable to parse string '$34.90'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/tmp/claude-0/ep15work/project/price_bad.py", line 4, in <module>
+    df["Price"] = pd.to_numeric(df["Price"])
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/dist-packages/pandas/core/tools/numeric.py", line 259, in to_numeric
+    values, new_mask = lib.maybe_convert_numeric(  # type: ignore[call-overload]
+                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "pandas/_libs/lib.pyx", line 2816, in pandas._libs.lib.maybe_convert_numeric
+ValueError: Unable to parse string '$34.90' at position 0
+### clean
+Before: (1000, 8)
+After: (892, 8)
+Empty cells left: 0
+Saved orders_clean.csv
+### check_clean
+  OrderID       Date    Customer     City    Product  Qty   Price     Status
+0   A1001 2026-04-17   Liam Park   Denver  Desk Lamp    3    34.9    pending
+1   A1002 2026-07-01   Theo Lane   Boston    Monitor    4  1299.0    shipped
+2   A1003 2026-01-10  Ava Brooks   Austin   Keyboard    1    59.0  cancelled
+3   A1004 2026-09-15   Nora Park  Seattle   Keyboard    1    59.0    shipped
+OrderID                str
+Date        datetime64[us]
+Customer               str
+City                   str
+Product                str
+Qty                  int64
+Price              float64
+Status                 str
+dtype: object
+### report
+orders.csv -> 50 cities, total 555982.9
+orders_clean.csv -> 7 cities, total 783255.0
+### timing
+0.238 s

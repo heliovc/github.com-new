@@ -1,0 +1,777 @@
+{
+ "cols": [
+  "OrderID",
+  "Date",
+  "Customer",
+  "City",
+  "Qty",
+  "Price",
+  "Status"
+ ],
+ "rows0": 1000,
+ "steps": [
+  {
+   "name": "Trim spaces + fix capitals",
+   "code": ".str.strip().str.title()",
+   "cols": [
+    "Customer",
+    "City",
+    "Status"
+   ],
+   "changed": 1303,
+   "removed": 0,
+   "rows": 1000
+  },
+  {
+   "name": "Fix typos",
+   "code": ".replace({\"shiped\": \"shipped\"})",
+   "cols": [
+    "Status"
+   ],
+   "changed": 48,
+   "removed": 0,
+   "rows": 1000
+  },
+  {
+   "name": "Remove duplicates",
+   "code": "df.drop_duplicates()",
+   "cols": [],
+   "changed": 0,
+   "removed": 60,
+   "rows": 940
+  },
+  {
+   "name": "Real dates",
+   "code": "pd.to_datetime(..., format=\"mixed\")",
+   "cols": [
+    "Date"
+   ],
+   "changed": 381,
+   "removed": 0,
+   "rows": 940
+  },
+  {
+   "name": "Text to numbers",
+   "code": "str.replace(\"$\", \"\") + pd.to_numeric",
+   "cols": [
+    "Price"
+   ],
+   "changed": 940,
+   "removed": 0,
+   "rows": 940
+  },
+  {
+   "name": "Empty cells",
+   "code": "dropna(...) + fillna(\"Unknown\")",
+   "cols": [
+    "City",
+    "Qty"
+   ],
+   "changed": 34,
+   "removed": 48,
+   "rows": 892
+  }
+ ],
+ "rows": [
+  {
+   "idx": 0,
+   "vals": [
+    [
+     "A1001",
+     "2026-04-17",
+     "Liam Park",
+     "DENVER",
+     "3.0",
+     "$34.90",
+     "Pending"
+    ],
+    [
+     "A1001",
+     "2026-04-17",
+     "Liam Park",
+     "Denver",
+     "3.0",
+     "$34.90",
+     "pending"
+    ],
+    [
+     "A1001",
+     "2026-04-17",
+     "Liam Park",
+     "Denver",
+     "3.0",
+     "$34.90",
+     "pending"
+    ],
+    [
+     "A1001",
+     "2026-04-17",
+     "Liam Park",
+     "Denver",
+     "3.0",
+     "$34.90",
+     "pending"
+    ],
+    [
+     "A1001",
+     "2026-04-17",
+     "Liam Park",
+     "Denver",
+     "3.0",
+     "$34.90",
+     "pending"
+    ],
+    [
+     "A1001",
+     "2026-04-17",
+     "Liam Park",
+     "Denver",
+     "3.0",
+     "34.9",
+     "pending"
+    ],
+    [
+     "A1001",
+     "2026-04-17",
+     "Liam Park",
+     "Denver",
+     "3",
+     "34.9",
+     "pending"
+    ]
+   ]
+  },
+  {
+   "idx": 1,
+   "vals": [
+    [
+     "A1002",
+     "07/01/2026",
+     "Theo Lane",
+     "Boston",
+     "4.0",
+     "1299.00",
+     "Shipped"
+    ],
+    [
+     "A1002",
+     "07/01/2026",
+     "Theo Lane",
+     "Boston",
+     "4.0",
+     "1299.00",
+     "shipped"
+    ],
+    [
+     "A1002",
+     "07/01/2026",
+     "Theo Lane",
+     "Boston",
+     "4.0",
+     "1299.00",
+     "shipped"
+    ],
+    [
+     "A1002",
+     "07/01/2026",
+     "Theo Lane",
+     "Boston",
+     "4.0",
+     "1299.00",
+     "shipped"
+    ],
+    [
+     "A1002",
+     "2026-07-01",
+     "Theo Lane",
+     "Boston",
+     "4.0",
+     "1299.00",
+     "shipped"
+    ],
+    [
+     "A1002",
+     "2026-07-01",
+     "Theo Lane",
+     "Boston",
+     "4.0",
+     "1299.0",
+     "shipped"
+    ],
+    [
+     "A1002",
+     "2026-07-01",
+     "Theo Lane",
+     "Boston",
+     "4",
+     "1299.0",
+     "shipped"
+    ]
+   ]
+  },
+  {
+   "idx": 2,
+   "vals": [
+    [
+     "A1003",
+     "01/10/2026",
+     "Ava Brooks   ",
+     "Austin",
+     "1.0",
+     "$59.00",
+     "cancelled"
+    ],
+    [
+     "A1003",
+     "01/10/2026",
+     "Ava Brooks",
+     "Austin",
+     "1.0",
+     "$59.00",
+     "cancelled"
+    ],
+    [
+     "A1003",
+     "01/10/2026",
+     "Ava Brooks",
+     "Austin",
+     "1.0",
+     "$59.00",
+     "cancelled"
+    ],
+    [
+     "A1003",
+     "01/10/2026",
+     "Ava Brooks",
+     "Austin",
+     "1.0",
+     "$59.00",
+     "cancelled"
+    ],
+    [
+     "A1003",
+     "2026-01-10",
+     "Ava Brooks",
+     "Austin",
+     "1.0",
+     "$59.00",
+     "cancelled"
+    ],
+    [
+     "A1003",
+     "2026-01-10",
+     "Ava Brooks",
+     "Austin",
+     "1.0",
+     "59.0",
+     "cancelled"
+    ],
+    [
+     "A1003",
+     "2026-01-10",
+     "Ava Brooks",
+     "Austin",
+     "1",
+     "59.0",
+     "cancelled"
+    ]
+   ]
+  },
+  {
+   "idx": 3,
+   "vals": [
+    [
+     "A1004",
+     "09/15/2026",
+     "Nora Park",
+     "Seattle",
+     "1.0",
+     "59.00",
+     "Shipped   "
+    ],
+    [
+     "A1004",
+     "09/15/2026",
+     "Nora Park",
+     "Seattle",
+     "1.0",
+     "59.00",
+     "shipped"
+    ],
+    [
+     "A1004",
+     "09/15/2026",
+     "Nora Park",
+     "Seattle",
+     "1.0",
+     "59.00",
+     "shipped"
+    ],
+    [
+     "A1004",
+     "09/15/2026",
+     "Nora Park",
+     "Seattle",
+     "1.0",
+     "59.00",
+     "shipped"
+    ],
+    [
+     "A1004",
+     "2026-09-15",
+     "Nora Park",
+     "Seattle",
+     "1.0",
+     "59.00",
+     "shipped"
+    ],
+    [
+     "A1004",
+     "2026-09-15",
+     "Nora Park",
+     "Seattle",
+     "1.0",
+     "59.0",
+     "shipped"
+    ],
+    [
+     "A1004",
+     "2026-09-15",
+     "Nora Park",
+     "Seattle",
+     "1",
+     "59.0",
+     "shipped"
+    ]
+   ]
+  },
+  {
+   "idx": 4,
+   "vals": [
+    [
+     "A1005",
+     "September 10, 2026",
+     "NORA RIVERA",
+     "boston",
+     "4.0",
+     "19.50",
+     "cancelled"
+    ],
+    [
+     "A1005",
+     "September 10, 2026",
+     "Nora Rivera",
+     "Boston",
+     "4.0",
+     "19.50",
+     "cancelled"
+    ],
+    [
+     "A1005",
+     "September 10, 2026",
+     "Nora Rivera",
+     "Boston",
+     "4.0",
+     "19.50",
+     "cancelled"
+    ],
+    [
+     "A1005",
+     "September 10, 2026",
+     "Nora Rivera",
+     "Boston",
+     "4.0",
+     "19.50",
+     "cancelled"
+    ],
+    [
+     "A1005",
+     "2026-09-10",
+     "Nora Rivera",
+     "Boston",
+     "4.0",
+     "19.50",
+     "cancelled"
+    ],
+    [
+     "A1005",
+     "2026-09-10",
+     "Nora Rivera",
+     "Boston",
+     "4.0",
+     "19.5",
+     "cancelled"
+    ],
+    [
+     "A1005",
+     "2026-09-10",
+     "Nora Rivera",
+     "Boston",
+     "4",
+     "19.5",
+     "cancelled"
+    ]
+   ]
+  },
+  {
+   "idx": 16,
+   "vals": [
+    [
+     "A1017",
+     "2026-10-20",
+     "Lucas Hayes",
+     "Denver",
+     "4.0",
+     "$89.90",
+     "shiped"
+    ],
+    [
+     "A1017",
+     "2026-10-20",
+     "Lucas Hayes",
+     "Denver",
+     "4.0",
+     "$89.90",
+     "shiped"
+    ],
+    [
+     "A1017",
+     "2026-10-20",
+     "Lucas Hayes",
+     "Denver",
+     "4.0",
+     "$89.90",
+     "shipped"
+    ],
+    [
+     "A1017",
+     "2026-10-20",
+     "Lucas Hayes",
+     "Denver",
+     "4.0",
+     "$89.90",
+     "shipped"
+    ],
+    [
+     "A1017",
+     "2026-10-20",
+     "Lucas Hayes",
+     "Denver",
+     "4.0",
+     "$89.90",
+     "shipped"
+    ],
+    [
+     "A1017",
+     "2026-10-20",
+     "Lucas Hayes",
+     "Denver",
+     "4.0",
+     "89.9",
+     "shipped"
+    ],
+    [
+     "A1017",
+     "2026-10-20",
+     "Lucas Hayes",
+     "Denver",
+     "4",
+     "89.9",
+     "shipped"
+    ]
+   ]
+  },
+  {
+   "idx": 19,
+   "vals": [
+    [
+     "A1020",
+     "October 02, 2026",
+     "NaN",
+     "NaN",
+     "1.0",
+     "$19.50",
+     "shipped"
+    ],
+    [
+     "A1020",
+     "October 02, 2026",
+     "NaN",
+     "NaN",
+     "1.0",
+     "$19.50",
+     "shipped"
+    ],
+    [
+     "A1020",
+     "October 02, 2026",
+     "NaN",
+     "NaN",
+     "1.0",
+     "$19.50",
+     "shipped"
+    ],
+    [
+     "A1020",
+     "October 02, 2026",
+     "NaN",
+     "NaN",
+     "1.0",
+     "$19.50",
+     "shipped"
+    ],
+    [
+     "A1020",
+     "2026-10-02",
+     "NaN",
+     "NaN",
+     "1.0",
+     "$19.50",
+     "shipped"
+    ],
+    [
+     "A1020",
+     "2026-10-02",
+     "NaN",
+     "NaN",
+     "1.0",
+     "19.5",
+     "shipped"
+    ],
+    null
+   ]
+  },
+  {
+   "idx": 22,
+   "vals": [
+    [
+     "A1023",
+     "2026-04-24",
+     "Zoe Hayes   ",
+     "Boston",
+     "5.0",
+     "$89.90",
+     "shiped"
+    ],
+    [
+     "A1023",
+     "2026-04-24",
+     "Zoe Hayes",
+     "Boston",
+     "5.0",
+     "$89.90",
+     "shiped"
+    ],
+    [
+     "A1023",
+     "2026-04-24",
+     "Zoe Hayes",
+     "Boston",
+     "5.0",
+     "$89.90",
+     "shipped"
+    ],
+    [
+     "A1023",
+     "2026-04-24",
+     "Zoe Hayes",
+     "Boston",
+     "5.0",
+     "$89.90",
+     "shipped"
+    ],
+    [
+     "A1023",
+     "2026-04-24",
+     "Zoe Hayes",
+     "Boston",
+     "5.0",
+     "$89.90",
+     "shipped"
+    ],
+    [
+     "A1023",
+     "2026-04-24",
+     "Zoe Hayes",
+     "Boston",
+     "5.0",
+     "89.9",
+     "shipped"
+    ],
+    [
+     "A1023",
+     "2026-04-24",
+     "Zoe Hayes",
+     "Boston",
+     "5",
+     "89.9",
+     "shipped"
+    ]
+   ]
+  },
+  {
+   "idx": 54,
+   "vals": [
+    [
+     "A1055",
+     "2026-04-13",
+     "Lily Frost",
+     "NaN",
+     "2.0",
+     "$1,299.00",
+     "SHIPPED"
+    ],
+    [
+     "A1055",
+     "2026-04-13",
+     "Lily Frost",
+     "NaN",
+     "2.0",
+     "$1,299.00",
+     "shipped"
+    ],
+    [
+     "A1055",
+     "2026-04-13",
+     "Lily Frost",
+     "NaN",
+     "2.0",
+     "$1,299.00",
+     "shipped"
+    ],
+    [
+     "A1055",
+     "2026-04-13",
+     "Lily Frost",
+     "NaN",
+     "2.0",
+     "$1,299.00",
+     "shipped"
+    ],
+    [
+     "A1055",
+     "2026-04-13",
+     "Lily Frost",
+     "NaN",
+     "2.0",
+     "$1,299.00",
+     "shipped"
+    ],
+    [
+     "A1055",
+     "2026-04-13",
+     "Lily Frost",
+     "NaN",
+     "2.0",
+     "1299.0",
+     "shipped"
+    ],
+    [
+     "A1055",
+     "2026-04-13",
+     "Lily Frost",
+     "Unknown",
+     "2",
+     "1299.0",
+     "shipped"
+    ]
+   ]
+  },
+  {
+   "idx": 92,
+   "vals": [
+    [
+     "A1093",
+     "2026-03-17",
+     "  Owen Lane",
+     "NaN",
+     "NaN",
+     "$1,299.00",
+     "  shipped"
+    ],
+    [
+     "A1093",
+     "2026-03-17",
+     "Owen Lane",
+     "NaN",
+     "NaN",
+     "$1,299.00",
+     "shipped"
+    ],
+    [
+     "A1093",
+     "2026-03-17",
+     "Owen Lane",
+     "NaN",
+     "NaN",
+     "$1,299.00",
+     "shipped"
+    ],
+    [
+     "A1093",
+     "2026-03-17",
+     "Owen Lane",
+     "NaN",
+     "NaN",
+     "$1,299.00",
+     "shipped"
+    ],
+    [
+     "A1093",
+     "2026-03-17",
+     "Owen Lane",
+     "NaN",
+     "NaN",
+     "$1,299.00",
+     "shipped"
+    ],
+    [
+     "A1093",
+     "2026-03-17",
+     "Owen Lane",
+     "NaN",
+     "NaN",
+     "1299.0",
+     "shipped"
+    ],
+    null
+   ]
+  },
+  {
+   "idx": 159,
+   "vals": [
+    [
+     "A1023",
+     "2026-04-24",
+     "ZOE HAYES ",
+     "boston",
+     "5.0",
+     "$89.90",
+     "shiped"
+    ],
+    [
+     "A1023",
+     "2026-04-24",
+     "Zoe Hayes",
+     "Boston",
+     "5.0",
+     "$89.90",
+     "shiped"
+    ],
+    [
+     "A1023",
+     "2026-04-24",
+     "Zoe Hayes",
+     "Boston",
+     "5.0",
+     "$89.90",
+     "shipped"
+    ],
+    null,
+    null,
+    null,
+    null
+   ]
+  }
+ ]
+}
