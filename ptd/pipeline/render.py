@@ -1104,7 +1104,79 @@ def sc_tag(img, v, t, dur):
         img.alpha_composite(lay)
     if v.get("caption"): dr.text((W / 2, H - 50), v["caption"], font=F(28, "Medium"), fill=DIM, anchor="mm")
 
-SC = {"tag": sc_tag, "exam": sc_exam, "gauge": sc_gauge, "onion": sc_onion, "floor": sc_floor, "clause": sc_clause, "round": sc_round, "ticker": sc_ticker, "scoreboard": sc_scoreboard, "title": sc_title, "bignumber": sc_bignumber, "flow": sc_flow, "split": sc_split, "bullets": sc_bullets,
+def _stopwatch(img, cx, cy, r, frac, a, label, unit, col, lw=None):
+    """Cronômetro: mostrador escuro, anel de progresso (frac 0-1), botão no topo, label grande + unit embaixo."""
+    lay = Image.new("RGBA", img.size, (0, 0, 0, 0)); d2 = ImageDraw.Draw(lay); A = int(255 * a)
+    lw = lw or max(8, int(r * 0.09))
+    d2.rounded_rectangle([cx - r * 0.13, cy - r - r * 0.24, cx + r * 0.13, cy - r - r * 0.06], int(r * 0.04), fill=(150, 160, 185, A))
+    d2.rectangle([cx - r * 0.05, cy - r - r * 0.08, cx + r * 0.05, cy - r + 4], fill=(150, 160, 185, A))
+    d2.ellipse([cx - r - 6, cy - r - 6, cx + r + 6, cy + r + 6], fill=(150, 160, 185, A))
+    d2.ellipse([cx - r, cy - r, cx + r, cy + r], fill=(16, 24, 40, A))
+    ri = r - lw * 1.2
+    d2.arc([cx - ri, cy - ri, cx + ri, cy + ri], 0, 360, fill=(40, 52, 76, A), width=lw)
+    if frac > 0.002:
+        d2.arc([cx - ri, cy - ri, cx + ri, cy + ri], -90, -90 + 360 * min(1.0, frac), fill=col + (A,), width=lw)
+        ang = math.radians(-90 + 360 * min(1.0, frac))
+        hx, hy = cx + (ri - lw * 1.6) * math.cos(ang), cy + (ri - lw * 1.6) * math.sin(ang)
+        d2.line([(cx, cy), (hx, hy)], fill=col + (int(110 * a),), width=max(3, lw // 3))
+    for k in range(12):
+        ang = math.radians(k * 30 - 90); r1, r2 = ri - lw * 0.9, ri - lw * 0.9 - (r * 0.06)
+        d2.line([(cx + r1 * math.cos(ang), cy + r1 * math.sin(ang)), (cx + r2 * math.cos(ang), cy + r2 * math.sin(ang))], fill=(90, 102, 130, A), width=3)
+    img.alpha_composite(lay)
+    fs = int(r * 0.52)
+    while F(fs, "Black").getlength(label) > ri * 1.5 and fs > 20: fs -= 2
+    alpha_text(img, (cx, cy - (r * 0.06 if unit else 0)), label, F(fs, "Black"), WHITE, a)
+    if unit: alpha_text(img, (cx, cy + r * 0.34), unit, F(max(18, int(r * 0.13)), "Bold"), col, a)
+
+def sc_clock(img, v, t, dur):
+    """Criado no EP17: o cronômetro do golpe. À esquerda, um cronômetro com o anel enchendo até 'frac' (0-1) e o
+    tempo no centro (label grande + unit); à direita 'MARCA n · head' (ou kicker se n=0), title (\n quebra), sub e
+    a régua das marcas (marks = rótulos curtos, a atual em destaque). col = cor do anel (hex).
+    recap=[[label, unit, rótulo], ...] desenha os cronômetros lado a lado (fechamento)."""
+    dr = ImageDraw.Draw(img)
+    if v.get("recap"):
+        rc = v["recap"]; n = len(rc); r = 120; gap = (W - 160) / n
+        if v.get("title"): alpha_text(img, (W / 2, 190), v["title"], F(70, "ExtraBold"), WHITE, ease(t / 0.5))
+        for i, (lab, unit, cap) in enumerate(rc):
+            a = ease((t - 0.3 - i * 0.4) / 0.5)
+            if a <= 0: continue
+            cx = 80 + gap * (i + 0.5); cy = 520 - (1 - a) * 30
+            _stopwatch(img, cx, cy, r, (i + 1) / n * a, a, lab, unit, AMBER if i < n - 1 else RED)
+            for j, ln in enumerate(cap.split("\n")):
+                alpha_text(img, (cx, 720 + j * 44), ln, F(34, "Bold"), WHITE, a)
+        if v.get("caption"): dr.text((W / 2, H - 60), v["caption"], font=F(28, "Medium"), fill=DIM, anchor="mm")
+        return
+    n = v.get("n", 0); col = hexc(v.get("col", "#F2A93B"))
+    a0 = ease(t / 0.5); fr = v.get("frac", 0.5) * ease((t - 0.2) / 1.6)
+    _stopwatch(img, 520, 570, 330, fr, a0, v.get("label", ""), v.get("unit", ""), col)
+    a1, a2, a3 = ease((t - 0.4) / 0.5), ease((t - 0.7) / 0.5), ease((t - 1.0) / 0.5)
+    x = 1000
+    head = f"MARCA {n}  ·  {v.get('head', '')}" if n > 0 else v.get("kicker", "")
+    hs = 46
+    while head and F(hs, "Black").getlength(head) > W - x - 50 and hs > 30: hs -= 2
+    if head: alpha_text(img, (x, 280), head, F(hs, "Black"), col if n == 0 else AMBER, a1, anchor="lm", dy=(1 - a1) * 30)
+    lines = v.get("title", "").split("\n")
+    for i, l in enumerate(lines):
+        fs = 96
+        while F(fs, "ExtraBold").getlength(l) > W - x - 70 and fs > 56: fs -= 2
+        alpha_text(img, (x, 400 + i * 106), l, F(fs, "ExtraBold"), WHITE, a2, anchor="lm", dy=(1 - a2) * 30)
+    yb = 400 + len(lines) * 106
+    if v.get("sub"): alpha_text(img, (x, yb), v["sub"], F(42, "SemiBold"), (150, 200, 240), a3, anchor="lm")
+    marks = v.get("marks")
+    if marks and n > 0:
+        lay = Image.new("RGBA", img.size, (0, 0, 0, 0)); d2 = ImageDraw.Draw(lay); A = int(255 * a3)
+        step = (W - x - 110) / (len(marks) - 1); yy = 870
+        d2.line([(x + 20, yy), (x + 20 + step * (len(marks) - 1), yy)], fill=(60, 72, 96, A), width=4)
+        d2.line([(x + 20, yy), (x + 20 + step * (n - 1), yy)], fill=AMBER + (A,), width=4)
+        for k, mk in enumerate(marks):
+            on = k + 1 <= n; c = AMBER if k + 1 == n else ((200, 190, 160) if on else (60, 72, 96))
+            px = x + 20 + k * step; rr = 16 if k + 1 == n else 10
+            d2.ellipse([px - rr, yy - rr, px + rr, yy + rr], fill=c + (A,))
+            d2.text((px, yy + 42), mk, font=F(26, "Bold"), fill=c + (A,), anchor="mm")
+        img.alpha_composite(lay)
+    if v.get("caption"): dr.text((W / 2, H - 50), v["caption"], font=F(28, "Medium"), fill=DIM, anchor="mm")
+
+SC = {"clock": sc_clock, "tag": sc_tag, "exam": sc_exam, "gauge": sc_gauge, "onion": sc_onion, "floor": sc_floor, "clause": sc_clause, "round": sc_round, "ticker": sc_ticker, "scoreboard": sc_scoreboard, "title": sc_title, "bignumber": sc_bignumber, "flow": sc_flow, "split": sc_split, "bullets": sc_bullets,
       "bars": sc_bars, "compare": sc_compare, "timeline": sc_timeline, "cards": sc_cards, "line": sc_line,
       "receipt": sc_receipt, "stack": sc_stack, "journey": sc_journey, "calendar": sc_calendar, "obit": sc_obit, "race": sc_race, "act": sc_act, "ledger": sc_ledger, "blackbox": sc_blackbox, "flight": sc_flight, "court": sc_court, "dossier": sc_dossier}
 

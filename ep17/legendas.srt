@@ -1,0 +1,543 @@
+1
+00:00:00,150 --> 00:00:01,494
+Você recebe uma ligação.
+
+2
+00:00:01,494 --> 00:00:04,128
+Do outro lado, alguém que diz ser do seu banco.
+
+3
+00:00:04,128 --> 00:00:10,963
+Há uma compra suspeita na sua conta, e para proteger o seu dinheiro você precisa fazer um Pix para uma conta de segurança.
+
+4
+00:00:10,963 --> 00:00:11,467
+Você faz.
+
+5
+00:00:11,467 --> 00:00:12,308
+Três mil reais.
+
+6
+00:00:12,308 --> 00:00:15,446
+E em poucos segundos, esse dinheiro já não está mais lá.
+
+7
+00:00:16,045 --> 00:00:17,510
+E o mais duro vem depois.
+
+8
+00:00:17,510 --> 00:00:26,470
+Desde que o Banco Central criou o mecanismo de devolução do Pix, de cada cem reais que as vítimas disseram ter perdido em golpes, menos de nove voltaram.
+
+9
+00:00:26,470 --> 00:00:28,988
+Mais de vinte e quatro bilhões notificados.
+
+10
+00:00:28,988 --> 00:00:31,214
+Pouco mais de dois bilhões devolvidos.
+
+11
+00:00:31,814 --> 00:00:34,027
+Hoje a gente vai ligar um cronômetro.
+
+12
+00:00:34,027 --> 00:00:37,795
+São seis marcas de tempo, do segundo zero até o octogésimo dia.
+
+13
+00:00:37,795 --> 00:00:44,016
+Em cada uma, o que acontece com o seu dinheiro, o que você pode fazer, e quem tem obrigação de devolver.
+
+14
+00:00:44,616 --> 00:00:47,236
+E guarde uma pergunta para o meio do caminho.
+
+15
+00:00:47,236 --> 00:00:52,475
+Se existe um mecanismo oficial de devolução, por que nove em cada dez pedidos são negados?
+
+16
+00:00:52,475 --> 00:00:54,280
+A resposta está na marca cinco.
+
+17
+00:00:54,880 --> 00:00:56,213
+Marca um: o segundo zero.
+
+18
+00:00:56,213 --> 00:00:58,187
+O momento em que você aperta o botão.
+
+19
+00:00:58,187 --> 00:01:01,120
+E aqui está o primeiro ponto que quase ninguém percebe.
+
+20
+00:01:01,120 --> 00:01:03,680
+Para o sistema, esse Pix não tem nada de errado.
+
+21
+00:01:03,680 --> 00:01:07,147
+Foi você quem digitou a senha, no seu celular, no seu aplicativo.
+
+22
+00:01:07,147 --> 00:01:09,334
+O golpe não quebrou a segurança do banco.
+
+23
+00:01:09,334 --> 00:01:10,347
+Ele convenceu você.
+
+24
+00:01:10,947 --> 00:01:13,554
+Esse tipo de golpe tem nome: engenharia social.
+
+25
+00:01:13,554 --> 00:01:14,940
+A falsa central do banco.
+
+26
+00:01:14,940 --> 00:01:17,381
+O falso parente, com número novo de celular.
+
+27
+00:01:17,381 --> 00:01:18,601
+A loja que não existe.
+
+28
+00:01:18,601 --> 00:01:20,487
+O falso emprego que pede uma taxa.
+
+29
+00:01:20,487 --> 00:01:25,923
+Muda a história, mas o objetivo é sempre o mesmo: fazer com que a própria vítima mande o dinheiro.
+
+30
+00:01:26,523 --> 00:01:28,384
+E o tamanho do problema é enorme.
+
+31
+00:01:28,384 --> 00:01:33,853
+Em dois mil e vinte e cinco, o Brasil registrou mais de dois milhões e duzentos mil estelionatos.
+
+32
+00:01:33,853 --> 00:01:36,785
+E o Pix virou o principal meio de pagamento do país.
+
+33
+00:01:36,785 --> 00:01:41,691
+No primeiro semestre deste ano, ele foi usado em mais da metade de todas as transações.
+
+34
+00:01:42,291 --> 00:01:44,232
+Marca dois: os primeiros segundos.
+
+35
+00:01:44,232 --> 00:01:45,716
+O Pix é liquidado na hora.
+
+36
+00:01:45,716 --> 00:01:49,369
+O dinheiro não fica em trânsito, como numa transferência antiga.
+
+37
+00:01:49,369 --> 00:01:51,653
+Ele cai na conta de destino em segundos.
+
+38
+00:01:51,653 --> 00:01:56,734
+E é exatamente essa velocidade, a maior qualidade do Pix, que o golpista usa a seu favor.
+
+39
+00:01:57,334 --> 00:02:01,025
+Porque a conta que recebe o seu dinheiro quase nunca é do golpista.
+
+40
+00:02:01,025 --> 00:02:01,907
+É de um laranja.
+
+41
+00:02:01,907 --> 00:02:04,827
+Alguém que emprestou, vendeu ou teve a conta roubada.
+
+42
+00:02:04,827 --> 00:02:09,345
+E dessa primeira conta o dinheiro pula para uma segunda, uma terceira, uma quarta.
+
+43
+00:02:09,345 --> 00:02:11,990
+Às vezes vira saque, criptomoeda ou boleto pago.
+
+44
+00:02:12,590 --> 00:02:13,837
+Por que tantas camadas?
+
+45
+00:02:13,837 --> 00:02:15,410
+Porque cada pulo ganha tempo.
+
+46
+00:02:15,410 --> 00:02:22,192
+Enquanto a vítima ainda está tentando entender o que aconteceu, o dinheiro já passou por várias contas, em bancos diferentes.
+
+47
+00:02:22,192 --> 00:02:24,741
+E cada banco só enxerga a sua parte do caminho.
+
+48
+00:02:24,741 --> 00:02:30,275
+Para quem investiga, é como montar um quebra-cabeça com as peças espalhadas em cinco casas diferentes.
+
+49
+00:02:30,875 --> 00:02:35,103
+Durante quatro anos, o mecanismo de devolução só enxergava a primeira conta.
+
+50
+00:02:35,103 --> 00:02:38,607
+Se o dinheiro já tivesse saído de lá, não havia o que bloquear.
+
+51
+00:02:38,607 --> 00:02:42,502
+Era como tentar fechar a porta depois que o ladrão já virou a esquina.
+
+52
+00:02:43,102 --> 00:02:44,670
+Marca três: a primeira hora.
+
+53
+00:02:44,670 --> 00:02:49,040
+Essa é a marca mais importante do vídeo, porque é a única que depende de você.
+
+54
+00:02:49,040 --> 00:02:50,049
+Cada minuto conta.
+
+55
+00:02:50,049 --> 00:02:55,091
+Quanto antes você avisa, maior a chance de ainda existir saldo em alguma conta do caminho.
+
+56
+00:02:55,691 --> 00:03:02,351
+Desde outubro de dois mil e vinte e cinco, os aplicativos dos bancos têm de oferecer um botão de contestação do Pix.
+
+57
+00:03:02,351 --> 00:03:06,140
+Você abre o comprovante, toca em contestar, explica que foi golpe.
+
+58
+00:03:06,140 --> 00:03:08,494
+Não precisa ligar, nem esperar atendente.
+
+59
+00:03:08,494 --> 00:03:11,307
+O pedido vai direto para o banco de quem recebeu.
+
+60
+00:03:11,907 --> 00:03:15,664
+Um detalhe importante: esse caminho é para golpe, fraude ou coação.
+
+61
+00:03:15,664 --> 00:03:20,430
+Não serve para arrependimento de compra, briga com uma loja ou chave digitada errada.
+
+62
+00:03:20,430 --> 00:03:24,579
+Nesses casos, a conversa é outra, com quem recebeu, e às vezes na Justiça.
+
+63
+00:03:25,179 --> 00:03:28,865
+E existe uma barreira que você pode ativar antes de qualquer golpe.
+
+64
+00:03:28,865 --> 00:03:35,742
+Desde dois mil e vinte e um, o Pix entre pessoas físicas tem limite de mil reais à noite, das oito da noite às seis da manhã.
+
+65
+00:03:35,742 --> 00:03:40,584
+Você pode baixar esse limite, e aumentar não é imediato: o banco tem prazo para atender.
+
+66
+00:03:40,584 --> 00:03:41,904
+É um freio de propósito.
+
+67
+00:03:42,504 --> 00:03:44,441
+Marca quatro: setenta e duas horas.
+
+68
+00:03:44,441 --> 00:03:50,362
+Quando o pedido chega ao banco de quem recebeu, o dinheiro que ainda estiver na conta suspeita é bloqueado.
+
+69
+00:03:50,362 --> 00:03:58,717
+E o próprio banco recebedor, se desconfiar de uma transferência, pode segurar o valor por até setenta e duas horas, antes mesmo de qualquer reclamação.
+
+70
+00:03:59,318 --> 00:04:10,182
+Com o MED dois ponto zero, obrigatório desde fevereiro de dois mil e vinte e seis, os bancos passaram a seguir o dinheiro pelas contas seguintes, e a bloquear o que encontrarem pelo caminho.
+
+71
+00:04:10,182 --> 00:04:13,441
+É a mudança mais importante desde a criação do mecanismo.
+
+72
+00:04:13,441 --> 00:04:19,274
+Na prática, a pergunta deixou de ser só onde o dinheiro caiu, e passou a ser para onde ele foi depois.
+
+73
+00:04:19,274 --> 00:04:26,021
+Os bancos trocam essas informações entre si, por canais internos, sem que você precise fazer nada além da contestação.
+
+74
+00:04:26,621 --> 00:04:28,717
+Mas repare na frase: o que encontrarem.
+
+75
+00:04:28,717 --> 00:04:31,083
+O bloqueio só pega o saldo que ainda existe.
+
+76
+00:04:31,083 --> 00:04:34,953
+Se o laranja já sacou tudo, a conta está vazia, e não há o que congelar.
+
+77
+00:04:34,953 --> 00:04:37,480
+É aqui que começa a resposta da nossa pergunta.
+
+78
+00:04:38,079 --> 00:04:39,404
+Marca cinco: onze dias.
+
+79
+00:04:39,404 --> 00:04:44,240
+É a estimativa do Banco Central para o dinheiro voltar, quando o golpe é confirmado.
+
+80
+00:04:44,240 --> 00:04:46,255
+Quem analisa não é o Banco Central.
+
+81
+00:04:46,255 --> 00:04:47,694
+São os bancos envolvidos.
+
+82
+00:04:47,694 --> 00:04:51,264
+Eles conferem o caso e decidem se aceitam ou recusam o pedido.
+
+83
+00:04:51,863 --> 00:04:53,213
+E os números são duros.
+
+84
+00:04:53,213 --> 00:04:58,495
+Entre janeiro e abril deste ano, as vítimas abriram onze milhões e oitocentos mil pedidos.
+
+85
+00:04:58,495 --> 00:05:01,136
+Dez milhões e setecentos mil foram recusados.
+
+86
+00:05:01,136 --> 00:05:02,192
+Noventa por cento.
+
+87
+00:05:02,192 --> 00:05:07,415
+No mesmo período, duzentos e sessenta e quatro milhões de reais voltaram para as vítimas.
+
+88
+00:05:08,015 --> 00:05:09,689
+Agora, a resposta da pergunta.
+
+89
+00:05:09,689 --> 00:05:10,861
+Por que tanta recusa?
+
+90
+00:05:10,861 --> 00:05:14,822
+O principal motivo, segundo o Banco Central, é simples: falta de saldo.
+
+91
+00:05:14,822 --> 00:05:16,830
+A conta que recebeu já estava vazia.
+
+92
+00:05:16,830 --> 00:05:22,744
+Nos dados desde dois mil e vinte e dois, treze vírgula sete bilhões de reais não voltaram por esse motivo.
+
+93
+00:05:22,744 --> 00:05:24,975
+É a maior parte de tudo o que se perdeu.
+
+94
+00:05:25,575 --> 00:05:30,314
+Há também pedidos recusados porque o caso não era golpe, ou porque faltaram informações.
+
+95
+00:05:30,314 --> 00:05:34,029
+Mas a lição central é esta: o mecanismo de devolução não é um seguro.
+
+96
+00:05:34,029 --> 00:05:34,999
+Ele é uma corrida.
+
+97
+00:05:34,999 --> 00:05:38,122
+Ele só devolve o que conseguir alcançar antes do golpista.
+
+98
+00:05:38,122 --> 00:05:44,583
+E quando a devolução acontece, pode ser parcial: volta o que foi encontrado, não necessariamente tudo o que você mandou.
+
+99
+00:05:45,183 --> 00:05:49,450
+Repare que a culpa da recusa, na maior parte das vezes, não é de quem decide.
+
+100
+00:05:49,450 --> 00:05:50,059
+É do tempo.
+
+101
+00:05:50,059 --> 00:05:54,547
+Por isso, a marca três, a primeira hora, vale mais do que todas as outras juntas.
+
+102
+00:05:54,547 --> 00:06:00,309
+E por isso os bancos investem cada vez mais em detectar a conta laranja antes de o dinheiro chegar nela.
+
+103
+00:06:00,909 --> 00:06:02,355
+Marca seis: oitenta dias.
+
+104
+00:06:02,355 --> 00:06:06,982
+É o prazo máximo para pedir a devolução pelo mecanismo, contado a partir do Pix.
+
+105
+00:06:06,982 --> 00:06:09,643
+Passou disso, o caminho pelo aplicativo fecha.
+
+106
+00:06:09,643 --> 00:06:12,650
+E aí sobra a pergunta que mais gente faz: e o banco?
+
+107
+00:06:12,650 --> 00:06:14,327
+O banco não tem que devolver?
+
+108
+00:06:14,927 --> 00:06:15,377
+Depende.
+
+109
+00:06:15,377 --> 00:06:22,068
+Uma súmula do Superior Tribunal de Justiça diz que o banco responde por fraudes de terceiros dentro das suas operações.
+
+110
+00:06:22,068 --> 00:06:28,197
+Por exemplo, quando alguém invade a sua conta, ou quando o sistema deixa passar algo que deveria ter barrado.
+
+111
+00:06:28,797 --> 00:06:39,628
+Mas, quando foi a própria vítima que fez o Pix, enganada por um golpista, decisões recentes do STJ têm afastado a culpa do banco, se as transferências eram compatíveis com o perfil do cliente.
+
+112
+00:06:39,628 --> 00:06:45,607
+O critério que mais pesa é este: o Pix era normal para você, ou destoava de tudo o que você costuma fazer?
+
+113
+00:06:46,207 --> 00:06:51,382
+A minha análise: o sistema brasileiro cobra caro da vítima pelo erro de ter sido convencida.
+
+114
+00:06:51,382 --> 00:06:55,657
+Em outros países, a discussão é se os bancos deveriam dividir esse prejuízo.
+
+115
+00:06:55,657 --> 00:07:01,057
+Aqui, a aposta do Banco Central foi outra: rastrear melhor o dinheiro e caçar as contas laranja.
+
+116
+00:07:01,057 --> 00:07:04,319
+O MED dois ponto zero ainda está sendo testado na prática.
+
+117
+00:07:04,919 --> 00:07:06,469
+Então, o que de fato protege?
+
+118
+00:07:06,469 --> 00:07:07,591
+Três hábitos simples.
+
+119
+00:07:07,591 --> 00:07:12,187
+Antes de confirmar qualquer Pix, leia o nome de quem vai receber, que aparece na tela.
+
+120
+00:07:12,187 --> 00:07:15,980
+Banco de verdade não pede transferência para conta de segurança, nunca.
+
+121
+00:07:15,980 --> 00:07:21,858
+E, se a ligação parecer urgente demais, desligue e ligue você mesmo para o número que está no verso do cartão.
+
+122
+00:07:22,458 --> 00:07:23,984
+Recapitulando o cronômetro.
+
+123
+00:07:23,984 --> 00:07:26,923
+No segundo zero, o Pix sai, e foi você quem apertou.
+
+124
+00:07:26,923 --> 00:07:29,976
+Em segundos, o dinheiro se espalha por contas laranja.
+
+125
+00:07:29,976 --> 00:07:32,745
+Na primeira hora, a sua reação decide quase tudo.
+
+126
+00:07:32,745 --> 00:07:35,571
+Em setenta e duas horas, o que sobrou é bloqueado.
+
+127
+00:07:35,571 --> 00:07:37,041
+Em onze dias, pode voltar.
+
+128
+00:07:37,041 --> 00:07:38,906
+E em oitenta dias, o prazo acaba.
+
+129
+00:07:39,506 --> 00:07:41,393
+E a lição deste episódio é esta.
+
+130
+00:07:41,393 --> 00:07:45,697
+A velocidade que fez o Pix dar certo é a mesma que faz o golpe dar certo.
+
+131
+00:07:45,697 --> 00:07:51,474
+Contra um sistema que leva segundos, a sua melhor defesa é desconfiar antes, e agir rápido depois.
+
+132
+00:07:52,074 --> 00:07:57,053
+Este vídeo é informativo e não é recomendação financeira nem orientação jurídica.
+
+133
+00:07:57,053 --> 00:08:02,954
+Em caso de golpe, procure o seu banco pelos canais oficiais e registre um boletim de ocorrência.
+
+134
+00:08:03,554 --> 00:08:07,909
+E se a ligação da falsa central viesse de um banco que você nunca ouviu falar?
+
+135
+00:08:07,909 --> 00:08:10,756
+No próximo episódio: os bancos que ninguém conhece.
+
+136
+00:08:10,756 --> 00:08:20,023
+As instituições de pagamento que viraram gigantes sem agência, como elas ganham dinheiro, e por que algumas delas acabam virando porta de entrada para contas laranja.
