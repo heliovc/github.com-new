@@ -6,7 +6,7 @@ Ler antes de cada vídeo (plano.md, seção 8). Atualizar depois de produzir e 4
 - Nome: **Na Pele De** — YouTube `@napeledebicho`, channel_id `UCO5Fa5_HJxd-aeTiyQcw0Sw` (criado pelo Hélio em 20/11/2026). Cadastrado em `server/publisher/channels.json`.
 - Instagram / TikTok: **pendente (Hélio criar)**; depois, ligar no Buffer.
 - Piloto (Dia 1 A e B): aprovado pelo Hélio em 20/11/2026; agendado pelo robô para 21/11 12:00 e 19:00.
-- Rotina diária na nuvem: ligada em 20/11, 06:30 (Brasília), produz até 2 dias adiantado.
+- Rotina diária na nuvem: prompt pronto (`rotina.md`, 06:30 Brasília, até 2 dias adiantado), aguardando o OK do Hélio para ser criada.
 - Pendente: longo semanal de domingo (compilação) ainda não implementado; Instagram/TikTok no Buffer.
 
 ## Animais e temas usados
@@ -30,8 +30,8 @@ Metas: continuaram assistindo ≥ 70% · % visualizada ≥ 80%.
 
 | Vídeo | Publicado em | Link | Continuaram assistindo | % visualizada | Views 48 h | Inscritos / 1.000 views |
 |---|---|---|---|---|---|---|
-| 1A formiga | 21/11 12:00 (agendado) | — | — | — | — | — |
-| 1B lagartixa | 21/11 19:00 (agendado) | — | — | — | — | — |
+| 1A formiga | 21/11 12:00 (agendado) | https://youtube.com/shorts/Wcw5EPuTlpg | — | — | — | — |
+| 1B lagartixa | 21/11 19:00 (agendado) | https://youtube.com/shorts/v88xGAAAzmw | — | — | — | — |
 
 ## Decisões e desvios do plano
 - **20/11 — Visão do Bicho da lagartixa:** o roteiro pedia visão térmica, mas lagartixa não enxerga calor (quem enxerga é cobra, Dia 11A). Trocado pelo sentido real: enxergar cores no escuro (Roth & Kelber 2004). A cena de calor continua como raio-X explicativo.
