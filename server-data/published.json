@@ -2016,7 +2016,9 @@
   "title": "Automate an Excel Report with Python: Summaries, Pivot Tables and Formatting (pandas + openpyxl)",
   "kind": "long",
   "publish_at": "2026-11-20T19:30:00-03:00",
-  "pinned_comment": "Which report do you still build by hand every week or month? Tell me below and it might become a future video."
+  "pinned_comment": "Which report do you still build by hand every week or month? Tell me below and it might become a future video.",
+  "comment_attempts": 1,
+  "comment_done": "2026-11-20T19:43:01.568296-03:00"
  },
  "lab-ep16-short": {
   "attempts": 1,
@@ -2032,7 +2034,9 @@
   "kind": "short",
   "publish_at": "2026-11-20T21:00:00-03:00",
   "related_key": "lab-ep16-long",
-  "pinned_comment": "What should Python build for you next: a chart, an email or a PDF? Full tutorial: Automate an Excel Report with Python: Summaries, Pivot Tables and Formatting (pandas + openpyxl)"
+  "pinned_comment": "What should Python build for you next: a chart, an email or a PDF? Full tutorial: Automate an Excel Report with Python: Summaries, Pivot Tables and Formatting (pandas + openpyxl)",
+  "related_attempts": 1,
+  "related_done": "2026-11-20T19:44:45.411210-03:00"
  },
  "quiet-ep10-long": {
   "attempts": 1,
