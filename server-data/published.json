@@ -1939,5 +1939,52 @@
   "publish_at": "2026-11-20T20:15:00-03:00",
   "related_key": "cosmic-ep17-long",
   "pinned_comment": "Which star should we put in the Sun's place next? Full video: What If We Swapped the Sun for 5 Other Stars? One Puts Earth INSIDE It"
+ },
+ "ptd-rank17-short": {
+  "attempts": 1,
+  "status": "published",
+  "url": "https://youtu.be/Xgcz4Z9iBJY",
+  "by": "robo",
+  "visibility": "schedule",
+  "when": "2026-11-20T12:45:00-03:00",
+  "at": "2026-11-20T07:34:30.998200-03:00",
+  "error": null,
+  "channel_id": "UCd_BGmJ5gbQ0kECAxmbvQHA",
+  "title": "Os 5 países que mais usam pagamento instantâneo (o Brasil não é o nº 1) #shorts",
+  "kind": "short",
+  "publish_at": "2026-11-20T12:45:00-03:00",
+  "related_key": "ptd-ep07-long",
+  "pinned_comment": "Você ainda usa dinheiro vivo ou já faz tudo no Pix? Vídeo completo: Como o Pix mudou os bancos (e quem perdeu dinheiro)"
+ },
+ "ptd-ep17-long": {
+  "attempts": 1,
+  "status": "published",
+  "url": "https://youtu.be/e8HlVeyJ5iE",
+  "by": "robo",
+  "visibility": "schedule",
+  "when": "2026-11-20T18:45:00-03:00",
+  "at": "2026-11-20T07:37:55.651477-03:00",
+  "error": null,
+  "channel_id": "UCd_BGmJ5gbQ0kECAxmbvQHA",
+  "title": "Golpe do Pix: para onde vai o seu dinheiro em segundos (e quem tem que devolver)",
+  "kind": "long",
+  "publish_at": "2026-11-20T18:45:00-03:00",
+  "pinned_comment": "Na sua opinião, quando alguém é enganado e faz o Pix para um golpista, o banco deveria dividir o prejuízo? Conta aqui."
+ },
+ "ptd-ep17-short": {
+  "attempts": 1,
+  "status": "published",
+  "url": "https://youtu.be/AafEZkjQPeU",
+  "by": "robo",
+  "visibility": "schedule",
+  "when": "2026-11-20T19:45:00-03:00",
+  "at": "2026-11-20T07:40:57.227633-03:00",
+  "error": null,
+  "channel_id": "UCd_BGmJ5gbQ0kECAxmbvQHA",
+  "title": "Caiu no golpe do Pix? Por que 9 em 10 pedidos de devolução são negados #shorts",
+  "kind": "short",
+  "publish_at": "2026-11-20T19:45:00-03:00",
+  "related_key": "ptd-ep17-long",
+  "pinned_comment": "Você ou alguém que você conhece já tentou pedir um Pix de volta? Conseguiu? Vídeo completo: Golpe do Pix: para onde vai o seu dinheiro em segundos (e quem tem que devolver)"
  }
 }
