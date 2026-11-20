@@ -1981,7 +1981,9 @@
   "title": "Golpe do Pix: para onde vai o seu dinheiro em segundos (e quem tem que devolver)",
   "kind": "long",
   "publish_at": "2026-11-20T18:45:00-03:00",
-  "pinned_comment": "Na sua opinião, quando alguém é enganado e faz o Pix para um golpista, o banco deveria dividir o prejuízo? Conta aqui."
+  "pinned_comment": "Na sua opinião, quando alguém é enganado e faz o Pix para um golpista, o banco deveria dividir o prejuízo? Conta aqui.",
+  "comment_attempts": 1,
+  "comment_done": "2026-11-20T18:53:11.664278-03:00"
  },
  "ptd-ep17-short": {
   "attempts": 1,
@@ -1997,7 +1999,9 @@
   "kind": "short",
   "publish_at": "2026-11-20T19:45:00-03:00",
   "related_key": "ptd-ep17-long",
-  "pinned_comment": "Você ou alguém que você conhece já tentou pedir um Pix de volta? Conseguiu? Vídeo completo: Golpe do Pix: para onde vai o seu dinheiro em segundos (e quem tem que devolver)"
+  "pinned_comment": "Você ou alguém que você conhece já tentou pedir um Pix de volta? Conseguiu? Vídeo completo: Golpe do Pix: para onde vai o seu dinheiro em segundos (e quem tem que devolver)",
+  "related_attempts": 1,
+  "related_done": "2026-11-20T18:54:44.499477-03:00"
  },
  "lab-ep16-long": {
   "attempts": 1,
