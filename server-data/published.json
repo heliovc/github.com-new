@@ -1854,7 +1854,9 @@
   "related_key": "lab-ep15-long",
   "pinned_comment": "Which data mess do you fight most: dates, duplicates or spaces? Full tutorial: Clean Messy Data with Python: Spaces, Duplicates, Dates and Text Numbers (pandas for Beginners)",
   "related_attempts": 1,
-  "related_done": "2026-11-19T19:54:13.774202-03:00"
+  "related_done": "2026-11-19T19:54:13.774202-03:00",
+  "comment_attempts": 1,
+  "comment_done": "2026-11-19T21:22:29.451900-03:00"
  },
  "quiet-ep09-long": {
   "attempts": 1,
