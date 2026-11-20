@@ -1,11 +1,6 @@
 {
- "last_run": "2026-11-20T20:01:34.753726-03:00",
- "pending": 2,
- "post_tasks": 1,
- "errors": [],
- "published_now": [
-  "c5-d01a-formiga: https://youtube.com/shorts/Wcw5EPuTlpg",
-  "c5-d01b-lagartixa: https://youtube.com/shorts/v88xGAAAzmw",
-  "ptd-ep17-short: comment comentário fixado"
- ]
+ "last_run": "2026-11-20T20:11:02.946267-03:00",
+ "pending": 0,
+ "post_tasks": 0,
+ "errors": []
 }
