@@ -1,0 +1,647 @@
+1
+00:00:00,250 --> 00:00:07,467
+Every month, someone opens a giant spreadsheet, filters it, copies numbers into a new file, adds totals, and makes it look nice.
+
+2
+00:00:07,467 --> 00:00:08,821
+It eats a whole morning.
+
+3
+00:00:08,821 --> 00:00:12,260
+This report was made by a Python script, in under one second.
+
+4
+00:00:12,260 --> 00:00:15,644
+Three sheets, a totals row, bold headers, and clean numbers.
+
+5
+00:00:15,644 --> 00:00:16,941
+Today, you'll build it.
+
+6
+00:00:17,641 --> 00:00:21,550
+We'll start from the clean orders file we made in the last episode.
+
+7
+00:00:21,550 --> 00:00:27,033
+If you missed it, no problem, any table with dates, categories and numbers works the same way.
+
+8
+00:00:27,033 --> 00:00:33,159
+And I'll show you the three mistakes that break almost every first report, with the real error on screen.
+
+9
+00:00:33,859 --> 00:00:34,834
+Here's the plan.
+
+10
+00:00:34,834 --> 00:00:35,687
+Load the data.
+
+11
+00:00:35,687 --> 00:00:37,698
+Add the columns the report needs.
+
+12
+00:00:37,698 --> 00:00:39,830
+Summarize it, by city and by month.
+
+13
+00:00:39,830 --> 00:00:43,060
+Write everything to one Excel file with three sheets.
+
+14
+00:00:43,060 --> 00:00:45,985
+And finally, make it look like a person made it.
+
+15
+00:00:46,685 --> 00:00:49,364
+You need Python, and two free libraries.
+
+16
+00:00:49,364 --> 00:00:54,922
+Pandas does the math, and openpyxl is the engine that reads and writes Excel files.
+
+17
+00:00:54,922 --> 00:00:58,471
+Open a terminal and type pip install pandas openpyxl.
+
+18
+00:00:58,471 --> 00:01:05,168
+Then put orders clean dot c s v in a folder, and create a new file next to it called report dot p y.
+
+19
+00:01:05,868 --> 00:01:06,422
+Step one.
+
+20
+00:01:06,422 --> 00:01:09,868
+Import pandas as p d, and read the file with read c s v.
+
+21
+00:01:09,868 --> 00:01:11,283
+Notice this extra part.
+
+22
+00:01:11,283 --> 00:01:13,498
+Parse dates equals a list with Date.
+
+23
+00:01:13,498 --> 00:01:17,744
+It tells pandas that the Date column holds real dates, not just text.
+
+24
+00:01:17,744 --> 00:01:20,452
+Remember that, it's the first mistake later.
+
+25
+00:01:20,452 --> 00:01:23,221
+Then print the shape and the first four rows.
+
+26
+00:01:23,921 --> 00:01:24,348
+Run it.
+
+27
+00:01:24,348 --> 00:01:27,520
+Eight hundred and ninety two rows and eight columns.
+
+28
+00:01:27,520 --> 00:01:31,730
+Order I D, date, customer, city, product, quantity, price and status.
+
+29
+00:01:31,730 --> 00:01:32,706
+Look at row two.
+
+30
+00:01:32,706 --> 00:01:34,231
+That order was cancelled.
+
+31
+00:01:34,231 --> 00:01:37,220
+We don't want cancelled orders in a sales report.
+
+32
+00:01:37,920 --> 00:01:38,455
+Step two.
+
+33
+00:01:38,455 --> 00:01:42,318
+First, keep only the rows where status is not equal to cancelled.
+
+34
+00:01:42,318 --> 00:01:47,489
+Inside the square brackets is a test, and pandas keeps the rows where the test is true.
+
+35
+00:01:47,489 --> 00:01:52,303
+Then a new column, Revenue, which is quantity times price, for every row at once.
+
+36
+00:01:52,303 --> 00:01:56,641
+And Month, using dot d t dot s t r f time, with percent Y dash percent m.
+
+37
+00:01:56,641 --> 00:02:00,563
+That turns a date into text like twenty twenty six dash zero four.
+
+38
+00:02:01,264 --> 00:02:03,028
+And here's mistake number one.
+
+39
+00:02:03,028 --> 00:02:07,673
+If you forget parse dates when you read the file, the Date column is just text.
+
+40
+00:02:07,673 --> 00:02:10,672
+The moment you use dot d t, pandas stops with this.
+
+41
+00:02:10,672 --> 00:02:11,613
+Attribute error.
+
+42
+00:02:11,613 --> 00:02:14,906
+Can only use dot d t accessor with datetime like values.
+
+43
+00:02:14,906 --> 00:02:17,375
+In plain English, that column isn't dates.
+
+44
+00:02:17,375 --> 00:02:19,433
+The fix is the one we already have.
+
+45
+00:02:19,433 --> 00:02:21,198
+Add parse dates to read c s v.
+
+46
+00:02:21,898 --> 00:02:23,584
+Step three, the first summary.
+
+47
+00:02:23,584 --> 00:02:26,450
+Group by City, take the Revenue column, and sum it.
+
+48
+00:02:26,450 --> 00:02:28,979
+Group by works like sorting cards into piles.
+
+49
+00:02:28,979 --> 00:02:32,969
+Every row goes to the pile of its city, and then each pile is added up.
+
+50
+00:02:32,969 --> 00:02:39,826
+Here it is, running for real, on all eight hundred and twenty five orders that are left after removing the cancelled ones.
+
+51
+00:02:40,526 --> 00:02:45,065
+We add sort values, ascending equals false, so the biggest city comes first.
+
+52
+00:02:45,065 --> 00:02:45,483
+Run it.
+
+53
+00:02:45,483 --> 00:02:49,185
+Austin on top, with almost one hundred and sixty two thousand.
+
+54
+00:02:49,185 --> 00:02:50,559
+Denver near the bottom.
+
+55
+00:02:50,559 --> 00:02:55,456
+And Unknown, those are orders with an empty city that we kept in the last episode.
+
+56
+00:02:55,456 --> 00:02:58,263
+Honest data shows them, instead of hiding them.
+
+57
+00:02:58,963 --> 00:03:02,519
+Step four, a pivot table, exactly like the one in Excel.
+
+58
+00:03:02,519 --> 00:03:05,250
+Index equals Month makes one row per month.
+
+59
+00:03:05,250 --> 00:03:08,172
+Columns equals City makes one column per city.
+
+60
+00:03:08,172 --> 00:03:11,729
+Values is Revenue, and agg func equals sum adds them up.
+
+61
+00:03:11,729 --> 00:03:17,254
+Fill value equals zero puts a zero where a city had no sales, instead of an empty cell.
+
+62
+00:03:17,954 --> 00:03:19,232
+And here's the result.
+
+63
+00:03:19,232 --> 00:03:25,740
+Ten months down the side, seven cities across the top, and every cell is the real total for that month and city.
+
+64
+00:03:25,740 --> 00:03:27,367
+I rounded it for the screen.
+
+65
+00:03:27,367 --> 00:03:29,923
+Building this by hand in Excel takes clicks.
+
+66
+00:03:29,923 --> 00:03:34,048
+Here it's two lines, and it updates itself every time the data changes.
+
+67
+00:03:34,748 --> 00:03:36,094
+Now we write to Excel.
+
+68
+00:03:36,094 --> 00:03:37,990
+And this is mistake number two.
+
+69
+00:03:37,990 --> 00:03:45,023
+It feels natural to call to excel twice, one sheet for the summary, one for the data, both into report dot x l s x.
+
+70
+00:03:45,023 --> 00:03:46,736
+Run it, and list the sheets.
+
+71
+00:03:46,736 --> 00:03:47,347
+Only Data.
+
+72
+00:03:47,347 --> 00:03:52,118
+The second call created a brand new file, and silently replaced the first one.
+
+73
+00:03:52,118 --> 00:03:53,402
+Your summary is gone.
+
+74
+00:03:54,102 --> 00:03:55,548
+Here's the real output.
+
+75
+00:03:55,548 --> 00:03:56,993
+One sheet, called Data.
+
+76
+00:03:56,993 --> 00:03:58,313
+No error, no warning.
+
+77
+00:03:58,313 --> 00:04:00,639
+That's what makes this one so sneaky.
+
+78
+00:04:01,339 --> 00:04:02,853
+The fix is Excel Writer.
+
+79
+00:04:02,853 --> 00:04:06,450
+With p d dot Excel Writer, report dot x l s x, as writer.
+
+80
+00:04:06,450 --> 00:04:10,677
+Everything indented under that line writes into the same open file.
+
+81
+00:04:10,677 --> 00:04:16,986
+Then call to excel three times, passing writer instead of a file name, each with its own sheet name.
+
+82
+00:04:16,986 --> 00:04:20,078
+The file is saved once, when the with block ends.
+
+83
+00:04:20,778 --> 00:04:21,587
+Open the file.
+
+84
+00:04:21,587 --> 00:04:23,031
+Three tabs at the bottom.
+
+85
+00:04:23,031 --> 00:04:24,648
+By city, By month, and Data.
+
+86
+00:04:24,648 --> 00:04:25,168
+It works.
+
+87
+00:04:25,168 --> 00:04:26,035
+But look at it.
+
+88
+00:04:26,035 --> 00:04:28,230
+Every column is the same narrow width.
+
+89
+00:04:28,230 --> 00:04:32,446
+In the Data sheet, the dates are just hash signs, because they don't fit.
+
+90
+00:04:32,446 --> 00:04:34,584
+Nobody would send this to their boss.
+
+91
+00:04:34,584 --> 00:04:35,912
+So let's fix the looks.
+
+92
+00:04:36,612 --> 00:04:38,723
+Quick detour for mistake number three.
+
+93
+00:04:38,723 --> 00:04:40,834
+See index equals false in those lines?
+
+94
+00:04:40,834 --> 00:04:46,111
+Leave it out, and pandas also writes its row numbers, zero, one, two, as an extra first column.
+
+95
+00:04:46,111 --> 00:04:49,500
+Read the file back, and you get a column called Unnamed zero.
+
+96
+00:04:49,500 --> 00:04:52,777
+It's harmless, but it confuses everyone who opens the file.
+
+97
+00:04:52,777 --> 00:04:56,888
+Add index equals false, unless the index means something, like our months.
+
+98
+00:04:57,588 --> 00:04:59,558
+Step six, formatting, with openpyxl.
+
+99
+00:04:59,558 --> 00:05:01,144
+Import Font and Pattern Fill.
+
+100
+00:05:01,144 --> 00:05:04,264
+Then, still inside the with block, loop over every sheet.
+
+101
+00:05:04,264 --> 00:05:06,288
+Writer dot sheets gives you each one.
+
+102
+00:05:06,288 --> 00:05:11,378
+For every cell in row one, the header, we set a bold white font, and a solid dark green fill.
+
+103
+00:05:11,378 --> 00:05:13,731
+Then every column gets a width of fourteen.
+
+104
+00:05:13,731 --> 00:05:17,671
+And freeze panes equals A two keeps the header visible while you scroll.
+
+105
+00:05:18,371 --> 00:05:23,067
+Here's the difference on the By city sheet, the same data before and after.
+
+106
+00:05:23,067 --> 00:05:26,636
+Wider columns, a real header, and a frozen line under it.
+
+107
+00:05:27,336 --> 00:05:28,843
+Step seven, a totals row.
+
+108
+00:05:28,843 --> 00:05:31,316
+Ws dot max row is the last row with data.
+
+109
+00:05:31,316 --> 00:05:36,442
+One row below it, we write the word Total, and in column B, an Excel formula as text.
+
+110
+00:05:36,442 --> 00:05:38,191
+Equals sum, B two to B eight.
+
+111
+00:05:38,191 --> 00:05:43,196
+Because it's a real formula, if someone edits a number in Excel, the total updates.
+
+112
+00:05:43,196 --> 00:05:47,056
+Then number format, with a comma for thousands and two decimals.
+
+113
+00:05:47,756 --> 00:05:52,011
+Click the total cell, and the formula bar shows sum B two to B eight.
+
+114
+00:05:52,011 --> 00:05:54,477
+A live Excel formula, written by Python.
+
+115
+00:05:54,477 --> 00:06:01,013
+And the last two lines in the script give the Data sheet a proper date format, so the hash signs are gone.
+
+116
+00:06:01,713 --> 00:06:03,221
+Here's the By month sheet.
+
+117
+00:06:03,221 --> 00:06:09,082
+The months down the side, cities across, the green header, and it stays frozen while you scroll down.
+
+118
+00:06:09,782 --> 00:06:10,893
+And the Data sheet.
+
+119
+00:06:10,893 --> 00:06:18,733
+Every order, with real dates instead of hash signs, the new Revenue column at the end, with Month right after it, and a frozen header.
+
+120
+00:06:18,733 --> 00:06:22,185
+Anyone can click a header in Excel and filter it from here.
+
+121
+00:06:22,885 --> 00:06:26,045
+If your script fails, it's usually one of three things.
+
+122
+00:06:26,045 --> 00:06:31,102
+No module named openpyxl means the library isn't installed, so run pip install openpyxl.
+
+123
+00:06:31,102 --> 00:06:36,044
+A permission error on Windows usually means report dot x l s x is still open in Excel.
+
+124
+00:06:36,044 --> 00:06:37,365
+Close it and run again.
+
+125
+00:06:37,365 --> 00:06:45,123
+And a key error means a column name doesn't match, so check the spelling and the capital letters, exactly as they appear in the header.
+
+126
+00:06:45,823 --> 00:06:47,248
+Here's the whole script.
+
+127
+00:06:47,248 --> 00:06:48,318
+About forty lines.
+
+128
+00:06:48,318 --> 00:06:53,960
+Load, filter, add two columns, two summaries, one Excel file, three sheets, and the formatting.
+
+129
+00:06:53,960 --> 00:06:55,980
+Pause here if you want to copy it.
+
+130
+00:06:55,980 --> 00:06:58,653
+It's also in the description, ready to paste.
+
+131
+00:06:59,353 --> 00:07:01,012
+Always check what you made.
+
+132
+00:07:01,012 --> 00:07:07,771
+This tiny script opens the report with load workbook, prints the sheet names, and prints every row of By city.
+
+133
+00:07:07,771 --> 00:07:11,642
+Three sheets, seven cities, and the total row with its formula.
+
+134
+00:07:11,642 --> 00:07:12,994
+Exactly what we built.
+
+135
+00:07:13,694 --> 00:07:14,124
+Pro tip.
+
+136
+00:07:14,124 --> 00:07:19,458
+Put the month in the file name, so every run makes a new report instead of overwriting the old one.
+
+137
+00:07:19,458 --> 00:07:20,912
+From date time import date.
+
+138
+00:07:20,912 --> 00:07:25,545
+Then an f string, report underscore, and date dot today with percent Y dash percent m.
+
+139
+00:07:25,545 --> 00:07:29,046
+Today that gives report underscore twenty twenty six dash eleven.
+
+140
+00:07:29,046 --> 00:07:35,996
+Combine it with episode twelve, where we scheduled a script to run by itself, and this report literally makes itself every month.
+
+141
+00:07:36,696 --> 00:07:37,505
+And the speed?
+
+142
+00:07:37,505 --> 00:07:43,233
+I timed the full script, reading the data, every summary, all three sheets, and all the formatting.
+
+143
+00:07:43,233 --> 00:07:44,390
+Under half a second.
+
+144
+00:07:44,390 --> 00:07:48,267
+The morning you used to spend on this report is now a coffee break.
+
+145
+00:07:48,967 --> 00:07:50,473
+Here's your cheat sheet.
+
+146
+00:07:50,473 --> 00:07:52,167
+Parse dates for real dates.
+
+147
+00:07:52,167 --> 00:07:53,924
+A filter in square brackets.
+
+148
+00:07:53,924 --> 00:07:54,990
+Group by and sum.
+
+149
+00:07:54,990 --> 00:07:55,743
+Pivot table.
+
+150
+00:07:55,743 --> 00:07:57,563
+Excel Writer for many sheets.
+
+151
+00:07:57,563 --> 00:07:58,755
+Index equals false.
+
+152
+00:07:58,755 --> 00:08:01,955
+And openpyxl for fonts, fills, widths and formulas.
+
+153
+00:08:01,955 --> 00:08:03,461
+Pause and screenshot it.
+
+154
+00:08:04,161 --> 00:08:04,887
+Quick recap.
+
+155
+00:08:04,887 --> 00:08:06,764
+Read the file with parse dates.
+
+156
+00:08:06,764 --> 00:08:09,004
+Filter, and add the columns you need.
+
+157
+00:08:09,004 --> 00:08:11,426
+Summarize with group by and pivot table.
+
+158
+00:08:11,426 --> 00:08:14,151
+Write all the sheets inside one Excel Writer.
+
+159
+00:08:14,151 --> 00:08:15,725
+Then format with openpyxl.
+
+160
+00:08:15,725 --> 00:08:17,844
+And put the month in the file name.
+
+161
+00:08:18,544 --> 00:08:26,666
+Next on Shortcut Lab, we leave spreadsheets behind, and pull data straight from a web page, with your first web scraper in Python.
+
+162
+00:08:26,666 --> 00:08:28,665
+Subscribe, so you don't miss it.

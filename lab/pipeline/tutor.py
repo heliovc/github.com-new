@@ -27,6 +27,11 @@ Scene types: title, steps, code, term, files, tip, keys, compare, chat, outro, t
   clean (EP15: a REAL messy table on the right + a rail of cleaning steps on the left; per step a scan bar sweeps the touched columns,
   every cell that really changes flashes coral -> accent and morphs old -> new, extra spaces are drawn as visible dots, NaN glows,
   removed rows are struck and collapse; badges + counters show the REAL whole-file numbers. frm/upto pick the steps to animate)
+  xlsx (EP16: a REAL .xlsx read back with openpyxl - formula bar with name box + the selected cell's formula, letters/row numbers,
+  the real column widths, bold/font color/fill, number formats, #### when a number doesn't fit, frozen header line and sheet tabs;
+  build=True drops rows in, morph=<plain workbook> morphs the unformatted file into the formatted one)
+  group (EP16: groupby made visible - the REAL rows stream by on the left, each revenue flies as a chip into its city bucket, bars and
+  running totals grow with the REAL cumulative sums (slow first rows, then fast-forward) and end at the real groupby result)
 Identity: charcoal #0F1115, lime #B6F35C, coral #FF7A59, sky #6CC4FF, Poppins + DejaVu Sans Mono.
 """
 import sys, os, re, math, json, hashlib, subprocess, importlib.util
@@ -1469,6 +1474,150 @@ def sc_clean(img, v, t, d):
     if v.get("note") and t > t0 + span:
         ka = ease((t - t0 - span) / 0.4); fe = F(28, "SemiBold"); ew = fe.getlength(v["note"]) + 60
         dr.rounded_rectangle([W / 2 - ew / 2, 1000, W / 2 + ew / 2, 1056], 28, fill=mix(BG, col_hi, ka)); dr.text((W / 2, 1028), v["note"], font=fe, fill=BG, anchor="mm")
+
+# ---- EP16: xlsx - a REAL workbook read back with openpyxl (demo/ep16/xlsx.json): formula bar (name box + formula of the selected cell),
+#      column letters / row numbers, the real column widths, bold / font color / fill of every cell, number formats, frozen header line,
+#      sheet tabs at the bottom (active one in accent). build=True drops rows in top-down; morph=<plain book> morphs the unformatted
+#      workbook into the formatted one (widths grow, header fills fade in, numbers switch to their format); sel="B9" selects a cell.
+def _hexrgb(s, dflt):
+    if not s or len(s) < 6: return dflt
+    s = s[-6:]; return tuple(int(s[i:i + 2], 16) for i in (0, 2, 4))
+def sc_xlsx(img, v, t, d):
+    book = v["data"][v.get("book", "report.xlsx")]; sh = book[v["sheet"]]; plain = v["data"][v["morph"]][v["sheet"]] if v.get("morph") else None
+    span = d * v.get("span", 0.5); k = ease((t - 0.6) / span) if plain else 1.0
+    rows = sh["rows"]; nr = min(len(rows), v.get("rows", 12)); nc = min(max(len(r) for r in rows), v.get("cols", 9))
+    a = ease(t / 0.4); dr = ImageDraw.Draw(img)
+    if v.get("title"): text_a(img, (W / 2, 150), v["title"], F(44, "Bold"), TXT, a, "mm")
+    X0, X1 = 130, W - 130; Y0 = 200 if v.get("title") else 150; Y1 = 1000
+    window(img, [X0, Y0, X1, Y1], v.get("win", v.get("book", "report.xlsx")), kind="term", a=a)
+    # formula bar
+    sel = v.get("sel"); scell = None
+    if sel:
+        cc = ord(sel[0]) - 65; rr = int(sel[1:]) - 1
+        if rr < len(rows) and cc < len(rows[rr]): scell = rows[rr][cc]
+    fy = Y0 + 66; dr.rounded_rectangle([X0 + 20, fy, X1 - 20, fy + 50], 8, fill=PANEL, outline=LINE, width=2)
+    dr.rectangle([X0 + 22, fy + 2, X0 + 140, fy + 48], fill=PANEL2); dr.text((X0 + 81, fy + 25), sel or "A1", font=F(22, "monob"), fill=TXT, anchor="mm")
+    dr.text((X0 + 172, fy + 25), "fx", font=F(24, "Medium"), fill=DIM, anchor="mm")
+    if scell is not None:
+        ftxt = scell["formula"] or scell["v"]; kk = ease((t - 0.8) / 0.5)
+        dr.text((X0 + 214, fy + 25), ftxt[:int(len(ftxt) * kk + 0.999)] if kk > 0 else "", font=F(26, "mono"), fill=ACC if scell["formula"] else TXT, anchor="lm")
+    # grid geometry: real widths (Excel default 8.43) lerp from the plain book while morphing
+    def wcol(b, L): return (b["widths"].get(L) or 8.43) if b else 8.43
+    letters = [chr(65 + i) for i in range(nc)]
+    ws_ = [wcol(plain, L) * (1 - k) + wcol(sh, L) * k for L in letters]
+    wmax = [max(wcol(plain, L), wcol(sh, L)) for L in letters]  # zoom fixed by the widest version, so columns visibly grow while morphing
+    gx0, gy0 = X0 + 20 + 64, fy + 70; avail = X1 - 20 - gx0; zoom = min(v.get("zoom", 13.5), avail / sum(wmax))
+    xs = [gx0]
+    for w_ in ws_: xs.append(xs[-1] + w_ * zoom)
+    rh = min(v.get("rh", 52), (Y1 - 70 - gy0 - 40) / (nr + 0.5)); fs = int(min(36, rh * 0.52, zoom * 0.95 * 100 / F(100, "Regular").getlength("0")))
+    gx1 = min(xs[-1], X1 - 20)
+    dr.rectangle([X0 + 20, gy0, gx1, gy0 + 36], fill=PANEL2)
+    for i, L in enumerate(letters):
+        if xs[i] >= X1 - 20: break
+        hl = sel and sel[0] == L
+        dr.rectangle([xs[i], gy0, min(xs[i + 1], X1 - 20), gy0 + 36], fill=mix(PANEL2, ACC, 0.35) if hl else PANEL2, outline=LINE)
+        dr.text(((xs[i] + min(xs[i + 1], X1 - 20)) / 2, gy0 + 18), L, font=F(20, "Medium"), fill=TXT if hl else DIM, anchor="mm")
+    step = span / max(1, nr) if v.get("build") else 0
+    for r in range(nr):
+        ry = gy0 + 36 + r * rh; ra = ease((t - 0.4 - r * step) / 0.3) if v.get("build") else 1.0
+        dr.rectangle([X0 + 20, ry, gx0, ry + rh], fill=PANEL2, outline=LINE)
+        dr.text((X0 + 20 + 32, ry + rh / 2), str(r + 1), font=F(19, "Medium"), fill=DIM, anchor="mm")
+        for c in range(nc):
+            if xs[c] >= X1 - 20: break
+            cx0, cx1 = xs[c], min(xs[c + 1], X1 - 20)
+            cell = rows[r][c] if c < len(rows[r]) else None; pc = plain["rows"][r][c] if plain and r < len(plain["rows"]) and c < len(plain["rows"][r]) else None
+            fillc = _hexrgb(cell and cell["fill"], None) if cell else None
+            base = (250, 250, 248); bg = base
+            if fillc: bg = mix(base, fillc, k)
+            if sel and r == rr and c == cc and t > 0.6: bg = mix(bg, ACC, 0.25)
+            dr.rectangle([cx0, ry, cx1, ry + rh], fill=mix(BG, bg, ra), outline=mix(BG, (214, 216, 220), ra))
+            if ra <= 0.05 or cell is None: continue
+            if plain and pc is None and k < 0.5: continue  # cell only exists in the formatted file (e.g. the Total row)
+            show = cell if (k >= 0.5 or not pc) else pc
+            txt = show["v"]
+            if not txt: continue
+            bold = show["b"]; col = _hexrgb(show["fc"], (30, 32, 36)) if show["fc"] and (fillc or k >= 0.5) and show["fc"][-6:] != "000000" else (30, 32, 36)
+            if col == (255, 255, 255) and not (fillc and k >= 0.3): col = (30, 32, 36)
+            f = F(fs, "Bold" if bold else "Regular"); room = cx1 - cx0 - 12
+            if show["num"]:  # fit in Excel width units (width of "0"): General numbers lose decimals, formatted numbers/dates become ####
+                wch = (cx1 - cx0) / zoom; u = lambda s_: f.getlength(s_) / f.getlength("0")
+                if show["nf"] == "General" and "." in txt and ":" not in txt:
+                    x_ = float(txt.replace(",", "")); dec = len(txt.split(".")[1])
+                    while u(txt) > wch - 0.6 and dec > 0: dec -= 1; txt = f"{round(x_, dec):.{dec}f}"  # Excel rounds General numbers to fit
+                if u(txt) > wch - 0.6: txt = "#" * max(1, int(wch - 0.6))
+            while f.getlength(txt) > room and len(txt) > 1: txt = txt[:-1]
+            if show["num"]: dr.text((cx1 - 6, ry + rh / 2), txt, font=f, fill=mix(BG, col, ra), anchor="rm")
+            else: dr.text((cx0 + 6, ry + rh / 2), txt, font=f, fill=mix(BG, col, ra), anchor="lm")
+        if sel and r == rr and t > 0.6 and cc < nc:
+            dr.rectangle([xs[cc], ry, min(xs[cc + 1], X1 - 20), ry + rh], outline=ACC, width=4)
+    if sh.get("freeze") == "A2" and k > 0.5:
+        yy = gy0 + 36 + rh; dr.line([X0 + 20, yy, gx1, yy], fill=mix((214, 216, 220), (90, 96, 108), k), width=3)
+    if sh["max_row"] > nr:
+        text_a(img, (gx0 + 10, gy0 + 36 + nr * rh + 6), f"… {sh['max_row'] - nr} more rows", F(20, "Medium"), DIM, a)
+    # sheet tabs
+    ty = Y1 - 56; tx = X0 + 30
+    for name in v["data"][v.get("book", "report.xlsx")].keys():
+        on = name == v["sheet"]; tw = F(22, "SemiBold").getlength(name) + 44
+        dr.rounded_rectangle([tx, ty, tx + tw, ty + 40], 8, fill=mix(PANEL, ACC, 0.9) if on else PANEL2, outline=ACC if on else LINE, width=2)
+        dr.text((tx + tw / 2, ty + 20), name, font=F(22, "SemiBold"), fill=BG if on else DIM, anchor="mm"); tx += tw + 10
+    if v.get("note"):
+        na = ease((t - 0.8 - span) / 0.5); fn = F(30, "SemiBold"); tw = fn.getlength(v["note"])
+        if na > 0:
+            dr.rounded_rectangle([W / 2 - tw / 2 - 30, 1012, W / 2 + tw / 2 + 30, 1066], 27, fill=mix(BG, v.get("notecol", ACC), na)); dr.text((W / 2, 1039), v["note"], font=fn, fill=BG, anchor="mm")
+
+# ---- EP16: group - groupby made visible. Left: the REAL rows of the table streaming by (order, city, revenue); each row's revenue flies
+#      as a chip into its city bucket on the right, where a bar and a running total grow. Slow for the first rows, then fast-forward to
+#      the end; the running totals are the REAL cumulative sums (row order of the file) and end exactly at the real groupby result.
+def sc_group(img, v, t, d):
+    S = v["stream"]; N = len(S); tot = v["totals"]; cities = list(tot.keys()); dr = ImageDraw.Draw(img)
+    span = d * v.get("span", 0.7); slow = v.get("slow", 8); ts_ = min(span * 0.45, slow * 0.55); t0 = 0.6
+    if t < t0: p = 0.0
+    elif t < t0 + ts_: p = slow * (t - t0) / ts_
+    else: p = slow + (N - slow) * ease(min(1.0, (t - t0 - ts_) / max(0.1, span - ts_)) ) ** 1.0
+    n = int(min(N, p)); frac = p - n
+    a = ease(t / 0.4)
+    code = v.get("code", 'df.groupby("City")["Revenue"].sum()'); fc = F(32, "mono"); cw = fc.getlength(code)
+    dr.rounded_rectangle([W / 2 - cw / 2 - 30, 128, W / 2 + cw / 2 + 30, 192], 14, fill=mix(BG, PANEL, a), outline=mix(BG, ACC, a), width=2)
+    cx = W / 2 - cw / 2
+    for s_, c_ in colorize(code): dr.text((cx, 160), s_, font=fc, fill=c_, anchor="lm"); cx += fc.getlength(s_)
+    # left: table rows
+    LX0, LX1, LY0, LY1 = 90, 760, 230, 1000; window(img, [LX0, LY0, LX1, LY1], v.get("win", "orders_clean.csv"), kind="term", a=a)
+    fr = F(24, "mono"); rh = 46; vis = 13; top = max(0, n - vis + 3)
+    dr.text((LX0 + 30, LY0 + 76), "Order   City      Revenue", font=F(24, "monob"), fill=DIM, anchor="lm")
+    for j in range(vis):
+        i = top + j
+        if i >= N: break
+        y = LY0 + 116 + j * rh; city, rev, oid = S[i][0], S[i][1], S[i][2]
+        cur = i == n and n < N; done = i < n
+        if cur: dr.rounded_rectangle([LX0 + 16, y - 20, LX1 - 16, y + 20], 8, fill=mix(PANEL, ACC, 0.28))
+        col = ACC if cur else (DIM if done else TXT)
+        dr.text((LX0 + 30, y), f"{oid:<7} {city:<9} {rev:>9,.2f}", font=fr, fill=col, anchor="lm")
+    dr.text(((LX0 + LX1) / 2, LY1 - 34), f"rows read: {n:,} / {N:,}", font=F(26, "SemiBold"), fill=ACC if n >= N else TXT, anchor="mm")
+    # right: buckets with running real totals
+    cum = {c: 0.0 for c in cities}
+    for i in range(n): cum[S[i][0]] += S[i][1]
+    mx = max(tot.values()); BX0, BX1 = 860, 1820; by0 = 250; bh = min(96, 740 / len(cities))
+    for j, c in enumerate(cities):
+        y = by0 + j * bh; ca = ease((t - 0.2 - j * 0.06) / 0.4)
+        text_a(img, (BX0, y + bh / 2 - 6), c, F(30, "SemiBold"), TXT, ca, "lm")
+        x0 = BX0 + 190; full = BX1 - 230 - x0
+        dr.rounded_rectangle([x0, y + bh / 2 - 26, x0 + full, y + bh / 2 + 14], 10, fill=mix(BG, PANEL, ca))
+        wv = full * cum[c] / mx
+        if wv > 2: dr.rounded_rectangle([x0, y + bh / 2 - 26, x0 + wv, y + bh / 2 + 14], 10, fill=ACC if n >= N else mix(ACC, SKY, 0.35))
+        hit = n < N and n > 0 and S[n - 1][0] == c and frac < 0.5
+        dr.text((BX1, y + bh / 2 - 6), f"{cum[c]:,.2f}", font=F(28, "monob"), fill=(YEL if hit else (ACC if n >= N else TXT)), anchor="rm")
+    # flying chip (only during the slow part)
+    if n < min(N, slow + 1) and t > t0:
+        city, rev = S[n][0], S[n][1]; j = top and (n - top) or n
+        sy = LY0 + 116 + (n - top) * rh; ty_ = by0 + cities.index(city) * bh + bh / 2 - 6
+        q = ease(frac); x = LX1 - 140 + (BX0 + 190 - (LX1 - 140)) * q; y = sy + (ty_ - sy) * q
+        lab = f"+{rev:,.2f}"; fl = F(24, "monob"); lw = fl.getlength(lab) + 28
+        dr.rounded_rectangle([x - lw / 2, y - 20, x + lw / 2, y + 20], 20, fill=ACC); dr.text((x, y), lab, font=fl, fill=BG, anchor="mm")
+    if v.get("note"):
+        na = ease((t - 0.6 - span - 0.3) / 0.5); fn = F(30, "SemiBold"); tw = fn.getlength(v["note"])
+        if na > 0:
+            dr.rounded_rectangle([W / 2 - tw / 2 - 30, 1012, W / 2 + tw / 2 + 30, 1066], 27, fill=mix(BG, ACC, na)); dr.text((W / 2, 1039), v["note"], font=fn, fill=BG, anchor="mm")
+
 
 SC = {k[3:]: f for k, f in list(globals().items()) if k.startswith("sc_")}
 

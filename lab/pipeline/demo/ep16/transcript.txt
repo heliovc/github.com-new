@@ -1,0 +1,69 @@
+### versions
+3.1.1 3.1.5
+### look
+(892, 8)
+  OrderID       Date    Customer     City    Product  Qty   Price     Status
+0   A1001 2026-04-17   Liam Park   Denver  Desk Lamp    3    34.9    pending
+1   A1002 2026-07-01   Theo Lane   Boston    Monitor    4  1299.0    shipped
+2   A1003 2026-01-10  Ava Brooks   Austin   Keyboard    1    59.0  cancelled
+3   A1004 2026-09-15   Nora Park  Seattle   Keyboard    1    59.0    shipped
+### month_bad
+Traceback (most recent call last):
+  File "/root/lab/ep16work/project/month_bad.py", line 4, in <module>
+    df["Month"] = df["Date"].dt.strftime("%Y-%m")
+                  ^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/dist-packages/pandas/core/generic.py", line 6434, in __getattr__
+    return object.__getattribute__(self, name)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/dist-packages/pandas/core/accessor.py", line 231, in __get__
+    return self._accessor(obj)
+           ^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/dist-packages/pandas/core/indexes/accessors.py", line 883, in __new__
+    raise AttributeError("Can only use .dt accessor with datetimelike values")
+AttributeError: Can only use .dt accessor with datetimelike values. Did you mean: 'at'?
+### summary
+City
+Austin     161996.9
+Boston     130426.5
+Miami      127673.2
+Chicago    122109.8
+Seattle    110747.1
+Denver      67805.6
+Unknown     15142.0
+Name: Revenue, dtype: float64
+### pivot
+City     Austin  Boston  Chicago  Denver  Miami  Seattle  Unknown
+Month                                                            
+2026-01   15906    2708    25393    3468   8827    22710      990
+2026-02   24960   12044     7828   22893   5417     2622      519
+2026-03   10205   25641    20418     878  11706      909      774
+2026-04   27818   15792    17896   18054  15959    29570     4465
+2026-05   15134   25460    12387    1544   6696    17191       90
+2026-06   24797    7241     3926    5565  10079     4210       70
+2026-07   11793    9605     8264    3576  24499      767      153
+2026-08    4939    7672     1995    5925  20436    21293      340
+2026-09   10260    2040    13905    1427   9490     4623     4479
+2026-10   16186   22224    10099    4475  14564     6852     3263
+### sheets_bad
+['Data']
+### index_bad
+['Unnamed: 0', 'OrderID', 'Date', 'Customer', 'City', 'Product', 'Qty', 'Price', 'Status']
+### report_v1
+Saved report.xlsx
+### report
+Saved report.xlsx
+### check
+['By city', 'By month', 'Data']
+('City', 'Revenue')
+('Austin', 161996.9)
+('Boston', 130426.5)
+('Miami', 127673.2)
+('Chicago', 122109.8)
+('Seattle', 110747.1)
+('Denver', 67805.6)
+('Unknown', 15142)
+('Total', '=SUM(B2:B8)')
+### name
+report_2026-11.xlsx
+### timing
+0.441 s
