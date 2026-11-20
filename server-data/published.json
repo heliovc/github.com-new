@@ -1949,8 +1949,8 @@
   "pinned_comment": "Which star should we put in the Sun's place next? Full video: What If We Swapped the Sun for 5 Other Stars? One Puts Earth INSIDE It",
   "related_attempts": 1,
   "related_done": "2026-11-20T16:26:10.829921-03:00",
-  "comment_attempts": 1,
-  "comment_error": "Page.goto: Timeout 60000ms exceeded.\nCall log:\n  - navigating to \"https://www.youtube.com/watch?v=F1TwWWAnQcU\", waiting until \"domcontentloaded\"\n (20261120-202314-erro-comment-cosmic-ep17-short.png)"
+  "comment_attempts": 2,
+  "comment_done": "2026-11-20T20:31:54.516232-03:00"
  },
  "ptd-rank17-short": {
   "attempts": 1,
