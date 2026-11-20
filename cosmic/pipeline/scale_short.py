@@ -37,6 +37,9 @@ Visuais (vis.type):
              régua em cm em tamanho real) | mass (balança Terra x bolinha) | squeeze (Terra encolhe em escala log passando por Lua, cidade,
              campo, pessoa, bolinha; flash) | sun (Sol espremido = 5,9 km; bonequinho andando numa barra 0–6 km) | star (estrela gigante
              colapsa) (scale11).
+  "dwarf": Sirius B, anã branca menor que a Terra com a massa do Sol; vis.mode = hook (Terra em cima x Sirius B embaixo EM ESCALA,
+             12.742 x 11.270 km) | mass (balança Sol x Sirius B, contador até 339 mil Terras) | spoon (colher de chá = 13,5 t x 2 elefantes) |
+             gravity (régua log 1 -> 433.000 g, peso de uma pessoa de 70 kg) | sirius (Sirius A + B na órbita de 50 anos) (scale12).
 Reaproveita render.py (sprites, fontes) e ranking.py (fundo, texto, legendas).
 """
 import sys, os, math, json, subprocess, importlib.util, random
@@ -841,6 +844,79 @@ def marble_vis(img, v, th, t, dur, bp):
         if 0.72 < p < 0.86: R.paste_c(img, R.radial(700, [(0, (255, 255, 255, int(255 * (1 - abs(p - 0.79) / 0.07)))), (1, (255, 255, 255, 0))]), cx, cy)
         text(img, (W / 2, 1420), "only giant stars get crushed this far", 42, (255, 255, 255), w="ExtraBold", stroke=3)
 
+def _dwarf12(img, cx, cy, r, t, a=1.0):
+    """Sirius B: blue-white white dwarf with a tight hot glow"""
+    R.paste_c(img, R.radial(max(8, int(r * 3.2)), [(0, (255, 255, 255, 255)), (0.5, (225, 235, 255, 255)), (0.625, (170, 195, 255, 255)),
+                                                   (0.66, (140, 170, 255, 130)), (1, (110, 140, 255, 0))]), cx, cy, a)
+
+def _elephant12(d, x, y, s, col=(190, 195, 215)):
+    d.ellipse([x - 60 * s, y - 40 * s, x + 60 * s, y + 35 * s], fill=col)
+    for k in (-42, -18, 18, 42): d.rectangle([x + k * s - 9 * s, y + 20 * s, x + k * s + 9 * s, y + 75 * s], fill=col)
+    d.ellipse([x + 45 * s, y - 60 * s, x + 95 * s, y - 5 * s], fill=col)
+    d.ellipse([x + 35 * s, y - 55 * s, x + 65 * s, y - 5 * s], fill=tuple(int(c * 0.85) for c in col))
+    d.line([(x + 90 * s, y - 25 * s), (x + 100 * s, y + 20 * s), (x + 92 * s, y + 50 * s)], fill=col, width=int(12 * s))
+
+def dwarf_vis(img, v, th, t, dur, bp):
+    """Sirius B, a white dwarf smaller than Earth with the Sun's mass; vis.mode = hook (Earth on top vs Sirius B below, TO SCALE:
+    12,742 vs 11,270 km) | mass (balance: the Sun vs the tiny dwarf, level; counter to 339,000 Earths) | spoon (teaspoon of its
+    matter = 13.5 t; two elephants on the other side) | gravity (log meter 1 g -> 430,000 g, a person's weight counter) |
+    sirius (Sirius A + B on their 50-year orbit, B's size exaggerated with a label)"""
+    acc, acc2 = tuple(th["accent"]), tuple(th["accent2"]); mode = v.get("mode", "hook"); d = ImageDraw.Draw(img)
+    if mode == "hook":
+        k = 0.042  # px per km
+        re_, rd = 12742 / 2 * k, 11270 / 2 * k
+        R.paste_c(img, R.earth_sprite(int(re_), glow=(120, 180, 255)), W / 2, 680)
+        _dwarf12(img, W / 2, 1185, rd, t)
+        d = ImageDraw.Draw(img)
+        for x in (W / 2 - re_, W / 2 + re_): d.line([(x, 680), (x, 1185)], fill=(140, 200, 255), width=2)
+        text(img, (W / 2 + re_ + 10, 560), "Earth", 40, (140, 200, 255), stroke=3, anchor="lm")
+        text(img, (W / 2 + rd + 10, 1330), "Sirius B", 40, acc2, stroke=3, anchor="lm")
+        text(img, (W / 2, 1460), "12,742 km  vs  11,270 km", 44, (255, 255, 255), w="ExtraBold", stroke=3)
+    elif mode == "mass":
+        cx, py = W / 2, 760; L = 380; tilt = 0.25 * (1 - bp)
+        lx, ly = cx - L * math.cos(tilt), py + L * math.sin(tilt); rx, ry = cx + L * math.cos(tilt), py - L * math.sin(tilt)
+        d.polygon([(cx, py), (cx - 70, py + 520), (cx + 70, py + 520)], fill=(70, 75, 110)); d.line([(lx, ly), (rx, ry)], fill=(210, 215, 240), width=12)
+        for x, y in ((lx, ly), (rx, ry)):
+            d.line([(x, y), (x - 110, y + 180)], fill=(170, 175, 200), width=3); d.line([(x, y), (x + 110, y + 180)], fill=(170, 175, 200), width=3)
+            d.arc([x - 130, y + 140, x + 130, y + 220], 0, 180, fill=(210, 215, 240), width=8)
+        R.paste_c(img, R.sun_sprite(70), lx, ly + 100)
+        _dwarf12(img, rx, ry + 168, 9, t)
+        text(img, (lx, ly + 270), "the Sun", 44, (255, 200, 110), stroke=3); text(img, (rx, ry + 270), "Sirius B", 44, acc2, stroke=3)
+        text(img, (W / 2, 1400), f"{339000 ** bp:,.0f} Earths of mass", 56, acc, stroke=4)
+    elif mode == "spoon":
+        sx, sy = 330, 900
+        d.ellipse([sx - 120, sy - 70, sx + 120, sy + 70], fill=(200, 205, 220)); d.line([(sx + 110, sy - 10), (sx + 330, sy - 120)], fill=(200, 205, 220), width=26)
+        _dwarf12(img, sx, sy - 10, 55, t)
+        d = ImageDraw.Draw(img)
+        text(img, (sx, sy + 140), "1 teaspoon", 44, acc2, stroke=3)
+        n = 2 if bp > 0.5 else 1
+        for k in range(n): _elephant12(d, 760, 760 + k * 230, 1.15)
+        text(img, (760, 1240), f"{13.5 * bp:.1f} tonnes", 70, acc, stroke=4)
+        text(img, (760, 1320), "≈ two elephants", 40, (255, 255, 255), w="ExtraBold", stroke=3)
+    elif mode == "gravity":
+        x0, x1, y = 120, W - 120, 1050; lo, hi = 0, 6
+        def X(g): return lerp(x0, x1, (math.log10(g) - lo) / (hi - lo))
+        d.line([(x0, y), (x1, y)], fill=(90, 95, 130), width=8)
+        for e in range(7):
+            x = X(10 ** e); d.line([(x, y - 14), (x, y + 14)], fill=(150, 155, 185), width=3)
+            d.text((x, y + 44), f"{10 ** e:,}", font=F(24, "Bold"), fill=(150, 155, 185), anchor="mm")
+        for g, lab, up in ((1, "Earth", 1), (2.5, "Jupiter", 0), (28, "the Sun", 1), (433000, "Sirius B", 0)):
+            x = X(g); yy = y - 70 if up else y + 100
+            d.ellipse([x - 10, y - 10, x + 10, y + 10], fill=acc2 if g > 1000 else (230, 230, 240)); d.text((x, yy), lab, font=F(30, "ExtraBold"), fill=acc2 if g > 1000 else (230, 230, 240), anchor="mm")
+        g = 433000 ** bp; x = X(g); d.polygon([(x, y - 30), (x - 18, y - 60), (x + 18, y - 60)], fill=acc)
+        text(img, (W / 2, 700), f"{70 * g:,.0f} kg", 96, acc, stroke=4)
+        text(img, (W / 2, 790), "what a 70 kg person would weigh", 40, (255, 255, 255), w="ExtraBold", stroke=3)
+        text(img, (W / 2, 1300), "surface gravity, × Earth's (log scale)", 34, (170, 175, 200), w="Bold")
+    elif mode == "sirius":
+        cx, cy = W / 2, 900; a_ = 380; b_ = 230; ang = 2 * math.pi * (0.15 + 0.12 * bp)
+        d.ellipse([cx - a_ - 120, cy - b_, cx + a_ - 120, cy + b_], outline=(110, 120, 170), width=3)
+        R.paste_c(img, R.radial(320, [(0, (255, 255, 255, 255)), (0.3, (220, 232, 255, 255)), (0.36, (170, 200, 255, 160)), (1, (120, 160, 255, 0))]), cx - 120 - a_ * 0.6, cy)
+        bx, by = cx - 120 + a_ * math.cos(ang), cy + b_ * math.sin(ang); _dwarf12(img, bx, by, 10, t)
+        d = ImageDraw.Draw(img)
+        text(img, (cx - 120 - a_ * 0.6, cy + 140), "Sirius A", 44, (230, 235, 255), stroke=3)
+        text(img, (bx + 30, by + 50), "Sirius B", 40, acc2, stroke=3)
+        text(img, (W / 2, 1300), "one orbit every 50 years · 8.6 light-years away", 38, (255, 255, 255), w="ExtraBold", stroke=3)
+
 def chrome(img, th, gt, total):
     d = ImageDraw.Draw(img)
     d.rectangle([0, 0, int(W * gt / total), 10], fill=tuple(th["accent"]))
@@ -911,6 +987,11 @@ def frame(m, durs, gt, chunks, arr):
         text(img, (W / 2, 280), hl["top"], 52, (255, 255, 255), stroke=3)
     elif v["type"] in ("ballearth", "marble"):
         (ballearth_vis if v["type"] == "ballearth" else marble_vis)(img, v, th, t, d, easeio((t - 0.2) / max(0.8, d * 0.8)))
+        hl = v.get("head") or m.BIG
+        text(img, (W / 2, 170), hl["num"], 124 if len(hl["num"]) < 12 else 100, tuple(th["accent"]), stroke=4)
+        text(img, (W / 2, 280), hl["top"], 52, (255, 255, 255), stroke=3)
+    elif v["type"] == "dwarf":
+        dwarf_vis(img, v, th, t, d, easeio((t - 0.2) / max(0.8, d * 0.8)))
         hl = v.get("head") or m.BIG
         text(img, (W / 2, 170), hl["num"], 124 if len(hl["num"]) < 12 else 100, tuple(th["accent"]), stroke=4)
         text(img, (W / 2, 280), hl["top"], 52, (255, 255, 255), stroke=3)

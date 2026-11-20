@@ -1,0 +1,591 @@
+1
+00:00:00,200 --> 00:00:02,289
+This is a normal day at the beach.
+
+2
+00:00:02,289 --> 00:00:07,084
+Now, without moving Earth an inch, we swap the Sun for the closest star to us.
+
+3
+00:00:07,084 --> 00:00:09,666
+In about eight minutes, the sky goes dark.
+
+4
+00:00:09,666 --> 00:00:11,325
+The ocean starts to freeze.
+
+5
+00:00:11,325 --> 00:00:14,706
+And within weeks, the air itself snows onto the ground.
+
+6
+00:00:15,406 --> 00:00:18,773
+Our Sun is just one star out of hundreds of billions.
+
+7
+00:00:18,773 --> 00:00:21,568
+So what if Earth had gotten a different one?
+
+8
+00:00:21,568 --> 00:00:23,220
+Today we try five of them.
+
+9
+00:00:23,220 --> 00:00:26,460
+Same planet, same orbit, five very different skies.
+
+10
+00:00:26,460 --> 00:00:29,764
+And the last one is so big, Earth ends up inside it.
+
+11
+00:00:30,464 --> 00:00:31,538
+First, the rules.
+
+12
+00:00:31,538 --> 00:00:37,226
+Earth stays exactly where it is, one hundred and fifty million kilometers from the center.
+
+13
+00:00:37,226 --> 00:00:40,701
+We keep the same air, the same oceans, the same clouds.
+
+14
+00:00:40,701 --> 00:00:42,092
+Only the star changes.
+
+15
+00:00:42,092 --> 00:00:43,861
+Then we ask three questions.
+
+16
+00:00:43,861 --> 00:00:45,631
+What does the sky look like?
+
+17
+00:00:45,631 --> 00:00:47,148
+How warm does Earth get?
+
+18
+00:00:47,148 --> 00:00:50,624
+And where would a planet need to be, to stay like home?
+
+19
+00:00:51,324 --> 00:00:52,337
+Swap number one.
+
+20
+00:00:52,337 --> 00:00:57,657
+Proxima Centauri, the nearest star to the Sun, four point two four light years away.
+
+21
+00:00:57,657 --> 00:00:58,734
+It's a red dwarf.
+
+22
+00:00:58,734 --> 00:01:05,638
+About one seventh the width of the Sun, and around three thousand degrees at the surface, almost half as hot.
+
+23
+00:01:06,338 --> 00:01:08,558
+From the beach, it's a tiny red disc.
+
+24
+00:01:08,558 --> 00:01:11,137
+Six and a half times narrower than the Sun.
+
+25
+00:01:11,137 --> 00:01:11,977
+And it's weak.
+
+26
+00:01:11,977 --> 00:01:19,656
+Proxima gives off less than a sixth of one percent of the Sun's energy, and most of that is infrared, which your eyes can't see.
+
+27
+00:01:19,656 --> 00:01:21,756
+Noon would look like deep twilight.
+
+28
+00:01:21,756 --> 00:01:24,216
+You'd see stars in the middle of the day.
+
+29
+00:01:24,915 --> 00:01:25,668
+So how cold?
+
+30
+00:01:25,668 --> 00:01:33,634
+A simple estimate, scaling today's average temperature to the new starlight, gives about minus two hundred and sixteen degrees.
+
+31
+00:01:33,634 --> 00:01:38,024
+Cold enough that nitrogen, most of the air you breathe, freezes solid.
+
+32
+00:01:38,024 --> 00:01:40,596
+Earth's sky would literally fall as snow.
+
+33
+00:01:41,295 --> 00:01:45,194
+To be comfortable around Proxima, a planet would have to hug it.
+
+34
+00:01:45,194 --> 00:01:50,251
+Its Earth-like zone sits around four to seven percent of our distance from the Sun.
+
+35
+00:01:50,251 --> 00:01:52,505
+That's six times closer than Mercury.
+
+36
+00:01:52,505 --> 00:01:54,637
+And there really is a planet there.
+
+37
+00:01:54,637 --> 00:01:57,743
+Proxima b, with a year that lasts just eleven days.
+
+38
+00:01:58,443 --> 00:02:00,223
+Even then, there's a catch.
+
+39
+00:02:00,223 --> 00:02:01,739
+Red dwarfs are violent.
+
+40
+00:02:01,739 --> 00:02:11,230
+In twenty nineteen, astronomers caught Proxima flaring so hard that it brightened fourteen thousand times in ultraviolet light, in just seconds.
+
+41
+00:02:11,230 --> 00:02:16,108
+Living next to Proxima means living next to a star that sneezes radiation.
+
+42
+00:02:16,807 --> 00:02:18,253
+One more strange thing.
+
+43
+00:02:18,253 --> 00:02:22,526
+Proxima has only an eighth of the Sun's mass, so its pull is weaker.
+
+44
+00:02:22,526 --> 00:02:25,480
+At our distance, Earth would orbit more slowly.
+
+45
+00:02:25,480 --> 00:02:28,371
+One year would last almost three of our years.
+
+46
+00:02:28,371 --> 00:02:31,890
+About one thousand and forty six days between birthdays.
+
+47
+00:02:32,590 --> 00:02:35,074
+Swap number two should be the easy one.
+
+48
+00:02:35,074 --> 00:02:40,168
+Alpha Centauri A, Proxima's big sister, four point three seven light years away.
+
+49
+00:02:40,168 --> 00:02:42,078
+It's almost a twin of the Sun.
+
+50
+00:02:42,078 --> 00:02:45,326
+Nearly the same color, about ten percent more mass.
+
+51
+00:02:46,026 --> 00:02:48,188
+From the beach, you'd barely notice.
+
+52
+00:02:48,188 --> 00:02:50,409
+The disc is twenty two percent wider.
+
+53
+00:02:50,409 --> 00:02:52,510
+The light is the same golden white.
+
+54
+00:02:52,510 --> 00:02:54,672
+But it's fifty two percent brighter.
+
+55
+00:02:54,672 --> 00:02:56,053
+And that is a big deal.
+
+56
+00:02:56,753 --> 00:03:01,161
+Our simple estimate puts the average temperature near forty seven degrees.
+
+57
+00:03:01,161 --> 00:03:02,948
+But the real problem is water.
+
+58
+00:03:02,948 --> 00:03:10,334
+Climate models suggest that just a few percent more sunlight, around six percent, could tip Earth into a runaway greenhouse.
+
+59
+00:03:10,334 --> 00:03:16,350
+Warmer oceans put more water vapor in the air, which traps more heat, which puts in more water vapor.
+
+60
+00:03:16,350 --> 00:03:20,817
+Fifty two percent more, and the oceans would slowly boil away into the sky.
+
+61
+00:03:21,517 --> 00:03:23,104
+Where's the safe spot now?
+
+62
+00:03:23,104 --> 00:03:27,865
+It slides outward, to about one point two to two point one times our distance.
+
+63
+00:03:27,865 --> 00:03:29,635
+And look who's sitting in it.
+
+64
+00:03:29,635 --> 00:03:29,940
+Mars.
+
+65
+00:03:29,940 --> 00:03:36,471
+Around Alpha Centauri A, Mars would be the planet in the Goldilocks zone, and Earth would be the new Venus.
+
+66
+00:03:37,171 --> 00:03:38,300
+Swap number three.
+
+67
+00:03:38,300 --> 00:03:43,191
+Sirius, the brightest star in our night sky, eight point six light years away.
+
+68
+00:03:43,191 --> 00:03:45,010
+Sirius is actually two stars.
+
+69
+00:03:45,010 --> 00:03:47,267
+We start with the big one, Sirius A.
+
+70
+00:03:47,267 --> 00:03:53,726
+Twice the Sun's mass, almost ten thousand degrees at the surface, and about twenty five times brighter.
+
+71
+00:03:54,426 --> 00:03:56,531
+Now the beach changes completely.
+
+72
+00:03:56,531 --> 00:04:00,359
+The disc is almost twice as wide as the Sun, and blue white.
+
+73
+00:04:00,359 --> 00:04:03,357
+The whole sky turns into a blinding pale glare.
+
+74
+00:04:03,357 --> 00:04:05,079
+And the light is different.
+
+75
+00:04:05,079 --> 00:04:11,459
+Sirius is so hot that its output peaks in the ultraviolet, around two hundred and ninety nanometers.
+
+76
+00:04:11,459 --> 00:04:14,010
+Sunburn would take seconds, not minutes.
+
+77
+00:04:14,710 --> 00:04:15,423
+Temperature?
+
+78
+00:04:15,423 --> 00:04:18,989
+Our estimate lands around three hundred and seventy degrees.
+
+79
+00:04:18,989 --> 00:04:20,415
+Hot enough to melt lead.
+
+80
+00:04:20,415 --> 00:04:23,684
+Oceans gone, rocks glowing in the dark side's twilight.
+
+81
+00:04:23,684 --> 00:04:25,823
+Earth wouldn't become the new Venus.
+
+82
+00:04:25,823 --> 00:04:28,854
+It would be on its way to becoming the new Mercury.
+
+83
+00:04:29,554 --> 00:04:34,631
+To get Earth's weather back, you'd have to move out to about five times our distance.
+
+84
+00:04:34,631 --> 00:04:37,319
+Which is almost exactly where Jupiter orbits.
+
+85
+00:04:37,319 --> 00:04:41,083
+Around Sirius, the comfortable seat belongs to Jupiter's orbit.
+
+86
+00:04:41,083 --> 00:04:47,474
+And with Sirius's stronger gravity, a year at our distance would last just two hundred and fifty four days.
+
+87
+00:04:48,174 --> 00:04:50,438
+Swap number four is the strangest.
+
+88
+00:04:50,438 --> 00:04:52,703
+Sirius A's tiny partner, Sirius B.
+
+89
+00:04:52,703 --> 00:04:57,098
+It's a white dwarf, the leftover core of a star that already died.
+
+90
+00:04:57,098 --> 00:05:02,958
+It holds about as much mass as the Sun, crushed into a ball slightly smaller than Earth.
+
+91
+00:05:03,658 --> 00:05:06,024
+From the beach, there's no disc at all.
+
+92
+00:05:06,024 --> 00:05:08,330
+Just a point, fifteen arcseconds wide.
+
+93
+00:05:08,330 --> 00:05:11,849
+Smaller in the sky than Venus can look through binoculars.
+
+94
+00:05:11,849 --> 00:05:20,404
+But every patch of its surface, at about twenty five thousand degrees, shines over three hundred times harder than the same patch of the Sun.
+
+95
+00:05:20,404 --> 00:05:24,287
+A tiny, violet white welding spark that you could never look at.
+
+96
+00:05:24,987 --> 00:05:31,004
+Overall, it's so small that it gives off only about five and a half percent of the Sun's energy.
+
+97
+00:05:31,004 --> 00:05:34,075
+The days would be dim and harsh at the same time.
+
+98
+00:05:34,075 --> 00:05:38,399
+And Earth would freeze to about minus one hundred and thirty degrees.
+
+99
+00:05:38,399 --> 00:05:39,715
+Water ice everywhere.
+
+100
+00:05:39,715 --> 00:05:41,094
+The air stays, barely.
+
+101
+00:05:41,794 --> 00:05:42,840
+Here's the twist.
+
+102
+00:05:42,840 --> 00:05:45,485
+Sirius B has almost exactly the Sun's mass.
+
+103
+00:05:45,485 --> 00:05:49,052
+So if you swapped them, Earth's orbit would hardly change.
+
+104
+00:05:49,052 --> 00:05:52,927
+The year would still be about three hundred and sixty two days.
+
+105
+00:05:52,927 --> 00:05:54,034
+And the warm zone?
+
+106
+00:05:54,034 --> 00:05:58,217
+It shrinks inward to about a quarter to four tenths of our distance.
+
+107
+00:05:58,217 --> 00:05:59,693
+Right on top of Mercury.
+
+108
+00:06:00,393 --> 00:06:02,826
+And now, as promised, swap number five.
+
+109
+00:06:02,826 --> 00:06:09,503
+Stephenson two eighteen, one of the largest stars ever measured, nearly nineteen thousand light years away.
+
+110
+00:06:09,503 --> 00:06:15,369
+Some estimates put it at around two thousand one hundred and fifty times the width of the Sun.
+
+111
+00:06:16,069 --> 00:06:19,105
+Put that in the Sun's place, and there is no sky.
+
+112
+00:06:19,105 --> 00:06:23,196
+Its surface would reach about ten times our distance from the Sun.
+
+113
+00:06:23,196 --> 00:06:28,029
+Past Mercury, Venus, Earth, Mars, Jupiter, and out beyond the orbit of Saturn.
+
+114
+00:06:28,029 --> 00:06:30,818
+Earth wouldn't orbit Stephenson two eighteen.
+
+115
+00:06:30,818 --> 00:06:32,367
+Earth would be inside it.
+
+116
+00:06:33,067 --> 00:06:35,035
+Not inside a solid ball, though.
+
+117
+00:06:35,035 --> 00:06:40,877
+The outer layers of a red supergiant are thinner than the best vacuum we can make in many labs.
+
+118
+00:06:40,877 --> 00:06:45,181
+But they're hot, thousands of degrees, and glowing in every direction.
+
+119
+00:06:45,181 --> 00:06:49,977
+Earth would plow through a red-hot fog, dragging against it, spiraling deeper.
+
+120
+00:06:49,977 --> 00:06:52,929
+It would vaporize long before reaching the core.
+
+121
+00:06:53,629 --> 00:06:55,446
+So where would Earth need to be?
+
+122
+00:06:55,446 --> 00:06:59,591
+This star may shine hundreds of thousands of times brighter than the Sun.
+
+123
+00:06:59,591 --> 00:07:03,225
+One published estimate is about four hundred and forty thousand.
+
+124
+00:07:03,225 --> 00:07:09,357
+If that's right, the Earth-like zone sits around six hundred and sixty to eleven hundred times our distance.
+
+125
+00:07:09,357 --> 00:07:11,345
+Seventeen times farther than Pluto.
+
+126
+00:07:11,345 --> 00:07:16,285
+Out there, the sunlight on your face would have left the star almost four days earlier.
+
+127
+00:07:16,985 --> 00:07:18,269
+And it wouldn't last.
+
+128
+00:07:18,269 --> 00:07:23,834
+Stars this big burn fast, living only a few million years before they collapse and explode.
+
+129
+00:07:23,834 --> 00:07:28,360
+Our Sun has been shining steadily for about four and a half billion years.
+
+130
+00:07:28,360 --> 00:07:30,745
+Life on Earth needed most of that time.
+
+131
+00:07:31,445 --> 00:07:34,398
+So, five swaps, and not one of them works.
+
+132
+00:07:34,398 --> 00:07:35,171
+Frozen air.
+
+133
+00:07:35,171 --> 00:07:36,226
+Boiling oceans.
+
+134
+00:07:36,226 --> 00:07:37,140
+Melting lead.
+
+135
+00:07:37,140 --> 00:07:39,390
+A frozen Earth under a pinprick.
+
+136
+00:07:39,390 --> 00:07:41,429
+And a planet swallowed whole.
+
+137
+00:07:42,129 --> 00:07:44,824
+But here's the part that really surprised me.
+
+138
+00:07:44,824 --> 00:07:50,633
+If you picked a star at random from the Milky Way, it probably wouldn't look like the Sun at all.
+
+139
+00:07:50,633 --> 00:07:55,365
+About three out of every four stars in our galaxy are red dwarfs, like Proxima.
+
+140
+00:07:55,365 --> 00:07:59,857
+So a random swap would most likely leave Earth frozen, under a dim red dot.
+
+141
+00:08:00,557 --> 00:08:03,404
+Our ordinary yellow Sun is not so ordinary.
+
+142
+00:08:03,404 --> 00:08:10,091
+It's brighter than most stars, calm, long-lived, and Earth sits right in its narrow comfortable zone.
+
+143
+00:08:10,091 --> 00:08:15,255
+Change the star, and the same planet becomes a snowball, an oven, or a memory.
+
+144
+00:08:15,955 --> 00:08:19,401
+Next time, we drop something into the biggest planet we have.
+
+145
+00:08:19,401 --> 00:08:22,339
+What would actually happen if you fell into Jupiter?
+
+146
+00:08:22,339 --> 00:08:26,689
+There's no ground to land on, and the answer gets stranger the deeper you go.
+
+147
+00:08:26,689 --> 00:08:29,344
+Subscribe to Cosmic Scale so you don't miss it.
+
+148
+00:08:29,344 --> 00:08:33,129
+And tell me in the comments, which star would you swap our Sun for?

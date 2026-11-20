@@ -72,6 +72,16 @@ EP16 added scenes: zdial (chapter card: half-circle redshift dial on log(1+z) 0 
   Learned: render.py runs with -I, so a sibling module needs sys.path.insert(0, HERE) before import; EP03 already used horizons/stretch,
   so keep EP16's horizon beat short and visual-new (lightcone event mode). EP16 promised EP17: the biggest star in place of our Sun.
   ranking.py: vis "probes" (rank15). scale_short.py: vis "jupfill" (scale09, planets poured into Jupiter by volume).
+EP17 added scenes: swapsky (beach at noon under a replacement star at its TRUE angular size from 1 AU — Sun = 70 px; sky brightness/tint
+  from L and the star's blackbody colour bbcol17(T); from_sun animates Sun -> star; glare sky gets a white core + rays; mode inside = Earth
+  inside the star, glowing fog), starcard (chapter card "SWAP n OF 5": star sprite star17(r, T) + log bars vs the Sun for width / brightness
+  / surface), hzmap (top-down solar system, square-root scale to v.max AU, Kopparapu 2013 zone 0.99–1.70 AU × √L slides from the Sun's to
+  the star's; star disc to scale swallows orbits; Earth tagged TOO HOT / TOO COLD / JUST RIGHT / INSIDE THE STAR; v.hl planet in the zone),
+  earthtemp (Earth tinted ice/scorched + thermometer −250…500 °C with landmarks; T = 288 K × L^¼, labelled a simple estimate).
+  Palette: each star's own blackbody colour. Structure NEW: "star swap" (same Earth, 5 replacement stars; sky / temperature / zone per chapter).
+  Learned: ImageDraw on an RGBA image REPLACES pixels (alpha is not blended) -> draw translucent shapes on a separate layer and
+  alpha_composite; 1,457 words + 30 scenes = 8.6 min; EP17 promised EP18: what if you fell into Jupiter.
+  ranking.py: vis "weigh" (rank17, balance beam in Earth masses). scale_short.py: vis "dwarf" (scale12, Sirius B smaller than Earth).
 EP06 added scenes: spinglobe (globe + speed by latitude; top=True rings; slow=True), pendulum, fling, bulge, yearday, dayclock (teal / amber palette)
 2026-11-19 (Thursday, Shorts-only day after EP16): ranking.py vis "rocks" (rank16, lumpy asteroids to scale + drive-around counter);
   scale_short.py vis "ballearth" (scale10, Earth as a basketball + magnifier with to-scale coin/pencil + 7 m pan to the Moon) and "marble"
@@ -4318,6 +4328,225 @@ def sc_fogwall(img, v, t, dur):
         d.ellipse([80, 870 + i * 44, 98, 888 + i * 44], fill=c); d.text((112, 879 + i * 44), n, font=F(28, "Bold"), fill=WHITE, anchor="lm")
     if v.get("head"): alpha_text(img, (W / 2, 80), v["head"], F(52, "ExtraBold"), WHITE, ease(t / 0.5))
 
+
+# ---------------- scenes (EP17: star swap) ----------------
+def bbcol17(T):
+    """approximate visible colour of a blackbody at T kelvin (Tanner Helland fit), as an RGB tuple"""
+    t = T / 100.0
+    r = 255 if t <= 66 else 329.7 * (t - 60) ** -0.1332
+    g = (99.47 * math.log(t) - 161.12) if t <= 66 else 288.12 * (t - 60) ** -0.0755
+    b = 255 if t >= 66 else (0 if t <= 19 else 138.52 * math.log(t - 10) - 305.04)
+    return tuple(int(max(0, min(255, c))) for c in (r, g, b))
+
+_st17 = {}
+def star17(r, T, halo=1.6):
+    r = max(2, int(r)); key = (r, int(T // 50), halo)
+    if key not in _st17:
+        c = bbcol17(T); hot = mix(c, (255, 255, 255), 0.65); k = 1 / 3
+        _st17[key] = radial(r * 6, [(0, hot + (255,)), (k * 0.75, mix(c, (255, 255, 255), 0.3) + (255,)), (k * 0.98, c + (255,)),
+                                   (k * 1.04, c + (150,)), (k * halo, c + (40,)), (1.0, c + (0,))])
+    return _st17[key]
+
+def _logp(a, b, p): return math.exp(lerp(math.log(a), math.log(b), p))
+SUNREF17 = {"L": 1.0, "R": 1.0, "T": 5772}
+def _swapvals17(v, t):
+    p = easeio((t - 0.4) / 2.0) if v.get("from_sun", False) else 1.0
+    return p, _logp(1.0, v["L"], p), _logp(1.0, v["R"], p), lerp(5772, v["T"], p)
+
+def _hills17(seed=17):
+    rng = random.Random(seed); pts = []
+    for k in range(0, 1121, 40):
+        x = k * 1.0
+        pts.append((x, 880 - 70 * math.sin(x / 260 + 1.3) - 40 * math.sin(x / 97) - rng.uniform(0, 14)))
+    return pts
+
+def sc_swapsky(img, v, t, dur):
+    """ground view at noon: the star that replaced the Sun hangs in the sky at its TRUE angular size from 1 AU (Sun = 0.533° = 70 px);
+    sky brightness/tint and the lit landscape follow its light (L) and colour (T); v.from_sun animates Sun -> star; v.ghost = dashed outline
+    of the Sun's disc; HUD: sunlight vs today, disc width vs the Sun; mode inside = Earth is inside the star (glowing fog, no sky)"""
+    p, L, R, T = _swapvals17(v, t)
+    col = bbcol17(T)
+    if v.get("mode") == "inside":
+        a = ease((t - 0.2) / 1.5)
+        lay = Image.new("RGBA", img.size, (0, 0, 0, 0)); dl = ImageDraw.Draw(lay)
+        for y in range(0, H, 6):
+            u = y / H; c = mix((255, 150, 70), (190, 40, 20), u)
+            fl = 0.85 + 0.15 * math.sin(y / 37 + t * 2.1) * math.sin(y / 13 - t * 1.3)
+            dl.rectangle([0, y, W, y + 6], fill=tuple(int(cc * fl) for cc in c) + (int(250 * a),))
+        img.alpha_composite(lay)
+        rng = random.Random(5); blobs = Image.new("RGBA", img.size, (0, 0, 0, 0)); d = ImageDraw.Draw(blobs)
+        for _ in range(140):  # drifting glowing gas cells
+            x = (rng.uniform(0, W) + t * rng.uniform(20, 60)) % W; y = rng.uniform(0, H); r = rng.uniform(20, 90)
+            d.ellipse([x - r, y - r * 0.6, x + r, y + r * 0.6], fill=(255, 220, 160, int(18 * a)))
+        img.alpha_composite(blobs.filter(ImageFilter.GaussianBlur(8)))
+        alpha_text(img, (W / 2, H / 2 - 40), v.get("big", "YOU ARE INSIDE THE STAR"), F(96, "Black"), WHITE, ease((t - 0.8) / 0.6))
+        alpha_text(img, (W / 2, H / 2 + 60), v.get("sub", ""), F(44, "SemiBold"), (255, 235, 200), ease((t - 1.3) / 0.6))
+        return
+    day = max(0.0, min(1.0, (math.log10(L) + 3.2) / 3.2))  # 0 = night (L <= 0.0006), 1 = full daylight at L = 1
+    wash = max(0.0, min(1.0, math.log10(max(L, 1)) / 1.6))  # glare for brighter stars
+    tint = mix((70, 130, 225), col, 0.35)
+    top = mix((4, 6, 16), mix(tint, (235, 240, 255), wash * 0.8), day)
+    bot = mix((10, 10, 24), mix(mix(tint, (255, 255, 255), 0.45), (255, 252, 245), wash), day)
+    lay = Image.new("RGBA", img.size, (0, 0, 0, 0)); dl = ImageDraw.Draw(lay)
+    for y in range(0, 900, 6):
+        dl.rectangle([0, y, W, y + 6], fill=mix(top, bot, y / 900) + (int(255 * min(1, day * 1.4)),))
+    img.alpha_composite(lay)
+    sx, sy = v.get("x", 1180), v.get("y", 330)
+    rpx = 35 * R  # Sun disc 0.533 deg -> 70 px across
+    glow = 1.5 + 2.2 * min(1, L ** 0.25)
+    if rpx >= 2.5:
+        paste_c(img, star17(rpx, T, halo=glow), sx, sy)
+        if wash > 0.2:  # glare sky: keep the disc readable with a hard white core + ring of rays
+            d = ImageDraw.Draw(img)
+            for k in range(12):
+                a = k * math.pi / 6 + t * 0.15; r0, r1 = rpx * 1.25, rpx * (2.2 + 0.3 * math.sin(t * 2 + k))
+                d.line([(sx + r0 * math.cos(a), sy + r0 * math.sin(a)), (sx + r1 * math.cos(a), sy + r1 * math.sin(a))], fill=(255, 255, 255), width=3)
+            d.ellipse([sx - rpx, sy - rpx, sx + rpx, sy + rpx], fill=(255, 255, 255), outline=mix(col, (120, 160, 255), 0.5), width=4)
+    else:
+        gl = int(10 + 30 * L ** 0.25); paste_c(img, star17(gl, T, halo=3.0), sx, sy, 0.45)
+        d = ImageDraw.Draw(img)
+        for k in range(4):
+            a = k * math.pi / 4; ln = 60 + 20 * math.sin(t * 3)
+            d.line([(sx - ln * math.cos(a), sy - ln * math.sin(a)), (sx + ln * math.cos(a), sy + ln * math.sin(a))], fill=mix(col, (255, 255, 255), 0.6), width=2)
+        d.ellipse([sx - 4, sy - 4, sx + 4, sy + 4], fill=(255, 255, 255))
+    d = ImageDraw.Draw(img)
+    if v.get("ghost", True) and p > 0.5:
+        for k in range(0, 360, 12): d.arc([sx - 35, sy - 35, sx + 35, sy + 35], k, k + 6, fill=(255, 255, 255), width=3)
+        d.text((sx + 48, sy - 50), "our Sun's size", font=F(26, "SemiBold"), fill=(255, 255, 255) if day < 0.6 else (40, 40, 60), anchor="lm")
+    # landscape: sea + hills, lit by the star
+    lit = mix((8, 10, 18), mix(col, (255, 255, 255), 0.25), day * 0.9)
+    sea = mix((6, 10, 22), mix((40, 90, 150), col, 0.25), day)
+    d.rectangle([0, 880, W, H], fill=sea)
+    for k in range(10):
+        yy = 900 + k * 18; d.line([(sx - 300 + k * 10, yy), (sx + 300 - k * 10, yy)], fill=mix(sea, col, 0.5 * day + 0.1), width=2)
+    hill = _hills17(); poly = [(0, H)] + hill + [(1120, H)]
+    d.polygon(poly, fill=mix((5, 6, 12), mix(lit, (40, 70, 40), 0.55), day))
+    # HUD
+    a = ease((t - 0.3) / 0.6)
+    lay = Image.new("RGBA", img.size, (0, 0, 0, 0)); dl = ImageDraw.Draw(lay)
+    dl.rounded_rectangle([1250, 640, 1840, 990], 24, fill=(6, 8, 20, int(200 * a)), outline=col + (int(200 * a),), width=3)
+    img.alpha_composite(lay)
+    sl = f"{L * 100:.2f}% of today" if L < 0.01 else (f"{L * 100:.1f}% of today" if L < 0.1 else (f"{L * 100:.0f}% of today" if L < 1.995 else f"{L:,.0f}× today"))
+    rows = [("STAR", v.get("name", "")), ("SUNLIGHT", sl), ("DISC WIDTH", (f"{R:.2f}× the Sun" if R >= 0.1 else f"1/{1 / R:,.0f} of the Sun")), ("COLOUR", f"{T:,.0f} K")]
+    for i, (k, val) in enumerate(rows):
+        alpha_text(img, (1285, 700 + i * 76), k, F(28, "Bold"), DIM, a, anchor="lm", shadow=False)
+        alpha_text(img, (1810, 700 + i * 76), val, F(38, "ExtraBold"), WHITE if i else mix(col, (255, 255, 255), 0.4), a, anchor="rm", shadow=False)
+    if v.get("head"): alpha_text(img, (W / 2, 150), v["head"], F(60, "Black"), WHITE, ease((t - 0.2) / 0.5))
+    if v.get("caption"): caption(img, v["caption"], ease((t - 0.8) / 0.5), y=H - 70)
+
+def sc_starcard(img, v, t, dur):
+    """chapter card 'SWAP n OF 5': the star drawn at left (size ∝ R^0.25 so it fits), Sun ghost for scale, and stat rows with log bars
+    centred on the Sun (1×): width, brightness, surface temperature, distance from us"""
+    col = bbcol17(v["T"]); a1, a2 = ease((t - 0.2) / 0.6), ease((t - 0.7) / 0.6)
+    r = max(6, min(300, 120 * v["R"] ** 0.25)) * (0.6 + 0.4 * ease(t / 1.2))
+    paste_c(img, star17(r, v["T"], halo=1.9), 470, 560, a1)
+    paste_c(img, sun_sprite(28), 470 + max(r, 40) + 120, 560 + max(r * 0.6, 60), a1)
+    d = ImageDraw.Draw(img); d.text((470 + max(r, 40) + 120, 560 + max(r * 0.6, 60) + 58), "our Sun", font=F(26, "SemiBold"), fill=DIM, anchor="mm")
+    if v["R"] > 50: d.text((470, 960), "(not to scale: way bigger)", font=F(26, "SemiBold"), fill=DIM, anchor="mm")
+    alpha_text(img, (1000, 230), v.get("kicker", ""), F(38, "Bold"), mix(col, (255, 255, 255), 0.3), a1, anchor="lm")
+    alpha_text(img, (1000, 320), v.get("name", ""), F(84, "Black"), WHITE, a1, anchor="lm", dy=(1 - a1) * 30)
+    alpha_text(img, (1000, 400), v.get("sub", ""), F(38, "SemiBold"), DIM, a2, anchor="lm")
+    rows = [("WIDTH", v["R"], f"{v['R']:.4f}×" if v["R"] < 0.1 else f"{v['R']:,.2f}×" if v["R"] < 100 else f"{v['R']:,.0f}×"),
+            ("BRIGHTNESS", v["L"], (f"{v['L']:.4f}×" if v["L"] < 0.01 else (f"{v['L']:.2f}×" if v["L"] < 10 else f"{v['L']:,.0f}×"))),
+            ("SURFACE", v["T"] / 5772, f"{v['T']:,.0f} K")]
+    lay = Image.new("RGBA", img.size, (0, 0, 0, 0)); dl = ImageDraw.Draw(lay)
+    x0, x1 = 1000, 1780; xm = (x0 + x1) / 2
+    for i, (k, ratio, txt) in enumerate(rows):
+        y = 520 + i * 125; ai = ease((t - 0.9 - i * 0.25) / 0.5)
+        dl.rectangle([x0, y + 30, x1, y + 52], fill=(40, 44, 60, int(255 * a2)))
+        dl.line([(xm, y + 20), (xm, y + 62)], fill=(255, 255, 255, int(200 * a2)), width=3)
+        u = max(-1, min(1, math.log10(ratio) / 6)) * ai; xe = xm + u * (x1 - xm)
+        dl.rectangle([min(xm, xe), y + 30, max(xm, xe), y + 52], fill=col + (int(255 * a2),))
+    img.alpha_composite(lay)
+    for i, (k, ratio, txt) in enumerate(rows):
+        y = 520 + i * 125; ai = ease((t - 0.9 - i * 0.25) / 0.5)
+        alpha_text(img, (x0, y), k, F(28, "Bold"), DIM, a2, anchor="lm", shadow=False)
+        alpha_text(img, (x1, y), txt + ("" if k == "SURFACE" else " the Sun"), F(36, "ExtraBold"), WHITE, ai, anchor="rm", shadow=False)
+    d = ImageDraw.Draw(img)
+    d.text((xm, 905), "Sun = centre line · log scale", font=F(24, "Medium"), fill=(110, 115, 140), anchor="mm")
+    alpha_text(img, (x0, 980), v.get("dist", ""), F(32, "SemiBold"), mix(col, (255, 255, 255), 0.5), a2, anchor="lm")
+
+PLAN17 = [("Mercury", 0.387), ("Venus", 0.723), ("Earth", 1.0), ("Mars", 1.524), ("Jupiter", 5.20), ("Saturn", 9.54), ("Uranus", 19.2), ("Neptune", 30.1), ("Pluto", 39.5)]
+def sc_hzmap(img, v, t, dur):
+    """top-down solar system on a SQUARE-ROOT distance scale (to v.max AU); green 'Earth-like zone' (0.99–1.70 AU × √L, Kopparapu et al.
+    2013 conservative limits) slides from the Sun's to the new star's; star disc to the same scale (R × 0.00465 AU) swallows inner orbits;
+    Earth tagged TOO HOT / TOO COLD / JUST RIGHT; v.hl = planet name that now sits in the zone"""
+    p = easeio((t - 0.6) / 2.2); L = _logp(1.0, v["L"], p); Rs = _logp(1.0, v["R"], p); T = lerp(5772, v["T"], p)
+    cx, cy, Rmax = 640, 560, 470; mx = v.get("max", 40)
+    def rp(au): return Rmax * math.sqrt(min(au, mx * 1.2) / mx)
+    col = bbcol17(T)
+    lay = Image.new("RGBA", img.size, (0, 0, 0, 0)); dl = ImageDraw.Draw(lay)
+    zi, zo = 0.99 * math.sqrt(L), 1.70 * math.sqrt(L)
+    if zi < mx * 1.2:
+        dl.ellipse([cx - rp(zo), cy - rp(zo), cx + rp(zo), cy + rp(zo)], fill=(60, 200, 110, 90))
+        dl.ellipse([cx - rp(zi), cy - rp(zi), cx + rp(zi), cy + rp(zi)], fill=(0, 0, 0, 0))
+    img.alpha_composite(lay)
+    lay2 = Image.new("RGBA", img.size, (0, 0, 0, 0)); dl = ImageDraw.Draw(lay2)
+    sr = rp(Rs * 0.00465)
+    for i, (nm, au) in enumerate(PLAN17):
+        if au > mx: continue
+        r = rp(au); gone = sr > r
+        dl.ellipse([cx - r, cy - r, cx + r, cy + r], outline=(120, 130, 160, 90 if gone else 200), width=2)
+        ang = -0.9 + i * 0.75; px, py = cx + r * math.cos(ang), cy + r * math.sin(ang)
+        pc = (90, 160, 255) if nm == "Earth" else ((120, 255, 150) if nm == v.get("hl") and p > 0.9 else (210, 210, 220))
+        if mx > 200 and nm != "Pluto":
+            continue
+        if not gone:
+            dl.ellipse([px - 9, py - 9, px + 9, py + 9], fill=pc + (255,))
+            dl.text((px + 14, py), nm, font=F(26, "Bold"), fill=pc + (255,), anchor="lm")
+        else:
+            if mx > 200: continue
+            dl.text((px + 14, py), nm + " ✕", font=F(24, "Bold"), fill=(255, 120, 90, 255), anchor="lm")
+    img.alpha_composite(lay2)
+    paste_c(img, star17(max(5, sr), T, halo=1.25 if sr > 60 else 2.0), cx, cy)
+    d = ImageDraw.Draw(img)
+    state = "INSIDE THE STAR" if sr > rp(1.0) else ("TOO HOT" if 1.0 < zi else ("TOO COLD" if 1.0 > zo else "JUST RIGHT"))
+    scol = {"TOO HOT": (255, 120, 80), "TOO COLD": (120, 190, 255), "JUST RIGHT": (120, 255, 150), "INSIDE THE STAR": (255, 160, 60)}[state]
+    alpha_text(img, (1180, 250), v.get("kicker", "THE EARTH-LIKE ZONE"), F(36, "Bold"), (120, 230, 150), 1, anchor="lm")
+    alpha_text(img, (1180, 340), v.get("name", ""), F(70, "Black"), WHITE, 1, anchor="lm")
+    zt = (f"{zi:,.0f}–{zo:,.0f} AU" if zi >= 10 else f"{zi:.2f}–{zo:.2f} AU")
+    alpha_text(img, (1180, 450), "zone: " + zt, F(44, "ExtraBold"), (140, 240, 170), 1, anchor="lm", shadow=False)
+    alpha_text(img, (1180, 540), "Earth (1 AU):", F(38, "SemiBold"), DIM, 1, anchor="lm", shadow=False)
+    alpha_text(img, (1180, 610), state, F(64, "Black"), scol, ease((t - 2.4) / 0.5), anchor="lm")
+    if v.get("note"): alpha_text(img, (1180, 720), v["note"], F(36, "SemiBold"), WHITE, ease((t - 2.8) / 0.5), anchor="lm")
+    d = ImageDraw.Draw(img)
+    d.text((1180, 960), "square-root distance scale · 1 AU = Earth–Sun", font=F(24, "Medium"), fill=(110, 115, 140), anchor="lm")
+    d.text((1180, 995), "zone limits: Kopparapu et al. 2013, scaled by √brightness", font=F(24, "Medium"), fill=(110, 115, 140), anchor="lm")
+
+def sc_earthtemp(img, v, t, dur):
+    """Earth globe tinted by the new average temperature (ice white / scorched orange) + a thermometer −250…500 °C with landmarks
+    (air freezes, water, lead melts, Venus); the reading slides from today's 15 °C to v.temp; simple estimate: T ∝ L^¼ (same air, clouds)"""
+    p = easeio((t - 0.5) / 2.0); temp = lerp(15, v["temp"], p)
+    paste_c(img, earth_sprite(230, glow=(120, 180, 255)), 540, 560)
+    cold = max(0, min(1, (0 - temp) / 120)); hot = max(0, min(1, (temp - 40) / 300))
+    m = Image.new("L", (520, 520), 0); ImageDraw.Draw(m).ellipse([30, 30, 490, 490], fill=255)
+    ov = Image.new("RGBA", (520, 520), (235, 245, 255, 0))
+    if cold > 0: ov = Image.new("RGBA", (520, 520), (235, 245, 255, int(215 * cold)))
+    if hot > 0: ov = Image.new("RGBA", (520, 520), (230, 90, 30, int(200 * hot)))
+    ov.putalpha(Image.fromarray((np.asarray(m, np.float32) * np.asarray(ov.getchannel("A"), np.float32) / 255).astype(np.uint8)))
+    img.alpha_composite(ov, (540 - 260, 560 - 260))
+    if hot > 0.3:
+        d = ImageDraw.Draw(img); rng = random.Random(3)
+        for _ in range(26):
+            a0 = rng.uniform(0, 6.28); r0 = rng.uniform(20, 200); x, y = 540 + r0 * math.cos(a0), 560 + r0 * math.sin(a0)
+            pts = [(x, y)]
+            for _k in range(4): x += rng.uniform(-22, 22); y += rng.uniform(-22, 22); pts.append((x, y))
+            d.line(pts, fill=(255, 210, 120), width=2)
+    x, y0, y1 = 1150, 900, 180; tmin, tmax = -250, 500
+    def ty(c): return lerp(y0, y1, (c - tmin) / (tmax - tmin))
+    d = ImageDraw.Draw(img)
+    d.rounded_rectangle([x - 22, y1 - 20, x + 22, y0 + 20], 22, fill=(30, 34, 50), outline=(150, 160, 190), width=3)
+    fc = (120, 190, 255) if temp < 0 else ((255, 200, 80) if temp < 100 else (255, 100, 60))
+    d.rounded_rectangle([x - 12, ty(temp), x + 12, y0 + 10], 12, fill=fc)
+    d.ellipse([x - 38, y0 - 4, x + 38, y0 + 72], fill=fc)
+    marks = [(-210, "−210 °C  air (nitrogen) freezes"), (0, "0 °C  water freezes"), (15, "15 °C  Earth today"), (100, "100 °C  water boils"),
+             (327, "327 °C  lead melts"), (464, "464 °C  Venus's surface")]
+    for c, lab in marks:
+        yy = ty(c); d.line([(x + 30, yy), (x + 60, yy)], fill=(200, 205, 220), width=3)
+        d.text((x + 72, yy + {15: -16, 0: 14}.get(c, 0)), lab, font=F(28, "SemiBold"), fill=WHITE if c == 15 else DIM, anchor="lm")
+    d.text((540, 880), f"{temp:+.0f} °C", font=F(92, "Black"), fill=fc, anchor="mm")
+    d.text((540, 960), v.get("label", "average temperature, simple estimate"), font=F(30, "SemiBold"), fill=DIM, anchor="mm")
+    if v.get("head"): alpha_text(img, (W / 2, 110), v["head"], F(56, "Black"), WHITE, ease((t - 0.2) / 0.5))
 
 SC = {k[3:]: f for k, f in globals().items() if k.startswith("sc_")}
 

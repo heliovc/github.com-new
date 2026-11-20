@@ -37,6 +37,9 @@ vis.type == "probes" / THEME.hook/outro == "probes": sonda desenhada por código
 vis.type == "rocks" / THEME.hook/outro == "rocks": asteroide desenhado por código (contorno irregular por harmônicos vis.lump, crateras,
   vis.spot = manchas claras de Ceres) EM ESCALA (0,72 px/km) girando devagar + barra de 100 km + "dar a volta de carro a 100 km/h: N h";
   gancho = silhueta escura de Ceres com "?"; outro = os 5 lado a lado na mesma escala (rank16).
+vis.type == "weigh" / THEME.hook/outro == "weigh": balança: o objeto no prato esquerdo (vis.kind = sun | gas | ringed | ice, vis.col, vis.r)
+  contra uma pilha de Terras no direito, o braço nivela enquanto o contador sobe até vis.earths + régua log 1–1.000.000 massas terrestres;
+  gancho = Terra sozinha num prato contra "?"; outro = as 5 na régua (rank17).
 Tudo desenhado por código; narração Kokoro (VOICE, padrão af_heart); legenda grande queimada.
 """
 import sys, os, re, math, json, subprocess, importlib.util, random
@@ -958,6 +961,54 @@ def rocks_vis(img, it, th, t, dur):
     if v.get("note"): text(img, (W / 2, 1290), v["note"], 38, acc2, w="ExtraBold", a=ease((t - 1.2) / 0.5), stroke=3)
 
 
+# ---------- rank17: "weigh" (balance beam in Earth masses) ----------
+WG_LOG = (0, 6)  # log10 Earth masses on the ruler: 1 -> 1,000,000
+def wg_body(img, kind, col, cx, cy, r, t):
+    if kind == "sun": R.paste_c(img, R.sun_sprite(int(r / 1.0)).resize((int(r * 4), int(r * 4))), cx, cy); return
+    R.paste_c(img, R.planet_sprite(int(r), tuple(col), light=(-0.9, -0.4)), cx, cy)
+    d = ImageDraw.Draw(img)
+    if kind == "gas":  # a few bands
+        for k in (-0.45, -0.15, 0.2, 0.5):
+            w = r * math.sqrt(max(0, 1 - k * k)) * 0.95; d.line([(cx - w, cy + k * r), (cx + w, cy + k * r)], fill=tuple(max(0, int(c * 0.78)) for c in col), width=max(2, int(r * 0.08)))
+    if kind == "ringed":
+        d.ellipse([cx - r * 2.0, cy - r * 0.42, cx + r * 2.0, cy + r * 0.42], outline=(230, 210, 160), width=max(3, int(r * 0.09)))
+def wg_ruler(img, th, items, cur=None, y=1200):
+    x0, x1 = 110, W - 110; d = ImageDraw.Draw(img)
+    def X(m): return lerp(x0, x1, (math.log10(max(1, m)) - WG_LOG[0]) / (WG_LOG[1] - WG_LOG[0]))
+    d.line([(x0, y), (x1, y)], fill=(90, 95, 130), width=6)
+    for e in range(WG_LOG[0], WG_LOG[1] + 1):
+        x = X(10 ** e); d.line([(x, y - 12), (x, y + 12)], fill=(150, 155, 185), width=3)
+        d.text((x, y + 40), f"{10 ** e:,}", font=F(24, "Bold"), fill=(150, 155, 185), anchor="mm")
+    R.paste_c(img, R.earth_sprite(14, glow=None), X(1), y - 40); d = ImageDraw.Draw(img)
+    d.text((x1, y + 78), "Earth masses (log scale)", font=F(26, "SemiBold"), fill=(150, 155, 185), anchor="rm")
+    for o in items:
+        v = o["vis"]; x = X(v["earths"]); on = cur is None or o is cur
+        if cur is not None and o["rank"] < cur["rank"]: continue
+        d.ellipse([x - 12, y - 12, x + 12, y + 12], fill=tuple(v["col"]) if on else (110, 110, 130))
+        d.text((x, y - 44 - (34 if o["rank"] % 2 == 0 else 0)), f"#{o['rank']}", font=F(30, "Black"), fill=tuple(v["col"]) if on else (130, 130, 150), anchor="mm")
+def wg_balance(img, th, left, right_n, t, bp, cy=760, label=None):
+    """left = (kind, col, r) body on the left pan; right pan = stack of Earth tokens up to right_n (shown as count); beam levels as bp -> 1"""
+    cx = W / 2; L = 380; tilt = 0.32 * (1 - easeio(bp)) + 0.015 * math.sin(t * 3) * (1 - bp)
+    lx, ly = cx - L * math.cos(tilt), cy + L * math.sin(tilt); rx, ry = cx + L * math.cos(tilt), cy - L * math.sin(tilt)
+    d = ImageDraw.Draw(img)
+    d.polygon([(cx, cy), (cx - 60, cy + 470), (cx + 60, cy + 470)], fill=(60, 66, 100)); d.line([(lx, ly), (rx, ry)], fill=(215, 220, 245), width=12)
+    d.ellipse([cx - 16, cy - 16, cx + 16, cy + 16], fill=(255, 255, 255))
+    for x, y in ((lx, ly), (rx, ry)):
+        d.line([(x, y), (x - 120, y + 160)], fill=(170, 175, 200), width=3); d.line([(x, y), (x + 120, y + 160)], fill=(170, 175, 200), width=3)
+        d.arc([x - 140, y + 120, x + 140, y + 200], 0, 180, fill=(215, 220, 245), width=8)
+    kind, col, r = left; wg_body(img, kind, col, lx, ly + 160 - r * (0.6 if kind != "sun" else 0.5), r, t)
+    n = (right_n ** easeio(bp) if right_n > 1000 else right_n * easeio(bp)); shown = min(28, max(1, int(round(n)) if n < 28 else 28))
+    for k in range(shown):
+        row, colk = divmod(k, 7); ex = rx - 105 + colk * 35; ey = ry + 150 - row * 32
+        R.paste_c(img, R.earth_sprite(15, glow=None), ex, ey)
+    text(img, (min(rx, W - 250), ry - 70), f"{n:,.0f} Earths" if n >= 10 else f"{n:,.1f} Earths", 54, tuple(th["accent2"]), stroke=4)
+    if label: text(img, (lx, ly + 260), label, 34, (235, 235, 245), w="Bold", stroke=3)
+def weigh_vis(img, it, th, t, dur):
+    v = it["vis"]; bp = (t - 0.4) / max(1.2, dur * 0.6)
+    wg_balance(img, th, (v["kind"], v["col"], v.get("r", 80)), v["earths"], t, max(0, min(1, bp)), cy=600, label=v.get("label"))
+    wg_ruler(img, th, ALL_ITEMS, cur=it, y=1170)
+    if v.get("note"): text(img, (W / 2, 1290), v["note"], 38, tuple(th["accent2"]), w="ExtraBold", a=ease((t - 1.2) / 0.5), stroke=3)
+
 def caption_chunks(say, t0, dur):
     words = say.split(); groups, g = [], []
     for w in words:
@@ -980,6 +1031,21 @@ def draw_caption(img, chunks, gt, y=1585):
 
 def seg_hook(img, sc, th, t, dur):
     col = tuple(th["star_col"]); acc = tuple(th["accent"])
+    if th.get("hook") == "weigh":
+        # frame 0: the big number + Earth alone on one pan, a "?" on the heavy pan (beam tipped hard)
+        cx, cy, L, tilt = W / 2, 760, 380, -0.32
+        d = ImageDraw.Draw(img); lx, ly = cx - L * math.cos(tilt), cy + L * math.sin(tilt); rx, ry = cx + L * math.cos(tilt), cy - L * math.sin(tilt)
+        d.polygon([(cx, cy), (cx - 60, cy + 470), (cx + 60, cy + 470)], fill=(60, 66, 100)); d.line([(lx, ly), (rx, ry)], fill=(215, 220, 245), width=12)
+        for x, y in ((lx, ly), (rx, ry)):
+            d.line([(x, y), (x - 120, y + 160)], fill=(170, 175, 200), width=3); d.line([(x, y), (x + 120, y + 160)], fill=(170, 175, 200), width=3)
+            d.arc([x - 140, y + 120, x + 140, y + 200], 0, 180, fill=(215, 220, 245), width=8)
+        d.text((lx, ly + 90), "?", font=F(200, "Black"), fill=tuple(th["accent"]), anchor="mm")
+        R.paste_c(img, R.earth_sprite(40, glow=None), rx, ry + 150)
+        text(img, (rx, ry + 250), "Earth", 40, (140, 200, 255), stroke=3)
+        text(img, (W / 2, 220), sc.get("big", ""), 140, tuple(th["accent"]), stroke=3)
+        text(img, (W / 2, 335), sc["top"].upper(), 52, (255, 255, 255))
+        text(img, (W / 2, 1360), sc["sub"], 46, tuple(th["accent2"]), w="ExtraBold")
+        return
     if th.get("hook") == "rocks":
         # frame 0: the big number + Ceres already on screen to scale (as a dark silhouette with a "?"), a 100 km bar for scale
         o = [x for x in ALL_ITEMS if x["rank"] == 1][0]; v = o["vis"]
@@ -1210,6 +1276,8 @@ def seg_item(img, it, th, t, dur):
         probes_vis(img, it, th, t, dur)
     if v["type"] == "rocks":
         rocks_vis(img, it, th, t, dur)
+    if v["type"] == "weigh":
+        weigh_vis(img, it, th, t, dur)
     # number
     p = easeio((t - 0.5) / 1.6)
     num = it["num"]
@@ -1222,6 +1290,14 @@ def seg_item(img, it, th, t, dur):
 
 def seg_outro(img, sc, th, t, dur):
     a = ease(t / 0.5)
+    if th.get("outro") == "weigh":
+        wg_ruler(img, th, ALL_ITEMS, cur=None, y=640)
+        if th.get("outro_note"): text(img, (W / 2, 850), th["outro_note"], 44, tuple(th["accent2"]), w="ExtraBold", a=a)
+        text(img, (W / 2, 990), "WHAT SHOULD WE", 90, (255, 255, 255), a=ease((t - 0.3) / 0.5))
+        text(img, (W / 2, 1080), "WEIGH NEXT?", 70, tuple(th["accent"]), a=ease((t - 0.5) / 0.5))
+        text(img, (W / 2, 1310), "SUBSCRIBE", 100, tuple(th["accent"]), a=ease((t - 0.8) / 0.5))
+        text(img, (W / 2, 1400), "to Cosmic Scale", 50, (255, 255, 255), w="ExtraBold", a=ease((t - 1.0) / 0.5))
+        return
     if th.get("outro") == "rocks":
         # all five side by side at one scale (0.45 px/km), biggest first, plus the Moon's edge for scale
         x = 70; k3 = 0.45; d = ImageDraw.Draw(img)
