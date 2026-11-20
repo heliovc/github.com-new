@@ -3,15 +3,15 @@
 Ler antes de cada vídeo (plano.md, seção 8). Atualizar depois de produzir e 48 h depois de publicar.
 
 ## Status do canal
-- Nome final: **pendente (Hélio)**. Sugestão: "Na Pele De".
-- Canal no YouTube / Instagram / TikTok: **pendente (Hélio criar)**. Sem `channel_id`, nada é publicado.
-- Piloto (Dia 1 A e B): renderizado em 20/11/2026, **aguardando aprovação do Hélio**. Rotina diária NÃO agendada.
+- Nome: **Na Pele De** — YouTube `@napeledebicho`, channel_id `UCO5Fa5_HJxd-aeTiyQcw0Sw` (criado pelo Hélio em 20/11/2026). Cadastrado em `server/publisher/channels.json`.
+- Instagram / TikTok: **pendente (Hélio criar)**; depois, ligar no Buffer.
+- Piloto (Dia 1 A e B): aprovado pelo Hélio em 20/11/2026; agendado pelo robô para 21/11 12:00 e 19:00.
 
 ## Animais e temas usados
 | Dia | Vídeo | Animal | Grupo | Tipo | Gancho | Tema | Paleta | Abertura | Visão do Bicho | Duração | Palavras | Status |
 |---|---|---|---|---|---|---|---|---|---|---|---|---|
-| 1 | A | formiga | inseto | escala extrema | queda/perigo | cidade | fim de tarde dourado | escorregando do parapeito | olho composto (mosaico hexagonal no pouso) | 48,5 s | 136 | piloto v2 (voz nova), aguardando aprovação |
-| 1 | B | lagartixa | réptil | mecânica do dia a dia | lugar proibido | casa | cozinha à noite, laranja × azul | close rasteiro atrás da geladeira | cores no escuro (visão noturna em cores) | 45,6 s | 137 | piloto v2 (voz nova), aguardando aprovação |
+| 1 | A | formiga | inseto | escala extrema | queda/perigo | cidade | fim de tarde dourado | escorregando do parapeito | olho composto (mosaico hexagonal no pouso) | 48,5 s | 136 | agendado (robô) |
+| 1 | B | lagartixa | réptil | mecânica do dia a dia | lugar proibido | casa | cozinha à noite, laranja × azul | close rasteiro atrás da geladeira | cores no escuro (visão noturna em cores) | 45,6 s | 137 | agendado (robô) |
 
 ## Fontes por vídeo
 **1A — formiga**
@@ -28,8 +28,8 @@ Metas: continuaram assistindo ≥ 70% · % visualizada ≥ 80%.
 
 | Vídeo | Publicado em | Link | Continuaram assistindo | % visualizada | Views 48 h | Inscritos / 1.000 views |
 |---|---|---|---|---|---|---|
-| 1A formiga | — | — | — | — | — | — |
-| 1B lagartixa | — | — | — | — | — | — |
+| 1A formiga | 21/11 12:00 (agendado) | — | — | — | — | — |
+| 1B lagartixa | 21/11 19:00 (agendado) | — | — | — | — | — |
 
 ## Decisões e desvios do plano
 - **20/11 — Visão do Bicho da lagartixa:** o roteiro pedia visão térmica, mas lagartixa não enxerga calor (quem enxerga é cobra, Dia 11A). Trocado pelo sentido real: enxergar cores no escuro (Roth & Kelber 2004). A cena de calor continua como raio-X explicativo.

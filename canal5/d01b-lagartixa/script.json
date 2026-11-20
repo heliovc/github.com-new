@@ -7,62 +7,303 @@
  "gancho": "lugar proibido",
  "tema": "casa",
  "voice": "pf_dora",
- "tts": {"engine": "edge", "voice": "pt-BR-ThalitaMultilingualNeural", "rate": "+0%"},
+ "tts": {
+  "engine": "edge",
+  "voice": "pt-BR-ThalitaMultilingualNeural",
+  "rate": "+0%"
+ },
  "speed": 0.9,
  "scene_module": "lagartixa",
- "accent": [235, 110, 40],
+ "accent": [
+  235,
+  110,
+  40
+ ],
  "hud_series": "E SE VOCÊ FOSSE…",
  "hud": "VOCÊ: 10 cm · GELADEIRA: 1,8 m",
- "music": {"bpm": 92, "root": 58, "prog": [0, 3, 5, 4], "seed": 7, "inst": "pluck", "density": 0.6},
+ "music": {
+  "bpm": 92,
+  "root": 58,
+  "prog": [
+   0,
+   3,
+   5,
+   4
+  ],
+  "seed": 7,
+  "inst": "pluck",
+  "density": 0.6
+ },
  "say_map": {},
  "beats": [
-  {"scene": "behind", "text": "Eu moro atrás da *geladeira*."},
-  {"scene": "behind", "text": "E aqui é *quente*."},
-  {"scene": "behind", "text": "Esse calor saiu lá de *dentro*."},
-  {"scene": "heatmove", "text": "A geladeira não *cria* frio."},
-  {"scene": "heatmove", "text": "Ela *tira* calor de dentro e joga aqui fora, em mim."},
-  {"scene": "pipes", "text": "Quem faz isso é um fluido que corre pelos canos: o *gás refrigerante*."},
-  {"scene": "evap", "text": "Lá dentro, ele passa por canos com *pressão baixa* e *evapora*."},
-  {"scene": "sweat", "text": "E evaporar *rouba* calor, igual o *suor* secando na sua pele."},
-  {"scene": "sweat", "text": "Por isso tudo lá dentro *esfria*."},
-  {"scene": "vision", "text": "Aí ele chega no motor, aqui embaixo: o *compressor*."},
-  {"scene": "vision", "text": "Esse *zumbido* que eu escuto o dia todo."},
-  {"scene": "compress", "text": "Ele *espreme* o gás e deixa ele quente, bem *quente*."},
-  {"scene": "condenser", "text": "Esse gás quente passa pela *grade* atrás da geladeira, solta o calor no ar e vira *líquido* de novo."},
-  {"scene": "condenser", "text": "E o ciclo *recomeça*."},
-  {"scene": "icecream", "text": "Ou seja: cada sorvete gelado que você tira lá de dentro…"},
-  {"scene": "icecream", "text": "*esquentou* a minha casa.", "pause_before": 0.3, "payoff": true}
+  {
+   "scene": "behind",
+   "text": "Eu moro atrás da *geladeira*."
+  },
+  {
+   "scene": "behind",
+   "text": "E aqui é *quente*."
+  },
+  {
+   "scene": "behind",
+   "text": "Esse calor saiu lá de *dentro*."
+  },
+  {
+   "scene": "heatmove",
+   "text": "A geladeira não *cria* frio."
+  },
+  {
+   "scene": "heatmove",
+   "text": "Ela *tira* calor de dentro e joga aqui fora, em mim."
+  },
+  {
+   "scene": "pipes",
+   "text": "Quem faz isso é um fluido que corre pelos canos: o *gás refrigerante*."
+  },
+  {
+   "scene": "evap",
+   "text": "Lá dentro, ele passa por canos com *pressão baixa* e *evapora*."
+  },
+  {
+   "scene": "sweat",
+   "text": "E evaporar *rouba* calor, igual o *suor* secando na sua pele."
+  },
+  {
+   "scene": "sweat",
+   "text": "Por isso tudo lá dentro *esfria*."
+  },
+  {
+   "scene": "vision",
+   "text": "Aí ele chega no motor, aqui embaixo: o *compressor*."
+  },
+  {
+   "scene": "vision",
+   "text": "Esse *zumbido* que eu escuto o dia todo."
+  },
+  {
+   "scene": "compress",
+   "text": "Ele *espreme* o gás e deixa ele quente, bem *quente*."
+  },
+  {
+   "scene": "condenser",
+   "text": "Esse gás quente passa pela *grade* atrás da geladeira, solta o calor no ar e vira *líquido* de novo."
+  },
+  {
+   "scene": "condenser",
+   "text": "E o ciclo *recomeça*."
+  },
+  {
+   "scene": "icecream",
+   "text": "Ou seja: cada sorvete gelado que você tira lá de dentro…"
+  },
+  {
+   "scene": "icecream",
+   "text": "*esquentou* a minha casa.",
+   "pause_before": 0.3,
+   "payoff": true
+  }
  ],
  "scenes": {
-  "behind": {"labels": [{"text": "AQUI ATRÁS É *QUENTE*", "emoji": "1f525", "at": "quente"}],
-             "sfx": [{"type": "hum", "at": 0, "d": "scene", "f0": 120, "gain": -21}]},
-  "heatmove": {"labels": [{"text": "ela não *cria* frio", "at": "cria"}, {"text": "ela *TIRA* calor", "at": "tira"}], "sfx_cut": "whoosh"},
-  "pipes": {"labels": [{"text": "*GÁS* REFRIGERANTE", "at": "gás"}], "sfx_cut": "whoosh_hi",
-            "sfx": [{"type": "hiss", "at": 0.2, "d": 2.5, "gain": -24}]},
-  "evap": {"labels": [{"text": "pressão baixa: *EVAPORA*", "at": "evapora"}], "sfx_cut": "whoosh",
-           "sfx": [{"type": "hiss", "at": 0.3, "d": 2.5, "gain": -22}]},
-  "sweat": {"labels": [{"text": "evaporar = *ROUBAR CALOR*", "at": "rouba"}, {"text": "lá dentro: *-18 °C*", "at": "esfria"}],
-            "sfx_cut": "pop", "sfx": [{"type": "drip", "at": 0.4, "gain": -16}, {"type": "whoosh_hi", "at": "isso", "gain": -14}]},
-  "vision": {"labels": [{"text": "VISÃO DO BICHO · *cores no escuro*", "style": "vision", "at": 0},
-                        {"text": "*COMPRESSOR* = o zumbido", "at": "zumbido"}],
-             "sfx_cut": "glitch", "sfx": [{"type": "hum", "at": 0.3, "d": "scene", "f0": 120, "gain": -13}]},
-  "compress": {"labels": [{"text": "espreme: *ESQUENTA*", "at": "espreme"}], "sfx_cut": "kick",
-               "sfx": [{"type": "hum", "at": 0, "d": "scene", "f0": 150, "gain": -13}]},
-  "condenser": {"labels": [{"text": "calor sai pela *GRADE*", "at": "grade"}, {"text": "o ciclo *RECOMEÇA*", "at": "recomeça"}],
-                "sfx_cut": "whoosh", "sfx": [{"type": "metal", "at": 0.6, "gain": -19}, {"type": "kick", "at": "recomeça", "gain": -12}]},
-  "icecream": {"hud": "VOCÊ: 10 cm · SORVETE: 2 litros", "sfx_cut": "whoosh_lo",
-               "sfx": [{"type": "door", "at": 0.05, "gain": -12}, {"type": "door", "at": "esquentou", "gain": -15}]}
+  "behind": {
+   "labels": [
+    {
+     "text": "AQUI ATRÁS É *QUENTE*",
+     "emoji": "1f525",
+     "at": "quente"
+    }
+   ],
+   "sfx": [
+    {
+     "type": "hum",
+     "at": 0,
+     "d": "scene",
+     "f0": 120,
+     "gain": -21
+    }
+   ]
+  },
+  "heatmove": {
+   "labels": [
+    {
+     "text": "ela não *cria* frio",
+     "at": "cria"
+    },
+    {
+     "text": "ela *TIRA* calor",
+     "at": "tira"
+    }
+   ],
+   "sfx_cut": "whoosh"
+  },
+  "pipes": {
+   "labels": [
+    {
+     "text": "*GÁS* REFRIGERANTE",
+     "at": "gás"
+    }
+   ],
+   "sfx_cut": "whoosh_hi",
+   "sfx": [
+    {
+     "type": "hiss",
+     "at": 0.2,
+     "d": 2.5,
+     "gain": -24
+    }
+   ]
+  },
+  "evap": {
+   "labels": [
+    {
+     "text": "pressão baixa: *EVAPORA*",
+     "at": "evapora"
+    }
+   ],
+   "sfx_cut": "whoosh",
+   "sfx": [
+    {
+     "type": "hiss",
+     "at": 0.3,
+     "d": 2.5,
+     "gain": -22
+    }
+   ]
+  },
+  "sweat": {
+   "labels": [
+    {
+     "text": "evaporar = *ROUBAR CALOR*",
+     "at": "rouba"
+    },
+    {
+     "text": "lá dentro: *-18 °C*",
+     "at": "esfria"
+    }
+   ],
+   "sfx_cut": "pop",
+   "sfx": [
+    {
+     "type": "drip",
+     "at": 0.4,
+     "gain": -16
+    },
+    {
+     "type": "whoosh_hi",
+     "at": "isso",
+     "gain": -14
+    }
+   ]
+  },
+  "vision": {
+   "labels": [
+    {
+     "text": "VISÃO DO BICHO · *cores no escuro*",
+     "style": "vision",
+     "at": 0
+    },
+    {
+     "text": "*COMPRESSOR* = o zumbido",
+     "at": "zumbido"
+    }
+   ],
+   "sfx_cut": "glitch",
+   "sfx": [
+    {
+     "type": "hum",
+     "at": 0.3,
+     "d": "scene",
+     "f0": 120,
+     "gain": -13
+    }
+   ]
+  },
+  "compress": {
+   "labels": [
+    {
+     "text": "espreme: *ESQUENTA*",
+     "at": "espreme"
+    }
+   ],
+   "sfx_cut": "kick",
+   "sfx": [
+    {
+     "type": "hum",
+     "at": 0,
+     "d": "scene",
+     "f0": 150,
+     "gain": -13
+    }
+   ]
+  },
+  "condenser": {
+   "labels": [
+    {
+     "text": "calor sai pela *GRADE*",
+     "at": "grade"
+    },
+    {
+     "text": "o ciclo *RECOMEÇA*",
+     "at": "recomeça"
+    }
+   ],
+   "sfx_cut": "whoosh",
+   "sfx": [
+    {
+     "type": "metal",
+     "at": 0.6,
+     "gain": -19
+    },
+    {
+     "type": "kick",
+     "at": "recomeça",
+     "gain": -12
+    }
+   ]
+  },
+  "icecream": {
+   "hud": "VOCÊ: 10 cm · SORVETE: 2 litros",
+   "sfx_cut": "whoosh_lo",
+   "sfx": [
+    {
+     "type": "door",
+     "at": 0.05,
+     "gain": -12
+    },
+    {
+     "type": "door",
+     "at": "esquentou",
+     "gain": -15
+    }
+   ]
+  }
  },
- "cover": {"t": 0.6, "title": ["UMA LAGARTIXA", "ATRÁS DA", "GELADEIRA?"]},
+ "cover": {
+  "t": 0.6,
+  "title": [
+   "UMA LAGARTIXA",
+   "ATRÁS DA",
+   "GELADEIRA?"
+  ]
+ },
  "publish": {
   "title": "E se você fosse uma lagartixa atrás da geladeira? #shorts",
   "description": "Por que atrás da geladeira é quente? Uma lagartixa explica: a geladeira não cria frio, ela tira o calor de dentro e joga para fora pela grade de trás. O gás refrigerante evapora lá dentro (roubando calor, como o suor na pele), o compressor espreme e esquenta o gás, e a grade solta esse calor no ar. Qual eletrodoméstico a gente desmonta no próximo? 👇\n\nVisão do Bicho: lagartixas noturnas enxergam cores com pouquíssima luz, onde o olho humano só vê cinza (Roth e Kelber, 2004).\n\nFontes: Danfoss, \"How a refrigerator works\", e Penn State EGEE 102, \"6.4 Refrigerators\" (ciclo de refrigeração: evaporador, compressor, condensador e tubo capilar); L. S. V. Roth e A. Kelber, \"Nocturnal colour vision in geckos\", Proceedings of the Royal Society B (2004). Narração com voz sintética; roteiro e animação próprios.\n#esevocefosse #lagartixa #geladeira #comofunciona #shorts",
-  "tags": ["lagartixa", "geladeira", "como funciona", "ciclo de refrigeração", "compressor", "e se você fosse", "shorts"],
-  "publish_at": null,
-  "pinned_comment": "Qual eletrodoméstico a gente desmonta no próximo? 👇"
+  "tags": [
+   "lagartixa",
+   "geladeira",
+   "como funciona",
+   "ciclo de refrigeração",
+   "compressor",
+   "e se você fosse",
+   "shorts"
+  ],
+  "publish_at": "2026-11-21T19:00:00-03:00",
+  "pinned_comment": "Qual eletrodoméstico a gente desmonta no próximo? 👇",
+  "channel_id": "UCO5Fa5_HJxd-aeTiyQcw0Sw"
  },
  "sources": [
-  "Danfoss — How a refrigerator works: https://www.danfoss.com/en/about-danfoss/our-businesses/cooling/the-fridge-how-it-works", "Penn State EGEE 102 — 6.4 Refrigerators: https://courses.ems.psu.edu/egee102/node/2402",
+  "Danfoss — How a refrigerator works: https://www.danfoss.com/en/about-danfoss/our-businesses/cooling/the-fridge-how-it-works",
+  "Penn State EGEE 102 — 6.4 Refrigerators: https://courses.ems.psu.edu/egee102/node/2402",
   "Roth, L.S.V. & Kelber, A. (2004) Nocturnal colour vision in geckos. Proc. R. Soc. B 271 (Suppl 6): S485–S487 — https://pmc.ncbi.nlm.nih.gov/articles/PMC1810110"
  ]
 }

@@ -7,61 +7,317 @@
  "gancho": "queda/perigo",
  "tema": "cidade",
  "voice": "pf_dora",
- "tts": {"engine": "edge", "voice": "pt-BR-ThalitaMultilingualNeural", "rate": "+0%"},
+ "tts": {
+  "engine": "edge",
+  "voice": "pt-BR-ThalitaMultilingualNeural",
+  "rate": "+0%"
+ },
  "speed": 0.92,
  "scene_module": "formiga",
- "accent": [230, 60, 80],
+ "accent": [
+  230,
+  60,
+  80
+ ],
  "hud_series": "E SE VOCÊ FOSSE…",
  "hud": "VOCÊ: 5 mm · PRÉDIO: 90 m",
- "music": {"bpm": 108, "root": 65, "prog": [0, 5, 3, 4], "seed": 3, "inst": "marimba", "density": 0.75},
- "say_map": {"30º": "trigésimo", "6": "seis", "km/h": "quilômetros por hora", "190": "cento e noventa"},
+ "music": {
+  "bpm": 108,
+  "root": 65,
+  "prog": [
+   0,
+   5,
+   3,
+   4
+  ],
+  "seed": 3,
+  "inst": "marimba",
+  "density": 0.75
+ },
+ "say_map": {
+  "30º": "trigésimo",
+  "6": "seis",
+  "km/h": "quilômetros por hora",
+  "190": "cento e noventa"
+ },
  "beats": [
-  {"scene": "ledge", "text": "Eu acabei de escorregar da janela do *30º andar*."},
-  {"scene": "ledge", "text": "E vou sair *andando*."},
-  {"scene": "pov", "text": "Pra você, o vento é uma *brisa*."},
-  {"scene": "pov", "text": "Pra mim, é uma *parede*."},
-  {"scene": "surface", "text": "Eu peso quase *nada*, mas tenho muita *superfície* pra esse peso."},
-  {"scene": "tug", "text": "Quando algo cai, a *gravidade* puxa pra baixo e o *ar* empurra pra cima."},
-  {"scene": "tug", "text": "Quanto menor você é, mais o ar *ganha* essa briga."},
-  {"scene": "speedo", "text": "Em menos de *um segundo*, eu paro de acelerar: uns *6 km/h*, no máximo."},
-  {"scene": "speedo", "text": "Um humano passaria de *190*."},
-  {"scene": "landing", "text": "E a força do impacto depende de *massa* e *velocidade*."},
-  {"scene": "landing", "text": "Minha massa é *minúscula*, minha velocidade é de *passeio*,"},
-  {"scene": "xray", "text": "e meu esqueleto fica *por fora*, como uma *armadura*."},
-  {"scene": "lineup", "text": "Por isso, no mundo animal, *tamanho é destino*:"},
-  {"scene": "lineup", "text": "um *camundongo* levanta e vai embora."},
-  {"scene": "lineup", "text": "Um *cavalo*, não."},
-  {"scene": "walk", "text": "Pra mim, cair de um prédio é só…"},
-  {"scene": "walk", "text": "um caminho mais *longo*.", "pause_before": 0.3, "payoff": true}
+  {
+   "scene": "ledge",
+   "text": "Eu acabei de escorregar da janela do *30º andar*."
+  },
+  {
+   "scene": "ledge",
+   "text": "E vou sair *andando*."
+  },
+  {
+   "scene": "pov",
+   "text": "Pra você, o vento é uma *brisa*."
+  },
+  {
+   "scene": "pov",
+   "text": "Pra mim, é uma *parede*."
+  },
+  {
+   "scene": "surface",
+   "text": "Eu peso quase *nada*, mas tenho muita *superfície* pra esse peso."
+  },
+  {
+   "scene": "tug",
+   "text": "Quando algo cai, a *gravidade* puxa pra baixo e o *ar* empurra pra cima."
+  },
+  {
+   "scene": "tug",
+   "text": "Quanto menor você é, mais o ar *ganha* essa briga."
+  },
+  {
+   "scene": "speedo",
+   "text": "Em menos de *um segundo*, eu paro de acelerar: uns *6 km/h*, no máximo."
+  },
+  {
+   "scene": "speedo",
+   "text": "Um humano passaria de *190*."
+  },
+  {
+   "scene": "landing",
+   "text": "E a força do impacto depende de *massa* e *velocidade*."
+  },
+  {
+   "scene": "landing",
+   "text": "Minha massa é *minúscula*, minha velocidade é de *passeio*,"
+  },
+  {
+   "scene": "xray",
+   "text": "e meu esqueleto fica *por fora*, como uma *armadura*."
+  },
+  {
+   "scene": "lineup",
+   "text": "Por isso, no mundo animal, *tamanho é destino*:"
+  },
+  {
+   "scene": "lineup",
+   "text": "um *camundongo* levanta e vai embora."
+  },
+  {
+   "scene": "lineup",
+   "text": "Um *cavalo*, não."
+  },
+  {
+   "scene": "walk",
+   "text": "Pra mim, cair de um prédio é só…"
+  },
+  {
+   "scene": "walk",
+   "text": "um caminho mais *longo*.",
+   "pause_before": 0.3,
+   "payoff": true
+  }
  ],
  "scenes": {
-  "ledge": {"labels": [{"text": "*30º* ANDAR", "emoji": "1f633", "at": "30º"}],
-            "sfx": [{"type": "wind", "at": 0, "d": "scene", "gain": -17}, {"type": "whoosh_hi", "at": 0.8, "gain": -11}]},
-  "pov": {"labels": [{"text": "pra você: brisa", "at": "brisa"}, {"text": "o ar vira *PAREDE*", "at": "parede"}],
-          "sfx_cut": "whoosh", "sfx": [{"type": "wind", "at": 0, "d": "scene", "muffled": true, "gain": -15},
-                                        {"type": "whoosh_lo", "at": "parede", "gain": -12}]},
-  "surface": {"labels": [{"text": "muita *SUPERFÍCIE*", "at": "superfície"}], "sfx_cut": "whoosh_hi"},
-  "tug": {"labels": [{"text": "*gravidade* × *ar*", "at": 0.15}], "sfx_cut": "pop"},
-  "speedo": {"labels": [{"text": "máx. *6 km/h*", "at": "6"}, {"text": "humano: *+190*", "at": "190"}],
-             "sfx_cut": "whoosh", "sfx": [{"type": "rise", "at": 0.2, "d": 3.0, "f0": 160, "f1": 700, "gain": -22},
-                                           {"type": "blip_up", "at": "segundo", "gain": -15}]},
-  "landing": {"vision": {"type": "compound", "from": 0, "cell": 34},
-              "labels": [{"text": "VISÃO DO BICHO · *olho composto*", "style": "vision", "at": 0},
-                         {"text": "impacto *MINÚSCULO*", "at": "minúscula"}],
-              "sfx_cut": "glitch", "sfx": [{"type": "thud", "at": "impacto", "gain": -15}, {"type": "tic", "at": "minúscula", "gain": -6}]},
-  "xray": {"labels": [{"text": "esqueleto *POR FORA*", "at": "esqueleto"}], "sfx_cut": "whoosh_hi",
-           "sfx": [{"type": "hiss", "at": 0, "d": 1.1, "gain": -24}, {"type": "metal", "at": "armadura", "gain": -17}]},
-  "lineup": {"hud": "VOCÊ: 5 mm · CAVALO: 1,6 m", "labels": [{"text": "*TAMANHO* É DESTINO", "at": 0.1}], "sfx_cut": "kick",
-             "sfx": [{"type": "pop", "at": "camundongo", "gain": -14}, {"type": "thud", "at": "cavalo", "gain": -13}]},
-  "walk": {"sfx_cut": "whoosh_lo", "sfx": [{"type": "steps", "at": 0, "d": 2.0, "rate": 11, "gain": -19}]}
+  "ledge": {
+   "labels": [
+    {
+     "text": "*30º* ANDAR",
+     "emoji": "1f633",
+     "at": "30º"
+    }
+   ],
+   "sfx": [
+    {
+     "type": "wind",
+     "at": 0,
+     "d": "scene",
+     "gain": -17
+    },
+    {
+     "type": "whoosh_hi",
+     "at": 0.8,
+     "gain": -11
+    }
+   ]
+  },
+  "pov": {
+   "labels": [
+    {
+     "text": "pra você: brisa",
+     "at": "brisa"
+    },
+    {
+     "text": "o ar vira *PAREDE*",
+     "at": "parede"
+    }
+   ],
+   "sfx_cut": "whoosh",
+   "sfx": [
+    {
+     "type": "wind",
+     "at": 0,
+     "d": "scene",
+     "muffled": true,
+     "gain": -15
+    },
+    {
+     "type": "whoosh_lo",
+     "at": "parede",
+     "gain": -12
+    }
+   ]
+  },
+  "surface": {
+   "labels": [
+    {
+     "text": "muita *SUPERFÍCIE*",
+     "at": "superfície"
+    }
+   ],
+   "sfx_cut": "whoosh_hi"
+  },
+  "tug": {
+   "labels": [
+    {
+     "text": "*gravidade* × *ar*",
+     "at": 0.15
+    }
+   ],
+   "sfx_cut": "pop"
+  },
+  "speedo": {
+   "labels": [
+    {
+     "text": "máx. *6 km/h*",
+     "at": "6"
+    },
+    {
+     "text": "humano: *+190*",
+     "at": "190"
+    }
+   ],
+   "sfx_cut": "whoosh",
+   "sfx": [
+    {
+     "type": "rise",
+     "at": 0.2,
+     "d": 3.0,
+     "f0": 160,
+     "f1": 700,
+     "gain": -22
+    },
+    {
+     "type": "blip_up",
+     "at": "segundo",
+     "gain": -15
+    }
+   ]
+  },
+  "landing": {
+   "vision": {
+    "type": "compound",
+    "from": 0,
+    "cell": 34
+   },
+   "labels": [
+    {
+     "text": "VISÃO DO BICHO · *olho composto*",
+     "style": "vision",
+     "at": 0
+    },
+    {
+     "text": "impacto *MINÚSCULO*",
+     "at": "minúscula"
+    }
+   ],
+   "sfx_cut": "glitch",
+   "sfx": [
+    {
+     "type": "thud",
+     "at": "impacto",
+     "gain": -15
+    },
+    {
+     "type": "tic",
+     "at": "minúscula",
+     "gain": -6
+    }
+   ]
+  },
+  "xray": {
+   "labels": [
+    {
+     "text": "esqueleto *POR FORA*",
+     "at": "esqueleto"
+    }
+   ],
+   "sfx_cut": "whoosh_hi",
+   "sfx": [
+    {
+     "type": "hiss",
+     "at": 0,
+     "d": 1.1,
+     "gain": -24
+    },
+    {
+     "type": "metal",
+     "at": "armadura",
+     "gain": -17
+    }
+   ]
+  },
+  "lineup": {
+   "hud": "VOCÊ: 5 mm · CAVALO: 1,6 m",
+   "labels": [
+    {
+     "text": "*TAMANHO* É DESTINO",
+     "at": 0.1
+    }
+   ],
+   "sfx_cut": "kick",
+   "sfx": [
+    {
+     "type": "pop",
+     "at": "camundongo",
+     "gain": -14
+    },
+    {
+     "type": "thud",
+     "at": "cavalo",
+     "gain": -13
+    }
+   ]
+  },
+  "walk": {
+   "sfx_cut": "whoosh_lo",
+   "sfx": [
+    {
+     "type": "steps",
+     "at": 0,
+     "d": 2.0,
+     "rate": 11,
+     "gain": -19
+    }
+   ]
+  }
  },
- "cover": {"t": 0.4, "title": ["UMA FORMIGA", "NO 30º ANDAR?"]},
+ "cover": {
+  "t": 0.4,
+  "title": [
+   "UMA FORMIGA",
+   "NO 30º ANDAR?"
+  ]
+ },
  "publish": {
   "title": "E se você fosse uma formiga caindo do 30º andar? #shorts",
   "description": "Uma formiga cai do 30º andar e sai andando. A física explica: no tamanho dela, o ar freia a queda em menos de um segundo (uns 6 km/h), enquanto um humano passaria de 190 km/h. Qual animal você quer ser no próximo? 👇\n\nFontes: University of Illinois, Physics Van, \"An ant dropped off the Empire State Building\" (velocidade terminal de uma formiga pequena: cerca de 6 a 7 km/h); FAI e Universe Today (pessoa em queda de barriga para baixo: cerca de 195 a 200 km/h); J.B.S. Haldane, \"On Being the Right Size\" (1926). Narração com voz sintética; roteiro e animação próprios.\n#esevocefosse #formiga #fisica #curiosidades #shorts",
-  "tags": ["formiga", "física", "velocidade terminal", "curiosidades", "e se você fosse", "animais", "shorts"],
-  "publish_at": null,
-  "pinned_comment": "Qual animal você quer ser no próximo vídeo? 👇"
+  "tags": [
+   "formiga",
+   "física",
+   "velocidade terminal",
+   "curiosidades",
+   "e se você fosse",
+   "animais",
+   "shorts"
+  ],
+  "publish_at": "2026-11-21T12:00:00-03:00",
+  "pinned_comment": "Qual animal você quer ser no próximo vídeo? 👇",
+  "channel_id": "UCO5Fa5_HJxd-aeTiyQcw0Sw"
  },
  "sources": [
   "University of Illinois Physics Van Q&A — An ant Dropped off the Empire State Building: https://van.physics.illinois.edu/ask/listing/2099",
