@@ -2001,7 +2001,9 @@
   "related_key": "ptd-ep17-long",
   "pinned_comment": "Você ou alguém que você conhece já tentou pedir um Pix de volta? Conseguiu? Vídeo completo: Golpe do Pix: para onde vai o seu dinheiro em segundos (e quem tem que devolver)",
   "related_attempts": 1,
-  "related_done": "2026-11-20T18:54:44.499477-03:00"
+  "related_done": "2026-11-20T18:54:44.499477-03:00",
+  "comment_attempts": 1,
+  "comment_done": "2026-11-20T20:01:30.666206-03:00"
  },
  "lab-ep16-long": {
   "attempts": 1,
@@ -2052,5 +2054,35 @@
   "kind": "long",
   "publish_at": "2026-11-20T21:45:00-03:00",
   "pinned_comment": "Which room of the castle would you choose to fall asleep in tonight?"
+ },
+ "c5-d01a-formiga": {
+  "attempts": 1,
+  "status": "published",
+  "url": "https://youtube.com/shorts/Wcw5EPuTlpg",
+  "by": "robo",
+  "visibility": "schedule",
+  "when": "2026-11-21T12:45:00-03:00",
+  "at": "2026-11-20T19:55:08.478466-03:00",
+  "error": null,
+  "channel_id": "UCO5Fa5_HJxd-aeTiyQcw0Sw",
+  "title": "E se você fosse uma formiga caindo do 30º andar? #shorts",
+  "kind": "short",
+  "publish_at": "2026-11-21T12:45:00-03:00",
+  "pinned_comment": "Qual animal você quer ser no próximo vídeo? 👇"
+ },
+ "c5-d01b-lagartixa": {
+  "attempts": 1,
+  "status": "published",
+  "url": "https://youtube.com/shorts/v88xGAAAzmw",
+  "by": "robo",
+  "visibility": "schedule",
+  "when": "2026-11-21T19:45:00-03:00",
+  "at": "2026-11-20T19:58:33.811302-03:00",
+  "error": null,
+  "channel_id": "UCO5Fa5_HJxd-aeTiyQcw0Sw",
+  "title": "E se você fosse uma lagartixa atrás da geladeira? #shorts",
+  "kind": "short",
+  "publish_at": "2026-11-21T19:45:00-03:00",
+  "pinned_comment": "Qual eletrodoméstico a gente desmonta no próximo? 👇"
  }
 }

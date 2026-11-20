@@ -1,10 +1,11 @@
 {
- "last_run": "2026-11-20T19:44:48.122666-03:00",
- "pending": 0,
- "post_tasks": 2,
+ "last_run": "2026-11-20T20:01:34.753726-03:00",
+ "pending": 2,
+ "post_tasks": 1,
  "errors": [],
  "published_now": [
-  "lab-ep16-long: comment comentário fixado",
-  "lab-ep16-short: related vinculado a wLCo988tRR8"
+  "c5-d01a-formiga: https://youtube.com/shorts/Wcw5EPuTlpg",
+  "c5-d01b-lagartixa: https://youtube.com/shorts/v88xGAAAzmw",
+  "ptd-ep17-short: comment comentário fixado"
  ]
 }
