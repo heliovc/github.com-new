@@ -7,6 +7,7 @@
  "gancho": "queda/perigo",
  "tema": "cidade",
  "voice": "pf_dora",
+ "tts": {"engine": "edge", "voice": "pt-BR-ThalitaMultilingualNeural", "rate": "+0%"},
  "speed": 0.92,
  "scene_module": "formiga",
  "accent": [230, 60, 80],

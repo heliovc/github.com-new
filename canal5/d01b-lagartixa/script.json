@@ -7,6 +7,7 @@
  "gancho": "lugar proibido",
  "tema": "casa",
  "voice": "pf_dora",
+ "tts": {"engine": "edge", "voice": "pt-BR-ThalitaMultilingualNeural", "rate": "+0%"},
  "speed": 0.9,
  "scene_module": "lagartixa",
  "accent": [235, 110, 40],

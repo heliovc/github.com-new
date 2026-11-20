@@ -4,9 +4,9 @@
 set -u
 log() { echo "[canal5-setup] $*"; }
 PY=${PY:-python3}
-PKGS="kokoro-onnx soundfile numpy pillow imageio-ffmpeg"
+PKGS="edge-tts kokoro-onnx soundfile numpy pillow imageio-ffmpeg"
 $PY -m pip install --break-system-packages -q $PKGS 2>/dev/null || $PY -m pip install -q $PKGS
-$PY -c "import kokoro_onnx, soundfile, numpy, PIL, imageio_ffmpeg" && log "python OK" || log "ERRO: pacotes python ($PY)"
+$PY -c "import edge_tts, kokoro_onnx, soundfile, numpy, PIL, imageio_ffmpeg" && log "python OK" || log "ERRO: pacotes python ($PY)"
 
 K=~/.cache/kokoro; mkdir -p $K
 REL=https://github.com/thewh1teagle/kokoro-onnx/releases/download/model-files-v1.0

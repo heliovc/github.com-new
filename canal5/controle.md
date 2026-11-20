@@ -10,8 +10,8 @@ Ler antes de cada vídeo (plano.md, seção 8). Atualizar depois de produzir e 4
 ## Animais e temas usados
 | Dia | Vídeo | Animal | Grupo | Tipo | Gancho | Tema | Paleta | Abertura | Visão do Bicho | Duração | Palavras | Status |
 |---|---|---|---|---|---|---|---|---|---|---|---|---|
-| 1 | A | formiga | inseto | escala extrema | queda/perigo | cidade | fim de tarde dourado | escorregando do parapeito | olho composto (mosaico hexagonal no pouso) | 46,8 s | 152 | piloto, aguardando aprovação |
-| 1 | B | lagartixa | réptil | mecânica do dia a dia | lugar proibido | casa | cozinha à noite, laranja × azul | close rasteiro atrás da geladeira | cores no escuro (visão noturna em cores) | 46,7 s | 146 | piloto, aguardando aprovação |
+| 1 | A | formiga | inseto | escala extrema | queda/perigo | cidade | fim de tarde dourado | escorregando do parapeito | olho composto (mosaico hexagonal no pouso) | 48,5 s | 136 | piloto v2 (voz nova), aguardando aprovação |
+| 1 | B | lagartixa | réptil | mecânica do dia a dia | lugar proibido | casa | cozinha à noite, laranja × azul | close rasteiro atrás da geladeira | cores no escuro (visão noturna em cores) | 45,6 s | 137 | piloto v2 (voz nova), aguardando aprovação |
 
 ## Fontes por vídeo
 **1A — formiga**
@@ -34,6 +34,6 @@ Metas: continuaram assistindo ≥ 70% · % visualizada ≥ 80%.
 ## Decisões e desvios do plano
 - **20/11 — Visão do Bicho da lagartixa:** o roteiro pedia visão térmica, mas lagartixa não enxerga calor (quem enxerga é cobra, Dia 11A). Trocado pelo sentido real: enxergar cores no escuro (Roth & Kelber 2004). A cena de calor continua como raio-X explicativo.
 - **20/11 — Trilha e efeitos:** sintetizados por código (`pipeline/audio.py`), em vez da Biblioteca de Áudio do YouTube: não depende de download manual e não tem risco de direitos. Trilha a −20 dB sob a voz, 0,3 s de silêncio antes do payoff.
-- **20/11 — Voz:** Kokoro `pf_dora` (feminina PT-BR). Por Trás do Dinheiro usa `pm_alex`; os canais em inglês usam vozes `af_*`.
-- **20/11 — Palavras:** os roteiros do Dia 1 deram 152 e 146 palavras (o checklist pede 110–140), mas a duração ficou em 47 s (meta 40–55 s). A partir do Dia 2, escrever com no máximo 140.
+- **20/11 — Voz:** o Hélio achou a Kokoro `pf_dora` com sotaque de estrangeiro. Trocada pela voz neural brasileira `pt-BR-ThalitaMultilingualNeural` (Microsoft, via edge-tts, grátis), velocidade normal. Ela também devolve o tempo exato de cada palavra, que agora sincroniza a legenda. Alternativas com amostra: Francisca e Antonio. Nenhum outro canal usa essas vozes. Risco: edge-tts usa o serviço de leitura do navegador Edge, não oficial; a via oficial com a mesma voz é o Azure Speech (camada grátis de 500 mil caracteres/mês, exige conta Azure).
+- **20/11 — Palavras:** contagem corrigida (a primeira versão contava pontuação como palavra): 136 e 137 palavras, dentro de 110–140.
 - **20/11 — Cenas:** 9 cenas por vídeo (o plano sugere 5–7), para manter troca a cada ~5 s.

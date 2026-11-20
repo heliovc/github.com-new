@@ -47,7 +47,10 @@ def ffmpeg_bin():
 def parse_text(text):
     toks = []
     for i, seg in enumerate(text.split("*")):
-        for w in seg.split():
+        for j, w in enumerate(seg.split()):
+            if toks and re.fullmatch(r"[,.;:!?…—]+", w) and (j > 0 or not seg.startswith(" ")):
+                toks[-1]["w"] += w  # pontuação colada na palavra anterior (ex.: "*andar*.")
+                continue
             toks.append({"w": w, "key": i % 2 == 1, "num": bool(re.search(r"\d", w))})
     return toks
 
@@ -92,7 +95,7 @@ def kokoro_paths():
 _K = None
 
 
-def synth(text, voice, speed, cache):
+def synth_kokoro(text, voice, speed, cache):
     global _K
     h = hashlib.sha1(f"{voice}|{speed}|{text}".encode()).hexdigest()[:14]
     p = os.path.join(cache, f"tts_{h}.wav")
@@ -103,7 +106,72 @@ def synth(text, voice, speed, cache):
         a, sr = _K.create(text, voice=voice, speed=speed, lang="pt-br")
         sf.write(p, AU.resample(np.asarray(a, dtype=np.float32), sr, SR), SR)
     a, _ = sf.read(p, dtype="float32")
-    return a
+    return a, None
+
+
+def synth_edge(text, voice, rate, cache):
+    """voz neural PT-BR (Microsoft, via edge-tts) + limites de palavra [(início s, duração s, texto)]"""
+    h = hashlib.sha1(f"edge|{voice}|{rate}|{text}".encode()).hexdigest()[:14]
+    p = os.path.join(cache, f"tts_{h}.wav"); pj = p[:-4] + ".json"
+    if not (os.path.exists(p) and os.path.exists(pj)):
+        import asyncio, io, edge_tts
+
+        async def go():
+            c = edge_tts.Communicate(text, voice, rate=rate, boundary="WordBoundary")
+            audio, wb = bytearray(), []
+            async for ch in c.stream():
+                if ch["type"] == "audio": audio += ch["data"]
+                elif ch["type"] == "WordBoundary": wb.append((ch["offset"] / 1e7, ch["duration"] / 1e7, ch["text"]))
+            return bytes(audio), wb
+
+        err = None
+        for attempt in range(4):
+            try:
+                audio, wb = asyncio.run(go())
+                if audio: break
+            except Exception as e:  # rede instável: tenta de novo
+                err = e
+            time.sleep(2 + 3 * attempt)
+        else:
+            raise RuntimeError(f"edge-tts falhou: {err}")
+        a, sr = sf.read(io.BytesIO(audio), dtype="float32")
+        if a.ndim > 1: a = a.mean(axis=1)
+        sf.write(p, AU.resample(a, sr, SR), SR)
+        json.dump(wb, open(pj, "w", encoding="utf-8"), ensure_ascii=False)
+    a, _ = sf.read(p, dtype="float32")
+    return a, json.load(open(pj, encoding="utf-8"))
+
+
+def synth(text, S, b, cache):
+    tts = S.get("tts", {"engine": "kokoro", "voice": S.get("voice", "pf_dora")})
+    if tts.get("engine") == "edge":
+        return synth_edge(text, tts.get("voice", "pt-BR-ThalitaMultilingualNeural"), b.get("rate", tts.get("rate", "+0%")), cache)
+    return synth_kokoro(text, tts.get("voice", "pf_dora"), b.get("speed", S.get("speed", 0.92)), cache)
+
+
+def trim_idx(a, rel=0.02, pad=0.025):
+    env = np.abs(a); idx = np.where(env > rel * env.max())[0]
+    if len(idx) == 0: return 0, len(a)
+    return max(0, idx[0] - int(pad * SR)), min(len(a), idx[-1] + int(pad * SR))
+
+
+def times_from_boundaries(toks, wb, lead, dur, say_map):
+    """casa os limites de palavra do TTS com as palavras da legenda (um limite pode cobrir 2+ palavras, ex. '6 km/h')"""
+    out, k = [], 0
+    for (o, d, txt) in wb:
+        n = max(1, len(txt.split()))
+        group = toks[k:k + n]
+        if len(group) < n: return None
+        ws = [syl(spoken(t["w"], say_map)) + 0.35 for t in group]; tot = sum(ws); acc = o - lead
+        for t, wgt in zip(group, ws):
+            dd = d * wgt / tot; out.append((acc, acc + dd)); acc += dd
+        k += n
+    if k != len(toks): return None
+    res = []
+    for i, (a0, a1) in enumerate(out):
+        nxt = out[i + 1][0] if i + 1 < len(out) else dur
+        res.append((max(0.0, a0), max(a0 + 0.05, min(max(a1, a0 + 0.05), nxt))))
+    return res
 
 
 def trim(a, rel=0.02, pad=0.025):
@@ -157,13 +225,19 @@ def build_timeline(ep):
     t = 0.03
     for bi, b in enumerate(S["beats"]):
         toks = parse_text(b["text"])
-        say = b.get("say") or " ".join(spoken(tk["w"], say_map) for tk in toks)
-        a = trim(synth(say, S.get("voice", "pf_dora"), b.get("speed", S.get("speed", 0.92)), cache))
+        edge = S.get("tts", {}).get("engine") == "edge"
+        if b.get("say"): say = b["say"]
+        elif edge: say = " ".join(tk["w"] for tk in toks)   # a voz neural lê números e unidades sozinha
+        else: say = " ".join(spoken(tk["w"], say_map) for tk in toks)
+        raw, wb = synth(say, S, b, cache)
+        i0, i1 = trim_idx(raw); a = raw[i0:i1]
         if bi > 0:
             prev = S["beats"][bi - 1]["text"].rstrip()
             t += b.get("pause_before", 0.07 if prev.endswith((",", ":", "…")) and not b.get("payoff") else 0.15)
         start = t
-        for tk, (w0, w1) in zip(toks, word_times(a, toks, say_map)):
+        wt = times_from_boundaries(toks, wb, i0 / SR, len(a) / SR, say_map) if (wb and not b.get("say")) else None
+        if wt is None: wt = word_times(a, toks, say_map)
+        for tk, (w0, w1) in zip(toks, wt):
             words.append(dict(w=tk["w"], key=tk["key"], num=tk["num"], t0=round(start + w0, 3),
                               t1=round(start + w1, 3), beat=bi))
         beats.append(dict(scene=b["scene"], t0=round(start, 3), t1=round(start + len(a) / SR, 3),

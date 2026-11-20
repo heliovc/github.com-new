@@ -3,7 +3,7 @@
 Plano completo: `plano.md`. Controle (animais usados, fontes, métricas, decisões): `controle.md`.
 
 ## Como um vídeo é feito
-Tudo por código, custo zero: voz Kokoro (offline), desenho 2D vetorial em Python (PIL), trilha e efeitos sintetizados.
+Tudo por código, custo zero: voz neural brasileira (Microsoft, via edge-tts, com tempo por palavra), desenho 2D vetorial em Python (PIL), trilha e efeitos sintetizados.
 
 ```
 canal5/
@@ -18,7 +18,7 @@ canal5/
 ```
 
 ### Passo a passo de um episódio novo
-1. Copiar `d01a-formiga/script.json` para `dNNx-animal/script.json` e reescrever: `beats` (uma frase por item; `*palavra*` = destaque amarelo; `scene` = id da cena; o último beat leva `"payoff": true` e `"pause_before": 0.3`), `scenes` (HUD, etiquetas com `at` = palavra que dispara, SFX, `vision`), `say_map` (como a voz lê números: `"30º": "trigésimo"`), `music` (bpm/tom/semente diferentes a cada vídeo), `publish` e `sources`.
+1. Copiar `d01a-formiga/script.json` para `dNNx-animal/script.json` e reescrever: `beats` (uma frase por item; `*palavra*` = destaque amarelo; `scene` = id da cena; o último beat leva `"payoff": true` e `"pause_before": 0.3`), `scenes` (HUD, etiquetas com `at` = palavra que dispara, SFX, `vision`), `say_map` (só para a voz Kokoro; a voz neural lê números e unidades sozinha), `music` (bpm/tom/semente diferentes a cada vídeo), `publish` e `sources`.
 2. Criar `pipeline/scenes/<animal>.py` com uma função por id de cena. `ctx.wt("palavra")` dá o instante (s) em que a palavra é falada dentro da cena, para sincronizar a animação com a narração.
 3. Revisar sem gerar vídeo: `python3 -I canal5/pipeline/engine.py canal5/dNNx-animal --sheet` (folha de contato em `.cache/sheet.png`) e `--stills 0,12.5` (quadros em tamanho real).
 4. Render: `python3 -I canal5/pipeline/engine.py canal5/dNNx-animal` (~3 min no Mac com 8 núcleos).
@@ -35,4 +35,4 @@ canal5/
 ## Ambiente
 - Mac: `~/.venvs/canal5` (Python 3.11 via `uv`). Rodar com `~/.venvs/canal5/bin/python -I canal5/pipeline/engine.py …`.
 - Nuvem / máquina nova: `bash canal5/setup.sh` (pacotes Python, ffmpeg e modelos Kokoro em `~/.cache/kokoro`).
-- Voz: Kokoro `pf_dora`, velocidade 0,90–0,92 (diferente de todos os outros canais).
+- Voz: `"tts": {"engine": "edge", "voice": "pt-BR-ThalitaMultilingualNeural", "rate": "+0%"}` no script.json (precisa de internet). Kokoro (`"engine": "kokoro"`, offline) continua disponível, mas soa estrangeira em PT-BR.
