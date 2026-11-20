@@ -1986,5 +1986,36 @@
   "publish_at": "2026-11-20T19:45:00-03:00",
   "related_key": "ptd-ep17-long",
   "pinned_comment": "Você ou alguém que você conhece já tentou pedir um Pix de volta? Conseguiu? Vídeo completo: Golpe do Pix: para onde vai o seu dinheiro em segundos (e quem tem que devolver)"
+ },
+ "lab-ep16-long": {
+  "attempts": 1,
+  "status": "published",
+  "url": "https://youtu.be/wLCo988tRR8",
+  "by": "robo",
+  "visibility": "schedule",
+  "when": "2026-11-20T19:30:00-03:00",
+  "at": "2026-11-20T09:14:39.632856-03:00",
+  "error": null,
+  "channel_id": "UCXGqR8k1RMbfYdVleIuJKzA",
+  "title": "Automate an Excel Report with Python: Summaries, Pivot Tables and Formatting (pandas + openpyxl)",
+  "kind": "long",
+  "publish_at": "2026-11-20T19:30:00-03:00",
+  "pinned_comment": "Which report do you still build by hand every week or month? Tell me below and it might become a future video."
+ },
+ "lab-ep16-short": {
+  "attempts": 1,
+  "status": "published",
+  "url": "https://youtu.be/esFrZn4fFYI",
+  "by": "robo",
+  "visibility": "schedule",
+  "when": "2026-11-20T21:00:00-03:00",
+  "at": "2026-11-20T09:18:08.438554-03:00",
+  "error": null,
+  "channel_id": "UCXGqR8k1RMbfYdVleIuJKzA",
+  "title": "Python Builds Your Excel Report in 0.5 Seconds #shorts",
+  "kind": "short",
+  "publish_at": "2026-11-20T21:00:00-03:00",
+  "related_key": "lab-ep16-long",
+  "pinned_comment": "What should Python build for you next: a chart, an email or a PDF? Full tutorial: Automate an Excel Report with Python: Summaries, Pivot Tables and Formatting (pandas + openpyxl)"
  }
 }
