@@ -46,6 +46,18 @@ Scene types: city, road, temple, interior, sea, hills, cloister (EP02), nile (EP
   five-storey pagoda with ringed spire, stone lanterns (_toro), belfry, maple bough and pampas grass (_plume); a row-house
   room with moonlit shoji and pine shadow, ink heron scroll, andon, brazier with kettle steam and live coals (_steam);
   new "leaves" particles (turning maple leaves); palette keys "lacquer" and "washi").
+  castle / bailey / hall / wallwalk / solar (EP10 Medieval Castle: across the moat at dusk - curtain wall with shaded round
+  towers (_rtower, _crenels, _courses), twin-towered gatehouse with lit arch, raised portcullis, torch and the drawbridge
+  down, the old square keep, the hall roof with its louvre smoking, pennants unrolling in the breeze (_banners), lit slits
+  trembling in the moat; the outer courtyard with the portcullis down, lean-to stables with a nodding horse, the
+  bakehouse oven glowing through the door (_oven), dovecote, cobbles, well-head with windlass and a cat, the watchman
+  crossing with a swinging lantern (_walker/_figure); the great hall in one-point perspective with arch-braced trusses,
+  moonlit windows, central hearth, dais and high table, painted hunting cloth with a white hart, trestle boards stacked,
+  sleepers on pallets and a hound; the wall walk with battlements receding to a tower, a brazier, the moonlit countryside
+  (river, village, church, windmill) and the watchman pacing away and back in perspective (_sentry); the lady's chamber
+  with painted flowers, window embrasure with benches, curtained tester bed with fur coverlet and truckle bed, candle niche,
+  hooded fireplace, chest, little dog and a woven garden cloth swaying (_hanging); new "thistledown" particles; palette
+  keys "stone" and "banner").
 Compilations: comp01.py (COMP01 = EP01-EP03 re-rendered via comp01_pNN.py wrappers) adds "candle haze" text cards that
   dissolve into the next part's first scene, one long ambient tail at the end, one loudness pass; thumb_comp.py = 3-scene
   blended thumbnail.
@@ -263,6 +275,7 @@ class Scene:
         self.beam, self.beam_src, self.foam, self.lensp, self.win, self.ship = None, None, [], None, None, None
         self.owl, self.incense, self.lamps, self.eyes, self.glints = None, None, [], [], []
         self.chochin, self.yakata, self.willow, self.steam, self.pipe = [], None, None, None, None
+        self.banners, self.oven, self.walker, self.sentry, self.hanging = [], None, None, None, None
         getattr(self, "build_" + kind)()
         self.prepare()
 
@@ -2411,10 +2424,470 @@ class Scene:
         vig = np.clip(1 - (r - 0.55) * 0.75, 0.35, 1)
         self.vig = Image.fromarray((vig * 255).astype(np.uint8), "L")
         rng = np.random.default_rng(7)
-        n = {"embers": 26, "fireflies": 22, "dust": 34, "snow": 90, "sand": 70, "mist": 16, "spray": 40, "moths": 14, "leaves": 16}[self.particles]
+        n = {"embers": 26, "fireflies": 22, "dust": 34, "snow": 90, "sand": 70, "mist": 16, "spray": 40, "moths": 14, "leaves": 16, "thistledown": 18}[self.particles]
         self.parts = [(rng.uniform(0, W), rng.uniform(0, H), rng.uniform(0, TAU), int(rng.integers(1, 3)), rng.uniform(0.4, 1.0)) for _ in range(n)]
         self.glow_sm = self._glow(16); self.glow_lg = self._glow(90)
         self.moth_c = [(x, y) for x, y, _ in self.lamps] + ([self.lamp] if self.lamp else [])
+
+    # ------------------------------------------------------------ EP10 medieval castle
+    def _crenels(self, d, x0, x1, y, mh, mw, gw, col):
+        """Battlements along a wall top at y: merlons mw wide rising mh, with crenels gw wide between them."""
+        x = x0
+        while x < x1:
+            d.rectangle([x, y - mh, min(x + mw, x1), y + 1], fill=col + (255,)); x += mw + gw
+
+    def _rtower(self, d, cx, top, base, w, col, slits=3, lit=0.0):
+        """Round tower: a shaded cylinder (lit from the right), a corbelled parapet with battlements, arrow slits."""
+        dark = mix(col, (0, 0, 0), 0.5)
+        for i in range(int(w)):
+            u = i / w; sh = (math.sin(math.pi * u) ** 0.6) * (0.75 + 0.25 * u)
+            d.line([(cx - w / 2 + i, top), (cx - w / 2 + i, base)], fill=mix(dark, col, sh) + (255,))
+        cw = w * 0.07
+        d.rectangle([cx - w / 2 - cw, top - 16, cx + w / 2 + cw, top], fill=mix(dark, col, 0.8) + (255,))
+        for k in range(7): d.rectangle([cx - w / 2 - cw + k * (w + 2 * cw) / 7 + 3, top, cx - w / 2 - cw + k * (w + 2 * cw) / 7 + 9, top + 8], fill=dark + (255,))
+        n = 5; mw = (w + 2 * cw) / (n * 1.6)
+        for k in range(n):
+            x = cx - w / 2 - cw + k * mw * 1.6 + mw * 0.3; d.rectangle([x, top - 16 - 24, x + mw, top - 16], fill=mix(dark, col, 0.6 + 0.4 * k / n) + (255,))
+        for j in range(slits):
+            y = top + 40 + (base - top - 80) * (j + 0.5) / slits; x = cx + w * (0.1 if j % 2 else -0.08)
+            if self.rng.random() < lit: self.windows.append((x, y, 6, 22, self.rng.uniform(0, TAU), 1))
+            else: d.rectangle([x - 3, y - 12, x + 3, y + 12], fill=mix(dark, (0, 0, 0), 0.5) + (255,))
+
+    def _courses(self, d, x0, x1, y0, y1, col, step=18):
+        for y in np.arange(y0 + step, y1, step): d.line([(x0, y), (x1, y)], fill=col + (90,), width=1)
+
+    def build_castle(self):
+        """Across the moat at dusk: curtain wall with round towers, the twin-towered gatehouse with a lit arch and a torch,
+        the old square keep behind, the great hall roof with its smoke louvre, banners on the towers, the drawbridge down
+        across the moat, reflections of lit slits trembling on the water; a willow and reeds on the near bank."""
+        p, rng = self.p, self.rng; hy = int(H * 0.6); wy = int(H * 0.75); st = p["stone"]
+        self.back = self.sky(hy, (0.8, 0.16), 40)
+        self.back.alpha_composite(hills(hy - 40, 42, int(rng.integers(1e6)), mix(p["far"], p["horizon"], 0.3), blur=3))
+        self.back.alpha_composite(hills(hy + 20, 20, int(rng.integers(1e6)), mix(p["far"], p["mid"], 0.55), blur=1))
+        self._water(wy, 0.2)
+        mx, my, mr = self.moon; self.reflect = (mx, wy + 4, mr)
+        mid = Image.new("RGBA", (W, H), (0, 0, 0, 0)); d = ImageDraw.Draw(mid)
+        wc = mix(p["mid"], st, 0.26); tc = mix(p["mid"], st, 0.34); kc = mix(wc, p["far"], 0.4)
+        d.polygon([(W * 0.06, wy), (W * 0.12, wy - 46), (W * 0.98, wy - 46), (W * 1.03, wy)], fill=mix(p["mid"], (44, 56, 44), 0.25) + (255,))
+        kx, kw, kt = W * 0.68, 250, hy - 380                                                  # the old square keep
+        d.rectangle([kx - kw / 2, kt, kx + kw / 2, wy - 46], fill=kc + (255,))
+        d.rectangle([kx + kw * 0.1, kt, kx + kw / 2, wy - 46], fill=mix(kc, st, 0.12) + (255,))
+        for sx in (-1, 1): d.rectangle([kx + sx * kw / 2 - 24, kt - 44, kx + sx * kw / 2 + 24, kt + 30], fill=mix(kc, st, 0.08) + (255,))
+        self._crenels(d, kx - kw / 2, kx + kw / 2, kt, 20, 24, 16, kc)
+        for sx in (-1, 1): self._crenels(d, kx + sx * kw / 2 - 24, kx + sx * kw / 2 + 24, kt - 44, 16, 12, 12, mix(kc, st, 0.08))
+        for (x, y) in ((kx - 40, kt + 90), (kx + 50, kt + 170)): self.windows.append((x, y, 10, 26, rng.uniform(0, TAU), 1))
+        d.rectangle([kx + 45, kt - 120, kx + 49, kt - 44], fill=kc + (255,)); self.banners.append((kx + 49, kt - 118, 92, 0.0))
+        hx0, hx1, wt = W * 0.3, W * 0.45, hy - 80                                             # the hall roof with its louvre
+        d.polygon([(hx0, wt + 4), (hx1, wt + 4), (hx1 - 40, wt - 120), (hx0 + 40, wt - 120)], fill=mix(p["mid"], (60, 44, 40), 0.3) + (255,))
+        lx = (hx0 + hx1) / 2; d.rectangle([lx - 18, wt - 150, lx + 18, wt - 118], fill=mix(p["mid"], (60, 44, 40), 0.2) + (255,))
+        d.polygon([(lx - 26, wt - 150), (lx + 26, wt - 150), (lx, wt - 176)], fill=mix(p["mid"], (60, 44, 40), 0.2) + (255,))
+        self.smoke = (lx, wt - 170, 260)
+        d.rectangle([W * 0.13, wt, W * 0.96, wy - 40], fill=wc + (255,))                     # the curtain wall
+        self._crenels(d, W * 0.13, W * 0.96, wt, 20, 26, 17, wc)
+        self._courses(d, W * 0.13, W * 0.96, wt, wy - 40, mix(wc, (0, 0, 0), 0.3), 22)
+        for cx in (W * 0.13, W * 0.3, W * 0.81, W * 0.96): self._rtower(d, cx, hy - 160, wy - 34, 124, tc, 3, 0.35)
+        gx = W * 0.545; gt = hy - 250                                                         # twin-towered gatehouse
+        d.rectangle([gx - 60, gt + 40, gx + 60, wy - 34], fill=mix(tc, (0, 0, 0), 0.1) + (255,))
+        self._crenels(d, gx - 60, gx + 60, gt + 40, 22, 20, 14, mix(tc, (0, 0, 0), 0.1))
+        for sx in (-1, 1): self._rtower(d, gx + sx * 98, gt, wy - 26, 142, tc, 3, 0.5)
+        for sx in (-1, 1):
+            d.rectangle([gx + sx * 98 - 2, gt - 150, gx + sx * 98 + 2, gt - 40], fill=tc + (255,)); self.banners.append((gx + sx * 98 + 2, gt - 148, 110, 1.3 + sx))
+        aw, at = 46, wy - 175
+        archc = mix(p["light"], p["mid"], 0.45)
+        d.rectangle([gx - aw, at, gx + aw, wy - 30], fill=archc + (255,)); d.pieslice([gx - aw, at - aw, gx + aw, at + aw], 180, 360, fill=archc + (255,))
+        for k in range(6): d.line([(gx - aw + 6 + k * (2 * aw - 12) / 5, at - aw * 0.8), (gx - aw + 6 + k * (2 * aw - 12) / 5, at - 10)], fill=mix(p["mid"], (0, 0, 0), 0.4) + (255,), width=3)   # portcullis drawn up
+        d.line([(gx - aw, at - 30), (gx + aw, at - 30)], fill=mix(p["mid"], (0, 0, 0), 0.4) + (255,), width=3)
+        self.wlights.append((gx, 80, 150, 0.4))
+        for x, y, w, h, f, k in list(self.windows):
+            if y > hy - 200: self.wlights.append((x, 26, 70, f))
+        bc = mix(p["mid"], (70, 52, 36), 0.35)                                                # the drawbridge, down
+        d.polygon([(gx - aw, wy - 30), (gx + aw, wy - 30), (gx + 150, H - 70), (gx - 150, H - 70)], fill=bc + (255,))
+        for k in range(1, 9):
+            v = (k / 9) ** 1.4; y = wy - 30 + v * (H - 100 - wy); hw = aw + v * 104
+            d.line([(gx - hw, y), (gx + hw, y)], fill=mix(bc, (0, 0, 0), 0.35) + (255,), width=2)
+        for sx in (-1, 1): d.line([(gx + sx * aw, wy - 90), (gx + sx * 150, H - 120)], fill=mix(bc, (0, 0, 0), 0.5) + (255,), width=4)   # chains
+        self.lamp = (gx + aw + 22, at - 6); self.lamp_r = 300
+        d.line([(gx + aw + 22, at + 30), (gx + aw + 22, at + 4)], fill=(30, 22, 18, 255), width=6)
+        self.mid = mid
+        near = hills(H - 80, 16, int(rng.integers(1e6)), p["near"]); dn = ImageDraw.Draw(near); nc = p["near"]
+        r2 = random.Random(int(rng.integers(1e6)))
+        dn.polygon([(0, H), (0, H * 0.18), (40, H * 0.2), (70, H - 90), (110, H)], fill=nc + (255,))   # willow trunk, left edge
+        for _ in range(70):
+            x = r2.uniform(-40, 330); y = H * 0.12 + r2.uniform(0, 80) + abs(x - 60) * 0.25; L = r2.uniform(180, 460)
+            dn.line([(x + 8 * math.sin(v * 3) * v + 20 * v ** 2, y + L * v) for v in np.linspace(0, 1, 8)], fill=nc + (255,), width=2)
+        dn.line([(-20, H * 0.14), (120, H * 0.12), (300, H * 0.16)], fill=nc + (255,), width=16, joint="curve")
+        for _ in range(60):                                                                   # reeds and bulrushes
+            x = r2.uniform(W * 0.62, W * 1.02); L = r2.uniform(90, 230); bend = r2.uniform(-30, 30)
+            dn.line([(x, H - 40), (x + bend, H - 40 - L)], fill=nc + (255,), width=3)
+            if r2.random() < 0.3: dn.ellipse([x + bend - 5, H - 40 - L - 4, x + bend + 5, H - 40 - L + 30], fill=nc + (255,))
+        self.near = near
+        self.fog_y = wy - 20; self.fog_a = 0.16; self.particles = "thistledown"
+
+    def build_bailey(self):
+        """The outer courtyard from inside the gate: the inner face of the gatehouse with the portcullis down, lean-to
+        stables with a horse looking out, the bakehouse with its oven glowing through the door and smoke from the
+        chimney, a dovecote in the corner tower, cobbles, and the stone well-head with its roof and windlass."""
+        p, rng = self.p, self.rng; hy = int(H * 0.5); gy = int(H * 0.79); st = p["stone"]
+        r2 = random.Random(int(rng.integers(1e6)))
+        self.back = self.sky(hy, (0.2, 0.15), 34)
+        mid = Image.new("RGBA", (W, H), (0, 0, 0, 0)); d = ImageDraw.Draw(mid)
+        wc = mix(mix(p["mid"], st, 0.26), p["far"], 0.25); wt = int(H * 0.37)
+        d.rectangle([0, wt, W, gy], fill=wc + (255,)); self._crenels(d, 0, W, wt, 26, 30, 22, wc)
+        self._courses(d, 0, W, wt, gy, mix(wc, (0, 0, 0), 0.3), 24)
+        gx = W * 0.44; gc = mix(p["mid"], st, 0.32); gt = int(H * 0.18)                      # gatehouse, inner face
+        d.rectangle([gx - 190, gt, gx + 190, gy], fill=gc + (255,)); self._crenels(d, gx - 190, gx + 190, gt, 28, 30, 20, gc)
+        self._courses(d, gx - 190, gx + 190, gt, gy, mix(gc, (0, 0, 0), 0.3), 26)
+        aw, at = 78, gy - 220
+        road = mix(p["sea"], p["moon"], 0.18)
+        d.rectangle([gx - aw, at, gx + aw, gy], fill=road + (255,)); d.pieslice([gx - aw, at - aw, gx + aw, at + aw], 180, 360, fill=road + (255,))
+        ir = (12, 12, 16, 255)                                                                # the portcullis, down
+        for k in range(9): x = gx - aw + 8 + k * (2 * aw - 16) / 8; d.line([(x, at - aw * 0.9), (x, gy)], fill=ir, width=6)
+        for k in range(7): y = at - aw * 0.5 + k * 40; d.line([(gx - aw, y), (gx + aw, y)], fill=ir, width=5)
+        for k in range(9): x = gx - aw + 8 + k * (2 * aw - 16) / 8; d.polygon([(x - 5, gy - 2), (x + 5, gy - 2), (x, gy + 10)], fill=ir)
+        self.windows += [(gx - 140, gy - 120, 34, 46, 0.3, 1), (gx + 10, gt + 90, 22, 34, 1.7, 1)]   # porter's lodge, windlass room
+        sc = mix(p["mid"], (78, 58, 40), 0.4); sx1 = W * 0.27                                # lean-to stables
+        d.polygon([(-20, gy - 210), (sx1 + 24, gy - 210), (sx1, gy - 300), (-20, gy - 300)], fill=mix(sc, (0, 0, 0), 0.35) + (255,))
+        for k in range(12): d.line([(-20 + k * 30, gy - 300), (-20 + k * 31, gy - 210)], fill=mix(sc, (0, 0, 0), 0.5) + (255,), width=2)
+        d.rectangle([-20, gy - 210, sx1, gy], fill=sc + (255,))
+        for k in range(20): d.line([(-20 + k * 26, gy - 210), (-20 + k * 26, gy)], fill=mix(sc, (0, 0, 0), 0.25) + (255,), width=2)
+        for k, x in enumerate((60, 230, 400)):
+            d.rectangle([x, gy - 170, x + 110, gy - 90], fill=(8, 8, 10, 255)); d.rectangle([x, gy - 90, x + 110, gy], fill=mix(sc, (0, 0, 0), 0.2) + (255,))
+            d.line([(x, gy - 90), (x + 110, gy)], fill=mix(sc, (0, 0, 0), 0.45) + (255,), width=4)
+        self.horse = (285, gy - 92)
+        bx0, bx1 = W * 0.66, W * 0.9; bk = mix(p["mid"], st, 0.4)                            # the bakehouse
+        d.polygon([(bx0 - 24, gy - 230), (bx1 + 24, gy - 230), ((bx0 + bx1) / 2, gy - 340)], fill=mix(p["mid"], (70, 50, 46), 0.35) + (255,))
+        d.rectangle([bx1 - 80, gy - 440, bx1 - 40, gy - 260], fill=bk + (255,)); self.smoke = (bx1 - 60, gy - 450, 300)
+        d.rectangle([bx0, gy - 230, bx1, gy], fill=bk + (255,)); self._courses(d, bx0, bx1, gy - 230, gy, mix(bk, (0, 0, 0), 0.3), 20)
+        dx0, dx1 = bx0 + 70, bx0 + 170
+        d.rectangle([dx0, gy - 160, dx1, gy], fill=mix(p["light"], p["mid"], 0.62) + (255,))
+        d.polygon([(dx1, gy - 160), (dx1 + 40, gy - 150), (dx1 + 40, gy + 8), (dx1, gy)], fill=mix(sc, (0, 0, 0), 0.2) + (255,))   # door ajar
+        self.oven = (dx0 + 50, gy - 60, 170)
+        self.windows.append((bx1 - 90, gy - 140, 30, 36, 2.2, 1))
+        self.spill = Image.new("RGBA", (W, H), (0, 0, 0, 0))
+        ImageDraw.Draw(self.spill).polygon([(dx0, gy), (dx1, gy), (dx1 + 160, H - 120), (dx0 - 120, H - 120)], fill=p["light"] + (40,))
+        self.spill = self.spill.filter(ImageFilter.GaussianBlur(24))
+        tx = W * 0.97; tcol = mix(p["mid"], st, 0.3)                                          # corner tower with dovecote
+        d.rectangle([tx - 90, H * 0.12, W + 20, gy], fill=tcol + (255,)); self._crenels(d, tx - 90, W + 20, H * 0.12, 24, 22, 16, tcol)
+        for r in range(6):
+            for c in range(3):
+                x = tx - 70 + c * 34; y = H * 0.2 + r * 30; d.rectangle([x, y, x + 16, y + 14], fill=(10, 10, 12, 255))
+                if r2.random() < 0.4: d.ellipse([x + 3, y + 3, x + 13, y + 12], fill=mix(tcol, p["moon"], 0.3) + (255,))
+        gcol = mix(p["mid"], st, 0.14)
+        d.rectangle([0, gy, W, H], fill=gcol + (255,))
+        for _ in range(500):
+            y = gy + (H - gy) * r2.random() ** 1.3; s_ = 0.4 + (y - gy) / (H - gy) * 1.4; x = r2.uniform(0, W)
+            d.ellipse([x - 12 * s_, y - 5 * s_, x + 12 * s_, y + 5 * s_], fill=mix(gcol, p["moon"] if r2.random() < 0.5 else (0, 0, 0), 0.09) + (255,))
+        self.mid = mid
+        near = Image.new("RGBA", (W, H), (0, 0, 0, 0)); dn = ImageDraw.Draw(near); nc = p["near"]
+        wx, wb = W * 0.56, H - 40; wl = mix(nc, st, 0.18)                                     # the well-head
+        dn.rectangle([wx - 170, wb - 150, wx + 170, wb], fill=wl + (255,)); dn.ellipse([wx - 170, wb - 30, wx + 170, wb + 30], fill=wl + (255,))
+        dn.ellipse([wx - 170, wb - 180, wx + 170, wb - 120], fill=mix(wl, p["moon"], 0.1) + (255,)); dn.ellipse([wx - 140, wb - 172, wx + 140, wb - 128], fill=(4, 4, 6, 255))
+        for k in range(5): dn.line([(wx - 170, wb - 120 + k * 26), (wx + 170, wb - 120 + k * 26)], fill=mix(wl, (0, 0, 0), 0.3) + (255,), width=2)
+        for sx in (-1, 1): dn.rectangle([wx + sx * 150 - 10, wb - 430, wx + sx * 150 + 10, wb - 150], fill=nc + (255,))
+        dn.polygon([(wx - 220, wb - 420), (wx + 220, wb - 420), (wx, wb - 520)], fill=nc + (255,))
+        dn.rectangle([wx - 150, wb - 330, wx + 150, wb - 306], fill=mix(nc, (60, 44, 30), 0.3) + (255,))   # windlass roller
+        dn.line([(wx + 160, wb - 318), (wx + 200, wb - 318), (wx + 200, wb - 270)], fill=nc + (255,), width=6)
+        dn.line([(wx - 20, wb - 306), (wx - 20, wb - 230)], fill=mix(nc, (90, 80, 60), 0.3) + (255,), width=2)
+        dn.polygon([(wx - 44, wb - 230), (wx + 4, wb - 230), (wx - 2, wb - 188), (wx - 38, wb - 188)], fill=mix(nc, (70, 50, 30), 0.3) + (255,))   # bucket
+        cx = wx + 90; cy = wb - 178                                                           # the cat on the rim
+        dn.ellipse([cx - 22, cy - 40, cx + 22, cy + 4], fill=nc + (255,)); dn.ellipse([cx - 13, cy - 62, cx + 13, cy - 36], fill=nc + (255,))
+        dn.polygon([(cx - 12, cy - 56), (cx - 9, cy - 72), (cx - 3, cy - 60)], fill=nc + (255,)); dn.polygon([(cx + 12, cy - 56), (cx + 9, cy - 72), (cx + 3, cy - 60)], fill=nc + (255,))
+        dn.line([(cx + 18, cy), (cx + 40, cy + 10), (cx + 46, cy + 40)], fill=nc + (255,), width=6, joint="curve")
+        self.near = near
+        self.walker = dict(y=gy + 70, s=1.0)
+        self.fog_y = gy; self.fog_a = 0.07; self.particles = "thistledown"
+
+    def build_hall(self):
+        """The great hall looking up towards the dais: arch-braced oak trusses receding into smoke-haze, tall windows with
+        moonlight, the central hearth with live flames and smoke rising to the louvre, the high table and a painted hunting
+        cloth on the end wall, trestle boards stacked against the wall, sleepers on pallets, a hound by the fire."""
+        p, rng = self.p, self.rng; vx, vy, f = W * 0.5, H * 0.46, 560; st = p["stone"]
+        P = lambda X, Y, z: (vx + X * f / z, vy + Y * f / z); q = lambda pts: [P(*a) for a in pts]
+        wall = mix(p["mid"], st, 0.2); wood = mix(p["mid"], (78, 52, 32), 0.5); hz = 1.9
+        img = Image.new("RGBA", (W, H), mix(p["near"], p["mid"], 0.5) + (255,)); d = ImageDraw.Draw(img)
+        zn, zf = 0.55, 3.6
+        d.polygon(q([(-1, -0.6, zn), (0, -1.75, zn), (0, -1.75, zf), (-1, -0.6, zf)]), fill=mix(p["near"], wood, 0.3) + (255,))
+        d.polygon(q([(1, -0.6, zn), (0, -1.75, zn), (0, -1.75, zf), (1, -0.6, zf)]), fill=mix(p["near"], wood, 0.22) + (255,))
+        d.polygon(q([(-1, -0.6, zn), (-1, -0.6, zf), (-1, 0.9, zf), (-1, 0.9, zn)]), fill=wall + (255,))
+        d.polygon(q([(1, -0.6, zn), (1, -0.6, zf), (1, 0.9, zf), (1, 0.9, zn)]), fill=mix(wall, (0, 0, 0), 0.14) + (255,))
+        fl = mix(p["mid"], (120, 110, 70), 0.24)
+        d.polygon(q([(-1, 0.9, zn), (1, 0.9, zn), (1, 0.9, zf), (-1, 0.9, zf)]), fill=fl + (255,))
+        for _ in range(900):                                                                  # rushes strewn on the floor
+            z = rng.uniform(0.62, zf); X = rng.uniform(-1, 1); x, y = P(X, 0.9, z); L = 22 / z
+            a = rng.uniform(0, TAU); d.line([(x, y), (x + L * math.cos(a), y + L * 0.3 * math.sin(a))], fill=mix(fl, (150, 150, 90), rng.uniform(0.1, 0.3)) + (255,), width=1)
+        ew = mix(wall, (0, 0, 0), 0.06)
+        d.polygon(q([(-1, -0.6, zf), (0, -1.75, zf), (1, -0.6, zf), (1, 0.9, zf), (-1, 0.9, zf)]), fill=ew + (255,))
+        x0, y0 = P(-0.72, -0.5, zf); x1, y1 = P(0.72, 0.36, zf); cl = mix(p["mid"], (60, 90, 56), 0.45)   # painted hunting cloth
+        d.rectangle([x0, y0, x1, y1], fill=cl + (255,)); d.rectangle([x0, y0, x1, y0 + 6], fill=mix(cl, (150, 60, 40), 0.4) + (255,))
+        r2 = random.Random(int(rng.integers(1e6)))
+        for k in range(9):
+            tx = x0 + 10 + k * (x1 - x0 - 20) / 8; d.ellipse([tx - 14, y0 + 16 + r2.uniform(0, 14), tx + 14, y0 + 60], fill=mix(cl, (20, 40, 20), 0.4) + (255,))
+            d.line([(tx, y0 + 50), (tx, y1 - 10)], fill=mix(cl, (40, 30, 20), 0.5) + (255,), width=3)
+        hx, hy_ = (x0 + x1) / 2 + 20, y1 - 30; hc = mix(p["washi"] if "washi" in p else (230, 222, 200), p["mid"], 0.25)   # the white hart
+        d.ellipse([hx - 20, hy_ - 10, hx + 18, hy_ + 6], fill=hc + (255,)); d.line([(hx + 14, hy_ - 4), (hx + 24, hy_ - 18)], fill=hc + (255,), width=5)
+        d.ellipse([hx + 20, hy_ - 24, hx + 30, hy_ - 14], fill=hc + (255,))
+        for lx in (hx - 16, hx - 8, hx + 8, hx + 14): d.line([(lx, hy_ + 2), (lx + 2, hy_ + 18)], fill=hc + (255,), width=2)
+        d.line([(hx + 26, hy_ - 24), (hx + 20, hy_ - 36), (hx + 14, hy_ - 40)], fill=hc + (255,), width=2); d.line([(hx + 26, hy_ - 24), (hx + 34, hy_ - 38)], fill=hc + (255,), width=2)
+        for k, gx in enumerate((x0 + 40, x0 + 76)):                                          # hounds chasing
+            gc = mix(cl, (20, 18, 16), 0.6); gy_ = y1 - 22; d.ellipse([gx - 16, gy_ - 6, gx + 16, gy_ + 4], fill=gc + (255,)); d.ellipse([gx + 12, gy_ - 12, gx + 22, gy_ - 2], fill=gc + (255,))
+        moonwin = mix(p["sea"], (120, 140, 200), 0.32)
+        for z in (0.95, 1.55, 2.25, 2.95):                                                    # tall windows, moonlit on the left
+            for sx, col in ((-1, moonwin), (1, mix(p["sea"], p["mid"], 0.4))):
+                pts = q([(sx, 0.2, z), (sx, 0.2, z + 0.2), (sx, -0.32, z + 0.2), (sx, -0.46, z + 0.1), (sx, -0.32, z)])
+                d.polygon(pts, fill=col + (255,))
+                a, b = P(sx, -0.42, z + 0.1), P(sx, 0.2, z + 0.1); d.line([a, b], fill=mix(wall, (0, 0, 0), 0.3) + (255,), width=max(2, int(8 / z)))
+        dz = 3.15; dc = mix(fl, (90, 70, 50), 0.3)                                            # the dais and high table
+        d.polygon(q([(-1, 0.8, dz), (1, 0.8, dz), (1, 0.8, zf), (-1, 0.8, zf)]), fill=mix(dc, p["light"], 0.08) + (255,))
+        d.polygon(q([(-1, 0.8, dz), (1, 0.8, dz), (1, 0.9, dz), (-1, 0.9, dz)]), fill=mix(dc, (0, 0, 0), 0.35) + (255,))
+        cx_, cy_ = P(0, 0.12, 3.5); d.rectangle([cx_ - 22, cy_ - 30, cx_ + 22, P(0, 0.62, 3.5)[1]], fill=mix(wood, (0, 0, 0), 0.25) + (255,))   # the lord's chair
+        d.pieslice([cx_ - 22, cy_ - 52, cx_ + 22, cy_ - 8], 180, 360, fill=mix(wood, (0, 0, 0), 0.25) + (255,))
+        a, b = P(-0.62, 0.5, 3.35), P(0.62, 0.68, 3.35)
+        d.rectangle([a[0], a[1], b[0], b[1]], fill=mix((214, 204, 184), p["mid"], 0.35) + (255,)); d.rectangle([a[0], a[1], b[0], a[1] + 4], fill=mix((214, 204, 184), p["mid"], 0.15) + (255,))
+        for z in (0.75, 1.1, 1.5, 1.9, 2.3, 2.7, 3.1, 3.5)[::-1]:                              # arch-braced trusses
+            c = mix(mix(wood, p["light"], 0.3 * math.exp(-abs(z - hz) * 1.2)), p["near"], min(0.6, z * 0.12)) + (255,)
+            d.line(q([(-1, -0.6, z), (0, -1.75, z), (1, -0.6, z)]), fill=c, width=max(2, int(34 / z)), joint="curve")
+            d.line(q([(-0.36, -1.3, z), (0.36, -1.3, z)]), fill=c, width=max(2, int(20 / z)))
+            for sx in (-1, 1):
+                d.line(q([(sx, -0.62, z), (sx, -0.05, z)]), fill=c, width=max(2, int(26 / z)))
+                pts = [(sx * ((1 - u) ** 2 * 1 + 2 * (1 - u) * u * 0.95 + u * u * 0.34), (1 - u) ** 2 * -0.08 + 2 * (1 - u) * u * -1.2 + u * u * -1.3, z) for u in np.linspace(0, 1, 12)]
+                d.line(q(pts), fill=c, width=max(2, int(18 / z)), joint="curve")
+        for X, Y in ((-0.5, -1.17), (0.5, -1.17), (-0.76, -0.88), (0.76, -0.88)):
+            d.line(q([(X, Y, zn), (X, Y, zf)]), fill=mix(wood, p["near"], 0.4) + (255,), width=4)
+        hs = mix(fl, st, 0.4)                                                                 # the central hearth
+        d.polygon(q([(-0.36, 0.9, hz - 0.22), (0.36, 0.9, hz - 0.22), (0.36, 0.9, hz + 0.22), (-0.36, 0.9, hz + 0.22)]), fill=hs + (255,))
+        fx, fy = P(0, 0.9, hz); self.fires.append((fx, fy, 0.5)); self.smoke = (fx, fy - 80, 400)
+        arr = np.asarray(img).astype(np.float32); arr[..., :3] += radial_glow(fx, fy - 50, 760, p["light"], 0.16)
+        self.back = Image.fromarray(np.clip(arr, 0, 255).astype(np.uint8), "RGBA")
+        mid = Image.new("RGBA", (W, H), (0, 0, 0, 0)); dm = ImageDraw.Draw(mid)
+        bd = mix(wood, (0, 0, 0), 0.2)
+        for k, z in enumerate((1.05, 1.13, 1.21)):                                            # trestle boards against the right wall
+            dm.polygon(q([(0.88 - k * 0.02, 0.9, z), (0.88 - k * 0.02, 0.9, z + 0.6), (0.99, -0.05, z + 0.6), (0.99, -0.05, z)]), fill=mix(bd, p["light"], 0.08 * k) + (255,))
+        bl = mix(p["mid"], (86, 64, 52), 0.35)
+        def bbox(X0, X1, Y0, Y1, z0, z1):
+            pts = [P(X, Y, z) for X in (X0, X1) for Y in (Y0, Y1) for z in (z0, z1)]
+            return [min(a for a, b in pts), min(b for a, b in pts), max(a for a, b in pts), max(b for a, b in pts)]
+        for X0, z in ((-0.95, 1.2), (-0.95, 1.75), (-0.92, 2.2), (0.62, 1.2), (0.55, 2.55)):   # sleepers on straw pallets
+            dm.polygon(q([(X0, 0.9, z), (X0 + 0.32, 0.9, z), (X0 + 0.32, 0.9, z + 0.5), (X0, 0.9, z + 0.5)]), fill=mix(bl, (150, 130, 80), 0.25) + (255,))
+            dm.ellipse(bbox(X0 + 0.04, X0 + 0.28, 0.8, 0.9, z + 0.12, z + 0.46), fill=bl + (255,))
+            dm.ellipse(bbox(X0 + 0.1, X0 + 0.22, 0.8, 0.88, z + 0.02, z + 0.1), fill=mix(bl, (0, 0, 0), 0.35) + (255,))
+        gx, gy = P(0.5, 0.9, 1.75); g = mix(p["mid"], (120, 116, 110), 0.3)                    # the hound by the fire
+        dm.ellipse([gx - 70, gy - 34, gx + 60, gy + 4], fill=g + (255,)); dm.ellipse([gx - 96, gy - 30, gx - 52, gy], fill=g + (255,))
+        dm.polygon([(gx - 92, gy - 26), (gx - 78, gy - 40), (gx - 70, gy - 22)], fill=mix(g, (0, 0, 0), 0.3) + (255,))
+        dm.line([(gx + 58, gy - 10), (gx + 100, gy - 2), (gx + 120, gy - 8)], fill=g + (255,), width=6, joint="curve")
+        self.mid = mid
+        near = Image.new("RGBA", (W, H), (0, 0, 0, 0)); dn = ImageDraw.Draw(near); nc = p["near"]
+        dn.polygon([(0, H - 150), (W * 0.36, H - 120), (W * 0.36, H - 96), (0, H - 120)], fill=nc + (255,))   # a bench in the foreground
+        for x in (40, W * 0.33): dn.rectangle([x, H - 120, x + 18, H], fill=nc + (255,))
+        self.near = near
+        self.fog_a = 0.0; self.particles = "embers"
+
+    def build_wallwalk(self):
+        """On the wall walk: battlements receding to a round tower, a brazier glowing, the countryside under the moon
+        with the river, a village and its church tower, a windmill, and the watchman pacing away and back."""
+        p, rng = self.p, self.rng; vx, vy, f = W * 0.6, H * 0.42, 520; st = p["stone"]
+        P = lambda X, Y, z: (vx + X * f / z, vy + Y * f / z); q = lambda pts: [P(*a) for a in pts]
+        r2 = random.Random(int(rng.integers(1e6)))
+        self.back = self.sky(int(vy), (0.24, 0.15), 40)
+        self.back.alpha_composite(hills(int(vy) - 6, 22, int(rng.integers(1e6)), mix(p["far"], p["horizon"], 0.25), blur=2))
+        land = Image.new("RGBA", (W, H), (0, 0, 0, 0)); dl = ImageDraw.Draw(land); gc = mix(p["mid"], (56, 70, 56), 0.2)
+        dl.rectangle([0, vy + 4, W, H], fill=gc + (255,))
+        for k in range(16):                                                                   # field strips
+            x = -800 + k * 220; dl.line([(vx - 400, vy + 6), (x, H)], fill=mix(gc, p["moon"], 0.05 + 0.04 * (k % 2)) + (255,), width=2)
+        dl.polygon([(0, vy + 10), (W * 0.5, vy + 6), (W * 0.5, vy + 26), (0, vy + 40)], fill=mix(gc, (0, 0, 0), 0.4) + (255,))   # woods on the hill
+        rv = [(-20, vy + 330), (W * 0.1, vy + 250), (W * 0.2, vy + 150), (W * 0.32, vy + 90), (W * 0.44, vy + 40), (W * 0.52, vy + 16)]
+        for k in range(len(rv) - 1):
+            dl.line([rv[k], rv[k + 1]], fill=mix(p["sea"], p["moon"], 0.35) + (255,), width=int(60 - k * 11))
+        vxl, vyl = W * 0.3, vy + 46; hc = mix(gc, (0, 0, 0), 0.45)                          # the village
+        for k in range(9):
+            x = vxl - 160 + k * 38 + r2.uniform(-8, 8); y = vyl + r2.uniform(-6, 10); s = 0.8 + r2.random() * 0.4
+            dl.rectangle([x, y - 16 * s, x + 30 * s, y], fill=hc + (255,)); dl.polygon([(x - 4, y - 16 * s), (x + 34 * s, y - 16 * s), (x + 15 * s, y - 34 * s)], fill=mix(hc, (0, 0, 0), 0.3) + (255,))
+        cx = vxl + 40; dl.rectangle([cx, vyl - 96, cx + 26, vyl], fill=hc + (255,)); self._crenels(dl, cx - 2, cx + 28, vyl - 96, 6, 6, 4, hc)
+        dl.rectangle([cx + 26, vyl - 40, cx + 90, vyl], fill=hc + (255,)); dl.polygon([(cx + 24, vyl - 40), (cx + 92, vyl - 40), (cx + 58, vyl - 60)], fill=hc + (255,))
+        self.windows.append((vxl - 70, vyl - 8, 5, 6, 0.9, 1))
+        mx_, my_ = W * 0.06, vy + 40                                                          # windmill
+        dl.polygon([(mx_ - 14, my_), (mx_ + 14, my_), (mx_ + 9, my_ - 40), (mx_ - 9, my_ - 40)], fill=hc + (255,))
+        for a in (0.6, 0.6 + math.pi / 2, 0.6 + math.pi, 0.6 + 1.5 * math.pi): dl.line([(mx_, my_ - 38), (mx_ + 46 * math.cos(a), my_ - 38 + 46 * math.sin(a))], fill=hc + (255,), width=4)
+        self.back.alpha_composite(land)
+        kc = mix(p["mid"], st, 0.22); kx = W * 0.92                                           # the keep on the right
+        self.back.alpha_composite(Image.new("RGBA", (W, H), (0, 0, 0, 0)))
+        db = ImageDraw.Draw(self.back)
+        db.rectangle([kx - 150, H * 0.06, W + 40, H], fill=kc + (255,)); self._crenels(db, kx - 150, W + 40, H * 0.06, 30, 32, 22, kc)
+        self.windows.append((kx - 60, H * 0.22, 14, 34, 2.1, 1))
+        mid = Image.new("RGBA", (W, H), (0, 0, 0, 0)); d = ImageDraw.Draw(mid)
+        zn, zf = 0.42, 7.0; wk = mix(p["mid"], st, 0.3)
+        tcx, tt, tb = P(0.1, 0, zf)[0], P(0, -2.6, zf)[1], P(0, 1, zf)[1]                     # round tower at the end of the walk
+        self._rtower(d, tcx, tt, tb, 3.4 * f / zf, mix(p["mid"], st, 0.36), 2, 0.6)
+        da, db_ = P(-0.18, -0.15, zf), P(0.38, 1, zf)
+        d.rectangle([da[0], da[1], db_[0], db_[1]], fill=mix(p["light"], p["mid"], 0.55) + (255,))
+        d.pieslice([da[0], da[1] - (db_[0] - da[0]) / 2, db_[0], da[1] + (db_[0] - da[0]) / 2], 180, 360, fill=mix(p["light"], p["mid"], 0.55) + (255,))
+        d.polygon(q([(-1, 1, zn), (1.2, 1, zn), (1.2, 1, zf), (-1, 1, zf)]), fill=wk + (255,))   # walk
+        z = zn
+        while z < zf: d.line(q([(-1, 1, z), (1.2, 1, z)]), fill=mix(wk, (0, 0, 0), 0.3) + (255,), width=max(1, int(4 / z))); z += 0.3
+        d.line(q([(0.1, 1, zn), (0.1, 1, zf)]), fill=mix(wk, (0, 0, 0), 0.2) + (255,), width=2)
+        d.polygon(q([(1.2, 1, zn), (1.2, 1, zf), (1.2, 0.58, zf), (1.2, 0.58, zn)]), fill=mix(wk, (0, 0, 0), 0.2) + (255,))   # low inner parapet
+        d.polygon(q([(1.2, 0.58, zn), (1.2, 0.58, zf), (1.4, 0.58, zf), (1.4, 0.58, zn)]), fill=mix(wk, p["moon"], 0.12) + (255,))
+        pc = mix(p["mid"], st, 0.22); sill = 0.52
+        d.polygon(q([(-1, 1, zn), (-1, 1, zf), (-1, sill, zf), (-1, sill, zn)]), fill=pc + (255,))   # outer parapet
+        d.polygon(q([(-1, sill, zn), (-1, sill, zf), (-1.3, sill, zf), (-1.3, sill, zn)]), fill=mix(pc, p["moon"], 0.2) + (255,))
+        segs = []; z = zn + 0.75
+        while z < zf: segs.append(z); z += 0.62 * (1 + 0.15 * z)
+        for z in segs[::-1]:
+            z1 = min(zf, z + 0.2)
+            d.polygon(q([(-1.3, sill, z), (-1, sill, z), (-1, -0.16, z), (-1.3, -0.16, z)]), fill=mix(pc, (0, 0, 0), 0.4) + (255,))
+            d.polygon(q([(-1, sill, z), (-1, sill, z1), (-1, -0.16, z1), (-1, -0.16, z)]), fill=mix(pc, p["moon"], 0.06) + (255,))
+        bx, by = P(0.85, 1, 1.5); s = f / 1.5 / 520                                           # brazier
+        for sx in (-1, 1): d.line([(bx + sx * 26 * s, by), (bx + sx * 12 * s, by - 60 * s)], fill=(16, 14, 14, 255), width=4)
+        d.chord([bx - 34 * s, by - 90 * s, bx + 34 * s, by - 50 * s], 0, 180, fill=(20, 16, 16, 255))
+        self.fires.append((bx, by - 70 * s, 0.22))
+        self.mid = mid
+        self.near = Image.new("RGBA", (W, H), (0, 0, 0, 0))
+        self.sentry = dict(v=(vx, vy, f), X=0.12)
+        self.fog_y = vy + 60; self.fog_a = 0.14; self.particles = "thistledown"
+
+    def build_solar(self):
+        """The lady's chamber: painted plaster with little flowers, a deep window embrasure with stone benches and a
+        moonlit two-light window, a hanging cloth with an enclosed garden, a candle in a wall niche, the great curtained
+        bed with tester and fur coverlet, a truckle bed, a hooded fireplace, a chest and a little dog on a cushion."""
+        p, rng = self.p, self.rng; r2 = random.Random(int(rng.integers(1e6))); st = p["stone"]
+        wall = mix(p["mid"], (132, 58, 50), 0.36); fy = int(H * 0.74)
+        self.back = Image.new("RGBA", (W, H), wall + (255,)); d = ImageDraw.Draw(self.back)
+        fc = mix(wall, (232, 220, 200), 0.2)
+        for yy in range(90, fy, 64):
+            for xx in range(20 + (yy // 64 % 2) * 32, W, 64):
+                for k in range(5): a = k * TAU / 5; d.ellipse([xx + 6 * math.cos(a) - 2, yy + 6 * math.sin(a) - 2, xx + 6 * math.cos(a) + 2, yy + 6 * math.sin(a) + 2], fill=fc + (255,))
+        bw = mix(p["mid"], (60, 42, 28), 0.4); d.rectangle([0, 0, W, 64], fill=mix(bw, (0, 0, 0), 0.3) + (255,))
+        for k in range(14): d.rectangle([k * 150, 50, k * 150 + 40, 76], fill=bw + (255,))
+        ex0, ex1, et = W * 0.03, W * 0.25, H * 0.2; sc = mix(p["mid"], st, 0.3)              # window embrasure
+        d.rectangle([ex0, et, ex1, fy - 20], fill=sc + (255,)); d.pieslice([ex0, et - (ex1 - ex0) / 2, ex1, et + (ex1 - ex0) / 2], 180, 360, fill=sc + (255,))
+        ix0, ix1, it = ex0 + 90, ex1 - 90, et + 40
+        d.rectangle([ex0 + 40, et + 10, ex1 - 40, fy - 20], fill=mix(sc, (0, 0, 0), 0.25) + (255,))
+        sky = mix(p["sky_mid"], p["moon"], 0.28); lw = (ix1 - ix0 - 16) / 2
+        for k in range(2):
+            a = ix0 + k * (lw + 16); d.rectangle([a, it + 40, a + lw, fy - 170], fill=sky + (255,))
+            d.polygon([(a, it + 40), (a + lw / 2, it - 10), (a + lw, it + 40)], fill=sky + (255,))
+        d.ellipse([(ix0 + ix1) / 2 - 14, it - 44, (ix0 + ix1) / 2 + 14, it - 16], fill=sky + (255,))
+        d.rectangle([ix0, it + 120, ix0 + lw, fy - 170], fill=mix(p["mid"], (70, 50, 32), 0.4) + (255,))   # left light shuttered below
+        for k in range(1, 4): d.line([(ix0 + lw + 16, it + 40 + k * 60), (ix1, it + 40 + k * 60)], fill=mix(sc, (0, 0, 0), 0.4) + (255,), width=2)
+        for sx, x in ((1, ex0 + 40), (-1, ex1 - 40)):                                         # stone window benches
+            d.polygon([(x, fy - 20), (x + sx * 70, fy - 20), (x + sx * 70, fy - 110), (x, fy - 130)], fill=mix(sc, p["moon"], 0.1) + (255,))
+        self.hanging = (W * 0.275, H * 0.14, W * 0.125, H * 0.4)
+        d.rectangle([W * 0.27, H * 0.13, W * 0.405, H * 0.14], fill=bw + (255,))
+        nx, ny = W * 0.335, H * 0.63                                                          # candle niche
+        d.rectangle([nx - 34, ny - 50, nx + 34, ny + 40], fill=mix(wall, (0, 0, 0), 0.45) + (255,)); d.pieslice([nx - 34, ny - 84, nx + 34, ny - 16], 180, 360, fill=mix(wall, (0, 0, 0), 0.45) + (255,))
+        d.rectangle([nx - 6, ny - 6, nx + 6, ny + 38], fill=(232, 214, 170, 255)); self.lamp = (nx, ny - 10); self.lamp_r = 280
+        hx0, hx1 = W * 0.86, W * 1.0; hcol = mix(p["mid"], st, 0.22)                          # hooded fireplace
+        d.polygon([(hx0 - 10, fy - 170), (W + 20, fy - 170), (W - 20, H * 0.26), (hx0 + 50, H * 0.26)], fill=hcol + (255,))
+        d.rectangle([hx0 + 50, 60, W - 20, H * 0.26], fill=hcol + (255,))
+        d.rectangle([hx0 + 10, fy - 170, W, fy + 10], fill=(12, 8, 8, 255)); d.rectangle([hx0 - 10, fy - 182, W + 20, fy - 166], fill=mix(hcol, p["moon"], 0.1) + (255,))
+        self.fires.append((hx0 + 120, fy, 0.3))
+        mid = Image.new("RGBA", (W, H), (0, 0, 0, 0)); dm = ImageDraw.Draw(mid)
+        fl = mix(p["mid"], (110, 86, 58), 0.3); dm.rectangle([0, fy, W, H], fill=fl + (255,))
+        for k in range(9): y = fy + (H - fy) * (k / 9) ** 1.3; dm.line([(0, y), (W, y)], fill=mix(fl, (0, 0, 0), 0.3) + (255,), width=2)
+        mt = mix(fl, (170, 150, 90), 0.25); dm.polygon([(W * 0.3, fy + 40), (W * 0.86, fy + 40), (W * 0.92, H - 30), (W * 0.24, H - 30)], fill=mt + (255,))
+        for k in range(40): x = W * 0.27 + k * (W * 0.62) / 40; dm.line([(x + 30, fy + 40), (x, H - 30)], fill=mix(mt, (0, 0, 0), 0.15) + (255,), width=1)
+        mb = Image.new("RGBA", (W, H), (0, 0, 0, 0))                                          # bar of moonlight across the floor
+        ImageDraw.Draw(mb).polygon([(ix0 + lw + 16, fy - 20), (ix1, fy - 20), (W * 0.56, H), (W * 0.36, H)], fill=(170, 190, 240, 46))
+        mid.alpha_composite(mb.filter(ImageFilter.GaussianBlur(18)))
+        b0, b1 = W * 0.43, W * 0.83; cur = mix(p["mid"], p["banner"], 0.55); tt = H * 0.1      # the great bed
+        dm.rectangle([b0, tt + 70, b1, fy - 150], fill=mix(cur, (0, 0, 0), 0.25) + (255,))     # back curtain
+        for k in range(26): x = b0 + k * (b1 - b0) / 26; dm.line([(x, tt + 70), (x, fy - 150)], fill=mix(cur, (0, 0, 0), 0.4) + (255,), width=3)
+        vine = mix(cur, (190, 170, 110), 0.35)
+        for k in range(30):
+            x = b0 + 10 + k * (b1 - b0 - 20) / 30; dm.ellipse([x - 5, tt + 88 + 8 * math.sin(k), x + 5, tt + 98 + 8 * math.sin(k)], fill=vine + (255,))
+        for x in (b0, b1): dm.rectangle([x - 12, tt, x + 12, fy + 50], fill=mix(bw, (0, 0, 0), 0.2) + (255,))
+        dm.rectangle([b0 - 30, tt, b1 + 30, tt + 70], fill=cur + (255,))                     # tester and valance
+        for k in range(18): x = b0 - 30 + k * (b1 - b0 + 60) / 18; dm.pieslice([x, tt + 50, x + (b1 - b0 + 60) / 18, tt + 90], 0, 180, fill=cur + (255,))
+        dm.rectangle([b0 - 30, tt + 6, b1 + 30, tt + 14], fill=vine + (255,))
+        dm.rectangle([b0 + 14, fy - 160, b1 - 14, fy - 30], fill=mix((214, 206, 190), p["mid"], 0.4) + (255,))   # mattress and sheet
+        dm.rounded_rectangle([b1 - 170, fy - 200, b1 - 20, fy - 140], radius=26, fill=mix((230, 222, 206), p["mid"], 0.3) + (255,))   # bolster
+        fur = mix(p["mid"], (150, 146, 140), 0.45)
+        dm.polygon([(b0 + 10, fy - 170), (b1 - 180, fy - 176), (b1 - 160, fy - 20), (b0 + 6, fy - 10)], fill=fur + (255,))
+        for k in range(160): x = r2.uniform(b0 + 10, b1 - 170); y = r2.uniform(fy - 170, fy - 14); dm.line([(x, y), (x + 3, y + 8)], fill=mix(fur, (240, 240, 240), 0.15) + (255,), width=1)
+        for x0_, w_ in ((b0 + 12, 70), (b1 - 82, 70)):                                       # gathered side curtains
+            for k in range(7): dm.line([(x0_ + k * 10, tt + 70), (x0_ + k * 10 + (5 if k % 2 else -5), fy + 30)], fill=mix(cur, (0, 0, 0), 0.1 + 0.25 * (k % 2)) + (255,), width=10)
+        dm.rectangle([b0 + 120, fy - 30, b1 - 120, fy + 30], fill=mix(bw, (0, 0, 0), 0.35) + (255,))   # truckle bed underneath
+        dm.rectangle([b0 + 130, fy - 30, b1 - 130, fy - 14], fill=mix((210, 200, 180), p["mid"], 0.5) + (255,))
+        cx_, cy_ = W * 0.84, fy + 110                                                         # little dog asleep on a cushion
+        dm.ellipse([cx_ - 90, cy_ - 30, cx_ + 90, cy_ + 30], fill=mix(p["mid"], (150, 40, 40), 0.45) + (255,))
+        dg = mix((236, 232, 222), p["mid"], 0.3); dm.ellipse([cx_ - 52, cy_ - 50, cx_ + 52, cy_ + 6], fill=dg + (255,))
+        dm.ellipse([cx_ + 10, cy_ - 46, cx_ + 52, cy_ - 12], fill=mix(dg, (0, 0, 0), 0.06) + (255,)); dm.polygon([(cx_ + 18, cy_ - 42), (cx_ + 30, cy_ - 60), (cx_ + 36, cy_ - 40)], fill=mix(dg, (0, 0, 0), 0.15) + (255,))
+        self.mid = mid
+        near = Image.new("RGBA", (W, H), (0, 0, 0, 0)); dn = ImageDraw.Draw(near); nc = p["near"]
+        ch = mix(nc, (70, 50, 32), 0.35)                                                      # carved chest at the foot of the bed
+        dn.rectangle([W * 0.3, H - 230, W * 0.47, H - 40], fill=ch + (255,)); dn.rectangle([W * 0.295, H - 244, W * 0.475, H - 222], fill=mix(ch, (0, 0, 0), 0.2) + (255,))
+        for k in range(4): x = W * 0.31 + k * (W * 0.15) / 4; dn.rectangle([x + 8, H - 205, x + (W * 0.15) / 4 - 8, H - 70], outline=mix(ch, (0, 0, 0), 0.35) + (255,), width=3)
+        for k in range(4): x = W * 0.31 + k * (W * 0.15) / 4 + (W * 0.15) / 8; dn.arc([x - 18, H - 180, x + 18, H - 110], 200, 340, fill=mix(ch, (200, 180, 120), 0.2) + (255,), width=3)
+        self.near = near
+        self.fog_a = 0.0; self.particles = "dust"
+
+    def _banners(self, img, ph):
+        """EP10: long pennants unrolling and folding in the evening breeze, each with its own rhythm."""
+        p = self.p; d = ImageDraw.Draw(img); col = mix(p["banner"], p["mid"], 0.2); st = mix(p["accent"], p["mid"], 0.3)
+        for x, y, L, f in self.banners:
+            top, bot = [], []
+            for j in range(15):
+                u = j / 14; wv = math.sin(ph * 2 + f - u * 5) * 9 * u + 3 * math.sin(ph * 5 + f - u * 7) * u
+                xx = x + u * L * (0.9 + 0.08 * math.cos(ph * 2 + f)); hh = 34 * (1 - 0.55 * u)
+                top.append((xx, y + wv)); bot.append((xx, y + hh + wv * 1.15))
+            d.polygon(top + bot[::-1], fill=col + (255,))
+            d.line([((a[0] + b[0]) / 2, (a[1] + b[1]) / 2) for a, b in zip(top, bot)], fill=st + (255,), width=3)
+
+    def _oven(self, img, ph):
+        """EP10: the bakehouse oven mouth breathing its red glow; the horse in the stable nodding slowly."""
+        x, y, R = self.oven; p = self.p; fl = 0.78 + 0.14 * math.sin(ph * 3) + 0.08 * math.sin(ph * 7 + 1)
+        d = ImageDraw.Draw(img)
+        d.chord([x - 38, y - 40, x + 38, y + 34], 180, 360, fill=mix(p["ember"], (255, 220, 150), 0.25 * fl) + (255,)); d.rectangle([x - 38, y - 4, x + 38, y + 10], fill=mix(p["ember"], (90, 30, 10), 0.4) + (255,))
+        img.alpha_composite(self.tint(self.glow_lg.resize((R * 2, R)), p["ember"], 0.55 * fl), (int(x - R), int(y - R // 2)))
+        hx, hy_ = self.horse; nod = 6 * math.sin(ph * 2) + 2 * math.sin(ph * 5); c = mix(self.p["near"], (60, 44, 34), 0.25) + (255,)
+        d.polygon([(hx - 40, hy_ - 78), (hx - 6, hy_ - 72), (hx + 4, hy_ - 58 + nod * 0.5), (hx - 22, hy_ - 2), (hx - 44, hy_ - 2)], fill=c)   # neck over the half-door
+        d.polygon([(hx - 8, hy_ - 66 + nod * 0.5), (hx + 6, hy_ - 64 + nod * 0.5), (hx + 58, hy_ - 4 + nod), (hx + 52, hy_ + 14 + nod), (hx + 30, hy_ + 16 + nod), (hx - 10, hy_ - 30 + nod * 0.6)], fill=c)
+        d.polygon([(hx - 6, hy_ - 64 + nod * 0.5), (hx - 2, hy_ - 86 + nod * 0.5), (hx + 6, hy_ - 62 + nod * 0.5)], fill=c)
+        d.line([(hx - 40, hy_ - 78), (hx - 12, hy_ - 70)], fill=mix(self.p["near"], self.p["moon"], 0.2) + (255,), width=3)   # mane edge in moonlight
+
+    def _walker(self, img, t, ph):
+        """EP10: the watchman crossing the courtyard once per loop, cloak and hood, staff, lantern swinging."""
+        Wk = self.walker; u = t / LOOP_S; s = Wk["s"]; x = -420 + (W + 840) * u; y = Wk["y"] - 3 * abs(math.sin(ph * 14))
+        self._figure(img, x, y, 230 * s, ph * 14, 1)
+
+    def _figure(self, img, x, y, h, step, side):
+        p = self.p; c = (14, 13, 18, 255); lay = Image.new("RGBA", (W, H), (0, 0, 0, 0)); d = ImageDraw.Draw(lay)
+        sw = math.sin(step) * 0.04 * h
+        d.polygon([(x - 0.16 * h, y), (x + 0.16 * h, y), (x + 0.09 * h, y - 0.8 * h), (x - 0.09 * h, y - 0.8 * h)], fill=c)
+        d.line([(x - 0.06 * h + sw, y), (x - 0.06 * h + sw, y + 0.02 * h)], fill=c, width=max(2, int(h / 40)))
+        d.ellipse([x - 0.08 * h, y - 0.97 * h, x + 0.08 * h, y - 0.78 * h], fill=c)
+        d.polygon([(x - 0.08 * h, y - 0.86 * h), (x + 0.02 * h, y - 1.02 * h), (x + 0.1 * h, y - 0.84 * h)], fill=c)
+        d.line([(x + side * 0.2 * h, y + 0.01 * h), (x + side * 0.23 * h, y - 1.15 * h)], fill=c, width=max(2, int(h / 45)))
+        hx, hy_ = x - side * 0.15 * h, y - 0.46 * h; a = 0.18 * math.sin(step * 0.5)
+        lx, ly = hx + 0.12 * h * math.sin(a), hy_ + 0.12 * h * math.cos(a)
+        d.line([(hx, hy_), (lx, ly - 0.03 * h)], fill=c, width=max(1, int(h / 90)))
+        img.alpha_composite(lay)
+        R = int(h * 0.9); img.alpha_composite(self.tint(self.glow_lg.resize((R * 2, R * 2)), p["light"], 0.36), (int(lx - R), int(ly - R)))
+        d = ImageDraw.Draw(img); d.rectangle([lx - 0.03 * h, ly - 0.03 * h, lx + 0.03 * h, ly + 0.05 * h], fill=(255, 206, 128, 255))
+        d.rectangle([lx - 0.035 * h, ly - 0.045 * h, lx + 0.035 * h, ly - 0.03 * h], fill=c)
+
+    def _sentry(self, img, t, ph):
+        """EP10: the watchman walking slowly away along the wall walk towards the far tower, and back again."""
+        S = self.sentry; vx, vy, f = S["v"]; u = t / LOOP_S
+        z = 3.0 - 1.5 * math.cos(TAU * u); X = S["X"] + 0.04 * math.sin(TAU * u)
+        fx, fy = vx + X * f / z, vy + 1.0 * f / z; h = 1.12 * f / z
+        self._figure(img, fx, fy - 2 * abs(math.sin(ph * 12)) / z, h, ph * 12, -1)
+
+    def _hanging(self, img, ph):
+        """EP10: the woven cloth of an enclosed garden, swaying very slightly on its rail in the draught."""
+        x0, y0, w, h = self.hanging; p = self.p; sway = 7 * math.sin(ph) + 2 * math.sin(ph * 3 + 1)
+        M = lambda u, v: (x0 + u * w + sway * v ** 1.5 * (1 + 0.2 * u), y0 + v * h + 2 * math.sin(ph * 2 + u * 3) * v)
+        d = ImageDraw.Draw(img); cl = mix(p["mid"], (54, 82, 60), 0.5)
+        d.polygon([M(0, 0), M(1, 0), M(1, 1), M(0, 1)], fill=cl + (255,))
+        bd = mix(cl, (160, 70, 50), 0.45)
+        for a, b in (((0, 0), (1, 0)), ((1, 0), (1, 1)), ((1, 1), (0, 1)), ((0, 1), (0, 0))): d.line([M(*a), M(*b)], fill=bd + (255,), width=8)
+        wl = mix(cl, (200, 190, 160), 0.35); d.line([M(0.08, 0.72), M(0.92, 0.72)], fill=wl + (255,), width=6)   # garden wall
+        for u in (0.18, 0.5, 0.82):                                                           # fruit trees
+            tx, ty = M(u, 0.42); d.line([M(u, 0.72), (tx, ty)], fill=mix(cl, (50, 36, 24), 0.6) + (255,), width=4)
+            d.ellipse([tx - 26, ty - 34, tx + 26, ty + 14], fill=mix(cl, (20, 50, 26), 0.5) + (255,))
+            for k in range(4): a = k * 1.7 + u * 5; d.ellipse([tx + 16 * math.cos(a) - 4, ty - 10 + 14 * math.sin(a) - 4, tx + 16 * math.cos(a) + 4, ty - 10 + 14 * math.sin(a) + 4], fill=mix(cl, p["ember"], 0.55) + (255,))
+        fx, fy = M(0.5, 0.85); d.ellipse([fx - 22, fy - 8, fx + 22, fy + 8], fill=mix(cl, (150, 170, 200), 0.45) + (255,)); d.line([(fx, fy), (fx, fy - 28)], fill=mix(cl, (200, 210, 230), 0.5) + (255,), width=3)
+        for u, v in ((0.3, 0.2), (0.66, 0.16), (0.4, 0.92), (0.75, 0.9)):
+            bx, by = M(u, v); d.ellipse([bx - 5, by - 4, bx + 5, by + 4], fill=mix(cl, (230, 220, 200), 0.5) + (255,))
 
     def _glow(self, r):
         s = r * 2; yy, xx = np.mgrid[0:s, 0:s].astype(np.float32)
@@ -2501,6 +2974,9 @@ class Scene:
                 dl.rectangle([x - w / 2, y - h / 2, x + w / 2, y + h / 2], fill=mix(p["mid"], p["light"], fl) + (255,))
             img.alpha_composite(lay)
         if self.glints: self._glints(img, ph)
+        if self.hanging: self._hanging(img, ph)
+        if self.banners: self._banners(img, ph)
+        if self.oven: self._oven(img, ph)
         if self.foam: self._foam(img, ph)
         if self.beam: self._beam(img, ph)
         if self.ship: self._ship(img, t, ph)
@@ -2511,6 +2987,8 @@ class Scene:
         if self.yakata: self._yakata(img, t, ph)
         if self.chochin: self._chochin(img, ph)
         if self.pipe: self._pipe(img, ph)
+        if self.walker: self._walker(img, t, ph)
+        if self.sentry: self._sentry(img, t, ph)
         img.alpha_composite(self.near)
         if getattr(self, "spill", None): img.alpha_composite(self.spill)
         if self.willow: self._willow(img, ph)
@@ -2559,6 +3037,9 @@ class Scene:
                     aa = j * TAU / 10; R = sz if j % 2 == 0 else sz * 0.45; lx, ly = R * math.cos(aa), R * math.sin(aa) * sq
                     pts.append((x + lx * math.cos(rot) - ly * math.sin(rot), y + lx * math.sin(rot) + ly * math.cos(rot)))
                 dl.polygon(pts, fill=col + (int(170 * s),)); continue
+            elif self.particles == "thistledown":                                          # EP10: seed tufts drifting sideways on the night air
+                x = (x0 + (W + 80) * t / LOOP_S * k) % (W + 80) - 40; y = H * 0.2 + (y0 % (H * 0.65)) + 40 * math.sin(ph * k + f) - 16 * math.sin(ph * 3 + f)
+                a = 0.24 * s * (0.7 + 0.3 * math.sin(ph * 2 + f)); col = mix(p["moon"], (255, 255, 255), 0.3); sz = 3 + 2 * s
             elif self.particles == "fireflies":
                 x = x0 + 60 * math.sin(ph * k + f); y = H * 0.55 + (y0 % (H * 0.45)) + 30 * math.cos(ph * (3 - k) + f)
                 a = max(0, math.sin(ph * 3 * k + f)) ** 2 * 0.8 * s; col = (230, 240, 160); sz = 4 + 2 * s

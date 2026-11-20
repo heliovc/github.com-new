@@ -1,0 +1,38 @@
+{
+  "version": 1,
+  "channel_id": "UCNrw11y7QKt0fWCrJ84QZ-g",
+  "created_at": "2026-11-20T09:13:03-03:00",
+  "items": [
+    {
+      "key": "quiet-ep10-long",
+      "kind": "long",
+      "video": [
+        "video.part00",
+        "video.part01"
+      ],
+      "title": "Boring History for Sleep: A Medieval Castle After Dark (Hearth Fire & Night Watch, 47 Min)",
+      "description": "Spend one slow November night inside an English castle, a little over five hundred years ago. Cross the moat at dusk, watch the gate close, sit by the central hearth of the great hall while the fire is covered for the night, walk the wall with the watchman under the stars, and end in a quiet chamber with a curtained bed and a single candle.\n\nNo sieges and no battles, only soft narration, gentle rain and a long ambient ending so you can drift off.\n\nChapters\n0:00 A Castle After Dark\n1:25 The Road Home at Dusk\n5:51 The Gate Is Closed\n10:10 The Bakehouse and the Well\n14:30 The Great Hall After Supper\n18:55 Compline and the Covering of the Fire\n23:25 The Watch on the Walls\n28:12 The Lady's Chamber\n32:58 Goodnight from the Castle\n35:06 Rest\n\n— — —\nThe Quiet Archive: calm history to fall asleep to. New episodes every evening.\nSubscribe so tonight's story is waiting for you.\n\nNarrated with a synthetic voice. Visuals are illustrated with code. Historical details are researched and gently simplified for relaxation.\n\n#sleephistory #boringhistoryforsleep #sleepstory #medievalhistory #castle",
+      "tags": [
+        "sleep history",
+        "history for sleep",
+        "boring history for sleep",
+        "bedtime stories for adults",
+        "sleep stories",
+        "medieval castle",
+        "medieval history",
+        "castle at night",
+        "great hall",
+        "middle ages for sleep",
+        "calm history",
+        "sleep story"
+      ],
+      "thumbnail": "thumbnail.jpg",
+      "captions": "legendas.srt",
+      "publish_at": "2026-11-20T22:00:00-03:00",
+      "if_late": "public_now",
+      "made_for_kids": false,
+      "altered_content": true,
+      "pinned_comment": "Which room of the castle would you choose to fall asleep in tonight?"
+    }
+  ]
+}
