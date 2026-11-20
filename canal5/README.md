@@ -22,7 +22,7 @@ canal5/
 2. Criar `pipeline/scenes/<animal>.py` com uma função por id de cena. `ctx.wt("palavra")` dá o instante (s) em que a palavra é falada dentro da cena, para sincronizar a animação com a narração.
 3. Revisar sem gerar vídeo: `python3 -I canal5/pipeline/engine.py canal5/dNNx-animal --sheet` (folha de contato em `.cache/sheet.png`) e `--stills 0,12.5` (quadros em tamanho real).
 4. Render: `python3 -I canal5/pipeline/engine.py canal5/dNNx-animal` (~3 min no Mac com 8 núcleos).
-5. Publicar: só depois de o canal existir. Renomear `publish.draft.json` para `publish.json`, preencher `channel_id` e `publish_at` (A 12:00, B 19:00, com `-03:00`). O robô do servidor publica **qualquer** `publish.json` que chegar na `main`.
+5. Publicar: copiar `publish.draft.json` para `publish.json` (o `channel_id` e o `publish_at` vêm do bloco `publish` do script.json; A 12:00, B 19:00, com `-03:00`). O robô do servidor publica **qualquer** `publish.json` que chegar na `main`.
 6. Atualizar `controle.md`.
 
 ### Regras que o motor já cumpre
@@ -34,5 +34,5 @@ canal5/
 
 ## Ambiente
 - Mac: `~/.venvs/canal5` (Python 3.11 via `uv`). Rodar com `~/.venvs/canal5/bin/python -I canal5/pipeline/engine.py …`.
-- Nuvem / máquina nova: `bash canal5/setup.sh` (pacotes Python, ffmpeg e modelos Kokoro em `~/.cache/kokoro`).
+- Nuvem / máquina nova: `bash canal5/setup.sh` (pacotes Python e ffmpeg; testa a voz neural). Rotina diária: prompt em `canal5/rotina.md`.
 - Voz: `"tts": {"engine": "edge", "voice": "pt-BR-ThalitaMultilingualNeural", "rate": "+0%"}` no script.json (precisa de internet). Kokoro (`"engine": "kokoro"`, offline) continua disponível, mas soa estrangeira em PT-BR.

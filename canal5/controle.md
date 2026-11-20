@@ -6,6 +6,8 @@ Ler antes de cada vídeo (plano.md, seção 8). Atualizar depois de produzir e 4
 - Nome: **Na Pele De** — YouTube `@napeledebicho`, channel_id `UCO5Fa5_HJxd-aeTiyQcw0Sw` (criado pelo Hélio em 20/11/2026). Cadastrado em `server/publisher/channels.json`.
 - Instagram / TikTok: **pendente (Hélio criar)**; depois, ligar no Buffer.
 - Piloto (Dia 1 A e B): aprovado pelo Hélio em 20/11/2026; agendado pelo robô para 21/11 12:00 e 19:00.
+- Rotina diária na nuvem: ligada em 20/11, 06:30 (Brasília), produz até 2 dias adiantado.
+- Pendente: longo semanal de domingo (compilação) ainda não implementado; Instagram/TikTok no Buffer.
 
 ## Animais e temas usados
 | Dia | Vídeo | Animal | Grupo | Tipo | Gancho | Tema | Paleta | Abertura | Visão do Bicho | Duração | Palavras | Status |
