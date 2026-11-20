@@ -1908,7 +1908,9 @@
   "title": "What If We Swapped the Sun for 5 Other Stars? One Puts Earth INSIDE It",
   "kind": "long",
   "publish_at": "2026-11-20T16:15:00-03:00",
-  "pinned_comment": "Which star would you swap our Sun for, if you had to pick one?"
+  "pinned_comment": "Which star would you swap our Sun for, if you had to pick one?",
+  "comment_attempts": 1,
+  "comment_done": "2026-11-20T16:22:46.411469-03:00"
  },
  "cosmic-scale12-short": {
   "attempts": 1,
@@ -1924,7 +1926,9 @@
   "kind": "short",
   "publish_at": "2026-11-20T18:15:00-03:00",
   "related_key": "cosmic-ep17-long",
-  "pinned_comment": "Would you stand on it for a selfie at 30 million kg? Full video: What If We Swapped the Sun for 5 Other Stars? One Puts Earth INSIDE It"
+  "pinned_comment": "Would you stand on it for a selfie at 30 million kg? Full video: What If We Swapped the Sun for 5 Other Stars? One Puts Earth INSIDE It",
+  "related_attempts": 1,
+  "related_done": "2026-11-20T16:24:23.153080-03:00"
  },
  "cosmic-ep17-short": {
   "attempts": 1,
@@ -1940,7 +1944,9 @@
   "kind": "short",
   "publish_at": "2026-11-20T20:15:00-03:00",
   "related_key": "cosmic-ep17-long",
-  "pinned_comment": "Which star should we put in the Sun's place next? Full video: What If We Swapped the Sun for 5 Other Stars? One Puts Earth INSIDE It"
+  "pinned_comment": "Which star should we put in the Sun's place next? Full video: What If We Swapped the Sun for 5 Other Stars? One Puts Earth INSIDE It",
+  "related_attempts": 1,
+  "related_done": "2026-11-20T16:26:10.829921-03:00"
  },
  "ptd-rank17-short": {
   "attempts": 1,
