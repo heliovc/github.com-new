@@ -498,19 +498,59 @@ def write_srt(T, path):
     open(path, "w", encoding="utf-8").write("\n".join(lines))
 
 
+def _title_line(d, cx, y, ln, size):
+    """linha de título em Anton; o "º" sai pequeno e alto (a fonte não tem o ordinal bem desenhado)"""
+    f, fo = A.F(size, "anton"), A.F(int(size * 0.5), "anton")
+    parts = ln.split("º")
+    wid = sum(f.getlength(p) for p in parts) + fo.getlength("o") * (len(parts) - 1)
+    x = cx - wid / 2; top = y - size * 0.5
+    for k, p in enumerate(parts):
+        d.text((x, y), p, font=f, fill=(255, 255, 255), anchor="lm", stroke_width=12, stroke_fill=(0, 0, 0))
+        x += f.getlength(p)
+        if k < len(parts) - 1:
+            d.text((x + 4, top + size * 0.08), "o", font=fo, fill=(255, 255, 255), anchor="lt", stroke_width=8,
+                   stroke_fill=(0, 0, 0))
+            x += fo.getlength("o") + 8
+
+
 def write_cover(R, path):
+    """capa: cena aproximada no bicho + faixa "E SE VOCÊ FOSSE…" + título + selo "VOCÊ" apontando para o bicho.
+    script.json -> cover: {t, title[], focus:[x,y] (onde o bicho está no quadro t), zoom, r (raio do anel),
+    at:[x,y] (onde o bicho fica na capa; padrão 540,1240)}"""
     S = R.S; cv = S.get("cover", {})
     img = R.frame(int(cv.get("t", 1.0) * FPS), captions=False, overlays=False).convert("RGBA")
-    shade = A.vgrad(W, H, [(0, (0, 0, 0, 170)), (0.35, (0, 0, 0, 0)), (0.7, (0, 0, 0, 0)), (1, (0, 0, 0, 150))])
+    fx, fy = cv.get("focus", [W / 2, H * 0.62]); px, py = cv.get("at", [W / 2, 1240]); z = cv.get("zoom", 1.0)
+    img = A.cam(img, zoom=z, dx=px - fx, dy=py - fy, cx=fx, cy=fy)
+    shade = A.vgrad(W, H, [(0, (0, 0, 0, 200)), (0.36, (0, 0, 0, 40)), (0.52, (0, 0, 0, 0)), (0.85, (0, 0, 0, 0)),
+                           (1, (0, 0, 0, 170))])
     img.alpha_composite(shade)
+    acc = tuple(S.get("accent", (230, 60, 80)))
+    # anel de destaque em volta do bicho
+    r = cv.get("r", 260)
+    ring = A.SS(W, H, s=2)
+    ring.ellipse(px, py, r, r * 0.8, ink=YELLOW, w=14)
+    img.alpha_composite(ring.get())
+    # selo "VOCÊ" com seta: você = o bicho
+    tag = A.sticker("VOCÊ", size=78, fg=(0, 0, 0), bg=YELLOW, pad=(34, 14), radius=26, iw=7).rotate(6, expand=True,
+                                                                                                     resample=Image.BICUBIC)
+    sx = int(px + r * 0.55); sy = int(py - r * 0.8 - 210)
+    lines = cv.get("title", ["?"]); size = 158 if max(len(l) for l in lines) <= 12 else 140
+    y_title_end = 420 + int(size * 1.06) * (len(lines) - 1) + size // 2
+    sx = min(sx, W - tag.width // 2 - 30); sy = max(sy, y_title_end + tag.height // 2 + 40)
+    ar = A.SS(W, H, s=2)
+    A.arrow(ar, sx - 30, sy + tag.height // 2 - 10, px + r * 0.35, py - r * 0.6, YELLOW, w=26, iw=6)
+    img.alpha_composite(ar.get())
+    A.paste_c(img, tag, sx, sy)
+    # faixa da série
+    band = A.sticker("E SE VOCÊ FOSSE…", size=86, fg=(0, 0, 0), bg=YELLOW, pad=(40, 18), radius=18, iw=8)
+    band = band.rotate(-2.5, expand=True, resample=Image.BICUBIC)
+    A.paste_c(img, band, W // 2, 235)
     d = ImageDraw.Draw(img)
-    d.text((W / 2, 250), S.get("hud_series", "E SE VOCÊ FOSSE…"), font=A.F(64, "mont-Black"), fill=YELLOW, anchor="mm",
+    y = 420
+    for ln in lines:
+        _title_line(d, W / 2, y, ln, size); y += int(size * 1.06)
+    d.text((W / 2, H - 120), "NA PELE DE", font=A.F(54, "mont-Black"), fill=(255, 255, 255), anchor="mm",
            stroke_width=6, stroke_fill=(0, 0, 0))
-    y = 380
-    for ln in cv.get("title", ["?"]):
-        d.text((W / 2, y), ln, font=A.F(150, "anton"), fill=(255, 255, 255), anchor="mm", stroke_width=12,
-               stroke_fill=(0, 0, 0))
-        y += 165
     img.convert("RGB").save(path, quality=92)
 
 
@@ -548,8 +588,11 @@ def main():
     ap.add_argument("ep"); ap.add_argument("--sheet", action="store_true"); ap.add_argument("--stills", default="")
     ap.add_argument("--workers", type=int, default=max(1, (os.cpu_count() or 2) - 1))
     ap.add_argument("--draft", action="store_true"); ap.add_argument("--audio", action="store_true")
+    ap.add_argument("--cover", action="store_true", help="só refaz capa.jpg usando o timeline.json (sem voz)")
     a = ap.parse_args()
     ep = os.path.abspath(a.ep)
+    if a.cover:
+        write_cover(Renderer(ep), os.path.join(ep, "capa.jpg")); print(os.path.join(ep, "capa.jpg")); return
     t_start = time.time()
     S, T, voice = build_timeline(ep)
     nw = len(T["words"])

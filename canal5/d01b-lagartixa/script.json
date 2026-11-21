@@ -283,6 +283,16 @@
    "UMA LAGARTIXA",
    "ATRÁS DA",
    "GELADEIRA?"
+  ],
+  "focus": [
+   640,
+   1360
+  ],
+  "zoom": 1.1,
+  "r": 420,
+  "at": [
+   620,
+   1330
   ]
  },
  "publish": {

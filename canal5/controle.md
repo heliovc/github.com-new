@@ -41,3 +41,6 @@ Metas: continuaram assistindo ≥ 70% · % visualizada ≥ 80%.
 - **20/11 — Cenas:** 9 cenas por vídeo (o plano sugere 5–7), para manter troca a cada ~5 s.
 - 20/11: comentário fixado sempre SEM emoji (o YouTube mostra o emoji como imagem e o robô não reconhecia o próprio comentário: a formiga ganhou 3 cópias, 2 apagadas). Fixar comentário no canal novo exige verificar o telefone no YouTube (pendente do Hélio).
 - 20/11: a rede da nuvem bloqueia o servidor da voz (speech.platform.bing.com, 403 no proxy). A rotina só produz depois que o domínio for liberado no ambiente.
+- 21/11 — **Capa nova** (pedido do Hélio): faixa amarela "E SE VOCÊ FOSSE…" maior, título, bicho ampliado dentro de um anel amarelo com o selo "VOCÊ" e seta (a ideia da série: você = o bicho), "NA PELE DE" no rodapé; o "º" agora sai certo. Campos novos em `cover`: `focus`, `zoom`, `at`, `r`. Capas do Dia 1 refeitas. Obs.: o YouTube não usa capa enviada em Shorts; ela vale para Instagram/TikTok, longo semanal e escolha manual no app.
+- 21/11 — Rotina das 06:30 não produziu o Dia 2: a voz continua bloqueada na rede da nuvem (403 em speech.platform.bing.com). Dia 2 (mosquito + barata) fica para a próxima rodada depois da liberação.
+

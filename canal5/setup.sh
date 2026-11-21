@@ -7,7 +7,8 @@ PY=${PY:-python3}
 PKGS="edge-tts soundfile numpy pillow imageio-ffmpeg"
 [ "${CANAL5_KOKORO:-0}" = 1 ] && PKGS="$PKGS kokoro-onnx"
 $PY -m pip install --break-system-packages -q $PKGS 2>/dev/null || $PY -m pip install -q $PKGS
-$PY -c "import edge_tts, soundfile, numpy, PIL, imageio_ffmpeg" && log "python OK" || log "ERRO: pacotes python ($PY)"
+$PY -I -c "from PIL import Image" 2>/dev/null || $PY -m pip install --break-system-packages -q --ignore-installed pillow
+$PY -I -c "import edge_tts, soundfile, numpy, imageio_ffmpeg; from PIL import Image" && log "python OK" || log "ERRO: pacotes python ($PY)"
 
 # voz: neural brasileira via edge-tts (padrão, precisa de internet). Kokoro só se CANAL5_KOKORO=1 (offline, soa estrangeira).
 $PY -c "import asyncio, edge_tts
