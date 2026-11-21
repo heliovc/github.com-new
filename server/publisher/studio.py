@@ -28,6 +28,13 @@ class StudioError(RuntimeError):
     pass
 
 
+class NeedsVerification(StudioError):
+    """o canal ainda não tem telefone verificado (miniatura personalizada, fixar comentário): tentar mais tarde"""
+
+
+PHONE_RX = re.compile(r"(verifique|confirme) seu n[uú]mero de telefone|verify your phone|confirm your phone", re.I)
+
+
 class LoginNeeded(StudioError):
     pass
 
@@ -456,6 +463,54 @@ class Studio:
             except Exception:  # noqa: BLE001
                 pass
 
+    # ------------------------------------------------- pós-publicação: miniatura de Short
+    def _phone_gate(self) -> bool:
+        """diálogo "confirme seu número de telefone" aberto? (canal sem verificação)"""
+        try:
+            txt = self.js("""() => [...document.querySelectorAll('tp-yt-paper-dialog, ytcp-dialog, ytcp-confirmation-dialog,
+                yt-confirm-dialog-renderer, ytd-popup-container, tp-yt-iron-overlay-backdrop + *')]
+                .filter(e => e.getBoundingClientRect().width > 0).map(e => e.innerText || '').join(' ')""")
+        except Exception:  # noqa: BLE001
+            return False
+        return bool(PHONE_RX.search(txt or ""))
+
+    def set_thumbnail(self, video_id: str, path: str) -> str:
+        """Envia a capa (9:16) como miniatura de um vídeo já enviado — Shorts aceitam no Studio desde 2025/26,
+        mas só com o canal verificado por telefone (visto em 21/11: "Para adicionar miniaturas personalizadas,
+        confirme seu número de telefone"). O input[type=file] escondido não funciona: tem de clicar no botão."""
+        p = self.page
+        p.goto(f"https://studio.youtube.com/video/{video_id}/edit", wait_until="domcontentloaded")
+        self.wait_visible("ytcp-video-thumbnail-editor", 90)
+        p.wait_for_timeout(3000)
+        try:
+            with p.expect_file_chooser(timeout=10_000) as fc:
+                p.locator("ytcp-thumbnail-uploader").first.click()
+            fc.value.set_files(str(path))
+        except PWTimeout:
+            if self._phone_gate():
+                p.keyboard.press("Escape")
+                raise NeedsVerification("miniatura personalizada pede o telefone verificado no canal")
+            self.shot("miniatura-seletor")
+            raise StudioError("o seletor de arquivo da miniatura não abriu")
+        save = p.locator("ytcp-button#save").first
+        for _ in range(40):  # a imagem sobe e o Salvar habilita
+            p.wait_for_timeout(1000)
+            if self._phone_gate():
+                p.keyboard.press("Escape")
+                raise NeedsVerification("miniatura personalizada pede o telefone verificado no canal")
+            if save.get_attribute("disabled") is None and save.get_attribute("aria-disabled") != "true":
+                break
+        else:
+            self.shot("miniatura-sem-salvar")
+            raise StudioError("a miniatura não entrou (Salvar continuou desabilitado)")
+        save.click()
+        for _ in range(20):
+            p.wait_for_timeout(1000)
+            if save.get_attribute("disabled") is not None or save.get_attribute("aria-disabled") == "true":
+                return "miniatura enviada"
+        self.shot("miniatura-salvar")
+        raise StudioError("cliquei em Salvar mas a página não confirmou")
+
     # ------------------------------------------------- pós-publicação: vínculo
     def set_related_video(self, short_id: str, long_id: str, long_title: str) -> str:
         """Campo "Vídeo relacionado" do Short → o longo (só aceita vídeo já público do canal).
@@ -565,6 +620,9 @@ class Studio:
             self.shot("comentario-menu")
             raise StudioError("opção 'Fixar' não apareceu no menu do comentário")
         p.wait_for_timeout(1500)
+        if self._phone_gate():  # 20/11: canal novo — "Verifique seu número de telefone para fixar comentários"
+            p.keyboard.press("Escape")
+            raise NeedsVerification("fixar comentário pede o telefone verificado no canal")
         for sel in ("yt-confirm-dialog-renderer #confirm-button", "#confirm-button"):
             if p.locator(sel).count() and p.locator(sel).first.is_visible():
                 p.locator(sel).first.click()

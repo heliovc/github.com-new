@@ -25,14 +25,18 @@ Data: 20/11/2026 · Origem: projeto "Canal Dark" no claude.ai
 ## 2. Monetização
 - Regra atual do YouTube: 1.000 inscritos + 10 mi views de Shorts/90 dias OU 4.000 h de longos/12 meses.
 - A partir de 01/02/2027: canais novos precisam de 8.000 h OU 20 mi views de Shorts/90 dias; para ganhar com Shorts, manter 10 mi views/90 dias.
-- Estratégia:
-  1. Shorts (2/dia → 1/dia).
-  2. **1 longo por semana (domingo):** compilação de 8–12 min dos Shorts da semana + narração-ponte NOVA + abertura nova.
-  3. Mesmo vídeo no Instagram Reels e TikTok via Buffer.
-  4. Teste de versão EN a partir do Dia 16 se a retenção provar o formato.
+- Horas de Shorts NÃO contam para as horas de longos. Sem longos, o canal só monetiza com 10 mi views de Shorts em 90 dias.
+- **Semana-tipo (v2, 21/11/2026):** Shorts todo dia (2/dia até o Dia 15) · **longo ORIGINAL na quarta 11:00** (seção 15; 1º em 02/12/2026) · **longo COMPILAÇÃO no domingo 11:00** (seção 14; 1º em 29/11/2026). Se os longos passarem de 3% de CTR por 2 semanas seguidas, subir para 3 longos/semana (acrescentar sexta 11:00).
+- Replicação: Facebook (Página "Napeledebicho") via Buffer; TikTok bloqueado até o Helio avisar; Instagram ainda não existe (seção 16).
+- Teste de versão EN a partir do Dia 16 se a retenção provar o formato.
 
 ## 3. Formato do Short
-**40–55 s · 1080×1920 · 30 fps · 110–140 palavras (~2,6 palavras/s)**
+**40–55 s · 1080×1920 · 30 fps · 110–140 palavras (~2,6 palavras/s)** — formato do Dia 1 (= "formato atual").
+
+**Teste de duração (v2, a partir do Dia 2, por 4 dias = Dias 2–5).** Dados do Dia 1 (21/11, 06h): formiga 1.167 views, 54% continuaram, ~17 s de 48 s; lagartixa 1.148 views, 68% continuaram, ~14 s de 46 s; o YouTube mostrou cada um a ~1,1 mil pessoas e parou. O gancho funciona; as pessoas saem no meio.
+- **Vídeo A = curto:** 32–40 s, 90–110 palavras, mecanismo em **2 passos** (não 3), fato mais forte até ~25 s, final = virada curta (ainda emendando no início), cena nova a cada **3–5 s**.
+- **Vídeo B = formato atual** (tabela abaixo): 40–55 s, 110–140 palavras, 3 passos, cena a cada 5–8 s.
+- No Dia 6, comparar no controle (continuaram assistindo + % visualizada) e ficar com o vencedor para A e B. Registrar a decisão.
 
 | Tempo | Função | Regra |
 |---|---|---|
@@ -54,7 +58,7 @@ Data: 20/11/2026 · Origem: projeto "Canal Dark" no claude.ai
 - Patas/antenas/bico aparecem na borda da tela de vez em quando.
 - **Corte raio-X:** máquina translúcida + fluxos (azul = frio, vermelho = quente, amarelo = eletricidade, verde = ar/água).
 - **Visão do Bicho:** filtro por espécie (UV roxo, térmico, mosaico de olho composto, câmera lenta, ondas de sonar).
-- Troca de cena a cada 5–8 s; 1 movimento principal por cena.
+- Troca de cena a cada 5–8 s no formato atual; 3–5 s no formato curto (seção 3); 1 movimento principal por cena.
 - **Anti-template:** paleta/cenário mudam a cada vídeo; nunca 2 vídeos seguidos com o mesmo tipo de abertura; capa diferente dos últimos 3.
 - Opcional (gasta créditos): Kling image-to-video só nos 0–3 s.
 
@@ -87,7 +91,7 @@ Horários iniciais: **A 12h, B 19h** (Brasília).
 4. Checklist (seção 12).
 5. Produzir e publicar.
 6. Registrar no controle.
-Domingo: longo semanal.
+Terça (rodada que prepara a quarta): longo ORIGINAL (seção 15). Sábado (rodada que prepara o domingo): longo COMPILAÇÃO (seção 14). Depois de cada Short publicado: replicar no Facebook (seção 16).
 
 ## 9. Calendário Dias 1–15 (sem repetir animal)
 | Dia | A — escala extrema | B — mecânica do dia a dia |
@@ -127,13 +131,42 @@ Métricas 48 h após postar (de `server-data/metrics` ou print do Studio):
 ## 12. Checklist antes do render
 1. 1ª frase com 1ª pessoa + contraste em ≤ 12 palavras?
 2. Frame 0 com movimento e a imagem mais forte?
-3. Mecanismo em 3 passos corretos, com fonte?
+3. Mecanismo em 3 passos (formato atual) ou 2 passos (curto) corretos, com fonte?
 4. Tem a cena Visão do Bicho?
 5. Fato mais forte no fim + loop para o início?
 6. Nenhuma cena parada > 8 s?
 7. Diferente dos últimos 3 em abertura, paleta e capa?
 8. Nada que incentive maltratar animal?
-9. 40–55 s e 110–140 palavras?
+9. Formato atual: 40–55 s e 110–140 palavras · curto: 32–40 s e 90–110 palavras, fato mais forte até ~25 s?
+10. Capa: bicho grande recortado, "E SE VOCÊ FOSSE…", título de 2 linhas curtas, selo VOCÊ apontando para a cabeça, chip do gancho, nada cortado?
+
+## 14. Longo COMPILAÇÃO — domingo 11:00 (obrigatório para monetizar)
+- 1º: **domingo 29/11/2026**. Conteúdo: os Shorts publicados de segunda a sábado (ou desde o último longo), **8–12 min**.
+- **Formato:** 16:9, 1920×1080. O vertical fica no centro; nas laterais, painel com a marca (fundo teal/azul do canal), nome do animal, HUD de escala e número do capítulo. Nada de faixas pretas vazias.
+- **Conteúdo novo obrigatório** (para não ser "conteúdo reutilizado"):
+  - Abertura nova de 15–20 s: gancho com o fato mais impressionante da semana + "hoje você vai ser N bichos diferentes".
+  - Ponte narrada de 5–10 s entre cada Short (mesma voz), ligando um animal ao próximo ("da formiga que cai do prédio para a lagartixa que mora atrás da geladeira…").
+  - Final com o ranking da semana ("o bicho mais extremo foi…") + pergunta para comentários. Sem despedida.
+- **Ordem:** começar pelo Short com maior "continuaram assistindo" da semana.
+- **Título:** buscável, sem #shorts. Ex.: "E se você fosse um bicho? 12 animais mostram como as coisas funcionam por dentro".
+- **Descrição:** capítulos (00:00 Abertura, 00:18 Formiga…), fontes de cada vídeo, "Narração com voz sintética; roteiro e animação próprios."
+- **Miniatura:** só com o canal verificado por telefone (ver controle). Antes disso, publicar sem "thumbnail" (o YouTube escolhe um quadro).
+- **publish.json:** `"kind": "long"`, `publish_at` domingo 11:00 -03:00. Validar como os outros.
+- Não apagar o video.mp4 dos Shorts da semana antes de o longo de domingo estar renderizado.
+
+## 15. Longo ORIGINAL — quarta 11:00
+- 1º: **quarta 02/12/2026**. Nesse dia os Shorts saem normalmente (12:00 e 19:00).
+- Episódio NOVO de **8–10 min** (não é compilação): 1 tema aprofundado em 1ª pessoa. Ex.: "24 horas na pele de uma formiga: como funciona um formigueiro por dentro", "E se você fosse um pombo no centro da cidade: semáforo, metrô e esgoto".
+- **Tema:** o animal/tema do Short com maior "continuaram assistindo" da semana anterior.
+- **Estrutura:** gancho em 5 s, promessa até 15 s, re-engajamento em ~3:00 e ~6:00, payoff no fim, nada de enrolação. 4–6 "sistemas" explicados, cada um com a cena "Visão do Bicho".
+- **Formato:** 16:9, 1920×1080, render nativo horizontal (mesmo motor e estilo 2D dos Shorts). ~1.300–1.500 palavras.
+- **Título e miniatura:** título buscável e com curiosidade; miniatura com o animal grande + 1 objeto gigante + 2–4 palavras. CTR é o gargalo dos longos nos outros canais (maioria abaixo de 2%): caprichar e usar o Teste A/B de título do Studio quando passar de 300 impressões (tarefa manual do Helio).
+- **Reaproveitar:** cortar 1 Short novo do melhor trecho de cada longo, com "Vídeo relacionado" apontando para o longo (`"related_key"` no publish.json; precisa do canal verificado).
+
+## 16. Replicação: Facebook (e TikTok quando liberar)
+- **Facebook:** Página "Napeledebicho" (facebook.com/napeledebicho), via Buffer (o Helio conecta a Página no Buffer). Para cada Short publicado no YouTube: post no Buffer na Página, mesmo vídeo, 2 h depois do horário do YouTube. Vídeo pela URL pública `https://raw.githubusercontent.com/heliovc/github.com-new/main/canal5/<pasta>/video.mp4` (fazer ANTES da limpeza que apaga o mp4). Texto: gancho + 1 frase + pergunta + 4 hashtags (#esevocefosse sempre), sem "#shorts". Enquanto a Página não aparecer no Buffer: pular e avisar no relatório.
+- **TikTok @napeledebicho:** BLOQUEADO desde 20/11 (recurso em análise). Não postar até o Helio avisar. Depois: mesmo esquema, 3 h depois do YouTube, no máximo 2 posts/dia, nunca editar o perfil pela web.
+- **Instagram:** ainda não existe. Ignorar.
 
 ---
 

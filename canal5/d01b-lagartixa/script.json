@@ -279,21 +279,27 @@
  },
  "cover": {
   "t": 0.6,
-  "title": [
-   "UMA LAGARTIXA",
-   "ATRÁS DA",
-   "GELADEIRA?"
-  ],
   "focus": [
-   640,
-   1360
+   560,
+   1300
   ],
-  "zoom": 1.1,
-  "r": 420,
+  "zoom": 1.0,
   "at": [
-   620,
-   1330
-  ]
+   560,
+   1200
+  ],
+  "title": [
+   "*UMA LAGARTIXA*",
+   "NA GELADEIRA?"
+  ],
+  "hook": "O CANTO MAIS QUENTE DA CASA",
+  "sprite_s": 330,
+  "sprite_rot": -7,
+  "you": [
+   210,
+   1150
+  ],
+  "you_side": "left"
  },
  "publish": {
   "title": "E se você fosse uma lagartixa atrás da geladeira? #shorts",

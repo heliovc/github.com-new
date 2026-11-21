@@ -22,7 +22,7 @@ HERE = os.path.dirname(os.path.abspath(__file__))
 if HERE not in sys.path: sys.path.insert(0, HERE)
 import numpy as np
 import soundfile as sf
-from PIL import Image, ImageDraw
+from PIL import Image, ImageDraw, ImageFilter
 
 import art as A
 import audio as AU
@@ -513,7 +513,7 @@ def _title_line(d, cx, y, ln, size):
             x += fo.getlength("o") + 8
 
 
-def write_cover(R, path):
+def _cover_v1(R, path):
     """capa: cena aproximada no bicho + faixa "E SE VOCÊ FOSSE…" + título + selo "VOCÊ" apontando para o bicho.
     script.json -> cover: {t, title[], focus:[x,y] (onde o bicho está no quadro t), zoom, r (raio do anel),
     at:[x,y] (onde o bicho fica na capa; padrão 540,1240)}"""
@@ -554,12 +554,120 @@ def write_cover(R, path):
     img.convert("RGB").save(path, quality=92)
 
 
+def _title_rich(d, cx, y, ln, size, base=(255, 255, 255), hi=YELLOW):
+    """linha de título em Anton com *destaque* (amarelo) e "º" pequeno e alto"""
+    f, fo = A.F(size, "anton"), A.F(int(size * 0.5), "anton")
+    segs = [(seg, k % 2 == 1) for k, seg in enumerate(ln.split("*")) if seg]
+    def seg_w(t):
+        parts = t.split("º")
+        return sum(f.getlength(p) for p in parts) + (fo.getlength("o") + 8) * (len(parts) - 1)
+    x = cx - sum(seg_w(t) for t, _ in segs) / 2; top = y - size * 0.5
+    for t, h in segs:
+        col = hi if h else base
+        parts = t.split("º")
+        for k, p in enumerate(parts):
+            d.text((x, y), p, font=f, fill=col, anchor="lm", stroke_width=max(8, size // 13), stroke_fill=(0, 0, 0))
+            x += f.getlength(p)
+            if k < len(parts) - 1:
+                d.text((x + 4, top + size * 0.08), "o", font=fo, fill=col, anchor="lt", stroke_width=8, stroke_fill=(0, 0, 0))
+                x += fo.getlength("o") + 8
+
+
+def _outlined(sp, px=16, col=(255, 255, 255)):
+    """recorte "adesivo": contorno grosso (borda arredondada) em volta do sprite"""
+    pad = px * 2
+    big = Image.new("RGBA", (sp.width + 2 * pad, sp.height + 2 * pad))
+    big.paste(sp, (pad, pad))
+    a = big.split()[3].filter(ImageFilter.GaussianBlur(px * 0.55)).point(lambda v: 255 if v > 10 else 0)
+    a = a.filter(ImageFilter.GaussianBlur(1.2))
+    out = Image.new("RGBA", big.size, (*col, 0)); out.putalpha(a)
+    out.alpha_composite(big)
+    return out
+
+
+def _burst(cx, cy, col, n=16, r=1500, a=70, spin=0.0):
+    """raios de "explosão" atrás do bicho, somem para fora"""
+    ss = A.SS(W, H, s=1)
+    for k in range(n):
+        a0 = spin + 2 * math.pi * k / n; a1 = a0 + math.pi / n
+        ss.poly([(cx, cy), (cx + r * math.cos(a0), cy + r * math.sin(a0)), (cx + r * math.cos(a1), cy + r * math.sin(a1))],
+                fill=(*col, 255))
+    rays = ss.get()
+    fall = A.rgrad(900, [(0, (255, 255, 255, a)), (0.45, (255, 255, 255, int(a * 0.8))), (1.0, (255, 255, 255, 0))],
+                   w=W, h=H, cx=cx, cy=cy).split()[3]
+    m = Image.composite(fall, Image.new("L", (W, H), 0), rays.split()[3])
+    rays.putalpha(m)
+    return rays
+
+
+def write_cover(R, path):
+    """capa v2 (21/11): bicho GRANDE recortado (contorno branco) sobre o cenário desfocado + raios + faixa
+    "E SE VOCÊ FOSSE…" + título curto (*destaque* em amarelo) + selo "VOCÊ" + chip do gancho.
+    Precisa de cover_sprite(cv) no módulo da cena (senão cai na capa antiga).
+    script.json -> cover: {t, focus, zoom, at:[x,y] centro do bicho na capa, title:[1-2 linhas], hook:"texto curto",
+    sprite_rot, you:[x,y] para onde a seta do VOCÊ aponta (cabeça), you_side: "left"|"right"}"""
+    from PIL import ImageEnhance
+    S = R.S; cv = S.get("cover", {})
+    if not hasattr(R.mod, "cover_sprite"):
+        return _cover_v1(R, path)
+    acc = tuple(S.get("accent", (230, 60, 80)))
+    fx, fy = cv.get("focus", [W / 2, H * 0.62]); px, py = cv.get("at", [W / 2, 1150]); z = cv.get("zoom", 1.0)
+    if hasattr(R.mod, "cover_bg"):
+        bg = R.mod.cover_bg(cv).convert("RGBA")
+    else:
+        bg = R.frame(int(cv.get("t", 1.0) * FPS), captions=False, overlays=False).convert("RGBA")
+    bg = A.cam(bg, zoom=z, dx=px - fx, dy=py - fy, cx=fx, cy=fy)
+    bg = bg.filter(ImageFilter.GaussianBlur(cv.get("blur", 7)))
+    bg = ImageEnhance.Color(bg.convert("RGB")).enhance(1.35).convert("RGBA")
+    img = bg
+    img.alpha_composite(A.rgrad(700, [(0, (*acc, 120)), (0.6, (*acc, 40)), (1, (*acc, 0))], w=W, h=H, cx=px, cy=py))
+    img.alpha_composite(_burst(px, py, (255, 246, 210), a=cv.get("burst", 80), spin=0.1))
+    img.alpha_composite(A.vgrad(W, H, [(0, (0, 0, 0, 190)), (0.30, (0, 0, 0, 60)), (0.42, (0, 0, 0, 0)),
+                                       (0.86, (0, 0, 0, 0)), (1, (0, 0, 0, 150))]))
+    # o bicho, grande, com contorno branco e sombra
+    sp = R.mod.cover_sprite(cv).convert("RGBA")
+    rot = cv.get("sprite_rot", 0)
+    if rot: sp = sp.rotate(rot, resample=Image.BICUBIC, expand=True)
+    sp = _outlined(sp, cv.get("outline", 16))
+    sh, pad = A.shadow_of(sp, 22, 0.55)
+    A.paste_c(img, sh, px + 16, py + 30)
+    A.paste_c(img, sp, px, py)
+    # selo VOCÊ com seta curta apontando para a cabeça
+    hx, hy = cv.get("you", [px, py - 150]); side = cv.get("you_side", "right")
+    tag = A.sticker("VOCÊ", size=84, fg=(0, 0, 0), bg=YELLOW, pad=(36, 14), radius=26, iw=8)
+    tag = tag.rotate(7 if side == "right" else -7, expand=True, resample=Image.BICUBIC)
+    sgn = 1 if side == "right" else -1
+    tx = int(min(max(hx + sgn * 230, tag.width // 2 + 30), W - tag.width // 2 - 30)); ty = int(hy - 250)
+    ar = A.SS(W, H, s=2)
+    A.arrow(ar, tx - sgn * tag.width * 0.25, ty + tag.height * 0.42, hx + sgn * 30, hy - 40, YELLOW, w=24, iw=6)
+    img.alpha_composite(ar.get())
+    A.paste_c(img, tag, tx, ty)
+    # faixa da série + título
+    band = A.sticker("E SE VOCÊ FOSSE…", size=88, fg=(0, 0, 0), bg=YELLOW, pad=(40, 18), radius=18, iw=8)
+    A.paste_c(img, band.rotate(-2.5, expand=True, resample=Image.BICUBIC), W // 2, 200)
+    d = ImageDraw.Draw(img)
+    lines = cv.get("title", ["?"]); n = max(len(l.replace("*", "")) for l in lines)
+    size = 190 if n <= 10 else 168 if n <= 12 else 148
+    y = 385
+    for ln in lines:
+        _title_rich(d, W / 2, y, ln, size); y += int(size * 1.04)
+    if cv.get("hook"):
+        chip = A.sticker(cv["hook"], size=66, fg=(255, 255, 255), bg=acc, pad=(34, 14), radius=22, iw=8)
+        if chip.width > W - 90:
+            k = (W - 90) / chip.width
+            chip = chip.resize((int(chip.width * k), int(chip.height * k)), Image.LANCZOS)
+        A.paste_c(img, chip.rotate(2.5, expand=True, resample=Image.BICUBIC), W // 2, cv.get("hook_y", 1640))
+    d.text((W / 2, H - 105), "NA PELE DE", font=A.F(50, "mont-Black"), fill=(255, 255, 255), anchor="mm",
+           stroke_width=6, stroke_fill=(0, 0, 0))
+    img.convert("RGB").save(path, quality=92)
+
+
 def write_publish(S, T, ep):
     pub = dict(S.get("publish", {}))
     if not pub: return
     item = dict(key=S["key"], kind="short", video="video.mp4", title=pub["title"], description=pub["description"],
                 tags=pub.get("tags", []), publish_at=pub.get("publish_at"), if_late="public_now", made_for_kids=False,
-                altered_content=True, pinned_comment=pub.get("pinned_comment"))
+                altered_content=True, pinned_comment=pub.get("pinned_comment"), thumbnail="capa.jpg")
     doc = dict(version=1, channel_id=pub.get("channel_id", "UC_CANAL5_PENDENTE"),
                created_at=time.strftime("%Y-%m-%dT%H:%M:%S-03:00"), items=[item])
     json.dump(doc, open(os.path.join(ep, "publish.draft.json"), "w", encoding="utf-8"), ensure_ascii=False, indent=1)

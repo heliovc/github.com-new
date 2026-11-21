@@ -298,20 +298,27 @@
  },
  "cover": {
   "t": 0.4,
-  "title": [
-   "UMA FORMIGA",
-   "NO 30º ANDAR?"
-  ],
   "focus": [
    540,
-   950
+   1000
   ],
-  "zoom": 1.6,
-  "r": 310,
+  "zoom": 1.25,
   "at": [
-   520,
-   1280
-  ]
+   540,
+   1150
+  ],
+  "title": [
+   "*UMA FORMIGA*",
+   "NO 30º ANDAR?"
+  ],
+  "hook": "QUEDA DE 90 METROS",
+  "sprite_s": 400,
+  "sprite_rot": 8,
+  "you": [
+   800,
+   1000
+  ],
+  "you_side": "right"
  },
  "publish": {
   "title": "E se você fosse uma formiga caindo do 30º andar? #shorts",

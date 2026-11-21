@@ -22,7 +22,8 @@
    "if_late": "public_now",
    "made_for_kids": false,
    "altered_content": true,
-   "pinned_comment": "Qual animal você quer ser no próximo vídeo?"
+   "pinned_comment": "Qual animal você quer ser no próximo vídeo?",
+   "thumbnail": "capa.jpg"
   }
  ]
 }

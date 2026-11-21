@@ -7,7 +7,10 @@ Ler antes de cada vídeo (plano.md, seção 8). Atualizar depois de produzir e 4
 - Instagram / TikTok: **pendente (Hélio criar)**; depois, ligar no Buffer.
 - Piloto (Dia 1 A e B): aprovado pelo Hélio em 20/11/2026. O robô agendou para 21/11, mas o Hélio pediu para sair no mesmo dia: formiga pública em 20/11 22:00 e lagartixa às 23:00 (ajuste manual no Studio; o robô não reagenda vídeo já enviado).
 - Rotina diária na nuvem: LIGADA em 20/11/2026 (OK do Hélio), prompt em `rotina.md`, 06:30 Brasília, até 2 dias adiantado. Dia 2 = 21/11.
-- Pendente: longo semanal de domingo (compilação) ainda não implementado; Instagram/TikTok no Buffer.
+- **Semana-tipo v2 (21/11, pedido do Hélio):** Shorts todo dia · longo ORIGINAL quarta 11:00 (1º 02/12) · longo COMPILAÇÃO domingo 11:00 (1º 29/11). Teste de duração A curto × B atual nos Dias 2–5 (plano.md seção 3).
+- **Telefone do canal:** NÃO verificado (21/11). Bloqueia miniatura personalizada (Shorts e longos) e comentário fixado; o robô tenta de novo a cada 6 h e resolve sozinho quando o Hélio verificar.
+- Replicação: Facebook (Página "Napeledebicho") via Buffer — aguardando o Hélio conectar a Página. TikTok @napeledebicho bloqueado (recurso em análise desde 20/11). Instagram: não existe.
+- Pendente: ferramenta da compilação (`pipeline/compilacao.py`) e modo horizontal do motor para o longo original.
 
 ## Animais e temas usados
 | Dia | Vídeo | Animal | Grupo | Tipo | Gancho | Tema | Paleta | Abertura | Visão do Bicho | Duração | Palavras | Status |
@@ -30,8 +33,14 @@ Metas: continuaram assistindo ≥ 70% · % visualizada ≥ 80%.
 
 | Vídeo | Publicado em | Link | Continuaram assistindo | % visualizada | Views 48 h | Inscritos / 1.000 views |
 |---|---|---|---|---|---|---|
-| 1A formiga | 20/11 22:00 | https://youtube.com/shorts/Wcw5EPuTlpg | — | — (parcial ~11 h: 62,6%) | — (parcial ~11 h: 1.169) | — (parcial: 1 inscrito) |
-| 1B lagartixa | 20/11 23:00 | https://youtube.com/shorts/v88xGAAAzmw | — | — (parcial ~11 h: 43,5%) | — (parcial ~11 h: 1.147) | — (parcial: 0) |
+| 1A formiga | 20/11 22:00 | https://youtube.com/shorts/Wcw5EPuTlpg | 54% (21/11 06h) | ~35% (~17 s de 48 s) · Studio ~11 h: 62,6% | 1.167 (8 h) · 22 likes | +1 inscrito |
+| 1B lagartixa | 20/11 23:00 | https://youtube.com/shorts/v88xGAAAzmw | 68% (21/11 06h) | ~30% (~14 s de 46 s) · Studio ~11 h: 43,5% | 1.148 (7 h) · 21 likes | — |
+
+Leitura do Dia 1 (21/11): o YouTube mostrou cada um a ~1,1 mil pessoas e parou de distribuir (1–2 views/h). O gancho funciona; as pessoas saem no meio → teste de duração nos Dias 2–5.
+
+## Longos
+| Data | Tipo | Título | Duração | Shorts incluídos / tema | Link | CTR | Status |
+|---|---|---|---|---|---|---|---|
 
 ## Decisões e desvios do plano
 - **20/11 — Visão do Bicho da lagartixa:** o roteiro pedia visão térmica, mas lagartixa não enxerga calor (quem enxerga é cobra, Dia 11A). Trocado pelo sentido real: enxergar cores no escuro (Roth & Kelber 2004). A cena de calor continua como raio-X explicativo.
@@ -43,6 +52,7 @@ Metas: continuaram assistindo ≥ 70% · % visualizada ≥ 80%.
 - 20/11: a rede da nuvem bloqueia o servidor da voz (speech.platform.bing.com, 403 no proxy). A rotina só produz depois que o domínio for liberado no ambiente.
 - 21/11 — **Capa nova** (pedido do Hélio): faixa amarela "E SE VOCÊ FOSSE…" maior, título, bicho ampliado dentro de um anel amarelo com o selo "VOCÊ" e seta (a ideia da série: você = o bicho), "NA PELE DE" no rodapé; o "º" agora sai certo. Campos novos em `cover`: `focus`, `zoom`, `at`, `r`. Capas do Dia 1 refeitas. Obs.: o YouTube não usa capa enviada em Shorts; ela vale para Instagram/TikTok, longo semanal e escolha manual no app.
 - 21/11 — Rotina das 06:30 não produziu o Dia 2: a voz continua bloqueada na rede da nuvem (403 em speech.platform.bing.com). Dia 2 (mosquito + barata) fica para a próxima rodada depois da liberação.
-
-- 22/11 — Rotina das 06:30 de novo sem produzir o Dia 2 (mosquito + barata): a voz não respondeu em 2 tentativas (DNS direto falha; pelo proxy, "No server date in headers" = bloqueio de speech.platform.bing.com). Métricas de 48 h ainda não disponíveis (último arquivo de métricas é de 21/11, ~11 h após publicar; valores parciais anotados). Facebook ainda não conectado no Buffer; TikTok aparece desconectado no Buffer. Limpeza: video.mp4 e capa.jpg do Dia 1 removidos (continuam no histórico do git).
-- 22/11 — O arquivo `rotina.md` do repositório ainda é a versão antiga (2 vídeos/dia); a versão com semana-tipo (Shorts diários, longo na quarta, compilação no domingo, Facebook) não está no repositório.
+- 21/11 — **Capa v2** (Hélio pediu capa mais atraente e ligada ao "E se você fosse…"): bicho GRANDE recortado com contorno branco sobre o cenário desfocado + raios de luz, faixa "E SE VOCÊ FOSSE…", título curto com o bicho em amarelo, selo VOCÊ apontando para a cabeça e chip do gancho. Corrigido: Shorts ACEITAM miniatura enviada no Studio, mas só com o canal verificado por telefone. O robô agora sobe `capa.jpg` sozinho depois do envio e fica tentando a cada 6 h até a verificação.
+- 21/11 — **Rotina v2** (documento do Hélio): teste de duração A curto × B atual, longo original na quarta, compilação no domingo, Facebook via Buffer, TikTok bloqueado.
+- 22/11 — Rotina das 06:30 de novo sem produzir o Dia 2 (mosquito + barata): a voz não respondeu em 2 tentativas (bloqueio de speech.platform.bing.com). Facebook ainda não conectado no Buffer; TikTok aparece desconectado no Buffer. A limpeza do Dia 1 feita por essa rodada foi desfeita: pela rotina v2, video.mp4 e capa.jpg ficam até entrarem na compilação de domingo (e a capa é a miniatura que o robô vai subir).
+- 22/11 — Hélio liberou speech.platform.bing.com no ambiente da nuvem; rotina v2 enviada ao repositório e rodada fora de hora para fazer o Dia 2 (23/11).

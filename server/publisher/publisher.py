@@ -20,6 +20,7 @@ import json
 import logging
 import os
 import re
+import shutil
 import subprocess
 import sys
 import tempfile
@@ -180,7 +181,9 @@ def joined_video(item) -> tuple[Path, bool]:
 
 
 # ------------------------------------------------- tarefas pós-publicação
-POST_MAX_AGE = timedelta(days=7)   # vínculo/comentário só para vídeos recentes
+POST_MAX_AGE = timedelta(days=7)   # vínculo só para vídeos recentes
+POST_MAX_AGE_LONG = timedelta(days=30)  # comentário fixado e miniatura podem esperar a verificação do canal
+VERIFY_RETRY = timedelta(hours=6)   # canal sem telefone verificado: tenta de novo depois, sem gastar tentativa
 PUBLIC_MARGIN = timedelta(minutes=5)
 
 
@@ -208,6 +211,16 @@ def remember(state: dict, it) -> None:
         rec["related_key"] = it.related_key
     if it.pinned_comment:
         rec["pinned_comment"] = it.pinned_comment
+    if it.kind == "short" and it.thumbnail:
+        # Short: a capa sobe depois, na página de edição. Guarda uma cópia aqui porque a pasta do episódio
+        # é limpa no repositório e a miniatura pode esperar a verificação do canal.
+        src = it.path(it.thumbnail)
+        dst = STATE_DIR / "thumbs" / f"{it.key}{src.suffix.lower()}"
+        if src.exists() and (not dst.exists() or dst.stat().st_size != src.stat().st_size) and not rec.get("thumb_done"):
+            dst.parent.mkdir(parents=True, exist_ok=True)
+            shutil.copyfile(src, dst)
+        if dst.exists():
+            rec["thumb_path"] = str(dst)
 
 
 def _dt(value: str | None) -> datetime | None:
@@ -223,22 +236,32 @@ def is_public(rec: dict, now) -> bool:
 
 
 def post_tasks(state: dict, now) -> list[tuple[str, str]]:
-    """(tipo, key) para fazer agora: 'related' (Short → longo) e 'comment' (comentário fixado)."""
+    """(tipo, key) para fazer agora: 'related' (Short → longo), 'comment' (comentário fixado) e
+    'thumb' (capa de Short, que só sobe depois do envio)."""
     out = []
+
+    def waiting(rec, field):
+        t = _dt(rec.get(f"{field}_retry_after"))
+        return t is not None and now < t
+
     for key, rec in state.items():
-        if rec.get("status") != "published" or not video_id(rec.get("url")):
+        if not isinstance(rec, dict) or rec.get("status") != "published" or not video_id(rec.get("url")):
             continue
         at = _dt(rec.get("publish_at")) or _dt(rec.get("at"))
-        if at and now - at > POST_MAX_AGE:
+        age = (now - at) if at else timedelta(0)
+        if age > POST_MAX_AGE_LONG:
             continue
         rk = rec.get("related_key")
-        if rk and not rec.get("related_done") and rec.get("related_attempts", 0) < 3:
+        if rk and age <= POST_MAX_AGE and not rec.get("related_done") and rec.get("related_attempts", 0) < 3:
             target = state.get(rk) or {}
             if target.get("status") == "published" and video_id(target.get("url")) and is_public(target, now):
                 out.append(("related", key))
         if rec.get("pinned_comment") and not rec.get("comment_done") and rec.get("comment_attempts", 0) < 3 \
-                and is_public(rec, now):
+                and is_public(rec, now) and not waiting(rec, "comment"):
             out.append(("comment", key))
+        if rec.get("thumb_path") and not rec.get("thumb_done") and rec.get("thumb_attempts", 0) < 3 \
+                and Path(rec["thumb_path"]).exists() and not waiting(rec, "thumb"):
+            out.append(("thumb", key))
     return out
 
 
@@ -248,6 +271,8 @@ def run_post_task(st, state: dict, kind: str, key: str) -> str:
     if kind == "related":
         target = state[rec["related_key"]]
         return st.set_related_video(video_id(rec["url"]), video_id(target["url"]), target.get("title", ""))
+    if kind == "thumb":
+        return st.set_thumbnail(video_id(rec["url"]), rec["thumb_path"])
     return st.post_pinned_comment(video_id(rec["url"]), rec["pinned_comment"], channel_name(rec["channel_id"]))
 
 
@@ -268,7 +293,7 @@ def cmd_plan(_args):
 def cmd_run(args):
     git_pull()
     # importa DEPOIS do pull: senão a rodada usa o studio.py antigo (visto em 09/11)
-    from studio import LoginNeeded, Studio, StudioError, open_browser  # noqa: F401
+    from studio import LoginNeeded, NeedsVerification, Studio, StudioError, open_browser  # noqa: F401
     items, errors = mf.discover(REPO)
     for e in errors:
         log.error(e)
@@ -337,16 +362,23 @@ def cmd_run(args):
         # vínculo do Short ao longo e comentário fixado: só quando o vídeo já está público
         for kind, key in post_tasks(state, mf.now_sp()):
             rec = state[key]
-            field = "related" if kind == "related" else "comment"
+            field = kind
             rec[f"{field}_attempts"] = rec.get(f"{field}_attempts", 0) + 1
             try:
                 result = run_post_task(st, state, kind, key)
                 rec[f"{field}_done"] = mf.now_sp().isoformat()
                 rec.pop(f"{field}_error", None)
+                rec.pop(f"{field}_retry_after", None)
                 published.append(f"{key}: {field} {result}")
                 log.info("%s %s: %s", field.upper(), key, result)
             except LoginNeeded:
                 raise
+            except NeedsVerification as e:  # não é falha: espera o telefone do canal ser verificado
+                rec[f"{field}_attempts"] -= 1
+                rec[f"{field}_error"] = str(e)[:250]
+                rec[f"{field}_retry_after"] = (mf.now_sp() + VERIFY_RETRY).isoformat()
+                log.info("%s %s: aguardando verificação do canal (%s)", field.upper(), key, e)
+                st.close_popups()
             except Exception as e:  # noqa: BLE001
                 shot = st.shot(f"erro-{field}-{key}")
                 rec[f"{field}_error"] = f"{str(e)[:250]} ({shot.name})"

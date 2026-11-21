@@ -782,3 +782,23 @@ def walk(ctx, lt):
         A.paste(out, img, 0, u * H); A.paste(out, top, 0, -(1 - u) * H)
         return motion_blur_v(out, 160 * math.sin(math.pi * u))
     return img
+
+
+# ======================================================================= capa (engine.write_cover v2)
+def cover_bg(cv):
+    """cenário do gancho (parapeito do 30º andar) sem a formiga"""
+    return ledge_frame(cv.get("t", 0.4), show_ant=False)
+
+
+def cover_sprite(cv):
+    """formiga da capa com olho maior e brilhante (mais expressiva no tamanho de miniatura)"""
+    s = cv.get("sprite_s", 400)
+    sp = ant_sprite(s, 0.0, "walk", phase=0.6, t=0.3)
+    half = sp.width / 2
+    ss = SS(sp.width, sp.height, s=2)
+    ex, ey, r = half + 0.635 * s, half - 0.155 * s, 0.125 * s
+    ss.circle(ex, ey, r, fill=(22, 14, 20), ink=INK, w=max(2, s * 0.012))
+    ss.circle(ex - r * 0.32, ey - r * 0.36, r * 0.36, fill=(255, 255, 255, 240))
+    ss.circle(ex + r * 0.34, ey + r * 0.3, r * 0.14, fill=(255, 255, 255, 190))
+    sp.alpha_composite(ss.get())
+    return sp

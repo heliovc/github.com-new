@@ -744,3 +744,18 @@ def icecream(ctx, lt):
     if w > 120: ss.rrect(240 + w - 50, 420, 240 + w - 30, 600, 8, fill=(160, 170, 186), ink=INK, w=3)
     img.alpha_composite(ss.get())
     return A.cam(img, zoom=1.0 + 0.05 * easeio(lt / max(0.5, tpay)))
+
+
+# ======================================================================= capa (engine.write_cover v2)
+def cover_bg(cv):
+    """atrás da geladeira (grade quente) sem a lagartixa"""
+    img = shimmer(behind_bg().copy(), 0.6, 3.0)
+    motes(img, 0.6)
+    return img
+
+
+def cover_sprite(cv):
+    s = cv.get("sprite_s", 330)
+    ss = SS(int(3.4 * s), int(1.0 * s), s=2)
+    gecko(ss, 1.30 * s, 0.42 * s, s, flip=-1, t=0.4, tail_amp=0.6)
+    return ss.get()
