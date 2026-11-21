@@ -2168,5 +2168,20 @@
   "pinned_comment": "Você já precisou reclamar do seu banco no Banco Central? Resolveu? Vídeo completo: Golpe do Pix: para onde vai o seu dinheiro em segundos (e quem tem que devolver)",
   "related_attempts": 1,
   "related_done": "2026-11-21T07:27:13.062567-03:00"
+ },
+ "quiet-ep11-long": {
+  "attempts": 1,
+  "status": "published",
+  "url": "https://youtu.be/ADGbmYU9-TY",
+  "by": "robo",
+  "visibility": "schedule",
+  "when": "2026-11-21T22:15:00-03:00",
+  "at": "2026-11-21T09:45:35.325267-03:00",
+  "error": null,
+  "channel_id": "UCNrw11y7QKt0fWCrJ84QZ-g",
+  "title": "Fall Asleep in Foggy Victorian London | Gaslight Sleep Story (47 Min)",
+  "kind": "long",
+  "publish_at": "2026-11-21T22:15:00-03:00",
+  "pinned_comment": "Which stop on the walk home would you linger at tonight: the river wall, the chestnut brazier or the parlour fire?"
  }
 }
