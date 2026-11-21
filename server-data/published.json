@@ -2084,14 +2084,15 @@
   "status": "published",
   "url": "https://youtube.com/shorts/v88xGAAAzmw",
   "by": "robo",
-  "visibility": "schedule",
-  "when": "2026-11-21T19:45:00-03:00",
+  "visibility": "public",
+  "when": "2026-11-20T22:58:04.316505-03:00",
   "at": "2026-11-20T19:58:33.811302-03:00",
   "error": null,
   "channel_id": "UCO5Fa5_HJxd-aeTiyQcw0Sw",
   "title": "E se você fosse uma lagartixa atrás da geladeira? #shorts",
   "kind": "short",
-  "publish_at": "2026-11-21T19:45:00-03:00",
-  "pinned_comment": "Qual eletrodoméstico a gente desmonta no próximo? 👇"
+  "publish_at": "2026-11-20T22:58:04.316505-03:00",
+  "pinned_comment": "Qual eletrodoméstico a gente desmonta no próximo? 👇",
+  "note": "público em 20/11 (ajuste manual)"
  }
 }
