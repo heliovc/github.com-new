@@ -58,6 +58,17 @@ Scene types: city, road, temple, interior, sea, hills, cloister (EP02), nile (EP
   with painted flowers, window embrasure with benches, curtained tester bed with fur coverlet and truckle bed, candle niche,
   hooded fireplace, chest, little dog and a woven garden cloth swaying (_hanging); new "thistledown" particles; palette
   keys "stone" and "banner").
+  fogstreet / embankment / cabstand / parlour (EP11 Victorian London in the Fog: starless fog sky (_fogback), layers pushed
+  back into the fog by colour (_fogtint), slow fog banks swaying at several heights (_mkbanks), gaslight as great soft
+  halos with a bright core (_halos) on cast-iron lamp posts (_gaspost); a terrace of sooty brick houses with sash windows,
+  fanlights, steps, area railings, smoking chimney stacks, pillar box and a mottled plane tree, the lamplighter walking with
+  his pole and its bobbing flame (_lighter/_man); the river wall in perspective with dolphin lamp standards fading into the
+  fog, Cleopatra's Needle, the clock tower with its lit dial, a railway bridge, landward trees and windows, a steam tug with
+  lit wheelhouse and trailing smoke (_tug); a cab rank with the green cabmen's shelter, a hansom with its lamps and the
+  driver up behind, the horse in a rug nodding at its nosebag and breathing steam, a chestnut brazier glowing (_hansom);
+  a gaslit parlour with coal fire, overmantel mirror, glass-domed clock, china dogs, a wall clock with swinging pendulum,
+  kettle steam on the hob (_pendulum), lace curtains and the fog outside; new "drizzle" particles; palette keys "fog",
+  "gas" and "brick").
 Compilations: comp01.py (COMP01 = EP01-EP03 re-rendered via comp01_pNN.py wrappers) adds "candle haze" text cards that
   dissolve into the next part's first scene, one long ambient tail at the end, one loudness pass; thumb_comp.py = 3-scene
   blended thumbnail.
@@ -276,6 +287,7 @@ class Scene:
         self.owl, self.incense, self.lamps, self.eyes, self.glints = None, None, [], [], []
         self.chochin, self.yakata, self.willow, self.steam, self.pipe = [], None, None, None, None
         self.banners, self.oven, self.walker, self.sentry, self.hanging = [], None, None, None, None
+        self.halos, self.banks, self.lighter, self.tug, self.hansom, self.pend, self.kettle, self.brazier = [], [], None, None, None, None, None, None
         getattr(self, "build_" + kind)()
         self.prepare()
 
@@ -2424,7 +2436,7 @@ class Scene:
         vig = np.clip(1 - (r - 0.55) * 0.75, 0.35, 1)
         self.vig = Image.fromarray((vig * 255).astype(np.uint8), "L")
         rng = np.random.default_rng(7)
-        n = {"embers": 26, "fireflies": 22, "dust": 34, "snow": 90, "sand": 70, "mist": 16, "spray": 40, "moths": 14, "leaves": 16, "thistledown": 18}[self.particles]
+        n = {"embers": 26, "fireflies": 22, "dust": 34, "snow": 90, "sand": 70, "mist": 16, "spray": 40, "moths": 14, "leaves": 16, "thistledown": 18, "drizzle": 110}[self.particles]
         self.parts = [(rng.uniform(0, W), rng.uniform(0, H), rng.uniform(0, TAU), int(rng.integers(1, 3)), rng.uniform(0.4, 1.0)) for _ in range(n)]
         self.glow_sm = self._glow(16); self.glow_lg = self._glow(90)
         self.moth_c = [(x, y) for x, y, _ in self.lamps] + ([self.lamp] if self.lamp else [])
@@ -2889,6 +2901,491 @@ class Scene:
         for u, v in ((0.3, 0.2), (0.66, 0.16), (0.4, 0.92), (0.75, 0.9)):
             bx, by = M(u, v); d.ellipse([bx - 5, by - 4, bx + 5, by + 4], fill=mix(cl, (230, 220, 200), 0.5) + (255,))
 
+    # ------------------------------------------------------------ EP11 Victorian London in the fog
+    def _fogback(self, hy, glow=(0.7, 0.2)):
+        """Starless sky of a London fog: sooty brown above, thick yellow fog low down, the moon only a faint smudge."""
+        p = self.p; y = np.arange(H, dtype=np.float32)[:, None]
+        top, mid, fo = (np.array(p[k], np.float32) for k in ("sky_top", "sky_mid", "fog"))
+        t1 = np.clip(y / (hy * 0.7), 0, 1); t2 = np.clip((y - hy * 0.45) / (hy * 0.55), 0, 1) ** 1.25
+        c = top * (1 - t1) + mid * t1; c = c * (1 - t2) + fo * 0.82 * t2
+        c = np.repeat(c[:, None, :], W, axis=1) + radial_glow(glow[0] * W, glow[1] * H, 260, p["moon"], 0.10)
+        self.moon = (glow[0] * W, glow[1] * H, 0)
+        return Image.fromarray(np.clip(c, 0, 255).astype(np.uint8)).convert("RGBA")
+
+    def _fogtint(self, lay, a_top, a_bot, y0, y1):
+        """Push a drawn layer back into the fog: blend its colours (not its alpha) towards the fog colour by height."""
+        arr = np.array(lay).astype(np.float32); ys = np.arange(H, dtype=np.float32)[:, None, None]
+        a = a_top + (a_bot - a_top) * np.clip((ys - y0) / max(1, y1 - y0), 0, 1)
+        arr[..., :3] = arr[..., :3] * (1 - a) + np.array(self.p["fog"], np.float32) * a
+        return Image.fromarray(arr.astype(np.uint8), "RGBA")
+
+    def _mkbanks(self, specs):
+        """Slow fog banks: soft horizontal textures that sway to and fro (periodic in LOOP_S) at different heights."""
+        p = self.p; xs = np.arange(2 * W, dtype=np.float32)
+        for yc, hh, a, amp in specs:
+            n = sum(np.sin(TAU * m * xs / (2 * W) + self.rng.uniform(0, TAU)) / m ** 0.7 for m in (2, 3, 5, 7, 11, 17))
+            n = np.clip(0.55 + 0.3 * n, 0, 1); y0 = int(max(0, yc - 2.2 * hh)); y1 = int(min(H, yc + 2.2 * hh))
+            ys = np.arange(y0, y1, dtype=np.float32)[:, None]
+            al = np.exp(-((ys - yc) / hh) ** 2) * n[None, :] * a * 255
+            tex = np.zeros((y1 - y0, 2 * W, 4), np.uint8); tex[..., :3] = mix(p["fog"], p["moon"], 0.25); tex[..., 3] = al.astype(np.uint8)
+            self.banks.append((Image.fromarray(tex, "RGBA"), y0, amp, self.rng.uniform(0, TAU)))
+
+    def _gaspost(self, d, x, base, h, col, s=1.0, dolphin=False):
+        """Cast-iron gas lamp post with ladder bar and a square lantern; dolphin=True gives the river-wall standard with
+        two fish curled round the foot. Returns the flame point."""
+        glass = mix(self.p["gas"], col, 0.3); c = col + (255,); top = base - h
+        if dolphin:
+            d.rectangle([x - 22 * s, base - 30 * s, x + 22 * s, base], fill=c)
+            for sx in (-1, 1):                                                                # the two curled fish
+                d.ellipse([x + sx * 9 * s - 9 * s, base - 112 * s, x + sx * 9 * s + 9 * s, base - 30 * s], fill=c)
+                d.arc([x + sx * 22 * s - 16 * s, base - 140 * s, x + sx * 22 * s + 16 * s, base - 104 * s], 90 if sx < 0 else -90, 270 if sx < 0 else 90, fill=c, width=max(2, int(6 * s)))
+                d.polygon([(x + sx * 22 * s, base - 140 * s), (x + sx * 34 * s, base - 154 * s), (x + sx * 30 * s, base - 134 * s)], fill=c)
+            col0 = base - 110 * s
+        else:
+            d.rectangle([x - 15 * s, base - 46 * s, x + 15 * s, base], fill=c); col0 = base - 46 * s
+        d.polygon([(x - 9 * s, col0), (x + 9 * s, col0), (x + 6 * s, top + 44 * s), (x - 6 * s, top + 44 * s)], fill=c)
+        d.rectangle([x - 26 * s, top + 52 * s, x + 26 * s, top + 58 * s], fill=c)                   # ladder bar
+        d.polygon([(x - 7 * s, top + 44 * s), (x + 7 * s, top + 44 * s), (x + 12 * s, top + 28 * s), (x - 12 * s, top + 28 * s)], fill=c)
+        d.polygon([(x - 13 * s, top + 28 * s), (x + 13 * s, top + 28 * s), (x + 21 * s, top - 22 * s), (x - 21 * s, top - 22 * s)], fill=glass + (255,))
+        for u in (-1, 0, 1): d.line([(x + u * 13 * s, top + 28 * s), (x + u * 21 * s, top - 22 * s)], fill=c, width=max(1, int(3 * s)))
+        d.polygon([(x - 25 * s, top - 22 * s), (x + 25 * s, top - 22 * s), (x, top - 44 * s)], fill=c)
+        d.ellipse([x - 4 * s, top - 54 * s, x + 4 * s, top - 42 * s], fill=c)
+        return (x, top + 4 * s)
+
+    def _halos(self, img, ph):
+        """EP11: gaslight in fog - each lamp a great soft halo (cached sprite) with a small breathing bright core."""
+        if not hasattr(self, "_hcache"):
+            self._hcache = [(self.tint(self.glow_lg.resize((int(R * 2), int(R * 2))), self.p["gas"], 0.40 * st),
+                             self.tint(self.glow_lg.resize((int(R * 0.7), int(R * 0.7))), mix(self.p["gas"], (255, 245, 220), 0.4), 0.55 * st)) for x, y, R, st in self.halos]
+        for (x, y, R, st), (spr, core) in zip(self.halos, self._hcache):
+            img.alpha_composite(spr, (int(x - R), int(y - R))); img.alpha_composite(core, (int(x - R * 0.35), int(y - R * 0.35)))
+        d = ImageDraw.Draw(img)
+        for i, (x, y, R, st) in enumerate(self.halos):
+            br = 0.85 + 0.15 * math.sin(ph * 3 + i * 1.7); r = max(2.0, R * 0.035) * br
+            d.ellipse([x - r, y - r * 1.3, x + r, y + r * 0.6], fill=mix(self.p["gas"], (255, 250, 230), 0.5 * st) + (int(220 * st),))
+
+    def _man(self, img, x, y, h, step, hat="cap", pole=False, ph=0.0):
+        """A walking man in a long coat (cap, top hat or police helmet); pole=True = the lamplighter's pole with its flame."""
+        c = (16, 15, 15, 255); d = ImageDraw.Draw(img); sw = math.sin(step) * 0.07 * h
+        d.line([(x - 0.03 * h, y - 0.36 * h), (x - 0.03 * h + sw, y)], fill=c, width=max(3, int(h / 22)))
+        d.line([(x + 0.03 * h, y - 0.36 * h), (x + 0.03 * h - sw, y)], fill=c, width=max(3, int(h / 22)))
+        d.polygon([(x - 0.13 * h, y - 0.3 * h), (x + 0.13 * h, y - 0.3 * h), (x + 0.09 * h, y - 0.8 * h), (x - 0.09 * h, y - 0.8 * h)], fill=c)
+        d.ellipse([x - 0.065 * h, y - 0.95 * h, x + 0.065 * h, y - 0.8 * h], fill=c)
+        if hat == "cap": d.rectangle([x - 0.07 * h, y - 0.96 * h, x + 0.07 * h, y - 0.91 * h], fill=c); d.rectangle([x, y - 0.93 * h, x + 0.11 * h, y - 0.91 * h], fill=c)
+        elif hat == "top": d.rectangle([x - 0.055 * h, y - 1.08 * h, x + 0.055 * h, y - 0.92 * h], fill=c); d.rectangle([x - 0.09 * h, y - 0.93 * h, x + 0.09 * h, y - 0.91 * h], fill=c)
+        elif hat == "helmet": d.chord([x - 0.07 * h, y - 1.1 * h, x + 0.07 * h, y - 0.86 * h], 180, 360, fill=c); d.rectangle([x - 0.07 * h, y - 0.98 * h, x + 0.07 * h, y - 0.9 * h], fill=c)
+        if pole:
+            hx, hy_ = x + 0.1 * h, y - 0.55 * h; bob = 0.02 * h * math.sin(step); tx, ty = x + 0.42 * h, y - 1.55 * h + bob
+            d.line([(x - 0.05 * h, y - 0.42 * h), (tx, ty)], fill=c, width=max(2, int(h / 60)))
+            d.line([(x + 0.08 * h, y - 0.72 * h), (hx, hy_)], fill=c, width=max(3, int(h / 26)))
+            fl = 0.8 + 0.2 * math.sin(ph * 9); R = int(h * 0.35)
+            img.alpha_composite(self.tint(self.glow_sm.resize((R * 2, R * 2)), self.p["gas"], 0.55 * fl), (int(tx - R), int(ty - R)))
+            d = ImageDraw.Draw(img); d.ellipse([tx - 3, ty - 7 * fl, tx + 3, ty + 2], fill=(255, 232, 170, 255))
+
+    def _lighter(self, img, t, ph):
+        """EP11: the lamplighter walking along the pavement once per loop, pole on his shoulder, little flame bobbing."""
+        L = self.lighter; u = t / LOOP_S; x = -300 + (W + 600) * u; y = L["y"] - 3 * abs(math.sin(ph * 13))
+        self._man(img, x, y, L["h"], ph * 13, "cap", True, ph)
+
+    def build_fogstreet(self):
+        """A terrace of sooty brick houses in thick fog: sash windows (some lit, blinds half down), fanlights over the doors,
+        steps, area railings, chimney stacks smoking, the far roofs and a spire almost gone; gas lamps at the kerb making
+        great halos, a pillar box, a plane tree with mottled bark; the lamplighter walks the pavement with his pole."""
+        p, rng = self.p, self.rng; r2 = random.Random(int(rng.integers(1e6))); fg = p["fog"]
+        gy = int(H * 0.68); kb = gy + 112
+        self.back = self._fogback(int(H * 0.6), (0.78, 0.14)); bd = ImageDraw.Draw(self.back)
+        for y0, fade in ((gy - 520, 0.8), (gy - 450, 0.66)):                                  # far roofs, chimneys, spire
+            col = mix(p["mid"], fg, fade); x = -40
+            if fade > 0.7:
+                sx = W * 0.36; bd.rectangle([sx - 34, y0 - 150, sx + 34, gy], fill=col + (255,)); bd.polygon([(sx - 34, y0 - 150), (sx + 34, y0 - 150), (sx, y0 - 390)], fill=col + (255,))
+            while x < W + 40:
+                w = r2.uniform(140, 280); hh = r2.uniform(0, 70); bd.rectangle([x, y0 - hh, x + w, gy], fill=col + (255,))
+                for _ in range(r2.randint(1, 2)):
+                    cx = x + r2.uniform(10, w - 50); bd.rectangle([cx, y0 - hh - 56, cx + 40, y0 - hh], fill=col + (255,))
+                    for k in range(3): bd.rectangle([cx + 4 + k * 12, y0 - hh - 72, cx + 11 + k * 12, y0 - hh - 56], fill=col + (255,))
+                if fade < 0.7 and r2.random() < 0.5:
+                    bd.rectangle([x + w * 0.4, y0 - hh + 60, x + w * 0.4 + 26, y0 - hh + 100], fill=mix(col, p["gas"], 0.22) + (255,))
+                x += w
+        mid = Image.new("RGBA", (W, H), (0, 0, 0, 0)); d = ImageDraw.Draw(mid)
+        top = gy - 650; brc = mix(p["brick"], fg, 0.3); dark = mix(brc, (0, 0, 0), 0.45); stuc = mix(fg, (214, 204, 182), 0.25)
+        d.rectangle([0, top, W, gy], fill=brc + (255,))
+        for y in range(top + 8, gy, 9): d.line([(0, y), (W, y)], fill=mix(brc, (0, 0, 0), 0.14) + (255,))
+        d.rectangle([0, top - 34, W, top], fill=mix(brc, fg, 0.08) + (255,)); d.rectangle([0, top - 4, W, top + 10], fill=stuc + (255,))
+        hw = 410; x0 = -150
+        def window(x, y, w, h, lit):
+            d.rectangle([x - 6, y - 8, x + w + 6, y], fill=stuc + (255,)); d.rectangle([x - 8, y + h, x + w + 8, y + h + 8], fill=stuc + (255,))
+            if lit:
+                d.rectangle([x, y, x + w, y + h], fill=mix(p["light"], brc, 0.3) + (255,))
+                bl = y + h * r2.uniform(0.25, 0.55); d.rectangle([x, y, x + w, bl], fill=mix(p["light"], brc, 0.62) + (255,))
+                gc = mix(p["light"], (0, 0, 0), 0.55)
+            else:
+                d.rectangle([x, y, x + w, y + h], fill=mix(dark, (0, 0, 0), 0.35) + (255,)); gc = mix(dark, fg, 0.25)
+            d.line([(x, y + h / 2), (x + w, y + h / 2)], fill=gc + (255,), width=4); d.line([(x + w / 2, y), (x + w / 2, y + h)], fill=gc + (255,), width=2)
+            for k in (1, 2): d.line([(x, y + h * k / 4 + (h / 4 if k == 2 else 0)), (x + w, y + h * k / 4 + (h / 4 if k == 2 else 0))], fill=gc + (255,), width=1)
+        for i in range(6):
+            hx = x0 + i * hw
+            d.line([(hx, top - 34), (hx, gy)], fill=dark + (255,), width=3)
+            d.rectangle([hx - 50, top - 140, hx + 50, top - 34], fill=mix(brc, fg, 0.12) + (255,))   # chimney stack on the party wall
+            for k in range(4):
+                px = hx - 42 + k * 23; d.rectangle([px, top - 172, px + 14, top - 140], fill=mix(brc, (60, 40, 30), 0.3) + (255,)); d.rectangle([px - 2, top - 176, px + 16, top - 170], fill=mix(brc, (60, 40, 30), 0.3) + (255,))
+            if i == 3: self.smoke = (hx - 12, top - 180, 300)
+            dx = hx + 40                                                                      # door, fanlight, steps
+            d.rectangle([dx - 14, gy - 300, dx + 104, gy - 64], fill=stuc + (255,))
+            d.rectangle([dx, gy - 250, dx + 90, gy - 64], fill=mix((24, 28, 30), fg, 0.15) + (255,))
+            for k in range(2): d.rectangle([dx + 8 + k * 42, gy - 236, dx + 40 + k * 42, gy - 150], outline=mix((24, 28, 30), fg, 0.35) + (255,), width=2)
+            fl = 0.2 + 0.4 * r2.random(); d.pieslice([dx, gy - 296, dx + 90, gy - 206], 180, 360, fill=mix(p["gas"], dark, 1 - fl) + (255,))
+            for a in range(0, 181, 30): d.line([(dx + 45, gy - 251), (dx + 45 - 45 * math.cos(math.radians(a)), gy - 251 - 45 * math.sin(math.radians(a)))], fill=dark + (255,), width=2)
+            d.ellipse([dx + 70, gy - 160, dx + 78, gy - 152], fill=mix(p["gas"], dark, 0.4) + (255,))
+            for k in range(4): d.rectangle([dx - 20 - k * 8, gy - 64 + k * 22, dx + 110 + k * 8, gy - 64 + (k + 1) * 22], fill=mix(stuc, (0, 0, 0), 0.08 + 0.06 * k) + (255,))
+            for (wx, wy_, ww, wh) in ((hx + 205, gy - 270, 72, 160), (hx + 310, gy - 270, 72, 160), (hx + 40, gy - 500, 76, 180), (hx + 205, gy - 500, 76, 180),
+                                      (hx + 310, gy - 500, 76, 180), (hx + 50, gy - 625, 64, 100), (hx + 210, gy - 625, 64, 100), (hx + 315, gy - 625, 64, 100)):
+                window(wx, wy_, ww, wh, r2.random() < 0.42)
+            bx = hx + 210; d.rectangle([bx, gy - 30, bx + 160, gy + 6], fill=mix(p["light"], dark, 0.35) + (255,))   # basement kitchen glow
+        d.rectangle([0, gy, W, kb], fill=mix(p["mid"], fg, 0.3) + (255,))                    # pavement flags
+        for x in range(-40, W + 40, 130): d.line([(x, gy), (x - 40, kb)], fill=mix(p["mid"], (0, 0, 0), 0.2) + (255,), width=2)
+        d.line([(0, gy + 50), (W, gy + 50)], fill=mix(p["mid"], (0, 0, 0), 0.2) + (255,), width=2)
+        ir = (18, 18, 20, 255)                                                                # area railings
+        for i in range(6):
+            hx = x0 + i * hw; a0, a1 = hx + 160, hx + hw + 10
+            d.line([(a0, gy - 70), (a1, gy - 70)], fill=ir, width=4); d.line([(a0, gy + 6), (a1, gy + 6)], fill=ir, width=4)
+            for x in np.arange(a0, a1, 16):
+                d.line([(x, gy - 82), (x, gy + 8)], fill=ir, width=3); d.polygon([(x - 4, gy - 80), (x + 4, gy - 80), (x, gy - 92)], fill=ir)
+        mid = self._fogtint(mid, 0.5, 0.18, top - 180, gy)
+        d = ImageDraw.Draw(mid); pc = (24, 22, 22)
+        for lx in (W * 0.24, W * 0.71):
+            f = self._gaspost(d, lx, kb - 6, 430, pc, 1.15); self.halos.append((f[0], f[1], 420, 1.0))
+        self.mid = mid
+        near = Image.new("RGBA", (W, H), (0, 0, 0, 0)); dn = ImageDraw.Draw(near); nc = p["near"]
+        dn.rectangle([0, kb, W, kb + 16], fill=mix(p["mid"], fg, 0.35) + (255,))                # kerb and the wet road
+        rc = mix(p["sea"], p["mid"], 0.4); dn.rectangle([0, kb + 16, W, H], fill=rc + (255,))
+        for _ in range(900):
+            y = kb + 16 + (H - kb) * r2.random() ** 1.4; s_ = 0.4 + (y - kb) / (H - kb) * 1.3; x = r2.uniform(0, W)
+            dn.ellipse([x - 10 * s_, y - 4 * s_, x + 10 * s_, y + 4 * s_], fill=mix(rc, p["moon"] if r2.random() < 0.5 else (0, 0, 0), 0.08) + (255,))
+        refl = Image.new("RGBA", (W, H), (0, 0, 0, 0)); dr = ImageDraw.Draw(refl)
+        for lx in (W * 0.24, W * 0.71): dr.polygon([(lx - 30, kb + 18), (lx + 30, kb + 18), (lx + 70, H), (lx - 70, H)], fill=p["gas"] + (60,))
+        near.alpha_composite(refl.filter(ImageFilter.GaussianBlur(26)))
+        dn = ImageDraw.Draw(near); bx = W * 0.86; red = mix((150, 32, 28), fg, 0.18)       # pillar box
+        dn.rectangle([bx - 38, kb - 200, bx + 38, kb - 6], fill=red + (255,)); dn.chord([bx - 44, kb - 236, bx + 44, kb - 170], 180, 360, fill=red + (255,))
+        dn.rectangle([bx - 44, kb - 204, bx + 44, kb - 196], fill=mix(red, (0, 0, 0), 0.3) + (255,)); dn.rectangle([bx - 22, kb - 168, bx + 22, kb - 162], fill=(20, 8, 8, 255))
+        dn.rectangle([bx - 44, kb - 18, bx + 44, kb - 4], fill=mix(red, (0, 0, 0), 0.4) + (255,)); dn.line([(bx + 28, kb - 200), (bx + 28, kb - 20)], fill=mix(red, (255, 220, 180), 0.25) + (255,), width=3)
+        tx = 70                                                                               # plane tree, mottled bark
+        dn.polygon([(tx - 46, H), (tx + 50, H), (tx + 30, H * 0.3), (tx - 20, H * 0.3)], fill=nc + (255,))
+        for _ in range(26):
+            yy = r2.uniform(H * 0.32, H - 20); ww = r2.uniform(10, 26); dn.ellipse([tx - 20 + r2.uniform(-10, 30), yy, tx + r2.uniform(-10, 30) + ww, yy + ww * 1.6], fill=mix(nc, fg, 0.22) + (255,))
+        def branch(x, y, a, L, wd, n):
+            if n == 0 or L < 14: return
+            x2, y2 = x + L * math.cos(a), y - L * math.sin(a); dn.line([(x, y), (x2, y2)], fill=nc + (255,), width=max(1, int(wd)))
+            for da in (-0.45, 0.4): branch(x2, y2, a + da + r2.uniform(-0.2, 0.2), L * 0.72, wd * 0.62, n - 1)
+        for a in (1.25, 1.6, 0.85, 2.1): branch(tx, H * 0.32, a, 190, 16, 6)
+        self.near = near
+        self.lighter = dict(y=gy + 96, h=250)
+        self._mkbanks([(gy - 330, 160, 0.34, 150), (gy + 40, 120, 0.24, 110), (top - 40, 170, 0.3, 190)])
+        self.fog_y = gy - 120; self.fog_a = 0.2; self.particles = "drizzle"
+
+    def _tug(self, img, t, ph):
+        """EP11: a small steam tug coming down the river once per loop: lit wheelhouse, funnel breathing smoke, mast lamp."""
+        T = self.tug; u = t / LOOP_S; s = T["s"]; x = T["x0"] + (T["x1"] - T["x0"]) * u; y = T["y"] + 2 * math.sin(ph * 4)
+        p = self.p; c = mix(p["near"], p["fog"], 0.35) + (255,); lay = Image.new("RGBA", (W, H), (0, 0, 0, 0)); d = ImageDraw.Draw(lay)
+        for k in range(10):                                                                   # funnel smoke trailing behind
+            v = ((t / LOOP_S) * 6 + k / 10) % 1.0; r = (10 + 50 * v) * s
+            sx = x + (60 + 260 * v) * s; sy = y - (150 + 90 * v ** 0.7) * s
+            lay.alpha_composite(self.tint(self.glow_sm.resize((int(r * 2), int(r * 2))), mix(p["fog"], (40, 36, 32), 0.4), 0.5 * (1 - v)), (int(sx - r), int(sy - r)))
+        d.polygon([(x - 170 * s, y - 34 * s), (x + 150 * s, y - 34 * s), (x + 132 * s, y), (x - 150 * s, y)], fill=c)
+        d.rectangle([x - 80 * s, y - 84 * s, x + 20 * s, y - 34 * s], fill=c); d.rectangle([x + 40 * s, y - 150 * s, x + 66 * s, y - 34 * s], fill=c)
+        d.rectangle([x + 36 * s, y - 158 * s, x + 70 * s, y - 148 * s], fill=c); d.line([(x - 110 * s, y - 34 * s), (x - 110 * s, y - 180 * s)], fill=c, width=max(2, int(4 * s)))
+        for k in range(3): d.rectangle([x - 70 * s + k * 30 * s, y - 72 * s, x - 52 * s + k * 30 * s, y - 52 * s], fill=mix(p["gas"], p["near"], 0.15) + (255,))
+        img.alpha_composite(lay)
+        img.alpha_composite(self.tint(self.glow_sm.resize((int(120 * s), int(120 * s))), p["gas"], 0.7), (int(x - 110 * s - 60 * s), int(y - 180 * s - 60 * s)))
+        img.alpha_composite(self.tint(self.glow_lg.resize((int(300 * s), int(200 * s))), p["gas"], 0.28), (int(x - 30 * s - 150 * s), int(y - 62 * s - 100 * s)))
+        d = ImageDraw.Draw(img)
+        for j in range(6):                                                                    # its light trembling on the water
+            yy = y + 6 + j * 7; off = 5 * math.sin(ph * 3 + j); ww = (50 - j * 6) * s * (0.7 + 0.3 * math.sin(ph * 5 + j))
+            d.line([(x - 30 * s - ww / 2 + off, yy), (x - 30 * s + ww / 2 + off, yy)], fill=p["gas"] + (int(90 - j * 13),), width=2)
+
+    def build_embankment(self):
+        """Looking down the river wall in the fog: the granite parapet running away from us with dolphin lamp standards,
+        each fainter than the last; Cleopatra's Needle on the wall; across the water the clock tower with its lit dial and
+        the long Gothic roofline, the railway bridge with its lamps; trees and lit windows on the landward side; a tug."""
+        p, rng = self.p, self.rng; r2 = random.Random(int(rng.integers(1e6))); fg = p["fog"]
+        hy = int(H * 0.5); vx, vy = W * 0.47, hy + 24
+        self.back = self._fogback(hy, (0.3, 0.17)); self._water(hy + 2, 0.45); bd = ImageDraw.Draw(self.back)
+        fc = mix(p["mid"], fg, 0.72); fc2 = mix(p["mid"], fg, 0.62)
+        bd.rectangle([0, hy - 80, W * 0.44, hy + 3], fill=fc + (255,))                         # far roofline with pinnacles
+        for x in range(0, int(W * 0.44), 34):
+            bd.polygon([(x, hy - 80), (x + 8, hy - 80), (x + 4, hy - 108)], fill=fc + (255,))
+            if (x // 34) % 3 == 1: bd.rectangle([x + 14, hy - 56, x + 22, hy - 36], fill=mix(fc, p["gas"], 0.25) + (255,))
+        tx = W * 0.13                                                                         # the clock tower
+        bd.rectangle([tx - 46, hy - 470, tx + 46, hy], fill=fc + (255,)); bd.rectangle([tx - 58, hy - 520, tx + 58, hy - 380], fill=fc + (255,))
+        bd.polygon([(tx - 58, hy - 520), (tx + 58, hy - 520), (tx + 30, hy - 600), (tx - 30, hy - 600)], fill=fc + (255,))
+        bd.polygon([(tx - 30, hy - 600), (tx + 30, hy - 600), (tx, hy - 720)], fill=fc + (255,))
+        bd.ellipse([tx - 38, hy - 488, tx + 38, hy - 412], fill=mix(p["gas"], fc, 0.5) + (255,))
+        for k in range(12): a = k * TAU / 12; bd.line([(tx + 30 * math.cos(a), hy - 450 + 30 * math.sin(a)), (tx + 36 * math.cos(a), hy - 450 + 36 * math.sin(a))], fill=fc + (255,), width=2)
+        bd.line([(tx, hy - 450), (tx + 4, hy - 474)], fill=fc + (255,), width=3); bd.line([(tx, hy - 450), (tx + 18, hy - 446)], fill=fc + (255,), width=3)
+        self.halos.append((tx, hy - 450, 190, 0.5))
+        for x0 in np.arange(W * 0.2, W * 0.5, 170):                                           # railway bridge piers and girders
+            bd.rectangle([x0, hy - 46, x0 + 30, hy + 8], fill=fc2 + (255,))
+        bd.rectangle([W * 0.2, hy - 70, W * 0.5, hy - 46], fill=fc2 + (255,))
+        for x0 in np.arange(W * 0.2, W * 0.5, 24): bd.line([(x0, hy - 70), (x0 + 24, hy - 46)], fill=mix(fc2, fg, 0.4) + (255,), width=2)
+        for x0 in np.arange(W * 0.22, W * 0.5, 120): self.halos.append((x0, hy - 82, 46, 0.45)); self.wlights.append((x0, 16, 50, r2.uniform(0, TAU)))
+        mid = Image.new("RGBA", (W, H), (0, 0, 0, 0)); d = ImageDraw.Draw(mid)
+        bc = mix(p["mid"], fg, 0.55)                                                          # landward side: buildings, trees
+        d.rectangle([vx + 20, hy - 280, W, vy + 6], fill=bc + (255,))
+        x = vx + 20
+        while x < W:
+            w = r2.uniform(120, 220); hh = r2.uniform(0, 90); d.rectangle([x, hy - 280 - hh, x + w, hy - 270], fill=bc + (255,))
+            for r in range(4):
+                for c in range(int(w // 46)):
+                    if r2.random() < 0.3: d.rectangle([x + 14 + c * 46, hy - 250 - hh * 0.5 + r * 60, x + 30 + c * 46, hy - 222 - hh * 0.5 + r * 60], fill=mix(bc, p["gas"], 0.4) + (255,))
+            x += w
+        mid = self._fogtint(mid, 0.42, 0.3, 0, H); d = ImageDraw.Draw(mid)
+        def P(X, Y, z): return (vx + X / z, vy + Y / z)
+        d.polygon([P(-900, 420, 0.5), P(-900, 420, 80), (W + 40, vy + 6), (W + 40, H)], fill=mix(p["mid"], fg, 0.25) + (255,))   # promenade
+        for z in (1.0, 1.6, 2.6, 4.2, 7, 12):
+            a, b = P(-900, 420, z), P(1200, 420, z); d.line([a, b], fill=mix(p["mid"], (0, 0, 0), 0.25) + (255,), width=max(1, int(3 / z ** 0.5)))
+        for z in (30, 20, 13, 8.5, 5.6, 3.8, 2.6):                                            # plane trees along the road
+            fd = 1 - math.exp(-z / 7); tc = mix(p["near"], fg, fd * 0.9); bx, by = P(700, 420, z); th = 1500 / z
+            d.rectangle([bx - 18 / z ** 0.6, by - th, bx + 18 / z ** 0.6, by], fill=tc + (255,))
+            for k in range(9):
+                a = 0.5 + k * 0.25; L = th * r2.uniform(0.3, 0.5)
+                d.line([(bx, by - th * 0.75), (bx + L * math.cos(a) * 0.8, by - th * 0.75 - L * math.sin(a))], fill=tc + (255,), width=max(1, int(8 / z ** 0.6)))
+            f = self._gaspost(d, P(560, 420, z)[0], P(560, 420, z)[1], 1300 / z, mix(p["near"], fg, fd * 0.85), 3.0 / z); self.halos.append((f[0], f[1], 900 / z ** 0.8, 1 - 0.5 * fd))
+        pc = mix(p["mid"], (150, 138, 120), 0.25)                                            # the granite parapet
+        d.polygon([P(-900, 120, 0.5), P(-900, 120, 80), P(-900, 420, 80), P(-900, 420, 0.5)], fill=pc + (255,))
+        d.polygon([P(-990, 100, 0.5), P(-990, 100, 80), P(-900, 120, 80), P(-900, 120, 0.5)], fill=mix(pc, p["moon"], 0.15) + (255,))
+        for z in np.geomspace(0.6, 60, 40): d.line([P(-900, 120, z), P(-900, 420, z)], fill=mix(pc, (0, 0, 0), 0.22) + (255,), width=max(1, int(4 / z ** 0.5)))
+        def needle():
+            nb, nt = P(-1080, 104, 15), P(-1080, -5600, 15); nw = 900 / 15                      # Cleopatra's Needle
+            ncol = mix(mix(p["mid"], (150, 110, 96), 0.25), fg, 0.5)
+            d.rectangle([nb[0] - nw * 0.9, nb[1] - 60, nb[0] + nw * 0.9, nb[1] + 6], fill=ncol + (255,))
+            d.polygon([(nb[0] - nw / 2, nb[1] - 60), (nb[0] + nw / 2, nb[1] - 60), (nt[0] + nw * 0.33, nt[1]), (nt[0] - nw * 0.33, nt[1])], fill=ncol + (255,))
+            d.polygon([(nt[0] - nw * 0.33, nt[1]), (nt[0] + nw * 0.33, nt[1]), (nt[0], nt[1] - nw * 0.6)], fill=mix(ncol, p["gas"], 0.2) + (255,))
+            for k in range(10): yk = nb[1] - 80 - k * (nb[1] - nt[1] - 100) / 10; d.line([(nb[0] - 6, yk), (nb[0] + 6, yk)], fill=mix(ncol, (0, 0, 0), 0.2) + (255,), width=2)
+        for z in (24, 15.5, 10, 6.4, 4.1, 2.75, 1.9):                                    # dolphin lamps on the wall
+            if z == 10: needle()
+            fd = 1 - math.exp(-z / 6); col = mix((20, 20, 22), fg, fd * 0.85); bx, by = P(-930, 104, z)
+            f = self._gaspost(d, bx, by, 1250 / z, col, 2.6 / z, dolphin=True); self.halos.append((f[0], f[1], min(560, 760 / z ** 0.75), 1 - 0.55 * fd))
+            self.wlights.append((f[0] - 40 / z, 60 / z ** 0.5 + 6, 70 * (1 - fd * 0.7), r2.uniform(0, TAU)))
+        self.mid = self._fogtint(mid, 0.12, 0.0, 0, H)
+        near = Image.new("RGBA", (W, H), (0, 0, 0, 0)); dn = ImageDraw.Draw(near); nc = p["near"]
+        bx0 = W * 0.7; by0 = H - 40                                                           # a bench on the promenade
+        dn.rectangle([bx0, by0 - 120, bx0 + 380, by0 - 104], fill=nc + (255,)); dn.rectangle([bx0, by0 - 190, bx0 + 380, by0 - 176], fill=nc + (255,)); dn.rectangle([bx0 + 6, by0 - 220, bx0 + 374, by0 - 206], fill=nc + (255,))
+        for sx in (0, 330): dn.polygon([(bx0 + sx, by0), (bx0 + sx + 50, by0), (bx0 + sx + 46, by0 - 230), (bx0 + sx + 14, by0 - 230)], fill=nc + (255,))
+        self.near = near
+        self.tug = dict(x0=vx + 80, x1=-380, y=hy + 64, s=0.62)
+        self._mkbanks([(hy + 20, 70, 0.32, 170), (hy - 120, 140, 0.22, 120), (vy + 220, 120, 0.12, 140)])
+        self.fog_y = hy - 20; self.fog_a = 0.22; self.particles = "drizzle"
+
+    def _hansom(self, img, ph):
+        """EP11: the cab horse in its rug nodding over its nosebag and breathing out little clouds of steam; the chestnut
+        brazier's coals breathing red through the holes in its sides."""
+        p = self.p; hx, hy_, s = self.hansom; nod = (5 * math.sin(ph * 2) + 2 * math.sin(ph * 5)) * s
+        c = mix(p["near"], (52, 40, 34), 0.3) + (255,); d = ImageDraw.Draw(img)
+        d.polygon([(hx + 70 * s, hy_ - 10 * s), (hx + 20 * s, hy_ - 70 * s + nod * 0.4), (hx - 10 * s, hy_ - 60 * s + nod * 0.5), (hx + 10 * s, hy_ + 50 * s), (hx + 90 * s, hy_ + 60 * s)], fill=c)
+        hd = [(hx - 10 * s, hy_ - 62 * s + nod), (hx + 14 * s, hy_ - 66 * s + nod), (hx - 30 * s, hy_ + 20 * s + nod), (hx - 60 * s, hy_ + 30 * s + nod), (hx - 66 * s, hy_ + 12 * s + nod)]
+        d.polygon(hd, fill=c); d.polygon([(hx - 2 * s, hy_ - 62 * s + nod), (hx + 6 * s, hy_ - 92 * s + nod), (hx + 12 * s, hy_ - 64 * s + nod)], fill=c)
+        d.polygon([(hx - 70 * s, hy_ + 6 * s + nod), (hx - 26 * s, hy_ + 22 * s + nod), (hx - 34 * s, hy_ + 64 * s + nod), (hx - 72 * s, hy_ + 52 * s + nod)], fill=mix(c[:3], (90, 76, 52), 0.35) + (255,))   # nosebag
+        lay = Image.new("RGBA", (W, H), (0, 0, 0, 0))
+        for k in range(2):                                                                    # breath: two puffs per loop
+            v = ((ph / TAU) * 4 + k * 0.5) % 1.0
+            if v < 0.7:
+                r = (12 + 60 * v) * s; bx, by = hx - 80 * s - 70 * v * s, hy_ + 10 * s + nod - 50 * v * s
+                lay.alpha_composite(self.tint(self.glow_sm.resize((int(r * 2), int(r * 2))), mix(p["fog"], p["moon"], 0.5), 0.45 * math.sin(math.pi * v / 0.7)), (int(bx - r), int(by - r)))
+        img.alpha_composite(lay)
+        x, y = self.brazier; fl = 0.75 + 0.15 * math.sin(ph * 3) + 0.1 * math.sin(ph * 8 + 1)
+        img.alpha_composite(self.tint(self.glow_lg.resize((420, 300)), p["ember"], 0.42 * fl), (int(x - 210), int(y - 170)))
+        d = ImageDraw.Draw(img)
+        for k in range(5):
+            for j in range(2): d.ellipse([x - 52 + k * 24, y - 30 + j * 30, x - 42 + k * 24, y - 20 + j * 30], fill=mix(p["ember"], (255, 220, 150), 0.3 * fl * (0.6 + 0.4 * math.sin(ph * 5 + k + j))) + (255,))
+
+    def build_cabstand(self):
+        """A cab rank in the fog: the green cabmen's shelter with lit windows and a smoking stove pipe, a hansom cab with lamps
+        lit and the driver up on his high seat, the horse in a rug at its nosebag, a gas lamp on the far pavement, buildings
+        across the street dissolving into fog, and a chestnut seller's brazier glowing in the foreground."""
+        p, rng = self.p, self.rng; r2 = random.Random(int(rng.integers(1e6))); fg = p["fog"]; gy = int(H * 0.74)
+        self.back = self._fogback(int(H * 0.6), (0.58, 0.13)); bd = ImageDraw.Draw(self.back)
+        for y0, fade in ((gy - 560, 0.8), (gy - 470, 0.62)):
+            col = mix(p["mid"], fg, fade); x = -30
+            while x < W + 30:
+                w = r2.uniform(200, 360); hh = r2.uniform(0, 80); bd.rectangle([x, y0 - hh, x + w, gy], fill=col + (255,))
+                for r in range(5):
+                    for cc in range(int(w // 60)):
+                        if r2.random() < 0.28: bd.rectangle([x + 20 + cc * 60, y0 - hh + 40 + r * 80, x + 44 + cc * 60, y0 - hh + 84 + r * 80], fill=mix(col, p["gas"], 0.3 if fade > 0.7 else 0.42) + (255,))
+                x += w
+        mid = Image.new("RGBA", (W, H), (0, 0, 0, 0)); d = ImageDraw.Draw(mid)
+        pv = mix(p["mid"], fg, 0.45); d.rectangle([0, gy - 130, W, gy - 104], fill=pv + (255,)); d.rectangle([0, gy - 104, W, gy - 96], fill=mix(pv, p["moon"], 0.15) + (255,))
+        rd = mix(p["sea"], p["mid"], 0.45); d.rectangle([0, gy - 96, W, H], fill=rd + (255,))
+        for _ in range(1100):
+            y = gy - 96 + (H - gy + 96) * r2.random() ** 1.3; s_ = 0.35 + (y - gy + 96) / (H - gy + 96) * 1.3; x = r2.uniform(0, W)
+            d.ellipse([x - 11 * s_, y - 4 * s_, x + 11 * s_, y + 4 * s_], fill=mix(rd, p["moon"] if r2.random() < 0.5 else (0, 0, 0), 0.08) + (255,))
+        mid = self._fogtint(mid, 0.3, 0.0, gy - 130, H); d = ImageDraw.Draw(mid)
+        f = self._gaspost(d, W * 0.455, gy - 112, 400, mix((22, 22, 24), fg, 0.3), 1.0); self.halos.append((f[0], f[1], 400, 0.9))
+        x0, x1, base = W * 0.52, W * 0.85, gy - 10; gr = mix((38, 72, 50), fg, 0.22); gd = mix(gr, (0, 0, 0), 0.35)
+        for wx in (x0 + 40, x1 - 40): d.ellipse([wx - 20, base - 8, wx + 20, base + 32], fill=(16, 16, 16, 255))   # little wheels
+        d.rectangle([x0, base - 240, x1, base], fill=gr + (255,))
+        for k in range(9):
+            px = x0 + 14 + k * (x1 - x0 - 28) / 9; d.rectangle([px, base - 100, px + (x1 - x0 - 28) / 9 - 10, base - 14], outline=gd + (255,), width=3)
+        d.rectangle([x0, base - 110, x1, base - 100], fill=gd + (255,))
+        for k in range(7):                                                                    # lit windows
+            wx = x0 + 70 + k * (x1 - x0 - 100) / 7; d.rectangle([wx, base - 210, wx + (x1 - x0 - 100) / 7 - 16, base - 124], fill=mix(p["gas"], gr, 0.28) + (255,))
+            d.line([(wx, base - 167), (wx + (x1 - x0 - 100) / 7 - 16, base - 167)], fill=gd + (255,), width=3)
+        d.rectangle([x0 + 10, base - 214, x0 + 58, base - 8], fill=gd + (255,))
+        d.polygon([(x0 - 30, base - 236), (x1 + 30, base - 236), (x1 - 4, base - 316), (x0 + 4, base - 316)], fill=mix(gd, fg, 0.15) + (255,))
+        for k in range(18): kx = x0 + 10 + k * (x1 - x0 - 20) / 17; d.polygon([(kx - 5, base - 316), (kx + 5, base - 316), (kx, base - 334)], fill=mix(gd, fg, 0.15) + (255,))
+        cx = x1 - 90; d.rectangle([cx - 9, base - 400, cx + 9, base - 300], fill=(26, 26, 26, 255)); d.polygon([(cx - 22, base - 400), (cx + 22, base - 400), (cx, base - 424)], fill=(26, 26, 26, 255))
+        self.smoke = (cx, base - 420, 280)
+        for k in range(3): self.halos.append((x0 + 160 + k * 210, base - 168, 170, 0.45))
+        nc = mix(p["near"], fg, 0.1); c = nc + (255,); wy = gy + 70                          # the hansom cab
+        wx = W * 0.335; R = 128
+        d.ellipse([wx - R, wy - R, wx + R, wy + R], outline=c, width=9); d.ellipse([wx - 14, wy - 14, wx + 14, wy + 14], fill=c)
+        for k in range(14): a = k * TAU / 14; d.line([(wx, wy), (wx + R * math.cos(a), wy + R * math.sin(a))], fill=c, width=4)
+        d.polygon([(W * 0.27, wy - 230), (W * 0.385, wy - 250), (W * 0.39, wy - 60), (W * 0.29, wy - 40), (W * 0.262, wy - 120)], fill=c)
+        d.polygon([(W * 0.262, wy - 240), (W * 0.39, wy - 262), (W * 0.385, wy - 250), (W * 0.27, wy - 230)], fill=c)
+        d.line([(W * 0.385, wy - 200), (W * 0.41, wy - 262)], fill=c, width=6)                # iron stay up to the high seat
+        d.line([(W * 0.29, wy - 60), (W * 0.12, wy - 95)], fill=c, width=8)                   # shaft
+        self._man(mid, W * 0.42, wy - 236, 190, 0.0, "top"); d = ImageDraw.Draw(mid)
+        d.rectangle([W * 0.392, wy - 330, W * 0.448, wy - 232], fill=mix(nc, (70, 50, 40), 0.3) + (255,))   # the driver's rug over his knees
+        d.rectangle([W * 0.388, wy - 244, W * 0.452, wy - 232], fill=c)
+        d = ImageDraw.Draw(mid); d.line([(W * 0.41, wy - 380), (W * 0.06, wy - 200)], fill=c, width=2)   # reins over the roof
+        for lx, k in ((W * 0.085, -1), (W * 0.11, 1), (W * 0.2, -1), (W * 0.225, 1)):          # legs with a slight bend at the knee
+            d.line([(lx, wy - 60), (lx + 3 * k, wy + 40), (lx + 6, wy + 118)], fill=c, width=15, joint="curve"); d.rectangle([lx - 4, wy + 110, lx + 18, wy + 126], fill=c)
+        d.ellipse([W * 0.06, wy - 165, W * 0.245, wy - 25], fill=c)                           # horse body with rug
+        d.chord([W * 0.08, wy - 172, W * 0.235, wy - 70], 180, 360, fill=mix(nc, (70, 40, 34), 0.35) + (255,))
+        for k in range(6): d.line([(W * 0.095 + k * 38, wy - 164), (W * 0.095 + k * 38, wy - 122)], fill=mix(nc, (110, 80, 50), 0.3) + (255,), width=2)
+        d.line([(W * 0.24, wy - 120), (W * 0.252, wy - 40), (W * 0.248, wy + 20)], fill=c, width=13, joint="curve")
+        self.hansom = (W * 0.058, wy - 196, 1.25)
+        for lx in (W * 0.265, W * 0.39): self.halos.append((lx, wy - 212, 120, 0.7)); d.rectangle([lx - 10, wy - 226, lx + 10, wy - 200], fill=mix(p["gas"], nc, 0.2) + (255,))
+        self.mid = mid
+        near = Image.new("RGBA", (W, H), (0, 0, 0, 0)); dn = ImageDraw.Draw(near); nc = p["near"]; c = nc + (255,)
+        bx, by = W * 0.9, H - 150                                                             # the chestnut brazier and its seller
+        for sx in (-50, 46): dn.line([(bx + sx, by + 40), (bx + sx * 1.3, H)], fill=c, width=8)
+        dn.rectangle([bx - 64, by - 50, bx + 64, by + 44], fill=c); dn.polygon([(bx - 90, by - 50), (bx + 90, by - 50), (bx + 80, by - 64), (bx - 80, by - 64)], fill=c)
+        for k in range(9): dn.ellipse([bx - 70 + k * 16, by - 78, bx - 58 + k * 16, by - 64], fill=mix(nc, (90, 60, 40), 0.3) + (255,))
+        self.brazier = (bx, by)
+        self._man(near, W * 0.975, H + 40, 420, 0.0, "cap")
+        self.near = near
+        self._mkbanks([(gy - 300, 160, 0.24, 140), (gy - 60, 90, 0.16, 100)])
+        self.fog_y = gy - 200; self.fog_a = 0.2; self.particles = "drizzle"
+
+    def _pendulum(self, img, ph):
+        """EP11: the wall clock's brass pendulum swinging behind its little glass window (16 swings per loop), and steam
+        curling from the kettle on the hob."""
+        p = self.p; x, y, L = self.pend; a = 0.13 * math.sin(ph * 16); bx, by = x + L * math.sin(a), y + L * math.cos(a)
+        d = ImageDraw.Draw(img); d.line([(x, y), (bx, by)], fill=(120, 96, 50, 255), width=3)
+        d.ellipse([bx - 22, by - 22, bx + 22, by + 22], fill=(178, 140, 66, 255)); d.ellipse([bx - 12, by - 14, bx + 2, by - 2], fill=(236, 206, 140, 255))
+        kx, ky, h = self.kettle; lay = Image.new("RGBA", (W, H), (0, 0, 0, 0)); dl = ImageDraw.Draw(lay)
+        for s_ in range(2):
+            pts = [(kx + (6 + 40 * v ** 1.5) * math.sin(v * 6 - ph * 2 + s_ * 2.4) - 20 * v, ky - v * h) for v in np.linspace(0, 1, 40)]
+            for j in range(39):
+                v = j / 39; dl.line([pts[j], pts[j + 1]], fill=mix(p["fog"], p["moon"], 0.5) + (int(110 * (1 - v) ** 1.2 * min(1, v * 6)),), width=max(3, int(4 + 12 * v)))
+        img.alpha_composite(lay.filter(ImageFilter.GaussianBlur(4)))
+
+    def build_parlour(self):
+        """A rented first-floor parlour: patterned wallpaper, a black marble chimney piece with a coal fire in the iron grate
+        and a brass fender, overmantel mirror, a clock under a glass dome and china dogs, a wall clock with a swinging
+        pendulum, a gas bracket with a tulip shade turned low, the sash window with lace curtains and heavy drapes, the
+        fog and a street-lamp halo outside; armchair with antimacassar, an aspidistra, the landlady's cat on the rug."""
+        p, rng = self.p, self.rng; r2 = random.Random(int(rng.integers(1e6)))
+        wall = mix((96, 46, 40), p["mid"], 0.3); wd = mix(wall, (0, 0, 0), 0.25)
+        self.back = Image.new("RGBA", (W, H), wall + (255,)); d = ImageDraw.Draw(self.back)
+        for x in range(0, W, 64): d.rectangle([x, 0, x + 22, H], fill=mix(wall, (0, 0, 0), 0.08) + (255,))
+        for y in range(40, int(H * 0.8), 90):
+            for x in range(32, W, 64): d.ellipse([x - 7, y - 10, x + 7, y + 10], fill=mix(wall, p["accent"], 0.12) + (255,))
+        d.rectangle([0, H * 0.16, W, H * 0.172], fill=mix(wall, (40, 26, 20), 0.5) + (255,))
+        fl = mix((52, 34, 26), p["mid"], 0.3); d.rectangle([0, H * 0.8, W, H], fill=fl + (255,))
+        for y in np.arange(H * 0.8, H, 22): d.line([(0, y), (W, y)], fill=mix(fl, (0, 0, 0), 0.25) + (255,))
+        x0, x1, y0, y1 = W * 0.71, W * 0.93, H * 0.12, H * 0.72                                # the window and the fog beyond
+        gl = Image.new("RGBA", (W, H), (0, 0, 0, 0)); dg = ImageDraw.Draw(gl)
+        for y in range(int(y0), int(y1)): dg.line([(x0, y), (x1, y)], fill=mix(mix(p["fog"], p["sky_mid"], 0.45), p["fog"], (y - y0) / (y1 - y0)) + (255,))
+        dg.rectangle([x0, H * 0.5, x1, y1], fill=mix(p["fog"], p["mid"], 0.45) + (90,))
+        for k in range(14): dg.line([(x0 + 10 + k * 26, H * 0.58), (x0 + 10 + k * 26, H * 0.68)], fill=mix(p["fog"], p["mid"], 0.6) + (255,), width=3)
+        dg.line([(x0, H * 0.58), (x1, H * 0.58)], fill=mix(p["fog"], p["mid"], 0.6) + (255,), width=3)
+        self.back.alpha_composite(gl)
+        self.back.alpha_composite(self.tint(self._glow(90).resize((560, 560)), p["gas"], 0.55), (int(W * 0.84 - 280), int(H * 0.36 - 280)))
+        lg = Image.new("RGBA", (W, H), (0, 0, 0, 0)); dl = ImageDraw.Draw(lg)                  # the lamp post outside
+        dl.rectangle([W * 0.84 - 4, H * 0.36, W * 0.84 + 4, y1], fill=mix(p["fog"], p["mid"], 0.55) + (255,)); dl.polygon([(W * 0.84 - 12, H * 0.37), (W * 0.84 + 12, H * 0.37), (W * 0.84 + 17, H * 0.34), (W * 0.84 - 17, H * 0.34)], fill=mix(p["gas"], p["fog"], 0.3) + (255,))
+        self.back.alpha_composite(lg)
+        d = ImageDraw.Draw(self.back); fr = (226, 214, 190, 255)
+        d.rectangle([x0 - 16, y0 - 16, x1 + 16, y1 + 22], outline=mix(wall, (230, 220, 200), 0.4) + (255,), width=16)
+        d.line([(x0, (y0 + y1) / 2), (x1, (y0 + y1) / 2)], fill=fr, width=10); d.line([((x0 + x1) / 2, y0), ((x0 + x1) / 2, y1)], fill=fr, width=6)
+        for u in (1 / 3, 2 / 3): d.line([(x0 + (x1 - x0) * u, y0), (x0 + (x1 - x0) * u, y1)], fill=fr, width=3)
+        lace = Image.new("RGBA", (W, H), (0, 0, 0, 0)); dl = ImageDraw.Draw(lace)
+        dl.rectangle([x0, H * 0.3, x1, y1], fill=(236, 230, 214, 46))
+        for yy in np.arange(H * 0.32, y1, 26):
+            for xx in np.arange(x0 + 10, x1, 26): dl.ellipse([xx - 6, yy - 6, xx + 6, yy + 6], outline=(240, 236, 222, 70), width=2)
+        for xx in np.arange(x0, x1, 18): dl.arc([xx - 9, y1 - 14, xx + 9, y1 + 4], 0, 180, fill=(240, 236, 222, 90), width=2)
+        self.back.alpha_composite(lace); d = ImageDraw.Draw(self.back)
+        dr = mix((70, 30, 34), p["mid"], 0.35)                                                # drapes and pelmet
+        for sx0 in (x0 - 120, x1 - 10):
+            d.polygon([(sx0, y0 - 40), (sx0 + 130, y0 - 40), (sx0 + 110 if sx0 < x0 else sx0 + 140, H * 0.82), (sx0 - 10 if sx0 < x0 else sx0 + 20, H * 0.82)], fill=dr + (255,))
+            for k in range(5): d.line([(sx0 + 20 + k * 22, y0 - 30), (sx0 + 14 + k * 24 + (0 if sx0 < x0 else 10), H * 0.8)], fill=mix(dr, (0, 0, 0), 0.3) + (255,), width=4)
+        d.rectangle([x0 - 140, y0 - 70, x1 + 140, y0 - 20], fill=mix(dr, (0, 0, 0), 0.15) + (255,))
+        for xx in np.arange(x0 - 130, x1 + 130, 24): d.ellipse([xx, y0 - 26, xx + 16, y0 - 12], fill=mix(dr, p["accent"], 0.3) + (255,))
+        cx = W * 0.36; d.rectangle([W * 0.2, 0, W * 0.52, H * 0.8], fill=mix(wall, (0, 0, 0), 0.06) + (255,))   # chimney breast
+        for x in range(int(W * 0.2), int(W * 0.52), 64): d.rectangle([x, 0, x + 22, H * 0.8], fill=mix(wall, (0, 0, 0), 0.13) + (255,))
+        d.rectangle([W * 0.26, H * 0.08, W * 0.46, H * 0.39], fill=(150, 112, 56, 255))      # overmantel mirror, gilt frame
+        d.rectangle([W * 0.27, H * 0.1, W * 0.45, H * 0.375], fill=mix(wall, (20, 16, 18), 0.5) + (255,))
+        self.back.alpha_composite(self.tint(self._glow(90).resize((300, 200)), p["light"], 0.25), (int(W * 0.36 - 150), int(H * 0.26 - 60)))
+        d = ImageDraw.Draw(self.back); mk = (22, 20, 22, 255)
+        d.rectangle([W * 0.235, H * 0.4, W * 0.485, H * 0.43], fill=mk); d.rectangle([W * 0.245, H * 0.43, W * 0.475, H * 0.8], fill=(30, 28, 30, 255))
+        d.rectangle([cx - 150, H * 0.5, cx + 150, H * 0.8], fill=(10, 8, 8, 255)); d.chord([cx - 150, H * 0.44, cx + 150, H * 0.58], 180, 360, fill=(10, 8, 8, 255))
+        for k in range(5): d.line([(cx - 110, H * 0.66 + k * 18), (cx + 110, H * 0.66 + k * 18)], fill=(46, 40, 38, 255), width=5)
+        d.rectangle([cx - 230, H * 0.64, cx - 152, H * 0.66], fill=mk)                         # the hob, the kettle
+        d.ellipse([cx - 222, H * 0.58, cx - 162, H * 0.645], fill=(66, 58, 54, 255)); d.line([(cx - 160, H * 0.6), (cx - 136, H * 0.575)], fill=(66, 58, 54, 255), width=7)
+        d.arc([cx - 214, H * 0.55, cx - 170, H * 0.62], 180, 360, fill=(66, 58, 54, 255), width=4)
+        self.kettle = (cx - 136, H * 0.57, 210)
+        mantel = [(cx - 40, "dome"), (cx - 210, "dog"), (cx + 170, "dog"), (cx + 90, "candle")]
+        for mx_, kind in mantel:
+            yb = H * 0.4
+            if kind == "dome":
+                d.rectangle([mx_ - 50, yb - 12, mx_ + 50, yb], fill=(60, 44, 30, 255)); d.rectangle([mx_ - 28, yb - 90, mx_ + 28, yb - 12], fill=(96, 70, 40, 255))
+                d.ellipse([mx_ - 20, yb - 84, mx_ + 20, yb - 44], fill=(222, 210, 184, 255)); d.line([(mx_, yb - 64), (mx_ + 2, yb - 80)], fill=(30, 26, 22, 255), width=2); d.line([(mx_, yb - 64), (mx_ + 12, yb - 62)], fill=(30, 26, 22, 255), width=2)
+                gc_ = mix(wall, (220, 220, 220), 0.4) + (255,)
+                d.arc([mx_ - 44, yb - 170, mx_ + 44, yb - 40], 180, 360, fill=gc_, width=2); d.line([(mx_ - 44, yb - 105), (mx_ - 44, yb - 12)], fill=gc_, width=2); d.line([(mx_ + 44, yb - 105), (mx_ + 44, yb - 12)], fill=gc_, width=2)
+                d.line([(mx_ + 30, yb - 140), (mx_ + 36, yb - 40)], fill=mix(wall, (255, 255, 255), 0.5) + (255,), width=3)
+            elif kind == "dog":
+                sg = 1 if mx_ < cx else -1; dc = (210, 200, 182, 255)
+                d.ellipse([mx_ - 24, yb - 60, mx_ + 24, yb], fill=dc); d.ellipse([mx_ - 16 + sg * 6, yb - 96, mx_ + 16 + sg * 6, yb - 58], fill=dc)
+                d.ellipse([mx_ - 22 + sg * 4, yb - 92, mx_ - 12 + sg * 4, yb - 64], fill=(150, 96, 60, 255)); d.ellipse([mx_ + 12 + sg * 4, yb - 92, mx_ + 22 + sg * 4, yb - 64], fill=(150, 96, 60, 255))
+            else:
+                d.rectangle([mx_ - 4, yb - 80, mx_ + 4, yb - 8], fill=(170, 136, 70, 255)); d.ellipse([mx_ - 16, yb - 12, mx_ + 16, yb], fill=(170, 136, 70, 255)); d.rectangle([mx_ - 5, yb - 112, mx_ + 5, yb - 80], fill=(232, 222, 200, 255))
+                d.polygon([(mx_ + 20, yb - 2), (mx_ + 56, yb - 2), (mx_ + 52, yb - 52), (mx_ + 26, yb - 48)], fill=(214, 204, 180, 255))   # letters tucked behind
+        wx, wy_ = W * 0.59, H * 0.25                                                          # the wall clock
+        d.ellipse([wx - 84, wy_ - 84, wx + 84, wy_ + 84], fill=(70, 46, 30, 255)); d.ellipse([wx - 70, wy_ - 70, wx + 70, wy_ + 70], fill=(226, 216, 192, 255))
+        for k in range(12):
+            a = k * TAU / 12; d.line([(wx + 58 * math.cos(a), wy_ + 58 * math.sin(a)), (wx + 66 * math.cos(a), wy_ + 66 * math.sin(a))], fill=(40, 32, 26, 255), width=4)
+        d.line([(wx, wy_), (wx - 18, wy_ - 34)], fill=(30, 24, 20, 255), width=5); d.line([(wx, wy_), (wx + 46, wy_ + 8)], fill=(30, 24, 20, 255), width=3)
+        d.polygon([(wx - 56, wy_ + 70), (wx + 56, wy_ + 70), (wx + 44, H * 0.56), (wx, H * 0.6), (wx - 44, H * 0.56)], fill=(70, 46, 30, 255))
+        d.rectangle([wx - 34, wy_ + 104, wx + 34, H * 0.53], fill=(26, 18, 14, 255))
+        self.pend = (wx, wy_ + 84, int(H * 0.53 - wy_ - 84 - 30))
+        gx, gyy = W * 0.535, H * 0.42                                                         # the gas bracket, turned low
+        d.line([(W * 0.52, gyy + 40), (gx, gyy + 40), (gx, gyy + 10)], fill=(150, 116, 60, 255), width=6)
+        d.polygon([(gx - 26, gyy - 40), (gx + 26, gyy - 40), (gx + 14, gyy + 8), (gx - 14, gyy + 8)], fill=mix(p["gas"], (255, 255, 255), 0.25) + (255,))
+        self.halos.append((gx, gyy - 14, 300, 0.55))
+        self.fires.append((cx, H * 0.75, 0.52))
+        self.back.alpha_composite(self.tint(self._glow(90).resize((1500, 1100)), p["light"], 0.2), (int(cx - 750), int(H * 0.72 - 550)))
+        self.mid = Image.new("RGBA", (W, H), (0, 0, 0, 0)); dm = ImageDraw.Draw(self.mid)
+        dm.rectangle([cx - 200, H * 0.79, cx + 200, H * 0.81], fill=(186, 146, 70, 255)); dm.line([(cx - 200, H * 0.79), (cx + 200, H * 0.79)], fill=(250, 210, 130, 255), width=2)
+        rug = mix((120, 34, 30), p["mid"], 0.35); dm.polygon([(W * 0.12, H), (W * 0.62, H), (W * 0.56, H * 0.83), (W * 0.16, H * 0.83)], fill=rug + (255,))
+        dm.polygon([(W * 0.15, H - 10), (W * 0.59, H - 10), (W * 0.545, H * 0.845), (W * 0.175, H * 0.845)], outline=mix(rug, p["accent"], 0.4) + (255,), width=5)
+        nc = p["near"]; c = nc + (255,); near = Image.new("RGBA", (W, H), (0, 0, 0, 0)); dn = ImageDraw.Draw(near)
+        dn.polygon([(0, H * 0.3), (W * 0.1, H * 0.26), (W * 0.16, H * 0.34), (W * 0.15, H * 0.66), (W * 0.2, H * 0.68), (W * 0.2, H), (0, H)], fill=c)   # armchair
+        dn.polygon([(W * 0.07, H * 0.3), (W * 0.13, H * 0.33), (W * 0.12, H * 0.45), (W * 0.05, H * 0.42)], fill=(206, 196, 178, 255))
+        for k in range(6): dn.ellipse([W * 0.05 + k * 26, H * 0.42 + k * 4, W * 0.05 + k * 26 + 18, H * 0.42 + k * 4 + 18], fill=(206, 196, 178, 255))
+        ax, ay = W * 0.685, H * 0.74                                                           # aspidistra on its stand
+        dn.rectangle([ax - 8, ay, ax + 8, H * 0.94], fill=c); dn.ellipse([ax - 60, H * 0.93, ax + 60, H * 0.96], fill=c); dn.rectangle([ax - 70, ay - 10, ax + 70, ay + 4], fill=c)
+        dn.polygon([(ax - 50, ay - 10), (ax + 50, ay - 10), (ax + 40, ay - 80), (ax - 40, ay - 80)], fill=mix(nc, (80, 50, 30), 0.3) + (255,))
+        for k in range(13):
+            a = math.radians(40 + k * 8 + r2.uniform(-4, 4)); L = r2.uniform(200, 320); lw = r2.uniform(14, 24)
+            pts = [(ax + L * v * math.cos(a) * 0.9, ay - 80 - L * v * math.sin(a) + 60 * v * v) for v in np.linspace(0, 1, 9)]
+            dn.line(pts, fill=mix(nc, (40, 70, 44), 0.35) + (255,), width=int(lw), joint="curve")
+        kx, ky = cx + 160, H * 0.9                                                            # the cat, curled on the rug
+        dn.ellipse([kx - 90, ky - 46, kx + 90, ky + 30], fill=c); dn.ellipse([kx + 40, ky - 60, kx + 100, ky - 10], fill=c)
+        dn.polygon([(kx + 48, ky - 52), (kx + 54, ky - 82), (kx + 68, ky - 56)], fill=c); dn.polygon([(kx + 76, ky - 56), (kx + 88, ky - 82), (kx + 96, ky - 50)], fill=c)
+        dn.arc([kx - 90, ky - 46, kx + 90, ky + 30], 190, 320, fill=mix(nc, p["ember"], 0.4) + (255,), width=4)
+        dn.line([(kx - 80, ky + 10), (kx - 20, ky + 34), (kx + 50, ky + 26)], fill=c, width=16, joint="curve")
+        self.near = near
+        self.fog_a = 0.0; self.particles = "dust"
+
     def _glow(self, r):
         s = r * 2; yy, xx = np.mgrid[0:s, 0:s].astype(np.float32)
         d = np.sqrt((xx - r) ** 2 + (yy - r) ** 2) / r
@@ -2965,6 +3462,7 @@ class Scene:
         if self.fog_a:
             off = int(W / 2 + 160 * math.sin(ph))
             img.alpha_composite(self.fog.crop((off, 0, off + W, H)))
+        if self.tug: self._tug(img, t, ph)
         img.alpha_composite(self.mid)
         if self.windows:
             lay = Image.new("RGBA", (W, H), (0, 0, 0, 0)); dl = ImageDraw.Draw(lay)
@@ -2973,6 +3471,9 @@ class Scene:
                 lay.alpha_composite(self.tint(self.glow_sm, p["light"], 0.35 * fl), (int(x - 16), int(y - 16)))
                 dl.rectangle([x - w / 2, y - h / 2, x + w / 2, y + h / 2], fill=mix(p["mid"], p["light"], fl) + (255,))
             img.alpha_composite(lay)
+        if self.halos: self._halos(img, ph)
+        if self.pend: self._pendulum(img, ph)
+        if self.hansom: self._hansom(img, ph)
         if self.glints: self._glints(img, ph)
         if self.hanging: self._hanging(img, ph)
         if self.banners: self._banners(img, ph)
@@ -2989,6 +3490,9 @@ class Scene:
         if self.pipe: self._pipe(img, ph)
         if self.walker: self._walker(img, t, ph)
         if self.sentry: self._sentry(img, t, ph)
+        if self.lighter: self._lighter(img, t, ph)
+        for tex, y0, amp, f in self.banks:                                                  # EP11: fog banks swaying to and fro
+            off = int(W / 2 + amp * math.sin(ph + f)); img.alpha_composite(tex.crop((off, 0, off + W, tex.height)), (0, y0))
         img.alpha_composite(self.near)
         if getattr(self, "spill", None): img.alpha_composite(self.spill)
         if self.willow: self._willow(img, ph)
@@ -3040,6 +3544,9 @@ class Scene:
             elif self.particles == "thistledown":                                          # EP10: seed tufts drifting sideways on the night air
                 x = (x0 + (W + 80) * t / LOOP_S * k) % (W + 80) - 40; y = H * 0.2 + (y0 % (H * 0.65)) + 40 * math.sin(ph * k + f) - 16 * math.sin(ph * 3 + f)
                 a = 0.24 * s * (0.7 + 0.3 * math.sin(ph * 2 + f)); col = mix(p["moon"], (255, 255, 255), 0.3); sz = 3 + 2 * s
+            elif self.particles == "drizzle":                                              # EP11: fine wet fog drops drifting down through the gaslight
+                x = x0 + 18 * math.sin(ph * k + f); y = (y0 + (H + 40) * t / LOOP_S * (k + 1)) % (H + 40) - 20; L = 8 + 8 * s
+                ImageDraw.Draw(lay).line([(x, y), (x - L * 0.25, y + L)], fill=mix(p["gas"], p["moon"], 0.4) + (int(50 + 60 * s),), width=1); continue
             elif self.particles == "fireflies":
                 x = x0 + 60 * math.sin(ph * k + f); y = H * 0.55 + (y0 % (H * 0.45)) + 30 * math.cos(ph * (3 - k) + f)
                 a = max(0, math.sin(ph * 3 * k + f)) ** 2 * 0.8 * s; col = (230, 240, 160); sz = 4 + 2 * s
