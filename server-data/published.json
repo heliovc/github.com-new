@@ -2040,7 +2040,9 @@
   "related_key": "lab-ep16-long",
   "pinned_comment": "What should Python build for you next: a chart, an email or a PDF? Full tutorial: Automate an Excel Report with Python: Summaries, Pivot Tables and Formatting (pandas + openpyxl)",
   "related_attempts": 1,
-  "related_done": "2026-11-20T19:44:45.411210-03:00"
+  "related_done": "2026-11-20T19:44:45.411210-03:00",
+  "comment_attempts": 1,
+  "comment_done": "2026-11-20T21:12:51.605540-03:00"
  },
  "quiet-ep10-long": {
   "attempts": 1,
