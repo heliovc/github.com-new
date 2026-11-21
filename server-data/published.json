@@ -2058,8 +2058,8 @@
   "kind": "long",
   "publish_at": "2026-11-20T21:45:00-03:00",
   "pinned_comment": "Which room of the castle would you choose to fall asleep in tonight?",
-  "comment_attempts": 2,
-  "comment_error": "Locator.wait_for: Timeout 30000ms exceeded.\nCall log:\n  - waiting for locator(\"ytd-comments #simplebox-placeholder\").first to be visible\n (20261120-221257-erro-comment-quiet-ep10-long.png)"
+  "comment_attempts": 3,
+  "comment_error": "Locator.wait_for: Timeout 30000ms exceeded.\nCall log:\n  - waiting for locator(\"ytd-comments #simplebox-placeholder\").first to be visible\n (20261120-222255-erro-comment-quiet-ep10-long.png)"
  },
  "c5-d01a-formiga": {
   "attempts": 1,
@@ -2076,8 +2076,8 @@
   "publish_at": "2026-11-20T22:01:04.392541-03:00",
   "pinned_comment": "Qual animal você quer ser no próximo vídeo? 👇",
   "note": "público em 20/11 (ajuste manual)",
-  "comment_attempts": 1,
-  "comment_error": "o comentário não apareceu depois de enviar (20261120-221454-erro-comment-c5-d01a-formiga.png)"
+  "comment_attempts": 2,
+  "comment_error": "o comentário não apareceu depois de enviar (20261120-222452-erro-comment-c5-d01a-formiga.png)"
  },
  "c5-d01b-lagartixa": {
   "attempts": 1,
