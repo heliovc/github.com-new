@@ -40,6 +40,9 @@ vis.type == "rocks" / THEME.hook/outro == "rocks": asteroide desenhado por códi
 vis.type == "weigh" / THEME.hook/outro == "weigh": balança: o objeto no prato esquerdo (vis.kind = sun | gas | ringed | ice, vis.col, vis.r)
   contra uma pilha de Terras no direito, o braço nivela enquanto o contador sobe até vis.earths + régua log 1–1.000.000 massas terrestres;
   gancho = Terra sozinha num prato contra "?"; outro = as 5 na régua (rank17).
+vis.type == "gravity" / THEME.hook/outro == "gravity": bonequinho numa balança de banheiro sobre a superfície curva do mundo (vis.kind =
+  sun | gas | ringed | ice | earth, vis.col), o visor sobe de 70 kg até 70 × g/9,80 e os joelhos dobram (log) + régua log "× gravidade da
+  Terra" (½× – 30×) com Vênus/Urano de fora; vis.g em m/s²; gancho = visor piscando "? ? ?" sobre chão escuro; outro = as 5 na régua (rank18).
 Tudo desenhado por código; narração Kokoro (VOICE, padrão af_heart); legenda grande queimada.
 """
 import sys, os, re, math, json, subprocess, importlib.util, random
@@ -1009,6 +1012,71 @@ def weigh_vis(img, it, th, t, dur):
     wg_ruler(img, th, ALL_ITEMS, cur=it, y=1170)
     if v.get("note"): text(img, (W / 2, 1290), v["note"], 38, tuple(th["accent2"]), w="ExtraBold", a=ease((t - 1.2) / 0.5), stroke=3)
 
+# ---------- rank18: "gravity" (a person on a bathroom scale standing on each world) ----------
+GV_LOG = (-0.5, 1.6)  # log10 of × Earth's gravity on the ruler: 0.32 -> 40
+GV_EARTH = 9.80
+def gv_surface(img, kind, col, t, top=1060, a=1.0):
+    """the world's surface as a huge curved horizon (radius 1500 px) fading out before the number block"""
+    lay = Image.new("RGBA", (W, 420), (0, 0, 0, 0)); d = ImageDraw.Draw(lay); Rr = 1500; cy = Rr
+    c = tuple(int(v * 0.55) for v in col)
+    d.ellipse([W / 2 - Rr, 0, W / 2 + Rr, 2 * Rr], fill=c + (255,))
+    if kind == "gas" or kind == "ringed" or kind == "ice":
+        for k in range(6):
+            yy = 30 + k * 48 + 6 * math.sin(t * 0.8 + k); d.arc([W / 2 - Rr - 40, yy, W / 2 + Rr + 40, yy + 2 * Rr], 200, 340, fill=tuple(int(v * (0.42 + 0.1 * (k % 2))) for v in col) + (255,), width=18)
+    if kind == "sun":
+        rng = np.random.default_rng(int(t * 3)); 
+        for _ in range(90):
+            x, y = rng.uniform(0, W), rng.uniform(20, 380); r = rng.uniform(6, 16)
+            if (x - W / 2) ** 2 + (y - cy) ** 2 < Rr ** 2: d.ellipse([x - r, y - r, x + r, y + r], fill=(255, 220, 120, 120))
+    if kind == "earth":
+        for x0, w in ((60, 260), (560, 380)): d.ellipse([x0, 40, x0 + w, 120], fill=(50, 110, 60, 255))
+    al = np.asarray(lay.getchannel("A"), np.float32) * (np.clip((300 - np.arange(420)) / 120, 0, 1)[:, None]) * a
+    lay.putalpha(Image.fromarray(al.astype(np.uint8))); img.alpha_composite(lay, (0, top))
+    if kind == "sun": R.paste_c(img, R.radial(1400, [(0, (255, 200, 90, 90)), (1, (255, 140, 40, 0))]), W / 2, top + 80, a)
+def gv_person(img, x, foot_y, squash, col=(240, 240, 250), lcd="70 kg", lcd_col=(120, 255, 160)):
+    """stick person on a bathroom scale; squash 0..1 bends the knees and lowers the body"""
+    d = ImageDraw.Draw(img); sw = 230
+    d.rounded_rectangle([x - sw / 2, foot_y - 34, x + sw / 2, foot_y + 6], 14, fill=(230, 232, 240), outline=(90, 95, 120), width=3)
+    d.rounded_rectangle([x - 52, foot_y - 28, x + 52, foot_y - 6], 5, fill=(20, 30, 26))
+    d.text((x, foot_y - 17), lcd, font=F(18, "Black"), fill=lcd_col, anchor="mm")
+    fy = foot_y - 36; leg = 120 * (1 - 0.35 * squash); knee_dx = 30 * squash
+    hip = fy - leg; d.line([(x - 30, fy), (x - 30 - knee_dx, fy - leg / 2), (x - 12, hip)], fill=col, width=14, joint="curve")
+    d.line([(x + 30, fy), (x + 30 + knee_dx, fy - leg / 2), (x + 12, hip)], fill=col, width=14, joint="curve")
+    torso = 115 * (1 - 0.12 * squash); sh = hip - torso
+    d.line([(x, hip), (x, sh)], fill=col, width=18)
+    arm_y = sh + 15 + 40 * squash
+    d.line([(x, sh + 12), (x - 55, arm_y + 70)], fill=col, width=12); d.line([(x, sh + 12), (x + 55, arm_y + 70)], fill=col, width=12)
+    d.ellipse([x - 32, sh - 70 + 12 * squash, x + 32, sh - 6 + 12 * squash], fill=col)
+def gv_ruler(img, th, items, cur=None, y=1290, labels=True, a=1.0):
+    x0, x1 = 110, W - 110
+    lay = Image.new("RGBA", img.size, (0, 0, 0, 0)); ImageDraw.Draw(lay).rounded_rectangle([60, y - 150, W - 60, y + 100], 24, fill=(6, 8, 18, 190)); img.alpha_composite(lay)
+    d = ImageDraw.Draw(img)
+    def X(g): return lerp(x0, x1, (math.log10(g / GV_EARTH) - GV_LOG[0]) / (GV_LOG[1] - GV_LOG[0]))
+    d.line([(x0, y), (x1, y)], fill=(110, 115, 150), width=6)
+    for v, lab in ((0.5, "½×"), (1, "1×"), (2, "2×"), (5, "5×"), (10, "10×"), (30, "30×")):
+        x = X(v * GV_EARTH); d.line([(x, y - 12), (x, y + 12)], fill=(160, 165, 195), width=3)
+        d.text((x, y + 36), lab, font=F(26, "Bold"), fill=(160, 165, 195), anchor="mm")
+    x = X(8.87); d.ellipse([x - 8, y - 8, x + 8, y + 8], fill=(110, 110, 130))
+    if labels: d.text((x - 16, y + 68), "Venus, Uranus", font=F(22, "Bold"), fill=(130, 130, 150), anchor="rm")
+    for o in items:
+        if cur is not None and o["rank"] < cur["rank"]: continue
+        v = o["vis"]; x = X(v["g"]); on = cur is None or o is cur
+        d.ellipse([x - 13, y - 13, x + 13, y + 13], fill=tuple(v["col"]) if on else (120, 120, 140))
+        dy, dx = {5: (-44, -34), 4: (-82, 0), 3: (-120, 34)}.get(o["rank"], (-44, 0))
+        d.text((x + dx, y + dy), f"#{o['rank']}", font=F(30, "Black"), fill=tuple(v["col"]) if on else (140, 140, 160), anchor="mm")
+    d.text((x1, y + 74), "gravity, × Earth's (log scale)", font=F(24, "SemiBold"), fill=(150, 155, 185), anchor="rm")
+def gravity_vis(img, it, th, t, dur):
+    v = it["vis"]; bp = max(0.0, min(1.0, (t - 0.4) / max(1.2, dur * 0.55))); r = v["g"] / GV_EARTH
+    gv_surface(img, v["kind"], tuple(v["col"]), t)
+    kg = 70 * (1 + (r - 1) * easeio(bp))
+    sq = min(1.0, math.log10(1 + (r - 1) * easeio(bp)) / math.log10(28)) if r > 1 else 0.0
+    gv_person(img, W / 2, 1078, sq, lcd=f"{kg:,.0f} kg")
+    lay = Image.new("RGBA", img.size, (0, 0, 0, 0)); ImageDraw.Draw(lay).rounded_rectangle([W / 2 - 250, 430, W / 2 + 250, 560], 24, fill=(14, 22, 18, 230), outline=(120, 255, 160, 200), width=4); img.alpha_composite(lay)
+    text(img, (W / 2, 495), f"{kg:,.0f} kg", 96, (120, 255, 160))
+    text(img, (W / 2, 600), "a 70 kg person on the scale", 34, (220, 225, 240), w="Bold", stroke=3)
+    if v.get("note"): text(img, (W / 2, 660), v["note"], 36, tuple(th["accent2"]), w="ExtraBold", a=ease((t - 1.2) / 0.5), stroke=3)
+    gv_ruler(img, th, ALL_ITEMS, cur=it, y=1250)
+
 def caption_chunks(say, t0, dur):
     words = say.split(); groups, g = [], []
     for w in words:
@@ -1031,6 +1099,16 @@ def draw_caption(img, chunks, gt, y=1585):
 
 def seg_hook(img, sc, th, t, dur):
     col = tuple(th["star_col"]); acc = tuple(th["accent"])
+    if th.get("hook") == "gravity":
+        # frame 0: the big number + a person on a scale over a dark unknown surface, the display flickering "????"
+        gv_surface(img, "gas", (60, 55, 80), t)
+        gv_person(img, W / 2, 1078, 0.6, lcd="? ? ?", lcd_col=(255, 120, 120))
+        lay = Image.new("RGBA", img.size, (0, 0, 0, 0)); ImageDraw.Draw(lay).rounded_rectangle([W / 2 - 250, 430, W / 2 + 250, 560], 24, fill=(14, 22, 18, 230), outline=(255, 120, 120, 200), width=4); img.alpha_composite(lay)
+        text(img, (W / 2, 495), f"{int(1000 + 957 * ((t * 7) % 1)):,} kg" if int(t * 3) % 2 else "? ? ?", 96, (255, 120, 120))
+        text(img, (W / 2, 220), sc.get("big", ""), 140, tuple(th["accent"]), stroke=3)
+        text(img, (W / 2, 335), sc["top"].upper(), 52, (255, 255, 255))
+        text(img, (W / 2, 1300), sc["sub"], 46, tuple(th["accent2"]), w="ExtraBold")
+        return
     if th.get("hook") == "weigh":
         # frame 0: the big number + Earth alone on one pan, a "?" on the heavy pan (beam tipped hard)
         cx, cy, L, tilt = W / 2, 760, 380, -0.32
@@ -1278,6 +1356,8 @@ def seg_item(img, it, th, t, dur):
         rocks_vis(img, it, th, t, dur)
     if v["type"] == "weigh":
         weigh_vis(img, it, th, t, dur)
+    if v["type"] == "gravity":
+        gravity_vis(img, it, th, t, dur)
     # number
     p = easeio((t - 0.5) / 1.6)
     num = it["num"]
@@ -1290,6 +1370,14 @@ def seg_item(img, it, th, t, dur):
 
 def seg_outro(img, sc, th, t, dur):
     a = ease(t / 0.5)
+    if th.get("outro") == "gravity":
+        gv_ruler(img, th, ALL_ITEMS, cur=None, y=640)
+        if th.get("outro_note"): text(img, (W / 2, 820), th["outro_note"], 44, tuple(th["accent2"]), w="ExtraBold", a=a)
+        text(img, (W / 2, 980), "WHERE SHOULD WE", 86, (255, 255, 255), a=ease((t - 0.3) / 0.5))
+        text(img, (W / 2, 1070), "WEIGH YOU NEXT?", 70, tuple(th["accent"]), a=ease((t - 0.5) / 0.5))
+        text(img, (W / 2, 1300), "SUBSCRIBE", 100, tuple(th["accent"]), a=ease((t - 0.8) / 0.5))
+        text(img, (W / 2, 1390), "to Cosmic Scale", 50, (255, 255, 255), w="ExtraBold", a=ease((t - 1.0) / 0.5))
+        return
     if th.get("outro") == "weigh":
         wg_ruler(img, th, ALL_ITEMS, cur=None, y=640)
         if th.get("outro_note"): text(img, (W / 2, 850), th["outro_note"], 44, tuple(th["accent2"]), w="ExtraBold", a=a)

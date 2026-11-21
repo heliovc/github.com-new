@@ -88,6 +88,13 @@ EP06 added scenes: spinglobe (globe + speed by latitude; top=True rings; slow=Tr
   (scale11, Earth squeezed to its 17.7 mm Schwarzschild size; ruler, balance, log squeeze, Sun = 5.9 km walk).
   Learned: python3 -I may load a broken Debian PIL (/usr/lib/python3/dist-packages) -> python3 -m pip install --force-reinstall pillow.
   Hook check: the spoken hook must say exactly what the big number measures (ISS 7.5 mm, not "space").
+2026-11-21 (Saturday, Shorts-only): ranking.py vis "gravity" (rank18, stick person on a bathroom scale over each world's curved surface,
+  LCD counter 70 kg -> 70 × g / 9.80, knees bend on a log curve + log ruler × Earth's gravity); scale_short.py vis "jupsun" (scale13, Sun
+  packed with to-scale Jupiters, row of 9.95, Earth zoom, 1,048-dot mass grid, density jars) and "andromeda" (scale14, Andromeda + full Moon
+  at the same angular scale over hills: 6 Moons along the axis, naked-eye smudge, 2.5 Myr light timeline, long-exposure frame).
+  Learned: never paste sun_sprite(r) with r in the thousands (r × 6 px square float array -> OOM kill); fake a zoom with a tinted overlay.
+  Moon counts per planet disagree between sources in 2026 (Saturn 274–293) -> avoid "most moons" rankings until NASA publishes one table.
+  Ruler labels for near-equal values (1.00 / 1.07 / 1.14) need staggered offsets.
 """
 import sys, os, re, math, subprocess, importlib.util, json, random, hashlib
 import numpy as np

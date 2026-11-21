@@ -40,6 +40,14 @@ Visuais (vis.type):
   "dwarf": Sirius B, anã branca menor que a Terra com a massa do Sol; vis.mode = hook (Terra em cima x Sirius B embaixo EM ESCALA,
              12.742 x 11.270 km) | mass (balança Sol x Sirius B, contador até 339 mil Terras) | spoon (colher de chá = 13,5 t x 2 elefantes) |
              gravity (régua log 1 -> 433.000 g, peso de uma pessoa de 70 kg) | sirius (Sirius A + B na órbita de 50 anos) (scale12).
+  "jupsun": o Sol EM ESCALA contra Júpiter (raio 9,95×); vis.mode = hook (Sol cheio de Júpiteres em escala, fatia 2D) | row (Júpiteres
+             rolam no diâmetro, contador até 9,7) | fill (chovem Júpiteres, contador até 986 por volume) | earth (zoom num Júpiter + Terra em
+             escala, contador até 1.321) | density (dois potes: Sol 1,41 x Júpiter 1,33 g/cm³, linha da água) | mass (grade de 1.048 pontos
+             = massas de Júpiter, os 986 do volume em outra cor) (scale13).
+  "andromeda": céu noturno com morros; Lua cheia e Andrômeda NA MESMA ESCALA ANGULAR (eixo longo = 6 Luas, ~3° x 0,5°); vis.mode = hook
+             | row (6 Luas deslizam ao longo do eixo) | eye (a galáxia some e sobra a mancha do núcleo, o que o olho vê) | light (pulso de luz
+             Andrômeda -> Terra, linha do tempo 2,5 milhões de anos com o surgimento da nossa espécie) | photo (moldura de câmera, contador
+             de exposição, o disco aparece) (scale14).
 Reaproveita render.py (sprites, fontes) e ranking.py (fundo, texto, legendas).
 """
 import sys, os, math, json, subprocess, importlib.util, random
@@ -917,6 +925,168 @@ def dwarf_vis(img, v, th, t, dur, bp):
         text(img, (bx + 30, by + 50), "Sirius B", 40, acc2, stroke=3)
         text(img, (W / 2, 1300), "one orbit every 50 years · 8.6 light-years away", 38, (255, 255, 255), w="ExtraBold", stroke=3)
 
+# ---- scale13: 986 Jupiters fit inside the Sun (volume, NASA fact sheets); 1,048 by mass; densities 1.41 vs 1.33 g/cm³ ----
+SUN_KM13, JUP_KM13, EARTH_KM13 = 695700.0, 69911.0, 6371.0
+def _hexpack13(Rs, rj):
+    """centres of Jupiter discs (radius rj) hex-packed inside a disc of radius Rs (2D slice, illustrative)"""
+    pts = []; dy = rj * math.sqrt(3); row = 0; y = -Rs + rj
+    while y <= Rs - rj:
+        off = rj if row % 2 else 0; x = -Rs + rj + off
+        while x <= Rs - rj:
+            if math.hypot(x, y) <= Rs - rj: pts.append((x, y))
+            x += 2 * rj
+        y += dy; row += 1
+    pts.sort(key=lambda p: (p[1], p[0])); return pts
+def _sundisc13(img, cx, cy, Rs, a=1.0):
+    R.paste_c(img, R.sun_sprite(int(Rs)), cx, cy, a)
+def jupsun_vis(img, v, th, t, dur, bp):
+    """the Sun TO SCALE against Jupiter (radius ratio 9.95); vis.mode = hook (Sun packed with to-scale Jupiters, slice view) | row
+    (Jupiters roll in one by one across the diameter, counter to 9.7) | fill (Jupiters rain in, counter to 986 by volume) | earth (zoom on
+    one Jupiter: an Earth to scale + counter to 1,321) | density (two jars: a cup of Sun 1.41 g/cm³ vs a cup of Jupiter 1.33, bars) |
+    mass (grid of 1,048 tiny dots = Jupiter masses vs 986 by volume)"""
+    acc, acc2 = tuple(th["accent"]), tuple(th["accent2"]); mode = v.get("mode", "hook"); cx, cy, Rs = W / 2, 930, 440
+    rj = Rs * JUP_KM13 / SUN_KM13
+    if mode in ("hook", "fill"):
+        _sundisc13(img, cx, cy, Rs, 0.85)
+        pts = _hexpack13(Rs, rj); n = len(pts) if mode == "hook" else int(len(pts) * min(1, bp * 1.15))
+        spr = R.jup10(rj, 0.0)
+        for k, (x, y) in enumerate(pts[:n]): R.paste_c(img, spr, cx + x, cy + y)
+        if mode == "fill":
+            cnt = int(986 * min(1, bp * 1.15)); text(img, (W / 2, 1450), f"{cnt:,} Jupiters", 70, acc, stroke=4)
+            text(img, (W / 2, 1520), "by volume  (one slice shown)", 34, (230, 230, 240), w="Bold", stroke=3)
+        else:
+            text(img, (W / 2, 1450), "Jupiter, to scale, inside the Sun", 42, (255, 240, 220), w="ExtraBold", stroke=3)
+    elif mode == "row":
+        _sundisc13(img, cx, cy, Rs, 0.9); spr = R.jup10(rj, 0.0); d = ImageDraw.Draw(img)
+        d.line([(cx - Rs, cy), (cx + Rs, cy)], fill=(255, 255, 255), width=3)
+        n = 9.95 * min(1, bp * 1.1); k = 0
+        while k < int(n):
+            x = cx - Rs + rj + 2 * rj * k; R.paste_c(img, spr, x, cy); k += 1
+        if n - int(n) > 0 and int(n) < 10:
+            x = lerp(-rj, cx - Rs + rj + 2 * rj * int(n), ease(n - int(n))); R.paste_c(img, spr, x, cy)
+        text(img, (W / 2, 1450), f"{n:.1f} Jupiters across", 64, acc, stroke=4)
+        text(img, (W / 2, 1520), "1,391,400 km  vs  139,822 km (average)", 36, (230, 230, 240), w="Bold", stroke=3)
+    elif mode == "earth":
+        z = 1 + 7 * easeio(bp); jr = rj * z; jx = lerp(cx + Rs * 0.55, cx, easeio(bp)); jy = lerp(cy - Rs * 0.3, cy, easeio(bp))
+        if bp < 0.7:  # the Sun's surface fills the frame as we zoom in, then fades (no giant sprite: memory)
+            lay = Image.new("RGBA", img.size, (255, 150, 40, int(150 * (1 - bp / 0.7)))); img.alpha_composite(lay)
+            _sundisc13(img, cx, cy, Rs, max(0, 1 - bp * 3))
+        R.paste_c(img, R.jup10(min(400, jr), 0.0), jx, jy)
+        er = jr * EARTH_KM13 / JUP_KM13
+        if bp > 0.55:
+            R.paste_c(img, R.earth_sprite(max(3, int(er)), glow=None), jx + jr * 0.35, jy - jr * 0.25)
+            text(img, (jx + jr * 0.35, jy - jr * 0.25 - er - 34), "Earth", 36, (150, 210, 255), stroke=3)
+        cnt = int(1321 * ease((bp - 0.55) / 0.45))
+        text(img, (W / 2, 1450), f"{cnt:,} Earths per Jupiter", 62, acc2, stroke=4, a=ease((bp - 0.5) / 0.2))
+    elif mode == "density":
+        d = ImageDraw.Draw(img)
+        for i, (lab, rho, col) in enumerate((("the Sun", 1.41, (255, 190, 80)), ("Jupiter", 1.33, (215, 170, 125)))):
+            x = 300 + i * 480; y0, y1 = 1260, 560; h = (y0 - y1) * rho / 1.6 * ease(bp * 1.3 - i * 0.15)
+            d.rounded_rectangle([x - 120, y1 - 20, x + 120, y0 + 10], 30, outline=(200, 210, 240), width=6)
+            d.rectangle([x - 110, y0 - h, x + 110, y0], fill=col)
+            for kk in range(6):
+                if y0 - h + 30 + kk * 60 < y0 - 5: d.line([(x - 100, y0 - h + 30 + kk * 60), (x + 100, y0 - h + 30 + kk * 60)], fill=tuple(int(c * 0.85) for c in col), width=4)
+            text(img, (x, y1 - 70), lab, 50, col, stroke=3)
+            text(img, (x, y0 + 70), f"{rho:.2f} g/cm³", 52, (255, 255, 255), stroke=3, a=ease(bp * 2 - 0.4))
+        y_w = 1260 - (1260 - 560) * 1.0 / 1.6; d = ImageDraw.Draw(img)
+        for xx in range(140, 960, 40): d.line([(xx, y_w), (xx + 20, y_w)], fill=(120, 200, 255), width=3)
+        text(img, (W / 2, y_w - 30), "water = 1.00", 32, (120, 200, 255), w="Bold", stroke=3)
+        text(img, (W / 2, 1450), "almost the same stuff", 58, acc, stroke=4)
+    elif mode == "mass":
+        d = ImageDraw.Draw(img); cols = 33; s = 26; x0 = W / 2 - cols * s / 2 + s / 2; y0 = 520
+        nv = 986; nm = int(1048 * min(1, bp * 1.1))
+        for k in range(nm):
+            r_, c_ = divmod(k, cols); x = x0 + c_ * s; y = y0 + r_ * s
+            col = (215, 170, 125) if k < nv else acc2
+            d.ellipse([x - 9, y - 9, x + 9, y + 9], fill=col)
+        text(img, (W / 2, 1450), f"{nm:,} by mass", 70, acc, stroke=4)
+        text(img, (W / 2, 1520), "986 by volume", 40, (215, 170, 125), w="ExtraBold", stroke=3)
+
+# ---- scale14: Andromeda spans ~3° of sky, six times the full Moon (0.5°) (NASA Hubble M31 page) ----
+_and14 = {}
+def _andro14(L, ang=-32):
+    """Andromeda drawn by code: elliptical disc 3:1, bright yellowish core, bluish spiral arms + dark dust lanes, rotated"""
+    key = (int(L), ang)
+    if key in _and14: return _and14[key]
+    S = int(L * 1.15); yy, xx = np.mgrid[0:S, 0:S].astype(np.float32)
+    nx, ny = (xx - S / 2) / (L / 2), (yy - S / 2) / (L / 6)
+    rr = np.sqrt(nx ** 2 + ny ** 2)
+    disc = np.clip(1 - rr ** 2, 0, 1) ** 0.7 * 0.62 + np.exp(-(rr / 0.3) ** 2) * 0.35 + np.exp(-(rr / 0.08) ** 2) * 1.0
+    lanes = 1 - 0.45 * np.clip(np.sin(rr * 26 + np.arctan2(ny, nx) * 1.5) * 0.5 + 0.5, 0, 1) ** 6 * (rr > 0.18) * (rr < 0.95)
+    rng = np.random.default_rng(31); noise = np.asarray(Image.fromarray((rng.random((60, 60)) * 255).astype(np.uint8)).resize((S, S), Image.BICUBIC), np.float32) / 255
+    b = np.clip(disc * lanes * (0.85 + 0.3 * noise), 0, 1.3)
+    core = np.exp(-(rr / 0.2) ** 2)
+    rgb = np.dstack([200 + 55 * core, 205 + 30 * core, 255 - 90 * core]) * np.clip(b, 0, 1)[..., None]
+    a = np.clip(b * 255, 0, 255)
+    im = Image.fromarray(np.dstack([np.clip(rgb, 0, 255), a]).astype(np.uint8), "RGBA").rotate(ang, resample=Image.BICUBIC)
+    rs = np.random.default_rng(5)
+    dd = ImageDraw.Draw(im)
+    for _ in range(int(L * 0.6)):  # sprinkled stars along the disc
+        u, w_ = rs.normal(0, 0.35), rs.normal(0, 0.1); x = S / 2 + (u * math.cos(math.radians(-ang)) - w_ * math.sin(math.radians(-ang))) * L / 2
+        y = S / 2 + (u * math.sin(math.radians(-ang)) + w_ * math.cos(math.radians(-ang))) * L / 2
+        dd.point((x, y), fill=(255, 255, 255, int(rs.uniform(60, 200))))
+    _and14[key] = im; return im
+def _moon14(img, cx, cy, r, a=1.0):
+    R.paste_c(img, R.radial(int(r * 3), [(0, (255, 255, 245, 255)), (0.6, (235, 235, 225, 255)), (0.66, (220, 220, 210, 255)), (0.7, (220, 220, 210, 90)), (1, (200, 200, 190, 0))]), cx, cy, a)
+    d = ImageDraw.Draw(img)
+    for dx, dy, rr in ((-0.3, -0.2, 0.22), (0.25, 0.1, 0.18), (-0.05, 0.35, 0.14)):
+        d.ellipse([cx + dx * r - rr * r, cy + dy * r - rr * r, cx + dx * r + rr * r, cy + dy * r + rr * r], fill=(200, 200, 192, int(180 * a)))
+def _hills14(img):
+    d = ImageDraw.Draw(img); pts = [(0, 1560)]
+    for x in range(0, W + 40, 40): pts.append((x, 1330 + 40 * math.sin(x / 140) + 22 * math.sin(x / 47)))
+    pts.append((W, 1560)); d.polygon(pts, fill=(6, 8, 16))
+    for x in (150, 210, 820, 870, 905):  # pine trees
+        y = 1330 + 40 * math.sin(x / 140) + 22 * math.sin(x / 47)
+        d.polygon([(x, y - 120), (x - 34, y + 5), (x + 34, y + 5)], fill=(6, 8, 16))
+def andromeda_vis(img, v, th, t, dur, bp):
+    """night sky over hills; full Moon (diameter 120 px) and Andromeda TO THE SAME ANGULAR SCALE (long axis 720 px = 6 Moons);
+    vis.mode = hook (both in the sky, Andromeda bright as a long exposure) | row (6 Moons slide in along the long axis) | eye (galaxy fades
+    to what eyes see: a faint core smudge) | light (light leaves Andromeda, counter of years to 2.5 million; timeline with first humans) |
+    photo (camera frame + exposure counter: the full disc slowly appears)"""
+    acc, acc2 = tuple(th["accent"]), tuple(th["accent2"]); mode = v.get("mode", "hook"); L = 720; mr = 60
+    gx, gy, mx, my = W / 2 + 20, 860, 860, 470
+    if mode == "hook":
+        R.paste_c(img, _andro14(L), gx, gy); _moon14(img, mx, my, mr); _hills14(img)
+        text(img, (mx, my + 100), "full Moon", 36, (240, 240, 230), stroke=3)
+        text(img, (gx - 250, gy + 230), "Andromeda", 44, acc, stroke=3)
+    elif mode == "row":
+        R.paste_c(img, _andro14(L), gx, gy, 0.8); _hills14(img)
+        ang = math.radians(32); n = 6 * min(1, bp * 1.15)
+        for k in range(int(math.ceil(n))):
+            f = min(1, n - k); u = -L / 2 + mr + 2 * mr * k
+            x, y = gx + u * math.cos(ang), gy + u * math.sin(ang)
+            _moon14(img, lerp(mx, x, ease(f)), lerp(my, y, ease(f)), mr, 0.9)
+        text(img, (W / 2, 1450), f"{min(6, int(n + 0.001))} full Moons", 70, acc2, stroke=4)
+        text(img, (W / 2, 1520), "≈ 3° of sky vs 0.5°", 38, (235, 235, 245), w="Bold", stroke=3)
+    elif mode == "eye":
+        q = easeio(bp); full = _andro14(L)
+        R.paste_c(img, full, gx, gy, 1 - 0.92 * q)
+        R.paste_c(img, R.radial(110, [(0, (235, 230, 210, int(140 * q))), (1, (200, 200, 220, 0))]), gx, gy)
+        _moon14(img, mx, my, mr); _hills14(img)
+        text(img, (W / 2, 1450), "what your eyes see", 58, acc, stroke=4, a=ease(bp * 2 - 0.6))
+        text(img, (W / 2, 1520), "only the bright core, from a dark sky", 36, (235, 235, 245), w="Bold", stroke=3, a=ease(bp * 2 - 0.8))
+    elif mode == "light":
+        d = ImageDraw.Draw(img); x0, x1, y = 120, W - 120, 1000
+        R.paste_c(img, _andro14(260), x0 + 40, 760)
+        R.paste_c(img, R.earth_sprite(36, glow=(120, 180, 255)), x1 - 20, 760)
+        d = ImageDraw.Draw(img); p = easeio(bp); xp = lerp(x0 + 120, x1 - 70, p)
+        for k in range(16): d.ellipse([xp - 10 - k * 18, 750, xp + 10 - k * 18, 770], fill=(255, 245, 190, int(230 * (1 - k / 16))))
+        d.line([(x0, y), (x1, y)], fill=(90, 95, 130), width=6)
+        for frac, lab in ((0.0, "light leaves"), (1 - 0.3 / 2.5, "our species appears ↑"), (1.0, "today")):
+            xx = lerp(x0, x1, frac); d.line([(xx, y - 16), (xx, y + 16)], fill=(180, 185, 210), width=4)
+            d.text((xx, y + (50 if frac != 1 - 0.3 / 2.5 else 90)), lab, font=F(28, "Bold"), fill=(190, 195, 215), anchor="mm" if 0 < frac < 1 else ("lm" if frac == 0 else "rm"))
+        d.polygon([(lerp(x0, x1, p), y - 24), (lerp(x0, x1, p) - 14, y - 50), (lerp(x0, x1, p) + 14, y - 50)], fill=acc)
+        text(img, (W / 2, 1450), f"{2.5 * p:.2f} million years", 66, acc, stroke=4)
+        text(img, (W / 2, 1520), "the trip its light took to reach you", 36, (235, 235, 245), w="Bold", stroke=3)
+    elif mode == "photo":
+        q = easeio(bp); R.paste_c(img, _andro14(L), gx, gy, 0.08 + 0.92 * q); _moon14(img, mx, my, mr); _hills14(img)
+        d = ImageDraw.Draw(img); fx0, fy0, fx1, fy1 = 90, 420, W - 90, 1280
+        for (x, y, sx, sy) in ((fx0, fy0, 1, 1), (fx1, fy0, -1, 1), (fx0, fy1, 1, -1), (fx1, fy1, -1, -1)):
+            d.line([(x, y), (x + 70 * sx, y)], fill=(255, 255, 255), width=6); d.line([(x, y), (x, y + 70 * sy)], fill=(255, 255, 255), width=6)
+        d.ellipse([fx0 + 20, fy0 + 20, fx0 + 44, fy0 + 44], fill=(255, 70, 70) if int(t * 2) % 2 == 0 else (120, 30, 30))
+        text(img, (W / 2, 1450), f"exposure {int(1 + 179 * q)} s", 62, acc, stroke=4)
+        text(img, (W / 2, 1520), "a long exposure reveals the whole disc", 36, (235, 235, 245), w="Bold", stroke=3)
+
 def chrome(img, th, gt, total):
     d = ImageDraw.Draw(img)
     d.rectangle([0, 0, int(W * gt / total), 10], fill=tuple(th["accent"]))
@@ -987,6 +1157,11 @@ def frame(m, durs, gt, chunks, arr):
         text(img, (W / 2, 280), hl["top"], 52, (255, 255, 255), stroke=3)
     elif v["type"] in ("ballearth", "marble"):
         (ballearth_vis if v["type"] == "ballearth" else marble_vis)(img, v, th, t, d, easeio((t - 0.2) / max(0.8, d * 0.8)))
+        hl = v.get("head") or m.BIG
+        text(img, (W / 2, 170), hl["num"], 124 if len(hl["num"]) < 12 else 100, tuple(th["accent"]), stroke=4)
+        text(img, (W / 2, 280), hl["top"], 52, (255, 255, 255), stroke=3)
+    elif v["type"] in ("jupsun", "andromeda"):
+        (jupsun_vis if v["type"] == "jupsun" else andromeda_vis)(img, v, th, t, d, easeio((t - 0.2) / max(0.8, d * 0.8)))
         hl = v.get("head") or m.BIG
         text(img, (W / 2, 170), hl["num"], 124 if len(hl["num"]) < 12 else 100, tuple(th["accent"]), stroke=4)
         text(img, (W / 2, 280), hl["top"], 52, (255, 255, 255), stroke=3)
