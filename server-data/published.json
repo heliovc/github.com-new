@@ -2074,7 +2074,7 @@
   "title": "E se você fosse uma formiga caindo do 30º andar? #shorts",
   "kind": "short",
   "publish_at": "2026-11-20T22:01:04.392541-03:00",
-  "pinned_comment": "Qual animal você quer ser no próximo vídeo? 👇",
+  "pinned_comment": "Qual animal você quer ser no próximo vídeo?",
   "note": "público em 20/11 (ajuste manual)",
   "comment_attempts": 3,
   "comment_error": "o comentário não apareceu depois de enviar (20261120-223125-erro-comment-c5-d01a-formiga.png)"
@@ -2092,7 +2092,9 @@
   "title": "E se você fosse uma lagartixa atrás da geladeira? #shorts",
   "kind": "short",
   "publish_at": "2026-11-20T22:58:04.316505-03:00",
-  "pinned_comment": "Qual eletrodoméstico a gente desmonta no próximo? 👇",
-  "note": "público em 20/11 (ajuste manual)"
+  "pinned_comment": "Qual eletrodoméstico a gente desmonta no próximo?",
+  "note": "público em 20/11 (ajuste manual)",
+  "comment_attempts": 1,
+  "comment_error": "comentário postado mas não ficou fixado (20261120-231152-erro-comment-c5-d01b-lagartixa.png)"
  }
 }
