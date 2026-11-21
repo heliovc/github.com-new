@@ -2057,7 +2057,9 @@
   "title": "Boring History for Sleep: A Medieval Castle After Dark (Hearth Fire & Night Watch, 47 Min)",
   "kind": "long",
   "publish_at": "2026-11-20T21:45:00-03:00",
-  "pinned_comment": "Which room of the castle would you choose to fall asleep in tonight?"
+  "pinned_comment": "Which room of the castle would you choose to fall asleep in tonight?",
+  "comment_attempts": 1,
+  "comment_error": "Locator.wait_for: Timeout 30000ms exceeded.\nCall log:\n  - waiting for locator(\"ytd-comments #simplebox-placeholder\").first to be visible\n (20261120-215304-erro-comment-quiet-ep10-long.png)"
  },
  "c5-d01a-formiga": {
   "attempts": 1,
