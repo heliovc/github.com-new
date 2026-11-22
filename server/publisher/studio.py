@@ -464,15 +464,21 @@ class Studio:
                 pass
 
     # ------------------------------------------------- pós-publicação: miniatura de Short
-    def _phone_gate(self) -> bool:
-        """diálogo "confirme seu número de telefone" aberto? (canal sem verificação)"""
-        try:
-            txt = self.js("""() => [...document.querySelectorAll('tp-yt-paper-dialog, ytcp-dialog, ytcp-confirmation-dialog,
-                yt-confirm-dialog-renderer, ytd-popup-container, tp-yt-iron-overlay-backdrop + *')]
-                .filter(e => e.getBoundingClientRect().width > 0).map(e => e.innerText || '').join(' ')""")
-        except Exception:  # noqa: BLE001
-            return False
-        return bool(PHONE_RX.search(txt or ""))
+    def _phone_gate(self, wait_s: float = 0) -> bool:
+        """aviso "verifique/confirme seu número de telefone" na tela? (canal sem verificação)
+        22/11: no youtube.com o aviso de fixar comentário não é nenhum dos diálogos conhecidos —
+        lê o texto visível da página inteira (innerText ignora o que está escondido)."""
+        end = time.time() + wait_s
+        while True:
+            try:
+                txt = self.js("() => document.body ? document.body.innerText : ''")
+            except Exception:  # noqa: BLE001
+                txt = ""
+            if PHONE_RX.search(txt or ""):
+                return True
+            if time.time() >= end:
+                return False
+            self.page.wait_for_timeout(500)
 
     def set_thumbnail(self, video_id: str, path: str) -> str:
         """Envia a capa (9:16) como miniatura de um vídeo já enviado — Shorts aceitam no Studio desde 2025/26,
@@ -619,8 +625,7 @@ class Studio:
         if not self.click_text(["Fixar no topo", "Fixar", "Pin"], timeout=8):
             self.shot("comentario-menu")
             raise StudioError("opção 'Fixar' não apareceu no menu do comentário")
-        p.wait_for_timeout(1500)
-        if self._phone_gate():  # 20/11: canal novo — "Verifique seu número de telefone para fixar comentários"
+        if self._phone_gate(wait_s=6):  # 20/11: canal novo — "Verifique seu número de telefone para fixar comentários"
             p.keyboard.press("Escape")
             raise NeedsVerification("fixar comentário pede o telefone verificado no canal")
         for sel in ("yt-confirm-dialog-renderer #confirm-button", "#confirm-button"):
@@ -628,6 +633,9 @@ class Studio:
                 p.locator(sel).first.click()
                 break
         p.wait_for_timeout(4000)
+        if self._phone_gate():
+            p.keyboard.press("Escape")
+            raise NeedsVerification("fixar comentário pede o telefone verificado no canal")
         thread = self._find_comment(text)
         if thread is None or not self._is_pinned(thread):
             self.shot("comentario-nao-fixou")
