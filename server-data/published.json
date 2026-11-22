@@ -2076,8 +2076,11 @@
   "publish_at": "2026-11-20T22:01:04.392541-03:00",
   "pinned_comment": "Qual animal você quer ser no próximo vídeo?",
   "note": "público em 20/11 (ajuste manual)",
-  "comment_attempts": 3,
-  "comment_error": "o comentário não apareceu depois de enviar (20261120-223125-erro-comment-c5-d01a-formiga.png)"
+  "comment_attempts": 1,
+  "thumb_path": "/opt/canal-publisher/state/thumbs/c5-d01a-formiga.jpg",
+  "comment_error": "comentário postado mas não ficou fixado (20261122-081255-erro-comment-c5-d01a-formiga.png)",
+  "thumb_attempts": 1,
+  "thumb_error": "o seletor de arquivo da miniatura não abriu (20261122-081347-erro-thumb-c5-d01a-formiga.png)"
  },
  "c5-d01b-lagartixa": {
   "attempts": 1,
@@ -2094,8 +2097,11 @@
   "publish_at": "2026-11-20T22:58:04.316505-03:00",
   "pinned_comment": "Qual eletrodoméstico a gente desmonta no próximo?",
   "note": "público em 20/11 (ajuste manual)",
-  "comment_attempts": 3,
-  "comment_error": "comentário postado mas não ficou fixado (20261120-233132-erro-comment-c5-d01b-lagartixa.png)"
+  "comment_attempts": 1,
+  "thumb_path": "/opt/canal-publisher/state/thumbs/c5-d01b-lagartixa.jpg",
+  "comment_error": "comentário postado mas não ficou fixado (20261122-081436-erro-comment-c5-d01b-lagartixa.png)",
+  "thumb_attempts": 1,
+  "thumb_error": "o seletor de arquivo da miniatura não abriu (20261122-081537-erro-thumb-c5-d01b-lagartixa.png)"
  },
  "cosmic-rank18-short": {
   "attempts": 1,
