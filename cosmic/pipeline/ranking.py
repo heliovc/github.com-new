@@ -43,6 +43,9 @@ vis.type == "weigh" / THEME.hook/outro == "weigh": balança: o objeto no prato e
 vis.type == "gravity" / THEME.hook/outro == "gravity": bonequinho numa balança de banheiro sobre a superfície curva do mundo (vis.kind =
   sun | gas | ringed | ice | earth, vis.col), o visor sobe de 70 kg até 70 × g/9,80 e os joelhos dobram (log) + régua log "× gravidade da
   Terra" (½× – 30×) com Vênus/Urano de fora; vis.g em m/s²; gancho = visor piscando "? ? ?" sobre chão escuro; outro = as 5 na régua (rank18).
+vis.type == "litre" / THEME.hook/outro == "litre": 1 litro do material médio do planeta despejado num pote de vidro sobre uma balança de
+  cozinha (visor sobe até vis.kgl kg) ao lado de uma garrafa de água de 1,00 kg + barra 0–6 kg/L com a linha da água e Saturno (0,69,
+  boiaria); gancho = pote vazio com "?" e visor correndo; outro = os 5 potes em fila, cada um na sua balança (rank19).
 Tudo desenhado por código; narração Kokoro (VOICE, padrão af_heart); legenda grande queimada.
 """
 import sys, os, re, math, json, subprocess, importlib.util, random
@@ -1077,6 +1080,66 @@ def gravity_vis(img, it, th, t, dur):
     if v.get("note"): text(img, (W / 2, 660), v["note"], 36, tuple(th["accent2"]), w="ExtraBold", a=ease((t - 1.2) / 0.5), stroke=3)
     gv_ruler(img, th, ALL_ITEMS, cur=it, y=1250)
 
+# ---------- rank19: "litre" (one litre of each planet, poured into a jar on a kitchen scale) ----------
+LT_MAX = 6.0  # kg per litre on the bar
+def lt_jar(img, cx, base_y, fill_col, fill=1.0, t=0.0, w=230, h=300, label=None, a=1.0, swirl=True):
+    """code-drawn glass jar (1 litre) on a scale plate; filled with the planet's average stuff (banded layers)"""
+    lay = Image.new("RGBA", img.size, (0, 0, 0, 0)); d = ImageDraw.Draw(lay)
+    x0, x1, y1 = cx - w / 2, cx + w / 2, base_y; y0 = y1 - h
+    top = y1 - h * 0.92 * max(0.0, min(1.0, fill))
+    if fill > 0 and top < y1 - 30:
+        c = tuple(fill_col)
+        d.rounded_rectangle([x0 + 10, top, x1 - 10, y1 - 8], 18, fill=c + (int(240 * a),))
+        for k in range(6):  # strata / swirls inside the jar
+            yy = top + (y1 - top) * (k + 0.5) / 6 + (5 * math.sin(t * 1.3 + k) if swirl else 0)
+            if yy < top + 6: continue
+            cc = tuple(int(v * (0.72 if k % 2 else 1.15)) for v in c); cc = tuple(min(255, v) for v in cc)
+            d.line([(x0 + 14, yy), (x1 - 14, yy + 6 * math.sin(k))], fill=cc + (int(170 * a),), width=10)
+    d.rounded_rectangle([x0, y0, x1, y1], 26, outline=(220, 235, 255, int(230 * a)), width=6)
+    d.rectangle([x0 + 20, y0 - 30, x1 - 20, y0 + 4], fill=(150, 160, 190, int(255 * a)))  # lid
+    d.line([(x0 + 22, y0 + 30), (x0 + 22, y1 - 40)], fill=(255, 255, 255, int(110 * a)), width=8)  # glass glint
+    img.alpha_composite(lay)
+    if label: text(img, (cx, y0 - 70), label, 40, (240, 240, 250), w="ExtraBold", a=a, stroke=3)
+def lt_scale(img, cx, y, lcd, lcd_col=(120, 255, 160), w=360, a=1.0):
+    lay = Image.new("RGBA", img.size, (0, 0, 0, 0)); d = ImageDraw.Draw(lay)
+    d.rounded_rectangle([cx - w / 2, y, cx + w / 2, y + 110], 22, fill=(225, 228, 238, int(255 * a)), outline=(90, 95, 120, int(255 * a)), width=4)
+    d.rounded_rectangle([cx - w * 0.3, y + 28, cx + w * 0.3, y + 92], 10, fill=(20, 28, 24, int(255 * a)))
+    img.alpha_composite(lay)
+    text(img, (cx, y + 61), lcd, 50 if w > 300 else 34, lcd_col, a=a)
+def lt_bar(img, th, items, cur=None, y=1215, a=1.0, labels=True):
+    x0, x1 = 120, W - 120
+    lay = Image.new("RGBA", img.size, (0, 0, 0, 0)); ImageDraw.Draw(lay).rounded_rectangle([60, y - 120, W - 60, y + 95], 24, fill=(6, 8, 18, int(190 * a))); img.alpha_composite(lay)
+    d = ImageDraw.Draw(img)
+    def X(v): return lerp(x0, x1, v / LT_MAX)
+    d.line([(x0, y), (x1, y)], fill=(110, 115, 150), width=6)
+    for v in range(0, 7):
+        d.line([(X(v), y - 10), (X(v), y + 10)], fill=(160, 165, 195), width=3); d.text((X(v), y + 34), f"{v}", font=F(26, "Bold"), fill=(160, 165, 195), anchor="mm")
+    xw = X(1.0); d.line([(xw, y - 60), (xw, y + 10)], fill=(90, 160, 255), width=4)
+    if labels: d.text((xw + 10, y - 68), "water", font=F(24, "Bold"), fill=(110, 170, 255), anchor="lm")
+    xs = X(0.687); d.ellipse([xs - 8, y - 8, xs + 8, y + 8], fill=(225, 200, 150))
+    if labels: d.text((xs, y + 66), "Saturn", font=F(22, "Bold"), fill=(225, 200, 150), anchor="mm")
+    for o in items:
+        if cur is not None and o["rank"] < cur["rank"]: continue
+        v = o["vis"]; x = X(v["kgl"]); on = cur is None or o is cur
+        d.ellipse([x - 13, y - 13, x + 13, y + 13], fill=tuple(v["col"]) if on else (120, 120, 140))
+        dy = {5: -44, 4: -92, 3: -44, 2: -92, 1: -44}.get(o["rank"], -44)
+        d.text((x, y + dy), f"#{o['rank']}", font=F(28, "Black"), fill=tuple(v["col"]) if on else (140, 140, 160), anchor="mm")
+    d.text((x1, y + 72), "kilograms per litre, planet average", font=F(24, "SemiBold"), fill=(150, 155, 185), anchor="rm")
+def litre_vis(img, it, th, t, dur):
+    v = it["vis"]; bp = max(0.0, min(1.0, (t - 0.3) / max(1.2, dur * 0.5)))
+    jx, base = W / 2 + 130, 880
+    # pour stream from above while filling
+    if bp < 1:
+        d = ImageDraw.Draw(img); d.line([(jx, 430), (jx, base - 300 * 0.92 * easeio(bp))], fill=tuple(v["col"]), width=22)
+    lt_jar(img, jx, base, v["col"], easeio(bp), t, label="1 litre of " + it["name"])
+    lt_scale(img, jx, base + 6, f"{v['kgl'] * easeio(bp):.2f} kg")
+    # reference: a 1-litre bottle of water, always 1.00 kg
+    bx = 210
+    lt_jar(img, bx, base, (70, 130, 230), 1.0, t, w=140, h=210, label="1 litre of water", swirl=False)
+    lt_scale(img, bx, base + 6, "1.00 kg", lcd_col=(140, 190, 255), w=220)
+    if v.get("note"): text(img, (W / 2, 1035), v["note"], 38, tuple(th["accent2"]), w="ExtraBold", a=ease((t - 1.0) / 0.5), stroke=3)
+    lt_bar(img, th, ALL_ITEMS, cur=it, y=1180, labels=False)
+
 def caption_chunks(say, t0, dur):
     words = say.split(); groups, g = [], []
     for w in words:
@@ -1099,6 +1162,17 @@ def draw_caption(img, chunks, gt, y=1585):
 
 def seg_hook(img, sc, th, t, dur):
     col = tuple(th["star_col"]); acc = tuple(th["accent"])
+    if th.get("hook") == "litre":
+        # frame 0: the big number + an empty jar on a scale whose display races, a "?" inside, water bottle for reference
+        lt_jar(img, W / 2 + 130, 960, (60, 55, 80), 0.0, t, label="1 litre of ?")
+        text(img, (W / 2 + 130, 800), "?", 200, tuple(th["accent"]))
+        lt_scale(img, W / 2 + 130, 966, f"{(t * 9.7) % 6:.2f} kg" if int(t * 3) % 2 else "? ? ?", lcd_col=(255, 120, 120))
+        lt_jar(img, 210, 960, (70, 130, 230), 1.0, t, w=140, h=210, label="water", swirl=False)
+        lt_scale(img, 210, 966, "1.00 kg", lcd_col=(140, 190, 255), w=220)
+        text(img, (W / 2, 220), sc.get("big", ""), 140, tuple(th["accent"]), stroke=3)
+        text(img, (W / 2, 335), sc["top"].upper(), 52, (255, 255, 255))
+        text(img, (W / 2, 1300), sc["sub"], 46, tuple(th["accent2"]), w="ExtraBold")
+        return
     if th.get("hook") == "gravity":
         # frame 0: the big number + a person on a scale over a dark unknown surface, the display flickering "????"
         gv_surface(img, "gas", (60, 55, 80), t)
@@ -1358,6 +1432,8 @@ def seg_item(img, it, th, t, dur):
         weigh_vis(img, it, th, t, dur)
     if v["type"] == "gravity":
         gravity_vis(img, it, th, t, dur)
+    if v["type"] == "litre":
+        litre_vis(img, it, th, t, dur)
     # number
     p = easeio((t - 0.5) / 1.6)
     num = it["num"]
@@ -1370,6 +1446,20 @@ def seg_item(img, it, th, t, dur):
 
 def seg_outro(img, sc, th, t, dur):
     a = ease(t / 0.5)
+    if th.get("outro") == "litre":
+        # five small jars side by side, each on its own scale, + Saturn's jar floating in a water tank
+        for i, o in enumerate(sorted(ALL_ITEMS, key=lambda o: o["rank"])):
+            x = 140 + i * 200; vv = o["vis"]
+            lt_jar(img, x, 760, vv["col"], 1.0, t, w=130, h=180, a=a, label=None)
+            lt_scale(img, x, 766, f"{vv['kgl']:.1f} kg", w=190, a=a)
+            text(img, (x, 470), f"#{o['rank']}", 40, tuple(vv["col"]), a=a, stroke=3)
+            text(img, (x, 515), o["name"], 30, tuple(vv["col"]), w="ExtraBold", a=a, stroke=3)
+        if th.get("outro_note"): text(img, (W / 2, 960), th["outro_note"], 44, tuple(th["accent2"]), w="ExtraBold", a=a, stroke=3)
+        text(img, (W / 2, 1080), "WHAT SHOULD WE", 86, (255, 255, 255), a=ease((t - 0.3) / 0.5))
+        text(img, (W / 2, 1165), "WEIGH NEXT?", 70, tuple(th["accent"]), a=ease((t - 0.5) / 0.5))
+        text(img, (W / 2, 1340), "SUBSCRIBE", 100, tuple(th["accent"]), a=ease((t - 0.8) / 0.5))
+        text(img, (W / 2, 1430), "to Cosmic Scale", 50, (255, 255, 255), w="ExtraBold", a=ease((t - 1.0) / 0.5))
+        return
     if th.get("outro") == "gravity":
         gv_ruler(img, th, ALL_ITEMS, cur=None, y=640)
         if th.get("outro_note"): text(img, (W / 2, 820), th["outro_note"], 44, tuple(th["accent2"]), w="ExtraBold", a=a)

@@ -48,6 +48,15 @@ Visuais (vis.type):
              | row (6 Luas deslizam ao longo do eixo) | eye (a galáxia some e sobra a mancha do núcleo, o que o olho vê) | light (pulso de luz
              Andrômeda -> Terra, linha do tempo 2,5 milhões de anos com o surgimento da nossa espécie) | photo (moldura de câmera, contador
              de exposição, o disco aparece) (scale14).
+  "redgiant": Betelgeuse (raio ~700 Sóis) EM ESCALA contra o Sol; vis.mode = hook (disco gigante cortando a tela + o Sol = ponto de 1,6 px
+             circulado) | zoom (zoom log do Sol até Betelgeuse, contador "× wider" até 700) | cube (cubo isométrico 7×7×7, cada bloco =
+             1 milhão de Sóis, contador até 343 milhões) | earths (equação 1 Sol = 1,3 mi Terras × 343 mi = 447 trilhões) | orbits (no lugar
+             do Sol: órbitas Mercúrio–Marte + cinturão de asteroides em escala, superfície em 3,26 UA) | orion (céu com Órion em pontos e linhas,
+             Betelgeuse pulsando) (scale15).
+  "sand"  : o Sol encolhido a um grão de areia de 1 mm (1 mm = 1.391.400 km); vis.mode = hook (ponta do dedo com o grão + ponto no horizonte
+             = próxima estrela, linha tracejada) | earth (régua 0–12 cm, Terra a 10,8 cm + lupa: Terra de 9 µm ao lado de um fio de cabelo) |
+             ruler (pista 0–20 m: Terra, Netuno 3,2 m, Voyager 1 18,6 m, pessoa de 1,7 m) | gap (estrada até o horizonte, contador 0 -> 28,9 km
+             e horas a pé) | galaxy (Terra, Lua a 384.400 km e a Via Láctea nessa escala, 680.000 km, tudo em escala) (scale16).
 Reaproveita render.py (sprites, fontes) e ranking.py (fundo, texto, legendas).
 """
 import sys, os, math, json, subprocess, importlib.util, random
@@ -1087,6 +1096,239 @@ def andromeda_vis(img, v, th, t, dur, bp):
         text(img, (W / 2, 1450), f"exposure {int(1 + 179 * q)} s", 62, acc, stroke=4)
         text(img, (W / 2, 1520), "a long exposure reveals the whole disc", 36, (235, 235, 245), w="Bold", stroke=3)
 
+# ---- scale15: 343 million Suns fit inside Betelgeuse (radius ~700 Suns, NOIRLab/Gemini 2025; volume 700³) ----
+_bg15 = {}
+def _betel15(r):
+    """Betelgeuse drawn by code: red-orange disc, strong limb darkening, a few giant convection cells, soft corona"""
+    r = max(2, int(r))
+    if r in _bg15: return _bg15[r]
+    if r not in (600, 1150) and (r > 150 or len(_bg15) > 40):  # zoom frames: scale one cached sprite instead of caching hundreds
+        base = _betel15(600 if r < 1300 else 1150); sz = int(base.width * r / (600 if r < 1300 else 1150))
+        return base.resize((max(4, sz), max(4, sz)), Image.BILINEAR)
+    S = int(r * 2.5) + 4; yy, xx = np.mgrid[0:S, 0:S].astype(np.float32)
+    d = np.sqrt((xx - S / 2) ** 2 + (yy - S / 2) ** 2) / r
+    mu = np.sqrt(np.clip(1 - d ** 2, 0, 1))
+    rng = np.random.default_rng(15); small = (rng.random((9, 9)) * 255).astype(np.uint8)
+    cells = np.asarray(Image.fromarray(small).resize((S, S), Image.BICUBIC), np.float32) / 255
+    b = (0.35 + 0.65 * mu) * (0.78 + 0.35 * cells)
+    rgb = np.dstack([255 * np.clip(b * 1.05, 0, 1), 120 * b + 30 * mu, 50 * b])
+    a = (d <= 1).astype(np.float32) * 255
+    glow = np.clip(1 - (d - 1) / 0.25, 0, 1) * (d > 1) * 120
+    rgbg = np.where((d > 1)[..., None], np.dstack([np.full_like(d, 255), np.full_like(d, 90), np.full_like(d, 40)]), rgb)
+    im = Image.fromarray(np.dstack([np.clip(rgbg, 0, 255), np.maximum(a, glow)]).astype(np.uint8), "RGBA")
+    _bg15[r] = im; return im
+def _sundot15(img, x, y, rpx, lab=True, ring=True, a=1.0):
+    R.paste_c(img, R.radial(max(24, int(rpx * 6)), [(0, (255, 250, 220, 255)), (0.35, (255, 220, 120, 230)), (1, (255, 200, 90, 0))]), x, y, a)
+    d = ImageDraw.Draw(img)
+    if ring: d.ellipse([x - 34, y - 34, x + 34, y + 34], outline=(255, 255, 255), width=4)
+    if lab: d.text((x + 46, y), "our Sun", font=F(40, "ExtraBold"), fill=(255, 255, 255), anchor="lm", stroke_width=4, stroke_fill=(0, 0, 0))
+def _cube15(img, cx, cy, n_filled, th, s=58):
+    """isometric 7x7x7 cube; each small cube = 100 x 100 x 100 Suns (1 million); fills layer by layer"""
+    acc = tuple(th["accent"]); d = ImageDraw.Draw(img)
+    ux, uy = s * 0.87, s * 0.5
+    def P(i, j, k): return (cx + (i - j) * ux, cy + (i + j) * uy - k * s)
+    idx = 0
+    for k in range(7):
+        for j in range(7):
+            for i in range(7):
+                idx += 1
+                if idx > n_filled: continue
+                top = [P(i, j, k + 1), P(i + 1, j, k + 1), P(i + 1, j + 1, k + 1), P(i, j + 1, k + 1)]
+                left = [P(i, j + 1, k), P(i + 1, j + 1, k), P(i + 1, j + 1, k + 1), P(i, j + 1, k + 1)]
+                right = [P(i + 1, j, k), P(i + 1, j + 1, k), P(i + 1, j + 1, k + 1), P(i + 1, j, k + 1)]
+                shade = 0.75 + 0.25 * (k / 6)
+                d.polygon(left, fill=tuple(int(c * 0.55 * shade) for c in acc), outline=(30, 10, 5))
+                d.polygon(right, fill=tuple(int(c * 0.75 * shade) for c in acc), outline=(30, 10, 5))
+                d.polygon(top, fill=tuple(int(min(255, c * 1.0 * shade + 30)) for c in acc), outline=(30, 10, 5))
+    # wireframe of the full cube
+    for a_, b_ in (((0, 0, 7), (7, 0, 7)), ((7, 0, 7), (7, 7, 7)), ((7, 7, 7), (0, 7, 7)), ((0, 7, 7), (0, 0, 7)),
+                   ((7, 0, 0), (7, 0, 7)), ((7, 7, 0), (7, 7, 7)), ((0, 7, 0), (0, 7, 7)), ((7, 0, 0), (7, 7, 0)), ((7, 7, 0), (0, 7, 0))):
+        d.line([P(*a_), P(*b_)], fill=(255, 230, 200), width=3)
+    return P
+ORI15 = [("Betelgeuse", 0.30, 0.18, 10, (255, 120, 70)), ("Bellatrix", 0.70, 0.22, 6, (200, 215, 255)), ("Alnitak", 0.40, 0.52, 6, (200, 215, 255)),
+         ("Alnilam", 0.50, 0.50, 6, (200, 215, 255)), ("Mintaka", 0.60, 0.48, 6, (200, 215, 255)), ("Saiph", 0.36, 0.84, 6, (200, 215, 255)),
+         ("Rigel", 0.74, 0.80, 8, (190, 210, 255)), ("Meissa", 0.52, 0.08, 4, (200, 215, 255))]
+def redgiant_vis(img, v, th, t, dur, bp):
+    """vis.mode = hook (Betelgeuse fills the screen, the Sun a dot circled at its edge, both TO SCALE) | zoom (log zoom out from the
+    Sun to Betelgeuse, counter "× wider" 1 -> 700) | cube (7×7×7 isometric cube; each block = 100×100×100 Suns; counter to 343 million) |
+    earths (Sun = 1.3 million Earths -> × 343 million = 447 trillion Earths, as a stacked equation) | orbits (Betelgeuse in the Sun's place:
+    orbits of Mercury..Mars + asteroid belt TO SCALE, surface at 3.26 AU) | orion (night sky, Orion drawn as dots + lines, Betelgeuse pulsing)"""
+    acc, acc2 = tuple(th["accent"]), tuple(th["accent2"]); mode = v.get("mode", "hook")
+    if mode == "hook":
+        Rb = 1150; cx, cy = W / 2 + 380, 1700  # huge disc, edge sweeping across the screen
+        R.paste_c(img, _betel15(Rb), cx, cy)
+        sx, sy = 300, 560  # the Sun, to scale (radius 1150/700 = 1.6 px)
+        _sundot15(img, sx, sy, 1.6)
+        text(img, (W / 2 + 120, 1250), "Betelgeuse", 76, (255, 235, 220), stroke=5)
+        text(img, (W / 2 + 120, 1330), "drawn to the same scale", 38, (255, 255, 255), w="Bold", stroke=4)
+    elif mode == "zoom":
+        z = 3 * (700 / 3) ** easeio(bp)  # Sun radius shrinks from 140 px to 0.6 px
+        Rs = 420 / z; cx, cy = W / 2, 900
+        Rb = 700 * Rs
+        if 4 < Rb < 1600: R.paste_c(img, _betel15(Rb), cx, cy, ease((1600 - Rb) / 400))
+        _sundot15(img, cx, cy, max(1.5, Rs), lab=False, ring=Rs < 20)
+        if Rs >= 20: R.paste_c(img, R.sun_sprite(Rs), cx, cy)
+        text(img, (W / 2, 1450), f"{700 ** easeio(bp):,.0f}× wider", 76, acc2, stroke=4)
+        text(img, (W / 2, 1525), "about 700 Suns across", 38, (255, 255, 255), w="Bold", stroke=3)
+    elif mode == "cube":
+        n = int(343 * easeio(bp)); _cube15(img, W / 2, 640, n, th)
+        text(img, (W / 2, 1390), f"{n:,} million Suns", 72, acc2, stroke=4)
+        text(img, (W / 2, 1465), "700 × 700 × 700  ·  each block = 1 million", 34, (255, 255, 255), w="Bold", stroke=3)
+    elif mode == "earths":
+        R.paste_c(img, R.sun_sprite(120), 260, 640)
+        R.paste_c(img, R.earth_sprite(14, glow=None), 470, 640)
+        d = ImageDraw.Draw(img)
+        text(img, (720, 610), "1 Sun =", 52, (255, 255, 255), w="ExtraBold", stroke=3)
+        text(img, (720, 680), "1.3 million Earths", 46, (140, 200, 255), w="ExtraBold", stroke=3)
+        q = easeio(bp)
+        R.paste_c(img, _betel15(150), W / 2 - 300, 1000, ease(q * 3))
+        text(img, (W / 2 + 120, 960), "× 343 million", 60, acc2, a=ease(q * 3), stroke=3)
+        text(img, (W / 2 + 120, 1040), "Suns", 46, (255, 255, 255), w="ExtraBold", a=ease(q * 3), stroke=3)
+        val = 447 * ease((q - 0.3) / 0.7)
+        text(img, (W / 2, 1300), f"{val:,.0f} trillion", 96, acc, a=ease((q - 0.25) * 4), stroke=4)
+        text(img, (W / 2, 1385), "Earths inside one star", 44, (255, 255, 255), w="ExtraBold", a=ease((q - 0.25) * 4), stroke=3)
+    elif mode == "orbits":
+        k = 440 / 3.6; cx, cy = W / 2, 880; d = ImageDraw.Draw(img)
+        rr = 3.255 * k * easeio(bp)
+        lay = Image.new("RGBA", img.size, (0, 0, 0, 0)); dl = ImageDraw.Draw(lay)
+        rng = random.Random(4)
+        for _ in range(700):  # asteroid belt 2.2-3.2 AU
+            a_ = rng.uniform(0, 2 * math.pi); r_ = rng.uniform(2.2, 3.2) * k
+            xx_, yy_ = cx + r_ * math.cos(a_), cy + r_ * math.sin(a_); dl.ellipse([xx_ - 2, yy_ - 2, xx_ + 2, yy_ + 2], fill=(190, 180, 170, 220))
+        img.alpha_composite(lay)
+        if rr > 2: R.paste_c(img, _betel15(rr), cx, cy, 0.92)
+        d = ImageDraw.Draw(img)
+        for n, au, col in (("Mercury", 0.387, (170, 160, 150)), ("Venus", 0.723, (230, 200, 140)), ("Earth", 1.0, (90, 150, 255)), ("Mars", 1.524, (220, 110, 80))):
+            r_ = au * k; swallowed = rr > r_
+            d.ellipse([cx - r_, cy - r_, cx + r_, cy + r_], outline=(255, 255, 255, 90) if not swallowed else (120, 40, 20), width=2)
+            ang = {"Mercury": -1.57, "Venus": 0.0, "Earth": 1.57, "Mars": 3.14}[n]; px, py = cx + r_ * math.cos(ang), cy + r_ * math.sin(ang)
+            if not swallowed:
+                d.ellipse([px - 8, py - 8, px + 8, py + 8], fill=col)
+                text(img, (px, py - 30) if n in ("Mercury", "Earth") else (px + (40 if n == "Venus" else -40), py - 30), n, 30, col, w="ExtraBold", stroke=3)
+                d = ImageDraw.Draw(img)
+        if bp > 0.95: text(img, (W / 2, 1390), "surface ≈ 3.3 × the Earth–Sun distance", 40, (255, 255, 255), w="ExtraBold", stroke=3)
+        text(img, (cx + 3.2 * k * 0.7, cy - 3.2 * k * 0.72 - 20), "asteroid belt", 30, (210, 200, 190), w="Bold", stroke=3)
+    elif mode == "orion":
+        x0, y0, sw, sh = 190, 420, 700, 880; d = ImageDraw.Draw(img)
+        P = {n: (x0 + fx * sw, y0 + fy * sh) for n, fx, fy, _, _ in ORI15}
+        for a_, b_ in (("Betelgeuse", "Alnitak"), ("Bellatrix", "Mintaka"), ("Alnitak", "Alnilam"), ("Alnilam", "Mintaka"), ("Alnitak", "Saiph"),
+                       ("Mintaka", "Rigel"), ("Betelgeuse", "Meissa"), ("Bellatrix", "Meissa")):
+            d.line([P[a_], P[b_]], fill=(120, 130, 180), width=2)
+        for n, fx, fy, s, col in ORI15:
+            x, y = P[n]; pul = 1 + (0.25 * math.sin(t * 4) if n == "Betelgeuse" else 0)
+            R.paste_c(img, R.radial(int(s * 9 * pul), [(0, col + (255,)), (0.25, col + (200,)), (1, col + (0,))]), x, y)
+        bx, by = P["Betelgeuse"]
+        d.ellipse([bx - 60, by - 60, bx + 60, by + 60], outline=acc, width=4)
+        text(img, (bx + 80, by - 20), "Betelgeuse", 46, acc, stroke=3, anchor="lm")
+        text(img, (bx + 80, by + 30), "visible tonight", 34, (255, 255, 255), w="Bold", stroke=3, anchor="lm")
+
+# ---- scale16: the Sun shrunk to a 1 mm grain of sand (1 mm = 1,391,400 km): Earth 9 µm at 10.8 cm, Neptune 3.2 m, Voyager 1 18.6 m,
+# Proxima Centauri 28.9 km, the Milky Way (100,000 ly) 680,000 km = 1.8 × the Earth–Moon distance ----
+def _grain16(img, x, y, r, a=1.0):
+    R.paste_c(img, R.radial(max(12, int(r * 7)), [(0, (255, 250, 220, 255)), (0.18, (255, 215, 110, 255)), (0.3, (255, 190, 80, 120)), (1, (255, 170, 60, 0))]), x, y, a)
+def _finger16(img, x, y):
+    """a fingertip (rounded, skin tone, nail) coming from the bottom; the grain sits on top at (x, y)"""
+    lay = Image.new("RGBA", img.size, (0, 0, 0, 0)); d = ImageDraw.Draw(lay)
+    d.rounded_rectangle([x - 130, y + 18, x + 130, y + 660], 130, fill=(214, 160, 128, 255))
+    d.rounded_rectangle([x - 70, y + 40, x + 70, y + 180], 60, fill=(236, 196, 176, 255))
+    for k in range(5): d.arc([x - 100 + k * 8, y + 260 + k * 22, x + 100 - k * 8, y + 330 + k * 22], 200, 340, fill=(190, 135, 105, 255), width=3)
+    img.alpha_composite(lay)
+_gal16 = {}
+def _galaxy16(w):
+    w = int(w)
+    if w in _gal16: return _gal16[w]
+    im = Image.new("RGBA", (w, int(w * 0.45)), (0, 0, 0, 0)); d = ImageDraw.Draw(im); rng = random.Random(16)
+    for _ in range(int(w * 14)):
+        arm = rng.randint(0, 1); th_ = rng.uniform(0, 3.4 * math.pi); rr = math.exp(0.22 * (th_ - 3.4 * math.pi)) * w / 2 * 0.97
+        ang = th_ + arm * math.pi + rng.gauss(0, 0.25); x = w / 2 + rr * math.cos(ang); y = im.height / 2 + rr * math.sin(ang) * 0.38
+        c = (200, 215, 255) if rng.random() < 0.7 else (255, 225, 180)
+        d.ellipse([x - 1, y - 1, x + 1, y + 1], fill=c + (rng.randint(90, 230),))
+    R.paste_c(im, R.radial(int(w * 0.22), [(0, (255, 235, 190, 255)), (0.5, (255, 220, 160, 110)), (1, (255, 200, 140, 0))]), w / 2, im.height / 2)
+    _gal16[w] = im; return im
+def sand_vis(img, v, th, t, dur, bp):
+    """vis.mode = hook (fingertip holding the grain-Sun; a far dot on the horizon = next star, dashed "29 km") | earth (lens: Earth = 9 µm
+    beside a human hair ~70 µm; ruler: the grain and Earth 10.8 cm away) | ruler (0–20 m track: grain, Earth 0.11 m, Neptune 3.2 m,
+    Voyager 1 18.6 m, a 1.7 m person for scale) | gap (road to the horizon, km counter 0 -> 28.9, walking hours) | galaxy (Earth, the
+    Moon 384,400 km away and the Milky Way at this scale, 680,000 km wide, all TO SCALE)"""
+    acc, acc2 = tuple(th["accent"]), tuple(th["accent2"]); mode = v.get("mode", "hook"); d = ImageDraw.Draw(img)
+    if mode == "hook":
+        d.line([(0, 1060), (W, 1060)], fill=(70, 80, 120), width=2)
+        hx, hy = 860, 1050
+        for k in range(14):  # dashed sightline from the grain to the far star
+            x = lerp(330, hx, k / 14); y = lerp(820, hy, k / 14); x2 = lerp(330, hx, (k + 0.5) / 14); y2 = lerp(820, hy, (k + 0.5) / 14)
+            d.line([(x, y), (x2, y2)], fill=acc2, width=4)
+        _grain16(img, hx, hy, 3 + 1.5 * math.sin(t * 5))
+        _finger16(img, 330, 820); _grain16(img, 330, 812, 16)
+        text(img, (hx - 20, hy - 70), "next star", 40, acc2, stroke=3)
+        text(img, ((330 + hx) / 2 + 40, (820 + hy) / 2 - 50), "29 km", 46, acc, stroke=3)
+        text(img, (330, 740), "the Sun, 1 mm", 44, (255, 235, 180), stroke=3)
+    elif mode == "earth":
+        x0, x1, y = 110, W - 110, 1180; ppm = (x1 - x0) / 120.0
+        d.line([(x0, y), (x1, y)], fill=(200, 205, 225), width=4)
+        for mm in range(0, 121, 10):
+            xx = x0 + mm * ppm; d.line([(xx, y - (24 if mm % 50 == 0 else 14)), (xx, y)], fill=(200, 205, 225), width=3)
+            d.text((xx, y + 30), f"{mm // 10}", font=F(26, "Bold"), fill=(170, 175, 200), anchor="mm")
+        d.text((x1, y + 70), "centimetres", font=F(26, "SemiBold"), fill=(150, 155, 185), anchor="rm")
+        _grain16(img, x0, y - 40, 5)
+        ex = x0 + 107.5 * ppm * easeio(min(1, bp * 1.6)); d = ImageDraw.Draw(img); d.ellipse([ex - 3, y - 43, ex + 3, y - 37], fill=(120, 180, 255))
+        # magnifier on Earth
+        lx, ly, lr = W / 2, 720, 300; q = ease((bp - 0.4) / 0.3)
+        lay = Image.new("RGBA", img.size, (0, 0, 0, 0)); dl = ImageDraw.Draw(lay)
+        dl.ellipse([lx - lr, ly - lr, lx + lr, ly + lr], fill=(10, 12, 26, int(240 * q)), outline=(220, 230, 255, int(255 * q)), width=8)
+        dl.line([(lx + 60, ly - lr), (lx + 200, ly + lr - 40)], fill=(150, 110, 70, int(200 * q)), width=140)  # a human hair, ~70 µm
+        dl.line([(ex, y - 40), (lx + lr * 0.6, ly + lr * 0.8)], fill=(220, 230, 255, int(150 * q)), width=3)
+        m = Image.new("L", img.size, 0); ImageDraw.Draw(m).ellipse([lx - lr + 6, ly - lr + 6, lx + lr - 6, ly + lr - 6], fill=255)
+        hair = Image.new("RGBA", img.size, (0, 0, 0, 0)); hair.paste(lay, (0, 0), m); img.alpha_composite(lay if q < 0.01 else hair)
+        if q > 0.01:
+            dd = ImageDraw.Draw(img); dd.ellipse([lx - lr, ly - lr, lx + lr, ly + lr], outline=(220, 230, 255), width=8)
+            R.paste_c(img, R.earth_sprite(9, glow=(120, 180, 255)), lx - 120, ly, q)
+            text(img, (lx - 120, ly + 60), "Earth", 34, (140, 200, 255), a=q, stroke=3)
+            text(img, (lx + 150, ly + 40), "a hair", 34, (230, 200, 170), a=q, stroke=3)
+        text(img, (W / 2, 1380), f"{10.75 * easeio(min(1, bp * 1.6)):.1f} cm away", 70, acc2, stroke=4)
+    elif mode == "ruler":
+        x0, x1, y = 90, W - 90, 1050; ppm = (x1 - x0) / 20.0
+        d.line([(x0, y), (x1, y)], fill=(200, 205, 225), width=4)
+        for m_ in range(0, 21, 5):
+            xx = x0 + m_ * ppm; d.line([(xx, y - 18), (xx, y + 18)], fill=(200, 205, 225), width=3); d.text((xx, y + 44), f"{m_} m", font=F(28, "Bold"), fill=(170, 175, 200), anchor="mm")
+        _grain16(img, x0, y, 4)
+        d = ImageDraw.Draw(img)
+        px = x0 + 1.0 * ppm; hgt = 1.7 * ppm  # person for scale
+        d.ellipse([px - 9, y - hgt, px + 9, y - hgt + 18], fill=(230, 230, 240)); d.line([(px, y - hgt + 18), (px, y - hgt * 0.45)], fill=(230, 230, 240), width=6)
+        d.line([(px, y - hgt * 0.45), (px - 12, y)], fill=(230, 230, 240), width=6); d.line([(px, y - hgt * 0.45), (px + 12, y)], fill=(230, 230, 240), width=6)
+        for i, (n, m_, col, dy) in enumerate((("Earth 0.11 m", 0.11, (120, 180, 255), -230), ("Neptune 3.2 m", 3.23, (90, 130, 240), -150), ("Voyager 1 · 18.6 m", 18.6, acc, -230))):
+            q = ease((bp - i * 0.3) / 0.25)
+            if q <= 0: continue
+            xx = x0 + m_ * ppm; d.line([(xx, y + dy + 30), (xx, y - 8)], fill=col, width=3); d.ellipse([xx - 7, y - 7, xx + 7, y + 7], fill=col)
+            text(img, (min(max(xx, 200), W - 200), y + dy), n, 38, col, a=q, stroke=3); d = ImageDraw.Draw(img)
+        text(img, (W / 2, 1330), "after 49 years of flying", 46, (255, 255, 255), w="ExtraBold", a=ease((bp - 0.75) / 0.2), stroke=3)
+    elif mode == "gap":
+        hy = 860
+        d.polygon([(0, hy), (W, hy), (W, 1560), (0, 1560)], fill=(10, 12, 22))
+        d.polygon([(W / 2 - 6, hy), (W / 2 + 6, hy), (W / 2 + 330, 1560), (W / 2 - 330, 1560)], fill=(38, 40, 56))
+        off = (t * 2.2) % 1
+        for k in range(10):  # dashes rushing toward the viewer
+            f0 = ((k + off) / 10) ** 2; f1 = ((k + off + 0.4) / 10) ** 2
+            d.polygon([(W / 2 - 3 - 12 * f0, lerp(hy, 1560, f0)), (W / 2 + 3 + 12 * f0, lerp(hy, 1560, f0)), (W / 2 + 3 + 12 * f1, lerp(hy, 1560, f1)), (W / 2 - 3 - 12 * f1, lerp(hy, 1560, f1))], fill=(230, 220, 150))
+        _grain16(img, W / 2, hy - 6, 5 + 2 * math.sin(t * 6))
+        text(img, (W / 2, hy - 70), "Proxima Centauri", 40, acc2, stroke=3)
+        km = 28.9 * easeio(bp)
+        text(img, (W / 2, 560), f"{km:.1f} km", 120, acc, stroke=4)
+        text(img, (W / 2, 660), f"of nothing  ·  {km / 5:.1f} hours on foot", 40, (255, 255, 255), w="ExtraBold", stroke=3)
+    elif mode == "galaxy":
+        ex, y = 100, 1000; scale = 470 / 384400  # px per km
+        mx = ex + 384400 * scale; gw = 680000 * scale
+        R.paste_c(img, _galaxy16(gw), ex + gw / 2, 720, ease(bp * 2))
+        d = ImageDraw.Draw(img)
+        R.paste_c(img, R.earth_sprite(12, glow=(120, 180, 255)), ex, y)
+        R.paste_c(img, R.planet_sprite(5, (200, 200, 205)), mx, y)
+        d = ImageDraw.Draw(img); d.line([(ex + 20, y), (mx - 12, y)], fill=(200, 205, 225), width=3)
+        text(img, (ex, y + 50), "Earth", 32, (140, 200, 255), stroke=3); text(img, (mx, y + 50), "Moon", 32, (220, 220, 230), stroke=3)
+        text(img, ((ex + mx) / 2, y - 40), "384,400 km", 34, (220, 225, 240), w="Bold", stroke=3)
+        q = ease((bp - 0.2) / 0.4); d = ImageDraw.Draw(img)
+        d.line([(ex, 900), (ex + gw * q, 900)], fill=acc2, width=6)
+        text(img, (ex + gw / 2, 860), "the Milky Way, at this scale: 680,000 km", 34, acc2, a=q, stroke=3)
+        text(img, (W / 2, 1330), "1.8× the trip to the Moon", 60, acc, a=ease((bp - 0.55) / 0.3), stroke=4)
+
 def chrome(img, th, gt, total):
     d = ImageDraw.Draw(img)
     d.rectangle([0, 0, int(W * gt / total), 10], fill=tuple(th["accent"]))
@@ -1160,8 +1402,8 @@ def frame(m, durs, gt, chunks, arr):
         hl = v.get("head") or m.BIG
         text(img, (W / 2, 170), hl["num"], 124 if len(hl["num"]) < 12 else 100, tuple(th["accent"]), stroke=4)
         text(img, (W / 2, 280), hl["top"], 52, (255, 255, 255), stroke=3)
-    elif v["type"] in ("jupsun", "andromeda"):
-        (jupsun_vis if v["type"] == "jupsun" else andromeda_vis)(img, v, th, t, d, easeio((t - 0.2) / max(0.8, d * 0.8)))
+    elif v["type"] in ("jupsun", "andromeda", "redgiant", "sand"):
+        {"jupsun": jupsun_vis, "andromeda": andromeda_vis, "redgiant": redgiant_vis, "sand": globals().get("sand_vis")}[v["type"]](img, v, th, t, d, easeio((t - 0.2) / max(0.8, d * 0.8)))
         hl = v.get("head") or m.BIG
         text(img, (W / 2, 170), hl["num"], 124 if len(hl["num"]) < 12 else 100, tuple(th["accent"]), stroke=4)
         text(img, (W / 2, 280), hl["top"], 52, (255, 255, 255), stroke=3)

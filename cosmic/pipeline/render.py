@@ -95,6 +95,13 @@ EP06 added scenes: spinglobe (globe + speed by latitude; top=True rings; slow=Tr
   Learned: never paste sun_sprite(r) with r in the thousands (r × 6 px square float array -> OOM kill); fake a zoom with a tinted overlay.
   Moon counts per planet disagree between sources in 2026 (Saturn 274–293) -> avoid "most moons" rankings until NASA publishes one table.
   Ruler labels for near-equal values (1.00 / 1.07 / 1.14) need staggered offsets.
+2026-11-22 (Sunday, Shorts-only): ranking.py vis "litre" (rank19, a litre of each planet poured into a glass jar on a kitchen scale, LCD
+  counts to the planet's mean density in kg/L, 1-litre water bottle as reference + 0–6 kg/L bar with Saturn floating below water);
+  scale_short.py vis "redgiant" (scale15, Betelgeuse 700 Suns wide TO SCALE: screen-filling disc + 1.6 px Sun, log zoom, 7×7×7 isometric
+  cube of Suns, Earth equation, orbits Mercury–Mars swallowed, Orion sky) and "sand" (scale16, Sun = 1 mm grain: fingertip, 12 cm ruler +
+  lens with a hair, 20 m track to Voyager 1, road to the horizon 28.9 km, Milky Way 680,000 km vs the Earth–Moon line).
+  Learned: never cache one code-drawn sprite per radius during a zoom (hundreds of multi-MB arrays) -> cache one and resize; nested
+  same-type quotes inside an f-string are a SyntaxError on 3.11; never start the same render twice into one output folder.
 """
 import sys, os, re, math, subprocess, importlib.util, json, random, hashlib
 import numpy as np

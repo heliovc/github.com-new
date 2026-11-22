@@ -1,0 +1,76 @@
+{
+ "version": 1,
+ "channel_id": "UCsYYjUbmq4n3lAKgw2F2IJw",
+ "created_at": "2026-11-22T06:14:53-03:00",
+ "items": [
+  {
+   "key": "cosmic-rank19-short",
+   "kind": "short",
+   "video": "ranking.mp4",
+   "title": "Top 5 Densest Planets (#1 Is the One You're Standing On) #shorts",
+   "description": "A litre of each planet on a kitchen scale. Number one weighs 5.51 kg, and Saturn would float.\nFull video: How Long to Reach Every Planet? By Car, Neptune Takes 4,912 Years\n\nSources\n• NASA planetary fact sheets (NSSDC): mean density Earth 5,514, Mercury 5,429, Venus 5,243, Mars 3,934, Neptune 1,638, Jupiter 1,326, Uranus 1,270, Saturn 687 kg/m³\n• 1,000 kg/m³ = 1 kg per litre (density of water)\n• NASA Science, Mercury: its metallic core takes up about 85% of the planet's radius\n\nVisuals are original. Narration uses a synthetic voice.\n#shorts #space #planets #solarsystem",
+   "tags": [
+    "densest planet",
+    "planet density",
+    "solar system",
+    "top 5",
+    "earth",
+    "mercury",
+    "space",
+    "shorts"
+   ],
+   "publish_at": "2026-11-22T13:00:00-03:00",
+   "related_key": "cosmic-ep13-long",
+   "pinned_comment": "Did you expect Earth to beat Mercury? Full video: How Long to Reach Every Planet? By Car, Neptune Takes 4,912 Years",
+   "if_late": "public_now",
+   "made_for_kids": false,
+   "altered_content": true
+  },
+  {
+   "key": "cosmic-scale15-short",
+   "kind": "short",
+   "video": "scale_betelgeuse.mp4",
+   "title": "That Dot Is Our Sun. 343 Million of Them Fit Inside Betelgeuse #shorts",
+   "description": "Betelgeuse is about 700 times wider than the Sun. 700 × 700 × 700 = 343 million Suns by volume, and you can see it tonight in Orion.\nFull video: What If We Swapped the Sun for 5 Other Stars? One Puts Earth INSIDE It\n\nSources\n• NSF NOIRLab / Gemini North release noirlab2523 (July 2025): Betelgeuse has a radius about 700 times the Sun's\n• NASA Sun Fact Sheet (NSSDC): mean radius 695,700 km, volume 1,412,000 × 10^12 km³; NASA Earth Fact Sheet: volume 1.08321 × 10^12 km³\n• Own calculations: 700 × 700 × 700 = 343 million Suns by volume; × 1.3 million Earths per Sun ≈ 447 trillion Earths; 700 Sun radii ≈ 3.26 times the Earth–Sun distance\n• NASA: the main asteroid belt lies roughly 2.2 to 3.2 times the Earth–Sun distance from the Sun\n\nVisuals are original. Narration uses a synthetic voice.\n#shorts #space #betelgeuse #stars",
+   "tags": [
+    "betelgeuse",
+    "sun vs betelgeuse",
+    "size comparison",
+    "biggest stars",
+    "orion",
+    "space to scale",
+    "space",
+    "shorts"
+   ],
+   "publish_at": "2026-11-22T17:00:00-03:00",
+   "related_key": "cosmic-ep17-long",
+   "pinned_comment": "Have you ever spotted Betelgeuse in Orion? Full video: What If We Swapped the Sun for 5 Other Stars? One Puts Earth INSIDE It",
+   "if_late": "public_now",
+   "made_for_kids": false,
+   "altered_content": true
+  },
+  {
+   "key": "cosmic-scale16-short",
+   "kind": "short",
+   "video": "scale_sand.mp4",
+   "title": "Shrink the Sun to a Grain of Sand. The Next Star Is 29 km Away #shorts",
+   "description": "Make the Sun 1 mm wide. Earth becomes a 9-micron speck 10.8 cm away, Voyager 1 sits at 18.6 m, and the next star is 29 km away.\nFull video: Voyager 1 Is Now 1 Light-Day Away. A Message Takes 24 Hours\n\nSources\n• NASA Sun Fact Sheet (NSSDC): mean radius 695,700 km (diameter 1,391,400 km, scaled to 1 mm)\n• NASA: Earth diameter 12,742 km; Earth–Sun distance 149.6 million km; Neptune about 30.07 times the Earth–Sun distance\n• NASA/JPL: Voyager 1 reached one light-day (about 173 times the Earth–Sun distance) in November 2026; launched 1977\n• NASA: Proxima Centauri about 4.2 light-years away; the Milky Way's disk about 100,000 light-years across\n• Own calculations: 1 mm = 1,391,400 km, so Earth 0.009 mm at 10.8 cm, Neptune 3.2 m, Voyager 1 18.6 m, Proxima 28.9 km, Milky Way 680,000 km (1.8 × the 384,400 km Earth–Moon distance)\n\nVisuals are original. Narration uses a synthetic voice.\n#shorts #space #scalemodel #universe",
+   "tags": [
+    "scale model",
+    "solar system to scale",
+    "grain of sand",
+    "proxima centauri",
+    "voyager 1",
+    "space to scale",
+    "space",
+    "shorts"
+   ],
+   "publish_at": "2026-11-22T19:00:00-03:00",
+   "related_key": "cosmic-ep15-long",
+   "pinned_comment": "At this scale, how far away do you think the Andromeda galaxy would be? Full video: Voyager 1 Is Now 1 Light-Day Away. A Message Takes 24 Hours",
+   "if_late": "public_now",
+   "made_for_kids": false,
+   "altered_content": true
+  }
+ ]
+}
