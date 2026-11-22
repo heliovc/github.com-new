@@ -2330,5 +2330,31 @@
   "kind": "long",
   "publish_at": "2026-11-22T21:30:00-03:00",
   "pinned_comment": "If you could borrow one scroll from the Great Library tonight, which subject would you choose?"
+ },
+ "c5-d03a-krill": {
+  "attempts": 1,
+  "status": "error",
+  "error": "canal 'Na Pele De' não aparece no channel_switcher",
+  "screenshot": "20261122-115129-erro-c5-d03a-krill.png",
+  "at": "2026-11-22T11:51:29.628242-03:00"
+ },
+ "c5-d03b-pombo": {
+  "attempts": 1,
+  "status": "published",
+  "url": "https://youtube.com/shorts/YFLRYfWb2ZU",
+  "by": "robo",
+  "visibility": "schedule",
+  "when": "2026-11-23T18:45:00-03:00",
+  "at": "2026-11-22T11:55:33.964428-03:00",
+  "error": null,
+  "channel_id": "UCO5Fa5_HJxd-aeTiyQcw0Sw",
+  "title": "E se você fosse um pombo no semáforo? #shorts",
+  "kind": "short",
+  "publish_at": "2026-11-23T18:45:00-03:00",
+  "pinned_comment": "Você já viu esse quadrado no asfalto da sua rua?",
+  "thumb_path": "/opt/canal-publisher/state/thumbs/c5-d03b-pombo.jpg",
+  "thumb_attempts": 0,
+  "thumb_error": "miniatura personalizada pede o telefone verificado no canal",
+  "thumb_retry_after": "2026-11-22T17:56:31.750723-03:00"
  }
 }
