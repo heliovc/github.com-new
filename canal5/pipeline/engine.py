@@ -672,7 +672,7 @@ def write_publish(S, T, ep):
                 tags=pub.get("tags", []), publish_at=pub.get("publish_at"), if_late="public_now", made_for_kids=False,
                 altered_content=True, pinned_comment=pub.get("pinned_comment"), thumbnail="capa.jpg")
     doc = dict(version=1, channel_id=pub.get("channel_id", "UC_CANAL5_PENDENTE"),
-               created_at=time.strftime("%Y-%m-%dT%H:%M:%S-03:00"), items=[item])
+               created_at=time.strftime("%Y-%m-%dT%H:%M:%S-03:00", time.gmtime(time.time() - 3 * 3600)), items=[item])  # sempre horário de Brasília (a nuvem roda em UTC)
     json.dump(doc, open(os.path.join(ep, "publish.draft.json"), "w", encoding="utf-8"), ensure_ascii=False, indent=1)
 
 
