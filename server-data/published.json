@@ -2078,9 +2078,11 @@
   "note": "público em 20/11 (ajuste manual)",
   "comment_attempts": 1,
   "thumb_path": "/opt/canal-publisher/state/thumbs/c5-d01a-formiga.jpg",
-  "comment_error": "comentário postado mas não ficou fixado (20261122-081255-erro-comment-c5-d01a-formiga.png)",
+  "comment_error": "fixar comentário pede o telefone verificado no canal",
   "thumb_attempts": 1,
-  "thumb_error": "o seletor de arquivo da miniatura não abriu (20261122-081347-erro-thumb-c5-d01a-formiga.png)"
+  "thumb_error": "miniatura personalizada pede o telefone verificado no canal",
+  "comment_retry_after": "2026-11-22T14:21:30.138287-03:00",
+  "thumb_retry_after": "2026-11-22T14:22:17.196844-03:00"
  },
  "c5-d01b-lagartixa": {
   "attempts": 1,
@@ -2099,9 +2101,11 @@
   "note": "público em 20/11 (ajuste manual)",
   "comment_attempts": 1,
   "thumb_path": "/opt/canal-publisher/state/thumbs/c5-d01b-lagartixa.jpg",
-  "comment_error": "comentário postado mas não ficou fixado (20261122-081436-erro-comment-c5-d01b-lagartixa.png)",
+  "comment_error": "fixar comentário pede o telefone verificado no canal",
   "thumb_attempts": 1,
-  "thumb_error": "o seletor de arquivo da miniatura não abriu (20261122-081537-erro-thumb-c5-d01b-lagartixa.png)"
+  "thumb_error": "miniatura personalizada pede o telefone verificado no canal",
+  "comment_retry_after": "2026-11-22T14:22:54.617735-03:00",
+  "thumb_retry_after": "2026-11-22T14:23:48.569316-03:00"
  },
  "cosmic-rank18-short": {
   "attempts": 1,
