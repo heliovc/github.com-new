@@ -2260,7 +2260,9 @@
   "related_key": "cosmic-ep15-long",
   "pinned_comment": "At this scale, how far away do you think the Andromeda galaxy would be? Full video: Voyager 1 Is Now 1 Light-Day Away. A Message Takes 24 Hours",
   "related_attempts": 1,
-  "related_done": "2026-11-22T06:45:26.534495-03:00"
+  "related_done": "2026-11-22T06:45:26.534495-03:00",
+  "comment_attempts": 1,
+  "comment_done": "2026-11-22T19:42:58.836738-03:00"
  },
  "ptd-rank19-short": {
   "attempts": 1,
@@ -2321,7 +2323,10 @@
   "thumb_path": "/opt/canal-publisher/state/thumbs/c5-d02b-barata.jpg",
   "thumb_attempts": 0,
   "thumb_error": "miniatura personalizada pede o telefone verificado no canal",
-  "thumb_retry_after": "2026-11-22T20:42:03.247280-03:00"
+  "thumb_retry_after": "2026-11-22T20:42:03.247280-03:00",
+  "comment_attempts": 0,
+  "comment_error": "fixar comentário pede o telefone verificado no canal",
+  "comment_retry_after": "2026-11-23T01:44:52.183466-03:00"
  },
  "quiet-ep12-long": {
   "attempts": 1,
