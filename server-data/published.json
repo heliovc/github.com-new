@@ -2295,7 +2295,10 @@
   "thumb_path": "/opt/canal-publisher/state/thumbs/c5-d02a-mosquito.jpg",
   "thumb_attempts": 0,
   "thumb_error": "miniatura personalizada pede o telefone verificado no canal",
-  "thumb_retry_after": "2026-11-22T14:37:28.784560-03:00"
+  "thumb_retry_after": "2026-11-22T14:37:28.784560-03:00",
+  "comment_attempts": 0,
+  "comment_error": "fixar comentário pede o telefone verificado no canal",
+  "comment_retry_after": "2026-11-22T18:41:29.573728-03:00"
  },
  "c5-d02b-barata": {
   "attempts": 1,
