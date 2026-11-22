@@ -2332,11 +2332,24 @@
   "pinned_comment": "If you could borrow one scroll from the Great Library tonight, which subject would you choose?"
  },
  "c5-d03a-krill": {
-  "attempts": 1,
-  "status": "error",
-  "error": "canal 'Na Pele De' não aparece no channel_switcher",
+  "attempts": 2,
+  "status": "published",
+  "error": null,
   "screenshot": "20261122-115129-erro-c5-d03a-krill.png",
-  "at": "2026-11-22T11:51:29.628242-03:00"
+  "at": "2026-11-22T12:03:11.462106-03:00",
+  "url": "https://youtube.com/shorts/UdUVK_LYYUQ",
+  "by": "robo",
+  "visibility": "schedule",
+  "when": "2026-11-23T11:45:00-03:00",
+  "channel_id": "UCO5Fa5_HJxd-aeTiyQcw0Sw",
+  "title": "E se você fosse um krill na boca da baleia-azul? #shorts",
+  "kind": "short",
+  "publish_at": "2026-11-23T11:45:00-03:00",
+  "pinned_comment": "Qual animal gigante você quer ver por dentro no próximo?",
+  "thumb_path": "/opt/canal-publisher/state/thumbs/c5-d03a-krill.jpg",
+  "thumb_attempts": 0,
+  "thumb_error": "miniatura personalizada pede o telefone verificado no canal",
+  "thumb_retry_after": "2026-11-22T18:04:01.206547-03:00"
  },
  "c5-d03b-pombo": {
   "attempts": 1,
