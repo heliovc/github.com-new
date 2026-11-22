@@ -1,0 +1,29 @@
+{
+ "version": 1,
+ "channel_id": "UCO5Fa5_HJxd-aeTiyQcw0Sw",
+ "created_at": "2026-11-22T11:17:16-03:00",
+ "items": [
+  {
+   "key": "c5-d02b-barata",
+   "kind": "short",
+   "video": "video.mp4",
+   "title": "E se você fosse uma barata no ralo? #shorts",
+   "description": "Por que o cheiro do esgoto não sobe pelo ralo? Uma barata explica: embaixo do ralo tem uma curva no cano, o sifão, que guarda uns 5 centímetros de água parada (o fecho hídrico). O gás do esgoto não atravessa essa tampa de água; cada banho troca a água velha pela nova, e um cano de ventilação até o telhado impede a descarga de sugar o sifão. Mas um ralo sem uso seca, o cheiro volta e o caminho fica livre. Tem algum ralo esquecido aí na sua casa?\n\nVisão do Bicho: a barata sente cheiros com as antenas, cobertas de sensores de olfato.\n\nFontes: ABNT NBR 8160 (sistemas prediais de esgoto sanitário: fecho hídrico mínimo de 50 mm em desconectores); apostila de esgoto sanitário da Escola Politécnica da USP (sifão, caixa sifonada e ventilação); estudos sobre as sensilas olfativas das antenas da barata-americana (Periplaneta americana), PubMed Central. Narração com voz sintética; roteiro e animação próprios.\n#esevocefosse #barata #comofunciona #casa #curiosidades",
+   "tags": [
+    "barata",
+    "ralo",
+    "sifão",
+    "fecho hídrico",
+    "como funciona",
+    "e se você fosse",
+    "shorts"
+   ],
+   "publish_at": "2026-11-23T19:00:00-03:00",
+   "if_late": "public_now",
+   "made_for_kids": false,
+   "altered_content": true,
+   "pinned_comment": "Tem algum ralo esquecido aí na sua casa?",
+   "thumbnail": "capa.jpg"
+  }
+ ]
+}

@@ -3,7 +3,7 @@
 Plano completo: `plano.md`. Controle (animais usados, fontes, métricas, decisões): `controle.md`.
 
 ## Como um vídeo é feito
-Tudo por código, custo zero: voz neural brasileira (Microsoft, via edge-tts, com tempo por palavra), desenho 2D vetorial em Python (PIL), trilha e efeitos sintetizados.
+Tudo por código, custo zero: voz neural brasileira (Microsoft, via edge-tts, com tempo por palavra; atrás de proxy, o motor usa o certificado de `SSL_CERT_FILE`), desenho 2D vetorial em Python (PIL), trilha e efeitos sintetizados.
 
 ```
 canal5/

@@ -11,7 +11,8 @@ $PY -I -c "from PIL import Image" 2>/dev/null || $PY -m pip install --break-syst
 $PY -I -c "import edge_tts, soundfile, numpy, imageio_ffmpeg; from PIL import Image" && log "python OK" || log "ERRO: pacotes python ($PY)"
 
 # voz: neural brasileira via edge-tts (padrão, precisa de internet). Kokoro só se CANAL5_KOKORO=1 (offline, soa estrangeira).
-$PY -c "import asyncio, edge_tts
+$PY -c "import asyncio, os, ssl, edge_tts, edge_tts.communicate as etc
+if os.environ.get('SSL_CERT_FILE'): etc._SSL_CTX = ssl.create_default_context(cafile=os.environ['SSL_CERT_FILE'])
 async def t():
     n = 0
     async for ch in edge_tts.Communicate('teste', 'pt-BR-ThalitaMultilingualNeural').stream():

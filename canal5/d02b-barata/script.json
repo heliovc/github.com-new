@@ -1,0 +1,309 @@
+{
+ "key": "c5-d02b-barata",
+ "title": "E se você fosse uma barata no ralo?",
+ "animal": "barata",
+ "grupo": "inseto",
+ "tipo": "B",
+ "formato": "atual",
+ "gancho": "lugar proibido",
+ "tema": "casa",
+ "tts": {
+  "engine": "edge",
+  "voice": "pt-BR-ThalitaMultilingualNeural",
+  "rate": "+0%"
+ },
+ "scene_module": "barata",
+ "accent": [
+  120,
+  180,
+  40
+ ],
+ "hud_series": "E SE VOCÊ FOSSE…",
+ "hud": "VOCÊ: 4 cm · RALO: 10 cm",
+ "music": {
+  "bpm": 96,
+  "root": 55,
+  "prog": [
+   0,
+   5,
+   4,
+   3
+  ],
+  "seed": 19,
+  "inst": "pluck",
+  "density": 0.55
+ },
+ "say_map": {},
+ "beats": [
+  {
+   "scene": "grate",
+   "text": "Eu moro dentro do *ralo* do seu banheiro."
+  },
+  {
+   "scene": "grate",
+   "text": "Lá embaixo, o esgoto *fede*."
+  },
+  {
+   "scene": "grate",
+   "text": "Mas aí em cima, você não sente *nada*."
+  },
+  {
+   "scene": "curve",
+   "text": "O segredo é uma *curva* no cano: o sifão."
+  },
+  {
+   "scene": "curve",
+   "text": "Toda vez que a água desce, um pouco *fica* presa nela."
+  },
+  {
+   "scene": "seal",
+   "text": "É o *fecho hídrico*: uns 5 centímetros de água parada."
+  },
+  {
+   "scene": "seal",
+   "text": "E o gás do esgoto não atravessa essa *tampa* de água."
+  },
+  {
+   "scene": "flush",
+   "text": "Quando você toma banho, a água nova *empurra* a velha."
+  },
+  {
+   "scene": "flush",
+   "text": "E a tampa se *renova* sozinha."
+  },
+  {
+   "scene": "vision",
+   "text": "Minhas antenas são o meu *nariz*."
+  },
+  {
+   "scene": "vision",
+   "text": "Pra elas, o fedor é uma nuvem que *para* bem na água."
+  },
+  {
+   "scene": "vent",
+   "text": "E tem um cano que sobe até o *telhado*: a ventilação."
+  },
+  {
+   "scene": "vent",
+   "text": "Ele deixa o ar entrar, pra descarga não *sugar* o sifão."
+  },
+  {
+   "scene": "dry",
+   "text": "Só que um ralo sem uso *seca*."
+  },
+  {
+   "scene": "dry",
+   "text": "A água evapora, o cheiro sobe…"
+  },
+  {
+   "scene": "dry",
+   "text": "e o caminho fica *livre* pra mim.",
+   "pause_before": 0.3,
+   "payoff": true
+  }
+ ],
+ "scenes": {
+  "grate": {
+   "labels": [
+    {
+     "text": "aqui em cima: *NADA* de cheiro",
+     "at": "nada"
+    }
+   ],
+   "sfx": [
+    {
+     "type": "drip",
+     "at": 0.3,
+     "gain": -14
+    },
+    {
+     "type": "drip",
+     "at": 2.2,
+     "gain": -16
+    },
+    {
+     "type": "hum",
+     "at": 0,
+     "d": "scene",
+     "f0": 70,
+     "gain": -26
+    }
+   ]
+  },
+  "curve": {
+   "labels": [
+    {
+     "text": "o *SIFÃO*",
+     "at": "sifão"
+    },
+    {
+     "text": "a água *FICA* presa",
+     "at": "fica"
+    }
+   ],
+   "sfx_cut": "whoosh",
+   "sfx": [
+    {
+     "type": "hiss",
+     "at": 0.2,
+     "d": 2.0,
+     "gain": -24
+    }
+   ]
+  },
+  "seal": {
+   "labels": [
+    {
+     "text": "fecho hídrico: *5 cm*",
+     "at": "5"
+    },
+    {
+     "text": "o gás *NÃO PASSA*",
+     "at": "tampa"
+    }
+   ],
+   "sfx_cut": "pop",
+   "sfx": [
+    {
+     "type": "kick",
+     "at": "tampa",
+     "gain": -13
+    }
+   ]
+  },
+  "flush": {
+   "labels": [
+    {
+     "text": "água nova *EMPURRA* a velha",
+     "at": "empurra"
+    }
+   ],
+   "sfx_cut": "whoosh",
+   "sfx": [
+    {
+     "type": "hiss",
+     "at": 0.1,
+     "d": 2.8,
+     "gain": -18
+    },
+    {
+     "type": "drip",
+     "at": "renova",
+     "gain": -12
+    }
+   ]
+  },
+  "vision": {
+   "labels": [
+    {
+     "text": "VISÃO DO BICHO · *o cheiro*",
+     "style": "vision",
+     "at": 0
+    }
+   ],
+   "sfx_cut": "glitch",
+   "sfx": [
+    {
+     "type": "hum",
+     "at": 0.2,
+     "d": "scene",
+     "f0": 180,
+     "gain": -24
+    }
+   ]
+  },
+  "vent": {
+   "labels": [
+    {
+     "text": "*VENTILAÇÃO* até o telhado",
+     "at": "ventilação"
+    }
+   ],
+   "sfx_cut": "whoosh_hi",
+   "sfx": [
+    {
+     "type": "wind",
+     "at": 0.2,
+     "d": "scene",
+     "gain": -22
+    },
+    {
+     "type": "whoosh_lo",
+     "at": "sugar",
+     "gain": -14
+    }
+   ]
+  },
+  "dry": {
+   "labels": [
+    {
+     "text": "ralo sem uso *SECA*",
+     "at": "seca"
+    },
+    {
+     "text": "caminho *LIVRE*",
+     "at": "livre"
+    }
+   ],
+   "sfx_cut": "whoosh_lo",
+   "sfx": [
+    {
+     "type": "sizzle",
+     "at": "evapora",
+     "d": 1.5,
+     "gain": -22
+    },
+    {
+     "type": "tic",
+     "at": "livre",
+     "gain": -8
+    }
+   ]
+  }
+ },
+ "cover": {
+  "t": 0.5,
+  "focus": [
+   540,
+   1150
+  ],
+  "zoom": 1.0,
+  "at": [
+   540,
+   1150
+  ],
+  "title": [
+   "*UMA BARATA*",
+   "NO SEU RALO?"
+  ],
+  "hook": "O CHEIRO NÃO VOLTA",
+  "sprite_s": 330,
+  "sprite_rot": -10,
+  "you": [
+   525,
+   1100
+  ],
+  "you_side": "left"
+ },
+ "publish": {
+  "title": "E se você fosse uma barata no ralo? #shorts",
+  "description": "Por que o cheiro do esgoto não sobe pelo ralo? Uma barata explica: embaixo do ralo tem uma curva no cano, o sifão, que guarda uns 5 centímetros de água parada (o fecho hídrico). O gás do esgoto não atravessa essa tampa de água; cada banho troca a água velha pela nova, e um cano de ventilação até o telhado impede a descarga de sugar o sifão. Mas um ralo sem uso seca, o cheiro volta e o caminho fica livre. Tem algum ralo esquecido aí na sua casa?\n\nVisão do Bicho: a barata sente cheiros com as antenas, cobertas de sensores de olfato.\n\nFontes: ABNT NBR 8160 (sistemas prediais de esgoto sanitário: fecho hídrico mínimo de 50 mm em desconectores); apostila de esgoto sanitário da Escola Politécnica da USP (sifão, caixa sifonada e ventilação); estudos sobre as sensilas olfativas das antenas da barata-americana (Periplaneta americana), PubMed Central. Narração com voz sintética; roteiro e animação próprios.\n#esevocefosse #barata #comofunciona #casa #curiosidades",
+  "tags": [
+   "barata",
+   "ralo",
+   "sifão",
+   "fecho hídrico",
+   "como funciona",
+   "e se você fosse",
+   "shorts"
+  ],
+  "publish_at": "2026-11-23T19:00:00-03:00",
+  "pinned_comment": "Tem algum ralo esquecido aí na sua casa?",
+  "channel_id": "UCO5Fa5_HJxd-aeTiyQcw0Sw"
+ },
+ "sources": [
+  "ABNT NBR 8160:1999 — Sistemas prediais de esgoto sanitário (fecho hídrico: camada líquida que veda a passagem dos gases; mínimo 50 mm)",
+  "Escola Politécnica da USP — Esgoto sanitário (apostila, 2019): https://edisciplinas.usp.br/pluginfile.php/4535392/mod_resource/content/6/Esgoto%20sanit%C3%A1rio%202019%20SQ.pdf",
+  "Sensilas olfativas da antena de Periplaneta americana — PubMed Central: https://pmc.ncbi.nlm.nih.gov/articles/PMC6208657"
+ ]
+}

@@ -1,0 +1,337 @@
+{
+ "key": "c5-d02a-mosquito",
+ "title": "E se você fosse um mosquito atingido por uma gota de chuva?",
+ "animal": "mosquito",
+ "grupo": "inseto",
+ "tipo": "A",
+ "formato": "curto",
+ "gancho": "queda/perigo",
+ "tema": "natureza",
+ "tts": {
+  "engine": "edge",
+  "voice": "pt-BR-ThalitaMultilingualNeural",
+  "rate": "+0%"
+ },
+ "scene_module": "mosquito",
+ "accent": [
+  30,
+  150,
+  200
+ ],
+ "hud_series": "E SE VOCÊ FOSSE…",
+ "hud": "VOCÊ: 2 mg · GOTA: até 100 mg",
+ "music": {
+  "bpm": 122,
+  "root": 62,
+  "prog": [
+   0,
+   4,
+   5,
+   3
+  ],
+  "seed": 11,
+  "inst": "marimba",
+  "density": 0.7
+ },
+ "say_map": {},
+ "beats": [
+  {
+   "scene": "rain",
+   "text": "Pra mim, cada gota de chuva é um *ônibus* caindo do céu."
+  },
+  {
+   "scene": "vision",
+   "text": "E eu tô no meio da chuva, seguindo o seu *bafo*."
+  },
+  {
+   "scene": "vision2",
+   "text": "Sinto o *gás carbônico* dele a mais de 10 metros."
+  },
+  {
+   "scene": "drop",
+   "text": "Aí vem a gota."
+  },
+  {
+   "scene": "drop",
+   "text": "Ela pesa até *50 vezes* mais que eu."
+  },
+  {
+   "scene": "speed",
+   "text": "E cai a mais de 30 km/h."
+  },
+  {
+   "scene": "ride",
+   "text": "Eu sou tão *leve* que ela quase não freia."
+  },
+  {
+   "scene": "ride",
+   "text": "Ela não me esmaga. Ela me *carrega*."
+  },
+  {
+   "scene": "gforce",
+   "text": "No tranco, eu aguento até 300 vezes a *gravidade*."
+  },
+  {
+   "scene": "gforce",
+   "text": "Um piloto de caça sente uns 9."
+  },
+  {
+   "scene": "slip",
+   "text": "Meus pelos *repelem* água, e eu escorrego pra fora."
+  },
+  {
+   "scene": "ground",
+   "text": "Meu único medo?"
+  },
+  {
+   "scene": "ground",
+   "text": "Pegar esse ônibus perto do *chão*.",
+   "pause_before": 0.3,
+   "payoff": true
+  }
+ ],
+ "scenes": {
+  "rain": {
+   "labels": [
+    {
+     "text": "cada gota = um *ÔNIBUS*",
+     "at": "ônibus"
+    }
+   ],
+   "sfx": [
+    {
+     "type": "wind",
+     "at": 0,
+     "d": "scene",
+     "gain": -20
+    },
+    {
+     "type": "whoosh_lo",
+     "at": 0.5,
+     "gain": -11
+    }
+   ]
+  },
+  "vision": {
+   "labels": [
+    {
+     "text": "VISÃO DO BICHO · *gás carbônico*",
+     "style": "vision",
+     "at": 0
+    }
+   ],
+   "sfx_cut": "glitch",
+   "sfx": [
+    {
+     "type": "hum",
+     "at": 0,
+     "d": "scene",
+     "f0": 520,
+     "gain": -26
+    }
+   ]
+  },
+  "vision2": {
+   "fn": "vision",
+   "no_punch": false,
+   "labels": [
+    {
+     "text": "VISÃO DO BICHO · *gás carbônico*",
+     "style": "vision",
+     "at": 0
+    },
+    {
+     "text": "*10 m* de distância",
+     "at": "10"
+    }
+   ],
+   "sfx_cut": "whoosh_lo",
+   "sfx": [
+    {
+     "type": "hum",
+     "at": 0,
+     "d": "scene",
+     "f0": 520,
+     "gain": -26
+    }
+   ]
+  },
+  "drop": {
+   "labels": [
+    {
+     "text": "*50×* o meu peso",
+     "at": "50"
+    }
+   ],
+   "sfx_cut": "whoosh",
+   "sfx": [
+    {
+     "type": "rise",
+     "at": 0.3,
+     "d": 2.5,
+     "f0": 180,
+     "f1": 620,
+     "gain": -22
+    }
+   ]
+  },
+  "speed": {
+   "labels": [
+    {
+     "text": "*+30 km/h*",
+     "at": "30"
+    }
+   ],
+   "sfx_cut": "whoosh",
+   "sfx": [
+    {
+     "type": "wind",
+     "at": 0,
+     "d": "scene",
+     "gain": -16
+    },
+    {
+     "type": "rise",
+     "at": 0.1,
+     "d": 1.6,
+     "f0": 200,
+     "f1": 900,
+     "gain": -20
+    }
+   ]
+  },
+  "ride": {
+   "labels": [
+    {
+     "text": "a gota quase não *FREIA*",
+     "at": "freia"
+    },
+    {
+     "text": "ela me *CARREGA*",
+     "at": "carrega"
+    }
+   ],
+   "sfx_cut": "pop",
+   "sfx": [
+    {
+     "type": "drip",
+     "at": 0.1,
+     "gain": -12
+    },
+    {
+     "type": "whoosh_hi",
+     "at": "carrega",
+     "gain": -13
+    }
+   ]
+  },
+  "gforce": {
+   "labels": [
+    {
+     "text": "até *300 G*",
+     "at": "300"
+    },
+    {
+     "text": "piloto de caça: *9 G*",
+     "at": "piloto"
+    }
+   ],
+   "sfx_cut": "kick",
+   "sfx": [
+    {
+     "type": "thud",
+     "at": "300",
+     "gain": -14
+    },
+    {
+     "type": "blip_up",
+     "at": "9",
+     "gain": -15
+    }
+   ]
+  },
+  "slip": {
+   "labels": [
+    {
+     "text": "pelos que *REPELEM* água",
+     "at": "repelem"
+    }
+   ],
+   "sfx_cut": "whoosh_hi",
+   "sfx": [
+    {
+     "type": "drip",
+     "at": "escorrego",
+     "gain": -12
+    }
+   ]
+  },
+  "ground": {
+   "labels": [
+    {
+     "text": "perigo: perto do *CHÃO*",
+     "at": "chão"
+    }
+   ],
+   "sfx_cut": "whoosh_lo",
+   "sfx": [
+    {
+     "type": "wind",
+     "at": 0,
+     "d": "scene",
+     "gain": -22
+    },
+    {
+     "type": "thud",
+     "at": "chão",
+     "gain": -16
+    }
+   ]
+  }
+ },
+ "cover": {
+  "t": 0.5,
+  "focus": [
+   560,
+   1180
+  ],
+  "zoom": 1.0,
+  "at": [
+   560,
+   1180
+  ],
+  "title": [
+   "*UM MOSQUITO*",
+   "NA CHUVA?"
+  ],
+  "hook": "GOTA 50× MAIS PESADA",
+  "sprite_s": 360,
+  "sprite_rot": -8,
+  "you": [
+   700,
+   1120
+  ],
+  "you_side": "right"
+ },
+ "publish": {
+  "title": "E se você fosse um mosquito atingido por uma gota de chuva? #shorts",
+  "description": "Uma gota de chuva pode pesar até 50 vezes mais que um mosquito e cair a mais de 30 km/h. Mesmo assim, ele sobrevive: é tão leve que a gota quase não freia, e em vez de esmagar, ela carrega o mosquito junto. No tranco, ele aguenta até 300 vezes a gravidade (um piloto de caça sente uns 9), e os pelos que repelem água fazem ele escorregar para fora. O perigo de verdade é ser atingido perto do chão. Qual bicho você quer ver levando um susto no próximo?\n\nVisão do Bicho: mosquitos sentem o gás carbônico da respiração a mais de 10 metros e usam isso para achar quem picar.\n\nFontes: A. K. Dickerson, P. G. Shankles, N. M. Madhavan e D. L. Hu, \"Mosquitoes survive raindrop collisions by virtue of their low mass\", PNAS (2012), e Georgia Tech (2012); F. van Breugel, J. Riffell, A. Fairhall e M. H. Dickinson, \"Mosquitoes use vision to associate odor plumes with thermal targets\", Current Biology (2015). Narração com voz sintética; roteiro e animação próprios.\n#esevocefosse #mosquito #chuva #fisica #curiosidades",
+  "tags": [
+   "mosquito",
+   "gota de chuva",
+   "física",
+   "curiosidades",
+   "e se você fosse",
+   "animais",
+   "shorts"
+  ],
+  "publish_at": "2026-11-23T12:00:00-03:00",
+  "pinned_comment": "Qual bicho você quer ver levando um susto no próximo?",
+  "channel_id": "UCO5Fa5_HJxd-aeTiyQcw0Sw"
+ },
+ "sources": [
+  "Dickerson, Shankles, Madhavan & Hu (2012) Mosquitoes survive raindrop collisions by virtue of their low mass. PNAS 109(25): 9822–9827 — https://pmc.ncbi.nlm.nih.gov/articles/PMC3382494",
+  "Georgia Tech (2012) Mosquitoes fly in rain thanks to low mass (até 300 G; gota até 50× a massa) — https://coe.gatech.edu/news/2012/06/mosquitoes-fly-rain-thanks-low-mass",
+  "van Breugel, Riffell, Fairhall & Dickinson (2015) Mosquitoes use vision to associate odor plumes with thermal targets. Current Biology 25: 2123–2129"
+ ]
+}

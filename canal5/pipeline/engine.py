@@ -114,7 +114,10 @@ def synth_edge(text, voice, rate, cache):
     h = hashlib.sha1(f"edge|{voice}|{rate}|{text}".encode()).hexdigest()[:14]
     p = os.path.join(cache, f"tts_{h}.wav"); pj = p[:-4] + ".json"
     if not (os.path.exists(p) and os.path.exists(pj)):
-        import asyncio, io, edge_tts
+        import asyncio, io, ssl, edge_tts
+        if os.environ.get("SSL_CERT_FILE"):  # nuvem com proxy: confia no certificado do proxy (edge-tts usa certifi fixo)
+            import edge_tts.communicate as _etc
+            _etc._SSL_CTX = ssl.create_default_context(cafile=os.environ["SSL_CERT_FILE"])
 
         async def go():
             c = edge_tts.Communicate(text, voice, rate=rate, boundary="WordBoundary")
