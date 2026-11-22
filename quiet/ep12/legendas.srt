@@ -1,0 +1,951 @@
+1
+00:00:07,000 --> 00:00:10,343
+Good evening, and welcome to The Quiet Archive.
+
+2
+00:00:10,343 --> 00:00:22,865
+Tonight we are travelling to Alexandria, on the coast of Egypt, about two hundred and thirty years before the common era, to visit the most famous library of the ancient world.
+
+3
+00:00:22,865 --> 00:00:25,355
+We will not be hurrying through it.
+
+4
+00:00:25,355 --> 00:00:36,738
+We will follow one single book, a rolled-up scroll, on its slow journey from a ship in the harbour to a quiet shelf, and then up onto a rooftop under the stars.
+
+5
+00:00:38,538 --> 00:00:41,575
+So let yourself sink into your pillow.
+
+6
+00:00:41,575 --> 00:00:45,171
+Let your jaw loosen and your hands rest open.
+
+7
+00:00:45,171 --> 00:00:55,879
+Breathe in slowly, as if you could smell the warm sea air and the salt drying on the harbour stones, and breathe out even more slowly.
+
+8
+00:00:55,879 --> 00:00:56,358
+Again.
+
+9
+00:00:56,358 --> 00:01:02,111
+Your only task tonight is to listen, or not to listen, just as you like.
+
+10
+00:01:03,912 --> 00:01:08,046
+If the story slips away from you for a while, let it go.
+
+11
+00:01:08,046 --> 00:01:16,167
+The scroll will carry on its journey without you, and the library will still be there whenever you drift back.
+
+12
+00:01:16,167 --> 00:01:27,314
+And if you fall asleep before the end, then the stars will simply keep shining over Alexandria, and that is a perfectly good way for tonight to finish.
+
+13
+00:01:37,114 --> 00:01:46,746
+The sun has just gone down behind the low line of the coast, and the sky over the sea is turning from gold to a deep, clear blue.
+
+14
+00:01:46,746 --> 00:01:59,290
+A merchant ship from the island of Rhodes is coming slowly in towards the harbour, her big square sail half lowered, her steersman leaning on the long oar at the stern.
+
+15
+00:01:59,290 --> 00:02:04,442
+Ahead of her, on its island, the great lighthouse is already burning.
+
+16
+00:02:06,242 --> 00:02:16,139
+It is called the Pharos, after the little island on which it stands, and it is the tallest building most of these sailors have ever seen.
+
+17
+00:02:16,139 --> 00:02:29,648
+It rises in three parts, one above the other: a broad square tower at the bottom, then an eight-sided tower, then a slim round one at the very top, where a fire is kept burning all night.
+
+18
+00:02:29,648 --> 00:02:35,789
+On the summit stands a statue, often said to be Zeus the Saviour, looking out to sea.
+
+19
+00:02:37,589 --> 00:02:52,326
+The lighthouse was begun under the first King Ptolemy and finished under his son, about fifty years before tonight, and it is said to have been designed by an architect called Sostratus of Cnidus.
+
+20
+00:02:52,326 --> 00:03:02,176
+To a ship far out at sea, the coast of Egypt here is low and flat and hard to see, with sandbanks and rocks hidden in the shallows.
+
+21
+00:03:02,176 --> 00:03:06,687
+The Pharos shows the way in, smoke by day and fire by night.
+
+22
+00:03:08,487 --> 00:03:15,683
+As the ship comes nearer, you can see the long causeway that joins the island to the mainland.
+
+23
+00:03:15,683 --> 00:03:26,323
+The Alexandrians call it the Heptastadion, which means seven stadia, because it is about seven stadia long, a little more than a kilometre.
+
+24
+00:03:26,323 --> 00:03:37,117
+It divides the water into two harbours, one on each side, and tonight the ship is steering for the larger one, the Great Harbour on the east.
+
+25
+00:03:38,917 --> 00:03:50,499
+Below decks, the cargo is packed tight in the hold: tall clay jars of Rhodian wine sealed with stoppers, baskets of dried figs, bundles of fine cloth.
+
+26
+00:03:50,499 --> 00:04:02,312
+And in the captain's own cabin, in a small cedar chest, lie a few rolled books that he bought in the market at Rhodes, to read on the long nights at sea.
+
+27
+00:04:02,312 --> 00:04:06,096
+One of them is the book we are following tonight.
+
+28
+00:04:07,896 --> 00:04:15,521
+It is a copy of a poem called the Phaenomena, written by a poet named Aratus about forty years earlier.
+
+29
+00:04:15,521 --> 00:04:27,366
+It describes the stars and constellations of the night sky, where they rise and where they set, and the signs of the weather that sailors and farmers watch for.
+
+30
+00:04:27,366 --> 00:04:36,546
+It has become one of the best-loved poems in the Greek world, and the captain likes to read it on deck when the sea is calm.
+
+31
+00:04:38,346 --> 00:04:53,945
+The ship slides in past the lighthouse, so close now that you can hear the soft roar of the fire high above, and see the glow of it reflected in the dark water, trembling and breaking up with every small wave.
+
+32
+00:04:53,945 --> 00:04:55,886
+The sailors furl the sail.
+
+33
+00:04:55,886 --> 00:04:58,797
+The oars come out for the last stretch.
+
+34
+00:04:58,797 --> 00:05:05,738
+And slowly, gently, the ship comes alongside the stone quay, and the ropes are thrown ashore.
+
+35
+00:05:15,538 --> 00:05:27,401
+On the quay, a few lamps are already lit outside the customs house, and men are waiting with wax tablets and tally sticks to record what each ship has brought.
+
+36
+00:05:27,401 --> 00:05:32,698
+Egypt under the Ptolemies is a country that likes to write things down.
+
+37
+00:05:32,698 --> 00:05:42,845
+Every jar of wine, every bale of cloth, every sack of grain is counted, weighed and taxed, and the clerks have been doing it since dawn.
+
+38
+00:05:44,645 --> 00:05:49,219
+The Great Harbour is busy by day, but at dusk it grows calm.
+
+39
+00:05:49,219 --> 00:06:03,171
+On the far side of the causeway lies the western harbour, which the Alexandrians call Eunostos, the harbour of the happy return, a lovely name for a place where tired ships come home.
+
+40
+00:06:03,171 --> 00:06:13,082
+Between the two, small boats pass to and fro under the arches of the causeway, and the water slaps softly against the stone piers.
+
+41
+00:06:14,882 --> 00:06:20,132
+But tonight, among the officials, there is someone a little different.
+
+42
+00:06:20,132 --> 00:06:36,557
+He is a young assistant from the library, with ink on his fingers and a satchel over his shoulder, and his job is to ask a question that is asked of every ship that comes into this harbour: are there any books on board?
+
+43
+00:06:38,357 --> 00:06:43,183
+The story goes that the kings of Alexandria gave an unusual order.
+
+44
+00:06:43,183 --> 00:06:49,179
+Any book found on a ship in the harbour was to be taken to the library and copied.
+
+45
+00:06:49,179 --> 00:07:00,074
+The copy was handed back to the owner, and the original was kept, and placed on the shelves with a small note saying that it had come from the ships.
+
+46
+00:07:00,074 --> 00:07:09,141
+The tale was told centuries later by a famous doctor called Galen, and whether every part of it is true, nobody now can say.
+
+47
+00:07:10,941 --> 00:07:17,713
+There is another story Galen told, about the third King Ptolemy, the one who is reigning tonight.
+
+48
+00:07:17,713 --> 00:07:29,373
+He is said to have asked the city of Athens to lend him its official copies of the great tragedies of Aeschylus, Sophocles and Euripides, so that they could be copied.
+
+49
+00:07:29,373 --> 00:07:34,051
+Athens agreed, but only after he promised a huge deposit of silver.
+
+50
+00:07:34,051 --> 00:07:42,429
+When the copies were made, the king kept the originals, sent back the new copies, and simply let Athens keep the silver.
+
+51
+00:07:44,229 --> 00:07:52,874
+So tonight, the captain from Rhodes is not surprised when the young man from the library politely asks about books.
+
+52
+00:07:52,874 --> 00:07:57,534
+He goes down to his cabin and comes back with the cedar chest.
+
+53
+00:07:57,534 --> 00:08:12,794
+The assistant lifts out each scroll, reads the little tag hanging from its end, and writes the titles carefully on his tablet: a book of fables, a speech by a famous orator, and the Phaenomena of Aratus.
+
+54
+00:08:14,594 --> 00:08:19,211
+The captain will have his books again, he is told, in a few days.
+
+55
+00:08:19,211 --> 00:08:20,703
+He shrugs and smiles.
+
+56
+00:08:20,703 --> 00:08:33,844
+He has heard about the library, as everyone who sails in this sea has heard about it, and there is a kind of pride, he thinks, in a book of his resting for a while among so many others.
+
+57
+00:08:33,844 --> 00:08:40,450
+The assistant thanks him, wraps the scrolls in a soft cloth, and slips them into his satchel.
+
+58
+00:08:42,250 --> 00:08:54,183
+He walks away along the quay, past the moored ships knocking gently against one another, past the stacked amphorae and the coils of rope and the sleeping dogs.
+
+59
+00:08:54,183 --> 00:09:00,112
+Behind him the lighthouse burns on, and its light follows him across the water.
+
+60
+00:09:00,112 --> 00:09:07,317
+Ahead of him, beyond the warehouses, the city of Alexandria is lighting its lamps for the night.
+
+61
+00:09:17,117 --> 00:09:19,134
+Alexandria is a young city.
+
+62
+00:09:19,134 --> 00:09:40,207
+It was founded about a hundred years ago by Alexander the Great, who chose this strip of land between the sea and a great lake, and it was laid out by his architect, Dinocrates, on a neat grid of straight streets crossing one another at right angles, like the lines on a board game.
+
+63
+00:09:40,207 --> 00:09:44,914
+Even in the dark, you would find it hard to lose your way here.
+
+64
+00:09:46,714 --> 00:09:54,824
+The assistant turns into the greatest of those streets, the one that later writers will call the Canopic Way.
+
+65
+00:09:54,824 --> 00:10:13,722
+It runs straight through the whole city from west to east, and it is astonishingly wide, wide enough for several carts to pass side by side, with long colonnades running along each edge, where people can walk in the shade by day and under lamps by night.
+
+66
+00:10:15,522 --> 00:10:19,005
+At this hour, the street is calm but not empty.
+
+67
+00:10:19,005 --> 00:10:22,117
+Shopkeepers are putting up their shutters.
+
+68
+00:10:22,117 --> 00:10:26,341
+A man sells little cakes of sesame and honey from a tray.
+
+69
+00:10:26,341 --> 00:10:31,899
+Two old men sit on a step playing a game with pebbles on a scratched board.
+
+70
+00:10:31,899 --> 00:10:44,941
+You hear Greek spoken, and Egyptian, and Aramaic, and the soft voices of women calling children in from the street, in a city where many peoples have come to live side by side.
+
+71
+00:10:46,741 --> 00:11:03,528
+The houses here are built of pale limestone and plastered brick, and most of them have flat roofs, where families sleep in the hottest months of summer, and dry their washing, and sit in the evening to catch the cool wind off the sea.
+
+72
+00:11:03,528 --> 00:11:13,429
+On some of those roofs, tonight, you can see the small flicker of an oil lamp, and the shapes of people sitting together, talking quietly.
+
+73
+00:11:15,229 --> 00:11:28,987
+Somewhere near the heart of the city, it is said, lies the tomb of Alexander himself, whose body was brought here many years ago by the first Ptolemy, and laid in a splendid tomb.
+
+74
+00:11:28,987 --> 00:11:31,139
+The assistant does not stop.
+
+75
+00:11:31,139 --> 00:11:33,752
+He has passed it a thousand times.
+
+76
+00:11:33,752 --> 00:11:42,898
+But he lowers his voice a little as he walks by, the way people do when they pass a place that feels old and important.
+
+77
+00:11:44,698 --> 00:11:56,248
+Further off, on a low hill in the south-west of the city, stands the temple of Serapis, a god who is part Greek and part Egyptian, honoured by both peoples.
+
+78
+00:11:56,248 --> 00:12:08,168
+Within its walls the kings have placed a second, smaller collection of books, a daughter library, open to readers who are not among the scholars of the Mouseion.
+
+79
+00:12:08,168 --> 00:12:13,498
+Its lamps, too, are lit tonight, small points of light on the dark hill.
+
+80
+00:12:15,298 --> 00:12:27,967
+The air smells of the sea and of woodsmoke, of baking bread, and faintly of the lake behind the city, where boats bring grain and wine and papyrus down from the Nile.
+
+81
+00:12:27,967 --> 00:12:34,606
+A breeze from the north stirs the dust along the street and makes the lamp flames lean.
+
+82
+00:12:34,606 --> 00:12:42,925
+It is the wind that keeps Alexandria cooler than the rest of Egypt, and the people here are very proud of it.
+
+83
+00:12:44,725 --> 00:12:53,973
+At last the assistant turns aside, towards the royal quarter near the sea, where the palaces of the kings stand among gardens.
+
+84
+00:12:53,973 --> 00:13:03,734
+Here the streets are quieter, and the walls are higher, and there are guards at the gates who know him by sight and nod as he passes.
+
+85
+00:13:03,734 --> 00:13:11,221
+A little further on, behind a long wall, there is a garden full of trees, and the soft sound of water.
+
+86
+00:13:21,021 --> 00:13:25,296
+The library is not a single building standing on its own.
+
+87
+00:13:25,296 --> 00:13:37,297
+It belongs to a larger place called the Mouseion, the shrine of the Muses, the nine goddesses of poetry, music, history, astronomy and all the arts of learning.
+
+88
+00:13:37,297 --> 00:13:39,848
+Our own word museum comes from it.
+
+89
+00:13:39,848 --> 00:13:49,224
+Here, under the protection of the kings, scholars from all over the Greek world come to live, and read, and think, and write.
+
+90
+00:13:51,024 --> 00:13:58,853
+The geographer Strabo, who visited Alexandria about two hundred years after tonight, described what he saw.
+
+91
+00:13:58,853 --> 00:14:19,269
+There was a covered walk, a peripatos, where scholars could stroll as they talked, a curved hall with stone seats, called an exedra, where they could sit together and argue, and a large house containing the common dining hall, where the men of learning took their meals together.
+
+92
+00:14:21,069 --> 00:14:30,385
+The assistant walks along the covered colonnade now, between the slender columns, with the garden open to the sky on his left.
+
+93
+00:14:30,385 --> 00:14:33,490
+Little lamps hang from the beams overhead.
+
+94
+00:14:33,490 --> 00:14:48,056
+In the middle of the garden there is a long pool, so still that the moon lies in it like a silver coin, and around it grow date palms, their great fronds rustling softly in the breeze from the sea.
+
+95
+00:14:49,856 --> 00:14:54,194
+The scholars here do not have to worry about earning a living.
+
+96
+00:14:54,194 --> 00:15:02,521
+They are fed at the king's table and given a salary, and they are free to spend their days studying whatever they wish.
+
+97
+00:15:02,521 --> 00:15:05,460
+Not everyone thought this was a good idea.
+
+98
+00:15:05,460 --> 00:15:17,845
+A sharp-tongued poet of the time joked that in Egypt, a crowd of bookish scribblers were being fattened up in the bird-cage of the Muses, quarrelling endlessly with one another.
+
+99
+00:15:19,645 --> 00:15:22,404
+Tonight, the quarrels seem to be over.
+
+100
+00:15:22,404 --> 00:15:33,729
+In the exedra, two old men are sitting on the curved stone bench, wrapped in their cloaks, talking slowly about the meaning of a single word in an old poem.
+
+101
+00:15:33,729 --> 00:15:42,513
+A younger man walks alone along the colonnade, reading from a scroll by the light of the lamps, his lips moving silently.
+
+102
+00:15:42,513 --> 00:15:48,829
+Somewhere a door opens, and the sound of soft laughter drifts out from the dining hall.
+
+103
+00:15:50,629 --> 00:15:55,603
+The scholars of the Mouseion study an astonishing range of things.
+
+104
+00:15:55,603 --> 00:16:00,352
+Some are poets, and some edit the poems of Homer, line by line.
+
+105
+00:16:00,352 --> 00:16:08,341
+Some are mathematicians, following in the footsteps of Euclid, who taught here a generation or two before.
+
+106
+00:16:08,341 --> 00:16:11,883
+Some are doctors, who study how the body works.
+
+107
+00:16:11,883 --> 00:16:19,194
+And some, like the man our scroll is going to meet tonight, try to measure the earth and the sky.
+
+108
+00:16:20,994 --> 00:16:31,902
+The assistant stops at the edge of the pool for a moment, as he often does at the end of a long day, and watches the moon trembling in the water.
+
+109
+00:16:31,902 --> 00:16:35,664
+A frog plops softly into the reeds at the far end.
+
+110
+00:16:35,664 --> 00:16:37,168
+A palm frond creaks.
+
+111
+00:16:37,168 --> 00:16:46,722
+Then he turns, climbs three shallow steps, and goes in through a tall doorway, into the lamplit rooms where the books are made.
+
+112
+00:16:56,522 --> 00:17:07,274
+Every book in this library is a roll of papyrus, and before we watch our scroll being copied, it is worth knowing where papyrus comes from.
+
+113
+00:17:07,274 --> 00:17:18,102
+It grows in the marshes of the Nile, a tall reed with a smooth green stem, taller than a man, crowned with a soft, feathery tuft at the top.
+
+114
+00:17:18,102 --> 00:17:24,213
+Egypt has been making writing material from it for nearly three thousand years.
+
+115
+00:17:26,013 --> 00:17:32,779
+To make a sheet, the workers cut the stems into lengths and peel away the green rind.
+
+116
+00:17:32,779 --> 00:17:38,112
+Then they slice the pale, spongy pith inside into long thin strips.
+
+117
+00:17:38,112 --> 00:17:51,485
+They lay the strips side by side on a flat board, all running the same way, and then lay a second layer across them, at right angles, like the threads of a woven cloth.
+
+118
+00:17:53,285 --> 00:18:01,253
+The two layers are pressed and beaten gently with a mallet, and the plant's own sap helps hold them together.
+
+119
+00:18:01,253 --> 00:18:11,707
+Then the sheet is left to dry in the sun, and afterwards polished smooth with a stone or a shell, until the surface is fine enough to write on.
+
+120
+00:18:11,707 --> 00:18:17,264
+The best sheets are pale and even, the colour of honey held up to the light.
+
+121
+00:18:19,064 --> 00:18:24,603
+A single sheet is not very big, perhaps the size of a page in a large book.
+
+122
+00:18:24,603 --> 00:18:33,689
+So the sheets are glued edge to edge, often about twenty of them, to make one long strip, which is rolled up around itself.
+
+123
+00:18:33,689 --> 00:18:37,529
+That roll is what the Greeks call a biblion, a book.
+
+124
+00:18:37,529 --> 00:18:46,541
+When you read, you hold it in both hands, unrolling it with one hand and rolling it up with the other, a column at a time.
+
+125
+00:18:48,341 --> 00:18:54,690
+Papyrus is one of the great exports of Egypt, shipped to every port around the sea.
+
+126
+00:18:54,690 --> 00:19:14,808
+A later story, told by the Roman writer Pliny, says that when a rival library grew up at Pergamon, in Asia, a king of Egypt stopped papyrus from being sent there, and so the people of Pergamon perfected a writing material of their own, made from fine animal skin.
+
+127
+00:19:14,808 --> 00:19:18,250
+We still call it parchment, after their city.
+
+128
+00:19:20,050 --> 00:19:29,906
+In the room where the assistant has arrived, there are fresh rolls of blank papyrus stacked on a shelf, each one tied with a thread.
+
+129
+00:19:29,906 --> 00:19:32,296
+Nearby stand little pots of ink.
+
+130
+00:19:32,296 --> 00:19:41,256
+The black ink is made from soot, scraped from lamps, mixed with gum and water, and it sits in the pots like dark velvet.
+
+131
+00:19:41,256 --> 00:19:46,632
+There is red ink too, for headings and corrections, made from red earth.
+
+132
+00:19:48,432 --> 00:20:00,738
+The pens are made of reed, a thinner reed than the papyrus, cut to a point with a small knife and split at the tip, so that the ink flows down into the point.
+
+133
+00:20:00,738 --> 00:20:07,359
+A good copyist cuts his own pens, and recuts them many times a day as they wear down.
+
+134
+00:20:07,359 --> 00:20:13,434
+In a small cup on the table, a few spare reeds wait, their tips stained black.
+
+135
+00:20:15,234 --> 00:20:22,208
+The room smells of lamp oil, of dust, and of the faintly sweet, grassy scent of papyrus.
+
+136
+00:20:22,208 --> 00:20:27,438
+It is warm in here, because the lamps have been burning for hours.
+
+137
+00:20:27,438 --> 00:20:39,405
+The assistant unwraps the cloth from his satchel, lays the three scrolls from the ship on the long table, and goes to find the copyist on duty tonight.
+
+138
+00:20:49,205 --> 00:20:56,018
+The copyist is a quiet, grey-haired man who has been copying books here for most of his life.
+
+139
+00:20:56,018 --> 00:21:05,981
+He looks at the three scrolls, chooses the Phaenomena first, because it is short and he knows it well, and settles himself at the table.
+
+140
+00:21:05,981 --> 00:21:15,872
+A lamp stands at his elbow, its little flame leaning one way and then the other, and a fresh roll of papyrus lies open in front of him.
+
+141
+00:21:17,672 --> 00:21:23,525
+He unrolls the ship's copy beside it, holding it flat with two smooth stones.
+
+142
+00:21:23,525 --> 00:21:29,987
+Then he dips his reed into the ink, taps it gently on the rim of the pot, and begins.
+
+143
+00:21:29,987 --> 00:21:41,998
+He writes in neat capital letters, one after another, with no spaces between the words and almost no punctuation, in a narrow column that runs down the sheet.
+
+144
+00:21:41,998 --> 00:21:46,408
+When one column is finished, he starts the next beside it.
+
+145
+00:21:48,208 --> 00:22:02,515
+He works slowly and steadily, in the soft scratching of the reed, saying the words very quietly to himself as he goes, because in this world most people read aloud, even when they are alone.
+
+146
+00:22:02,515 --> 00:22:10,572
+Now and then he stops, and leans closer, and looks hard at a word in the ship's copy that seems odd to him.
+
+147
+00:22:10,572 --> 00:22:14,789
+Then he makes a tiny mark in the margin, and carries on.
+
+148
+00:22:16,589 --> 00:22:26,599
+Copying by hand is a delicate business, and every copy brings the chance of new mistakes: a line skipped, a word misread, a letter changed.
+
+149
+00:22:26,599 --> 00:22:37,472
+So the library's scholars spend a great deal of their time comparing different copies of the same work, to work out which words the author truly wrote.
+
+150
+00:22:37,472 --> 00:22:47,842
+A book that arrives from the ships may hold a better reading than the copies already on the shelves, or a worse one, and both are worth knowing.
+
+151
+00:22:49,642 --> 00:22:56,440
+Around the room, other copyists are working too, each in their own small pool of lamplight.
+
+152
+00:22:56,440 --> 00:22:58,979
+One is copying a book of medicine.
+
+153
+00:22:58,979 --> 00:23:07,047
+Another is checking a finished roll against its original, running his finger down the columns, line by line.
+
+154
+00:23:07,047 --> 00:23:15,114
+A boy sweeps the floor near the door with a soft broom, and moves the lamps closer to the men who need them.
+
+155
+00:23:16,914 --> 00:23:21,100
+Near midnight, the copyist reaches the end of the poem.
+
+156
+00:23:21,100 --> 00:23:32,745
+He writes its title at the end, as was the custom, then counts the lines and notes the number, so that anyone can check later that nothing has been lost.
+
+157
+00:23:32,745 --> 00:23:42,792
+He lets the ink dry, blowing on it gently, and then rolls up the new copy, slowly and carefully, from the end back to the beginning.
+
+158
+00:23:44,591 --> 00:23:51,879
+The new copy will go back to the captain from Rhodes, and the old one from the ship will stay here.
+
+159
+00:23:51,879 --> 00:23:59,977
+The copyist ties a small tag to its end, with the title written on it, and the name of the place it came from.
+
+160
+00:23:59,977 --> 00:24:08,442
+Then he lays it aside for the librarians, stretches his stiff fingers, and reaches for the next scroll in the pile.
+
+161
+00:24:18,242 --> 00:24:22,512
+Where does a single scroll go, in a library with so many?
+
+162
+00:24:22,512 --> 00:24:26,483
+Nobody knows exactly how many books the library held.
+
+163
+00:24:26,483 --> 00:24:37,495
+Ancient writers gave enormous numbers, of hundreds of thousands of rolls, while many modern historians think it more likely held tens of thousands.
+
+164
+00:24:37,495 --> 00:24:47,533
+But even tens of thousands of rolls, all looking much the same from the outside, need a careful system, or they would be lost forever.
+
+165
+00:24:49,333 --> 00:24:58,949
+The system was built by a poet and scholar named Callimachus, who came here from the city of Cyrene, further along the African coast.
+
+166
+00:24:58,949 --> 00:25:03,866
+He made a vast catalogue called the Pinakes, which means the Tables.
+
+167
+00:25:03,866 --> 00:25:07,698
+It filled about a hundred and twenty rolls by itself.
+
+168
+00:25:07,698 --> 00:25:19,989
+It listed authors under their subjects, such as poetry, history, law, philosophy or medicine, with a few words about each author's life, and the first line of every work.
+
+169
+00:25:21,789 --> 00:25:34,979
+It was one of the very first library catalogues in history, and the idea of listing the first line, so that two books with the same title could be told apart, was a clever one.
+
+170
+00:25:34,979 --> 00:25:38,126
+Many later libraries borrowed his methods.
+
+171
+00:25:38,126 --> 00:25:44,871
+And yet, for all his work, Callimachus was probably never the head of the library himself.
+
+172
+00:25:44,871 --> 00:25:50,866
+He was a poet first, and his own poems were famous for being short and polished.
+
+173
+00:25:52,666 --> 00:25:55,527
+The heads of the library were others.
+
+174
+00:25:55,527 --> 00:26:03,644
+The first was Zenodotus, who worked on the poems of Homer, comparing copies and marking lines he doubted.
+
+175
+00:26:03,644 --> 00:26:11,144
+Then came the poet Apollonius of Rhodes, who wrote a long poem about Jason and the Golden Fleece.
+
+176
+00:26:11,144 --> 00:26:21,039
+And now, on this evening, the head of the library is a man from Cyrene called Eratosthenes, of whom we will hear more very soon.
+
+177
+00:26:22,839 --> 00:26:29,703
+The librarian on duty tonight takes the scroll of Aratus to the hall where the poetry is kept.
+
+178
+00:26:29,703 --> 00:26:39,194
+It is a long, high room, lined from floor to ceiling with wooden shelves divided into square compartments, like a great honeycomb.
+
+179
+00:26:39,194 --> 00:26:52,045
+In each compartment lie a few rolls, their ends facing outwards, and from many of them hangs a little tag, so that a reader can see what each roll is without having to open it.
+
+180
+00:26:53,845 --> 00:27:06,302
+The librarian holds his lamp up to the shelves and walks slowly down the hall, reading the tags as he goes, until he finds the place where the other copies of Aratus lie.
+
+181
+00:27:06,302 --> 00:27:08,574
+There are several here already.
+
+182
+00:27:08,574 --> 00:27:14,217
+He lays the new one beside them, gently, so that its tag hangs down straight.
+
+183
+00:27:14,217 --> 00:27:21,471
+Later, scholars will come and compare them all, word by word, to see what each copy can teach them.
+
+184
+00:27:23,271 --> 00:27:25,349
+The hall is very quiet now.
+
+185
+00:27:25,349 --> 00:27:27,119
+The lamp hisses softly.
+
+186
+00:27:27,119 --> 00:27:33,582
+Somewhere far off a door closes, and the sound travels down the long room and fades.
+
+187
+00:27:33,582 --> 00:27:50,663
+The tags on the shelves stir slightly in the night air from a high window, thousands of little labels, each one standing for a voice from the past, sleeping in the dark, waiting patiently for someone to come and unroll it.
+
+188
+00:28:00,463 --> 00:28:03,582
+But our scroll's journey is not quite over.
+
+189
+00:28:03,582 --> 00:28:09,021
+Before dawn, the head of the library himself will borrow it, for one night.
+
+190
+00:28:09,021 --> 00:28:16,491
+Eratosthenes is a man of many interests: a poet, a geographer, a mathematician, a student of the stars.
+
+191
+00:28:16,491 --> 00:28:31,866
+Some of the other scholars teased him with the nickname Beta, the second letter of the alphabet, because he was second best in every subject, and yet his work would be remembered for more than two thousand years.
+
+192
+00:28:33,666 --> 00:28:37,833
+The story of his most famous measurement goes like this.
+
+193
+00:28:37,833 --> 00:28:46,538
+He had heard that far to the south, at the town of Syene, near the first cataract of the Nile, there was a deep well.
+
+194
+00:28:46,538 --> 00:28:57,177
+At noon on the longest day of the year, the sun shone straight down into it, lighting the water at the bottom, so that no shadow could be seen.
+
+195
+00:28:57,177 --> 00:29:00,674
+The sun, at that moment, was directly overhead.
+
+196
+00:29:02,474 --> 00:29:09,637
+But here in Alexandria, at noon on the same day, an upright stick still cast a short shadow.
+
+197
+00:29:09,637 --> 00:29:19,058
+By measuring that shadow, Eratosthenes found that the sun's rays fell at an angle of about one fiftieth of a full circle.
+
+198
+00:29:19,058 --> 00:29:31,359
+If the earth was round, as Greek scholars already believed, then the distance from Alexandria to Syene must be one fiftieth of the whole way around the world.
+
+199
+00:29:33,159 --> 00:29:39,241
+The distance between the two places was reckoned at about five thousand stadia.
+
+200
+00:29:39,241 --> 00:29:49,019
+So Eratosthenes multiplied by fifty, and found that the whole earth must be about two hundred and fifty thousand stadia around.
+
+201
+00:29:49,019 --> 00:30:03,261
+We do not know exactly how long his stadion was, but by most reckonings his answer was remarkably close to the truth, made with nothing more than a stick, a shadow, and careful thought.
+
+202
+00:30:05,061 --> 00:30:07,950
+Tonight, there is no shadow to measure.
+
+203
+00:30:07,950 --> 00:30:20,395
+Eratosthenes has climbed up to the flat roof of the building, as he likes to do on clear evenings, with a cushion, a small lamp, and the scroll of Aratus under his arm.
+
+204
+00:30:20,395 --> 00:30:32,247
+Up here, there is a bronze bowl set on a stone pillar, with a little pointer standing up inside it, a kind of sundial that measures the angle of the sun by day.
+
+205
+00:30:32,247 --> 00:30:34,543
+By night it holds a little dew.
+
+206
+00:30:36,343 --> 00:30:53,481
+From the roof, you can see the whole city spread out below, pale and silent under the moon: the flat roofs, the lines of the long streets, the dark shapes of the palace gardens, and the lamps along the Canopic Way, a long dotted line of gold.
+
+207
+00:30:53,481 --> 00:31:05,378
+Beyond the roofs lies the harbour, and beyond that, on its island, the lighthouse fire burns steadily, small and bright as a star that has come down to rest on the sea.
+
+208
+00:31:07,178 --> 00:31:17,258
+Eratosthenes sets down his lamp and his cushion, lowers himself onto the roof with a small sigh, and pulls his cloak around his knees.
+
+209
+00:31:17,258 --> 00:31:33,055
+He unrolls the poem a little way, holding it up to the lamp, and then looks up at the sky, and back to the scroll, and back to the sky again, comparing the words with the stars, the way a careful scholar would.
+
+210
+00:31:42,855 --> 00:31:49,248
+The poem begins with Zeus, as many Greek poems do, and then it turns to the sky.
+
+211
+00:31:49,248 --> 00:32:01,234
+Aratus describes the two Bears that circle the pole of the heavens, never setting below the sea, with a long Dragon winding between them like a river.
+
+212
+00:32:01,234 --> 00:32:03,712
+Sailors steer by them, he says.
+
+213
+00:32:03,712 --> 00:32:10,823
+Eratosthenes finds them now, low in the north over the dark water, just as the poem says.
+
+214
+00:32:12,623 --> 00:32:27,329
+Then the poem walks slowly around the sky, from one group of stars to the next: the Herdsman following the Bear, the Crown shining like a circle of jewels, the Lyre, the Swan with its wings outstretched.
+
+215
+00:32:27,329 --> 00:32:30,371
+Aratus did not invent these star pictures.
+
+216
+00:32:30,371 --> 00:32:37,615
+Many were already very old, coming from the Greeks before him and from the star watchers of Babylon.
+
+217
+00:32:37,615 --> 00:32:42,469
+But he set them into gentle verse, so that anyone could learn them.
+
+218
+00:32:44,269 --> 00:32:57,301
+Later, it is said, Eratosthenes himself would write a little book about the constellations, telling the old stories of how each figure came to be placed among the stars.
+
+219
+00:32:57,301 --> 00:33:09,485
+Perhaps, on nights like this one, he is already thinking about it, as he turns the scroll slowly in the lamplight, and lets his eyes wander from star to star.
+
+220
+00:33:11,285 --> 00:33:16,734
+Down in the harbour, the merchant ship from Rhodes lies quiet at the quay.
+
+221
+00:33:16,734 --> 00:33:22,184
+The captain is asleep in his cabin, with the empty cedar chest beside him.
+
+222
+00:33:22,184 --> 00:33:38,826
+In a few days, his book will come back to him, a fresh copy, crisp and pale, and he will read it on deck on the long voyage home, never knowing that tonight his old copy is lying in the hands of the man who measured the world.
+
+223
+00:33:40,626 --> 00:33:43,499
+The great library will not last forever.
+
+224
+00:33:43,499 --> 00:33:55,132
+Over many centuries, through wars and changes of rulers and long years of neglect, it faded slowly away, and nobody knows exactly when its last scrolls were lost.
+
+225
+00:33:55,132 --> 00:34:10,642
+But the work of its scholars, their catalogues, their careful copies, their measurements of the earth and sky, was carried onward, from library to library and from hand to hand, and some of it is still with us today.
+
+226
+00:34:12,442 --> 00:34:22,962
+And in our own time, in the year two thousand and two, a new library opened in Alexandria, close to where the old royal quarter once stood.
+
+227
+00:34:22,962 --> 00:34:36,282
+It is a great round building that slopes towards the sea like the disc of the sun rising from the water, its granite walls carved with letters from many alphabets of the world.
+
+228
+00:34:36,282 --> 00:34:41,882
+The idea of a home for all the books, it seems, never quite went to sleep.
+
+229
+00:34:43,682 --> 00:34:49,940
+Up on the roof, Eratosthenes has rolled the scroll closed and set it in his lap.
+
+230
+00:34:49,940 --> 00:34:51,817
+His lamp has burned low.
+
+231
+00:34:51,817 --> 00:34:57,684
+The breeze from the sea is cool and steady, and his eyes are growing heavy.
+
+232
+00:34:57,684 --> 00:34:59,639
+Let yours grow heavy too.
+
+233
+00:34:59,639 --> 00:35:10,434
+Let your breathing slow until it is as gentle as the small waves lapping against the harbour wall, rising and falling, rising and falling.
+
+234
+00:35:12,234 --> 00:35:20,770
+The lighthouse keeps its fire burning out on the island, so that every ship at sea can find its way safely home.
+
+235
+00:35:20,770 --> 00:35:23,970
+The scrolls lie sleeping on their shelves.
+
+236
+00:35:23,970 --> 00:35:30,524
+The palms are still in the garden of the Muses, and the moon lies quietly in the pool.
+
+237
+00:35:30,524 --> 00:35:36,087
+Thank you for spending this evening in Alexandria with The Quiet Archive.
+
+238
+00:35:36,087 --> 00:35:38,069
+Sleep well, and goodnight.

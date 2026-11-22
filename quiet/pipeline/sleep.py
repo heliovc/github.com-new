@@ -69,6 +69,17 @@ Scene types: city, road, temple, interior, sea, hills, cloister (EP02), nile (EP
   a gaslit parlour with coal fire, overmantel mirror, glass-domed clock, china dogs, a wall clock with swinging pendulum,
   kettle steam on the hob (_pendulum), lace curtains and the fog outside; new "drizzle" particles; palette keys "fog",
   "gas" and "brick").
+  pharos / rooftop / mouseion / scriptorium / stacks (EP12 Great Library of Alexandria: the Great Harbour at dusk with the
+  three-tiered Pharos (_pharos_tower: square, octagonal and round tiers, open lantern, statue) and its breathing fire and
+  smoke (_pharosfire), the arched Heptastadion, the pale shore city, a Hellenistic merchant ship with swan-neck stern and
+  half-lowered square sail rocking at the harbour mouth (_galley), amphorae on the quay; a flat roof at night over a city of
+  moonlit flat roofs, the colonnaded Canopic Way with lamps, the far Pharos glow, the Bear twinkling, a bowl sundial
+  (scaphe) and a scholar reading a scroll by a clay lamp; the garden of the Muses with an Ionic peripatos in perspective,
+  hanging lamps, a long pool holding the moon, the exedra bench, date palms whose fronds sway (_palm/_palms); the copyists'
+  room with a wall of scroll pigeonholes (_scroll_niches), a moonlit window with a palm, lamps, and a copyist whose reed pen
+  travels along the line and returns (_scribe); the poetry hall of pigeonholes in one-point perspective with title tags
+  stirring (_tags) and the librarian walking away with his lamp and back; new "motes" particles; palette keys "lime" and
+  "papyrus").
 Compilations: comp01.py (COMP01 = EP01-EP03 re-rendered via comp01_pNN.py wrappers) adds "candle haze" text cards that
   dissolve into the next part's first scene, one long ambient tail at the end, one loudness pass; thumb_comp.py = 3-scene
   blended thumbnail.
@@ -288,6 +299,7 @@ class Scene:
         self.chochin, self.yakata, self.willow, self.steam, self.pipe = [], None, None, None, None
         self.banners, self.oven, self.walker, self.sentry, self.hanging = [], None, None, None, None
         self.halos, self.banks, self.lighter, self.tug, self.hansom, self.pend, self.kettle, self.brazier = [], [], None, None, None, None, None, None
+        self.palms, self.winpalms, self.pharos, self.galley, self.tags, self.scribe = [], [], None, None, [], None
         getattr(self, "build_" + kind)()
         self.prepare()
 
@@ -2436,7 +2448,7 @@ class Scene:
         vig = np.clip(1 - (r - 0.55) * 0.75, 0.35, 1)
         self.vig = Image.fromarray((vig * 255).astype(np.uint8), "L")
         rng = np.random.default_rng(7)
-        n = {"embers": 26, "fireflies": 22, "dust": 34, "snow": 90, "sand": 70, "mist": 16, "spray": 40, "moths": 14, "leaves": 16, "thistledown": 18, "drizzle": 110}[self.particles]
+        n = {"embers": 26, "fireflies": 22, "dust": 34, "snow": 90, "sand": 70, "mist": 16, "spray": 40, "moths": 14, "leaves": 16, "thistledown": 18, "drizzle": 110, "motes": 40}[self.particles]
         self.parts = [(rng.uniform(0, W), rng.uniform(0, H), rng.uniform(0, TAU), int(rng.integers(1, 3)), rng.uniform(0.4, 1.0)) for _ in range(n)]
         self.glow_sm = self._glow(16); self.glow_lg = self._glow(90)
         self.moth_c = [(x, y) for x, y, _ in self.lamps] + ([self.lamp] if self.lamp else [])
@@ -3386,6 +3398,413 @@ class Scene:
         self.near = near
         self.fog_a = 0.0; self.particles = "dust"
 
+    # ------------------------------------------------------------ EP12 Great Library of Alexandria
+    def _palm(self, x, base, h, s=1.0, n=11):
+        """Date palm: trunk drawn now (ringed, slightly curved); fronds stored in self.palms and drawn each frame so
+        they can sway (_palms). Returns the crown point."""
+        d = ImageDraw.Draw(self.mid); c = self.p["near"] if s > 1.2 else mix(self.p["mid"], self.p["near"], 0.5)
+        lean = self.rng.uniform(-0.12, 0.12) * h; pts = [(x + lean * (v ** 2), base - h * v) for v in np.linspace(0, 1, 12)]
+        for i in range(len(pts) - 1):
+            w = (16 - 7 * i / 11) * s; d.line([pts[i], pts[i + 1]], fill=c + (255,), width=max(2, int(w)))
+            if i % 1 == 0: d.line([(pts[i][0] - w / 2, pts[i][1]), (pts[i][0] + w / 2, pts[i][1] - 3 * s)], fill=mix(c, (0, 0, 0), 0.3) + (255,), width=1)
+        cx, cy = pts[-1]; self.palms.append((cx, cy, h * 0.42, s, self.rng.uniform(0, TAU), n, c, self.mid is getattr(self, "near", None)))
+        return cx, cy
+
+    def _palms(self, img, ph, front=False, which=None):
+        """EP12: palm fronds arching from the crown, each frond swaying a little on its own rhythm."""
+        lay = Image.new("RGBA", (W, H), (0, 0, 0, 0)); d = ImageDraw.Draw(lay)
+        for cx, cy, L, s, f, n, c, fr in (which if which is not None else self.palms):
+            if which is None and fr != front: continue
+            for k in range(n):
+                a0 = math.pi * (0.05 + 0.9 * k / (n - 1)); sway = 0.06 * math.sin(ph + f + k * 0.7) + 0.03 * math.sin(ph * 3 + k)
+                pts = []
+                for v in np.linspace(0, 1, 9):
+                    a = a0 + sway * v; r = L * v; droop = L * 0.55 * v * v * (0.4 + 0.6 * abs(math.cos(a0)))
+                    pts.append((cx + r * math.cos(a), cy - r * math.sin(a) * 0.75 + droop))
+                d.line(pts, fill=c + (255,), width=max(2, int(5 * s)), joint="curve")
+                for j in range(2, 9):                                                         # leaflets hanging from the rib
+                    px, py = pts[j]; ll = (14 - j) * 2.4 * s
+                    d.line([(px, py), (px - ll * 0.4, py + ll)], fill=c + (255,), width=max(1, int(2 * s)))
+                    d.line([(px, py), (px + ll * 0.4, py + ll)], fill=c + (255,), width=max(1, int(2 * s)))
+            d.ellipse([cx - 9 * s, cy - 6 * s, cx + 9 * s, cy + 12 * s], fill=c + (255,))
+        img.alpha_composite(lay)
+
+    def _pharos_tower(self, d, cx, base, s=1.0, lit=True):
+        """Three tiers - square, octagonal, round - with a lantern of columns, the fire and a statue on top.
+        Moon on the right: right-hand faces pale, left faces in shadow. Returns the fire point."""
+        p = self.p; lime = p.get("lime", (214, 204, 180)); li = mix(lime, p["moon"], 0.15); sh = mix(lime, p["mid"], 0.68); dk = mix(sh, (0, 0, 0), 0.35)
+        def tier(y0, h, wb, wt, faces):
+            for k, (u0, u1, col) in enumerate(faces):
+                d.polygon([(cx - wb / 2 + wb * u0, y0), (cx - wb / 2 + wb * u1, y0), (cx - wt / 2 + wt * u1, y0 - h), (cx - wt / 2 + wt * u0, y0 - h)], fill=col + (255,))
+            d.rectangle([cx - wt / 2 - 8 * s, y0 - h - 10 * s, cx + wt / 2 + 8 * s, y0 - h], fill=mix(li, sh, 0.4) + (255,))
+            for k in range(int(wt / (14 * s))):                                                # small battlements
+                x = cx - wt / 2 - 6 * s + k * 14 * s; d.rectangle([x, y0 - h - 18 * s, x + 7 * s, y0 - h - 10 * s], fill=mix(li, sh, 0.5) + (255,))
+            return y0 - h - 10 * s
+        h1, w1 = 300 * s, 170 * s
+        top = tier(base, h1, w1, w1 * 0.86, [(0, 0.55, sh), (0.55, 1, li)])
+        for r in range(6):                                                                    # rows of small windows
+            for k in (0.3, 0.72):
+                y = base - h1 * (0.15 + r * 0.14); x = cx - w1 * 0.46 + w1 * 0.92 * k
+                d.rectangle([x - 4 * s, y - 9 * s, x + 4 * s, y + 9 * s], fill=dk + (255,))
+                if lit and (r + int(k * 10)) % 4 == 1: self.windows.append((x, y, 6 * s, 14 * s, self.rng.uniform(0, TAU), 1))
+        top = tier(top, 140 * s, 104 * s, 92 * s, [(0, 0.3, dk), (0.3, 0.62, sh), (0.62, 1, li)])
+        top = tier(top, 74 * s, 62 * s, 56 * s, [(0, 0.45, sh), (0.45, 1, mix(li, sh, 0.25))])
+        lw, lh = 26 * s, 46 * s                                                               # open lantern on columns
+        d.rectangle([cx - lw, top - lh, cx + lw, top], fill=mix(p["light"], (255, 240, 200), 0.3) + (255,))
+        for k in range(5): x = cx - lw + k * lw / 2; d.line([(x, top), (x, top - lh)], fill=dk + (255,), width=max(1, int(4 * s)))
+        d.polygon([(cx - lw - 6 * s, top - lh), (cx + lw + 6 * s, top - lh), (cx, top - lh - 24 * s)], fill=sh + (255,))
+        sx, sy = cx, top - lh - 24 * s                                                         # the statue
+        d.rectangle([sx - 5 * s, sy - 36 * s, sx + 5 * s, sy], fill=dk + (255,)); d.ellipse([sx - 5 * s, sy - 46 * s, sx + 5 * s, sy - 34 * s], fill=dk + (255,))
+        d.line([(sx + 6 * s, sy - 28 * s), (sx + 12 * s, sy - 62 * s)], fill=dk + (255,), width=max(1, int(2 * s)))
+        return (cx, top - lh * 0.45)
+
+    def _pharosfire(self, img, ph):
+        """EP12: the lighthouse fire - a large breathing glow and small leaning tongues of flame inside the lantern."""
+        x, y, s = self.pharos; p = self.p; fl = 0.85 + 0.1 * math.sin(ph * 5) + 0.05 * math.sin(ph * 13 + 1)
+        R = int(300 * s); img.alpha_composite(self.tint(self.glow_lg.resize((R * 2, R * 2)), p["light"], 0.55 * fl), (int(x - R), int(y - R)))
+        R2 = int(110 * s); img.alpha_composite(self.tint(self.glow_lg.resize((R2 * 2, R2 * 2)), (255, 236, 190), 0.75 * fl), (int(x - R2), int(y - R2)))
+        R3 = int(700 * s); img.alpha_composite(self.tint(self.glow_lg.resize((R3 * 2, R3 * 2)), p["light"], 0.16 * fl), (int(x - R3), int(y - R3)))
+        d = ImageDraw.Draw(img)
+        for k in (-1, 0, 1):
+            fh = (30 - abs(k) * 9) * s * (0.75 + 0.25 * math.sin(ph * (6 + abs(k) * 3) + k)); fx = x + k * 11 * s; lean = 3 * s * math.sin(ph * 4 + k)
+            d.polygon([(fx - 7 * s, y + 12 * s), (fx + lean, y + 12 * s - fh), (fx + 7 * s, y + 12 * s)], fill=(255, 214, 140, 255))
+            d.polygon([(fx - 3 * s, y + 12 * s), (fx + lean * 0.6, y + 12 * s - fh * 0.6), (fx + 3 * s, y + 12 * s)], fill=(255, 248, 226, 255))
+
+    def _galley(self, img, t, ph):
+        """EP12: a Hellenistic merchant ship riding at the harbour mouth: rounded hull, swan-neck stern post, one mast
+        with a broad square sail half lowered, steering oar, stern lantern; drifts a little to and fro and rocks."""
+        G = self.galley; s = G["s"]; p = self.p; L = 380 * s
+        x = G["x"] + 40 * s * math.sin(ph); y = G["y"] + 3 * s * math.sin(ph * 3); tilt = 0.012 * math.sin(ph * 2 + 0.6)
+        lay = Image.new("RGBA", (W, H), (0, 0, 0, 0)); d = ImageDraw.Draw(lay); c = (9, 10, 16, 255)
+        def R(px, py): return (x + px * math.cos(tilt) - py * math.sin(tilt), y + px * math.sin(tilt) + py * math.cos(tilt))
+        hull = [R(-L / 2, -30 * s)] + [R(-L / 2 + L * u, 10 * s * math.sin(math.pi * u) * 1.0 - 34 * s + 40 * s * (1 - math.sin(math.pi * u)) * 0.3) for u in np.linspace(0, 1, 14)]
+        hull += [R(L / 2 + 20 * s, -46 * s), R(L / 2 - 30 * s, 10 * s)] + [R(L / 2 - 30 * s - (L - 60 * s) * u, 10 * s + 8 * s * math.sin(math.pi * u)) for u in np.linspace(0, 1, 10)]
+        d.polygon([(px, 2 * y - py + 20 * s) for px, py in hull], fill=(4, 8, 14, 70))               # reflection
+        d.polygon(hull, fill=c)
+        neck = [R(-L / 2 - 30 * s * math.sin(v * 2.2) - 10 * s * v, -30 * s - 90 * s * v) for v in np.linspace(0, 1, 10)]
+        d.line(neck, fill=c, width=max(3, int(9 * s)), joint="curve"); hx, hy_ = neck[-1]
+        d.polygon([(hx, hy_ - 4 * s), (hx + 24 * s, hy_ + 4 * s), (hx, hy_ + 8 * s)], fill=c)         # swan head
+        d.line([R(-L / 2 + 30 * s, -34 * s), R(-L / 2 + 10 * s, 30 * s)], fill=c, width=max(3, int(8 * s)))  # steering oar
+        mx_ = 0.06 * L; top = R(mx_, -300 * s); d.line([R(mx_, -34 * s), top], fill=c, width=max(3, int(7 * s)))
+        ya = 120 * s; yl, yr = R(mx_ - ya, -250 * s), R(mx_ + ya, -250 * s); d.line([yl, yr], fill=c, width=max(2, int(5 * s)))
+        sail = mix(p.get("papyrus", (222, 198, 146)), p["far"], 0.55)
+        bil = 10 * s * math.sin(ph * 2)
+        d.polygon([yl, yr, R(mx_ + ya - 6 * s, -140 * s), R(mx_ + bil, -128 * s), R(mx_ - ya + 6 * s, -140 * s)], fill=sail + (225,))
+        for k in range(1, 6): d.line([R(mx_ - ya + k * ya / 3, -250 * s), R(mx_ - ya + k * ya / 3, -136 * s)], fill=mix(sail, (0, 0, 0), 0.25) + (160,), width=1)
+        d.line([top, R(L / 2 + 10 * s, -44 * s)], fill=c, width=1); d.line([top, R(-L / 2 + 20 * s, -40 * s)], fill=c, width=1)
+        img.alpha_composite(lay)
+        lx, ly = R(-L / 2 + 16 * s, -54 * s); fl = 0.85 + 0.15 * math.sin(ph * 5)
+        img.alpha_composite(self.tint(self.glow_sm.resize((60, 60)), p["light"], 0.8 * fl), (int(lx - 30), int(ly - 30)))
+        ImageDraw.Draw(img).ellipse([lx - 3, ly - 3, lx + 3, ly + 3], fill=(255, 222, 160, 255))
+
+    def build_pharos(self):
+        """The Great Harbour at dusk: the Pharos on its island with its fire and smoke, the Heptastadion running to the
+        mainland, the pale city along the shore, a merchant ship riding at the harbour mouth, the quay in front."""
+        p, rng = self.p, self.rng; hy = int(H * 0.6)
+        self.back = self.sky(hy, (0.8, 0.17), 36)
+        glow = Image.new("RGBA", (W, H), (0, 0, 0, 0)); g = self.tint(self._glow(90).resize((1500, 500)), p["horizon"], 0.55)   # last light in the west
+        glow.alpha_composite(g, (-700, hy - 250)); self.back.alpha_composite(glow)
+        self._water(hy, 0.35)
+        lime = p.get("lime", (214, 204, 180))
+        mid = Image.new("RGBA", (W, H), (0, 0, 0, 0)); d = ImageDraw.Draw(mid); self.mid = mid
+        d.polygon([(0, hy), (0, hy - 8)] + [(x, hy - 8 - 4 * math.sin(x / 90)) for x in range(0, int(W * 0.18), 20)] + [(W * 0.18, hy)], fill=mix(p["far"], p["horizon"], 0.35) + (255,))
+        ix = W * 0.3; ib = hy + 18                                                            # the island and its rocks
+        d.polygon([(ix - 260, ib + 6), (ix - 200, ib - 16), (ix + 160, ib - 20), (ix + 250, ib + 6)], fill=mix(p["mid"], p["far"], 0.3) + (255,))
+        d.rectangle([ix - 130, ib - 40, ix + 130, ib - 14], fill=mix(lime, p["mid"], 0.6) + (255,))   # the courtyard wall
+        for k in range(18): d.rectangle([ix - 128 + k * 15, ib - 48, ix - 121 + k * 15, ib - 40], fill=mix(lime, p["mid"], 0.6) + (255,))
+        fx, fy = self._pharos_tower(d, ix, ib - 36, 0.84)
+        self.pharos = (fx, fy, 1.15); self.smoke = (fx + 4, fy - 30, 300)
+        self.wlights.append((fx, 46, 120, 0.0)); self.wlights.append((fx, 18, 60, 1.3))
+        cy = hy + 34; cc = mix(lime, p["mid"], 0.62)                                          # the Heptastadion and its arches
+        d.polygon([(ix + 240, ib + 2), (W * 0.82, cy - 12), (W * 0.82, cy + 6), (ix + 240, ib + 14)], fill=cc + (255,))
+        for k in range(16):
+            u = (k + 0.5) / 16; ax = ix + 240 + (W * 0.82 - ix - 240) * u; ay = ib + 2 + (cy - 12 - ib - 2) * u
+            aw = 7 + 5 * u; d.chord([ax - aw, ay + 4, ax + aw, ay + 20 + 6 * u], 180, 360, fill=mix(cc, (0, 0, 0), 0.55) + (255,))
+        city = mix(p["mid"], lime, 0.32)                                                      # the shore of the city
+        d.rectangle([W * 0.66, hy - 8, W, hy + 40], fill=mix(p["mid"], p["far"], 0.2) + (255,))
+        x = W * 0.66
+        while x < W:
+            w = rng.uniform(40, 110); h = rng.uniform(30, 90); b = hy + 34 + rng.uniform(-6, 6)
+            col = mix(city, p["moon"], rng.uniform(0, 0.12)); d.rectangle([x, b - h, x + w, b], fill=col + (255,))
+            d.rectangle([x, b - h, x + w * 0.3, b], fill=mix(col, p["mid"], 0.45) + (255,))
+            if rng.random() < 0.18:                                                            # a temple front with columns
+                d.polygon([(x - 4, b - h), (x + w / 2, b - h - 18), (x + w + 4, b - h)], fill=col + (255,))
+                for k in range(5): d.line([(x + 6 + k * (w - 12) / 4, b - h + 4), (x + 6 + k * (w - 12) / 4, b)], fill=mix(col, (0, 0, 0), 0.35) + (255,), width=3)
+            for _ in range(2):
+                if rng.random() < 0.5:
+                    wx = x + rng.uniform(0.35, 0.9) * w; wy = b - rng.uniform(0.25, 0.75) * h
+                    self.windows.append((wx, wy, 5, 7, rng.uniform(0, TAU), int(rng.integers(1, 3)))); self.wlights.append((wx, 8, 34, rng.uniform(0, TAU)))
+            x += w + rng.uniform(-6, 8)
+        self.galley = dict(x=W * 0.56, y=hy + 210, s=0.95)
+        mx, my, mr = self.moon; self.reflect = (mx, hy + 4, mr)
+        near = Image.new("RGBA", (W, H), (0, 0, 0, 0)); dn = ImageDraw.Draw(near); nc = p["near"]
+        dn.polygon([(0, H), (0, H * 0.84), (W * 0.36, H * 0.86), (W * 0.42, H)], fill=nc + (255,))      # the quay
+        for k in range(9): dn.line([(k * W * 0.045, H * 0.845 + k * 1.5), (k * W * 0.045 + 8, H)], fill=mix(nc, p["moon"], 0.06) + (255,), width=2)
+        dn.line([(0, H * 0.84), (W * 0.36, H * 0.86)], fill=mix(nc, p["moon"], 0.12) + (255,), width=3)
+        for ax_ in (W * 0.05, W * 0.085, W * 0.12, W * 0.07):                                 # amphorae waiting on the quay
+            ay_ = H * 0.84 - (14 if ax_ == W * 0.07 else 0)
+            dn.ellipse([ax_ - 16, ay_ - 70, ax_ + 16, ay_ - 14], fill=nc + (255,)); dn.polygon([(ax_ - 6, ay_ - 16), (ax_ + 6, ay_ - 16), (ax_, ay_ + 4)], fill=nc + (255,))
+            dn.rectangle([ax_ - 5, ay_ - 88, ax_ + 5, ay_ - 66], fill=nc + (255,)); dn.arc([ax_ - 14, ay_ - 88, ax_ + 2, ay_ - 62], 90, 270, fill=nc + (255,), width=3)
+        dn.rectangle([W * 0.3, H * 0.8, W * 0.32, H * 0.86], fill=nc + (255,)); dn.ellipse([W * 0.296, H * 0.79, W * 0.324, H * 0.81], fill=nc + (255,))   # bollard
+        dn.line([(W * 0.31, H * 0.82), (W * 0.42, H * 0.9), (W * 0.5, H)], fill=nc + (255,), width=3)
+        self.palms = []; self.near = near
+        sv = self.mid; self.mid = near; cx_, cy_ = self._palm(W * 0.94, H + 20, 520, 1.6, 12); self.mid = sv
+        self.fog_y = hy + 6; self.fog_a = 0.1; self.particles = "mist"
+
+    def build_rooftop(self):
+        """A flat roof at night: bright stars with the Bear twinkling, the pale city of flat roofs below, the lamps of the
+        Canopic Way, the sea and the far Pharos fire; in front the parapet, water jars, a potted palm, a bronze bowl
+        sundial with its pointer, and a scholar sitting with a scroll beside a small lamp."""
+        p, rng = self.p, self.rng; hy = int(H * 0.47)
+        self.back = self.sky(hy, (0.1, 0.13), 30)
+        for x, y in ((0.58, 0.1), (0.63, 0.085), (0.67, 0.11), (0.71, 0.13), (0.76, 0.12), (0.78, 0.19), (0.73, 0.2)):   # the Bear
+            self.stars_tw.append((x * W, y * H, 0.85, rng.uniform(0, TAU), 1))
+        for x, y in ((0.3, 0.07), (0.33, 0.12), (0.36, 0.09), (0.4, 0.15), (0.45, 0.06), (0.88, 0.3), (0.92, 0.24)):
+            self.stars_tw.append((x * W, y * H, 0.6, rng.uniform(0, TAU), 2))
+        lime = p.get("lime", (214, 204, 180))
+        self._water(hy, 0.25)
+        mid = Image.new("RGBA", (W, H), (0, 0, 0, 0)); d = ImageDraw.Draw(mid); self.mid = mid
+        px_ = W * 0.8; d.polygon([(px_ - 50, hy + 2), (px_ - 30, hy - 6), (px_ + 30, hy - 6), (px_ + 50, hy + 2)], fill=mix(p["mid"], p["far"], 0.4) + (255,))
+        d.polygon([(px_ - 9, hy - 6), (px_ + 9, hy - 6), (px_ + 6, hy - 52), (px_ - 6, hy - 52)], fill=mix(lime, p["far"], 0.55) + (255,))
+        d.polygon([(px_ - 5, hy - 52), (px_ + 5, hy - 52), (px_ + 4, hy - 74), (px_ - 4, hy - 74)], fill=mix(lime, p["far"], 0.55) + (255,))
+        self.glowspot = (px_, hy - 80, 70); self.wlights.append((px_, 10, 70, 0.0))
+        rows = 7; y = hy + 6
+        for r in range(rows):                                                                # rows of flat roofs, near rows larger
+            s = 0.35 + r * 0.22; y += 16 + r * 14; x = rng.uniform(-60, 0)
+            if r == 4:                                                                         # the Canopic Way: a long colonnaded street
+                d.rectangle([0, y - 10, W, y + 26], fill=mix(p["mid"], lime, 0.16) + (255,))
+                for k in range(0, W, 46):
+                    d.line([(k, y - 34), (k, y - 4)], fill=mix(lime, p["mid"], 0.5) + (255,), width=4)
+                    d.line([(k + 20, y + 22), (k + 20, y + 52)], fill=mix(lime, p["mid"], 0.4) + (255,), width=5)
+                    if (k // 46) % 2 == 0: self.windows.append((k + 23, y - 12, 4, 5, rng.uniform(0, TAU), 1)); self.windows.append((k + 43, y + 32, 5, 6, rng.uniform(0, TAU), 1))
+                d.rectangle([0, y - 40, W, y - 34], fill=mix(lime, p["mid"], 0.45) + (255,)); d.rectangle([0, y + 16, W, y + 22], fill=mix(lime, p["mid"], 0.38) + (255,))
+                continue
+            while x < W:
+                w = rng.uniform(70, 160) * s; h = rng.uniform(30, 60) * s; b = y + rng.uniform(-5, 5) * s
+                col = mix(mix(p["mid"], lime, 0.22 + 0.05 * r), p["far"], 0.35 - r * 0.04)
+                d.rectangle([x, b - h, x + w, b + 40 * s], fill=col + (255,))
+                d.polygon([(x, b - h), (x + w, b - h), (x + w - 10 * s, b - h - 8 * s), (x + 8 * s, b - h - 8 * s)], fill=mix(col, p["moon"], 0.16) + (255,))   # moonlit roof top
+                d.rectangle([x, b - h, x + w * 0.22, b + 40 * s], fill=mix(col, p["mid"], 0.4) + (255,))
+                if rng.random() < 0.35: self.windows.append((x + rng.uniform(0.4, 0.85) * w, b - h * 0.45, 4 + 3 * s, 5 + 4 * s, rng.uniform(0, TAU), int(rng.integers(1, 3))))
+                if rng.random() < 0.1: d.ellipse([x + w * 0.4, b - h - 30 * s, x + w * 0.8, b - h + 6 * s], fill=col + (255,))   # a little dome
+                x += w + rng.uniform(4, 30) * s
+        self.palms = []
+        for px2, s2 in ((W * 0.14, 0.7), (W * 0.47, 0.6), (W * 0.62, 0.8)):
+            self._palm(px2, hy + 120 + 60 * s2, 160 * s2, s2, 10)
+        near = Image.new("RGBA", (W, H), (0, 0, 0, 0)); dn = ImageDraw.Draw(near); nc = p["near"]; self.near = near
+        dn.rectangle([0, H * 0.8, W, H], fill=nc + (255,)); dn.rectangle([0, H * 0.79, W, H * 0.81], fill=mix(nc, lime, 0.14) + (255,))
+        for jx in (W * 0.05, W * 0.09):                                                       # water jars on the parapet
+            dn.ellipse([jx - 26, H * 0.79 - 80, jx + 26, H * 0.79 - 6], fill=nc + (255,)); dn.rectangle([jx - 12, H * 0.79 - 96, jx + 12, H * 0.79 - 74], fill=nc + (255,))
+        sx, sb = W * 0.78, H * 0.79                                                           # bowl sundial (scaphe) on a pillar
+        dn.rectangle([sx - 22, sb - 120, sx + 22, sb], fill=nc + (255,)); dn.rectangle([sx - 34, sb - 130, sx + 34, sb - 118], fill=nc + (255,))
+        dn.chord([sx - 60, sb - 200, sx + 60, sb - 110], 0, 180, fill=mix(nc, (120, 90, 50), 0.35) + (255,))
+        dn.line([(sx - 60, sb - 155), (sx + 60, sb - 155)], fill=mix(nc, (230, 190, 120), 0.4) + (255,), width=3)
+        dn.line([(sx, sb - 140), (sx - 14, sb - 196)], fill=mix(nc, (230, 190, 120), 0.3) + (255,), width=3)
+        for k in range(5): a = math.pi * (0.15 + 0.7 * k / 4); dn.line([(sx + 54 * math.cos(a), sb - 155 + 40 * math.sin(a)), (sx + 46 * math.cos(a), sb - 155 + 34 * math.sin(a))], fill=mix(nc, (230, 190, 120), 0.3) + (255,), width=2)
+        fx, fg = W * 0.58, H * 0.82                                                           # the scholar with his scroll
+        dn.ellipse([fx - 90, fg - 20, fx + 90, fg + 14], fill=mix(nc, (90, 50, 40), 0.25) + (255,))   # cushion
+        dn.polygon([(fx - 60, fg), (fx + 56, fg), (fx + 30, fg - 70), (fx + 10, fg - 150), (fx - 26, fg - 150), (fx - 46, fg - 70)], fill=(14, 13, 20, 255))
+        dn.ellipse([fx - 26, fg - 196, fx + 10, fg - 148], fill=(14, 13, 20, 255))
+        dn.polygon([(fx + 4, fg - 104), (fx + 66, fg - 120), (fx + 70, fg - 104), (fx + 8, fg - 88)], fill=(14, 13, 20, 255))   # arms holding the roll
+        dn.rectangle([fx + 50, fg - 136, fx + 112, fg - 108], fill=mix(p.get("papyrus", (222, 198, 146)), nc, 0.35) + (255,))
+        dn.ellipse([fx + 44, fg - 140, fx + 58, fg - 104], fill=mix(p.get("papyrus", (222, 198, 146)), nc, 0.5) + (255,)); dn.ellipse([fx + 106, fg - 140, fx + 120, fg - 104], fill=mix(p.get("papyrus", (222, 198, 146)), nc, 0.5) + (255,))
+        lx, ly = W * 0.66, H * 0.82; dn.ellipse([lx - 26, ly - 10, lx + 22, ly + 8], fill=mix(nc, (140, 90, 60), 0.3) + (255,))   # clay lamp
+        self.lamp = (lx + 18, ly - 8); self.lamp_r = 380
+        sv = self.mid; self.mid = near; self._palm(W * 0.26, H * 0.79, 230, 1.3, 11); self.mid = sv          # potted palm
+        dn.polygon([(W * 0.26 - 50, H * 0.79), (W * 0.26 + 50, H * 0.79), (W * 0.26 + 38, H * 0.79 - 70), (W * 0.26 - 38, H * 0.79 - 70)], fill=mix(nc, (110, 60, 40), 0.3) + (255,))
+        self.fog_y = hy + 10; self.fog_a = 0.08; self.particles = "moths"
+
+    def build_mouseion(self):
+        """The garden of the Muses: a covered walk (peripatos) receding on the left with lamps between the columns, a long
+        pool in perspective holding the moon, date palms, the curved stone seat of the exedra, the lit doorway of the
+        dining hall at the far end, a scholar walking slowly across in front."""
+        p, rng = self.p, self.rng; hy = int(H * 0.5); vx = W * 0.6
+        self.back = self.sky(hy, (0.6, 0.15), 34)
+        lime = p.get("lime", (214, 204, 180))
+        mid = Image.new("RGBA", (W, H), (0, 0, 0, 0)); d = ImageDraw.Draw(mid); self.mid = mid; self.palms = []
+        bw = mix(lime, p["mid"], 0.55)                                                         # the far building and its door
+        d.rectangle([W * 0.3, hy - 150, W, hy + 6], fill=bw + (255,)); d.polygon([(W * 0.48, hy - 150), (W * 0.62, hy - 196), (W * 0.76, hy - 150)], fill=mix(bw, p["moon"], 0.12) + (255,))
+        for k in range(8): x = W * 0.49 + k * W * 0.038; d.rectangle([x, hy - 146, x + 10, hy + 4], fill=mix(bw, p["moon"], 0.2) + (255,))
+        d.rectangle([vx - 22, hy - 70, vx + 22, hy + 4], fill=mix(p["light"], (255, 240, 200), 0.2) + (255,))
+        self.back.alpha_composite(self.tint(self._glow(90).resize((260, 200)), p["light"], 0.35), (int(vx - 130), int(hy - 110)))
+        db = ImageDraw.Draw(self.back); db.rectangle([0, hy, W, H], fill=mix(p["mid"], (40, 52, 36), 0.25) + (255,))   # garden ground (back layer, so the moon can lie in the pool)
+        def P(X, Y, z): return (vx + X / z, hy + Y / z)
+        zs = [1.0 * 1.2 ** i for i in range(16)]; near_z, far_z = 0.75, zs[-1]
+        db.polygon([P(-260, 470, near_z), P(260, 470, near_z), P(260, 470, far_z), P(-260, 470, far_z)], fill=mix(lime, p["mid"], 0.5) + (255,))   # pool kerb
+        pool = [P(-220, 470, near_z * 0.98), P(220, 470, near_z * 0.98), P(220, 470, far_z * 0.92), P(-220, 470, far_z * 0.92)]
+        db.polygon(pool, fill=mix(p["sky_mid"], p["sea"], 0.4) + (255,))
+        d = ImageDraw.Draw(mid)
+        mx, my, mr = self.moon; self.reflect = (mx, hy + 30, mr * 0.7)
+        X0, Yb, Hc = -1250.0, 470.0, 1000.0                                                   # the colonnade (left)
+        wallc = mix(lime, p["mid"], 0.62); dark = mix(p["mid"], (0, 0, 0), 0.4)
+        d.polygon([P(X0 - 600, Yb, near_z), P(X0 - 600, Yb, far_z), P(X0 - 600, Yb - Hc * 1.1, far_z), P(X0 - 600, Yb - Hc * 1.1, near_z)], fill=wallc + (255,))
+        d.polygon([P(X0 - 600, Yb, near_z), P(X0 + 60, Yb, near_z), P(X0 + 60, Yb, far_z), P(X0 - 600, Yb, far_z)], fill=mix(lime, p["mid"], 0.45) + (255,))
+        d.polygon([P(X0 - 600, Yb - Hc * 1.1, near_z), P(X0 + 80, Yb - Hc * 1.02, near_z), P(X0 + 80, Yb - Hc * 1.02, far_z), P(X0 - 600, Yb - Hc * 1.1, far_z)], fill=dark + (255,))
+        d.polygon([P(X0 + 80, Yb - Hc * 1.02, near_z), P(X0 + 80, Yb - Hc * 1.16, near_z), P(X0 + 80, Yb - Hc * 1.16, far_z), P(X0 + 80, Yb - Hc * 1.02, far_z)], fill=mix(lime, p["moon"], 0.1) + (255,))
+        for i in range(len(zs) - 1):                                                          # doorways in the back wall, a few lit
+            za = zs[i] * 1.06; zb = zs[i] * 1.14
+            lit = rng.random() < 0.3
+            d.polygon([P(X0 - 600, Yb, za), P(X0 - 600, Yb, zb), P(X0 - 600, Yb - Hc * 0.55, zb), P(X0 - 600, Yb - Hc * 0.55, za)], fill=(mix(p["light"], wallc, 0.35) if lit else mix(wallc, (0, 0, 0), 0.5)) + (255,))
+        for z in zs[::-1]:                                                                    # Ionic columns
+            cw = 70 / z; (bx, by), (_, ty) = P(X0, Yb, z), P(X0, Yb - Hc, z)
+            c = mix(lime, p["mid"], 0.2 + 0.45 * min(1, z / 9))
+            d.polygon([(bx - cw / 2, by), (bx + cw / 2, by), (bx + cw * 0.42, ty), (bx - cw * 0.42, ty)], fill=c + (255,))
+            d.ellipse([bx - cw * 0.85, ty - 18 / z, bx - cw * 0.25, ty + 12 / z], fill=c + (255,)); d.ellipse([bx + cw * 0.25, ty - 18 / z, bx + cw * 0.85, ty + 12 / z], fill=c + (255,))
+            d.line([(bx + cw * 0.18, by), (bx + cw * 0.14, ty)], fill=mix(c, (0, 0, 0), 0.25) + (255,), width=max(1, int(5 / z)))
+        for i in range(0, len(zs) - 1):                                                       # lamps hanging between the columns
+            z = (zs[i] * zs[i + 1]) ** 0.5; (lx, ly) = P(X0 - 200, Yb - Hc * 0.6, z); (_, cy) = P(X0 - 200, Yb - Hc * 1.05, z)
+            d.line([(lx, cy), (lx, ly - 8 / z)], fill=dark + (255,), width=max(1, int(3 / z)))
+            self.windows.append((lx, ly, max(3, 22 / z), max(2, 12 / z), rng.uniform(0, TAU), 1))
+        ex, ey = W * 0.86, hy + 120                                                           # the exedra: a curved stone bench
+        d.chord([ex - 170, ey - 60, ex + 170, ey + 70], 180, 360, fill=mix(lime, p["mid"], 0.4) + (255,))
+        d.chord([ex - 150, ey - 40, ex + 150, ey + 50], 180, 360, fill=mix(p["mid"], (40, 52, 36), 0.25) + (255,))
+        d.rectangle([ex - 170, ey + 4, ex + 170, ey + 22], fill=mix(lime, p["mid"], 0.5) + (255,))
+        draw_figure(d, ex - 60, ey + 4, 1.0, mix(p["near"], p["mid"], 0.4), hat=False); draw_figure(d, ex + 50, ey + 4, 1.0, mix(p["near"], p["mid"], 0.4), hat=False)
+        for (X, z, h) in ((420, 1.6, 300), (420, 3.2, 300), (420, 6.4, 300), (-380, 2.4, 300), (-380, 5.0, 300)):   # palms beside the pool
+            bx, by = P(X, 470, z); self._palm(bx, by, h / z * 2.0, max(0.5, 1.6 / z), 11)
+        self._palm(W * 0.96, H * 0.98, 640, 1.8, 12)
+        near = Image.new("RGBA", (W, H), (0, 0, 0, 0)); dn = ImageDraw.Draw(near); nc = p["near"]; self.near = near
+        r2 = random.Random(int(rng.integers(1e6)))
+        for _ in range(40):                                                                   # flowering shrubs along the path
+            x = r2.uniform(W * 0.35, W * 0.92); yb = H - r2.uniform(0, 40); rr = r2.uniform(30, 60)
+            dn.ellipse([x - rr, yb - rr, x + rr, yb + rr * 0.4], fill=nc + (255,))
+            if r2.random() < 0.5: dn.ellipse([x - 4, yb - rr * 0.6, x + 4, yb - rr * 0.6 + 8], fill=mix(nc, (230, 220, 240), 0.35) + (255,))
+        self.walker = dict(y=H - 60, s=0.95)
+        self.fog_y = hy + 30; self.fog_a = 0.06; self.particles = "fireflies"
+
+    def _scroll_niches(self, d, x0, y0, x1, y1, cell, col, tags=True, s=1.0):
+        """A wall of square wooden pigeonholes, each with a few rolled scrolls showing their round ends (front view)."""
+        p = self.p; pap = p.get("papyrus", (222, 198, 146)); wood = mix(col, (90, 60, 36), 0.4)
+        d.rectangle([x0, y0, x1, y1], fill=wood + (255,))
+        for y in np.arange(y0 + 6 * s, y1 - cell * 0.5, cell):
+            for x in np.arange(x0 + 6 * s, x1 - cell * 0.5, cell):
+                d.rectangle([x, y, x + cell - 10 * s, y + cell - 10 * s], fill=mix(wood, (0, 0, 0), 0.6) + (255,))
+                n = int(self.rng.integers(2, 6)); r = (cell - 14 * s) / 6
+                for k in range(n):
+                    cx = x + r * 1.3 + (k % 3) * r * 1.9; cy = y + cell - 10 * s - r * 1.1 - (k // 3) * r * 1.8
+                    d.ellipse([cx - r, cy - r, cx + r, cy + r], fill=mix(pap, col, self.rng.uniform(0.25, 0.55)) + (255,))
+                    d.ellipse([cx - r * 0.3, cy - r * 0.3, cx + r * 0.3, cy + r * 0.3], fill=mix(pap, (60, 40, 20), 0.5) + (255,))
+                    if tags and self.rng.random() < 0.35: self.tags.append((cx, cy + r * 0.6, 9 * s, 15 * s, self.rng.uniform(0, TAU), mix(pap, col, 0.2)))
+
+    def _tags(self, img, ph):
+        """EP12: little title tags hanging from the scroll ends, stirring in the night air."""
+        d = ImageDraw.Draw(img)
+        for i, (x, y, w, h, f, col) in enumerate(self.tags):
+            a = 0.18 * math.sin(ph * 2 + f) + 0.08 * math.sin(ph * 5 + f * 2)
+            ca, sa = math.cos(a), math.sin(a); L = h * 0.6
+            ax, ay = x + sa * L * 0.4, y + ca * L * 0.4
+            pts = [(ax + dx * ca + dy * sa, ay - dx * sa + dy * ca) for dx, dy in ((-w / 2, 0), (w / 2, 0), (w / 2, h), (-w / 2, h))]
+            d.line([(x, y), (ax, ay)], fill=col + (200,), width=1); d.polygon(pts, fill=col + (235,))
+
+    def _scribe(self, img, ph):
+        """EP12: the copyist's arm and reed pen moving slowly along the line, returning at the end of each line,
+        the head nodding gently as he reads the original."""
+        x, y, s = self.scribe; c = (13, 12, 18, 255); lay = Image.new("RGBA", (W, H), (0, 0, 0, 0)); d = ImageDraw.Draw(lay)
+        u = (ph / TAU * 4) % 1.0; prog = smooth(u / 0.85) if u < 0.85 else 1 - smooth((u - 0.85) / 0.15)
+        hx = x + (40 + 70 * prog) * s; hy_ = y - 4 * s + 2 * s * math.sin(ph * 40)
+        d.line([(x - 10 * s, y - 120 * s), (x + 30 * s, y - 50 * s), (hx, hy_)], fill=c, width=int(16 * s), joint="curve")
+        d.line([(hx, hy_), (hx + 26 * s, hy_ - 34 * s)], fill=(60, 50, 40, 255), width=max(2, int(3 * s)))
+        nod = 3 * s * math.sin(ph * 4 + 1)
+        d.ellipse([x - 40 * s, y - 214 * s + nod, x + 6 * s, y - 160 * s + nod], fill=c)
+        img.alpha_composite(lay)
+
+    def build_scriptorium(self):
+        """The copyists' room by lamplight: plastered walls, a wall of scroll pigeonholes, a high window with a palm and the
+        moon, a long table with rolls, ink pots, a cup of reeds and stones holding a roll flat; a copyist writing."""
+        p, rng = self.p, self.rng; lime = p.get("lime", (214, 204, 180)); pap = p.get("papyrus", (222, 198, 146))
+        wall = mix(lime, p["mid"], 0.62); self.back = Image.new("RGBA", (W, H), wall + (255,)); d = ImageDraw.Draw(self.back)
+        d.rectangle([0, 0, W, H * 0.08], fill=mix(wall, (0, 0, 0), 0.35) + (255,))
+        for x in range(0, W, 140): d.rectangle([x, 0, x + 40, H * 0.08], fill=mix(wall, (0, 0, 0), 0.5) + (255,))   # beams
+        d.rectangle([0, H * 0.58, W, H * 0.62], fill=mix(wall, (110, 60, 40), 0.35) + (255,))          # painted dado band
+        x0, y0, x1, y1 = W * 0.66, H * 0.14, W * 0.86, H * 0.5                                # the window
+        win = Image.new("RGBA", (W, H), (0, 0, 0, 0)); dw = ImageDraw.Draw(win)
+        for y in range(int(y0), int(y1)): dw.line([(x0, y), (x1, y)], fill=mix(p["sky_top"], p["sky_mid"], (y - y0) / (y1 - y0)) + (255,))
+        mx, my = W * 0.8, H * 0.22; dw.ellipse([mx - 22, my - 22, mx + 22, my + 22], fill=p["moon"] + (255,))
+        for _ in range(30): sx, sy = rng.uniform(x0, x1), rng.uniform(y0, y1 * 0.9); dw.point((sx, sy), fill=(230, 226, 214, 255))
+        self.back.alpha_composite(win); self.back.alpha_composite(self.tint(self._glow(90).resize((200, 200)), p["moon"], 0.4), (int(mx - 100), int(my - 100)))
+        d = ImageDraw.Draw(self.back); d.rectangle([x0 - 14, y0 - 14, x1 + 14, y1 + 14], outline=mix(wall, (0, 0, 0), 0.3) + (255,), width=14)
+        for k in range(1, 4): d.line([(x0 + (x1 - x0) * k / 4, y0), (x0 + (x1 - x0) * k / 4, y1)], fill=mix(wall, (0, 0, 0), 0.45) + (255,), width=5)
+        self.tags = []; self._scroll_niches(d, W * 0.04, H * 0.12, W * 0.5, H * 0.56, 92, mix(wall, p["mid"], 0.3), True, 1.0)
+        self.mid = Image.new("RGBA", (W, H), (0, 0, 0, 0)); self.palms = []
+        pw = Image.new("RGBA", (W, H), (0, 0, 0, 0)); sv = self.mid; self.mid = pw
+        self._palm(W * 0.83, H * 0.56, 230, 0.9, 10); self.mid = sv
+        self.back.alpha_composite(pw.crop((int(x0), int(y0), int(x1), int(y1))), (int(x0), int(y0)))
+        wp = Image.new("RGBA", (W, H), (0, 0, 0, 0)); self._palms(wp, 0.0, which=self.palms); self.palms = []
+        self.back.alpha_composite(wp.crop((int(x0), int(y0), int(x1), int(y1))), (int(x0), int(y0)))
+        d = ImageDraw.Draw(self.back); fl = mix(wall, (60, 40, 30), 0.55)
+        d.rectangle([0, H * 0.74, W, H], fill=fl + (255,))
+        for x in range(-200, W + 200, 120): d.line([(W / 2 + (x - W / 2) * 0.55, H * 0.74), (x, H)], fill=mix(fl, (0, 0, 0), 0.2) + (255,), width=2)
+        nc = p["near"]; near = Image.new("RGBA", (W, H), (0, 0, 0, 0)); dn = ImageDraw.Draw(near); self.near = near
+        tb = mix(nc, (90, 60, 36), 0.35)                                                       # the long table
+        dn.rectangle([W * 0.1, H * 0.7, W * 0.92, H * 0.74], fill=mix(tb, pap, 0.12) + (255,)); dn.rectangle([W * 0.1, H * 0.74, W * 0.92, H * 0.78], fill=tb + (255,))
+        for lx_ in (W * 0.13, W * 0.89): dn.rectangle([lx_ - 12, H * 0.78, lx_ + 12, H], fill=tb + (255,))
+        dn.polygon([(W * 0.42, H * 0.7), (W * 0.62, H * 0.7), (W * 0.64, H * 0.715), (W * 0.4, H * 0.715)], fill=mix(pap, nc, 0.15) + (255,))   # open roll being written
+        for k in range(7): dn.line([(W * 0.44 + k * 26, H * 0.703), (W * 0.44 + k * 26 + 18, H * 0.703)], fill=mix(pap, (40, 30, 20), 0.6) + (255,), width=1)
+        for rx_ in (W * 0.405, W * 0.63): dn.ellipse([rx_ - 14, H * 0.69, rx_ + 14, H * 0.72], fill=mix(pap, nc, 0.3) + (255,))
+        dn.polygon([(W * 0.66, H * 0.7), (W * 0.8, H * 0.7), (W * 0.81, H * 0.715), (W * 0.65, H * 0.715)], fill=mix(pap, nc, 0.35) + (255,))   # the ship's copy
+        for sx_ in (W * 0.665, W * 0.8): dn.ellipse([sx_ - 16, H * 0.682, sx_ + 16, H * 0.706], fill=mix(nc, (120, 120, 120), 0.3) + (255,))   # stones
+        dn.ellipse([W * 0.36, H * 0.665, W * 0.385, H * 0.705], fill=(20, 18, 24, 255)); dn.ellipse([W * 0.37, H * 0.664, W * 0.378, H * 0.672], fill=(4, 4, 6, 255))   # ink pot
+        dn.rectangle([W * 0.84, H * 0.64, W * 0.865, H * 0.705], fill=mix(nc, (120, 80, 50), 0.35) + (255,))   # cup of reeds
+        for k in range(4): dn.line([(W * 0.845 + k * 5, H * 0.64), (W * 0.83 + k * 12, H * 0.57)], fill=mix(nc, (150, 120, 70), 0.4) + (255,), width=2)
+        for k in range(3): dn.ellipse([W * 0.2 + k * 50, H * 0.67 - (k % 2) * 16, W * 0.2 + k * 50 + 44, H * 0.705 - (k % 2) * 16], fill=mix(pap, nc, 0.4) + (255,))   # rolled scrolls
+        cx_, cy_ = W * 0.47, H * 0.7                                                           # the copyist on his stool
+        dn.polygon([(cx_ - 150, H * 0.98), (cx_ - 20, H * 0.98), (cx_ - 10, cy_ + 20), (cx_ - 30, cy_ - 160), (cx_ - 110, cy_ - 150), (cx_ - 150, cy_ + 20)], fill=(13, 12, 18, 255))
+        dn.rectangle([cx_ - 160, H * 0.86, cx_ - 20, H * 0.9], fill=tb + (255,))
+        self.scribe = (cx_ - 40, cy_, 1.0)
+        dn.polygon([(W * 0.77, H * 0.98), (W * 0.85, H * 0.98), (W * 0.86, cy_), (W * 0.84, cy_ - 120), (W * 0.79, cy_ - 118), (W * 0.76, cy_)], fill=mix((13, 12, 18), wall, 0.12) + (255,))   # a second copyist
+        dn.ellipse([W * 0.785, cy_ - 176, W * 0.83, cy_ - 118], fill=mix((13, 12, 18), wall, 0.12) + (255,))
+        for lx_, ly_ in ((W * 0.33, H * 0.62), (W * 0.71, H * 0.62)):                         # lamp stands on the table
+            dn.rectangle([lx_ - 4, ly_ + 10, lx_ + 4, H * 0.7], fill=(30, 26, 22, 255)); dn.ellipse([lx_ - 30, H * 0.69, lx_ + 30, H * 0.705], fill=(30, 26, 22, 255))
+            dn.ellipse([lx_ - 24, ly_, lx_ + 20, ly_ + 16], fill=mix(nc, (150, 100, 60), 0.4) + (255,))
+            self.lamps.append((lx_ + 18, ly_ + 2, 1.0))
+        self.back.alpha_composite(self.tint(self._glow(90).resize((1700, 1000)), p["light"], 0.18), (int(W * 0.5 - 850), int(H * 0.6 - 500)))
+        self.fog_a = 0.0; self.particles = "motes"
+
+    def build_stacks(self):
+        """The poetry hall: walls of pigeonholes from floor to ceiling receding in one-point perspective, scroll ends and
+        tags glimmering, ceiling beams, a lamp on a stand in front, a lit doorway far off and the librarian walking
+        slowly away down the hall with his lamp and back again."""
+        p, rng = self.p, self.rng; lime = p.get("lime", (214, 204, 180)); pap = p.get("papyrus", (222, 198, 146))
+        vx, vy, f = W * 0.5, H * 0.46, 700.0; self.vp = (vx, vy, f); P = self._proj
+        wall = mix(lime, p["mid"], 0.7); self.back = Image.new("RGBA", (W, H), wall + (255,)); d = ImageDraw.Draw(self.back)
+        Xw, Yf, Yc = 1.25, -1.0, 1.35; z0, z1 = 0.62, 14.0
+        for sd in (-1, 1):                                                                     # shelf walls
+            d.polygon([P(sd * Xw, Yf, z0), P(sd * Xw, Yf, z1), P(sd * Xw, Yc, z1), P(sd * Xw, Yc, z0)], fill=mix(wall, (90, 60, 36), 0.4) + (255,))
+        d.polygon([P(-Xw, Yf, z0), P(Xw, Yf, z0), P(Xw, Yf, z1), P(-Xw, Yf, z1)], fill=mix(wall, (40, 30, 26), 0.5) + (255,))
+        d.polygon([P(-Xw, Yc, z0), P(Xw, Yc, z0), P(Xw, Yc, z1), P(-Xw, Yc, z1)], fill=mix(wall, (0, 0, 0), 0.55) + (255,))
+        ex0, ey0 = P(-Xw, Yc, z1); ex1, ey1 = P(Xw, Yf, z1); d.rectangle([ex0, ey0, ex1, ey1], fill=mix(wall, (0, 0, 0), 0.2) + (255,))
+        dx0, dy0 = P(-0.25, 0.3, z1); dx1, dy1 = P(0.25, Yf, z1); d.rectangle([dx0, dy0, dx1, dy1], fill=mix(p["light"], (255, 240, 200), 0.25) + (255,))
+        self.back.alpha_composite(self.tint(self._glow(90).resize((300, 260)), p["light"], 0.5), (int(vx - 150), int((dy0 + dy1) / 2 - 130)))
+        d = ImageDraw.Draw(self.back)
+        zs = [z0 * 1.16 ** i for i in range(40) if z0 * 1.16 ** i < z1]
+        rowsY = np.linspace(Yf + 0.12, Yc - 0.05, 9); wood = mix(wall, (90, 60, 36), 0.4); hole = mix(wood, (0, 0, 0), 0.62)
+        self.tags = []
+        for sd in (-1, 1):
+            for i in range(len(zs) - 1):
+                za, zb = zs[i], zs[i + 1]
+                for j in range(len(rowsY) - 1):
+                    ya, yb = rowsY[j] + 0.02, rowsY[j + 1] - 0.02; zA, zB = za + (zb - za) * 0.06, zb - (zb - za) * 0.06
+                    q = [P(sd * Xw, ya, zA), P(sd * Xw, ya, zB), P(sd * Xw, yb, zB), P(sd * Xw, yb, zA)]
+                    d.polygon(q, fill=hole + (255,))
+                    n = int(rng.integers(2, 5)); zm = (zA + zB) / 2
+                    for k in range(n):                                                        # scroll ends seen at an angle
+                        zz = zA + (zB - zA) * (k + 0.5) / n; yy = ya + 0.035 + 0.02 * (k % 2)
+                        cx, cy = P(sd * Xw * 0.99, yy, zz); rx = 0.02 * f / zz * 0.45; ry = 0.03 * f / zz
+                        d.ellipse([cx - rx, cy - ry, cx + rx, cy + ry], fill=mix(pap, wall, rng.uniform(0.2, 0.55)) + (255,))
+                        if zz < 2.4 and rng.random() < 0.35: self.tags.append((cx, cy + ry, max(3, 0.03 * f / zz), max(5, 0.05 * f / zz), rng.uniform(0, TAU), mix(pap, wall, 0.2)))
+        for z in zs[::2]:                                                                     # ceiling beams
+            d.line([P(-Xw, Yc, z), P(Xw, Yc, z)], fill=mix(wall, (0, 0, 0), 0.7) + (255,), width=max(1, int(40 / z)))
+        for z in zs[::3]: d.line([P(-Xw * 0.98, Yf, z), P(Xw * 0.98, Yf, z)], fill=mix(wall, (0, 0, 0), 0.6) + (255,), width=max(1, int(6 / z)))
+        self.mid = Image.new("RGBA", (W, H), (0, 0, 0, 0))
+        self.back.alpha_composite(self.tint(self._glow(90).resize((1600, 1200)), p["light"], 0.14), (int(W * 0.5 - 800), int(H * 0.6 - 600)))
+        nc = p["near"]; near = Image.new("RGBA", (W, H), (0, 0, 0, 0)); dn = ImageDraw.Draw(near); self.near = near
+        lx, ly = W * 0.72, H * 0.6                                                             # a tall bronze lamp stand
+        dn.rectangle([lx - 5, ly + 8, lx + 5, H * 0.96], fill=(26, 22, 18, 255)); dn.polygon([(lx - 50, H), (lx + 50, H), (lx, H * 0.93)], fill=(26, 22, 18, 255))
+        dn.ellipse([lx - 30, ly - 4, lx + 26, ly + 16], fill=(70, 52, 34, 255)); self.lamps.append((lx + 22, ly, 1.1))
+        self.sentry = dict(v=(vx, vy, f), X=0.12)
+        self.fog_a = 0.0; self.particles = "motes"
+
+
     def _glow(self, r):
         s = r * 2; yy, xx = np.mgrid[0:s, 0:s].astype(np.float32)
         d = np.sqrt((xx - r) ** 2 + (yy - r) ** 2) / r
@@ -3463,7 +3882,10 @@ class Scene:
             off = int(W / 2 + 160 * math.sin(ph))
             img.alpha_composite(self.fog.crop((off, 0, off + W, H)))
         if self.tug: self._tug(img, t, ph)
+        if self.pharos: self._pharosfire(img, ph)
+        if self.tags: self._tags(img, ph)
         img.alpha_composite(self.mid)
+        if self.galley: self._galley(img, t, ph)
         if self.windows:
             lay = Image.new("RGBA", (W, H), (0, 0, 0, 0)); dl = ImageDraw.Draw(lay)
             for x, y, w, h, f, k in self.windows:
@@ -3493,7 +3915,10 @@ class Scene:
         if self.lighter: self._lighter(img, t, ph)
         for tex, y0, amp, f in self.banks:                                                  # EP11: fog banks swaying to and fro
             off = int(W / 2 + amp * math.sin(ph + f)); img.alpha_composite(tex.crop((off, 0, off + W, tex.height)), (0, y0))
+        if self.palms: self._palms(img, ph, False)
         img.alpha_composite(self.near)
+        if self.palms: self._palms(img, ph, True)
+        if self.scribe: self._scribe(img, ph)
         if getattr(self, "spill", None): img.alpha_composite(self.spill)
         if self.willow: self._willow(img, ph)
         if self.steam: self._steam(img, ph)
@@ -3547,6 +3972,9 @@ class Scene:
             elif self.particles == "drizzle":                                              # EP11: fine wet fog drops drifting down through the gaslight
                 x = x0 + 18 * math.sin(ph * k + f); y = (y0 + (H + 40) * t / LOOP_S * (k + 1)) % (H + 40) - 20; L = 8 + 8 * s
                 ImageDraw.Draw(lay).line([(x, y), (x - L * 0.25, y + L)], fill=mix(p["gas"], p["moon"], 0.4) + (int(50 + 60 * s),), width=1); continue
+            elif self.particles == "motes":                                                # EP12: tiny gold flecks drifting up through the lamplight
+                y = (y0 - (H + 40) * t / LOOP_S * k) % (H + 40) - 20; x = x0 + 22 * math.sin(ph * k + f) + 10 * math.sin(ph * 3 + f)
+                a = 0.2 * s * (0.6 + 0.4 * math.sin(ph * 5 + f)); col = mix(self.p.get("papyrus", (222, 198, 146)), (255, 240, 200), 0.4); sz = 1.2 + 1.4 * s
             elif self.particles == "fireflies":
                 x = x0 + 60 * math.sin(ph * k + f); y = H * 0.55 + (y0 % (H * 0.45)) + 30 * math.cos(ph * (3 - k) + f)
                 a = max(0, math.sin(ph * 3 * k + f)) ** 2 * 0.8 * s; col = (230, 240, 160); sz = 4 + 2 * s
