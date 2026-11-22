@@ -1,0 +1,29 @@
+{
+ "version": 1,
+ "channel_id": "UCO5Fa5_HJxd-aeTiyQcw0Sw",
+ "created_at": "2026-11-22T11:36:32-03:00",
+ "items": [
+  {
+   "key": "c5-d03b-pombo",
+   "kind": "short",
+   "video": "video.mp4",
+   "title": "E se você fosse um pombo no semáforo? #shorts",
+   "description": "Como muitos semáforos sabem que tem carro esperando? Um pombo explica: embaixo do asfalto tem um fio enrolado (o laço indutivo), dá para ver o corte em quadrado perto da faixa. Uma corrente elétrica passa nele e cria um campo magnético. Quando um carro para em cima, o metal mexe nesse campo e a frequência do circuito sobe; um aparelho na caixa da esquina percebe a mudança e avisa o semáforo. E o pombo? Carne e pena, sem metal: para o sinal, ele não existe. Você já viu esse quadrado no asfalto da sua rua?\n\nVisão do Bicho: pombos sentem o campo magnético da Terra e usam isso para voltar para casa.\n\nFontes: Federal Highway Administration (EUA), Traffic Detector Handbook, 3ª ed., cap. 2 (laço indutivo: as correntes no metal do carro diminuem a indutância e a frequência sobe); W. T. Keeton, \"Magnets interfere with pigeon homing\", PNAS (1971); R. Wiltschko e W. Wiltschko, revisões sobre a bússola magnética das aves. Narração com voz sintética; roteiro e animação próprios.\n#esevocefosse #pombo #semaforo #comofunciona #cidade",
+   "tags": [
+    "pombo",
+    "semáforo",
+    "laço indutivo",
+    "campo magnético",
+    "como funciona",
+    "e se você fosse",
+    "shorts"
+   ],
+   "publish_at": "2026-11-23T19:00:00-03:00",
+   "if_late": "public_now",
+   "made_for_kids": false,
+   "altered_content": true,
+   "pinned_comment": "Você já viu esse quadrado no asfalto da sua rua?",
+   "thumbnail": "capa.jpg"
+  }
+ ]
+}

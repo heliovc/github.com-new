@@ -19,6 +19,8 @@ Ler antes de cada vídeo (plano.md, seção 8). Atualizar depois de produzir e 4
 | 1 | B | lagartixa | réptil | mecânica do dia a dia | lugar proibido | casa | cozinha à noite, laranja × azul | close rasteiro atrás da geladeira | cores no escuro (visão noturna em cores) | 45,6 s | 137 | público 20/11 23:00 |
 | 2 | A | mosquito | inseto | escala extrema · **curto** | queda/perigo | natureza | tempestade verde-azulada, folhas escuras | gota gigante descendo sobre o mosquito | gás carbônico do bafo em verde (a 10 m) | 34,7 s | 102 | agendado 22/11 12:00 |
 | 2 | B | barata | inseto | mecânica do dia a dia · **atual** | lugar proibido | casa | banheiro creme e menta × esgoto oliva | POV de dentro do ralo olhando a grelha | o cheiro pelas antenas (fedor para na água) | 44,2 s | 138 | agendado 22/11 19:00 |
+| 3 | A | krill | marinho | escala extrema · **curto** | queda/perigo | natureza | azul-cobalto ensolarado, krill coral, barbatanas grafite | boca da baleia-azul vindo de frente, do fundo | olho composto puxado pro azul (a sombra da baleia apaga a luz) | 35,4 s | 102 | agendado 23/11 12:00 |
+| 3 | B | pombo | ave | mecânica do dia a dia · **atual** | lugar proibido | cidade | crepúsculo roxo e rosa, asfalto grafite, luzes do semáforo | pombo em cima do semáforo, carros lá embaixo | campo magnético da Terra (linhas violeta até o pombal) | 45,3 s | 139 | agendado 23/11 19:00 |
 
 ## Fontes por vídeo
 **1A — formiga**
@@ -39,6 +41,15 @@ Ler antes de cada vídeo (plano.md, seção 8). Atualizar depois de produzir e 4
 - ABNT NBR 8160 — fecho hídrico: camada de água que veda a passagem dos gases; mínimo 50 mm em desconectores. Poli-USP, apostila "Esgoto sanitário" (2019): sifão, caixa sifonada, ventilação. https://edisciplinas.usp.br/pluginfile.php/4535392/mod_resource/content/6/Esgoto%20sanit%C3%A1rio%202019%20SQ.pdf
 - Antenas da barata-americana cobertas de sensilas olfativas — PubMed Central. https://pmc.ncbi.nlm.nih.gov/articles/PMC6208657
 
+**3A — krill (curto)**
+- Goldbogen et al. (2011), J. Exp. Biol. 214: 131–146; Stanford News (2016) — na investida, a baleia engole água e presas num volume maior que o próprio corpo. https://news.stanford.edu/stories/2016/09/unique-feeding-habits-whales-come-light
+- Savoca et al. (2021), Nature 599: 85–90 — baleia-azul do Pacífico Norte come ~16 t de krill por dia de alimentação (Smithsonian). https://dashboard.si.edu/es/newsdesk/releases/worlds-largest-whales-eat-more-previously-thought-amplifying-their-role-global
+- Eletrorretinografia de crustáceos antárticos, incluindo krill — pico de sensibilidade no azul (470–497 nm). https://core.ac.uk/download/51094692.pdf
+
+**3B — pombo (atual)**
+- FHWA, Traffic Detector Handbook, 3ª ed., vol. I, cap. 2 — laço indutivo: as correntes no metal do carro diminuem a indutância e a frequência do oscilador sobe. https://www.fhwa.dot.gov/publications/research/operations/its/06108/02.cfm
+- Keeton (1971), "Magnets interfere with pigeon homing", PNAS 68(1): 102–106; Wiltschko & Wiltschko (revisões) — pombos usam o campo magnético da Terra para voltar para casa.
+
 ## Métricas (48 h após publicar)
 Metas: continuaram assistindo ≥ 70% · % visualizada ≥ 80%.
 
@@ -48,6 +59,8 @@ Metas: continuaram assistindo ≥ 70% · % visualizada ≥ 80%.
 | 1B lagartixa | 20/11 23:00 | https://youtube.com/shorts/v88xGAAAzmw | 68% (21/11 06h) | ~30% (~14 s de 46 s) · Studio ~11 h: 43,5% | 1.148 (7 h) · 21 likes | — |
 | 2A mosquito (curto) | 22/11 12:00 | — | — | — | — | — |
 | 2B barata (atual) | 22/11 19:00 | — | — | — | — | — |
+| 3A krill (curto) | 23/11 12:00 | — | — | — | — | — |
+| 3B pombo (atual) | 23/11 19:00 | — | — | — | — | — |
 
 Leitura do Dia 1 (21/11): o YouTube mostrou cada um a ~1,1 mil pessoas e parou de distribuir (1–2 views/h). O gancho funciona; as pessoas saem no meio → teste de duração nos Dias 2–5.
 
@@ -72,3 +85,5 @@ Leitura do Dia 1 (21/11): o YouTube mostrou cada um a ~1,1 mil pessoas e parou d
 - 22/11 (rodada fora de hora) — **Voz voltou.** O domínio já passava, mas o edge-tts recusava o certificado do proxy da nuvem (ele usa a lista fixa do pacote certifi). Correção no motor e no setup: quando existe a variável SSL_CERT_FILE (só na nuvem), o edge-tts passa a confiar nesse certificado. No Mac nada muda. Mesma voz Thalita.
 - 22/11 — Dia 2 produzido: 2A mosquito no formato CURTO (34,7 s, 102 palavras, 2 passos: leveza → a gota carrega; pelos que repelem água) e 2B barata no formato ATUAL (44,2 s, 138 palavras, 3 passos: curva que guarda água → fecho hídrico barra o gás → ventilação). Fatos corrigidos na checagem: o piloto de caça "sente uns 9 G" (não "desmaia"); a barata "prende o fôlego 40 min" ficou de fora (sem fonte confiável; estudo de 2009 fala em ~7 min).
 - 22/11 — Mosquito: Visão do Bicho no início (3,9 s), como pede o formato curto (até ~20 s); cenas "visão" e "gota" divididas em 2 tomadas cada para trocar a cada 3–5 s.
+- 22/11 (rodada das 06:30, adiantando o Dia 3) — 3A krill no formato CURTO (35,4 s, 102 palavras, 2 passos: engole mais água que o corpo → espreme pelas barbatanas) e 3B pombo no formato ATUAL (45,3 s, 139 palavras, 3 passos: fio enrolado → metal muda o campo/frequência sobe → caixa avisa o sinal). Checagem: "muito sinal sabe" (nem todo semáforo no Brasil tem laço; muitos são de tempo fixo); a Visão do Bicho do krill é o olho composto mais sensível ao azul (dado de crustáceos antárticos, sem curva exata do krill-antártico), sem afirmar que ele "só vê azul". Pombo: "land" dividida em 2 cenas para não passar de 8 s.
+- 22/11 — Métricas de 48 h ainda não existem (o arquivo mais recente é de 21/11 09h, ~11 h depois da formiga e da lagartixa; já anotadas). Nenhum item c5 com erro no robô.

@@ -1,0 +1,311 @@
+{
+ "key": "c5-d03b-pombo",
+ "title": "E se você fosse um pombo no semáforo?",
+ "animal": "pombo",
+ "grupo": "ave",
+ "tipo": "B",
+ "formato": "atual",
+ "gancho": "lugar proibido",
+ "tema": "cidade",
+ "tts": {
+  "engine": "edge",
+  "voice": "pt-BR-ThalitaMultilingualNeural",
+  "rate": "+0%"
+ },
+ "scene_module": "pombo",
+ "accent": [
+  190,
+  90,
+  230
+ ],
+ "hud_series": "E SE VOCÊ FOSSE…",
+ "hud": "VOCÊ: 300 g · CARRO: 1.500 kg",
+ "music": {
+  "bpm": 100,
+  "root": 63,
+  "prog": [
+   0,
+   4,
+   3,
+   5
+  ],
+  "seed": 31,
+  "inst": "pluck",
+  "density": 0.6
+ },
+ "say_map": {},
+ "beats": [
+  {
+   "scene": "perch",
+   "text": "Eu peso 300 gramas e passo o dia em cima do *semáforo*."
+  },
+  {
+   "scene": "perch",
+   "text": "Daqui eu vejo: muito sinal *sabe* quando chega carro."
+  },
+  {
+   "scene": "cut",
+   "text": "O segredo tá no chão: um fio enrolado embaixo do *asfalto*."
+  },
+  {
+   "scene": "cut",
+   "text": "Dá pra ver o corte em *quadrado* perto da faixa."
+  },
+  {
+   "scene": "field",
+   "text": "Passa uma corrente elétrica nele, e ela cria um campo *magnético*."
+  },
+  {
+   "scene": "car",
+   "text": "Quando um carro para em cima, o *metal* dele mexe nesse campo."
+  },
+  {
+   "scene": "car",
+   "text": "O fio muda de ritmo: a frequência *sobe*."
+  },
+  {
+   "scene": "vision",
+   "text": "E campo magnético eu *conheço*."
+  },
+  {
+   "scene": "vision",
+   "text": "Eu sinto o da *Terra*, e uso pra voltar pra casa."
+  },
+  {
+   "scene": "box",
+   "text": "Um aparelho na caixa da esquina percebe a *mudança*."
+  },
+  {
+   "scene": "box",
+   "text": "E avisa o sinal: tem carro esperando, pode abrir o *verde*."
+  },
+  {
+   "scene": "land",
+   "text": "Adivinha o que acontece quando eu pouso no quadrado."
+  },
+  {
+   "scene": "land",
+   "text": "*Nada*. Eu sou carne e pena, sem metal nenhum."
+  },
+  {
+   "scene": "land2",
+   "text": "Pra esse sinal, eu *não existo*. Então eu fico aqui em cima.",
+   "pause_before": 0.3,
+   "payoff": true
+  }
+ ],
+ "scenes": {
+  "perch": {
+   "labels": [
+    {
+     "text": "o sinal *SABE*",
+     "at": "sabe"
+    }
+   ],
+   "sfx": [
+    {
+     "type": "hum",
+     "at": 0,
+     "d": "scene",
+     "f0": 62,
+     "gain": -24
+    },
+    {
+     "type": "whoosh_lo",
+     "at": 0.6,
+     "gain": -14
+    }
+   ]
+  },
+  "cut": {
+   "labels": [
+    {
+     "text": "fio embaixo do *ASFALTO*",
+     "at": "asfalto"
+    },
+    {
+     "text": "o corte em *QUADRADO*",
+     "at": "quadrado"
+    }
+   ],
+   "sfx_cut": "whoosh",
+   "sfx": [
+    {
+     "type": "tic",
+     "at": "quadrado",
+     "gain": -10
+    }
+   ]
+  },
+  "field": {
+   "labels": [
+    {
+     "text": "corrente → campo *MAGNÉTICO*",
+     "at": "magnético"
+    }
+   ],
+   "sfx_cut": "pop",
+   "sfx": [
+    {
+     "type": "hum",
+     "at": 0.1,
+     "d": "scene",
+     "f0": 240,
+     "gain": -22
+    }
+   ]
+  },
+  "car": {
+   "labels": [
+    {
+     "text": "o *METAL* mexe no campo",
+     "at": "metal"
+    },
+    {
+     "text": "frequência *SOBE*",
+     "at": "sobe"
+    }
+   ],
+   "sfx_cut": "whoosh",
+   "sfx": [
+    {
+     "type": "thud",
+     "at": "metal",
+     "gain": -14
+    },
+    {
+     "type": "rise",
+     "at": "sobe",
+     "d": 1.0,
+     "f0": 300,
+     "f1": 900,
+     "gain": -18
+    }
+   ]
+  },
+  "vision": {
+   "labels": [
+    {
+     "text": "VISÃO DO BICHO · *campo magnético*",
+     "style": "vision",
+     "at": 0
+    }
+   ],
+   "sfx_cut": "glitch",
+   "sfx": [
+    {
+     "type": "hum",
+     "at": 0.1,
+     "d": "scene",
+     "f0": 330,
+     "gain": -24
+    }
+   ]
+  },
+  "box": {
+   "labels": [
+    {
+     "text": "pode abrir o *VERDE*",
+     "at": "verde"
+    }
+   ],
+   "sfx_cut": "pop",
+   "sfx": [
+    {
+     "type": "blip_up",
+     "at": "mudança",
+     "gain": -14
+    },
+    {
+     "type": "metal",
+     "at": "verde",
+     "gain": -16
+    }
+   ]
+  },
+  "land": {
+   "labels": [
+    {
+     "text": "*NADA* acontece",
+     "at": "=nada"
+    }
+   ],
+   "sfx_cut": "whoosh_lo",
+   "sfx": [
+    {
+     "type": "steps",
+     "at": "pouso",
+     "d": 0.5,
+     "gain": -16
+    }
+   ]
+  },
+  "land2": {
+   "fn": "land",
+   "labels": [
+    {
+     "text": "eu *NÃO EXISTO*",
+     "at": "existo"
+    }
+   ],
+   "sfx_cut": "pop",
+   "sfx": [
+    {
+     "type": "tic",
+     "at": "existo",
+     "gain": -8
+    },
+    {
+     "type": "whoosh_hi",
+     "at": "então",
+     "gain": -14
+    }
+   ]
+  }
+ },
+ "cover": {
+  "t": 0.5,
+  "focus": [
+   540,
+   1150
+  ],
+  "zoom": 1.0,
+  "at": [
+   540,
+   1150
+  ],
+  "title": [
+   "*UM POMBO*",
+   "NO SEMÁFORO?"
+  ],
+  "hook": "O SINAL NÃO ME VÊ",
+  "sprite_s": 420,
+  "sprite_rot": 0,
+  "you": [
+   640,
+   980
+  ],
+  "you_side": "right"
+ },
+ "publish": {
+  "title": "E se você fosse um pombo no semáforo? #shorts",
+  "description": "Como muitos semáforos sabem que tem carro esperando? Um pombo explica: embaixo do asfalto tem um fio enrolado (o laço indutivo), dá para ver o corte em quadrado perto da faixa. Uma corrente elétrica passa nele e cria um campo magnético. Quando um carro para em cima, o metal mexe nesse campo e a frequência do circuito sobe; um aparelho na caixa da esquina percebe a mudança e avisa o semáforo. E o pombo? Carne e pena, sem metal: para o sinal, ele não existe. Você já viu esse quadrado no asfalto da sua rua?\n\nVisão do Bicho: pombos sentem o campo magnético da Terra e usam isso para voltar para casa.\n\nFontes: Federal Highway Administration (EUA), Traffic Detector Handbook, 3ª ed., cap. 2 (laço indutivo: as correntes no metal do carro diminuem a indutância e a frequência sobe); W. T. Keeton, \"Magnets interfere with pigeon homing\", PNAS (1971); R. Wiltschko e W. Wiltschko, revisões sobre a bússola magnética das aves. Narração com voz sintética; roteiro e animação próprios.\n#esevocefosse #pombo #semaforo #comofunciona #cidade",
+  "tags": [
+   "pombo",
+   "semáforo",
+   "laço indutivo",
+   "campo magnético",
+   "como funciona",
+   "e se você fosse",
+   "shorts"
+  ],
+  "publish_at": "2026-11-23T19:00:00-03:00",
+  "pinned_comment": "Você já viu esse quadrado no asfalto da sua rua?",
+  "channel_id": "UCO5Fa5_HJxd-aeTiyQcw0Sw"
+ },
+ "sources": [
+  "FHWA, Traffic Detector Handbook, 3rd ed., Vol. I, cap. 2 — laço indutivo, queda de indutância e aumento de frequência com o veículo: https://www.fhwa.dot.gov/publications/research/operations/its/06108/02.cfm",
+  "Keeton, W. T. (1971), \"Magnets interfere with pigeon homing\", PNAS 68(1): 102-106: https://www.pnas.org/doi/10.1073/pnas.68.1.102",
+  "Wiltschko, R. & Wiltschko, W. — bússola magnética das aves (revisões); pombo-doméstico pesa ~240-380 g"
+ ]
+}

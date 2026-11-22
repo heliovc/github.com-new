@@ -1,0 +1,351 @@
+{
+ "key": "c5-d03a-krill",
+ "title": "E se você fosse um krill na boca da baleia-azul?",
+ "animal": "krill",
+ "grupo": "marinho",
+ "tipo": "A",
+ "formato": "curto",
+ "gancho": "queda/perigo",
+ "tema": "natureza",
+ "tts": {
+  "engine": "edge",
+  "voice": "pt-BR-ThalitaMultilingualNeural",
+  "rate": "+0%"
+ },
+ "scene_module": "krill",
+ "accent": [
+  255,
+  120,
+  110
+ ],
+ "hud_series": "E SE VOCÊ FOSSE…",
+ "hud": "VOCÊ: 5 cm · BALEIA: 30 m",
+ "music": {
+  "bpm": 116,
+  "root": 60,
+  "prog": [
+   0,
+   3,
+   5,
+   4
+  ],
+  "seed": 23,
+  "inst": "marimba",
+  "density": 0.6
+ },
+ "say_map": {},
+ "beats": [
+  {
+   "scene": "mouth",
+   "text": "Eu tenho 5 centímetros. E uma baleia de 30 metros vem *vindo*."
+  },
+  {
+   "scene": "vision",
+   "text": "Meus olhos compostos são feitos pro *azul* do mar."
+  },
+  {
+   "scene": "vision2",
+   "text": "E aí uma sombra gigante *apaga* a luz."
+  },
+  {
+   "scene": "gulp",
+   "text": "Ela abre a boca, e a garganta *estica* feito sanfona."
+  },
+  {
+   "scene": "gulp2",
+   "text": "Numa bocada, entra mais água do que o *corpo* dela."
+  },
+  {
+   "scene": "pool",
+   "text": "Uma piscina inteira, com milhares de mim lá *dentro*."
+  },
+  {
+   "scene": "filter",
+   "text": "Aí ela fecha a boca e *espreme* a água pra fora."
+  },
+  {
+   "scene": "filter2",
+   "text": "A água passa pelas *barbatanas*, uma cortina de cerdas."
+  },
+  {
+   "scene": "stuck",
+   "text": "Eu não passo. Eu *fico*."
+  },
+  {
+   "scene": "count",
+   "text": "Num dia de caça, ela come até 16 *toneladas* de krill."
+  },
+  {
+   "scene": "loop",
+   "text": "O maior animal da Terra vive de *mim*.",
+   "pause_before": 0.3,
+   "payoff": true
+  }
+ ],
+ "scenes": {
+  "mouth": {
+   "labels": [
+    {
+     "text": "baleia-azul: *30 m*",
+     "at": "vindo"
+    }
+   ],
+   "sfx": [
+    {
+     "type": "hum",
+     "at": 0,
+     "d": "scene",
+     "f0": 55,
+     "gain": -18
+    },
+    {
+     "type": "whoosh_lo",
+     "at": 0.4,
+     "gain": -12
+    }
+   ]
+  },
+  "vision": {
+   "labels": [
+    {
+     "text": "VISÃO DO BICHO · *olho composto*",
+     "style": "vision",
+     "at": 0
+    }
+   ],
+   "vision": {
+    "type": "compound",
+    "cell": 30
+   },
+   "sfx_cut": "glitch",
+   "sfx": [
+    {
+     "type": "hum",
+     "at": 0,
+     "d": "scene",
+     "f0": 420,
+     "gain": -26
+    }
+   ]
+  },
+  "vision2": {
+   "fn": "vision",
+   "labels": [
+    {
+     "text": "VISÃO DO BICHO · *olho composto*",
+     "style": "vision",
+     "at": 0
+    },
+    {
+     "text": "a luz *SOME*",
+     "at": "apaga"
+    }
+   ],
+   "vision": {
+    "type": "compound",
+    "cell": 30
+   },
+   "sfx_cut": "whoosh_lo",
+   "sfx": [
+    {
+     "type": "rise",
+     "at": 0.1,
+     "d": 1.8,
+     "f0": 120,
+     "f1": 60,
+     "gain": -18
+    }
+   ]
+  },
+  "gulp": {
+   "labels": [
+    {
+     "text": "garganta = *SANFONA*",
+     "at": "estica"
+    }
+   ],
+   "sfx_cut": "whoosh",
+   "sfx": [
+    {
+     "type": "whoosh_lo",
+     "at": "abre",
+     "gain": -10
+    },
+    {
+     "type": "wind",
+     "at": 0.2,
+     "d": "scene",
+     "muffled": true,
+     "gain": -18
+    }
+   ]
+  },
+  "gulp2": {
+   "labels": [
+    {
+     "text": "mais água que o *CORPO* dela",
+     "at": "corpo"
+    }
+   ],
+   "sfx_cut": "whoosh_lo",
+   "sfx": [
+    {
+     "type": "thud",
+     "at": "corpo",
+     "gain": -12
+    }
+   ]
+  },
+  "pool": {
+   "labels": [
+    {
+     "text": "*MILHARES* de krill",
+     "at": "milhares"
+    }
+   ],
+   "sfx_cut": "pop",
+   "sfx": [
+    {
+     "type": "hiss",
+     "at": 0.2,
+     "d": 2.0,
+     "gain": -24
+    }
+   ]
+  },
+  "filter": {
+   "labels": [
+    {
+     "text": "a água *SAI*",
+     "at": "espreme"
+    }
+   ],
+   "sfx_cut": "whoosh",
+   "sfx": [
+    {
+     "type": "hiss",
+     "at": "espreme",
+     "d": 2.0,
+     "gain": -18
+    }
+   ]
+  },
+  "filter2": {
+   "labels": [
+    {
+     "text": "*BARBATANAS*: o filtro",
+     "at": "barbatanas"
+    }
+   ],
+   "sfx_cut": "whoosh_hi",
+   "sfx": [
+    {
+     "type": "hiss",
+     "at": 0.1,
+     "d": 2.5,
+     "gain": -20
+    }
+   ]
+  },
+  "stuck": {
+   "labels": [
+    {
+     "text": "eu *FICO*",
+     "at": "fico"
+    }
+   ],
+   "sfx_cut": "kick",
+   "sfx": [
+    {
+     "type": "tic",
+     "at": "fico",
+     "gain": -8
+    }
+   ]
+  },
+  "count": {
+   "labels": [
+    {
+     "text": "*16 toneladas* por dia",
+     "at": "16"
+    }
+   ],
+   "sfx_cut": "whoosh",
+   "sfx": [
+    {
+     "type": "thud",
+     "at": "16",
+     "gain": -12
+    },
+    {
+     "type": "blip_up",
+     "at": "toneladas",
+     "gain": -15
+    }
+   ]
+  },
+  "loop": {
+   "labels": [
+    {
+     "text": "o maior animal vive de *MIM*",
+     "at": "mim"
+    }
+   ],
+   "sfx_cut": "whoosh_lo",
+   "sfx": [
+    {
+     "type": "hum",
+     "at": 0,
+     "d": "scene",
+     "f0": 55,
+     "gain": -20
+    }
+   ]
+  }
+ },
+ "cover": {
+  "t": 0.5,
+  "focus": [
+   540,
+   1130
+  ],
+  "zoom": 1.0,
+  "at": [
+   540,
+   1130
+  ],
+  "title": [
+   "*UM KRILL* NA",
+   "BOCA DA BALEIA?"
+  ],
+  "hook": "BALEIA DE 30 METROS",
+  "sprite_s": 500,
+  "sprite_rot": -8,
+  "you": [
+   760,
+   1060
+  ],
+  "you_side": "right"
+ },
+ "publish": {
+  "title": "E se você fosse um krill na boca da baleia-azul? #shorts",
+  "description": "Um krill tem uns 5 centímetros. A baleia-azul, até 30 metros, e vive comendo krill. Ela abre a boca, a garganta estica como sanfona e, numa bocada só, entra mais água do que o próprio corpo dela. Depois ela fecha a boca e espreme a água para fora pelas barbatanas, uma cortina de cerdas que deixa a água sair e segura o krill. Num dia de caça, uma baleia-azul come até 16 toneladas de krill. Qual animal gigante você quer ver por dentro no próximo?\n\nVisão do Bicho: o krill tem olhos compostos, mais sensíveis ao azul, a cor da luz que chega no fundo do mar.\n\nFontes: J. A. Goldbogen e equipe, Universidade Stanford (2011 e 2016), alimentação por investida da baleia-azul; M. S. Savoca e equipe, \"Baleen whale prey consumption based on high-resolution foraging measurements\", Nature (2021), e Smithsonian; estudos de eletrorretinografia de crustáceos antárticos (sensibilidade no azul, 470 a 497 nm). Narração com voz sintética; roteiro e animação próprios.\n#esevocefosse #krill #baleiaazul #oceano #curiosidades",
+  "tags": [
+   "krill",
+   "baleia-azul",
+   "barbatanas",
+   "oceano",
+   "como funciona",
+   "e se você fosse",
+   "shorts"
+  ],
+  "publish_at": "2026-11-23T12:00:00-03:00",
+  "pinned_comment": "Qual animal gigante você quer ver por dentro no próximo?",
+  "channel_id": "UCO5Fa5_HJxd-aeTiyQcw0Sw"
+ },
+ "sources": [
+  "Goldbogen et al. (2011), J. Exp. Biol. 214: 131-146 — mecânica e energia da investida da baleia-azul; Stanford News (2016): a baleia engole água e presas num volume maior que o próprio corpo",
+  "Savoca et al. (2021), Nature 599: 85-90 — baleia-azul do Pacífico Norte come ~16 t de krill por dia de alimentação (Smithsonian): https://dashboard.si.edu/es/newsdesk/releases/worlds-largest-whales-eat-more-previously-thought-amplifying-their-role-global",
+  "Eletrorretinografia de crustáceos antárticos, incluindo krill — pico de sensibilidade no azul (470-497 nm): https://core.ac.uk/download/51094692.pdf"
+ ]
+}
