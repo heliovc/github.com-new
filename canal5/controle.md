@@ -30,8 +30,8 @@ Metas: continuaram assistindo ≥ 70% · % visualizada ≥ 80%.
 
 | Vídeo | Publicado em | Link | Continuaram assistindo | % visualizada | Views 48 h | Inscritos / 1.000 views |
 |---|---|---|---|---|---|---|
-| 1A formiga | 20/11 22:00 | https://youtube.com/shorts/Wcw5EPuTlpg | — | — | — | — |
-| 1B lagartixa | 20/11 23:00 | https://youtube.com/shorts/v88xGAAAzmw | — | — | — | — |
+| 1A formiga | 20/11 22:00 | https://youtube.com/shorts/Wcw5EPuTlpg | — | — (parcial ~11 h: 62,6%) | — (parcial ~11 h: 1.169) | — (parcial: 1 inscrito) |
+| 1B lagartixa | 20/11 23:00 | https://youtube.com/shorts/v88xGAAAzmw | — | — (parcial ~11 h: 43,5%) | — (parcial ~11 h: 1.147) | — (parcial: 0) |
 
 ## Decisões e desvios do plano
 - **20/11 — Visão do Bicho da lagartixa:** o roteiro pedia visão térmica, mas lagartixa não enxerga calor (quem enxerga é cobra, Dia 11A). Trocado pelo sentido real: enxergar cores no escuro (Roth & Kelber 2004). A cena de calor continua como raio-X explicativo.
@@ -44,3 +44,5 @@ Metas: continuaram assistindo ≥ 70% · % visualizada ≥ 80%.
 - 21/11 — **Capa nova** (pedido do Hélio): faixa amarela "E SE VOCÊ FOSSE…" maior, título, bicho ampliado dentro de um anel amarelo com o selo "VOCÊ" e seta (a ideia da série: você = o bicho), "NA PELE DE" no rodapé; o "º" agora sai certo. Campos novos em `cover`: `focus`, `zoom`, `at`, `r`. Capas do Dia 1 refeitas. Obs.: o YouTube não usa capa enviada em Shorts; ela vale para Instagram/TikTok, longo semanal e escolha manual no app.
 - 21/11 — Rotina das 06:30 não produziu o Dia 2: a voz continua bloqueada na rede da nuvem (403 em speech.platform.bing.com). Dia 2 (mosquito + barata) fica para a próxima rodada depois da liberação.
 
+- 22/11 — Rotina das 06:30 de novo sem produzir o Dia 2 (mosquito + barata): a voz não respondeu em 2 tentativas (DNS direto falha; pelo proxy, "No server date in headers" = bloqueio de speech.platform.bing.com). Métricas de 48 h ainda não disponíveis (último arquivo de métricas é de 21/11, ~11 h após publicar; valores parciais anotados). Facebook ainda não conectado no Buffer; TikTok aparece desconectado no Buffer. Limpeza: video.mp4 e capa.jpg do Dia 1 removidos (continuam no histórico do git).
+- 22/11 — O arquivo `rotina.md` do repositório ainda é a versão antiga (2 vídeos/dia); a versão com semana-tipo (Shorts diários, longo na quarta, compilação no domingo, Facebook) não está no repositório.
