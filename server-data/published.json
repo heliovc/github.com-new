@@ -2593,6 +2593,8 @@
   "related_key": "lab-ep17-long",
   "pinned_comment": "What data do you still copy by hand from websites? Full tutorial: Web Scraping with Python for Beginners: Web Page to Spreadsheet (requests + BeautifulSoup)",
   "related_attempts": 1,
-  "related_done": "2026-11-23T18:52:07.916481-03:00"
+  "related_done": "2026-11-23T18:52:07.916481-03:00",
+  "comment_attempts": 1,
+  "comment_done": "2026-11-23T20:14:49.665020-03:00"
  }
 }
