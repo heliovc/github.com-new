@@ -2482,7 +2482,7 @@
   "thumb_path": "/opt/canal-publisher/state/thumbs/c5-d04a-peixe.jpg",
   "thumb_attempts": 0,
   "thumb_error": "miniatura personalizada pede o telefone verificado no canal",
-  "thumb_retry_after": "2026-11-23T19:31:54.035299-03:00"
+  "thumb_retry_after": "2026-11-24T01:41:43.779597-03:00"
  },
  "c5-d04b-rato": {
   "attempts": 1,
@@ -2501,7 +2501,7 @@
   "thumb_path": "/opt/canal-publisher/state/thumbs/c5-d04b-rato.jpg",
   "thumb_attempts": 0,
   "thumb_error": "miniatura personalizada pede o telefone verificado no canal",
-  "thumb_retry_after": "2026-11-23T19:33:14.828962-03:00"
+  "thumb_retry_after": "2026-11-24T01:42:39.733999-03:00"
  },
  "ptd-rank20-short": {
   "attempts": 1,
@@ -2556,7 +2556,9 @@
   "related_key": "ptd-ep18-long",
   "pinned_comment": "Você sabe se a sua conta no app é de banco ou de instituição de pagamento? Vídeo completo: Os bancos que ninguém conhece: quem guarda o seu dinheiro no app (e por que o BC fechou o cerco)",
   "related_attempts": 1,
-  "related_done": "2026-11-23T18:47:48.658514-03:00"
+  "related_done": "2026-11-23T18:47:48.658514-03:00",
+  "comment_attempts": 1,
+  "comment_done": "2026-11-23T19:45:22.970019-03:00"
  },
  "lab-ep17-long": {
   "attempts": 1,
