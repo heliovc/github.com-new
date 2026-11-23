@@ -2420,7 +2420,9 @@
   "title": "What If You Fell Into Jupiter? You'd Fall 70,000 km and Never Hit Ground",
   "kind": "long",
   "publish_at": "2026-11-23T16:15:00-03:00",
-  "pinned_comment": "Which planet should we fall into next?"
+  "pinned_comment": "Which planet should we fall into next?",
+  "comment_attempts": 1,
+  "comment_done": "2026-11-23T16:23:44.120826-03:00"
  },
  "cosmic-scale17-short": {
   "attempts": 1,
@@ -2436,7 +2438,9 @@
   "kind": "short",
   "publish_at": "2026-11-23T18:15:00-03:00",
   "related_key": "cosmic-ep18-long",
-  "pinned_comment": "What invisible giant should we measure next? Full video: What If You Fell Into Jupiter?"
+  "pinned_comment": "What invisible giant should we measure next? Full video: What If You Fell Into Jupiter?",
+  "related_attempts": 1,
+  "related_done": "2026-11-23T16:26:01.448293-03:00"
  },
  "cosmic-ep18-short": {
   "attempts": 1,
@@ -2452,7 +2456,9 @@
   "kind": "short",
   "publish_at": "2026-11-23T20:15:00-03:00",
   "related_key": "cosmic-ep18-long",
-  "pinned_comment": "Would you rather fall into Jupiter or into the Sun? Full video: What If You Fell Into Jupiter?"
+  "pinned_comment": "Would you rather fall into Jupiter or into the Sun? Full video: What If You Fell Into Jupiter?",
+  "related_attempts": 1,
+  "related_done": "2026-11-23T16:28:18.903246-03:00"
  },
  "c5-d04a-peixe": {
   "attempts": 1,
