@@ -2341,7 +2341,9 @@
   "title": "Sleep Story: The Great Library of Alexandria | Calm Ancient History (48 Min)",
   "kind": "long",
   "publish_at": "2026-11-22T21:30:00-03:00",
-  "pinned_comment": "If you could borrow one scroll from the Great Library tonight, which subject would you choose?"
+  "pinned_comment": "If you could borrow one scroll from the Great Library tonight, which subject would you choose?",
+  "comment_attempts": 1,
+  "comment_done": "2026-11-22T21:43:09.040202-03:00"
  },
  "c5-d03a-krill": {
   "attempts": 2,
