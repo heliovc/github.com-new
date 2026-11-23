@@ -1,0 +1,775 @@
+1
+00:00:00,250 --> 00:00:03,773
+This web page has twenty four books, spread over three pages.
+
+2
+00:00:03,773 --> 00:00:07,470
+Copying them into a spreadsheet by hand would take half an hour.
+
+3
+00:00:07,470 --> 00:00:14,864
+This Python script visits every page, reads every title, price and rating, and saves them all to a file, in about three seconds.
+
+4
+00:00:14,864 --> 00:00:16,770
+Today you'll write it, from zero.
+
+5
+00:00:17,470 --> 00:00:18,702
+This is web scraping.
+
+6
+00:00:18,702 --> 00:00:23,866
+A program that reads a web page the way you do, and copies out the parts you care about.
+
+7
+00:00:23,866 --> 00:00:27,035
+Prices, lists, tables, anything you can see on a page.
+
+8
+00:00:27,035 --> 00:00:32,199
+And I'll show you the three errors every beginner hits, with the real message on screen.
+
+9
+00:00:32,899 --> 00:00:35,811
+First, a quick word about doing this the right way.
+
+10
+00:00:35,811 --> 00:00:37,239
+Only scrape public pages.
+
+11
+00:00:37,239 --> 00:00:41,693
+Read the site's terms, and its robots dot t x t file, which we'll check later.
+
+12
+00:00:41,693 --> 00:00:43,292
+Go slow, one page at a time.
+
+13
+00:00:43,292 --> 00:00:45,120
+And never collect personal data.
+
+14
+00:00:45,120 --> 00:00:51,516
+To keep things safe, every example today runs against a small practice shop I built, running on my own computer.
+
+15
+00:00:51,516 --> 00:00:53,686
+That's why the address says localhost.
+
+16
+00:00:54,386 --> 00:00:55,434
+Here's the plan.
+
+17
+00:00:55,434 --> 00:00:57,530
+Download the page with requests.
+
+18
+00:00:57,530 --> 00:01:01,655
+Turn the H T M L into something searchable with Beautiful Soup.
+
+19
+00:01:01,655 --> 00:01:04,603
+Find the parts you want with C S S selectors.
+
+20
+00:01:04,603 --> 00:01:05,978
+Loop over every page.
+
+21
+00:01:05,978 --> 00:01:09,776
+And save everything to a C S V file you can open in Excel.
+
+22
+00:01:10,476 --> 00:01:13,125
+You need Python and three free libraries.
+
+23
+00:01:13,125 --> 00:01:17,519
+In a terminal, type pip install requests beautiful soup four pandas.
+
+24
+00:01:17,519 --> 00:01:19,135
+Requests downloads pages.
+
+25
+00:01:19,135 --> 00:01:23,076
+Beautiful soup four, imported as b s four, reads the H T M L.
+
+26
+00:01:23,076 --> 00:01:24,821
+And pandas saves the table.
+
+27
+00:01:24,821 --> 00:01:27,082
+This prints the versions I'm using.
+
+28
+00:01:27,782 --> 00:01:28,318
+Step one.
+
+29
+00:01:28,318 --> 00:01:29,270
+Import requests.
+
+30
+00:01:29,270 --> 00:01:33,316
+Put the address in a variable called url, and call requests dot get.
+
+31
+00:01:33,316 --> 00:01:38,731
+Always add timeout equals ten, so your script never waits forever if a site doesn't answer.
+
+32
+00:01:38,731 --> 00:01:40,159
+Then print three things.
+
+33
+00:01:40,159 --> 00:01:44,324
+The status code, how long the text is, and the first characters of it.
+
+34
+00:01:45,024 --> 00:01:45,427
+Run it.
+
+35
+00:01:45,427 --> 00:01:46,117
+Two hundred.
+
+36
+00:01:46,117 --> 00:01:48,532
+That's the code for O K, the page arrived.
+
+37
+00:01:48,532 --> 00:01:51,292
+Three thousand eight hundred and ten characters.
+
+38
+00:01:51,292 --> 00:01:52,845
+And here's the start of it.
+
+39
+00:01:52,845 --> 00:01:57,790
+That's the raw H T M L, the same text your browser receives, before it draws the page.
+
+40
+00:01:58,490 --> 00:02:00,821
+But how do we find a price in all that text?
+
+41
+00:02:00,821 --> 00:02:04,530
+Open the page in your browser, right click a book, and choose Inspect.
+
+42
+00:02:04,530 --> 00:02:07,496
+The developer tools show the H T M L of that exact book.
+
+43
+00:02:07,496 --> 00:02:10,092
+Every book is an article tag with the class book.
+
+44
+00:02:10,092 --> 00:02:13,218
+Inside it, the title is in an h three with the class title.
+
+45
+00:02:13,218 --> 00:02:15,655
+The price is a paragraph with the class price.
+
+46
+00:02:15,655 --> 00:02:17,880
+And the rating has a data stars attribute.
+
+47
+00:02:17,880 --> 00:02:19,469
+Those class names are our map.
+
+48
+00:02:20,169 --> 00:02:21,259
+Now Beautiful Soup.
+
+49
+00:02:21,259 --> 00:02:23,382
+From b s four, import Beautiful Soup.
+
+50
+00:02:23,382 --> 00:02:28,832
+Pass it the page text, and the name of the parser, h t m l dot parser, which comes with Python.
+
+51
+00:02:28,832 --> 00:02:32,102
+The result is called soup, and it lets you ask questions.
+
+52
+00:02:32,102 --> 00:02:34,167
+Soup dot title gives the page title.
+
+53
+00:02:34,167 --> 00:02:37,035
+Soup dot find h two gives the first h two heading.
+
+54
+00:02:37,035 --> 00:02:40,018
+And get text keeps just the words, without the tags.
+
+55
+00:02:40,718 --> 00:02:41,157
+Run it.
+
+56
+00:02:41,157 --> 00:02:44,421
+The page title, Pine Street Books, catalog page one.
+
+57
+00:02:44,421 --> 00:02:47,307
+And the heading, all books, page one of three.
+
+58
+00:02:47,307 --> 00:02:48,876
+Python can read the page.
+
+59
+00:02:49,576 --> 00:02:51,420
+Step three, the important one.
+
+60
+00:02:51,420 --> 00:02:56,277
+Soup dot select takes a C S S selector, and returns every element that matches.
+
+61
+00:02:56,277 --> 00:02:59,843
+Article dot book means an article tag with the class book.
+
+62
+00:02:59,843 --> 00:03:01,072
+Watch the real page.
+
+63
+00:03:01,072 --> 00:03:03,900
+All eight books light up, one after the other.
+
+64
+00:03:03,900 --> 00:03:07,036
+Python now has a list of eight boxes, one per book.
+
+65
+00:03:07,735 --> 00:03:09,538
+Then we look inside each box.
+
+66
+00:03:09,538 --> 00:03:13,144
+Select one returns the first match, only inside that book.
+
+67
+00:03:13,144 --> 00:03:16,191
+Dot title for the title, dot price for the price.
+
+68
+00:03:16,191 --> 00:03:21,662
+And get text with strip equals true removes the spaces and line breaks around the words.
+
+69
+00:03:21,662 --> 00:03:24,832
+Without it, you get messy text full of blank space.
+
+70
+00:03:25,532 --> 00:03:29,926
+Here's the price selector, running on the real page, one book at a time.
+
+71
+00:03:29,926 --> 00:03:35,845
+Each yellow outline is the element dot price, and on the right, the text Python pulled out of it.
+
+72
+00:03:36,545 --> 00:03:37,854
+And the real output.
+
+73
+00:03:37,854 --> 00:03:41,324
+Eight books found, and every title next to its price.
+
+74
+00:03:41,324 --> 00:03:42,698
+That's a web scraper.
+
+75
+00:03:42,698 --> 00:03:43,615
+Fifteen lines.
+
+76
+00:03:44,315 --> 00:03:48,253
+Now mistake number one, and it's the most common error in web scraping.
+
+77
+00:03:48,253 --> 00:03:51,470
+I typed dot prices, with an s, a class that doesn't exist.
+
+78
+00:03:51,470 --> 00:03:51,858
+Run it.
+
+79
+00:03:51,858 --> 00:03:52,746
+Attribute error.
+
+80
+00:03:52,746 --> 00:03:55,131
+None type object has no attribute get text.
+
+81
+00:03:55,131 --> 00:03:58,903
+Select one found nothing, so it returned None, and None has no text.
+
+82
+00:03:58,903 --> 00:04:01,343
+When you see None type, check your selector.
+
+83
+00:04:01,343 --> 00:04:03,673
+Copy the class name straight from Inspect.
+
+84
+00:04:04,373 --> 00:04:04,872
+Step four.
+
+85
+00:04:04,872 --> 00:04:06,321
+A table needs more than text.
+
+86
+00:04:06,321 --> 00:04:07,120
+Here's one book.
+
+87
+00:04:07,120 --> 00:04:09,518
+For the link, select the a tag inside the title.
+
+88
+00:04:09,518 --> 00:04:10,767
+Get text gives its words.
+
+89
+00:04:10,767 --> 00:04:13,315
+Square brackets with h r e f give the link address.
+
+90
+00:04:13,315 --> 00:04:16,013
+But it's only half an address, it starts with a slash.
+
+91
+00:04:16,013 --> 00:04:19,110
+Url join glues it to the page address, so you get a full link.
+
+92
+00:04:19,110 --> 00:04:21,558
+Square brackets also read data stars, the rating.
+
+93
+00:04:21,558 --> 00:04:26,653
+And for the price, strip the dollar sign and turn it into a float, a real number you can sort and add.
+
+94
+00:04:27,353 --> 00:04:28,407
+The real output.
+
+95
+00:04:28,407 --> 00:04:29,066
+The title.
+
+96
+00:04:29,066 --> 00:04:30,054
+The short link.
+
+97
+00:04:30,054 --> 00:04:31,898
+The full link from url join.
+
+98
+00:04:31,898 --> 00:04:32,556
+Two stars.
+
+99
+00:04:32,556 --> 00:04:35,981
+And fourteen point nine nine, as a number, not text.
+
+100
+00:04:36,681 --> 00:04:37,752
+Mistake number two.
+
+101
+00:04:37,752 --> 00:04:41,641
+There are only three pages, but what if your loop asks for page four?
+
+102
+00:04:41,641 --> 00:04:42,937
+Requests does not stop.
+
+103
+00:04:42,937 --> 00:04:48,405
+It quietly returns status four oh four, not found, and your script carries on with an error page.
+
+104
+00:04:48,405 --> 00:04:49,532
+The fix is one line.
+
+105
+00:04:49,532 --> 00:04:50,490
+Raise for status.
+
+106
+00:04:50,490 --> 00:04:55,676
+If the status is an error, it stops right there, and tells you exactly which address failed.
+
+107
+00:04:56,376 --> 00:04:58,957
+Mistake number three is the confusing one.
+
+108
+00:04:58,957 --> 00:05:02,520
+In my browser, the bottom of the page shows three reviews.
+
+109
+00:05:02,520 --> 00:05:06,330
+But Python finds zero, and the box just says, loading reviews.
+
+110
+00:05:06,330 --> 00:05:06,575
+Why?
+
+111
+00:05:06,575 --> 00:05:10,139
+The reviews are added by JavaScript, after the page loads.
+
+112
+00:05:10,139 --> 00:05:12,228
+Your browser runs that JavaScript.
+
+113
+00:05:12,228 --> 00:05:13,334
+Requests does not.
+
+114
+00:05:13,334 --> 00:05:15,115
+It only gets the raw H T M L.
+
+115
+00:05:15,815 --> 00:05:16,923
+Here's the proof.
+
+116
+00:05:16,923 --> 00:05:20,309
+Zero reviews found, and the text is loading reviews.
+
+117
+00:05:20,309 --> 00:05:21,481
+Nothing is broken.
+
+118
+00:05:21,481 --> 00:05:24,997
+That data simply isn't in the file requests downloads.
+
+119
+00:05:25,697 --> 00:05:26,152
+The fix?
+
+120
+00:05:26,152 --> 00:05:30,753
+Open the developer tools again, and look at the Network tab while the page loads.
+
+121
+00:05:30,753 --> 00:05:33,991
+You'll often find the data file the JavaScript downloads.
+
+122
+00:05:33,991 --> 00:05:35,695
+Here it's reviews dot j s o n.
+
+123
+00:05:35,695 --> 00:05:39,785
+Ask for that file directly, and dot j s o n turns it into a Python list.
+
+124
+00:05:39,785 --> 00:05:42,058
+Three reviews, clean, no H T M L at all.
+
+125
+00:05:42,058 --> 00:05:49,045
+If there's no such file, a browser tool like Playwright can run the JavaScript for you, but that's a topic for another day.
+
+126
+00:05:49,745 --> 00:05:51,300
+Step five, the full scraper.
+
+127
+00:05:51,300 --> 00:05:57,019
+The address has a page number, so base is the address with curly braces, and format puts the number in.
+
+128
+00:05:57,019 --> 00:05:58,962
+A for loop runs pages one to three.
+
+129
+00:05:58,962 --> 00:06:02,349
+For each page, download, raise for status, and make the soup.
+
+130
+00:06:02,349 --> 00:06:05,459
+Then, for every book, add a dictionary to the rows list.
+
+131
+00:06:05,459 --> 00:06:06,514
+One key per column.
+
+132
+00:06:06,514 --> 00:06:09,679
+Title, author, price, stars, in stock, and the full link.
+
+133
+00:06:10,379 --> 00:06:11,824
+Two details matter here.
+
+134
+00:06:11,824 --> 00:06:14,835
+Time dot sleep one waits one second between pages.
+
+135
+00:06:14,835 --> 00:06:17,846
+That's being polite, so you never flood a website.
+
+136
+00:06:17,846 --> 00:06:23,628
+And at the end, pandas turns the list of rows into a table, a data frame, and to c s v saves it.
+
+137
+00:06:23,628 --> 00:06:27,241
+Index equals false keeps pandas row numbers out of the file.
+
+138
+00:06:27,941 --> 00:06:28,429
+Run it.
+
+139
+00:06:28,429 --> 00:06:29,962
+Page one, eight books.
+
+140
+00:06:29,962 --> 00:06:31,216
+Page two, sixteen.
+
+141
+00:06:31,216 --> 00:06:32,889
+Page three, twenty four.
+
+142
+00:06:32,889 --> 00:06:35,886
+Saved twenty four books to books dot c s v.
+
+143
+00:06:36,586 --> 00:06:37,813
+And here's the file.
+
+144
+00:06:37,813 --> 00:06:40,144
+A header line, then one line per book.
+
+145
+00:06:40,144 --> 00:06:45,359
+Title, author, price as a number, stars, true or false for in stock, and a full link.
+
+146
+00:06:45,359 --> 00:06:48,733
+Double click it and it opens in Excel or Google Sheets.
+
+147
+00:06:49,433 --> 00:06:52,133
+Here's the whole scrape on the real page one.
+
+148
+00:06:52,133 --> 00:06:59,632
+Every book lights up, and its row lands in the table, with the price as a number and the stars from the data stars attribute.
+
+149
+00:06:59,632 --> 00:07:02,092
+That's exactly what ended up in the file.
+
+150
+00:07:02,792 --> 00:07:03,787
+Now the fun part.
+
+151
+00:07:03,787 --> 00:07:05,309
+Your data is a real table.
+
+152
+00:07:05,309 --> 00:07:11,279
+Read it back with pandas, keep the books with four stars or more that are in stock, and sort by price.
+
+153
+00:07:11,279 --> 00:07:14,088
+Five cheap, well rated books, found in a second.
+
+154
+00:07:14,088 --> 00:07:16,663
+And the average price, thirteen ninety five.
+
+155
+00:07:16,663 --> 00:07:19,355
+Try doing that by scrolling through a website.
+
+156
+00:07:20,055 --> 00:07:22,683
+If your scraper fails, it's usually one of these.
+
+157
+00:07:22,683 --> 00:07:27,725
+None type has no attribute means a selector found nothing, so check the class name in Inspect.
+
+158
+00:07:27,725 --> 00:07:32,176
+A four oh three or four oh four error means the page refused you, or doesn't exist.
+
+159
+00:07:32,176 --> 00:07:33,410
+Read the error address.
+
+160
+00:07:33,410 --> 00:07:40,757
+And if you get empty results while the browser shows data, that data comes from JavaScript, so look for the data file in the Network tab.
+
+161
+00:07:41,457 --> 00:07:41,924
+Pro tip.
+
+162
+00:07:41,924 --> 00:07:44,372
+Python can check robots dot t x t for you.
+
+163
+00:07:44,372 --> 00:07:46,470
+Robot file parser comes with Python.
+
+164
+00:07:46,470 --> 00:07:48,860
+Give it the robots address and call read.
+
+165
+00:07:48,860 --> 00:07:51,541
+Then can fetch tells you if a page is allowed.
+
+166
+00:07:51,541 --> 00:07:52,590
+The catalog, true.
+
+167
+00:07:52,590 --> 00:07:53,989
+The admin folder, false.
+
+168
+00:07:53,989 --> 00:07:57,486
+And crawl delay says how many seconds to wait between pages.
+
+169
+00:07:57,486 --> 00:08:00,517
+Here it's one, which is exactly what our sleep does.
+
+170
+00:08:01,217 --> 00:08:02,076
+And the speed.
+
+171
+00:08:02,076 --> 00:08:05,756
+Three pages, twenty four books, in three and a half seconds.
+
+172
+00:08:05,756 --> 00:08:09,988
+And three of those seconds are the polite pauses we added on purpose.
+
+173
+00:08:09,988 --> 00:08:11,828
+The work itself takes a blink.
+
+174
+00:08:12,528 --> 00:08:13,930
+Here's your cheat sheet.
+
+175
+00:08:13,930 --> 00:08:15,799
+Requests dot get with a timeout.
+
+176
+00:08:15,799 --> 00:08:16,792
+Raise for status.
+
+177
+00:08:16,792 --> 00:08:19,070
+Beautiful Soup with the h t m l parser.
+
+178
+00:08:19,070 --> 00:08:21,932
+Select for all matches, select one for the first.
+
+179
+00:08:21,932 --> 00:08:23,100
+Get text with strip.
+
+180
+00:08:23,100 --> 00:08:24,911
+Square brackets for attributes.
+
+181
+00:08:24,911 --> 00:08:26,020
+Url join for links.
+
+182
+00:08:26,020 --> 00:08:27,188
+Sleep between pages.
+
+183
+00:08:27,188 --> 00:08:28,415
+And to c s v to save.
+
+184
+00:08:28,415 --> 00:08:29,817
+Pause and screenshot it.
+
+185
+00:08:30,517 --> 00:08:31,208
+Quick recap.
+
+186
+00:08:31,208 --> 00:08:35,184
+Download the page with requests, with a timeout and raise for status.
+
+187
+00:08:35,184 --> 00:08:35,991
+Make the soup.
+
+188
+00:08:35,991 --> 00:08:37,547
+Find your map with Inspect.
+
+189
+00:08:37,547 --> 00:08:41,062
+Select every item, and pull out text, attributes and numbers.
+
+190
+00:08:41,062 --> 00:08:42,676
+Loop over the pages, slowly.
+
+191
+00:08:42,676 --> 00:08:43,828
+Save it with pandas.
+
+192
+00:08:43,828 --> 00:08:45,672
+And always scrape the right way.
+
+193
+00:08:46,372 --> 00:08:54,986
+Next on Shortcut Lab, we'll take the data you just scraped and send it somewhere useful, with an automatic email report written in Python.
+
+194
+00:08:54,986 --> 00:08:56,983
+Subscribe, so you don't miss it.

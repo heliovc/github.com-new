@@ -1,0 +1,59 @@
+{
+  "version": 1,
+  "channel_id": "UCXGqR8k1RMbfYdVleIuJKzA",
+  "created_at": "2026-11-23T09:00:00-03:00",
+  "items": [
+    {
+      "key": "lab-ep17-long",
+      "kind": "long",
+      "video": "video.mp4",
+      "title": "Web Scraping with Python for Beginners: Web Page to Spreadsheet (requests + BeautifulSoup)",
+      "description": "Write your first web scraper in Python: download a page with requests, find every product with BeautifulSoup and CSS selectors, loop over all the pages and save the result to a CSV you can open in Excel. Includes the three errors every beginner hits (NoneType, 404 and data loaded by JavaScript), and every output on screen is the real result of the code shown, run against a practice shop on my own computer.\n\nChapters\n0:00 The result\n0:32 Scrape the right way\n0:54 The plan\n1:10 Setup\n1:27 Step 1: download the page\n1:58 Step 2: read the HTML\n2:49 Step 3: find every book\n3:44 Mistake 1: NoneType has no get_text\n4:04 Step 4: links, attributes and numbers\n4:36 Mistake 2: the page that isn't there\n4:56 Mistake 3: data made by JavaScript\n5:49 Step 5: every page\n7:02 Use the data\n7:19 If something goes wrong\n7:41 Pro tip: check robots.txt in code\n8:00 How fast is it?\n8:12 Cheat sheet\n8:30 Recap\n\nInstall\npip install requests beautifulsoup4 pandas\n\nscraper.py (full script)\nimport time\nimport requests\nimport pandas as pd\nfrom bs4 import BeautifulSoup\nfrom urllib.parse import urljoin\n\nBASE = \"http://localhost:8000/catalog/page-{}.html\"\nrows = []\n\nfor page in range(1, 4):\n    url = BASE.format(page)\n    response = requests.get(url, timeout=10)\n    response.raise_for_status()\n    soup = BeautifulSoup(response.text, \"html.parser\")\n\n    for book in soup.select(\"article.book\"):\n        link = book.select_one(\".title a\")\n        rows.append({\n            \"title\": link.get_text(strip=True),\n            \"author\": book.select_one(\".author\").get_text(strip=True).removeprefix(\"by \"),\n            \"price\": float(book.select_one(\".price\").get_text(strip=True).lstrip(\"$\")),\n            \"stars\": int(book.select_one(\".rating\")[\"data-stars\"]),\n            \"in_stock\": book.select_one(\".stock\").get_text(strip=True) == \"In stock\",\n            \"link\": urljoin(url, link[\"href\"]),\n        })\n    print(f\"Page {page}: {len(rows)} books so far\")\n    time.sleep(1)\n\ndf = pd.DataFrame(rows)\ndf.to_csv(\"books.csv\", index=False)\nprint(\"Saved\", len(df), \"books to books.csv\")\n\nThe three mistakes\n1. AttributeError: 'NoneType' object has no attribute 'get_text': the selector found nothing (typo in the class name). Copy the class name from right-click, Inspect.\n2. A page that doesn't exist returns status 404 without stopping your script. Add response.raise_for_status().\n3. The browser shows data but Python finds nothing: that part is added by JavaScript. Look in the Network tab of the developer tools for the data file (JSON) and request it directly.\n\nScrape the right way: public pages only, read the site's terms and robots.txt, pause between pages, never collect personal data.\n\nPro tip: check robots.txt in code\nfrom urllib.robotparser import RobotFileParser\nrobots = RobotFileParser(\"https://example.com/robots.txt\")\nrobots.read()\nprint(robots.can_fetch(\"*\", \"https://example.com/some-page\"))\n\n—\nShortcut Lab: software and AI tutorials that save you hours.\nSubscribe so you don't miss the next shortcut.\n\nNarration uses a synthetic voice. All code shown is run and checked before publishing.\n#python #webscraping #beautifulsoup",
+      "tags": [
+        "web scraping python",
+        "python web scraping for beginners",
+        "beautifulsoup tutorial",
+        "requests python",
+        "web scraping tutorial",
+        "python scraper",
+        "scrape website to csv",
+        "beautifulsoup select",
+        "css selectors python",
+        "python for beginners",
+        "python automation",
+        "pandas to csv",
+        "web scraping",
+        "learn python",
+        "python tutorial"
+      ],
+      "thumbnail": "thumbnail.jpg",
+      "captions": "legendas.srt",
+      "publish_at": "2026-11-23T19:00:00-03:00",
+      "if_late": "public_now",
+      "made_for_kids": false,
+      "altered_content": true,
+      "pinned_comment": "Which website would you love to turn into a spreadsheet? Tell me below (public data only) and it might become a future example."
+    },
+    {
+      "key": "lab-ep17-short",
+      "kind": "short",
+      "video": "vertical.mp4",
+      "title": "Python Copies 24 Products in 3 Seconds #shorts",
+      "description": "A tiny Python scraper visits every page, reads every title and price, and saves them all to a CSV file.\n\nFull tutorial on the channel: Web Scraping with Python for Beginners: Web Page to Spreadsheet (requests + BeautifulSoup)\n\n#python #webscraping #shorts",
+      "tags": [
+        "web scraping",
+        "python",
+        "beautifulsoup",
+        "python shorts",
+        "web scraping python",
+        "automation"
+      ],
+      "publish_at": "2026-11-23T20:30:00-03:00",
+      "if_late": "public_now",
+      "made_for_kids": false,
+      "altered_content": true,
+      "related_key": "lab-ep17-long",
+      "pinned_comment": "What data do you still copy by hand from websites? Full tutorial: Web Scraping with Python for Beginners: Web Page to Spreadsheet (requests + BeautifulSoup)"
+    }
+  ]
+}

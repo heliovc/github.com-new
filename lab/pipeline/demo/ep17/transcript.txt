@@ -1,0 +1,87 @@
+### versions
+2.34.2 4.15.0 3.1.1
+### get_page
+200
+3810 characters
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Pine Street Books - Catalog page 1</title>
+  <link rel="stylesheet" href="../style.css
+### soup_title
+Pine Street Books - Catalog page 1
+All books - page 1 of 3
+### select_books
+8 books found
+The Lost Forest | $14.99
+The Broken Map | $12.49
+The Distant Island | $7.99
+The Northern Letter | $9.50
+The Gentle Orchard | $16.50
+The Small Garden | $16.50
+The Northern Library | $16.50
+The Northern Orchard | $14.00
+### one_book
+The Lost Forest
+/book/the-lost-forest.html
+http://localhost:8000/book/the-lost-forest.html
+2
+14.99
+### bad_none
+Traceback (most recent call last):
+  File "/tmp/claude-0/ep17work/project/bad_none.py", line 8, in <module>
+    price = book.select_one(".prices").get_text(strip=True)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AttributeError: 'NoneType' object has no attribute 'get_text'
+### bad_404
+404
+Traceback (most recent call last):
+  File "/tmp/claude-0/ep17work/project/bad_404.py", line 6, in <module>
+    response.raise_for_status()
+  File "/usr/local/lib/python3.11/dist-packages/requests/models.py", line 1167, in raise_for_status
+    raise HTTPError(http_error_msg, response=self)
+requests.exceptions.HTTPError: 404 Client Error: File not found for url: http://localhost:8000/catalog/page-4.html
+### bad_js
+0 reviews found
+Loading reviews...
+### reviews_json
+5 Fast delivery, lovely shop.
+4 Great prices on paperbacks.
+5 Found a book I'd looked for for years.
+### scraper
+Page 1: 8 books so far
+Page 2: 16 books so far
+Page 3: 24 books so far
+Saved 24 books to books.csv
+### analyze
+                title  price  stars
+0     The Lost Forest  14.99      2
+1      The Broken Map  12.49      2
+2  The Distant Island   7.99      4
+
+              title  price  stars
+      The Paper Map   7.00      4
+       The Last Map   7.99      5
+ The Silver Station   7.99      5
+The Northern Letter   9.50      4
+   The Quiet Forest  11.50      5
+
+Average price: 13.95
+### robots
+True
+False
+1
+### head
+title,author,price,stars,in_stock,link
+The Lost Forest,Omar Reyes,14.99,2,True,http://localhost:8000/book/the-lost-forest.html
+The Broken Map,Ana Moreno,12.49,2,True,http://localhost:8000/book/the-broken-map.html
+The Distant Island,Mira Patel,7.99,4,False,http://localhost:8000/book/the-distant-island.html
+### timing
+3.584 s
+### server
+127.0.0.1 - - [date] "GET /catalog/page-3.html HTTP/1.1" 200 -
+127.0.0.1 - - [date] "GET /robots.txt HTTP/1.1" 200 -
+127.0.0.1 - - [date] "GET /catalog/page-1.html HTTP/1.1" 200 -
+127.0.0.1 - - [date] "GET /catalog/page-2.html HTTP/1.1" 200 -
+127.0.0.1 - - [date] "GET /catalog/page-3.html HTTP/1.1" 200 -

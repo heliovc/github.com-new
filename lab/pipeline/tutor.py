@@ -30,6 +30,10 @@ Scene types: title, steps, code, term, files, tip, keys, compare, chat, outro, t
   xlsx (EP16: a REAL .xlsx read back with openpyxl - formula bar with name box + the selected cell's formula, letters/row numbers,
   the real column widths, bold/font color/fill, number formats, #### when a number doesn't fit, frozen header line and sheet tabs;
   build=True drops rows in, morph=<plain workbook> morphs the unformatted file into the formatted one)
+  scrape (EP17: a REAL Chromium screenshot in a browser window + a CSS selector bar; every element the selector really matches
+  (Playwright bounding boxes) lights up with a numbered badge while the value BeautifulSoup really extracted lands in a "What Python gets"
+  table; inner= outlines a child selector; mode="inspect" = DevTools-style hovered element + its HTML with the lines highlighted;
+  mode="nojs" = the browser view next to a REAL JavaScript-off screenshot = what requests downloads)
   group (EP16: groupby made visible - the REAL rows stream by on the left, each revenue flies as a chip into its city bucket, bars and
   running totals grow with the REAL cumulative sums (slow first rows, then fast-forward) and end at the real groupby result)
 Identity: charcoal #0F1115, lime #B6F35C, coral #FF7A59, sky #6CC4FF, Poppins + DejaVu Sans Mono.
@@ -1618,6 +1622,115 @@ def sc_group(img, v, t, d):
         if na > 0:
             dr.rounded_rectangle([W / 2 - tw / 2 - 30, 1012, W / 2 + tw / 2 + 30, 1066], 27, fill=mix(BG, ACC, na)); dr.text((W / 2, 1039), v["note"], font=fn, fill=BG, anchor="mm")
 
+
+# ---- EP17: scrape - a REAL Chromium screenshot of the page in a browser window (left), a CSS selector bar on top; every element the
+#      selector REALLY matches (bounding boxes measured by Playwright, demo/ep17/boxes.json) lights up one by one with a numbered badge,
+#      while the value BeautifulSoup really extracted from it lands as a row in the "Python sees" table on the right (live counter).
+#      inner= a second selector outlined inside the boxes in another color. mode="inspect": DevTools-style - one element hovered on the
+#      page, its HTML source on the right with the element's lines highlighted. mode="nojs": right side shows what requests downloads
+#      (a second REAL screenshot taken with JavaScript off) next to what the browser shows.
+def _browser(img, box, shot, url, crop=None, a=1.0):
+    x0, y0, x1, y1 = box
+    window(img, box, "Pine Street Books", kind="term")
+    dr = ImageDraw.Draw(img); ay = y0 + 62
+    dr.rounded_rectangle([x0 + 14, ay, x1 - 14, ay + 40], 20, fill=(38, 42, 52)); dr.text((x0 + 40, ay + 20), url, font=F(19, "mono"), fill=DIM, anchor="lm")
+    if shot not in _imc: _imc[shot] = Image.open(shot).convert("RGBA")
+    src = _imc[shot]
+    if crop: src = src.crop((0, int(crop[0] * src.height), src.width, int(crop[1] * src.height)))
+    iw = x1 - x0 - 24; ih = int(src.height * iw / src.width); py = ay + 52; ph = y1 - py - 12
+    pic = src.resize((iw, ih), Image.LANCZOS).crop((0, 0, iw, min(ih, ph))); img.alpha_composite(pic, (x0 + 12, py))
+    return x0 + 12, py, iw, ih
+
+def sc_scrape(img, v, t, d):
+    BX = v["boxes"]; mode = v.get("mode", "select"); dr = ImageDraw.Draw(img); a0 = ease(t / 0.4)
+    # selector bar
+    sel = v.get("code", f'soup.select("{v.get("sel", "")}")'); fs = F(40, "monob"); sw = fs.getlength(sel)
+    dr.rounded_rectangle([W / 2 - sw / 2 - 36, 112, W / 2 + sw / 2 + 36, 192], 20, fill=mix(BG, PANEL, a0), outline=mix(BG, ACC, a0), width=3)
+    text_a(img, (W / 2 - sw / 2 - 36, 104), v.get("label", "CSS SELECTOR"), F(20, "Bold"), ACC, a0, "ls")
+    cx = W / 2 - sw / 2; sl = v.get("hilite", v.get("sel", ""))
+    i0 = sel.find(sl) if sl else -1
+    for k, ch in enumerate(sel):
+        col = ACC if (i0 >= 0 and i0 <= k < i0 + len(sl)) else (200, 206, 216)
+        text_a(img, (cx, 152), ch, fs, col, a0, "lm"); cx += fs.getlength(ch)
+    url = v.get("url", "localhost:8000/catalog/page-1.html")
+    wide = mode == "inspect" or mode == "nojs"
+    bbox = [50, 230, 1010 if not wide else 960, 1012]
+    if v.get("bcrop"): bbox[3] = v.get("bh", 1012)
+    px, py, iw, ih = _browser(img, bbox, v["shot"], url, crop=v.get("bcrop"))
+    c0, c1 = v.get("bcrop", (0, 1))
+    def R(b):  # page fraction box -> screen rect (respecting the vertical crop)
+        fy0, fy1 = (b[1] - c0) / (c1 - c0), (b[1] + b[3] - c0) / (c1 - c0)
+        return [px + b[0] * iw, py + fy0 * ih, px + (b[0] + b[2]) * iw, py + fy1 * ih]
+    lay = Image.new("RGBA", img.size, (0, 0, 0, 0)); dl = ImageDraw.Draw(lay)
+    clip = py + min(ih, bbox[3] - 12 - py)
+    if mode == "inspect":
+        r = R(BX[v["sel"]][v.get("pick", 0)]); k = ease((t - 0.5) / 0.4)
+        if k > 0 and r[1] < clip:
+            dl.rectangle(r, fill=SKY + (int(70 * k),), outline=SKY + (255,), width=3)
+            tag = v.get("tag", v["sel"]); ft = F(20, "monob"); tw = ft.getlength(tag) + 24
+            dl.rounded_rectangle([r[0], r[1] - 34, r[0] + tw, r[1] - 4], 8, fill=(20, 22, 28, int(235 * k))); dl.text((r[0] + 12, r[1] - 19), tag, font=ft, fill=SKY + (255,), anchor="lm")
+        img.alpha_composite(lay)
+        hl = v.get("hl", ()); box = [990, 230, 1870, 1012]; window(img, box, "Elements  (right-click > Inspect)", kind="term")
+        size = 22; f = F(size, "mono"); lh = int(size * 1.55); mc = int((box[2] - box[0] - 70) // f.getlength("M"))
+        vis = []  # long source lines wrap like DevTools (continuation indented), highlight follows the source line
+        for i, ln in enumerate(v["src"]):
+            ind = len(ln) - len(ln.lstrip()) + 4; first = True
+            while ln:
+                cut = len(ln) if len(ln) <= mc else (ln.rfind(" ", 0, mc) if ln.rfind(" ", ind + 1, mc) > 0 else mc)
+                vis.append((i + 1, ln[:cut], first)); ln = ln[cut:].lstrip(); first = False
+                if ln: ln = " " * ind + ln
+        for j, (i, ln, first) in enumerate(vis):
+            yy = 306 + j * lh
+            if i in hl and t > 0.9: dr.rectangle([box[0] + 4, yy - 5, box[2] - 4, yy + lh - 6], fill=mix(PANEL, SKY, 0.28)); dr.rectangle([box[0] + 4, yy - 5, box[0] + 10, yy + lh - 6], fill=SKY)
+            xx = box[0] + 30
+            for s_, c_ in colorize(ln, "html"): dr.text((xx, yy), s_, font=f, fill=c_); xx += f.getlength(s_)
+    elif mode == "nojs":
+        img.alpha_composite(lay)
+        box = [990, 230, 1870, bbox[3]]
+        x0, y0, iw2, ih2 = _browser(img, box, v["shot2"], url, crop=v.get("bcrop"))
+        for (bx, lab, col) in ((bbox, "BROWSER (runs JavaScript)", LIME), (box, "requests (raw HTML only)", CORAL)):
+            fl = F(22, "Bold"); lw = fl.getlength(lab) + 40; mx = (bx[0] + bx[2]) / 2
+            dr.rounded_rectangle([mx - lw / 2, bx[3] - 56, mx + lw / 2, bx[3] - 14], 21, fill=col); dr.text((mx, bx[3] - 35), lab, font=fl, fill=BG, anchor="mm")
+        if v.get("ring"):
+            k = ease((t - 0.8) / 0.4)
+            if k > 0:
+                for (xx0, yy0, ww, hh, col) in ((px, py, iw, ih, LIME), (x0, y0, iw2, ih2, CORAL)):
+                    b = BX[v["ring"]][0]; fy0 = (b[1] - c0) / (c1 - c0); fy1 = (b[1] + b[3] - c0) / (c1 - c0)
+                    dr.rounded_rectangle([xx0 + b[0] * ww - 6, yy0 + fy0 * hh - 6, xx0 + (b[0] + b[2]) * ww + 6, yy0 + fy1 * hh + 6], 10, outline=col, width=4)
+    else:
+        boxes = BX[v["sel"]]; rows = v.get("rows", []); n = len(boxes); span = d * v.get("span", 0.62); t1 = 0.7
+        gap = span / max(1, n); shown = sum(1 for k in range(n) if t >= t1 + k * gap)
+        for k in range(shown):
+            r = R(boxes[k]); hot = k == shown - 1 and t < t1 + shown * gap + 0.25
+            if r[1] > clip: continue
+            r[3] = min(r[3], clip)
+            dl.rectangle(r, fill=ACC + (90 if hot else 38,), outline=ACC + (255,), width=4 if hot else 3)
+            if v.get("inner"):
+                for b in BX[v["inner"]]:
+                    if boxes[k][0] <= b[0] <= boxes[k][0] + boxes[k][2] and boxes[k][1] <= b[1] <= boxes[k][1] + boxes[k][3]:
+                        ri = R(b); dl.rectangle([ri[0] - 3, ri[1] - 3, ri[2] + 3, min(clip, ri[3] + 3)], outline=YEL + (255,), width=3)
+            fb = F(22, "Bold"); dl.ellipse([r[0] - 14, r[1] - 14, r[0] + 22, r[1] + 22], fill=ACC + (255,)); dl.text((r[0] + 4, r[1] + 4), str(k + 1), font=fb, fill=BG + (255,), anchor="mm")
+        img.alpha_composite(lay)
+        # "Python sees" table
+        box = [1040, 230, 1870, 1012]; dr.rounded_rectangle(box, 18, fill=PANEL, outline=LINE, width=2)
+        dr.text((box[0] + 30, box[1] + 36), v.get("panel", "What Python gets"), font=F(26, "SemiBold"), fill=TXT, anchor="lm")
+        lab = f"{shown} matched"; fl = F(24, "Bold"); lw = fl.getlength(lab) + 40
+        dr.rounded_rectangle([box[2] - lw - 24, box[1] + 16, box[2] - 24, box[1] + 56], 20, fill=ACC if shown else LINE); dr.text((box[2] - 24 - lw / 2, box[1] + 36), lab, font=fl, fill=BG, anchor="mm")
+        cols = v.get("cols", ["#", "value"]); fr = F(v.get("tsize", 24), "mono"); rh = min(76, (box[3] - box[1] - 150) / max(1, len(rows)))
+        cw = [max([fr.getlength(str(c))] + [fr.getlength(str(r_[j])) for r_ in rows]) + 34 for j, c in enumerate(cols)]
+        sc = min(1.0, (box[2] - box[0] - 60) / sum(cw)); cw = [c * sc for c in cw]
+        yh = box[1] + 90; xx = box[0] + 30
+        for j, c in enumerate(cols): dr.text((xx + 6, yh), str(c), font=F(20, "Bold"), fill=DIM, anchor="lm"); xx += cw[j]
+        dr.line([box[0] + 24, yh + 22, box[2] - 24, yh + 22], fill=LINE, width=2)
+        for k, r_ in enumerate(rows[:shown]):
+            age = t - (t1 + k * gap); a = ease(age / 0.3); yy = yh + 52 + k * rh; xx = box[0] + 30 + (1 - a) * -60
+            if age < 0.6: dr.rounded_rectangle([box[0] + 20, yy - rh / 2 + 4, box[2] - 20, yy + rh / 2 - 4], 10, fill=mix(PANEL, ACC, 0.25 * (1 - age / 0.6)))
+            for j, cell in enumerate(r_):
+                col = ACC if j == 0 else (TXT if j == 1 else YEL if j == 2 else SKY)
+                text_a(img, (xx + 6, yy), str(cell), fr, col, a, "lm"); xx += cw[j]
+    if v.get("note"):
+        a = ease((t - d * v.get("notet", 0.7)) / 0.5); fn = F(30, "SemiBold"); tw = fn.getlength(v["note"])
+        if a > 0: dr.rounded_rectangle([W / 2 - tw / 2 - 30, 1018, W / 2 + tw / 2 + 30, 1068], 25, fill=mix(BG, v.get("notecol", ACC), a)); dr.text((W / 2, 1043), v["note"], font=fn, fill=BG, anchor="mm")
 
 SC = {k[3:]: f for k, f in list(globals().items()) if k.startswith("sc_")}
 
