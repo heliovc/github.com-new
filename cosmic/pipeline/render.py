@@ -102,6 +102,20 @@ EP06 added scenes: spinglobe (globe + speed by latitude; top=True rings; slow=Tr
   lens with a hair, 20 m track to Voyager 1, road to the horizon 28.9 km, Milky Way 680,000 km vs the Earth–Moon line).
   Learned: never cache one code-drawn sprite per radius during a zoom (hundreds of multi-MB arrays) -> cache one and resize; nested
   same-type quotes inside an f-string are a SyntaxError on 3.11; never start the same render twice into one output folder.
+EP18 added scenes: plunge (mode hook = cloud horizon from a cached full-frame layer _horizon18 + capsule streak | approach = Jupiter grows
+  from Europa's orbit, speed/hours HUD | view = 12.2° disc with 23 full Moons across | entry = capsule in plasma, speed + g HUD, v.label),
+  depthgauge (chapter card: log depth gauge 0 -> 70,000 km with clouds / deep air / metal / core bands, capsule marker, floor name, depth,
+  optional ptxt/ttxt rows, background darkens with depth), cloudstack (log PRESSURE axis 0.2–25 bar, three model cloud decks, Galileo's
+  dotted parachute path to 23 bar, lightning, v.wind streaks + "600+ km/h"), nosurface (phase 0 "surface here? NOT HERE" scan + critical
+  point box | 1 capsule sinking through a continuous gradient | 2 helium rain with neon specks in violet metallic hydrogen), jupcut (Jupiter
+  cut open TO SCALE, wedge layers molecular / metallic from 10,000 km / dilute core or old compact core, Earth to scale, depth marker,
+  hl=skin magnifier on Galileo's 150 km), scars (Shoemaker-Levy 9: fragment train + flashes + day HUD | dark scars on one latitude with
+  Earth to scale). Helpers jup18(r) (one r=500 jup10 sprite resized), _capsule18, _hud18. Palette Jupiter ochre / ammonia cream / metallic
+  violet. Structure NEW: "the elevator" (one fall, floor by floor; each floor opens on the depth gauge).
+  Learned: depth-gauge rows must never show unsourced values -> pass only ptxt/ttxt you can cite; 1,365 words + 32 scenes = 8.3 min.
+  EP18 promised EP19: what if Earth had a second Moon? ranking.py: vis "beads" (rank20, Earths strung across each planet at one common
+  scale). scale_short.py: vis "magbubble" (scale17, Jupiter's magnetosphere 15 Suns wide, sunward edge 3.2–7.1 million km, sky vs the
+  Moon, tail to Saturn's orbit, dissolves back into the hook for the loop).
 """
 import sys, os, re, math, subprocess, importlib.util, json, random, hashlib
 import numpy as np
@@ -4561,6 +4575,316 @@ def sc_earthtemp(img, v, t, dur):
     d.text((540, 880), f"{temp:+.0f} °C", font=F(92, "Black"), fill=fc, anchor="mm")
     d.text((540, 960), v.get("label", "average temperature, simple estimate"), font=F(30, "SemiBold"), fill=DIM, anchor="mm")
     if v.get("head"): alpha_text(img, (W / 2, 110), v["head"], F(56, "Black"), WHITE, ease((t - 0.2) / 0.5))
+
+
+# ---------------- scenes (EP18: the elevator into Jupiter) ----------------
+_j18 = {}
+def jup18(r):
+    """banded Jupiter at radius r, drawn ONCE at r=500 with jup10 and resized (never one array per radius: see 2026-11-22 notes)"""
+    r = max(4, int(r))
+    if r not in _j18:
+        if len(_j18) > 40: _j18.clear()
+        base = jup10(500, 0.0); k = r / 500.0
+        _j18[r] = base.resize((max(8, int(base.width * k)), max(8, int(base.height * k))), Image.BILINEAR)
+    return _j18[r]
+
+def _capsule18(img, x, y, s=1.0, glow=0.0, ang=0.0):
+    """the imaginary unbreakable capsule: rounded cone + window, optional plasma glow"""
+    if glow > 0: paste_c(img, radial(int(60 * s * (1 + glow)), [(0, (255, 240, 200, 255)), (0.3, (255, 150, 60, 200)), (1, (255, 80, 20, 0))]), x, y, min(1, glow))
+    d = ImageDraw.Draw(img); c, sn = math.cos(ang), math.sin(ang)
+    def P(px, py): return (x + (px * c - py * sn) * s, y + (px * sn + py * c) * s)
+    d.polygon([P(-18, -26), P(18, -26), P(26, 18), P(-26, 18)], fill=(215, 220, 232), outline=(90, 95, 120))
+    d.polygon([P(-30, 14), P(30, 14), P(24, 26), P(-24, 26)], fill=(120, 80, 60))
+    wx, wy = P(0, -6); d.ellipse([wx - 7 * s, wy - 7 * s, wx + 7 * s, wy + 7 * s], fill=(90, 190, 255))
+
+def _hud18(img, rows, x0=1360, y0=620, w=500, col=(230, 170, 100)):
+    lay = Image.new("RGBA", img.size, (0, 0, 0, 0)); dl = ImageDraw.Draw(lay)
+    dl.rounded_rectangle([x0, y0, x0 + w, y0 + 70 + 82 * len(rows)], 24, fill=(8, 6, 14, 210), outline=col + (200,), width=3)
+    img.alpha_composite(lay); d = ImageDraw.Draw(img)
+    for i, (k, val) in enumerate(rows):
+        d.text((x0 + 30, y0 + 60 + i * 82), k, font=F(28, "Bold"), fill=DIM, anchor="lm")
+        d.text((x0 + w - 30, y0 + 60 + i * 82), val, font=F(42, "ExtraBold"), fill=WHITE, anchor="rm")
+
+_hz18 = {}
+def _horizon18(R_, cy):
+    """full-frame layer with the top of a radius-R_ Jupiter centred at (W/2, cy): built once from the r=500 sprite, cropped, cached"""
+    key = (R_, int(cy))
+    if key not in _hz18:
+        base = jup10(500, 0.0); k = R_ / 500.0; side = base.width * k
+        # crop the part of the base sprite that lands on screen, then scale only that
+        x0s, y0s = (W / 2 - side / 2), (cy - side / 2)
+        bx0, by0 = max(0, -x0s / k), max(0, -y0s / k); bx1, by1 = min(base.width, (W - x0s) / k), min(base.height, (H - y0s) / k)
+        part = base.crop((int(bx0), int(by0), int(math.ceil(bx1)), int(math.ceil(by1)))).resize((int((math.ceil(bx1) - int(bx0)) * k), int((math.ceil(by1) - int(by0)) * k)), Image.BILINEAR)
+        lay = Image.new("RGBA", (W, H), (0, 0, 0, 0)); lay.alpha_composite(part, (int(x0s + int(bx0) * k), int(y0s + int(by0) * k)))
+        _hz18[key] = lay
+    return _hz18[key]
+
+def sc_plunge(img, v, t, dur):
+    """falling toward Jupiter. mode hook = giant cloud limb + the capsule streaking down | approach = Jupiter grows from Europa's distance,
+    speed counter v0->v1 (∝ √ of the fall) + hours counter | view = Jupiter at 12.2° with 23 full Moons lined up across it, then it swells
+    to fill the frame | entry = cloud horizon, capsule wrapped in plasma, speed + g meter rising to v.g (v.label = caption)"""
+    mode = v.get("mode", "hook"); d = ImageDraw.Draw(img)
+    if mode in ("hook", "entry"):
+        # cloud horizon: a huge banded arc rising from the bottom
+        R_ = 1900; cy = H + R_ - 430 + (0 if mode == "hook" else 60)
+        img.alpha_composite(_horizon18(R_, cy))
+        haze = Image.new("RGBA", img.size, (0, 0, 0, 0)); dh = ImageDraw.Draw(haze)
+        for k in range(14): dh.ellipse([W / 2 - R_ - k * 6, cy - R_ - k * 6, W / 2 + R_ + k * 6, cy + R_ + k * 6], outline=(255, 210, 160, 14), width=6)
+        img.alpha_composite(haze)
+        if mode == "hook":
+            p = (t * 0.22) % 1.0; x, y = lerp(560, 1150, p), lerp(150, 700, p)
+            lay = Image.new("RGBA", img.size, (0, 0, 0, 0)); dl = ImageDraw.Draw(lay)
+            dl.line([(x - 260, y - 240), (x, y)], fill=(255, 220, 170, 120), width=6); img.alpha_composite(lay)
+            _capsule18(img, x, y, 1.4, glow=0.3 + 0.7 * p, ang=-0.83)
+            if v.get("head"): alpha_text(img, (W / 2, 140), v["head"], F(84, "Black"), WHITE, ease(t / 0.4))
+            return
+        p = (t * 0.35) % 1.0; x, y = lerp(300, 1400, p), lerp(200, 560, p)
+        lay = Image.new("RGBA", img.size, (0, 0, 0, 0)); dl = ImageDraw.Draw(lay)
+        for k in range(18):
+            off = k * 9; dl.line([(x - 500 - off, y - 170 - off * 0.3 + k * 4), (x - 40, y - 10)], fill=(255, 160 - k * 4, 60, max(0, 150 - k * 8)), width=12 - k // 2)
+        img.alpha_composite(lay.filter(ImageFilter.GaussianBlur(4)))
+        _capsule18(img, x, y, 1.6, glow=1.4 + 0.3 * math.sin(t * 20), ang=-1.25)
+        rows = [("SPEED", f"{v.get('v0', 47):.1f} km/s")]
+        if v.get("g"):
+            g = v["g"] * math.exp(-((t - dur * 0.45) / (dur * 0.22)) ** 2) if t < dur * 0.45 else v["g"] * math.exp(-((t - dur * 0.45) / (dur * 0.35)) ** 2)
+            rows.append(("BRAKING", f"{g:,.0f} g")); rows.append(("SHIELD", "≈ 16,000 °C"))
+        _hud18(img, rows, y0=150)
+        if v.get("label"): caption(img, v["label"], ease((t - 0.4) / 0.5), y=H - 90)
+        return
+    if mode == "approach":
+        p = easeio(t / max(1.0, dur * 0.9)); r = lerp(40, 520, p ** 2.2)
+        paste_c(img, jup18(r), 820, 560)
+        # Europa shrinking away behind
+        paste_c(img, planet_sprite(max(3, int(26 * (1 - p) + 3)), (210, 190, 160)), 200 + 100 * p, 900 + 80 * p, max(0.0, 1 - p))
+        _capsule18(img, 1500 - 300 * p, 300 + 120 * p, 1.0, glow=p ** 4, ang=2.3)
+        vel = lerp(v.get("v0", 0), v.get("v1", 56.3), p ** 1.7); hrs = v.get("hours", 14.8) * p
+        _hud18(img, [("SPEED", f"{vel:.1f} km/s"), ("FALLING FOR", f"{hrs:.1f} h"), ("FROM", "Europa's orbit")], y0=640)
+        alpha_text(img, (W / 2, 110), "Floor 1 · the fall", F(54, "Black"), WHITE, ease(t / 0.4))
+        return
+    if mode == "view":
+        p = easeio((t - dur * 0.55) / (dur * 0.4)); mr = 17
+        rj = mr * 23.4 * (1 + 3.5 * p ** 2)
+        paste_c(img, jup18(rj), W / 2, H / 2 + 20)
+        q = 1 - p
+        if q > 0.02:
+            for i in range(23):
+                a_ = ease((t - 0.4 - i * 0.07) / 0.3) * q
+                if a_ > 0: paste_c(img, planet_sprite(mr, (225, 225, 230)), W / 2 - rj + mr + i * 2 * mr * (rj / (mr * 23.4)), H / 2 + 20, a_)
+            alpha_text(img, (W / 2, H / 2 + 20 + rj + 60), "23 full Moons, side by side", F(44, "ExtraBold"), CREAM18, q * ease((t - 1.8) / 0.5))
+        alpha_text(img, (W / 2, 110), "From Europa: 12.2° of sky", F(56, "Black"), WHITE, ease(t / 0.4))
+
+CREAM18 = (245, 225, 185)
+GAUGE18 = [(0, 120, (235, 210, 160)), (120, 10000, (150, 95, 60)), (10000, 35000, (110, 70, 190)), (35000, 70000, (200, 80, 70))]
+def _gy18(dep, y0=170, y1=980): return lerp(y0, y1, math.log10(1 + max(0, dep)) / math.log10(70001))
+
+def sc_depthgauge(img, v, t, dur):
+    """chapter card: a vertical depth gauge 0 -> 70,000 km on a log scale (bands: clouds / deep air / metallic hydrogen / dilute core),
+    the capsule slides down to v.depth; background darkens with depth; right panel: floor name, depth, pressure, temperature, note"""
+    dep = v["depth"]; p = easeio((t - 0.3) / 1.6); cur = lerp(dep * 0.25, dep, p)
+    dark = min(1.0, math.log10(1 + dep) / 5.0)
+    lay = Image.new("RGBA", img.size, mix((40, 22, 10), (18, 6, 30), dark) + (int(120 + 110 * dark),)); img.alpha_composite(lay)
+    d = ImageDraw.Draw(img); x0, x1 = 230, 330
+    for a_, b_, c in GAUGE18:
+        d.rectangle([x0, _gy18(a_), x1, _gy18(b_)], fill=c)
+    d.rectangle([x0, _gy18(0), x1, _gy18(70000)], outline=(230, 230, 240), width=3)
+    for mk in (0, 10, 100, 1000, 10000, 70000):
+        y = _gy18(mk); d.line([(x0 - 22, y), (x0, y)], fill=(220, 220, 235), width=3)
+        d.text((x0 - 32, y), (f"{mk:,} km" if mk else "0"), font=F(26, "Bold"), fill=(200, 200, 220), anchor="rm")
+    for (a_, b_, c), nm in zip(GAUGE18, ("clouds", "deep air", "metal", "core")):
+        d.text((x1 + 18, (_gy18(a_) + _gy18(b_)) / 2), nm, font=F(24, "SemiBold"), fill=mix(c, (255, 255, 255), 0.4), anchor="lm")
+    yc = _gy18(cur); d.line([(x0 - 6, yc), (x1 + 6, yc)], fill=(90, 220, 255), width=4)
+    _capsule18(img, (x0 + x1) / 2, yc - 30, 0.9, glow=0.2)
+    a1, a2 = ease((t - 0.2) / 0.5), ease((t - 0.8) / 0.5)
+    alpha_text(img, (620, 230), v.get("floor", ""), F(46, "ExtraBold"), (230, 170, 100), a1, anchor="lm")
+    num = f"−{cur:,.0f} km" if dep >= 1 else "0 km"
+    alpha_text(img, (620, 370), num, F(150, "Black"), WHITE, a1, anchor="lm")
+    rows = [r_ for r_ in (("PRESSURE", v.get("ptxt")), ("TEMPERATURE", v.get("ttxt"))) if r_[1]]
+    for i, (k, val) in enumerate(rows):
+        alpha_text(img, (625, 540 + i * 120), k, F(30, "Bold"), DIM, a2, anchor="lm", shadow=False)
+        alpha_text(img, (625, 590 + i * 120), val, F(56, "ExtraBold"), (255, 215, 150) if i else (150, 210, 255), a2, anchor="lm")
+    if v.get("note"): alpha_text(img, (625, 860), v["note"], F(36, "SemiBold"), WHITE, ease((t - 1.3) / 0.5), anchor="lm")
+    d = ImageDraw.Draw(img)
+    d.text((625, 960), "depth below the 1-bar level · log scale" + (" · model values" if v.get("approx") else ""), font=F(24, "Medium"), fill=(150, 150, 175), anchor="lm")
+
+DECKS18 = [(0.7, "ammonia ice", (245, 245, 240)), (2.2, "ammonium hydrosulfide", (200, 140, 90)), (5.0, "water + lightning", (150, 190, 230))]
+def _py18(pb, y0=200, y1=1000): return lerp(y0, y1, (math.log10(pb) + 0.7) / (math.log10(25) + 0.7))
+def sc_cloudstack(img, v, t, dur):
+    """side cross-section of the top of Jupiter's atmosphere on a log PRESSURE axis 0.2 -> 25 bar: three cloud decks (model levels 0.7 /
+    2.2 / 5 bar) as textured bands, the capsule sinking to the highlighted deck, Galileo's parachute path to 23 bar (dotted), optional wind
+    streaks (v.wind) that speed up with depth + "600+ km/h" (Galileo, Atkinson et al. 1998)"""
+    hl = v.get("hl", 0); target = [0.7, 2.2, 5.0, 15.0][min(hl, 3)]
+    lay = Image.new("RGBA", img.size, (0, 0, 0, 0)); dl = ImageDraw.Draw(lay)
+    for y in range(140, 1040, 8):
+        u = (y - 140) / 900; dl.rectangle([0, y, W, y + 8], fill=mix((70, 110, 170), (30, 14, 8), u ** 0.8) + (235,))
+    img.alpha_composite(lay)
+    lay = Image.new("RGBA", img.size, (0, 0, 0, 0)); dl = ImageDraw.Draw(lay); rng = random.Random(18)
+    for i, (pb, nm, c) in enumerate(DECKS18):
+        y = _py18(pb); on = (i == hl) or hl == 3
+        for k in range(70):
+            x = (rng.uniform(-100, W + 100) + t * (12 + 10 * i) * (1 if k % 2 else -0.6)) % (W + 200) - 100
+            r_ = rng.uniform(30, 90); yy = y + rng.uniform(-28, 28)
+            dl.ellipse([x - r_, yy - r_ * 0.35, x + r_, yy + r_ * 0.35], fill=c + (int((150 if on else 70) * rng.uniform(0.5, 1)),))
+        if i == 2 and on and int(t * 3) % 4 == 0:
+            lx = 300 + (int(t * 3) * 337) % 1200; dl.line([(lx, y - 30), (lx + 20, y), (lx - 10, y + 20), (lx + 15, y + 50)], fill=(255, 255, 200, 255), width=5)
+    img.alpha_composite(lay.filter(ImageFilter.GaussianBlur(3)))
+    d = ImageDraw.Draw(img)
+    for i, (pb, nm, c) in enumerate(DECKS18):
+        y = _py18(pb); on = (i == hl)
+        d.text((W - 60, y), f"{nm} · ≈ {pb:g} bar", font=F(36 if on else 28, "ExtraBold" if on else "SemiBold"), fill=c if on else mix(c, (90, 90, 110), 0.4), anchor="rm", stroke_width=3, stroke_fill=(0, 0, 0))
+    for pb in (0.3, 1, 3, 10, 23):
+        y = _py18(pb); d.line([(60, y), (90, y)], fill=(220, 220, 235), width=3); d.text((100, y), f"{pb:g} bar", font=F(26, "Bold"), fill=(220, 220, 235), anchor="lm")
+    y1b = _py18(1.0)
+    for x in range(60, W, 30): d.line([(x, y1b), (x + 14, y1b)], fill=(255, 255, 255), width=2)
+    d.text((300, y1b - 22), "the zero line (1 bar)", font=F(24, "SemiBold"), fill=WHITE, anchor="lm")
+    # Galileo's path, dotted, with a parachute at its last point
+    gx = 520
+    for k in range(40):
+        pb = 0.4 * (23 / 0.4) ** (k / 39); y = _py18(pb); d.ellipse([gx + 30 * math.sin(k * 0.5) - 3, y - 3, gx + 30 * math.sin(k * 0.5) + 3, y + 3], fill=(255, 230, 120))
+    ye = _py18(23); d.arc([gx - 40, ye - 70, gx + 40, ye - 10], 180, 360, fill=(255, 230, 120), width=5)
+    d.text((gx + 50, ye - 20), "Galileo, 1995 · signal lost ≈ 23 bar", font=F(26, "Bold"), fill=(255, 230, 120), anchor="lm", stroke_width=3, stroke_fill=(0, 0, 0))
+    cp = math.exp(lerp(math.log(max(0.3, target / 3)), math.log(target), easeio((t - 0.2) / 1.8)))
+    _capsule18(img, 900, _py18(cp) - 30, 1.0, glow=0.15)
+    if v.get("wind"):
+        lay = Image.new("RGBA", img.size, (0, 0, 0, 0)); dl = ImageDraw.Draw(lay); rng = random.Random(4)
+        for k in range(60):
+            pb = math.exp(rng.uniform(math.log(0.5), math.log(22))); y = _py18(pb); sp = 300 + 900 * (math.log10(pb) + 0.3) / 1.6
+            x = (rng.uniform(0, W) + t * sp) % (W + 300) - 300; L = 80 + sp * 0.15
+            dl.line([(x, y), (x + L, y)], fill=(255, 255, 255, 130), width=3)
+        img.alpha_composite(lay)
+        box = Image.new("RGBA", img.size, (0, 0, 0, 0)); ImageDraw.Draw(box).rounded_rectangle([1320, 820, 1860, 1000], 22, fill=(10, 8, 6, 220)); img.alpha_composite(box)
+        d = ImageDraw.Draw(img); d.text((1590, 880), "600+ km/h", font=F(64, "Black"), fill=(255, 215, 150), anchor="mm")
+        d.text((1590, 950), "winds grow stronger with depth", font=F(28, "Bold"), fill=WHITE, anchor="mm")
+    alpha_text(img, (W / 2, 80), "Floor 3 · the clouds", F(50, "Black"), WHITE, ease(t / 0.4))
+
+def sc_nosurface(img, v, t, dur):
+    """phase 0: a column of hydrogen getting denser with depth, a dashed 'surface?' line scans down and never finds a boundary (NOT HERE
+    stamps) + the critical point note (−240 °C, 13 bar) | phase 1: the capsule sinks slower and slower through a continuous gradient,
+    density meter | phase 2: helium rain: droplets fall through violet metallic hydrogen, carrying pink neon specks"""
+    ph = v.get("phase", 0); d = ImageDraw.Draw(img)
+    if ph in (0, 1):
+        lay = Image.new("RGBA", img.size, (0, 0, 0, 0)); dl = ImageDraw.Draw(lay)
+        for y in range(0, H, 6):
+            u = y / H; dl.rectangle([0, y, W, y + 6], fill=mix((170, 120, 80), (25, 8, 6), u ** 0.7) + (int(lerp(120, 255, u)),))
+        img.alpha_composite(lay)
+        rng = random.Random(7); lay = Image.new("RGBA", img.size, (0, 0, 0, 0)); dl = ImageDraw.Draw(lay)
+        for k in range(500):  # molecules: more of them, slower, deeper
+            u = rng.random() ** 0.6; y = u * H; sp = lerp(60, 4, u); x = (rng.uniform(0, W) + t * sp) % W
+            dl.ellipse([x - 3, y - 3, x + 3, y + 3], fill=(255, 220, 180, int(lerp(90, 200, u))))
+        img.alpha_composite(lay); d = ImageDraw.Draw(img)
+        if ph == 0:
+            for j in range(3):
+                yy = 260 + j * 260
+                if t > 0.8 + j * 1.2:
+                    for x in range(80, 1200, 34): d.line([(x, yy), (x + 18, yy)], fill=(255, 255, 255), width=3)
+                    d.text((100, yy - 26), "surface here?", font=F(30, "Bold"), fill=WHITE, anchor="lm")
+                    alpha_text(img, (1000, yy), "NOT HERE", F(56, "Black"), (255, 110, 90), ease((t - 1.3 - j * 1.2) / 0.3))
+            box = Image.new("RGBA", img.size, (0, 0, 0, 0)); ImageDraw.Draw(box).rounded_rectangle([1280, 300, 1860, 700], 24, fill=(10, 8, 14, 225)); img.alpha_composite(box)
+            d = ImageDraw.Draw(img)
+            for i, (s_, c_, f_) in enumerate((("HYDROGEN", (230, 170, 100), 32), ("above −240 °C and 13 bar:", WHITE, 30), ("no line between", WHITE, 34), ("gas and liquid", WHITE, 34))):
+                d.text((1570, 370 + i * 80), s_, font=F(f_, "ExtraBold"), fill=c_, anchor="mm")
+        else:
+            p = 1 - math.exp(-t / (dur * 0.35)); y = lerp(200, 820, p)
+            _capsule18(img, 760, y, 1.3, glow=0.1)
+            dens = lerp(0.01, 0.4, p)
+            _hud18(img, [("SINKING SPEED", "slower and slower"), ("SURFACE FOUND", "none")], y0=300, w=560)
+            alpha_text(img, (W / 2, 90), "Floor 5 · where's the surface?", F(50, "Black"), WHITE, ease(t / 0.4))
+        if ph == 0: alpha_text(img, (W / 2, 90), "Floor 5 · where's the surface?", F(50, "Black"), WHITE, ease(t / 0.4))
+        return
+    lay = Image.new("RGBA", img.size, (0, 0, 0, 0)); dl = ImageDraw.Draw(lay)
+    for y in range(0, H, 6):
+        u = y / H; dl.rectangle([0, y, W, y + 6], fill=mix((50, 30, 90), (110, 70, 200), u) + (235,))
+    img.alpha_composite(lay)
+    lay = Image.new("RGBA", img.size, (0, 0, 0, 0)); dl = ImageDraw.Draw(lay); rng = random.Random(11)
+    for k in range(260):  # metallic sheen: drifting electrons
+        x = (rng.uniform(0, W) + t * rng.uniform(-80, 80)) % W; y = rng.uniform(0, H)
+        dl.ellipse([x - 2, y - 2, x + 2, y + 2], fill=(140, 200, 255, 150))
+    for k in range(40):  # helium droplets with neon passengers
+        x = rng.uniform(80, W - 380); sp = rng.uniform(120, 240); y = (rng.uniform(0, H) + t * sp) % (H + 80) - 40; r_ = rng.uniform(10, 22)
+        dl.ellipse([x - r_ * 0.8, y - r_, x + r_ * 0.8, y + r_ * 1.1], fill=(230, 235, 255, 220), outline=(255, 255, 255, 255), width=2)
+        dl.ellipse([x - 4, y - 2, x + 4, y + 6], fill=(255, 90, 170, 255))
+        dl.line([(x, y - r_ - 4), (x, y - r_ - 4 - sp * 0.25)], fill=(230, 235, 255, 90), width=3)
+    img.alpha_composite(lay)
+    box = Image.new("RGBA", img.size, (0, 0, 0, 0)); ImageDraw.Draw(box).rounded_rectangle([1460, 360, 1880, 740], 24, fill=(10, 6, 20, 225)); img.alpha_composite(box)
+    d = ImageDraw.Draw(img)
+    for i, (c_, lab) in enumerate((((230, 235, 255), "helium droplet"), ((255, 90, 170), "neon, carried down"), ((140, 200, 255), "free electrons"))):
+        d.ellipse([1490, 425 + i * 100, 1520, 455 + i * 100], fill=c_); d.text((1540, 440 + i * 100), lab, font=F(30, "Bold"), fill=WHITE, anchor="lm")
+    d.text((1670, 700), "illustration", font=F(24, "Medium"), fill=DIM, anchor="mm")
+    alpha_text(img, (W / 2, 90), "Floor 6 · helium rain", F(50, "Black"), WHITE, ease(t / 0.4))
+
+def sc_jupcut(img, v, t, dur):
+    """Jupiter cut open TO SCALE (r = 420 px for 69,911 km): a wedge shows molecular hydrogen, metallic hydrogen (from ≈ 10,000 km down),
+    the dilute core (to ≈ half the radius) or the old compact core (hl=oldcore); Earth to scale beside it; the capsule marker at v.depth
+    on the cut edge; hl=skin adds a magnifier on Galileo's 150 km sliver"""
+    cx, cy, Rj = 600, 560, 420; hl = v.get("hl", "skin")
+    paste_c(img, jup18(Rj), cx, cy)
+    lay = Image.new("RGBA", img.size, (0, 0, 0, 0)); dl = ImageDraw.Draw(lay)
+    a0, a1 = -70, 20
+    def wedge(rf, col): rr = Rj * rf; dl.pieslice([cx - rr, cy - rr, cx + rr, cy + rr], a0, a1, fill=col)
+    q = lambda name: 255 if hl == name else 200
+    wedge(1.0, (190, 140, 95, 255)); wedge(0.995, (150, 100, 70, 255))
+    wedge(1 - 10000 / 69911, (100, 70, 180, q("metal")))
+    if hl in ("dilute", "centre"): wedge(0.5, (200, 90, 80, 230)); wedge(0.25, (230, 120, 90, 240))
+    elif hl == "oldcore": wedge(0.15, (120, 110, 100, 255))
+    else: wedge(0.5, (150, 70, 120, 200))
+    img.alpha_composite(lay); d = ImageDraw.Draw(img)
+    if hl == "metal":
+        rr = Rj * (1 - 10000 / 69911); pul = 0.5 + 0.5 * math.sin(t * 3)
+        d.arc([cx - rr, cy - rr, cx + rr, cy + rr], a0, a1, fill=mix((140, 200, 255), (255, 255, 255), pul), width=6)
+    if hl == "oldcore":
+        rr = Rj * 0.15; d.ellipse([cx - rr, cy - rr, cx + rr, cy + rr], outline=(255, 255, 255), width=4)
+    dep = v.get("depth", 0); rr = Rj * (1 - min(69900, dep) / 69911); ang = math.radians(a0 + 2)
+    mx, my = cx + rr * math.cos(ang), cy + rr * math.sin(ang)
+    d.ellipse([mx - 11, my - 11, mx + 11, my + 11], fill=(90, 220, 255), outline=(255, 255, 255), width=3)
+    # Earth to scale
+    er = Rj * 6371 / 69911; paste_c(img, earth_sprite(int(er)), 150, cy + Rj - 20)
+    d = ImageDraw.Draw(img); d.text((150, cy + Rj + 40), "Earth, to scale", font=F(26, "SemiBold"), fill=(150, 200, 255), anchor="mm")
+    if hl == "skin":
+        lx, ly, lr = 1180, 330, 170; ex, ey = cx + Rj * math.cos(ang), cy + Rj * math.sin(ang)
+        d.line([(ex, ey), (lx - lr * 0.7, ly + lr * 0.7)], fill=(255, 255, 255), width=3)
+        d.ellipse([lx - lr, ly - lr, lx + lr, ly + lr], fill=(40, 25, 18), outline=(255, 255, 255), width=5)
+        d.rectangle([lx - lr + 30, ly - 120, lx + lr - 30, ly - 60], fill=(200, 150, 100))
+        d.line([(lx, ly - 60), (lx, ly - 60 + 100 * ease((t - 0.5) / 1.5))], fill=(255, 230, 120), width=6)
+        d.text((lx, ly + 90), "Galileo's 150 km", font=F(28, "Bold"), fill=(255, 230, 120), anchor="mm")
+    labels = {"skin": ("0.2% OF THE WAY", (255, 230, 120)), "metal": ("METALLIC HYDROGEN", (150, 200, 255)), "oldcore": ("A SOLID CORE?", (220, 210, 200)),
+              "dilute": ("A DILUTE CORE", (255, 150, 120)), "centre": ("NO FLOOR", (255, 150, 120))}
+    lab, col = labels.get(hl, ("", WHITE))
+    alpha_text(img, (1180, 640 if hl == "skin" else 400), lab, F(72 if len(lab) < 14 else 56, "Black"), col, ease((t - 0.4) / 0.5), anchor="lm")
+    if v.get("note"): alpha_text(img, (1182, 720 if hl == "skin" else 490), v["note"], F(38, "SemiBold"), WHITE, ease((t - 0.9) / 0.5), anchor="lm")
+    d = ImageDraw.Draw(img)
+    for i, (c_, n_) in enumerate((((190, 140, 95), "hydrogen + helium gas → fluid"), ((100, 70, 180), "metallic hydrogen"), ((200, 90, 80), "heavy elements, mixed in"))):
+        d.rectangle([1182, 820 + i * 50, 1210, 848 + i * 50], fill=c_); d.text((1226, 834 + i * 50), n_, font=F(28, "SemiBold"), fill=(215, 215, 230), anchor="lm")
+    d.text((1182, 990), "layer depths from interior models · to scale", font=F(24, "Medium"), fill=(140, 140, 165), anchor="lm")
+
+def sc_scars(img, v, t, dur):
+    """Shoemaker-Levy 9 (July 1994): phase 0 = a train of 21 fragments sweeps in and flashes one by one near the southern limb, day counter
+    1 -> 6 | phase 1 = the dark scars rotate into view along one southern latitude, with Earth to scale beside the biggest one"""
+    cx, cy, Rj = 760, 560, 430; ph = v.get("phase", 0)
+    paste_c(img, jup18(Rj), cx, cy); d = ImageDraw.Draw(img)
+    lat = math.radians(-44); yb = cy - Rj * math.sin(lat) * 1.0
+    if ph == 0:
+        n_hit = int(min(21, max(0, (t - 0.8) / max(0.5, dur - 1.5) * 21)))
+        for i in range(n_hit, 21):
+            k = i - n_hit; x = cx - Rj * 0.5 - 90 - k * 46 - (t * 25) % 46 * 0; y = yb - 420 - k * 16
+            d.ellipse([x - 6, y - 6, x + 6, y + 6], fill=(230, 235, 255)); d.line([(x, y), (x - 50, y - 18)], fill=(160, 190, 255), width=2)
+        if n_hit > 0 and (t * 4) % 1 < 0.6:
+            fx = cx - Rj * math.cos(lat) * 0.92; paste_c(img, radial(90, [(0, (255, 255, 230, 255)), (0.3, (255, 200, 120, 200)), (1, (255, 120, 40, 0))]), fx, yb - 10)
+        day = 1 + 5 * min(1, max(0, (t - 0.8) / max(0.5, dur - 1.5)))
+        _hud18(img, [("FRAGMENTS LEFT", f"{21 - n_hit}"), ("DAY", f"{day:.0f} of 6")], x0=1380, y0=700, w=470)
+        alpha_text(img, (W / 2, 90), "July 1994 · comet Shoemaker-Levy 9", F(52, "Black"), WHITE, ease(t / 0.4))
+        return
+    lay = Image.new("RGBA", img.size, (0, 0, 0, 0)); dl = ImageDraw.Draw(lay); rng = random.Random(94)
+    for i in range(9):
+        lon = -1.3 + i * 0.32 + t * 0.06
+        if abs(lon) > 1.45: continue
+        x = cx + Rj * math.cos(lat) * math.sin(lon); s_ = math.cos(lon); r_ = rng.uniform(18, 48) * (1.25 if i == 4 else 1)
+        dl.ellipse([x - r_ * s_, yb - r_ * 0.55, x + r_ * s_, yb + r_ * 0.55], fill=(35, 20, 18, 230))
+        dl.ellipse([x - r_ * s_ * 0.5, yb - r_ * 0.3, x + r_ * s_ * 0.5, yb + r_ * 0.3], fill=(15, 8, 8, 240))
+    img.alpha_composite(lay.filter(ImageFilter.GaussianBlur(2)))
+    er = Rj * 6371 / 71492; paste_c(img, earth_sprite(int(er)), cx + Rj + 160, yb)
+    d = ImageDraw.Draw(img); d.text((cx + Rj + 160, yb + er + 34), "Earth, to scale", font=F(28, "SemiBold"), fill=(150, 200, 255), anchor="mm")
+    alpha_text(img, (W / 2, 90), "Scars bigger than Earth", F(56, "Black"), WHITE, ease(t / 0.4))
+    caption(img, "illustration of the 1994 impact sites; the darkest were larger than Earth (NASA)", ease((t - 0.8) / 0.5), y=H - 80)
+
 
 SC = {k[3:]: f for k, f in globals().items() if k.startswith("sc_")}
 

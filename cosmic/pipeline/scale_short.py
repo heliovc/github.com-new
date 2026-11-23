@@ -57,13 +57,17 @@ Visuais (vis.type):
              = próxima estrela, linha tracejada) | earth (régua 0–12 cm, Terra a 10,8 cm + lupa: Terra de 9 µm ao lado de um fio de cabelo) |
              ruler (pista 0–20 m: Terra, Netuno 3,2 m, Voyager 1 18,6 m, pessoa de 1,7 m) | gap (estrada até o horizonte, contador 0 -> 28,9 km
              e horas a pé) | galaxy (Terra, Lua a 384.400 km e a Via Láctea nessa escala, 680.000 km, tudo em escala) (scale16).
+  "magbubble": a magnetosfera de Júpiter (bolha invisível) contra o Sol; vis.mode = hook (bolha 15 Sóis de largura, fila de 15 Sóis, Júpiter
+             = ponto) | field (linhas de campo do dipolo crescendo, vento solar por cima; ilustração) | front (Júpiter em escala e a borda
+             diurna 3,2–7,1 milhões de km, Sóis empilhados no vão, contador 2,3 -> 5,1) | sky (céu noturno: Lua cheia x bolha 2–3× maior)
+             | tail (Sol, órbitas de Júpiter e Saturno em escala raiz quadrada, cauda até a órbita de Saturno; dissolve de volta no hook = loop) (scale17).
 Reaproveita render.py (sprites, fontes) e ranking.py (fundo, texto, legendas).
 """
 import sys, os, math, json, subprocess, importlib.util, random
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 import numpy as np
 import soundfile as sf
-from PIL import Image, ImageDraw
+from PIL import Image, ImageDraw, ImageFilter
 import render as R
 import ranking as K
 
@@ -1329,6 +1333,134 @@ def sand_vis(img, v, th, t, dur, bp):
         text(img, (ex + gw / 2, 860), "the Milky Way, at this scale: 680,000 km", 34, acc2, a=q, stroke=3)
         text(img, (W / 2, 1330), "1.8× the trip to the Moon", 60, acc, a=ease((bp - 0.55) / 0.3), stroke=4)
 
+# ---------- scale17: "magbubble" (Jupiter's magnetosphere vs the Sun) ----------
+SUN_KM17 = 1391400.0; RJ17 = 71492.0
+_mb17 = {}
+def _bubble17(cx, ny, half_w, tail_y, col):
+    """glowing magnetosphere outline (nose at ny pointing UP toward the Sun, flaring to half_w, tail running down to tail_y); cached layer"""
+    key = (int(cx), int(ny), int(half_w), int(tail_y), col)
+    if key not in _mb17:
+        if len(_mb17) > 30: _mb17.clear()
+        pts_l, pts_r = [], []
+        for k in range(61):
+            u = k / 60; y = ny + u * (tail_y - ny)
+            w = half_w * min(1.0, math.sqrt(max(0.0, (y - ny) / (half_w * 1.1))))
+            pts_l.append((cx - w, y)); pts_r.append((cx + w, y))
+        poly = pts_l + pts_r[::-1]
+        lay = Image.new("RGBA", (W, H), (0, 0, 0, 0)); d = ImageDraw.Draw(lay)
+        d.polygon(poly, fill=col + (40,))
+        glow = Image.new("RGBA", (W, H), (0, 0, 0, 0)); dg = ImageDraw.Draw(glow)
+        dg.line(pts_l, fill=col + (230,), width=14); dg.line(pts_r, fill=col + (230,), width=14)
+        lay.alpha_composite(glow.filter(ImageFilter.GaussianBlur(10)))
+        d = ImageDraw.Draw(lay); d.line(pts_l, fill=(230, 245, 255, 255), width=3); d.line(pts_r, fill=(230, 245, 255, 255), width=3)
+        _mb17[key] = lay
+    return _mb17[key]
+
+def _wind17(img, t, top=330, bot=1500, n=40, a=1.0):
+    lay = Image.new("RGBA", img.size, (0, 0, 0, 0)); d = ImageDraw.Draw(lay); rng = random.Random(17)
+    for k in range(n):
+        x = rng.uniform(0, W); sp = rng.uniform(300, 600); y = top + (rng.uniform(0, bot - top) + t * sp) % (bot - top)
+        d.line([(x, y - 40), (x, y)], fill=(255, 220, 150, int(110 * a)), width=3)
+    img.alpha_composite(lay)
+
+def _hookframe17(img, th, t):
+    """frame 0 / loop frame: bubble 15 Suns wide, a row of 15 Suns across it, Jupiter = a dot with a ring"""
+    acc2 = tuple(th["accent2"]); cx = W / 2; half = 495; ny = 560
+    _wind17(img, t, 330, 560, 26)
+    img.alpha_composite(_bubble17(cx, ny, half, H + 40, acc2))
+    sr = half / 15.0; yj = ny + 260
+    for i in range(15): R.paste_c(img, R.sun_sprite(int(sr)), cx - half + sr + i * 2 * sr, 1080)
+    d = ImageDraw.Draw(img); jr = max(2, sr * RJ17 / (SUN_KM17 / 2))
+    d.ellipse([cx - jr, yj - jr, cx + jr, yj + jr], fill=(230, 180, 120)); d.ellipse([cx - 22, yj - 22, cx + 22, yj + 22], outline=(255, 255, 255), width=3)
+    text(img, (cx + 34, yj), "Jupiter", 36, (230, 190, 140), anchor="lm", stroke=3)
+    text(img, (cx, 1150), "15 Suns, side by side", 42, (255, 225, 160), w="ExtraBold", stroke=3)
+
+def magbubble_vis(img, v, th, t, dur, bp):
+    """Jupiter's magnetosphere vs the Sun. vis.mode = hook (bubble + 15 Suns across + Jupiter dot) | field (Jupiter close up with dipole
+    field loops growing, solar wind pressing from above: illustration) | front (Jupiter and the dayside edge, 3.2–7.1 million km = 45–100
+    Jupiter radii; Suns stacked in the gap, counter 2.3 -> 5.1) | sky (night sky: full Moon vs the bubble 2–3 × wider, NASA) | tail (top-down
+    Sun–Jupiter–Saturn orbits, square-root distances; the tail streams away from the Sun out to Saturn's orbit; loops back to the hook)"""
+    acc, acc2 = tuple(th["accent"]), tuple(th["accent2"]); mode = v.get("mode", "hook"); cx = W / 2
+    if mode == "hook":
+        _hookframe17(img, th, t); return
+    if mode == "field":
+        jy = 1000; _wind17(img, t, 330, 640, 40)
+        lay = Image.new("RGBA", img.size, (0, 0, 0, 0)); d = ImageDraw.Draw(lay)
+        for k in range(1, 8):
+            L = 90 * k * (0.4 + 0.6 * ease(bp * 1.4)); sq = 1 - 0.35 * k / 8  # squashed on the sunward (top) side
+            for side in (-1, 1):
+                pts = []
+                for j in range(41):
+                    lam = -1.25 + 2.5 * j / 40; r = L * math.cos(lam) ** 2
+                    x = cx + side * r * math.cos(lam); y = jy - r * math.sin(lam) * (sq if math.sin(lam) > 0 else 1.0)
+                    pts.append((x, y))
+                d.line(pts, fill=acc2 + (190 - k * 18,), width=4)
+        img.alpha_composite(lay)
+        R.paste_c(img, R.jup10(70, 0.0), cx, jy)
+        text(img, (cx, 1300), "magnetic field from Jupiter's metal ocean", 40, acc2, w="ExtraBold", stroke=3)
+        text(img, (cx, 560), "wind from the Sun", 36, (255, 220, 150), w="Bold", stroke=3)
+        text(img, (cx, 1360), "illustration", 28, (170, 175, 200), w="SemiBold")
+        return
+    if mode == "front":
+        jy = 1300; k_ = 760 / 7.1e6  # px per km so the max edge reaches y=540
+        dist = lerp(3.2e6, 7.1e6, easeio(bp)); ny = jy - dist * k_
+        _wind17(img, t, 330, max(340, ny - 10), 30)
+        d = ImageDraw.Draw(img)
+        for edge, lab in ((3.2e6, "smallest: 3.2 million km"), (7.1e6, "largest: 7.1 million km")):
+            y = jy - edge * k_
+            for x in range(120, W - 120, 30): d.line([(x, y), (x + 14, y)], fill=(200, 205, 225), width=2)
+            d.text((W - 110, y - 22), lab, font=F(28, "Bold"), fill=(200, 205, 225), anchor="rm")
+        lay = Image.new("RGBA", img.size, (0, 0, 0, 0)); dl = ImageDraw.Draw(lay)
+        for x in range(0, W, 4):
+            u = (x - cx) / 500.0; y = ny + 380 * u * u
+            dl.ellipse([x - 7, y - 7, x + 7, y + 7], fill=acc2 + (200,))
+        img.alpha_composite(lay.filter(ImageFilter.GaussianBlur(3)))
+        sr = SUN_KM17 / 2 * k_; n = dist / SUN_KM17; full = int(n)
+        for i in range(full): R.paste_c(img, R.sun_sprite(max(3, int(sr))), cx - 200, jy - sr - i * 2 * sr)
+        d = ImageDraw.Draw(img); jr = max(3, RJ17 * k_)
+        d.ellipse([cx - jr, jy - jr, cx + jr, jy + jr], fill=(230, 180, 120)); d.ellipse([cx - 20, jy - 20, cx + 20, jy + 20], outline=(255, 255, 255), width=3)
+        text(img, (cx + 34, jy), "Jupiter (to scale)", 34, (230, 190, 140), anchor="lm", stroke=3)
+        text(img, (cx - 200, jy + 60), f"{n:.1f} Suns", 56, acc, stroke=4)
+        text(img, (cx, 1440), "between Jupiter and the edge facing the Sun", 34, (235, 235, 245), w="Bold", stroke=3)
+        return
+    if mode == "sky":
+        d = ImageDraw.Draw(img)
+        d.polygon([(0, 1380), (240, 1320), (520, 1360), (800, 1300), (W, 1350), (W, 1560), (0, 1560)], fill=(8, 10, 18))
+        mx, my, mr = 330, 1020, 46
+        R.paste_c(img, R.planet_sprite(mr, (225, 225, 230)), mx, my)
+        text(img, (mx, my + mr + 40), "full Moon", 34, (230, 230, 240), stroke=3)
+        q = ease((bp - 0.15) / 0.4); jx, jy = 700, 830; half = mr * 2.5 * 1.0
+        if q > 0:
+            lay = _bubble17(jx, jy - half * 0.9, half, jy + half * 2.2, acc2)
+            img.alpha_composite(Image.blend(Image.new("RGBA", img.size, (0, 0, 0, 0)), lay, q))
+            d = ImageDraw.Draw(img); d.ellipse([jx - 4, jy - 4, jx + 4, jy + 4], fill=(255, 235, 200))
+            text(img, (jx, jy + half * 2.2 + 40), "2–3× the Moon's width", 40, acc2, w="ExtraBold", a=q, stroke=3)
+        text(img, (cx, 560), "if you could see it", 48, (255, 255, 255), w="ExtraBold", stroke=3)
+        return
+    if mode == "tail":
+        if bp > 0.82:  # loop: dissolve back into the hook composition
+            q = easeio((bp - 0.82) / 0.18); base = img.copy(); _hookframe17(base, th, t)
+            tmp = img.copy(); _tailframe17(tmp, th, t, 1.0)
+            img.paste(Image.blend(tmp, base, q)); return
+        _tailframe17(img, th, t, bp)
+
+def _tailframe17(img, th, t, bp):
+    acc2 = tuple(th["accent2"]); sx, sy = W / 2, 470; k = 1050 / math.sqrt(9.6)  # px per sqrt(AU)
+    d = ImageDraw.Draw(img)
+    for au, nm, col in ((5.2, "Jupiter", (230, 180, 120)), (9.54, "Saturn", (225, 205, 155))):
+        r = k * math.sqrt(au); d.arc([sx - r, sy - r, sx + r, sy + r], 20, 160, fill=col + (255,) if False else col, width=3)
+        d.text((sx + r * math.cos(math.radians(30)) + 14, sy + r * math.sin(math.radians(30))), nm + "'s orbit", font=F(30, "Bold"), fill=col, anchor="lm")
+    R.paste_c(img, R.sun_sprite(26), sx, sy)
+    rj = k * math.sqrt(5.2); rs = k * math.sqrt(9.54); jy = sy + rj
+    L = (rs - rj + 30) * ease(bp * 1.3)
+    lay = Image.new("RGBA", img.size, (0, 0, 0, 0)); dl = ImageDraw.Draw(lay)
+    dl.polygon([(sx - 18, jy), (sx + 18, jy), (sx + 34, jy + L), (sx - 34, jy + L)], fill=acc2 + (120,))
+    img.alpha_composite(lay.filter(ImageFilter.GaussianBlur(6)))
+    d = ImageDraw.Draw(img); d.ellipse([sx - 9, jy - 9, sx + 9, jy + 9], fill=(230, 180, 120))
+    text(img, (sx, jy + L + 60 if L > 50 else jy + 80), "the tail reaches Saturn's orbit", 42, acc2, w="ExtraBold", a=ease((bp - 0.3) / 0.3), stroke=3)
+    text(img, (sx, 1500), "distances: square-root scale", 26, (170, 175, 200), w="SemiBold")
+
+
 def chrome(img, th, gt, total):
     d = ImageDraw.Draw(img)
     d.rectangle([0, 0, int(W * gt / total), 10], fill=tuple(th["accent"]))
@@ -1402,8 +1534,8 @@ def frame(m, durs, gt, chunks, arr):
         hl = v.get("head") or m.BIG
         text(img, (W / 2, 170), hl["num"], 124 if len(hl["num"]) < 12 else 100, tuple(th["accent"]), stroke=4)
         text(img, (W / 2, 280), hl["top"], 52, (255, 255, 255), stroke=3)
-    elif v["type"] in ("jupsun", "andromeda", "redgiant", "sand"):
-        {"jupsun": jupsun_vis, "andromeda": andromeda_vis, "redgiant": redgiant_vis, "sand": globals().get("sand_vis")}[v["type"]](img, v, th, t, d, easeio((t - 0.2) / max(0.8, d * 0.8)))
+    elif v["type"] in ("jupsun", "andromeda", "redgiant", "sand", "magbubble"):
+        {"jupsun": jupsun_vis, "andromeda": andromeda_vis, "redgiant": redgiant_vis, "sand": globals().get("sand_vis"), "magbubble": globals().get("magbubble_vis")}[v["type"]](img, v, th, t, d, easeio((t - 0.2) / max(0.8, d * 0.8)))
         hl = v.get("head") or m.BIG
         text(img, (W / 2, 170), hl["num"], 124 if len(hl["num"]) < 12 else 100, tuple(th["accent"]), stroke=4)
         text(img, (W / 2, 280), hl["top"], 52, (255, 255, 255), stroke=3)

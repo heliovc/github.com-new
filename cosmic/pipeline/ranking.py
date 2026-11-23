@@ -46,6 +46,10 @@ vis.type == "gravity" / THEME.hook/outro == "gravity": bonequinho numa balança 
 vis.type == "litre" / THEME.hook/outro == "litre": 1 litro do material médio do planeta despejado num pote de vidro sobre uma balança de
   cozinha (visor sobe até vis.kgl kg) ao lado de uma garrafa de água de 1,00 kg + barra 0–6 kg/L com a linha da água e Saturno (0,69,
   boiaria); gancho = pote vazio com "?" e visor correndo; outro = os 5 potes em fila, cada um na sua balança (rank19).
+vis.type == "beads" / THEME.hook/outro == "beads": o planeta numa ESCALA COMUM (raio de Júpiter = 430 px; vis.km = diâmetro equatorial,
+  vis.kind = jupiter | ringed | earth | outro, vis.col) e Terras na mesma escala caindo uma a uma num fio sobre o equador, contador até
+  vis.earths + contorno tracejado do tamanho do #1; Vênus ao lado da Terra no #5; gancho = disco "?" do tamanho de Júpiter com 11 Terras
+  enfileiradas; outro = os 5 lado a lado numa escala menor (rank20).
 Tudo desenhado por código; narração Kokoro (VOICE, padrão af_heart); legenda grande queimada.
 """
 import sys, os, re, math, json, subprocess, importlib.util, random
@@ -1140,6 +1144,55 @@ def litre_vis(img, it, th, t, dur):
     if v.get("note"): text(img, (W / 2, 1035), v["note"], 38, tuple(th["accent2"]), w="ExtraBold", a=ease((t - 1.0) / 0.5), stroke=3)
     lt_bar(img, th, ALL_ITEMS, cur=it, y=1180, labels=False)
 
+
+# ---------- rank20: "beads" (Earths strung like beads across each planet's diameter, one common scale) ----------
+BD_K = 430 / 71492  # px per km: Jupiter's equatorial radius = 430 px; every item uses this same scale
+_bd = {}
+def bd_body(kind, r, col):
+    key = (kind, int(r), tuple(col))
+    if key not in _bd:
+        if kind == "jupiter":
+            base = R.jup10(500, 0.0); k = r / 500.0; _bd[key] = base.resize((int(base.width * k), int(base.height * k)), Image.BILINEAR)
+        elif kind == "earth": _bd[key] = R.earth_sprite(max(3, int(r)))
+        else: _bd[key] = R.planet_sprite(max(3, int(r)), tuple(col))
+    return _bd[key]
+def bd_planet(img, kind, col, cx, cy, r, a=1.0):
+    if kind == "ringed":  # back half of the rings, planet, front half
+        lay = Image.new("RGBA", img.size, (0, 0, 0, 0)); d = ImageDraw.Draw(lay)
+        for k in range(5):
+            rr = r * (1.35 + k * 0.12); d.arc([cx - rr, cy - rr * 0.28, cx + rr, cy + rr * 0.28], 180, 360, fill=(220, 200, 160, int(170 * a)), width=7)
+        img.alpha_composite(lay)
+    R.paste_c(img, bd_body(kind, r, col), cx, cy, a)
+    if kind == "ringed":
+        lay = Image.new("RGBA", img.size, (0, 0, 0, 0)); d = ImageDraw.Draw(lay)
+        for k in range(5):
+            rr = r * (1.35 + k * 0.12); d.arc([cx - rr, cy - rr * 0.28, cx + rr, cy + rr * 0.28], 0, 180, fill=(235, 215, 170, int(200 * a)), width=7)
+        img.alpha_composite(lay)
+def beads_vis(img, it, th, t, dur):
+    """the planet TO A COMMON SCALE (Jupiter r = 430 px), then Earths (same scale, 37.8 px wide... r = 38 px) drop in one by one along a
+    string across its equator; the counter climbs to vis.earths; a ghost outline of Jupiter shows how far the smaller ones are from #1"""
+    v = it["vis"]; acc = tuple(th["accent"]); cx, cy = W / 2, 820
+    r = v["km"] / 2 * BD_K; er = 12756 / 2 * BD_K
+    d = ImageDraw.Draw(img)
+    rj = 71492 * BD_K
+    if v["km"] < 140000:
+        for k in range(0, 360, 8): d.arc([cx - rj, cy - rj, cx + rj, cy + rj], k, k + 4, fill=(120, 120, 150), width=3)
+        d.text((cx, cy - rj - 22), "#1's size", font=F(26, "Bold"), fill=(140, 140, 170), anchor="mm")
+    bd_planet(img, v["kind"], v["col"], cx, cy, r, ease(t / 0.4))
+    p = max(0.0, min(1.0, (t - 0.7) / max(1.0, dur * 0.55))); n = v["earths"] * p
+    d = ImageDraw.Draw(img); d.line([(cx - r, cy), (cx + r, cy)], fill=(255, 255, 255), width=3)
+    full = int(n); whole = int(v["earths"] + 1e-6)
+    for i in range(min(whole, full + 1) if v.get("kind") != "earth" else 0):
+        x = cx - r + er + i * 2 * er; drop = 0 if i < full else (1 - (n - full)) * 160
+        R.paste_c(img, bd_body("earth", er, (0, 0, 0)), x, cy - drop)
+    if v.get("kind") == "earth":
+        vr = 12104 / 2 * BD_K; d = ImageDraw.Draw(img)
+        d.ellipse([cx + 160 - vr, cy - vr, cx + 160 + vr, cy + vr], fill=(220, 190, 130)); d.text((cx + 160, cy + vr + 30), "Venus", font=F(30, "Bold"), fill=(230, 200, 150), anchor="mm")
+        R.paste_c(img, bd_body("earth", er, (0, 0, 0)), cx, cy); d = ImageDraw.Draw(img)
+        d.text((cx, cy + er + 30), "Earth", font=F(30, "Bold"), fill=(140, 190, 255), anchor="mm")
+    text(img, (W / 2, 1220), f"{n:.2f} Earths wide" if v["earths"] > 1.01 else "1 Earth wide", 54, tuple(th["accent2"]), w="ExtraBold", a=ease((t - 0.6) / 0.3), stroke=4)
+    if v.get("note"): text(img, (W / 2, 1290), v["note"], 36, (235, 235, 245), w="Bold", a=ease((t - 1.2) / 0.4), stroke=3)
+
 def caption_chunks(say, t0, dur):
     words = say.split(); groups, g = [], []
     for w in words:
@@ -1162,6 +1215,18 @@ def draw_caption(img, chunks, gt, y=1585):
 
 def seg_hook(img, sc, th, t, dur):
     col = tuple(th["star_col"]); acc = tuple(th["accent"])
+    if th.get("hook") == "beads":
+        # frame 0: the big number + Jupiter-sized "?" disc with a row of Earths already strung across it
+        cx, cy = W / 2, 930; rj = 71492 * BD_K * 0.92; er = 12756 / 2 * BD_K * 0.92
+        d = ImageDraw.Draw(img); d.ellipse([cx - rj, cy - rj, cx + rj, cy + rj], fill=(40, 30, 50), outline=tuple(th["accent"]), width=6)
+        n = 11.2
+        for i in range(11):
+            R.paste_c(img, bd_body("earth", er, (0, 0, 0)), cx - rj + er + i * 2 * er, cy + 10 * math.sin(t * 6 + i))
+        text(img, (cx, cy - rj * 0.5), "?", 190, tuple(th["accent"]))
+        text(img, (W / 2, 220), sc.get("big", ""), 140, tuple(th["accent"]), stroke=3)
+        text(img, (W / 2, 335), sc["top"].upper(), 52, (255, 255, 255))
+        text(img, (W / 2, 1460), sc["sub"], 46, tuple(th["accent2"]), w="ExtraBold")
+        return
     if th.get("hook") == "litre":
         # frame 0: the big number + an empty jar on a scale whose display races, a "?" inside, water bottle for reference
         lt_jar(img, W / 2 + 130, 960, (60, 55, 80), 0.0, t, label="1 litre of ?")
@@ -1434,6 +1499,8 @@ def seg_item(img, it, th, t, dur):
         gravity_vis(img, it, th, t, dur)
     if v["type"] == "litre":
         litre_vis(img, it, th, t, dur)
+    if v["type"] == "beads":
+        beads_vis(img, it, th, t, dur)
     # number
     p = easeio((t - 0.5) / 1.6)
     num = it["num"]
@@ -1446,6 +1513,20 @@ def seg_item(img, it, th, t, dur):
 
 def seg_outro(img, sc, th, t, dur):
     a = ease(t / 0.5)
+    if th.get("outro") == "beads":
+        # all five side by side at one smaller common scale, biggest first
+        k = 0.2 * BD_K; x = 150; cy = 680
+        for o in sorted(ALL_ITEMS, key=lambda o: o["rank"]):
+            vv = o["vis"]; r = vv["km"] / 2 * k
+            if vv["kind"] == "ringed": x += 0.85 * r
+            bd_planet(img, vv["kind"], vv["col"], x + r, cy, r, a)
+            text(img, (x + r, cy + max(r, 30) + 40), f"#{o['rank']}", 38, tuple(th["accent"]), a=a, stroke=3)
+            x += 2 * r + (60 if vv["kind"] == "ringed" else 44)
+        if th.get("outro_note"): text(img, (W / 2, 1000), th["outro_note"], 44, tuple(th["accent2"]), w="ExtraBold", a=a, stroke=3)
+        text(img, (W / 2, 1130), "WHICH WORLD", 96, (255, 255, 255), a=ease((t - 0.3) / 0.5))
+        text(img, (W / 2, 1225), "SHOULD WE MEASURE NEXT?", 56, tuple(th["accent"]), a=ease((t - 0.5) / 0.5))
+        text(img, (W / 2, 1400), "SUBSCRIBE to Cosmic Scale", 56, tuple(th["accent"]), a=ease((t - 0.8) / 0.5))
+        return
     if th.get("outro") == "litre":
         # five small jars side by side, each on its own scale, + Saturn's jar floating in a water tank
         for i, o in enumerate(sorted(ALL_ITEMS, key=lambda o: o["rank"])):

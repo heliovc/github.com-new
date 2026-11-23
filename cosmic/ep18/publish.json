@@ -1,0 +1,101 @@
+{
+ "version": 1,
+ "channel_id": "UCsYYjUbmq4n3lAKgw2F2IJw",
+ "created_at": "2026-11-23T06:37:35-03:00",
+ "items": [
+  {
+   "key": "cosmic-rank20-short",
+   "kind": "short",
+   "video": "ranking.mp4",
+   "title": "Top 5 Biggest Planets (#1 Is 11 Earths Wide) #shorts",
+   "description": "The five biggest planets, all at the same scale, with Earths strung across each one like beads. Earth only beats Venus by 652 km.\n\nFull video on the channel: \"What If You Fell Into Jupiter?\"\n\nSources:\n- NASA planetary fact sheets (NSSDC): equatorial diameter Jupiter 142,984 km, Saturn 120,536 km, Uranus 51,118 km, Neptune 49,528 km, Earth 12,756 km, Venus 12,104 km\n- NASA: Neptune mass 102.4 × 10^24 kg vs Uranus 86.8 × 10^24 kg; Saturn's main rings span about 273,000 km\n- Own calculations: diameters divided by Earth's 12,756 km (Jupiter 11.21, Saturn 9.45, Uranus 4.01, Neptune 3.88); Earth minus Venus = 652 km\n\nVisuals are original. Narration uses a synthetic voice.\n#shorts #space #jupiter #science",
+   "tags": [
+    "biggest planets",
+    "top 5",
+    "jupiter",
+    "saturn",
+    "planet size comparison",
+    "space",
+    "shorts",
+    "cosmic scale"
+   ],
+   "publish_at": "2026-11-23T13:00:00-03:00",
+   "if_late": "public_now",
+   "made_for_kids": false,
+   "altered_content": true,
+   "related_key": "cosmic-ep10-long",
+   "pinned_comment": "Did you expect Uranus to beat Neptune? Full video: What If Jupiter Became a Star?"
+  },
+  {
+   "key": "cosmic-ep18-long",
+   "kind": "long",
+   "video": "video.mp4",
+   "title": "What If You Fell Into Jupiter? You'd Fall 70,000 km and Never Hit Ground",
+   "description": "Jump into Jupiter and ride all the way down, floor by floor: a 59.5 km/s arrival, three cloud decks, the spot where NASA's Galileo probe went silent, an ocean with no surface, liquid metal hydrogen, helium rain and a fuzzy core — and no ground anywhere.\n\n0:00 Falling with no ground\n0:34 The zero line\n0:54 Floor 1: the fall from Europa\n1:44 Floor 2: entry at 47 km/s\n2:32 Floor 3: three cloud decks\n3:12 Floor 4: Galileo's last signal\n3:46 Floor 5: where's the surface?\n4:40 Floor 6: the metal ocean and helium rain\n5:28 Floor 7: the dilute core\n6:14 Floor 8: the centre\n6:44 What really fell into Jupiter\n7:44 Recap and next episode\n\nSources:\n- NASA Jupiter Fact Sheet (NSSDC): equatorial radius 71,492 km at the 1-bar level, mean radius 69,911 km, gravity 24.79 m/s², escape velocity 59.5 km/s\n- NASA/JPL, Galileo Probe: entered Jupiter's atmosphere on December 7, 1995 at about 47 km/s (106,000 mph); peak deceleration about 228 g; heat shield about 16,000 °C; 58 minutes of data; signal lost at about 23 bar\n- Seiff et al. (1998) and Atkinson et al. (1998), Journal of Geophysical Research: Galileo probe temperature about 150 °C near 22 bar; winds increasing with depth to about 170 m/s (over 600 km/h)\n- Cloud decks (thermochemical models): ammonia ice near 0.7 bar, ammonium hydrosulfide near 2.2 bar, water near 5 bar (e.g. Atreya et al.; Juno microwave results)\n- Hydrogen critical point: about 33 K (−240 °C) and 13 bar; above it there is no boundary between gas and liquid\n- NASA/JPL (2021): Juno found the Great Red Spot extends up to about 500 km below the cloud tops (Parisi et al. 2021, Science; Bolton et al. 2021)\n- Metallic hydrogen and helium rain: about 10,000–13,000 km below the cloud tops, 1–2 million bar, about 5,000 °C (Wilson & Militzer 2010; Physics Today; Berkeley Lab)\n- Dilute core: Wahl et al. (2017), Geophysical Research Letters; Militzer et al. (2022), Planetary Science Journal: 7–25 Earth masses of heavy elements, spread to about half of Jupiter's radius; Liu et al. (2019), Nature: a giant impact may have stirred it\n- Centre: about 20,000 K and tens of millions of bar in interior models (e.g. Guillot; 40–70 Mbar)\n- NASA: comet Shoemaker-Levy 9 hit Jupiter July 16–22, 1994 in about 21 fragments; some impact scars were larger than Earth\n- NASA/JPL: the Galileo orbiter was sent into Jupiter on September 21, 2003 at about 48 km/s to avoid contaminating Europa\n- Galileo probe: about 166 K (−107 °C) at the 1-bar level; NASA: Jupiter has 317.8 Earth masses, more than twice all the other planets combined; Shoemaker-Levy 9 fragments hit at about 60 km/s, fragment G about 6 million megatons of TNT (NASA/JPL estimates)\n- Own calculations (Python): from Europa's orbit Jupiter spans 2 × atan(71,492 / 670,900) = 12.2°, about 23 full Moons (0.52° each); fall from rest at Europa's orbit (670,900 km) reaches 56.3 km/s after 14.8 hours; 59.5 km/s = 214,000 km/h, about 60 times a 1 km/s rifle bullet; 24.79 / 9.81 = 2.53 g, so 70 kg feels like 177 kg; 23 bar ≈ 220 m of seawater; centre ≈ 69,900 km = 5.5 Earth diameters; at about 150 km per 58 minutes the trip to the centre would take about 19 days\n\n—\nCosmic Scale: the universe, measured in a way you can feel.\nSubscribe for a new space video every week.\nVisuals and animations are original. Narration uses a synthetic voice.\n#space #universe #science",
+   "tags": [
+    "what if you fell into jupiter",
+    "jupiter",
+    "inside jupiter",
+    "galileo probe",
+    "juno",
+    "metallic hydrogen",
+    "gas giant",
+    "space",
+    "universe",
+    "science",
+    "cosmic scale"
+   ],
+   "thumbnail": "thumbnail.jpg",
+   "captions": "legendas.srt",
+   "publish_at": "2026-11-23T17:00:00-03:00",
+   "if_late": "public_now",
+   "made_for_kids": false,
+   "altered_content": true,
+   "pinned_comment": "Which planet should we fall into next?"
+  },
+  {
+   "key": "cosmic-scale17-short",
+   "kind": "short",
+   "video": "scale.mp4",
+   "title": "15 Suns Fit Across Jupiter's Invisible Bubble #shorts",
+   "description": "Jupiter's magnetic bubble, its magnetosphere, is nearly 15 times bigger than the Sun. If it glowed, it would look 2–3 times wider than the full Moon in our sky.\n\nFull video on the channel: \"What If You Fell Into Jupiter?\"\n\nSources:\n- ESA (2023): Jupiter's magnetosphere is nearly 15 times bigger than the Sun\n- Jupiter's sunward magnetopause lies about 45–100 Jupiter radii from the planet (published Juno-era and Galileo-era measurements), i.e. about 3.2–7.1 million km\n- NASA Science: if Jupiter's magnetosphere glowed in visible light it would appear two to three times the size of the full Moon from Earth\n- NASA/JPL: Jupiter's magnetotail extends as far as the orbit of Saturn\n- Own calculations: 1 Jupiter radius = 71,492 km; Sun diameter 1,391,400 km, so 2.3–5.1 Suns fit between Jupiter and the sunward edge\n\nVisuals are original. Narration uses a synthetic voice.\n#shorts #space #jupiter #science",
+   "tags": [
+    "jupiter magnetosphere",
+    "jupiter",
+    "sun size",
+    "scale comparison",
+    "space",
+    "shorts",
+    "cosmic scale"
+   ],
+   "publish_at": "2026-11-23T19:00:00-03:00",
+   "if_late": "public_now",
+   "made_for_kids": false,
+   "altered_content": true,
+   "related_key": "cosmic-ep18-long",
+   "pinned_comment": "What invisible giant should we measure next? Full video: What If You Fell Into Jupiter?"
+  },
+  {
+   "key": "cosmic-ep18-short",
+   "kind": "short",
+   "video": "vertical.mp4",
+   "title": "Fall Into Jupiter and You'd Sink 70,000 km Without Ever Landing #shorts",
+   "description": "Jupiter has no surface: its hydrogen air just gets thicker and thicker, with no line between sky and sea.\n\nFull video on the channel: \"What If You Fell Into Jupiter?\"\n\nSources:\n- NASA Jupiter Fact Sheet (NSSDC): equatorial radius 71,492 km at the 1-bar level, mean radius 69,911 km, gravity 24.79 m/s², escape velocity 59.5 km/s\n- Hydrogen critical point: about 33 K (−240 °C) and 13 bar; above it there is no boundary between gas and liquid\n\nVisuals are original. Narration uses a synthetic voice.\n#shorts #space #jupiter #science",
+   "tags": [
+    "jupiter",
+    "fall into jupiter",
+    "no surface",
+    "gas giant",
+    "space",
+    "shorts",
+    "cosmic scale"
+   ],
+   "publish_at": "2026-11-23T21:00:00-03:00",
+   "if_late": "public_now",
+   "made_for_kids": false,
+   "altered_content": true,
+   "related_key": "cosmic-ep18-long",
+   "pinned_comment": "Would you rather fall into Jupiter or into the Sun? Full video: What If You Fell Into Jupiter?"
+  }
+ ]
+}

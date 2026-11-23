@@ -1,0 +1,535 @@
+1
+00:00:00,200 --> 00:00:01,947
+You're falling toward Jupiter.
+
+2
+00:00:01,947 --> 00:00:03,403
+Nothing can stop you now.
+
+3
+00:00:03,403 --> 00:00:05,034
+And here's the strange part.
+
+4
+00:00:05,034 --> 00:00:07,073
+There is no ground waiting for you.
+
+5
+00:00:07,073 --> 00:00:11,442
+You could fall for seventy thousand kilometers, and never land on anything.
+
+6
+00:00:12,142 --> 00:00:15,806
+Jupiter is the biggest planet we have, eleven Earths wide.
+
+7
+00:00:15,806 --> 00:00:21,934
+Today we jump in, and we ride all the way down, floor by floor, to find out what's really inside.
+
+8
+00:00:22,634 --> 00:00:23,507
+And it's heavy.
+
+9
+00:00:23,507 --> 00:00:27,291
+Jupiter holds three hundred and eighteen times the mass of Earth.
+
+10
+00:00:27,291 --> 00:00:31,308
+That's more than twice as much as all the other planets put together.
+
+11
+00:00:31,308 --> 00:00:34,218
+Everything about this fall is going to be extreme.
+
+12
+00:00:34,918 --> 00:00:36,270
+Here's how this works.
+
+13
+00:00:36,270 --> 00:00:39,710
+Jupiter has no surface, so scientists pick a zero point.
+
+14
+00:00:39,710 --> 00:00:44,379
+It's the height where the air pressure is the same as at sea level on Earth.
+
+15
+00:00:44,379 --> 00:00:44,871
+One bar.
+
+16
+00:00:44,871 --> 00:00:48,127
+Everything we measure today is depth below that line.
+
+17
+00:00:48,127 --> 00:00:50,707
+And on the way, we'll watch three numbers.
+
+18
+00:00:50,707 --> 00:00:54,332
+How deep, how hard the air is pushing, and how hot it gets.
+
+19
+00:00:55,031 --> 00:00:56,786
+Floor one is still in space.
+
+20
+00:00:56,786 --> 00:01:03,551
+Let's say you step off near Europa, one of Jupiter's moons, six hundred and seventy thousand kilometers out.
+
+21
+00:01:03,551 --> 00:01:05,180
+At first, you barely move.
+
+22
+00:01:05,180 --> 00:01:07,435
+But Jupiter pulls harder and harder.
+
+23
+00:01:07,435 --> 00:01:13,762
+Our calculation: after almost fifteen hours of falling, you're going fifty six kilometers per second.
+
+24
+00:01:14,462 --> 00:01:15,890
+And the view is unreal.
+
+25
+00:01:15,890 --> 00:01:20,483
+From Europa's distance, Jupiter already spans about twelve degrees of sky.
+
+26
+00:01:20,483 --> 00:01:23,834
+Picture twenty three full Moons lined up side by side.
+
+27
+00:01:23,834 --> 00:01:30,910
+As you fall, it grows until there's nothing in front of you but clouds, from one edge of your vision to the other.
+
+28
+00:01:31,610 --> 00:01:38,463
+Fall in from even farther away, and you'd hit the top of the air at fifty nine and a half kilometers per second.
+
+29
+00:01:38,463 --> 00:01:41,277
+Over two hundred thousand kilometers per hour.
+
+30
+00:01:41,277 --> 00:01:43,664
+Sixty times faster than a rifle bullet.
+
+31
+00:01:44,363 --> 00:01:44,980
+Floor two.
+
+32
+00:01:44,980 --> 00:01:45,597
+The entry.
+
+33
+00:01:45,597 --> 00:01:49,299
+We know exactly what this feels like, because we've done it.
+
+34
+00:01:49,299 --> 00:01:56,886
+In December nineteen ninety five, NASA's Galileo probe hit Jupiter's atmosphere at about forty seven kilometers per second.
+
+35
+00:01:57,586 --> 00:02:04,964
+Within about a minute, the air slowed it down so violently that the probe felt two hundred and twenty eight times its own weight.
+
+36
+00:02:04,964 --> 00:02:10,970
+The front of its heat shield reached around sixteen thousand degrees, hotter than the surface of the Sun.
+
+37
+00:02:10,970 --> 00:02:13,543
+A person would not survive that first minute.
+
+38
+00:02:14,243 --> 00:02:18,029
+So from here on, imagine you're inside an unbreakable capsule.
+
+39
+00:02:18,029 --> 00:02:20,349
+It can't burn and it can't be crushed.
+
+40
+00:02:20,349 --> 00:02:22,425
+It can only fall, and report back.
+
+41
+00:02:22,425 --> 00:02:25,722
+And even after the braking, there's Jupiter's gravity.
+
+42
+00:02:25,722 --> 00:02:27,492
+Two and a half times Earth's.
+
+43
+00:02:27,492 --> 00:02:32,377
+If you weigh seventy kilos at home, you'd feel like a hundred and seventy seven.
+
+44
+00:02:33,077 --> 00:02:33,822
+Floor three.
+
+45
+00:02:33,822 --> 00:02:34,505
+The clouds.
+
+46
+00:02:34,505 --> 00:02:39,102
+The colorful stripes you know from photos are only the top of the weather.
+
+47
+00:02:39,102 --> 00:02:43,326
+Models say there are three cloud decks stacked on top of each other.
+
+48
+00:02:43,326 --> 00:02:46,432
+First, white clouds of ammonia ice, freezing cold.
+
+49
+00:02:47,131 --> 00:02:54,625
+Below them, a brownish deck of ammonium hydrosulfide, a compound of ammonia and sulfur that smells like rotten eggs.
+
+50
+00:02:54,625 --> 00:02:58,566
+And deeper still, clouds of water, flickering with lightning.
+
+51
+00:02:59,266 --> 00:03:00,217
+And it's windy.
+
+52
+00:03:00,217 --> 00:03:06,554
+As Galileo sank under its parachute, it measured the winds getting stronger, not weaker, with depth.
+
+53
+00:03:06,554 --> 00:03:12,130
+Over six hundred kilometers per hour, far below the clouds where sunlight never reaches.
+
+54
+00:03:12,830 --> 00:03:13,493
+Floor four.
+
+55
+00:03:13,493 --> 00:03:16,024
+About a hundred and fifty kilometers down.
+
+56
+00:03:16,024 --> 00:03:18,435
+This is where our real explorer stopped.
+
+57
+00:03:18,435 --> 00:03:22,231
+After fifty eight minutes of sending data, Galileo went silent.
+
+58
+00:03:22,231 --> 00:03:28,318
+The pressure was about twenty three times Earth's air, and it was around a hundred and fifty degrees.
+
+59
+00:03:29,018 --> 00:03:33,730
+That sounds tough, but it's like being two hundred and twenty meters under the sea.
+
+60
+00:03:33,730 --> 00:03:35,490
+Submarines go deeper than that.
+
+61
+00:03:35,490 --> 00:03:37,250
+We've barely scratched Jupiter.
+
+62
+00:03:37,250 --> 00:03:42,019
+Galileo made it through less than a quarter of one percent of the way to the center.
+
+63
+00:03:42,019 --> 00:03:46,106
+At its average pace, the full trip down would take around nineteen days.
+
+64
+00:03:46,806 --> 00:03:47,474
+Floor five.
+
+65
+00:03:47,474 --> 00:03:51,056
+You'd expect to splash into an ocean somewhere around here.
+
+66
+00:03:51,056 --> 00:03:52,089
+But you never do.
+
+67
+00:03:52,089 --> 00:04:02,107
+Hydrogen, the main ingredient of Jupiter, stops behaving like a normal gas or liquid above about minus two hundred and forty degrees, once it's squeezed hard enough.
+
+68
+00:04:02,107 --> 00:04:04,961
+Here it's hundreds of degrees hotter than that.
+
+69
+00:04:05,661 --> 00:04:09,142
+So the air simply gets thicker, and thicker, and thicker.
+
+70
+00:04:09,142 --> 00:04:13,538
+It turns into something like a hot, dark syrup, with no line in between.
+
+71
+00:04:13,538 --> 00:04:16,958
+There's no moment where the sky ends and the sea begins.
+
+72
+00:04:16,958 --> 00:04:22,087
+Your capsule just keeps sinking, slower and slower, through a fluid that never ends.
+
+73
+00:04:22,787 --> 00:04:25,223
+Even Jupiter's famous storm goes deep.
+
+74
+00:04:25,223 --> 00:04:33,873
+In twenty twenty one, NASA's Juno spacecraft found that the roots of the Great Red Spot reach up to about five hundred kilometers down.
+
+75
+00:04:33,873 --> 00:04:39,897
+A storm wider than Earth, and taller than the entire layer of air we live in, many times over.
+
+76
+00:04:40,597 --> 00:04:42,397
+Now we go much, much deeper.
+
+77
+00:04:42,397 --> 00:04:45,355
+Floor six, about ten thousand kilometers down.
+
+78
+00:04:45,355 --> 00:04:48,120
+Almost the width of Earth below the clouds.
+
+79
+00:04:48,120 --> 00:04:54,357
+The pressure here is one to two million times Earth's air, and it's around five thousand degrees.
+
+80
+00:04:55,057 --> 00:04:57,900
+And something incredible happens to hydrogen.
+
+81
+00:04:57,900 --> 00:05:04,030
+It's squeezed so hard that its electrons break free, and it starts to behave like a liquid metal.
+
+82
+00:05:04,030 --> 00:05:05,547
+It conducts electricity.
+
+83
+00:05:05,547 --> 00:05:11,739
+Churning around, this ocean of metal powers Jupiter's magnetic field, the strongest of any planet.
+
+84
+00:05:12,439 --> 00:05:16,558
+Right at the top of that metal ocean, scientists think it rains.
+
+85
+00:05:16,558 --> 00:05:17,201
+Not water.
+
+86
+00:05:17,201 --> 00:05:17,652
+Helium.
+
+87
+00:05:17,652 --> 00:05:23,765
+Droplets of helium sink through the hydrogen like rain, and they may carry neon down with them.
+
+88
+00:05:23,765 --> 00:05:28,205
+That would explain why Galileo found so little neon in the air above.
+
+89
+00:05:28,905 --> 00:05:29,722
+Floor seven.
+
+90
+00:05:29,722 --> 00:05:32,785
+For decades, the textbook picture was simple.
+
+91
+00:05:32,785 --> 00:05:38,367
+Deep inside Jupiter, a solid ball of rock and ice, a few times heavier than Earth.
+
+92
+00:05:38,367 --> 00:05:43,881
+Then Juno started measuring Jupiter's gravity, very precisely, orbit after orbit.
+
+93
+00:05:44,581 --> 00:05:46,511
+And the answer was a surprise.
+
+94
+00:05:46,511 --> 00:05:49,470
+The heavy stuff isn't packed into a neat ball.
+
+95
+00:05:49,470 --> 00:05:54,875
+It's smeared out, mixed with hydrogen, spread across maybe half of Jupiter's radius.
+
+96
+00:05:54,875 --> 00:05:56,998
+Scientists call it a dilute core.
+
+97
+00:05:56,998 --> 00:06:00,858
+One idea is that a giant collision, long ago, stirred it up.
+
+98
+00:06:01,558 --> 00:06:03,571
+How much heavy stuff is in there?
+
+99
+00:06:03,571 --> 00:06:08,754
+Estimates range from about seven to twenty five Earths' worth of rock, ice and metal.
+
+100
+00:06:08,754 --> 00:06:13,633
+It's like dissolving a few whole planets into a giant ball of gas, and stirring.
+
+101
+00:06:14,333 --> 00:06:15,047
+Floor eight.
+
+102
+00:06:15,047 --> 00:06:15,702
+The center.
+
+103
+00:06:15,702 --> 00:06:20,227
+Seventy thousand kilometers down, five and a half Earths stacked end to end.
+
+104
+00:06:20,227 --> 00:06:27,133
+Models put the temperature around twenty thousand degrees, more than three times hotter than the surface of the Sun.
+
+105
+00:06:27,133 --> 00:06:28,145
+And the pressure?
+
+106
+00:06:28,145 --> 00:06:31,122
+Tens of millions of times what you feel right now.
+
+107
+00:06:31,822 --> 00:06:34,361
+And even here, there may be no solid floor.
+
+108
+00:06:34,361 --> 00:06:39,910
+You started falling at the top of the air, and you'd end in the middle of a hot, crushed soup.
+
+109
+00:06:39,910 --> 00:06:42,154
+In a sense, you never stopped falling.
+
+110
+00:06:42,154 --> 00:06:43,747
+You just ran out of planet.
+
+111
+00:06:44,447 --> 00:06:45,547
+Here's the twist.
+
+112
+00:06:45,547 --> 00:06:49,102
+Things really have fallen into Jupiter, and we watched.
+
+113
+00:06:49,102 --> 00:06:59,253
+In July nineteen ninety four, the comet Shoemaker Levy nine, broken into about twenty one pieces, slammed into Jupiter one piece after another over six days.
+
+114
+00:06:59,953 --> 00:07:06,358
+Each piece hit at about sixty kilometers per second, almost exactly the speed you'd arrive at.
+
+115
+00:07:06,358 --> 00:07:13,990
+The biggest one, fragment G, released energy estimated at around six million megatons of TNT, in a single flash.
+
+116
+00:07:14,690 --> 00:07:19,253
+The impacts left dark scars in the clouds, some of them bigger than Earth.
+
+117
+00:07:19,253 --> 00:07:21,411
+Backyard telescopes could see them.
+
+118
+00:07:21,411 --> 00:07:25,911
+A comet a few kilometers wide, and it bruised the biggest planet we have.
+
+119
+00:07:26,611 --> 00:07:29,491
+And in twenty oh three, NASA did it on purpose.
+
+120
+00:07:29,491 --> 00:07:40,828
+The Galileo orbiter, low on fuel, was steered into Jupiter at about forty eight kilometers per second, so it could never crash into Europa and contaminate an ocean that might hold life.
+
+121
+00:07:40,828 --> 00:07:43,891
+Somewhere down there, its atoms are still falling.
+
+122
+00:07:44,591 --> 00:07:46,626
+So, our fall, floor by floor.
+
+123
+00:07:46,626 --> 00:07:49,714
+Fifty nine kilometers per second at the top.
+
+124
+00:07:49,714 --> 00:07:52,591
+Clouds of ammonia, rotten eggs and water.
+
+125
+00:07:52,591 --> 00:07:56,521
+Galileo's last signal at a hundred and fifty kilometers.
+
+126
+00:07:56,521 --> 00:07:58,275
+An ocean with no surface.
+
+127
+00:07:58,275 --> 00:07:59,047
+Metal rain.
+
+128
+00:07:59,047 --> 00:07:59,959
+A fuzzy core.
+
+129
+00:07:59,959 --> 00:08:01,573
+And no ground anywhere.
+
+130
+00:08:02,273 --> 00:08:05,651
+Next time, we stay closer to home and give Earth a gift.
+
+131
+00:08:05,651 --> 00:08:07,401
+What if we had a second Moon?
+
+132
+00:08:07,401 --> 00:08:10,115
+Tides, nights, and maybe a crash, all change.
+
+133
+00:08:10,115 --> 00:08:12,951
+Subscribe to Cosmic Scale so you don't miss it.
+
+134
+00:08:12,951 --> 00:08:16,993
+And tell me in the comments, which planet should we fall into next?
