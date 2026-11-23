@@ -2326,7 +2326,7 @@
   "thumb_retry_after": "2026-11-23T21:37:44.161942-03:00",
   "comment_attempts": 1,
   "comment_error": "fixar comentário pede o telefone verificado no canal",
-  "comment_retry_after": "2026-11-23T20:21:51.713528-03:00"
+  "comment_retry_after": "2026-11-24T02:32:58.532514-03:00"
  },
  "quiet-ep12-long": {
   "attempts": 1,
@@ -2464,8 +2464,8 @@
   "pinned_comment": "Would you rather fall into Jupiter or into the Sun? Full video: What If You Fell Into Jupiter?",
   "related_attempts": 1,
   "related_done": "2026-11-23T16:28:18.903246-03:00",
-  "comment_attempts": 1,
-  "comment_error": "Page.goto: Timeout 60000ms exceeded.\nCall log:\n  - navigating to \"https://www.youtube.com/channel_switcher\", waiting until \"domcontentloaded\"\n (20261123-202223-erro-comment-cosmic-ep18-short.png)"
+  "comment_attempts": 2,
+  "comment_done": "2026-11-23T20:35:47.916782-03:00"
  },
  "c5-d04a-peixe": {
   "attempts": 1,
