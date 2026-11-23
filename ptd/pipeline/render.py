@@ -1176,7 +1176,54 @@ def sc_clock(img, v, t, dur):
         img.alpha_composite(lay)
     if v.get("caption"): dr.text((W / 2, H - 50), v["caption"], font=F(28, "Medium"), fill=DIM, anchor="mm")
 
-SC = {"clock": sc_clock, "tag": sc_tag, "exam": sc_exam, "gauge": sc_gauge, "onion": sc_onion, "floor": sc_floor, "clause": sc_clause, "round": sc_round, "ticker": sc_ticker, "scoreboard": sc_scoreboard, "title": sc_title, "bignumber": sc_bignumber, "flow": sc_flow, "split": sc_split, "bullets": sc_bullets,
+def sc_house(img, v, t, dur):
+    """Criado no EP18: a vistoria (o negócio visto como uma casa, cômodo por cômodo). n (cômodo 1..5; 0 = casa
+    inteira fechada), head, title (\n quebra), sub, rooms (5 rótulos: 1 = fachada embaixo, 2-3 no meio, 4-5 em cima).
+    Planta à esquerda: cômodos já vistoriados em verde-escuro, o atual em âmbar pulsando, os próximos escuros com '?'."""
+    dr = ImageDraw.Draw(img)
+    rooms = v.get("rooms", ["", "", "", "", ""]); n = v.get("n", 0)
+    LIT, DONE, OFF, EDGE = (242, 169, 59), (38, 96, 72), (26, 36, 56), (110, 125, 150)
+    x0, y0, w, h = 120, 300, 640, 600
+    rel = [(0, 0.70, 1, 1), (0, 0.35, 0.5, 0.70), (0.5, 0.35, 1, 0.70), (0, 0, 0.5, 0.35), (0.5, 0, 1, 0.35)]
+    lay = Image.new("RGBA", img.size, (0, 0, 0, 0)); d2 = ImageDraw.Draw(lay)
+    ra = ease(t / 0.5)
+    d2.polygon([(x0 - 40, y0), (x0 + w / 2, y0 - 190), (x0 + w + 40, y0)], fill=(52, 40, 86, int(255 * ra)), outline=EDGE + (int(255 * ra),))
+    for i, (a, b, c, d) in enumerate(rel):
+        k = ease((t - 0.1 - i * 0.1) / 0.4)
+        if k <= 0: continue
+        rx0, ry0, rx1, ry1 = x0 + a * w, y0 + b * h, x0 + c * w, y0 + d * h
+        r = i + 1
+        if n and r < n: col, tc = DONE, (170, 230, 195)
+        elif r == n: col, tc = LIT, BG1
+        else: col, tc = OFF, (110, 125, 150)
+        A = int(255 * k)
+        d2.rectangle([rx0, ry0, rx1, ry1], fill=col + (A,), outline=EDGE + (A,), width=4)
+        if r == n:
+            pul = 0.5 + 0.5 * math.sin(t * 4)
+            d2.rectangle([rx0 - 6, ry0 - 6, rx1 + 6, ry1 + 6], outline=LIT + (int((90 + 100 * pul) * k),), width=6)
+        cx, cy = (rx0 + rx1) / 2, (ry0 + ry1) / 2
+        lab = rooms[i] if (n == 0 or r <= n or v.get("all")) else "?"
+        if lab == "?":
+            d2.text((cx, cy), "?", font=F(80, "Black"), fill=tc + (A,), anchor="mm")
+        else:
+            d2.text((cx, cy - 34), str(r), font=F(44, "Black"), fill=tc + (A,), anchor="mm")
+            fs = 40
+            while F(fs, "Bold").getlength(lab) > (rx1 - rx0) - 40 and fs > 22: fs -= 1
+            d2.text((cx, cy + 22), lab, font=F(fs, "Bold"), fill=tc + (A,), anchor="mm")
+    img.alpha_composite(lay)
+    a1, a2, a3 = ease((t - 0.4) / 0.5), ease((t - 0.7) / 0.5), ease((t - 1.0) / 0.5)
+    x = 880
+    head = f"CÔMODO {n}  ·  {v.get('head', '')}" if 0 < n <= 5 else v.get("kicker", "")
+    if head: alpha_text(img, (x, 300), head, F(46, "Black"), LIT, a1, anchor="lm", dy=(1 - a1) * 30)
+    lines = v.get("title", "").split("\n")
+    for i, l in enumerate(lines):
+        fs = 96
+        while F(fs, "ExtraBold").getlength(l) > W - x - 60 and fs > 56: fs -= 2
+        alpha_text(img, (x, 420 + i * 106), l, F(fs, "ExtraBold"), WHITE, a2, anchor="lm", dy=(1 - a2) * 30)
+    if v.get("sub"): alpha_text(img, (x, 420 + len(lines) * 106 + 10), v["sub"], F(42, "SemiBold"), (150, 200, 240), a3, anchor="lm")
+    if v.get("caption"): dr.text((W / 2, H - 50), v["caption"], font=F(28, "Medium"), fill=DIM, anchor="mm")
+
+SC = {"house": sc_house, "clock": sc_clock, "tag": sc_tag, "exam": sc_exam, "gauge": sc_gauge, "onion": sc_onion, "floor": sc_floor, "clause": sc_clause, "round": sc_round, "ticker": sc_ticker, "scoreboard": sc_scoreboard, "title": sc_title, "bignumber": sc_bignumber, "flow": sc_flow, "split": sc_split, "bullets": sc_bullets,
       "bars": sc_bars, "compare": sc_compare, "timeline": sc_timeline, "cards": sc_cards, "line": sc_line,
       "receipt": sc_receipt, "stack": sc_stack, "journey": sc_journey, "calendar": sc_calendar, "obit": sc_obit, "race": sc_race, "act": sc_act, "ledger": sc_ledger, "blackbox": sc_blackbox, "flight": sc_flight, "court": sc_court, "dossier": sc_dossier}
 
