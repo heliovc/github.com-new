@@ -2385,7 +2385,7 @@
   "thumb_path": "/opt/canal-publisher/state/thumbs/c5-d03b-pombo.jpg",
   "thumb_attempts": 0,
   "thumb_error": "miniatura personalizada pede o telefone verificado no canal",
-  "thumb_retry_after": "2026-11-23T18:32:45.496315-03:00"
+  "thumb_retry_after": "2026-11-24T00:43:05.972791-03:00"
  },
  "cosmic-rank20-short": {
   "attempts": 1,
@@ -2533,7 +2533,9 @@
   "title": "Os bancos que ninguém conhece: quem guarda o seu dinheiro no app (e por que o BC fechou o cerco)",
   "kind": "long",
   "publish_at": "2026-11-23T18:30:00-03:00",
-  "pinned_comment": "Você sabia que o seu saldo no app pode não ter FGC? Na sua opinião, o Banco Central demorou para apertar as regras das fintechs? Conta aqui."
+  "pinned_comment": "Você sabia que o seu saldo no app pode não ter FGC? Na sua opinião, o Banco Central demorou para apertar as regras das fintechs? Conta aqui.",
+  "comment_attempts": 1,
+  "comment_done": "2026-11-23T18:45:50.610853-03:00"
  },
  "ptd-ep18-short": {
   "attempts": 1,
@@ -2549,7 +2551,9 @@
   "kind": "short",
   "publish_at": "2026-11-23T19:30:00-03:00",
   "related_key": "ptd-ep18-long",
-  "pinned_comment": "Você sabe se a sua conta no app é de banco ou de instituição de pagamento? Vídeo completo: Os bancos que ninguém conhece: quem guarda o seu dinheiro no app (e por que o BC fechou o cerco)"
+  "pinned_comment": "Você sabe se a sua conta no app é de banco ou de instituição de pagamento? Vídeo completo: Os bancos que ninguém conhece: quem guarda o seu dinheiro no app (e por que o BC fechou o cerco)",
+  "related_attempts": 1,
+  "related_done": "2026-11-23T18:47:48.658514-03:00"
  },
  "lab-ep17-long": {
   "attempts": 1,
@@ -2564,7 +2568,9 @@
   "title": "Web Scraping with Python for Beginners: Web Page to Spreadsheet (requests + BeautifulSoup)",
   "kind": "long",
   "publish_at": "2026-11-23T18:30:00-03:00",
-  "pinned_comment": "Which website would you love to turn into a spreadsheet? Tell me below (public data only) and it might become a future example."
+  "pinned_comment": "Which website would you love to turn into a spreadsheet? Tell me below (public data only) and it might become a future example.",
+  "comment_attempts": 1,
+  "comment_done": "2026-11-23T18:50:23.103540-03:00"
  },
  "lab-ep17-short": {
   "attempts": 1,
@@ -2580,6 +2586,8 @@
   "kind": "short",
   "publish_at": "2026-11-23T20:00:00-03:00",
   "related_key": "lab-ep17-long",
-  "pinned_comment": "What data do you still copy by hand from websites? Full tutorial: Web Scraping with Python for Beginners: Web Page to Spreadsheet (requests + BeautifulSoup)"
+  "pinned_comment": "What data do you still copy by hand from websites? Full tutorial: Web Scraping with Python for Beginners: Web Page to Spreadsheet (requests + BeautifulSoup)",
+  "related_attempts": 1,
+  "related_done": "2026-11-23T18:52:07.916481-03:00"
  }
 }
