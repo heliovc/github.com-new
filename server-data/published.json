@@ -2463,7 +2463,9 @@
   "related_key": "cosmic-ep18-long",
   "pinned_comment": "Would you rather fall into Jupiter or into the Sun? Full video: What If You Fell Into Jupiter?",
   "related_attempts": 1,
-  "related_done": "2026-11-23T16:28:18.903246-03:00"
+  "related_done": "2026-11-23T16:28:18.903246-03:00",
+  "comment_attempts": 1,
+  "comment_error": "Page.goto: Timeout 60000ms exceeded.\nCall log:\n  - navigating to \"https://www.youtube.com/channel_switcher\", waiting until \"domcontentloaded\"\n (20261123-202223-erro-comment-cosmic-ep18-short.png)"
  },
  "c5-d04a-peixe": {
   "attempts": 1,
