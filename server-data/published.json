@@ -2081,8 +2081,8 @@
   "comment_error": "fixar comentário pede o telefone verificado no canal",
   "thumb_attempts": 1,
   "thumb_error": "miniatura personalizada pede o telefone verificado no canal",
-  "comment_retry_after": "2026-11-23T08:51:30.639518-03:00",
-  "thumb_retry_after": "2026-11-23T08:52:28.155180-03:00"
+  "comment_retry_after": "2026-11-23T15:22:09.645606-03:00",
+  "thumb_retry_after": "2026-11-23T15:23:13.701708-03:00"
  },
  "c5-d01b-lagartixa": {
   "attempts": 1,
@@ -2104,8 +2104,8 @@
   "comment_error": "fixar comentário pede o telefone verificado no canal",
   "thumb_attempts": 1,
   "thumb_error": "miniatura personalizada pede o telefone verificado no canal",
-  "comment_retry_after": "2026-11-23T08:53:23.885222-03:00",
-  "thumb_retry_after": "2026-11-23T08:54:20.442526-03:00"
+  "comment_retry_after": "2026-11-23T15:24:17.179756-03:00",
+  "thumb_retry_after": "2026-11-23T15:25:32.939932-03:00"
  },
  "cosmic-rank18-short": {
   "attempts": 1,
@@ -2301,7 +2301,7 @@
   "thumb_path": "/opt/canal-publisher/state/thumbs/c5-d02a-mosquito.jpg",
   "thumb_attempts": 0,
   "thumb_error": "miniatura personalizada pede o telefone verificado no canal",
-  "thumb_retry_after": "2026-11-23T09:01:51.883538-03:00",
+  "thumb_retry_after": "2026-11-23T15:26:41.310942-03:00",
   "comment_attempts": 0,
   "comment_error": "fixar comentário pede o telefone verificado no canal",
   "comment_retry_after": "2026-11-23T13:08:06.728749-03:00"
@@ -2323,7 +2323,7 @@
   "thumb_path": "/opt/canal-publisher/state/thumbs/c5-d02b-barata.jpg",
   "thumb_attempts": 0,
   "thumb_error": "miniatura personalizada pede o telefone verificado no canal",
-  "thumb_retry_after": "2026-11-23T09:02:49.689092-03:00",
+  "thumb_retry_after": "2026-11-23T15:27:48.508211-03:00",
   "comment_attempts": 0,
   "comment_error": "fixar comentário pede o telefone verificado no canal",
   "comment_retry_after": "2026-11-23T14:02:41.122853-03:00"
@@ -2535,5 +2535,36 @@
   "publish_at": "2026-11-23T19:30:00-03:00",
   "related_key": "ptd-ep18-long",
   "pinned_comment": "Você sabe se a sua conta no app é de banco ou de instituição de pagamento? Vídeo completo: Os bancos que ninguém conhece: quem guarda o seu dinheiro no app (e por que o BC fechou o cerco)"
+ },
+ "lab-ep17-long": {
+  "attempts": 1,
+  "status": "published",
+  "url": "https://youtu.be/WH1JAH4ZvJ0",
+  "by": "robo",
+  "visibility": "schedule",
+  "when": "2026-11-23T18:30:00-03:00",
+  "at": "2026-11-23T09:16:10.499570-03:00",
+  "error": null,
+  "channel_id": "UCXGqR8k1RMbfYdVleIuJKzA",
+  "title": "Web Scraping with Python for Beginners: Web Page to Spreadsheet (requests + BeautifulSoup)",
+  "kind": "long",
+  "publish_at": "2026-11-23T18:30:00-03:00",
+  "pinned_comment": "Which website would you love to turn into a spreadsheet? Tell me below (public data only) and it might become a future example."
+ },
+ "lab-ep17-short": {
+  "attempts": 1,
+  "status": "published",
+  "url": "https://youtu.be/XAOehpDmiqY",
+  "by": "robo",
+  "visibility": "schedule",
+  "when": "2026-11-23T20:00:00-03:00",
+  "at": "2026-11-23T09:19:45.192084-03:00",
+  "error": null,
+  "channel_id": "UCXGqR8k1RMbfYdVleIuJKzA",
+  "title": "Python Copies 24 Products in 3 Seconds #shorts",
+  "kind": "short",
+  "publish_at": "2026-11-23T20:00:00-03:00",
+  "related_key": "lab-ep17-long",
+  "pinned_comment": "What data do you still copy by hand from websites? Full tutorial: Web Scraping with Python for Beginners: Web Page to Spreadsheet (requests + BeautifulSoup)"
  }
 }
