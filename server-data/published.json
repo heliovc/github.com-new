@@ -2324,8 +2324,8 @@
   "thumb_attempts": 0,
   "thumb_error": "miniatura personalizada pede o telefone verificado no canal",
   "thumb_retry_after": "2026-11-23T15:27:48.508211-03:00",
-  "comment_attempts": 0,
-  "comment_error": "fixar comentário pede o telefone verificado no canal",
+  "comment_attempts": 1,
+  "comment_error": "Page.goto: Timeout 60000ms exceeded.\nCall log:\n  - navigating to \"https://www.youtube.com/watch?v=RL1mco3U_fw\", waiting until \"domcontentloaded\"\n (20261123-141230-erro-comment-c5-d02b-barata.png)",
   "comment_retry_after": "2026-11-23T14:02:41.122853-03:00"
  },
  "quiet-ep12-long": {
