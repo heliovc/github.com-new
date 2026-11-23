@@ -21,6 +21,8 @@ Ler antes de cada vídeo (plano.md, seção 8). Atualizar depois de produzir e 4
 | 2 | B | barata | inseto | mecânica do dia a dia · **atual** | lugar proibido | casa | banheiro creme e menta × esgoto oliva | POV de dentro do ralo olhando a grelha | o cheiro pelas antenas (fedor para na água) | 44,2 s | 138 | agendado 22/11 19:00 |
 | 3 | A | krill | marinho | escala extrema · **curto** | queda/perigo | natureza | azul-cobalto ensolarado, krill coral, barbatanas grafite | boca da baleia-azul vindo de frente, do fundo | olho composto puxado pro azul (a sombra da baleia apaga a luz) | 35,4 s | 102 | agendado 23/11 12:00 |
 | 3 | B | pombo | ave | mecânica do dia a dia · **atual** | lugar proibido | cidade | crepúsculo roxo e rosa, asfalto grafite, luzes do semáforo | pombo em cima do semáforo, carros lá embaixo | campo magnético da Terra (linhas violeta até o pombal) | 45,3 s | 139 | agendado 23/11 19:00 |
+| 4 | A | peixe-caracol | marinho | escala extrema · **curto** | queda/perigo | natureza | breu verde-petróleo abissal, peixe rosa pálido, luz branca do robô, neve marinha | peixe na luz do robô com régua de profundidade em 8 km | linha lateral (ondinhas do anfípode acendem os poros) | 38,1 s | 104 | agendado 24/11 12:00 |
+| 4 | B | rato | mamífero | mecânica do dia a dia · **atual** | lugar proibido | cidade | concreto cinza-quente, lâmpada de sódio laranja, aço, faixa amarelo × preto (flashback 1854 em sépia) | contra-plongée do fundo do poço, cabine descendo | bigodes sentindo o vento que a cabine empurra (ar em verde) | 48,4 s | 136 | agendado 24/11 19:00 |
 
 ## Fontes por vídeo
 **1A — formiga**
@@ -50,17 +52,29 @@ Ler antes de cada vídeo (plano.md, seção 8). Atualizar depois de produzir e 4
 - FHWA, Traffic Detector Handbook, 3ª ed., vol. I, cap. 2 — laço indutivo: as correntes no metal do carro diminuem a indutância e a frequência do oscilador sobe. https://www.fhwa.dot.gov/publications/research/operations/its/06108/02.cfm
 - Keeton (1971), "Magnets interfere with pigeon homing", PNAS 68(1): 102–106; Wiltschko & Wiltschko (revisões) — pombos usam o campo magnético da Terra para voltar para casa.
 
+**4A — peixe-caracol (curto)**
+- Yancey, Gerringer, Drazen, Rowden & Jamieson (2014), PNAS 111(12): 4461–4465 — TMAO aumenta com a profundidade e protege as proteínas da pressão; limite extrapolado ~8.200 m. https://pmc.ncbi.nlm.nih.gov/articles/PMC3970477
+- UWA / Tokyo Univ. of Marine Science and Technology (abr. 2023) — peixe-caracol filmado a 8.336 m (fossa de Izu-Ogasawara), o mais fundo já registrado. https://uwa.edu.au/news/article/2023/april/scientists-break-new-record-after-finding-worlds-deepest-fish
+- Pressão ≈ 1 atm a cada 10 m (≈ 800 atm a 8 km ≈ 8 kN/cm²: ~1,6 t num dedão de 2 cm²). Liparídeos não têm bexiga natatória.
+
+**4B — rato (atual)**
+- ASME, "Elisha Graves Otis" — 1854, Crystal Palace (Nova York): mandou cortar a corda e o freio de catraca segurou a plataforma. https://www.asme.org/topics-resources/content/elisha-graves-otis
+- ASME A17.1/CSA B44 — freios de segurança acionados pelo limitador de velocidade agarram as guias; contrapeso ≈ cabine + 40–50% da carga nominal.
+- Yu, Graff, Bresee, Man & Hartmann (2016), "Whiskers aid anemotaxis in rats", Science Advances — ratos usam os bigodes para sentir a direção do vento. https://pmc.ncbi.nlm.nih.gov/articles/PMC4996642
+
 ## Métricas (48 h após publicar)
 Metas: continuaram assistindo ≥ 70% · % visualizada ≥ 80%.
 
 | Vídeo | Publicado em | Link | Continuaram assistindo | % visualizada | Views 48 h | Inscritos / 1.000 views |
 |---|---|---|---|---|---|---|
-| 1A formiga | 20/11 22:00 | https://youtube.com/shorts/Wcw5EPuTlpg | 54% (21/11 06h) | ~35% (~17 s de 48 s) · Studio ~11 h: 62,6% | 1.167 (8 h) · 22 likes | +1 inscrito |
-| 1B lagartixa | 20/11 23:00 | https://youtube.com/shorts/v88xGAAAzmw | 68% (21/11 06h) | ~30% (~14 s de 46 s) · Studio ~11 h: 43,5% | 1.148 (7 h) · 21 likes | — |
-| 2A mosquito (curto) | 22/11 12:00 | — | — | — | — | — |
-| 2B barata (atual) | 22/11 19:00 | — | — | — | — | — |
-| 3A krill (curto) | 23/11 12:00 | — | — | — | — | — |
-| 3B pombo (atual) | 23/11 19:00 | — | — | — | — | — |
+| 1A formiga | 20/11 22:00 | https://youtube.com/shorts/Wcw5EPuTlpg | 54% (21/11 06h) | 62,4% (~35 h, média 0:30) | 1.771 (~35 h) | 2 inscritos (~1,1 / 1.000) |
+| 1B lagartixa | 20/11 23:00 | https://youtube.com/shorts/v88xGAAAzmw | 68% (21/11 06h) | 43,5% (~34 h, média 0:20) | 1.210 (~34 h) | 0 |
+| 2A mosquito (curto) | 22/11 12:00 | https://youtube.com/shorts/_34mq8-rs-Q | — | — | — | — |
+| 2B barata (atual) | 22/11 19:00 | https://youtube.com/shorts/RL1mco3U_fw | — | — | — | — |
+| 3A krill (curto) | 23/11 12:00 | https://youtube.com/shorts/UdUVK_LYYUQ | — | — | — | — |
+| 3B pombo (atual) | 23/11 19:00 | https://youtube.com/shorts/YFLRYfWb2ZU | — | — | — | — |
+| 4A peixe-caracol (curto) | 24/11 12:00 | — | — | — | — | — |
+| 4B rato (atual) | 24/11 19:00 | — | — | — | — | — |
 
 Leitura do Dia 1 (21/11): o YouTube mostrou cada um a ~1,1 mil pessoas e parou de distribuir (1–2 views/h). O gancho funciona; as pessoas saem no meio → teste de duração nos Dias 2–5.
 
@@ -87,3 +101,6 @@ Leitura do Dia 1 (21/11): o YouTube mostrou cada um a ~1,1 mil pessoas e parou d
 - 22/11 — Mosquito: Visão do Bicho no início (3,9 s), como pede o formato curto (até ~20 s); cenas "visão" e "gota" divididas em 2 tomadas cada para trocar a cada 3–5 s.
 - 22/11 (rodada das 06:30, adiantando o Dia 3) — 3A krill no formato CURTO (35,4 s, 102 palavras, 2 passos: engole mais água que o corpo → espreme pelas barbatanas) e 3B pombo no formato ATUAL (45,3 s, 139 palavras, 3 passos: fio enrolado → metal muda o campo/frequência sobe → caixa avisa o sinal). Checagem: "muito sinal sabe" (nem todo semáforo no Brasil tem laço; muitos são de tempo fixo); a Visão do Bicho do krill é o olho composto mais sensível ao azul (dado de crustáceos antárticos, sem curva exata do krill-antártico), sem afirmar que ele "só vê azul". Pombo: "land" dividida em 2 cenas para não passar de 8 s.
 - 22/11 — Métricas de 48 h ainda não existem (o arquivo mais recente é de 21/11 09h, ~11 h depois da formiga e da lagartixa; já anotadas). Nenhum item c5 com erro no robô.
+- 23/11 (rodada das 06:30) — Dia 4 produzido: 4A peixe-caracol no formato CURTO (38,1 s, 104 palavras, 2 passos: sem bexiga de ar/corpo de água → molécula TMAO protege as proteínas) e 4B rato no formato ATUAL (48,4 s, 136 palavras, 3 passos: roda com atrito → contrapeso → limitador + cunhas; payoff Otis 1854). Checagem: "peixe a 8.000 m" virou o peixe-caracol (o único peixe que vive lá; recorde filmado 8.336 m); "um carro no dedão" confere (~1,6 t em 2 cm²); contrapeso = cabine + "quase metade" da lotação (40–50%). Visão do Bicho do peixe = linha lateral (no escuro total ele não depende dos olhos); a do rato = bigodes sentindo o vento (Yu et al. 2016). No 4A, o fato mais forte (carro no dedão) sai aos ~14 s; o limite de 8.200 m fica como virada final (~32 s).
+- 23/11 — Métricas: o arquivo mais recente do robô é de 22/11 09h (~35 h depois do Dia 1; sem "continuaram assistindo" na tabela). Formiga 1.771 views, 62,4% visualizada, 2 inscritos; lagartixa 1.210, 43,5%. Dias 2 e 3 ainda sem dados. Nenhum item c5 com erro no robô (o krill tem um print de erro antigo, mas está publicado). Telefone ainda não verificado (capa e comentário fixado pendentes).
+- 23/11 — Facebook: a Página "Napeledebicho" ainda não aparece no Buffer → replicação pulada. TikTok segue bloqueado (e desconectado no Buffer). Limpeza: nada a apagar (nenhum Short entrou ainda num longo de compilação).

@@ -1,0 +1,333 @@
+{
+ "key": "c5-d04b-rato",
+ "title": "E se você fosse um rato no poço do elevador?",
+ "animal": "rato",
+ "grupo": "mamífero",
+ "tipo": "B",
+ "formato": "atual",
+ "gancho": "lugar proibido",
+ "tema": "cidade",
+ "tts": {
+  "engine": "edge",
+  "voice": "pt-BR-ThalitaMultilingualNeural",
+  "rate": "+0%"
+ },
+ "scene_module": "rato",
+ "accent": [
+  255,
+  150,
+  40
+ ],
+ "hud_series": "E SE VOCÊ FOSSE…",
+ "hud": "VOCÊ: 20 cm · POÇO: 60 m",
+ "music": {
+  "bpm": 112,
+  "root": 53,
+  "prog": [
+   0,
+   3,
+   4,
+   5
+  ],
+  "seed": 47,
+  "inst": "marimba",
+  "density": 0.65
+ },
+ "say_map": {},
+ "beats": [
+  {
+   "scene": "hook",
+   "text": "Eu moro no fundo de um poço de 20 andares. E lá vem o *elevador*."
+  },
+  {
+   "scene": "hang",
+   "text": "Uma cabine de quase uma tonelada, pendurada lá em cima por *cabos*."
+  },
+  {
+   "scene": "motor",
+   "text": "São cabos de aço que passam por uma roda no *motor*."
+  },
+  {
+   "scene": "motor",
+   "text": "A roda gira, e o *atrito* puxa os cabos junto."
+  },
+  {
+   "scene": "counter",
+   "text": "Do outro lado, pendura um bloco de ferro: o *contrapeso*."
+  },
+  {
+   "scene": "counter",
+   "text": "Ele pesa a cabine mais quase *metade* da lotação."
+  },
+  {
+   "scene": "counter2",
+   "text": "Então o motor só levanta a *diferença*."
+  },
+  {
+   "scene": "vision",
+   "text": "Eu nem preciso olhar. Meus *bigodes* sentem o vento que a cabine empurra."
+  },
+  {
+   "scene": "brake",
+   "text": "E se o cabo arrebentar? Aí entra o *freio*."
+  },
+  {
+   "scene": "brake",
+   "text": "Um limitador vigia a *velocidade* o tempo todo."
+  },
+  {
+   "scene": "brake2",
+   "text": "Se a cabine dispara, cunhas de aço *mordem* os trilhos."
+  },
+  {
+   "scene": "otis",
+   "text": "Em 1854, um inventor mandou cortar a corda do próprio *elevador*."
+  },
+  {
+   "scene": "loop",
+   "text": "Caiu uns centímetros e *parou*. Por isso eu durmo aqui embaixo.",
+   "pause_before": 0.3,
+   "payoff": true
+  }
+ ],
+ "scenes": {
+  "hook": {
+   "labels": [
+    {
+     "text": "poço de *20 andares*",
+     "at": "andares"
+    }
+   ],
+   "sfx": [
+    {
+     "type": "hum",
+     "at": 0,
+     "d": "scene",
+     "f0": 70,
+     "gain": -17
+    },
+    {
+     "type": "metal",
+     "at": "elevador",
+     "gain": -14
+    }
+   ]
+  },
+  "hang": {
+   "labels": [
+    {
+     "text": "*~1 tonelada* no ar",
+     "at": "tonelada"
+    }
+   ],
+   "sfx_cut": "whoosh_lo",
+   "sfx": [
+    {
+     "type": "metal",
+     "at": "cabos",
+     "seed": 6,
+     "gain": -14
+    }
+   ]
+  },
+  "motor": {
+   "labels": [
+    {
+     "text": "roda + *ATRITO*",
+     "at": "atrito"
+    }
+   ],
+   "sfx_cut": "whoosh",
+   "sfx": [
+    {
+     "type": "hum",
+     "at": "motor",
+     "d": "scene",
+     "f0": 110,
+     "gain": -20
+    }
+   ]
+  },
+  "counter": {
+   "labels": [
+    {
+     "text": "o *CONTRAPESO*",
+     "at": "contrapeso"
+    }
+   ],
+   "sfx_cut": "whoosh_lo",
+   "sfx": [
+    {
+     "type": "thud",
+     "at": "contrapeso",
+     "gain": -11
+    }
+   ]
+  },
+  "counter2": {
+   "labels": [
+    {
+     "text": "motor: só a *DIFERENÇA*",
+     "at": "diferença"
+    }
+   ],
+   "sfx_cut": "pop",
+   "sfx": [
+    {
+     "type": "blip_up",
+     "at": "diferença",
+     "gain": -14
+    }
+   ]
+  },
+  "vision": {
+   "labels": [
+    {
+     "text": "VISÃO DO BICHO · *bigodes*",
+     "style": "vision",
+     "at": 0
+    },
+    {
+     "text": "o *VENTO* da cabine",
+     "at": "vento"
+    }
+   ],
+   "sfx_cut": "glitch",
+   "sfx": [
+    {
+     "type": "wind",
+     "at": "vento",
+     "d": 2.5,
+     "gain": -15
+    }
+   ]
+  },
+  "brake": {
+   "labels": [
+    {
+     "text": "o *FREIO*",
+     "at": "freio"
+    }
+   ],
+   "sfx_cut": "whoosh",
+   "sfx": [
+    {
+     "type": "rise",
+     "at": "velocidade",
+     "d": 1.4,
+     "f0": 300,
+     "f1": 900,
+     "gain": -19
+    }
+   ]
+  },
+  "brake2": {
+   "labels": [
+    {
+     "text": "cunhas *MORDEM* o trilho",
+     "at": "mordem"
+    }
+   ],
+   "sfx_cut": "kick",
+   "sfx": [
+    {
+     "type": "metal",
+     "at": "mordem",
+     "seed": 9,
+     "gain": -9
+    },
+    {
+     "type": "sizzle",
+     "at": "mordem",
+     "d": 0.8,
+     "gain": -16
+    }
+   ]
+  },
+  "otis": {
+   "labels": [
+    {
+     "text": "*1854*",
+     "at": "1854"
+    }
+   ],
+   "sfx_cut": "whoosh_lo",
+   "sfx": [
+    {
+     "type": "tic",
+     "at": "cortar",
+     "gain": -8
+    }
+   ]
+  },
+  "loop": {
+   "labels": [
+    {
+     "text": "e *PAROU*",
+     "at": "parou"
+    }
+   ],
+   "sfx_cut": "whoosh_lo",
+   "sfx": [
+    {
+     "type": "thud",
+     "at": "parou",
+     "gain": -10
+    },
+    {
+     "type": "hum",
+     "at": 0,
+     "d": "scene",
+     "f0": 70,
+     "gain": -19
+    }
+   ]
+  }
+ },
+ "cover": {
+  "t": 0.5,
+  "focus": [
+   540,
+   1150
+  ],
+  "zoom": 1.0,
+  "at": [
+   540,
+   1200
+  ],
+  "title": [
+   "*UM RATO* EMBAIXO",
+   "DO ELEVADOR?"
+  ],
+  "hook": "1 TONELADA EM CIMA",
+  "sprite_s": 440,
+  "sprite_rot": -4,
+  "you": [
+   700,
+   1100
+  ],
+  "you_side": "right"
+ },
+ "publish": {
+  "title": "E se você fosse um rato no poço do elevador? #shorts",
+  "description": "Lá no fundo do poço, um rato vê a cabine descer: quase uma tonelada pendurada por cabos de aço. Os cabos passam por uma roda com sulcos no motor, e é o atrito que puxa. Do outro lado pendura o contrapeso, que pesa a cabine mais quase metade da lotação: o motor só levanta a diferença. E se o cabo arrebentar? Um limitador de velocidade vigia o tempo todo e, se a cabine dispara, aciona cunhas de aço que agarram os trilhos. Em 1854, Elisha Otis subiu numa plataforma e mandou cortar a corda na frente do público: ela caiu uns centímetros e parou. Você confia no elevador do seu prédio?\n\nVisão do Bicho: ratos sentem a direção do vento com os bigodes; no poço, a cabine empurra o ar como um pistão.\n\nFontes: ASME, \"Elisha Graves Otis\" (demonstração do freio de segurança, Nova York, 1854); norma ASME A17.1 (freios de segurança acionados pelo limitador de velocidade, agarrando as guias); Yu, Graff, Bresee, Man e Hartmann, \"Whiskers aid anemotaxis in rats\", Science Advances (2016). Narração com voz sintética; roteiro e animação próprios.\n#esevocefosse #elevador #comofunciona #rato #curiosidades",
+  "tags": [
+   "elevador",
+   "contrapeso",
+   "freio de segurança",
+   "Otis",
+   "rato",
+   "como funciona",
+   "e se você fosse",
+   "shorts"
+  ],
+  "publish_at": "2026-11-24T19:00:00-03:00",
+  "pinned_comment": "Você confia no elevador do seu prédio?",
+  "channel_id": "UCO5Fa5_HJxd-aeTiyQcw0Sw"
+ },
+ "sources": [
+  "ASME, \"Elisha Graves Otis\" — em 1854, no Crystal Palace de Nova York, Otis mandou cortar a corda da plataforma; o freio de catraca segurou: https://www.asme.org/topics-resources/content/elisha-graves-otis · Guinness World Records, \"First safety elevator\"",
+  "ASME A17.1 / CSA B44 — freios de segurança acionados pelo limitador de velocidade agarram as guias e param a cabine com carga nominal; contrapeso ≈ cabine + 40–50% da carga nominal (manuais de elevadores)",
+  "Yu, Graff, Bresee, Man & Hartmann (2016), \"Whiskers aid anemotaxis in rats\", Science Advances 2(8): e1600716: https://pmc.ncbi.nlm.nih.gov/articles/PMC4996642"
+ ]
+}

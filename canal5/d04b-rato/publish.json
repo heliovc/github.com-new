@@ -1,0 +1,30 @@
+{
+ "version": 1,
+ "channel_id": "UCO5Fa5_HJxd-aeTiyQcw0Sw",
+ "created_at": "2026-11-23T06:52:30-03:00",
+ "items": [
+  {
+   "key": "c5-d04b-rato",
+   "kind": "short",
+   "video": "video.mp4",
+   "title": "E se você fosse um rato no poço do elevador? #shorts",
+   "description": "Lá no fundo do poço, um rato vê a cabine descer: quase uma tonelada pendurada por cabos de aço. Os cabos passam por uma roda com sulcos no motor, e é o atrito que puxa. Do outro lado pendura o contrapeso, que pesa a cabine mais quase metade da lotação: o motor só levanta a diferença. E se o cabo arrebentar? Um limitador de velocidade vigia o tempo todo e, se a cabine dispara, aciona cunhas de aço que agarram os trilhos. Em 1854, Elisha Otis subiu numa plataforma e mandou cortar a corda na frente do público: ela caiu uns centímetros e parou. Você confia no elevador do seu prédio?\n\nVisão do Bicho: ratos sentem a direção do vento com os bigodes; no poço, a cabine empurra o ar como um pistão.\n\nFontes: ASME, \"Elisha Graves Otis\" (demonstração do freio de segurança, Nova York, 1854); norma ASME A17.1 (freios de segurança acionados pelo limitador de velocidade, agarrando as guias); Yu, Graff, Bresee, Man e Hartmann, \"Whiskers aid anemotaxis in rats\", Science Advances (2016). Narração com voz sintética; roteiro e animação próprios.\n#esevocefosse #elevador #comofunciona #rato #curiosidades",
+   "tags": [
+    "elevador",
+    "contrapeso",
+    "freio de segurança",
+    "Otis",
+    "rato",
+    "como funciona",
+    "e se você fosse",
+    "shorts"
+   ],
+   "publish_at": "2026-11-24T19:00:00-03:00",
+   "if_late": "public_now",
+   "made_for_kids": false,
+   "altered_content": true,
+   "pinned_comment": "Você confia no elevador do seu prédio?",
+   "thumbnail": "capa.jpg"
+  }
+ ]
+}
