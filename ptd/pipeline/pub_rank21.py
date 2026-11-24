@@ -1,0 +1,20 @@
+# Gera rank21/publish.json (terça 24/11/2026: dia sem longo, só o ranking).
+import json, sys, os
+out = sys.argv[1] if len(sys.argv) > 1 else "rank21"
+RK_TITLE = "Os 5 lugares onde o brasileiro usa o banco (a agência ficou com 3%) #shorts"
+desc = ("Em 2025 os brasileiros fizeram 240,8 bilhões de transações bancárias. Participação de cada canal: "
+        "5) caixa eletrônico, 2%; 4) agência, 3%; 3) internet banking, 5%; 2) maquininha (POS), 11%; 1) celular (mobile banking), 78%, "
+        "ou 187,5 bilhões de transações. Outros canais somam 1%. \"Mais de 7 vezes o 2º lugar\" é cálculo do canal (78 / 11). "
+        "Fonte: Febraban/Deloitte, Pesquisa Febraban de Tecnologia Bancária 2026 (ano-base 2025, divulgada em junho de 2026), via imprensa. "
+        "Este vídeo é informativo e não é recomendação financeira. Voz sintética.\n#shorts #bancos #pix #febraban #financaspessoais")
+items = [{"key": "ptd-rank21-short", "kind": "short", "video": "ranking.mp4", "title": RK_TITLE, "description": desc,
+  "tags": ["bancos", "transações bancárias", "mobile banking", "aplicativo de banco", "agência bancária", "maquininha", "febraban", "pix", "shorts", "por tras do dinheiro"],
+  "publish_at": "2026-11-24T12:00:00-03:00", "if_late": "public_now", "made_for_kids": False, "altered_content": True,
+  "related_key": "ptd-ep18-long",
+  "pinned_comment": "Quando foi a última vez que você entrou numa agência? Vídeo completo: Os bancos que ninguém conhece: quem guarda o seu dinheiro no app (e por que o BC fechou o cerco)"}]
+for it in items:
+    assert len(it["title"]) <= 100 and len(it["description"]) <= 5000, it["key"]
+    assert "<" not in it["title"] + it["description"] and ">" not in it["title"] + it["description"]
+json.dump({"version": 1, "channel_id": "UCd_BGmJ5gbQ0kECAxmbvQHA", "created_at": "2026-11-24T07:20:00-03:00", "items": items},
+          open(os.path.join(out, "publish.json"), "w"), ensure_ascii=False, indent=1)
+print("ok")
