@@ -2363,7 +2363,7 @@
   "thumb_path": "/opt/canal-publisher/state/thumbs/c5-d03a-krill.jpg",
   "thumb_attempts": 0,
   "thumb_error": "miniatura personalizada pede o telefone verificado no canal",
-  "thumb_retry_after": "2026-11-24T00:54:20.639072-03:00",
+  "thumb_retry_after": "2026-11-24T07:01:38.866269-03:00",
   "comment_attempts": 0,
   "comment_error": "fixar comentário pede o telefone verificado no canal",
   "comment_retry_after": "2026-11-24T06:11:59.454688-03:00"
@@ -2388,7 +2388,7 @@
   "thumb_retry_after": "2026-11-24T06:52:20.167890-03:00",
   "comment_attempts": 0,
   "comment_error": "fixar comentário pede o telefone verificado no canal",
-  "comment_retry_after": "2026-11-24T00:55:31.344810-03:00"
+  "comment_retry_after": "2026-11-24T07:02:49.186854-03:00"
  },
  "cosmic-rank20-short": {
   "attempts": 1,
