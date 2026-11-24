@@ -2363,7 +2363,7 @@
   "thumb_path": "/opt/canal-publisher/state/thumbs/c5-d03a-krill.jpg",
   "thumb_attempts": 0,
   "thumb_error": "miniatura personalizada pede o telefone verificado no canal",
-  "thumb_retry_after": "2026-11-24T19:12:54.464732-03:00",
+  "thumb_retry_after": "2026-11-25T01:22:06.240022-03:00",
   "comment_attempts": 0,
   "comment_error": "fixar comentário pede o telefone verificado no canal",
   "comment_retry_after": "2026-11-25T00:42:24.204012-03:00"
@@ -2385,10 +2385,10 @@
   "thumb_path": "/opt/canal-publisher/state/thumbs/c5-d03b-pombo.jpg",
   "thumb_attempts": 0,
   "thumb_error": "miniatura personalizada pede o telefone verificado no canal",
-  "thumb_retry_after": "2026-11-24T19:15:15.623949-03:00",
+  "thumb_retry_after": "2026-11-25T01:23:55.916769-03:00",
   "comment_attempts": 0,
   "comment_error": "fixar comentário pede o telefone verificado no canal",
-  "comment_retry_after": "2026-11-24T19:14:10.873309-03:00"
+  "comment_retry_after": "2026-11-25T01:23:03.136772-03:00"
  },
  "cosmic-rank20-short": {
   "attempts": 1,
