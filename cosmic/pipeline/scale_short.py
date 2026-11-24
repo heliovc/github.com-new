@@ -61,6 +61,15 @@ Visuais (vis.type):
              = ponto) | field (linhas de campo do dipolo crescendo, vento solar por cima; ilustração) | front (Júpiter em escala e a borda
              diurna 3,2–7,1 milhões de km, Sóis empilhados no vão, contador 2,3 -> 5,1) | sky (céu noturno: Lua cheia x bolha 2–3× maior)
              | tail (Sol, órbitas de Júpiter e Saturno em escala raiz quadrada, cauda até a órbita de Saturno; dissolve de volta no hook = loop) (scale17).
+  "sugarcube": toda a humanidade espremida até a densidade do núcleo atômico = um cubo de açúcar; vis.mode = hook (multidão escorrendo
+             para dentro de um cubo de açúcar isométrico brilhando) | atom (átomo = estádio visto de cima, núcleo = grão de arroz na lupa,
+             1/100.000 da largura) | squeeze (nós como carne = cubo de ~800 m ao lado do Burj Khalifa encolhendo até o cubo; contador
+             0,51 km³ -> 1,9 cm³) | weight (cubo sobre a mesa, visor até 510 milhões de t, a mesa racha e ele atravessa) | neutron (estrela
+             de nêutrons com jatos, o cubo = uma colherada; dissolve de volta no hook = loop) (scale18).
+  "saturnfloat": 764 Terras dentro de Saturno e mesmo assim ele boiaria; vis.mode = hook (Saturno em corte cheio de Terras em escala, fatia
+             2D) | row (9,1 Terras no diâmetro médio, contador) | fill (Terras empilhando de baixo para cima, contador até 764 por volume) |
+             density (3 potes de 1 litro em balanças: Saturno 0,69, água 1,00, Terra 5,51 kg) | float (tanque gigante: Saturno boiando com
+             69% abaixo da linha d'água, Terra afundando; dissolve de volta no hook = loop) (scale19).
 Reaproveita render.py (sprites, fontes) e ranking.py (fundo, texto, legendas).
 """
 import sys, os, math, json, subprocess, importlib.util, random
@@ -1461,6 +1470,200 @@ def _tailframe17(img, th, t, bp):
     text(img, (sx, 1500), "distances: square-root scale", 26, (170, 175, 200), w="SemiBold")
 
 
+# ---------- scale18: "sugarcube" (all of humanity squeezed to nuclear density) ----------
+def _cube18(img, cx, cy, s, a=1.0, col=(246, 244, 238), seed=18, crack=0.0):
+    """isometric sugar cube centred at (cx, cy), edge s px; grainy faces"""
+    lay = Image.new("RGBA", img.size, (0, 0, 0, 0)); d = ImageDraw.Draw(lay)
+    h = s * 0.5; k = s * 0.866
+    top = [(cx, cy - s), (cx + k, cy - h), (cx, cy), (cx - k, cy - h)]
+    left = [(cx - k, cy - h), (cx, cy), (cx, cy + s), (cx - k, cy + h)]
+    right = [(cx, cy), (cx + k, cy - h), (cx + k, cy + h), (cx, cy + s)]
+    A = int(255 * a)
+    d.polygon(top, fill=col + (A,)); d.polygon(left, fill=tuple(int(c * 0.83) for c in col) + (A,)); d.polygon(right, fill=tuple(int(c * 0.68) for c in col) + (A,))
+    rng = random.Random(seed); n = int(min(900, s * 3))
+    for face, sh in ((top, 1.0), (left, 0.83), (right, 0.68)):
+        (x0, y0), (x1, y1), _, (x3, y3) = face[0], face[1], face[2], face[3]
+        for _ in range(n // 3):
+            u, v_ = rng.random(), rng.random()
+            x = x0 + (x1 - x0) * u + (x3 - x0) * v_; y = y0 + (y1 - y0) * u + (y3 - y0) * v_
+            g = int(255 * sh * rng.uniform(0.86, 1.0)); rr = max(1, s / 90)
+            d.rectangle([x - rr, y - rr, x + rr, y + rr], fill=(g, g, int(g * 0.97), A))
+    for poly in (top, left, right): d.line(poly + [poly[0]], fill=(255, 255, 255, int(120 * a)), width=2)
+    img.alpha_composite(lay)
+def _person18(d, x, y, s, col):
+    d.ellipse([x - s * 0.22, y - s, x + s * 0.22, y - s * 0.56], fill=col)
+    d.rounded_rectangle([x - s * 0.26, y - s * 0.54, x + s * 0.26, y], max(1, int(s * 0.12)), fill=col)
+_crowd18 = None
+def _crowd(img, t, cx, cy, q, th):
+    """a stream of tiny people flowing into the cube from both sides of the screen"""
+    lay = Image.new("RGBA", img.size, (0, 0, 0, 0)); d = ImageDraw.Draw(lay); rng = random.Random(7)
+    cols = [(255, 200, 160), (200, 150, 110), (150, 100, 70), (240, 180, 140), (110, 75, 50)]
+    for i in range(260):
+        side = -1 if i % 2 else 1; ph = (rng.random() + t * 0.35) % 1.0
+        x0 = cx + side * rng.uniform(420, 620); y0 = cy + rng.uniform(-520, 520)
+        x = lerp(x0, cx, ph ** 1.4); y = lerp(y0, cy - 40, ph ** 1.4); s = lerp(34, 4, ph)
+        _person18(d, x, y, s, cols[i % 5] + (int(230 * q * (1 - ph ** 6)),))
+    img.alpha_composite(lay)
+def _hook18(img, th, t):
+    acc2 = tuple(th["accent2"]); cx, cy = W / 2, 930
+    _crowd(img, t, cx, cy, 1.0, th)
+    R.paste_c(img, R.radial(560, [(0, (255, 250, 230, 120)), (1, (255, 240, 200, 0))]), cx, cy - 40)
+    _cube18(img, cx, cy - 40, 150 + 4 * math.sin(t * 3))
+    text(img, (W / 2, 1270), "1 sugar cube  ·  ~2 cm³", 50, acc2, w="ExtraBold", stroke=3)
+def sugarcube_vis(img, v, th, t, dur, bp):
+    """vis.mode = hook (crowd streaming into a glowing sugar cube) | atom (an atom as a stadium seen from above; the nucleus = a grain of
+    rice at the centre, 1/100,000 of the width; the rest is empty) | squeeze (all of us as flesh = a cube ~800 m a side next to the
+    Burj Khalifa, shrinking to the sugar cube; volume counter 0.51 km³ -> 1.9 cm³) | weight (cube on a kitchen table, display climbs to
+    510 million tonnes, the table cracks and the cube drops through) | neutron (a neutron star glowing, the cube is a scoop of it; then
+    dissolves back into the hook = loop)"""
+    acc, acc2 = tuple(th["accent"]), tuple(th["accent2"]); mode = v.get("mode", "hook"); d = ImageDraw.Draw(img)
+    if mode == "hook":
+        _hook18(img, th, t)
+    elif mode == "atom":
+        cx, cy = W / 2, 900; rx, ry = 470, 330
+        d.ellipse([cx - rx, cy - ry, cx + rx, cy + ry], fill=(70, 70, 90))
+        d.ellipse([cx - rx + 40, cy - ry + 40, cx + rx - 40, cy + ry - 40], fill=(180, 80, 70))
+        d.rounded_rectangle([cx - rx + 80, cy - ry + 80, cx + rx - 80, cy + ry - 80], 150, fill=(50, 130, 70))
+        for k in range(-3, 4): d.line([(cx + k * 50, cy - ry + 85), (cx + k * 50, cy + ry - 85)], fill=(60, 145, 80), width=22)
+        lay = Image.new("RGBA", img.size, (0, 0, 0, 0)); dl = ImageDraw.Draw(lay)
+        for k in range(3):  # electron cloud
+            a0 = t * (0.9 + k * 0.4) + k * 2.1; ex, ey = cx + 400 * math.cos(a0), cy + 280 * math.sin(a0)
+            dl.ellipse([ex - 14, ey - 14, ex + 14, ey + 14], fill=acc2 + (230,))
+        dl.ellipse([cx - rx - 10, cy - ry - 10, cx + rx + 10, cy + ry + 10], outline=acc2 + (120,), width=4)
+        img.alpha_composite(lay)
+        q = ease((bp - 0.2) / 0.3); d = ImageDraw.Draw(img)
+        d.ellipse([cx - 3, cy - 3, cx + 3, cy + 3], fill=acc)
+        if q > 0:  # magnifier on the nucleus
+            lx, ly, lr = cx + 230, cy - 420, 150
+            d.line([(cx + 4, cy - 4), (lx - lr * 0.7, ly + lr * 0.7)], fill=(230, 235, 255), width=3)
+            d.ellipse([lx - lr, ly - lr, lx + lr, ly + lr], fill=(30, 90, 50), outline=(230, 235, 255), width=6)
+            d.ellipse([lx - 40, ly - 16, lx + 40, ly + 16], fill=(250, 245, 230))
+            text(img, (lx, ly + 70), "a grain of rice", 32, (255, 255, 255), a=q, stroke=3)
+        text(img, (W / 2, 1300), "everything else: empty", 58, acc, a=ease((bp - 0.55) / 0.3), stroke=4)
+        text(img, (W / 2, 1240), "atom = stadium  ·  nucleus = 1/100,000 the width", 32, (225, 230, 245), w="Bold", a=ease(bp / 0.2), stroke=3)
+    elif mode == "squeeze":
+        g = 1360; p = easeio((bp - 0.2) / 0.6)
+        # Burj Khalifa silhouette (828 m) and the flesh cube (799 m) to the same scale, then the cube collapses
+        ppm = 0.78; bx = 230; tower_h = 828 * ppm
+        d.polygon([(bx - 34, g), (bx + 34, g), (bx + 14, g - tower_h * 0.6), (bx + 5, g - tower_h * 0.92), (bx, g - tower_h), (bx - 5, g - tower_h * 0.92), (bx - 14, g - tower_h * 0.6)], fill=(120, 130, 160))
+        text(img, (bx, g + 40), "Burj Khalifa · 828 m", 28, (180, 190, 215), w="Bold", stroke=2)
+        d.line([(40, g), (W - 40, g)], fill=(120, 130, 160), width=3)
+        s0 = 799 * ppm / 1.732 * 1.0; s = lerp(s0, 40, p)
+        cx = 690; cy = g - s
+        if p < 0.999:
+            lay = Image.new("RGBA", img.size, (0, 0, 0, 0)); dl = ImageDraw.Draw(lay); rng = random.Random(4)
+            k = s * 0.866; h = s * 0.5
+            dl.polygon([(cx, cy - s), (cx + k, cy - h), (cx + k, cy + h), (cx, cy + s), (cx - k, cy + h), (cx - k, cy - h)], fill=(200, 140, 110, 200))
+            for _ in range(500):
+                x = cx + rng.uniform(-k, k) * 0.95; y = cy + rng.uniform(-s, s) * 0.9 * (1 - abs(x - cx) / (2 * k))
+                rr = max(1, s / 40); dl.ellipse([x - rr, y - rr, x + rr, y + rr], fill=(250, 210, 170, 220))
+            img.alpha_composite(lay)
+        _cube18(img, cx, g - 40, 40, a=ease((p - 0.8) / 0.2))
+        vol = math.exp(lerp(math.log(5.1e8), math.log(1.9e-6), p))  # m³
+        lab = f"{vol / 1e9:.2f} km³" if vol > 1e7 else (f"{vol:,.0f} m³" if vol >= 1 else (f"{vol * 1e6:,.0f} cm³" if vol * 1e6 >= 10 else f"{vol * 1e6:.1f} cm³"))
+        text(img, (W / 2, 470), lab, 110, acc, stroke=4)
+        text(img, (W / 2, 560), "8.2 billion people, all the empty space gone" if p > 0.5 else "8.2 billion people, as they are", 36, (235, 235, 245), w="Bold", stroke=3)
+    elif mode == "weight":
+        ty = 1100; q = ease((bp - 0.55) / 0.3)
+        d.rectangle([140, ty, W - 140, ty + 34], fill=(150, 105, 70)); d.rectangle([180, ty + 34, 210, 1420], fill=(120, 85, 55)); d.rectangle([W - 210, ty + 34, W - 180, 1420], fill=(120, 85, 55))
+        if q > 0:
+            for k in range(7):
+                a0 = -math.pi / 2 + (k - 3) * 0.45; L = 160 * q
+                d.line([(W / 2, ty), (W / 2 + L * math.cos(a0 + math.pi), ty + abs(L * math.sin(a0)) * 0.3 + 10)], fill=(40, 25, 15), width=5)
+        drop = 900 * max(0.0, (bp - 0.8) / 0.2) ** 2
+        _cube18(img, W / 2, ty - 90 + drop, 90)
+        d = ImageDraw.Draw(img); d.rounded_rectangle([W / 2 - 300, 590, W / 2 + 300, 740], 22, fill=(20, 24, 30), outline=(120, 130, 150), width=4)
+        tn = 510e6 * easeio(min(1, bp / 0.55))
+        d.text((W / 2, 665), f"{tn:,.0f} t", font=F(70, "Black"), fill=(120, 255, 160) if bp < 0.55 else (255, 110, 110), anchor="mm")
+        text(img, (W / 2, 1300), "it falls straight through", 56, acc, a=q, stroke=4)
+    elif mode == "neutron":
+        if bp > 0.8:
+            q = easeio((bp - 0.8) / 0.2); base = img.copy(); _hook18(base, th, t)
+            tmp = img.copy(); _neutron18(tmp, th, t, 1.0); img.paste(Image.blend(tmp, base, q)); return
+        _neutron18(img, th, t, bp)
+def _neutron18(img, th, t, bp):
+    acc2 = tuple(th["accent2"]); cx, cy = W / 2, 900
+    R.paste_c(img, R.radial(900, [(0, (190, 220, 255, 160)), (0.4, (120, 160, 255, 60)), (1, (80, 120, 255, 0))]), cx, cy)
+    d = ImageDraw.Draw(img); d.ellipse([cx - 260, cy - 260, cx + 260, cy + 260], fill=(225, 235, 255))
+    for k in range(2):
+        a0 = t * 2 + k * math.pi; lay = Image.new("RGBA", img.size, (0, 0, 0, 0)); dl = ImageDraw.Draw(lay)
+        dl.polygon([(cx, cy), (cx + 900 * math.cos(a0 + k * math.pi) - 60, cy - 900), (cx + 900 * math.cos(a0 + k * math.pi) + 60, cy - 900)] if k == 0 else
+                   [(cx, cy), (cx - 900 * math.cos(a0) - 60, cy + 900), (cx - 900 * math.cos(a0) + 60, cy + 900)], fill=acc2 + (50,))
+        img.alpha_composite(lay)
+    _cube18(img, cx + 300, cy - 300, 70, a=ease(bp / 0.3), col=(220, 230, 255))
+    text(img, (cx + 300, cy - 190), "one scoop", 36, (255, 255, 255), a=ease(bp / 0.3), stroke=3)
+    text(img, (W / 2, 1300), "neutron star matter", 60, acc2, a=ease((bp - 0.1) / 0.3), stroke=4)
+
+# ---------- scale19: "saturnfloat" (764 Earths inside Saturn, and it would float) ----------
+SAT_R19, EARTH_R19 = 58232.0, 6371.0  # mean radii, km (NASA NSSDC)
+def _sat19(img, cx, cy, r, a=1.0, cut=False):
+    K.bd_planet(img, "ringed", (225, 200, 150), cx, cy, r, a)
+    if cut:  # cutaway: dark interior disc ready to be filled
+        d = ImageDraw.Draw(img); d.ellipse([cx - r * 0.97, cy - r * 0.97, cx + r * 0.97, cy + r * 0.97], fill=(30, 24, 20))
+def _earths19(img, cx, cy, r, n_show, er):
+    """Earth discs packed in a hex grid inside a circle, revealed bottom-up (a 2D slice: illustrative)"""
+    pts = []; dx = 2 * er; dy = math.sqrt(3) * er; row = 0; y = cy + r - er
+    while y > cy - r + er * 0.5:
+        x0 = cx - r + er + (er if row % 2 else 0); x = x0
+        while x < cx + r - er * 0.5:
+            if (x - cx) ** 2 + (y - cy) ** 2 <= (r - er * 0.9) ** 2: pts.append((x, y))
+            x += dx
+        y -= dy; row += 1
+    spr = R.earth_sprite(max(3, int(er)), glow=None)
+    for (x, y) in pts[:n_show]: R.paste_c(img, spr, x, y)
+    return len(pts)
+def _hook19(img, th, t):
+    cx, cy, r = W / 2, 900, 360
+    _sat19(img, cx, cy, r, cut=True); _earths19(img, cx, cy, r, 9999, r * EARTH_R19 / SAT_R19)
+    text(img, (W / 2, 1330), "same scale  ·  and it would float", 46, tuple(th["accent2"]), w="ExtraBold", stroke=3)
+def saturnfloat_vis(img, v, th, t, dur, bp):
+    """vis.mode = hook (Saturn cut open, packed with Earths to scale) | row (9.1 Earths across the mean diameter, counter) | fill (Earths
+    stack up from the bottom of the cutaway, volume counter to 764; the disc packing is a 2D slice, illustrative) | density (two litre
+    flasks on kitchen scales: Saturn 0.69 kg, water 1.00 kg; Earth 5.51 kg) | float (a giant tank: Saturn bobbing with 69% under the
+    waterline, Earth sinking to the bottom; ends by dissolving back into the hook = loop)"""
+    acc, acc2 = tuple(th["accent"]), tuple(th["accent2"]); mode = v.get("mode", "hook"); d = ImageDraw.Draw(img)
+    cx, cy, r = W / 2, 900, 360; er = r * EARTH_R19 / SAT_R19
+    if mode == "hook":
+        _hook19(img, th, t)
+    elif mode == "row":
+        _sat19(img, cx, cy, r)
+        n = 2 * SAT_R19 / (2 * EARTH_R19) * easeio(bp); full = int(n)
+        d = ImageDraw.Draw(img); d.line([(cx - r, cy), (cx + r, cy)], fill=(255, 255, 255), width=3)
+        for i in range(min(9, full + 1)):
+            drop = 0 if i < full else (1 - (n - full)) * 140
+            R.paste_c(img, R.earth_sprite(max(3, int(er)), glow=None), cx - r + er + i * 2 * er, cy - drop)
+        text(img, (W / 2, 1330), f"{n:.1f} Earths across", 64, acc2, stroke=4)
+    elif mode == "fill":
+        _sat19(img, cx, cy, r, cut=True)
+        tot = _earths19(img, cx, cy, r, 0, er); k = int(tot * easeio(bp)); _earths19(img, cx, cy, r, k, er)
+        text(img, (W / 2, 1330), f"{764 * easeio(bp):,.0f} Earths, by volume", 64, acc2, stroke=4)
+        text(img, (W / 2, 1400), "slice shown in 2D", 28, (170, 175, 200), w="SemiBold")
+    elif mode == "density":
+        for x, kg, lab, col in ((250, 0.69, "Saturn", (225, 200, 150)), (540, 1.00, "water", (70, 130, 230)), (830, 5.51, "Earth", (90, 140, 200))):
+            K.lt_jar(img, x, 1000, col, 1.0, t, w=180, h=260, label=lab)
+            K.lt_scale(img, x, 1006, f"{kg * easeio(min(1, bp * 1.5)):.2f} kg", lcd_col=(120, 255, 160) if kg < 1 else (255, 150, 120) if kg > 1.5 else (140, 190, 255), w=250)
+        text(img, (W / 2, 560), "one litre of each", 48, (235, 235, 245), w="ExtraBold", stroke=3)
+        text(img, (W / 2, 1330), "Saturn is lighter than water", 58, acc, a=ease((bp - 0.5) / 0.3), stroke=4)
+    elif mode == "float":
+        if bp > 0.82:
+            q = easeio((bp - 0.82) / 0.18); base = img.copy(); _hook19(base, th, t)
+            tmp = img.copy(); _float19(tmp, th, t, 1.0); img.paste(Image.blend(tmp, base, q)); return
+        _float19(img, th, t, bp)
+def _float19(img, th, t, bp):
+    acc = tuple(th["accent"]); wl = 960; rs = 230
+    sy = lerp(520, wl + rs * (2 * 0.687 - 1) + 6 * math.sin(t * 2.5), easeio(min(1, bp * 1.6)))
+    _sat19(img, 400, sy, rs)
+    ey = lerp(520, 1440, easeio(min(1, max(0, bp - 0.2) * 1.8)))
+    R.paste_c(img, R.earth_sprite(int(rs * EARTH_R19 / SAT_R19 * 2.2), glow=None), 860, ey)
+    lay = Image.new("RGBA", img.size, (0, 0, 0, 0)); dl = ImageDraw.Draw(lay)
+    dl.rectangle([30, wl, W - 30, 1500], fill=(40, 110, 220, 120)); dl.line([(30, wl), (W - 30, wl)], fill=(170, 220, 255, 230), width=5)
+    dl.line([(30, 1500), (W - 30, 1500)], fill=(170, 220, 255, 200), width=5)
+    img.alpha_composite(lay)
+    text(img, (400, wl - rs * 0.4 - 140), "floats", 52, acc, a=ease((bp - 0.4) / 0.2), stroke=3)
+    text(img, (860, 1380), "sinks", 52, (255, 130, 120), a=ease((bp - 0.5) / 0.2), stroke=3)
+    text(img, (860, 600), "Earth (enlarged)", 28, (180, 200, 230), w="SemiBold", a=1 - ease((bp - 0.3) / 0.2), stroke=2)
+
+
 def chrome(img, th, gt, total):
     d = ImageDraw.Draw(img)
     d.rectangle([0, 0, int(W * gt / total), 10], fill=tuple(th["accent"]))
@@ -1534,8 +1737,9 @@ def frame(m, durs, gt, chunks, arr):
         hl = v.get("head") or m.BIG
         text(img, (W / 2, 170), hl["num"], 124 if len(hl["num"]) < 12 else 100, tuple(th["accent"]), stroke=4)
         text(img, (W / 2, 280), hl["top"], 52, (255, 255, 255), stroke=3)
-    elif v["type"] in ("jupsun", "andromeda", "redgiant", "sand", "magbubble"):
-        {"jupsun": jupsun_vis, "andromeda": andromeda_vis, "redgiant": redgiant_vis, "sand": globals().get("sand_vis"), "magbubble": globals().get("magbubble_vis")}[v["type"]](img, v, th, t, d, easeio((t - 0.2) / max(0.8, d * 0.8)))
+    elif v["type"] in ("jupsun", "andromeda", "redgiant", "sand", "magbubble", "sugarcube", "saturnfloat"):
+        {"jupsun": jupsun_vis, "andromeda": andromeda_vis, "redgiant": redgiant_vis, "sand": globals().get("sand_vis"), "magbubble": globals().get("magbubble_vis"),
+         "sugarcube": globals().get("sugarcube_vis"), "saturnfloat": globals().get("saturnfloat_vis")}[v["type"]](img, v, th, t, d, easeio((t - 0.2) / max(0.8, d * 0.8)))
         hl = v.get("head") or m.BIG
         text(img, (W / 2, 170), hl["num"], 124 if len(hl["num"]) < 12 else 100, tuple(th["accent"]), stroke=4)
         text(img, (W / 2, 280), hl["top"], 52, (255, 255, 255), stroke=3)

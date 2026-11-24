@@ -50,6 +50,10 @@ vis.type == "beads" / THEME.hook/outro == "beads": o planeta numa ESCALA COMUM (
   vis.kind = jupiter | ringed | earth | outro, vis.col) e Terras na mesma escala caindo uma a uma num fio sobre o equador, contador até
   vis.earths + contorno tracejado do tamanho do #1; Vênus ao lado da Terra no #5; gancho = disco "?" do tamanho de Júpiter com 11 Terras
   enfileiradas; outro = os 5 lado a lado numa escala menor (rank20).
+vis.type == "tilt" / THEME.hook/outro == "tilt": inclinação do eixo. Planeta com faixas girado pela obliquidade (vis.deg) sobre a linha do
+  plano da órbita, linha tracejada "reto para cima" + arco transferidor que varre até o eixo com contador de graus + eixo fantasma da
+  Terra (23,4°); marcador na superfície mostra o sentido da rotação (vis.retro = gira ao contrário); vis.kind = gas | ice | rock | ringed;
+  gancho = planeta "?" com o eixo virando até ficar de cabeça para baixo; outro = os 5 em fila, cada um na sua inclinação (rank21).
 Tudo desenhado por código; narração Kokoro (VOICE, padrão af_heart); legenda grande queimada.
 """
 import sys, os, re, math, json, subprocess, importlib.util, random
@@ -1193,6 +1197,77 @@ def beads_vis(img, it, th, t, dur):
     text(img, (W / 2, 1220), f"{n:.2f} Earths wide" if v["earths"] > 1.01 else "1 Earth wide", 54, tuple(th["accent2"]), w="ExtraBold", a=ease((t - 0.6) / 0.3), stroke=4)
     if v.get("note"): text(img, (W / 2, 1290), v["note"], 36, (235, 235, 245), w="Bold", a=ease((t - 1.2) / 0.4), stroke=3)
 
+# ---- rank21: "tilt" — axial tilt. The planet (banded, rotated by its obliquity) sits on a horizontal orbit-plane line; a dashed vertical
+# line = "straight up" (0°), a protractor arc sweeps from vertical to the spin axis while the degree counter climbs; Earth's 23.4° is a
+# ghost axis for reference; vis.retro = spins backward (curved arrow flips); vis.kind = gas | ice | rock | ringed.
+_tl = {}
+def tl_body(kind, r, col):
+    key = (kind, int(r), tuple(col))
+    if key not in _tl:
+        spr = R.planet_sprite(max(4, int(r)), tuple(col), light=(-0.7, -0.5)).copy()
+        w, h = spr.size; cx, cy = w / 2, h / 2
+        band = Image.new("RGBA", spr.size, (0, 0, 0, 0)); d = ImageDraw.Draw(band)
+        nb = {"gas": 9, "ringed": 7, "ice": 3, "rock": 0}.get(kind, 4)
+        for i in range(nb):
+            y = cy - r + (i + 0.6) * 2 * r / (nb + 0.4)
+            dark = tuple(int(c * (0.72 if i % 2 else 1.12)) for c in col)
+            d.rectangle([0, y - r * 0.06, w, y + r * 0.06], fill=tuple(min(255, c) for c in dark) + (110,))
+        m = Image.new("L", spr.size, 0); ImageDraw.Draw(m).ellipse([cx - r + 2, cy - r + 2, cx + r - 2, cy + r - 2], fill=255)
+        bb = Image.new("RGBA", spr.size, (0, 0, 0, 0)); bb.paste(band, (0, 0), m); spr.alpha_composite(bb)
+        if kind == "rock":  # polar cap
+            dd = ImageDraw.Draw(spr); dd.ellipse([cx - r * 0.35, cy - r * 0.98, cx + r * 0.35, cy - r * 0.78], fill=(245, 245, 250, 220))
+        _tl[key] = spr
+    return _tl[key]
+def tl_planet(img, kind, col, cx, cy, r, deg, spin, a=1.0, axis=True, retro=False):
+    """planet tilted by deg (clockwise from straight up), spin = phase for the moving surface marker"""
+    big = Image.new("RGBA", (int(r * 4.2), int(r * 4.2)), (0, 0, 0, 0)); bc = big.width / 2
+    d = ImageDraw.Draw(big)
+    if kind == "ringed":
+        for k in range(4):
+            rr = r * (1.4 + k * 0.13); d.arc([bc - rr, bc - rr * 0.22, bc + rr, bc + rr * 0.22], 180, 360, fill=(225, 205, 160, 190), width=max(2, int(r * 0.05)))
+    if axis: d.line([(bc, bc - r * 1.75), (bc, bc + r * 1.75)], fill=(255, 255, 255, 230), width=max(3, int(r * 0.04)))
+    spr = tl_body(kind, r, col); big.alpha_composite(spr, (int(bc - spr.width / 2), int(bc - spr.height / 2)))
+    d = ImageDraw.Draw(big)
+    # moving surface marker shows the spin direction (sped up)
+    ph = (spin * (-1 if retro else 1)) % 1.0; x = bc + r * 0.85 * math.sin(2 * math.pi * ph)
+    if math.cos(2 * math.pi * ph) > 0: d.ellipse([x - r * 0.08, bc - r * 0.08, x + r * 0.08, bc + r * 0.08], fill=(255, 255, 255, 200))
+    if kind == "ringed":
+        for k in range(4):
+            rr = r * (1.4 + k * 0.13); d.arc([bc - rr, bc - rr * 0.22, bc + rr, bc + rr * 0.22], 0, 180, fill=(240, 220, 175, 220), width=max(2, int(r * 0.05)))
+    if axis:
+        d.line([(bc, bc - r * 1.75), (bc, bc - r * 1.02)], fill=(255, 255, 255, 240), width=max(3, int(r * 0.04)))
+        d.polygon([(bc, bc - r * 1.92), (bc - r * 0.1, bc - r * 1.72), (bc + r * 0.1, bc - r * 1.72)], fill=(255, 255, 255, 240))
+        d.text((bc + r * 0.14, bc - r * 1.8), "N", font=F(max(18, int(r * 0.18)), "Black"), fill=(255, 255, 255, 230), anchor="lm")
+    big = big.rotate(-deg, resample=Image.BICUBIC)
+    R.paste_c(img, big, cx, cy, a)
+def tl_arc(img, cx, cy, rad, deg, col, a=1.0, label=True):
+    lay = Image.new("RGBA", img.size, (0, 0, 0, 0)); d = ImageDraw.Draw(lay)
+    for k in range(0, 40):  # dashed vertical "straight up" reference
+        y0 = cy - rad * 1.15 + k * rad * 2.3 / 40
+        if k % 2 == 0: d.line([(cx, y0), (cx, y0 + rad * 2.3 / 80)], fill=(200, 205, 230, int(160 * a)), width=3)
+    if deg > 0.3: d.arc([cx - rad, cy - rad, cx + rad, cy + rad], -90, -90 + deg, fill=col + (int(255 * a),), width=10)
+    img.alpha_composite(lay)
+def tl_ghost(img, cx, cy, L, deg, col=(120, 190, 255), a=1.0):
+    lay = Image.new("RGBA", img.size, (0, 0, 0, 0)); d = ImageDraw.Draw(lay)
+    s, c = math.sin(math.radians(deg)), math.cos(math.radians(deg))
+    for k in range(16):
+        f0, f1 = -1 + k * 2 / 16, -1 + (k + 0.5) * 2 / 16
+        d.line([(cx + s * L * f0, cy - c * L * f0), (cx + s * L * f1, cy - c * L * f1)], fill=col + (int(200 * a),), width=4)
+    img.alpha_composite(lay)
+    text(img, (cx - s * L - 20, cy + c * L + 10), "Earth 23.4°", 30, col, w="Bold", a=a, anchor="rm", stroke=3)
+def tilt_vis(img, it, th, t, dur):
+    v = it["vis"]; acc = tuple(th["accent"]); cx, cy = W / 2, 830; r = v.get("r", 230)
+    d = ImageDraw.Draw(img)
+    d.line([(60, cy), (W - 60, cy)], fill=(150, 160, 200), width=3)
+    d.text((W - 70, cy + 26), "orbit plane", font=F(26, "SemiBold"), fill=(150, 160, 200), anchor="rm")
+    p = easeio((t - 0.5) / max(1.2, dur * 0.5)); deg = v["deg"] * p
+    tl_arc(img, cx, cy, r * 1.55, deg, acc)
+    if v["deg"] > 30 or v.get("ghost"): tl_ghost(img, cx, cy, r * 1.6, 23.44, a=ease((t - 0.3) / 0.4))
+    tl_planet(img, v["kind"], tuple(v["col"]), cx, cy, r, deg, t * 0.35, ease(t / 0.35), retro=v.get("retro", False))
+    text(img, (W - 190, 470), f"{deg:.1f}°", 72, acc, a=ease((t - 0.4) / 0.3), stroke=4)
+    text(img, (W - 190, 525), "from straight up", 26, (200, 205, 230), w="SemiBold", a=ease((t - 0.4) / 0.3), stroke=2)
+    if v.get("note"): text(img, (W / 2, 1265), v["note"], 38, (235, 235, 245), w="Bold", a=ease((t - 1.4) / 0.4), stroke=3)
+
 def caption_chunks(say, t0, dur):
     words = say.split(); groups, g = [], []
     for w in words:
@@ -1215,6 +1290,18 @@ def draw_caption(img, chunks, gt, y=1585):
 
 def seg_hook(img, sc, th, t, dur):
     col = tuple(th["star_col"]); acc = tuple(th["accent"])
+    if th.get("hook") == "tilt":
+        # frame 0: the big number + a dark "?" planet whose axis swings back and forth, ending upside down; Earth's 23.4° ghost
+        cx, cy = W / 2, 930; d = ImageDraw.Draw(img); d.line([(60, cy), (W - 60, cy)], fill=(150, 160, 200), width=3)
+        deg = 177.4 + 4 * math.sin(t * 2.2)
+        tl_ghost(img, cx, cy, 400, 23.44)
+        tl_arc(img, cx, cy, 340, deg, tuple(th["accent"]))
+        tl_planet(img, "rock", (70, 60, 95), cx, cy, 210, deg, t * 0.4)
+        text(img, (cx, cy), "?", 200, tuple(th["accent"]), stroke=4)
+        text(img, (W / 2, 220), sc.get("big", ""), 150, tuple(th["accent"]), stroke=3)
+        text(img, (W / 2, 340), sc["top"].upper(), 52, (255, 255, 255))
+        text(img, (W / 2, 1420), sc["sub"], 46, tuple(th["accent2"]), w="ExtraBold")
+        return
     if th.get("hook") == "beads":
         # frame 0: the big number + Jupiter-sized "?" disc with a row of Earths already strung across it
         cx, cy = W / 2, 930; rj = 71492 * BD_K * 0.92; er = 12756 / 2 * BD_K * 0.92
@@ -1501,6 +1588,8 @@ def seg_item(img, it, th, t, dur):
         litre_vis(img, it, th, t, dur)
     if v["type"] == "beads":
         beads_vis(img, it, th, t, dur)
+    if v["type"] == "tilt":
+        tilt_vis(img, it, th, t, dur)
     # number
     p = easeio((t - 0.5) / 1.6)
     num = it["num"]
@@ -1513,6 +1602,22 @@ def seg_item(img, it, th, t, dur):
 
 def seg_outro(img, sc, th, t, dur):
     a = ease(t / 0.5)
+    if th.get("outro") == "tilt":
+        # all five in a row, each tilted by its own obliquity, + Earth for reference
+        row = sorted(ALL_ITEMS, key=lambda o: o["rank"])
+        d = ImageDraw.Draw(img); d.line([(40, 640), (W - 40, 640)], fill=(150, 160, 200), width=2)
+        for i, o in enumerate(row):
+            x = 130 + i * 205; vv = o["vis"]
+            tl_planet(img, vv["kind"], tuple(vv["col"]), x, 640, 62, vv["deg"], t * 0.4, a, retro=vv.get("retro", False))
+            text(img, (x, 470), f"#{o['rank']}", 40, tuple(th["accent"]), a=a, stroke=3)
+            text(img, (x, 810), f"{vv['deg']:.0f}°", 40, (255, 255, 255), a=a, stroke=3)
+            text(img, (x, 855), o["name"], 28, tuple(vv["col"]), w="ExtraBold", a=a, stroke=3)
+        if th.get("outro_note"): text(img, (W / 2, 975), th["outro_note"], 44, tuple(th["accent2"]), w="ExtraBold", a=a, stroke=3)
+        text(img, (W / 2, 1100), "WHICH PLANET", 92, (255, 255, 255), a=ease((t - 0.3) / 0.5))
+        text(img, (W / 2, 1190), "SHOULD WE MEASURE NEXT?", 56, tuple(th["accent"]), a=ease((t - 0.5) / 0.5))
+        text(img, (W / 2, 1360), "SUBSCRIBE", 100, tuple(th["accent"]), a=ease((t - 0.8) / 0.5))
+        text(img, (W / 2, 1450), "to Cosmic Scale", 50, (255, 255, 255), w="ExtraBold", a=ease((t - 1.0) / 0.5))
+        return
     if th.get("outro") == "beads":
         # all five side by side at one smaller common scale, biggest first
         k = 0.2 * BD_K; x = 150; cy = 680

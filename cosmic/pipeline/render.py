@@ -116,6 +116,11 @@ EP18 added scenes: plunge (mode hook = cloud horizon from a cached full-frame la
   EP18 promised EP19: what if Earth had a second Moon? ranking.py: vis "beads" (rank20, Earths strung across each planet at one common
   scale). scale_short.py: vis "magbubble" (scale17, Jupiter's magnetosphere 15 Suns wide, sunward edge 3.2–7.1 million km, sky vs the
   Moon, tail to Saturn's orbit, dissolves back into the hook for the loop).
+2026-11-24 (Tuesday, Shorts-only): ranking.py vis "tilt" (rank21, banded planet rotated by its obliquity on the orbit-plane line,
+  protractor arc from straight-up + degree counter, Earth 23.4° ghost axis, spin marker reverses for Venus); scale_short.py "sugarcube"
+  (scale18, isometric grainy cube, crowd streaming in, stadium atom, Burj Khalifa vs 800 m flesh cube, table cracking, neutron star) and
+  "saturnfloat" (scale19, Saturn cutaway packed with Earths, litre jars, floating tank). Learned: science.nasa.gov is not reachable from
+  the cloud session (DNS) -> verify numbers with web search; moon counts change every few months -> avoid them in rankings.
 """
 import sys, os, re, math, subprocess, importlib.util, json, random, hashlib
 import numpy as np
