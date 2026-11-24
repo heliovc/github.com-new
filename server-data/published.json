@@ -2484,7 +2484,7 @@
   "thumb_path": "/opt/canal-publisher/state/thumbs/c5-d04a-peixe.jpg",
   "thumb_attempts": 0,
   "thumb_error": "miniatura personalizada pede o telefone verificado no canal",
-  "thumb_retry_after": "2026-11-24T07:51:45.755349-03:00"
+  "thumb_retry_after": "2026-11-24T14:03:26.491301-03:00"
  },
  "c5-d04b-rato": {
   "attempts": 1,
@@ -2503,7 +2503,7 @@
   "thumb_path": "/opt/canal-publisher/state/thumbs/c5-d04b-rato.jpg",
   "thumb_attempts": 0,
   "thumb_error": "miniatura personalizada pede o telefone verificado no canal",
-  "thumb_retry_after": "2026-11-24T07:52:33.307767-03:00"
+  "thumb_retry_after": "2026-11-24T14:04:40.702003-03:00"
  },
  "ptd-rank20-short": {
   "attempts": 1,
