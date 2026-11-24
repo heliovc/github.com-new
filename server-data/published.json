@@ -2679,7 +2679,7 @@
   "thumb_path": "/opt/canal-publisher/state/thumbs/c5-d05a-pulga.jpg",
   "thumb_attempts": 0,
   "thumb_error": "miniatura personalizada pede o telefone verificado no canal",
-  "thumb_retry_after": "2026-11-24T19:22:18.445524-03:00"
+  "thumb_retry_after": "2026-11-25T01:31:26.409522-03:00"
  },
  "c5-d05b-cachorro": {
   "attempts": 1,
@@ -2698,7 +2698,7 @@
   "thumb_path": "/opt/canal-publisher/state/thumbs/c5-d05b-cachorro.jpg",
   "thumb_attempts": 0,
   "thumb_error": "miniatura personalizada pede o telefone verificado no canal",
-  "thumb_retry_after": "2026-11-24T19:23:18.428346-03:00"
+  "thumb_retry_after": "2026-11-25T01:32:25.933812-03:00"
  },
  "ptd-rank21-short": {
   "attempts": 1,
