@@ -23,6 +23,8 @@ Ler antes de cada vídeo (plano.md, seção 8). Atualizar depois de produzir e 4
 | 3 | B | pombo | ave | mecânica do dia a dia · **atual** | lugar proibido | cidade | crepúsculo roxo e rosa, asfalto grafite, luzes do semáforo | pombo em cima do semáforo, carros lá embaixo | campo magnético da Terra (linhas violeta até o pombal) | 45,3 s | 139 | agendado 23/11 19:00 |
 | 4 | A | peixe-caracol | marinho | escala extrema · **curto** | queda/perigo | natureza | breu verde-petróleo abissal, peixe rosa pálido, luz branca do robô, neve marinha | peixe na luz do robô com régua de profundidade em 8 km | linha lateral (ondinhas do anfípode acendem os poros) | 38,1 s | 104 | agendado 24/11 12:00 |
 | 4 | B | rato | mamífero | mecânica do dia a dia · **atual** | lugar proibido | cidade | concreto cinza-quente, lâmpada de sódio laranja, aço, faixa amarelo × preto (flashback 1854 em sépia) | contra-plongée do fundo do poço, cabine descendo | bigodes sentindo o vento que a cabine empurra (ar em verde) | 48,4 s | 136 | agendado 24/11 19:00 |
+| 5 | A | pulga | inseto | escala extrema · **curto** | número | casa | tapete verde-musgo, sol amarelo da manhã, pulga castanho-avermelhada, raio-X violeta | pulga agachada no topo do tapete, arco pontilhado do pulo saindo da tela | luz e sombra (olhos simples: a sombra do cachorro passa, o calor chega) | 36,8 s | 98 | agendado 25/11 12:00 |
+| 5 | B | cachorro | mamífero | mecânica do dia a dia · **atual** | som | cidade | céu de meio-dia, carro amarelo-mostarda em corte, estofado azul-petróleo, motor em raio-X (planta azul) | corte lateral do carro: cachorro de peitoral no banco de trás, capô com 4 cilindros piscando | o ouvido (até 45 mil vibrações/s × 20 mil da pessoa) | 49,3 s | 136 | agendado 25/11 19:00 |
 
 ## Fontes por vídeo
 **1A — formiga**
@@ -62,19 +64,31 @@ Ler antes de cada vídeo (plano.md, seção 8). Atualizar depois de produzir e 4
 - ASME A17.1/CSA B44 — freios de segurança acionados pelo limitador de velocidade agarram as guias; contrapeso ≈ cabine + 40–50% da carga nominal.
 - Yu, Graff, Bresee, Man & Hartmann (2016), "Whiskers aid anemotaxis in rats", Science Advances — ratos usam os bigodes para sentir a direção do vento. https://pmc.ncbi.nlm.nih.gov/articles/PMC4996642
 
+**5A — pulga (curto)**
+- Sutton & Burrows (2011), "Biomechanics of jumping in the flea", J. Exp. Biol. 214: 836–847 — a força sai pela tíbia e pelo pé; aceleração de pico ~1.500 m/s² (~150 G); energia guardada na resilina.
+- Bennet-Clark & Lucey (1967), "The jump of the flea", J. Exp. Biol. 47: 59–76 — almofada de resilina comprimida e travada antes do salto.
+- Pulga do gato: ~2–3 mm, pulo vertical máximo ~17–18 cm (Cadiergues et al. 2000, Vet. Parasitology); orienta-se pela luz, pula quando uma sombra passa e distingue o calor do hospedeiro (Rust & Dryden 1997, Annu. Rev. Entomol.). Astronauta na decolagem ≈ 3 G (NASA).
+
+**5B — cachorro (atual)**
+- U.S. Department of Energy, "Internal Combustion Engine Basics" — ciclo de 4 tempos; vela de ignição. https://www.energy.gov/eere/vehicles/articles/internal-combustion-engine-basics
+- Conta: 1 explosão por cilindro a cada 2 voltas → 2.000 rpm = ~16,7/s por cilindro, ~67/s em 4 cilindros. Taxa de compressão típica a gasolina ≈ 10:1.
+- Heffner (1983), "Hearing in large and small dogs", Behavioral Neuroscience 97(2): 310–318 — cães ouvem até ~41–47 kHz; pessoas até ~20 kHz.
+
 ## Métricas (48 h após publicar)
 Metas: continuaram assistindo ≥ 70% · % visualizada ≥ 80%.
 
 | Vídeo | Publicado em | Link | Continuaram assistindo | % visualizada | Views 48 h | Inscritos / 1.000 views |
 |---|---|---|---|---|---|---|
-| 1A formiga | 20/11 22:00 | https://youtube.com/shorts/Wcw5EPuTlpg | 54% (21/11 06h) | 62,4% (~35 h, média 0:30) | 1.771 (~35 h) | 2 inscritos (~1,1 / 1.000) |
-| 1B lagartixa | 20/11 23:00 | https://youtube.com/shorts/v88xGAAAzmw | 68% (21/11 06h) | 43,5% (~34 h, média 0:20) | 1.210 (~34 h) | 0 |
-| 2A mosquito (curto) | 22/11 12:00 | https://youtube.com/shorts/_34mq8-rs-Q | — | — | — | — |
-| 2B barata (atual) | 22/11 19:00 | https://youtube.com/shorts/RL1mco3U_fw | — | — | — | — |
+| 1A formiga | 20/11 22:00 | https://youtube.com/shorts/Wcw5EPuTlpg | 54% (21/11 06h) | 62,5% (~59 h, média 0:30) | 1.794 (~59 h) | 2 inscritos (~1,1 / 1.000) |
+| 1B lagartixa | 20/11 23:00 | https://youtube.com/shorts/v88xGAAAzmw | 68% (21/11 06h) | 43,6% (~58 h, média 0:20) | 1.247 (~58 h) | 0 |
+| 2A mosquito (curto) | 22/11 12:00 | https://youtube.com/shorts/_34mq8-rs-Q | — | 42,8% (~21 h, média 0:14) | 1.442 (~21 h) | 1 inscrito (~0,7 / 1.000) |
+| 2B barata (atual) | 22/11 19:00 | https://youtube.com/shorts/RL1mco3U_fw | — | 52,2% (~14 h, média 0:23) | 1.314 (~14 h) | 2 inscritos (~1,5 / 1.000) |
 | 3A krill (curto) | 23/11 12:00 | https://youtube.com/shorts/UdUVK_LYYUQ | — | — | — | — |
 | 3B pombo (atual) | 23/11 19:00 | https://youtube.com/shorts/YFLRYfWb2ZU | — | — | — | — |
-| 4A peixe-caracol (curto) | 24/11 12:00 | — | — | — | — | — |
-| 4B rato (atual) | 24/11 19:00 | — | — | — | — | — |
+| 4A peixe-caracol (curto) | 24/11 12:45 | https://youtube.com/shorts/sSUEHRXF7l8 | — | — | — | — |
+| 4B rato (atual) | 24/11 19:45 | https://youtube.com/shorts/lfVnMg7h9ck | — | — | — | — |
+| 5A pulga (curto) | 25/11 12:00 | — | — | — | — | — |
+| 5B cachorro (atual) | 25/11 19:00 | — | — | — | — | — |
 
 Leitura do Dia 1 (21/11): o YouTube mostrou cada um a ~1,1 mil pessoas e parou de distribuir (1–2 views/h). O gancho funciona; as pessoas saem no meio → teste de duração nos Dias 2–5.
 
@@ -104,3 +118,6 @@ Leitura do Dia 1 (21/11): o YouTube mostrou cada um a ~1,1 mil pessoas e parou d
 - 23/11 (rodada das 06:30) — Dia 4 produzido: 4A peixe-caracol no formato CURTO (38,1 s, 104 palavras, 2 passos: sem bexiga de ar/corpo de água → molécula TMAO protege as proteínas) e 4B rato no formato ATUAL (48,4 s, 136 palavras, 3 passos: roda com atrito → contrapeso → limitador + cunhas; payoff Otis 1854). Checagem: "peixe a 8.000 m" virou o peixe-caracol (o único peixe que vive lá; recorde filmado 8.336 m); "um carro no dedão" confere (~1,6 t em 2 cm²); contrapeso = cabine + "quase metade" da lotação (40–50%). Visão do Bicho do peixe = linha lateral (no escuro total ele não depende dos olhos); a do rato = bigodes sentindo o vento (Yu et al. 2016). No 4A, o fato mais forte (carro no dedão) sai aos ~14 s; o limite de 8.200 m fica como virada final (~32 s).
 - 23/11 — Métricas: o arquivo mais recente do robô é de 22/11 09h (~35 h depois do Dia 1; sem "continuaram assistindo" na tabela). Formiga 1.771 views, 62,4% visualizada, 2 inscritos; lagartixa 1.210, 43,5%. Dias 2 e 3 ainda sem dados. Nenhum item c5 com erro no robô (o krill tem um print de erro antigo, mas está publicado). Telefone ainda não verificado (capa e comentário fixado pendentes).
 - 23/11 — Facebook: a Página "Napeledebicho" ainda não aparece no Buffer → replicação pulada. TikTok segue bloqueado (e desconectado no Buffer). Limpeza: nada a apagar (nenhum Short entrou ainda num longo de compilação).
+- 24/11 (rodada das 06:30) — Dia 5 produzido: 5A pulga no formato CURTO (36,8 s, 98 palavras, 2 passos: espreme e trava a mola de resilina → solta e a mola chuta a perna; 150 G aos ~25 s) e 5B cachorro no formato ATUAL (49,3 s, 136 palavras, 3 passos: puxa e espreme → faísca/explosão gira as rodas → expulsa a fumaça; payoff ~70 explosões/s). Checagem: "100× a altura" virou "80 vezes o meu tamanho" (2 mm → ~17 cm); "40 andares" é a conta para 1,70 m × 80. Visão do Bicho da pulga = luz e sombra (olhos simples, sem olho composto); a do cachorro = o ouvido (até ~45 mil Hz). Cachorro sempre de peitoral preso ao cinto (nada de cabeça para fora da janela). 25/11 é quarta, mas o 1º longo original é só em 02/12.
+- 24/11 — Métricas: arquivo mais recente do robô é de 23/11 09h (sem "continuaram assistindo" na tabela). Mosquito 1.442 views e 42,8% visualizada em ~21 h; barata 1.314 e 52,2% em ~14 h; formiga 1.794 (62,5%); lagartixa 1.247 (43,6%). Ainda sem 48 h para os Dias 2–5; a comparação do teste de duração fica para o Dia 6. O robô agendou peixe e rato às 12:45 e 19:45. Nenhum item c5 com erro. Telefone ainda não verificado.
+- 24/11 — Facebook: a Página "Napeledebicho" ainda não aparece no Buffer → replicação pulada. TikTok segue bloqueado (e desconectado no Buffer). Limpeza: nada a apagar (nenhum Short entrou ainda num longo de compilação).

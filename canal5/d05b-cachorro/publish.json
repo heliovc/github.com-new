@@ -1,0 +1,29 @@
+{
+ "version": 1,
+ "channel_id": "UCO5Fa5_HJxd-aeTiyQcw0Sw",
+ "created_at": "2026-11-24T06:57:02-03:00",
+ "items": [
+  {
+   "key": "c5-d05b-cachorro",
+   "kind": "short",
+   "video": "video.mp4",
+   "title": "E se você fosse um cachorro no banco de trás do carro? #shorts",
+   "description": "No banco de trás, um cachorro escuta o ronco do motor: é fogo dentro de cilindros de metal. Cada cilindro trabalha em quatro tempos. 1) O pistão desce e puxa ar com um pouco de gasolina. 2) Ele sobe e espreme a mistura cerca de dez vezes. 3) A vela solta uma faísca, a mistura explode e empurra o pistão para baixo, o que gira o virabrequim e as rodas. 4) O pistão sobe de novo e expulsa a fumaça pelo escapamento. A 2.000 rotações por minuto, cada cilindro explode umas 17 vezes por segundo; somando os quatro, quase 70 explosões por segundo. Você sabe quantos cilindros tem o motor do seu carro?\n\nVisão do Bicho: cachorros ouvem sons de até uns 45 mil hertz (vibrações por segundo); pessoas, até uns 20 mil.\n\nFontes: U.S. Department of Energy, \"Internal Combustion Engine Basics\" (ciclo de quatro tempos); H. E. Heffner, \"Hearing in large and small dogs\", Behavioral Neuroscience (1983). Narração com voz sintética; roteiro e animação próprios.\n#esevocefosse #motor #comofunciona #cachorro #carros",
+   "tags": [
+    "motor de 4 tempos",
+    "como funciona o motor",
+    "pistão",
+    "cachorro",
+    "carro",
+    "e se você fosse",
+    "shorts"
+   ],
+   "publish_at": "2026-11-25T19:00:00-03:00",
+   "if_late": "public_now",
+   "made_for_kids": false,
+   "altered_content": true,
+   "pinned_comment": "Você sabe quantos cilindros tem o motor do seu carro?",
+   "thumbnail": "capa.jpg"
+  }
+ ]
+}
