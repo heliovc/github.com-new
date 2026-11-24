@@ -2363,7 +2363,7 @@
   "thumb_path": "/opt/canal-publisher/state/thumbs/c5-d03a-krill.jpg",
   "thumb_attempts": 0,
   "thumb_error": "miniatura personalizada pede o telefone verificado no canal",
-  "thumb_retry_after": "2026-11-24T07:01:38.866269-03:00",
+  "thumb_retry_after": "2026-11-24T13:07:43.283913-03:00",
   "comment_attempts": 0,
   "comment_error": "fixar comentário pede o telefone verificado no canal",
   "comment_retry_after": "2026-11-24T12:22:21.123954-03:00"
@@ -2385,10 +2385,10 @@
   "thumb_path": "/opt/canal-publisher/state/thumbs/c5-d03b-pombo.jpg",
   "thumb_attempts": 0,
   "thumb_error": "miniatura personalizada pede o telefone verificado no canal",
-  "thumb_retry_after": "2026-11-24T06:52:20.167890-03:00",
+  "thumb_retry_after": "2026-11-24T13:09:50.650568-03:00",
   "comment_attempts": 0,
   "comment_error": "fixar comentário pede o telefone verificado no canal",
-  "comment_retry_after": "2026-11-24T07:02:49.186854-03:00"
+  "comment_retry_after": "2026-11-24T13:08:40.479669-03:00"
  },
  "cosmic-rank20-short": {
   "attempts": 1,
@@ -2652,5 +2652,43 @@
   "pinned_comment": "What should we squeeze next? Full video: What If We Swapped the Sun for 5 Other Stars? One Puts Earth INSIDE It",
   "related_attempts": 1,
   "related_done": "2026-11-24T06:48:21.232952-03:00"
+ },
+ "c5-d05a-pulga": {
+  "attempts": 1,
+  "status": "published",
+  "url": "https://youtube.com/shorts/vI8lZkXR2TY",
+  "by": "robo",
+  "visibility": "schedule",
+  "when": "2026-11-25T11:30:00-03:00",
+  "at": "2026-11-24T07:06:14.599892-03:00",
+  "error": null,
+  "channel_id": "UCO5Fa5_HJxd-aeTiyQcw0Sw",
+  "title": "E se você fosse uma pulga pulando 80 vezes o seu tamanho? #shorts",
+  "kind": "short",
+  "publish_at": "2026-11-25T11:30:00-03:00",
+  "pinned_comment": "Qual bicho você acha que pula mais alto, proporcionalmente?",
+  "thumb_path": "/opt/canal-publisher/state/thumbs/c5-d05a-pulga.jpg",
+  "thumb_attempts": 0,
+  "thumb_error": "miniatura personalizada pede o telefone verificado no canal",
+  "thumb_retry_after": "2026-11-24T13:11:38.335854-03:00"
+ },
+ "c5-d05b-cachorro": {
+  "attempts": 1,
+  "status": "published",
+  "url": "https://youtube.com/shorts/TWjyaeNdNaQ",
+  "by": "robo",
+  "visibility": "schedule",
+  "when": "2026-11-25T18:30:00-03:00",
+  "at": "2026-11-24T07:15:38.985716-03:00",
+  "error": null,
+  "channel_id": "UCO5Fa5_HJxd-aeTiyQcw0Sw",
+  "title": "E se você fosse um cachorro no banco de trás do carro? #shorts",
+  "kind": "short",
+  "publish_at": "2026-11-25T18:30:00-03:00",
+  "pinned_comment": "Você sabe quantos cilindros tem o motor do seu carro?",
+  "thumb_path": "/opt/canal-publisher/state/thumbs/c5-d05b-cachorro.jpg",
+  "thumb_attempts": 0,
+  "thumb_error": "miniatura personalizada pede o telefone verificado no canal",
+  "thumb_retry_after": "2026-11-24T13:17:12.802561-03:00"
  }
 }
