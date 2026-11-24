@@ -2484,7 +2484,10 @@
   "thumb_path": "/opt/canal-publisher/state/thumbs/c5-d04a-peixe.jpg",
   "thumb_attempts": 0,
   "thumb_error": "miniatura personalizada pede o telefone verificado no canal",
-  "thumb_retry_after": "2026-11-24T14:03:26.491301-03:00"
+  "thumb_retry_after": "2026-11-24T14:03:26.491301-03:00",
+  "comment_attempts": 0,
+  "comment_error": "fixar comentário pede o telefone verificado no canal",
+  "comment_retry_after": "2026-11-24T18:52:06.514534-03:00"
  },
  "c5-d04b-rato": {
   "attempts": 1,
@@ -2615,7 +2618,9 @@
   "related_key": "cosmic-ep13-long",
   "pinned_comment": "Did you know Venus spins backward? Full video: How Long to Reach Every Planet? By Car, Neptune Takes 4,912 Years",
   "related_attempts": 1,
-  "related_done": "2026-11-24T06:44:13.553767-03:00"
+  "related_done": "2026-11-24T06:44:13.553767-03:00",
+  "comment_attempts": 1,
+  "comment_done": "2026-11-24T12:54:49.772413-03:00"
  },
  "cosmic-scale19-short": {
   "attempts": 1,
