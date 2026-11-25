@@ -2366,7 +2366,7 @@
   "thumb_retry_after": "2026-11-25T13:41:42.424801-03:00",
   "comment_attempts": 0,
   "comment_error": "fixar comentário pede o telefone verificado no canal",
-  "comment_retry_after": "2026-11-25T12:57:29.746754-03:00"
+  "comment_retry_after": "2026-11-25T19:03:13.671892-03:00"
  },
  "c5-d03b-pombo": {
   "attempts": 1,
