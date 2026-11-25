@@ -2081,8 +2081,8 @@
   "comment_error": "fixar comentário pede o telefone verificado no canal",
   "thumb_attempts": 1,
   "thumb_error": "miniatura personalizada pede o telefone verificado no canal",
-  "comment_retry_after": "2026-11-24T22:11:54.615788-03:00",
-  "thumb_retry_after": "2026-11-24T22:12:54.633530-03:00"
+  "comment_retry_after": "2026-11-25T04:21:21.155679-03:00",
+  "thumb_retry_after": "2026-11-25T04:22:20.437704-03:00"
  },
  "c5-d01b-lagartixa": {
   "attempts": 1,
@@ -2104,8 +2104,8 @@
   "comment_error": "fixar comentário pede o telefone verificado no canal",
   "thumb_attempts": 1,
   "thumb_error": "miniatura personalizada pede o telefone verificado no canal",
-  "comment_retry_after": "2026-11-24T22:13:50.501244-03:00",
-  "thumb_retry_after": "2026-11-24T22:14:54.452772-03:00"
+  "comment_retry_after": "2026-11-25T04:23:22.180326-03:00",
+  "thumb_retry_after": "2026-11-25T04:24:28.214608-03:00"
  },
  "cosmic-rank18-short": {
   "attempts": 1,
@@ -2301,7 +2301,7 @@
   "thumb_path": "/opt/canal-publisher/state/thumbs/c5-d02a-mosquito.jpg",
   "thumb_attempts": 0,
   "thumb_error": "miniatura personalizada pede o telefone verificado no canal",
-  "thumb_retry_after": "2026-11-24T22:16:05.926100-03:00",
+  "thumb_retry_after": "2026-11-25T04:25:37.735550-03:00",
   "comment_attempts": 0,
   "comment_error": "fixar comentário pede o telefone verificado no canal",
   "comment_retry_after": "2026-11-25T01:52:04.520193-03:00"
@@ -2323,7 +2323,7 @@
   "thumb_path": "/opt/canal-publisher/state/thumbs/c5-d02b-barata.jpg",
   "thumb_attempts": 0,
   "thumb_error": "miniatura personalizada pede o telefone verificado no canal",
-  "thumb_retry_after": "2026-11-24T22:17:20.425209-03:00",
+  "thumb_retry_after": "2026-11-25T04:26:41.902146-03:00",
   "comment_attempts": 1,
   "comment_error": "fixar comentário pede o telefone verificado no canal",
   "comment_retry_after": "2026-11-25T03:31:33.206809-03:00"
