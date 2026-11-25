@@ -2326,7 +2326,7 @@
   "thumb_retry_after": "2026-11-25T04:26:41.902146-03:00",
   "comment_attempts": 1,
   "comment_error": "fixar comentário pede o telefone verificado no canal",
-  "comment_retry_after": "2026-11-25T03:31:33.206809-03:00"
+  "comment_retry_after": "2026-11-25T09:41:57.614344-03:00"
  },
  "quiet-ep12-long": {
   "attempts": 1,
