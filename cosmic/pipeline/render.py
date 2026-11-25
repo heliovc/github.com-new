@@ -121,6 +121,20 @@ EP18 added scenes: plunge (mode hook = cloud horizon from a cached full-frame la
   (scale18, isometric grainy cube, crowd streaming in, stadium atom, Burj Khalifa vs 800 m flesh cube, table cracking, neutron star) and
   "saturnfloat" (scale19, Saturn cutaway packed with Earths, litre jars, floating tank). Learned: science.nasa.gov is not reachable from
   the cloud session (DNS) -> verify numbers with web search; moon counts change every few months -> avoid them in rankings.
+2026-11-25 (Wednesday) EP19 added scenes: slotmap (chapter card: square-root distance strip Earth -> 1.5 million km with zones torn /
+  falls in / can stay / Sun steals, Roche 18,400, geostationary 42,164, Moon, 0.49 R_H stability edge, Hill radius; pins 1-5, v.n active,
+  v.drift in|out arrows, v.stamp verdict stamp), twinsky (desert mesas + lake at night; our Moon and a twin at v.km2 with TRUE relative angular
+  size, v.fov zoom, v.phase = twin 75% lit, sky glow from the extra light), tidechart (72 h harbour curve: Moon alone dashed / twin alone /
+  both, equilibrium tide, v.lead° and v.period2 h; mode bar = log tidal-pull bars), trojan (Earth-Moon-twin triangle with L4/L5; wobble =
+  tadpole libration + Routh 1875 box; companion = Jutzi & Asphaug 1,200 km moon drifting toward the Moon), splat (shred = twin inside the
+  Roche limit smearing into a ring; splat = slow 2-3 km/s pancake pile; farside = near side vs far side sprites moon19(far=True)), sunsteal
+  (our Hill-problem RK4 simulation, Earth + Sun, frame turning with Earth: orbit started at 1,000,000 km leaves after ~149 days), tangle
+  (minimoon loops 2006 RH120 | size lineup person / 1.2 m / 3 m / 10 m / bus | Kamo'oalewa quasi-satellite loop). Helpers moon19(r, k)
+  (phase via k = cos phase angle), _sized19, _stamp19, _land19, _box19. Palette moonlight lilac / tide aqua / companion amber.
+  Structure NEW: "five parking spots" (one twin Moon tried at 5 distances, each chapter opens and closes on the parking map with a verdict).
+  Learned: a twin 60° ahead gives the SAME tide height (cos 2θ pattern, phasors 120° apart); 1,375 words + 32 scenes = 8.1 min.
+  EP19 promised EP20: shrink the universe until the Sun is a grain of sand, then walk to the edge. ranking.py: vis "pair" (rank22,
+  every planet the same size, moon to scale with it). scale_short.py: vis "olympus" (scale20, Olympus Mons over Arizona at one scale).
 """
 import sys, os, re, math, subprocess, importlib.util, json, random, hashlib
 import numpy as np
@@ -4889,6 +4903,461 @@ def sc_scars(img, v, t, dur):
     d = ImageDraw.Draw(img); d.text((cx + Rj + 160, yb + er + 34), "Earth, to scale", font=F(28, "SemiBold"), fill=(150, 200, 255), anchor="mm")
     alpha_text(img, (W / 2, 90), "Scars bigger than Earth", F(56, "Black"), WHITE, ease(t / 0.4))
     caption(img, "illustration of the 1994 impact sites; the darkest were larger than Earth (NASA)", ease((t - 0.8) / 0.5), y=H - 80)
+
+
+# ---------------- scenes (EP19: what if Earth had a second Moon?) ----------------
+LIL19, AQUA19, AMB19, RED19 = (200, 190, 255), (90, 220, 210), (255, 180, 90), (255, 105, 95)
+GM19, OM19 = 3.986e5, 2 * math.pi / (365.25 * 86400)
+_ph19 = {}
+def moon19(r, k=-1.0, far=False):
+    """Moon sprite with a phase: k = cos(phase angle) -> lit where x >= k·sqrt(1-y²) (k=-1 full, 0 half, 1 new); far = far-side look"""
+    r = max(4, int(r)); key = (r, round(k, 2), far)
+    if key in _ph19: return _ph19[key]
+    if far:
+        base = planet_sprite(r, (196, 193, 188), light=(-0.2, -0.1)).copy()
+        a = np.asarray(base, np.float32).copy(); s = a.shape[0]
+        yy, xx = np.mgrid[0:s, 0:s].astype(np.float32); nx, ny = (xx - s / 2) / r, (yy - s / 2) / r
+        rng = np.random.default_rng(19)
+        for _ in range(70):
+            cx, cy, cr = rng.uniform(-0.9, 0.9), rng.uniform(-0.9, 0.9), rng.uniform(0.02, 0.09)
+            dd = np.hypot(nx - cx, ny - cy); a[..., :3] *= (1 - 0.2 * ((dd < cr) & (dd > cr * 0.65)))[..., None]
+        m = np.exp(-(((nx + 0.05) ** 2 + (ny - 0.55) ** 2) / (2 * 0.12 ** 2))); a[..., :3] *= (1 - 0.25 * m)[..., None]
+        base = Image.fromarray(np.clip(a, 0, 255).astype(np.uint8), "RGBA")
+    else:
+        base = moon8(r, light=(-0.2, -0.1)).copy()
+    if k > -0.99:
+        a = np.asarray(base, np.float32).copy(); s = a.shape[0]
+        yy, xx = np.mgrid[0:s, 0:s].astype(np.float32); nx, ny = (xx - s / 2) / r, (yy - s / 2) / r
+        lim = k * np.sqrt(np.clip(1 - ny ** 2, 0, 1)); lit = np.clip((nx - lim) * r / 2.0 + 0.5, 0, 1)
+        a[..., :3] *= (0.06 + 0.94 * lit)[..., None]
+        base = Image.fromarray(np.clip(a, 0, 255).astype(np.uint8), "RGBA")
+    _ph19[key] = base
+    return base
+
+def _sized19(r, k=-1.0, far=False):
+    if r <= 240: return moon19(r, k, far)
+    spr = moon19(240, k, far); q = r / 240.0
+    return spr.resize((int(spr.width * q), int(spr.height * q)), Image.BILINEAR)
+
+def _box19(img, x0, y0, x1, y1, col, a=210):
+    lay = Image.new("RGBA", img.size, (0, 0, 0, 0))
+    ImageDraw.Draw(lay).rounded_rectangle([x0, y0, x1, y1], 24, fill=(8, 8, 26, a), outline=col + (150,), width=2); img.alpha_composite(lay)
+
+def _stamp19(img, txt, col, cx, cy, p, ang=-8):
+    if p <= 0: return
+    f = F(84, "Black"); tw = int(f.getlength(txt)) + 80
+    lay = Image.new("RGBA", (tw + 40, 190), (0, 0, 0, 0)); d = ImageDraw.Draw(lay)
+    d.rounded_rectangle([20, 20, tw + 20, 170], 18, outline=col + (255,), width=10)
+    d.text(((tw + 40) / 2, 95), txt, font=f, fill=col + (255,), anchor="mm")
+    k = lerp(1.8, 1.0, ease(p / 0.6)); lay = lay.rotate(ang, expand=True, resample=Image.BICUBIC)
+    lay = lay.resize((int(lay.width * k), int(lay.height * k)), Image.BILINEAR)
+    al = lay.getchannel("A").point(lambda v: int(v * min(1, p / 0.3))); lay.putalpha(al)
+    img.alpha_composite(lay, (int(cx - lay.width / 2), int(cy - lay.height / 2)))
+
+def _land19(img, glow):
+    """desert mesas + a still lake, lit by moonlight glow 0..1"""
+    lay = Image.new("RGBA", img.size, (0, 0, 0, 0)); d = ImageDraw.Draw(lay)
+    for y in range(0, 800, 8):
+        c = mix((10, 10, 34), (70, 74, 128), glow * (y / 800) ** 1.2 + glow * 0.25)
+        d.rectangle([0, y, W, y + 8], fill=c + (int(120 + 110 * glow),))
+    img.alpha_composite(lay); d = ImageDraw.Draw(img)
+    rock = mix((14, 12, 24), (60, 52, 72), glow)
+    pts = [(0, 800), (0, 700), (130, 700), (160, 640), (420, 640), (450, 700), (700, 705), (760, 760), (1180, 760), (1210, 690),
+           (1260, 600), (1520, 600), (1560, 680), (1700, 690), (1760, 730), (W, 730), (W, 800)]
+    d.polygon(pts, fill=rock)
+    d.rectangle([0, 800, W, H], fill=mix((8, 10, 26), (36, 44, 86), glow))
+
+def sc_twinsky(img, v, t, dur):
+    """night sky over mesas: our Moon + the twin at v.km2, sizes to scale with each other (v.fov sets the zoom); v.phase = phases"""
+    km2 = v["km2"]; ang2 = 2 * math.degrees(math.atan(1737.4 / km2)); ratio = ang2 / 0.518
+    fov = v.get("fov", 5.5 if ratio < 1.5 else 9.0 if ratio < 5 else 30.0); pxd = W / fov
+    r1 = 0.518 * pxd / 2; r2 = ang2 * pxd / 2
+    light = 1 + (384400 / km2) ** 2 * (0.75 if v.get("phase") else 1)
+    glow = max(0.15, min(1.0, 0.18 + 0.32 * math.log10(light)))
+    _land19(img, glow * ease(t / 0.8))
+    p = easeio((t - 0.3) / 1.6)
+    x1, y1 = 520, 330; x2, y2 = 1220, 300 + r2 * 0.25
+    for (x, y, r, k, a) in ((x1, y1, r1, -1, 1.0), (x2, y2 + (1 - p) * 120, r2, (-0.5 if v.get("phase") else -1), p)):
+        hal = radial(int(r * 6) + 20, [(0, (225, 225, 255, int(70 * a))), (0.35, (180, 180, 240, int(25 * a))), (1, (120, 120, 200, 0))])
+        paste_c(img, hal, x, y); paste_c(img, _sized19(r, k), x, y, a)
+    d = ImageDraw.Draw(img)
+    # reflections on the lake
+    lay = Image.new("RGBA", img.size, (0, 0, 0, 0)); dl = ImageDraw.Draw(lay)
+    for i, (x, r) in enumerate(((x1, r1), (x2, r2))):
+        for k2 in range(10):
+            yy = 830 + k2 * 22; ww = max(8, r * 0.9) * (1 + 0.15 * math.sin(t * 2 + k2 + i))
+            dl.line([(x - ww, yy), (x + ww, yy)], fill=(220, 220, 255, int((140 - k2 * 12) * (p if i else 1))), width=3)
+    img.alpha_composite(lay); d = ImageDraw.Draw(img)
+    d.text((x1, y1 + max(r1, 10) + 40), "our Moon", font=F(30, "Bold"), fill=LIL19, anchor="mm")
+    d.text((x2, y2 + r2 + 40), "the twin", font=F(30, "Bold"), fill=AMB19, anchor="mm") if p > 0.5 else None
+    _box19(img, 80, 870, 900, 1030, LIL19)
+    d = ImageDraw.Draw(img)
+    d.text((120, 915), v.get("head", ""), font=F(46, "ExtraBold"), fill=WHITE, anchor="lm")
+    d.text((120, 985), v.get("sub", ""), font=F(36, "SemiBold"), fill=AMB19, anchor="lm")
+    d.text((W - 60, 1030), "sizes to scale with each other", font=F(24, "SemiBold"), fill=DIM, anchor="rm")
+
+SL_X0, SL_X1, SL_Y = 230, 1760, 560
+def _sx19(km): return SL_X0 + (SL_X1 - SL_X0) * math.sqrt(max(0, km) / 1.5e6)
+SLOTS19 = [(15000, "1"), (30000, "2"), (100000, "3"), (384400, "4"), (1000000, "5")]
+def sc_slotmap(img, v, t, dur):
+    """chapter card: square-root distance strip Earth -> Hill radius with zones; pins 1-5; v.n active pin, v.stamp verdict, v.drift in|out"""
+    d = ImageDraw.Draw(img); a = ease(t / 0.5); p = easeio((t - 0.2) / 1.0)
+    zones = [(0, 18400, RED19, "torn apart"), (18400, 42164, AMB19, "falls in"), (42164, 732000, AQUA19, "can stay"), (732000, 1.5e6, (150, 150, 175), "Sun steals")]
+    lay = Image.new("RGBA", img.size, (0, 0, 0, 0)); dl = ImageDraw.Draw(lay)
+    for (k0, k1, c, lab) in zones:
+        x0, x1 = _sx19(k0), _sx19(k1) * 1.0
+        dl.rectangle([x0, SL_Y - 26, lerp(x0, x1, p), SL_Y + 26], fill=c + (80,))
+    img.alpha_composite(lay); d = ImageDraw.Draw(img)
+    for (k0, k1, c, lab) in zones[1:]:
+        xm = (_sx19(k0) + _sx19(k1)) / 2
+        d.text((xm, SL_Y + 64), lab, font=F(26, "Bold"), fill=mix(SPACE, c, p), anchor="mm")
+    d.text((_sx19(9000), SL_Y + 64), "torn", font=F(22, "Bold"), fill=mix(SPACE, RED19, p), anchor="mm")
+    er = _sx19(6371) - SL_X0
+    paste_c(img, earth_sprite(int(er), light=(1, -0.2)), SL_X0, SL_Y)
+    d = ImageDraw.Draw(img)
+    marks = [(18400, "Roche limit", -1, RED19), (42164, "geostationary", 1, AMB19), (384400, "our Moon", 1, LIL19), (732000, "stability edge", -1, AQUA19), (1.5e6, "edge of Earth's pull", 1, (190, 190, 210))]
+    for i, (km, lab, side, c) in enumerate(marks):
+        x = _sx19(km); aa = ease((t - 0.3 - i * 0.12) / 0.4)
+        if aa <= 0: continue
+        cc = mix(SPACE, c, aa)
+        d.line([(x, SL_Y - 40), (x, SL_Y + 40)], fill=cc, width=3)
+        yy = SL_Y - 150 if side < 0 else SL_Y + 120
+        if km == 18400: yy = SL_Y - 190
+        d.line([(x, SL_Y + side * 40), (x, yy + (30 if side < 0 else -18))], fill=mix(SPACE, c, aa * 0.5), width=1)
+        d.text((x, yy), lab, font=F(26, "Bold"), fill=cc, anchor="mm")
+        d.text((x, yy + 32), f"{km:,.0f} km", font=F(22, "SemiBold"), fill=mix(SPACE, DIM, aa), anchor="mm")
+    paste_c(img, moon19(9), _sx19(384400), SL_Y)
+    n = v.get("n", 0)
+    for i, (km, lab) in enumerate(SLOTS19):
+        x = _sx19(km); act = (i + 1 == n); aa = ease((t - 0.6 - i * 0.1) / 0.4)
+        if aa <= 0: continue
+        c = AMB19 if act else (110, 110, 140)
+        y = SL_Y - (95 if km != 384400 else 110)
+        if km == 384400: x += 26
+        d.ellipse([x - 24, y - 24, x + 24, y + 24], fill=mix(SPACE, c, aa), outline=WHITE if act else None, width=3)
+        d.text((x, y), lab, font=F(28, "Black"), fill=SPACE, anchor="mm")
+        d.line([(x, y + 24), (x, SL_Y - 30)], fill=mix(SPACE, c, aa), width=2)
+        if act:
+            pulse = 1 + 0.08 * math.sin(t * 4)
+            paste_c(img, radial(80, [(0, AMB19 + (120,)), (1, AMB19 + (0,))]), x, SL_Y); d = ImageDraw.Draw(img)
+            paste_c(img, moon19(int(12 * pulse)), x, SL_Y); d = ImageDraw.Draw(img)
+            dr = v.get("drift")
+            if dr:
+                s_ = -1 if dr == "in" else 1; ox = 30 * math.sin(t * 3) * 0.3
+                for k2 in range(3):
+                    ax = x + s_ * (40 + 30 * k2) + ox
+                    d.polygon([(ax + s_ * 16, SL_Y + 0), (ax - s_ * 4, SL_Y - 14), (ax - s_ * 4, SL_Y + 14)], fill=AMB19 if dr == "out" else RED19)
+    alpha_text(img, (160, 210), v.get("title", ""), F(72, "ExtraBold"), WHITE, a, anchor="lm")
+    if v.get("sub"): alpha_text(img, (160, 290), v["sub"], F(38, "SemiBold"), AMB19, ease((t - 0.3) / 0.5), anchor="lm")
+    d = ImageDraw.Draw(img)
+    d.text((W - 60, H - 60), "distances on a square-root scale", font=F(24, "SemiBold"), fill=DIM, anchor="rm")
+    if v.get("stamp"): _stamp19(img, v["stamp"], tuple(v.get("scol", AQUA19)), W / 2 + 200, 860, (t - 0.8) / 0.8)
+
+def sc_tidechart(img, v, t, dur):
+    """harbor tide: mode curve = 72 h of water level, Moon alone (dashed) / twin alone / both (thick), cursor; mode bar = log pull bars"""
+    d = ImageDraw.Draw(img); a = ease(t / 0.5)
+    alpha_text(img, (160, 170), v.get("head", ""), F(60, "ExtraBold"), WHITE, a, anchor="lm")
+    ratio = v.get("ratio", 1.0)
+    if v.get("mode") == "bar":
+        p = easeio((t - 0.4) / 2.2); x0, x1 = 420, 1700
+        lx = lambda val: x0 + (x1 - x0) * math.log10(max(1, val)) / math.log10(3000)
+        for i, (lab, val, c) in enumerate((("our Moon", 1, LIL19), ("twin at 30,000 km", ratio, RED19))):
+            y = 430 + i * 230; vv = val ** p if i else 1
+            d.text((160, y), lab, font=F(40, "Bold"), fill=WHITE, anchor="lm")
+            d.rounded_rectangle([x0, y + 40, max(x0 + 10, lx(vv)), y + 120], 16, fill=c)
+            d.text((max(x0 + 10, lx(vv)) + 24, y + 80), f"{vv:,.0f}×", font=F(64, "Black"), fill=c, anchor="lm")
+        for k2, lab in ((1, "1"), (10, "10"), (100, "100"), (1000, "1,000")):
+            x = lx(k2); d.line([(x, 900), (x, 920)], fill=DIM, width=2); d.text((x, 950), lab, font=F(26, "SemiBold"), fill=DIM, anchor="mm")
+        d.line([(x0, 910), (x1, 910)], fill=DIM, width=2)
+        d.text((x1, 1000), "tidal pull, log scale · grows with 1 / distance³", font=F(28, "SemiBold"), fill=DIM, anchor="rm")
+        return
+    x0, x1, y0, y1 = 200, 1500, 300, 860; ym = (y0 + y1) / 2; hrs = 72
+    lead = math.radians(2 * v.get("lead", 0)); p2 = v.get("period2", 12.42)
+    w1 = 2 * math.pi / 12.42; w2 = 2 * math.pi / p2
+    amp = 1 + ratio; sc = (y1 - y0) / 2 / amp * 0.92
+    reveal = easeio((t - 0.3) / max(1.0, dur * 0.7))
+    d.line([(x0, ym), (x1, ym)], fill=(60, 60, 90), width=2)
+    for hh in range(0, hrs + 1, 12):
+        x = lerp(x0, x1, hh / hrs); d.line([(x, y1 + 10), (x, y1 + 26)], fill=DIM, width=2)
+        d.text((x, y1 + 50), f"{hh} h", font=F(24, "SemiBold"), fill=DIM, anchor="mm")
+    def curve(fn, col, wdt, dash=False):
+        pts = []
+        for i in range(0, 601):
+            h = hrs * i / 600
+            if h > hrs * reveal: break
+            pts.append((lerp(x0, x1, h / hrs), ym - fn(h) * sc))
+        if len(pts) < 2: return
+        if dash:
+            for j in range(0, len(pts) - 1, 6): d.line(pts[j:j + 4], fill=col, width=wdt)
+        else: d.line(pts, fill=col, width=wdt, joint="curve")
+    f1 = lambda h: math.cos(w1 * h); f2 = lambda h: ratio * math.cos(w2 * h - lead)
+    curve(f2, AMB19, 3); curve(lambda h: f1(h) + f2(h), AQUA19, 7); curve(f1, LIL19, 4, dash=True)
+    leg = [("our Moon alone", LIL19), ("the twin alone", AMB19), ("both together", AQUA19)]
+    for i, (lab, c) in enumerate(leg):
+        y = 360 + i * 70; d.line([(1560, y), (1620, y)], fill=c, width=6); d.text((1640, y), lab, font=F(30, "Bold"), fill=WHITE, anchor="lm")
+    h = hrs * reveal; tot = f1(h) + f2(h)
+    if reveal > 0.02:
+        x = lerp(x0, x1, h / hrs); d.ellipse([x - 12, ym - tot * sc - 12, x + 12, ym - tot * sc + 12], fill=WHITE)
+    d.text((1560, 640), "highest tide", font=F(30, "Bold"), fill=DIM, anchor="lm")
+    d.text((1560, 700), f"up to {amp:,.0f}×" if ratio != 1 else "1.0× today", font=F(56, "Black"), fill=AQUA19, anchor="lm")
+    d.text((x1, y0 - 40), "equilibrium tide, Sun ignored · our calculation", font=F(24, "SemiBold"), fill=DIM, anchor="rm")
+
+def sc_trojan(img, v, t, dur):
+    """Earth, the Moon and a twin at L4 (60° ahead): triangle | wobble (tadpole libration + Routh box) | companion (≈ 1,200 km, drifts in)"""
+    mode = v.get("mode", "triangle"); cx, cy, R = 700, 570, 360
+    d = ImageDraw.Draw(img)
+    rr = R * (1 + (0.06 * easeio((t - 0.5) / max(1, dur - 1.5)) if mode == "companion" else 0))
+    d.ellipse([cx - rr, cy - rr, cx + rr, cy + rr], outline=(70, 70, 110), width=2)
+    am = math.radians(10) - t * 0.02
+    lib = math.radians(12) * math.sin(t * 1.4) if mode == "wobble" else 0
+    if mode == "companion": lib = -math.radians(40) * easeio((t - 1.0) / max(1, dur - 1.5)) ** 2 + math.radians(4) * math.sin(t * 2)
+    a4 = am - math.radians(60) + lib
+    mx, my = cx + rr * math.cos(am), cy + rr * math.sin(am); tx, ty = cx + rr * math.cos(a4), cy + rr * math.sin(a4)
+    a5 = am + math.radians(60); l5 = (cx + rr * math.cos(a5), cy + rr * math.sin(a5)); l4 = (cx + rr * math.cos(am - math.radians(60)), cy + rr * math.sin(am - math.radians(60)))
+    if mode != "companion" or t < dur * 0.5:
+        ta = ease((t - 0.3) / 0.6)
+        lay = Image.new("RGBA", img.size, (0, 0, 0, 0)); dl = ImageDraw.Draw(lay)
+        dl.line([(cx, cy), (mx, my), l4, (cx, cy)], fill=LIL19 + (int(160 * ta),), width=3)
+        img.alpha_composite(lay); d = ImageDraw.Draw(img)
+        for (px, py, lab) in ((l4[0], l4[1], "L4"), (l5[0], l5[1], "L5")):
+            d.line([(px - 14, py - 14), (px + 14, py + 14)], fill=AQUA19, width=3); d.line([(px - 14, py + 14), (px + 14, py - 14)], fill=AQUA19, width=3)
+            d.text((px + (40 if px > cx else -40), py - 30), lab, font=F(34, "Black"), fill=AQUA19, anchor="mm")
+        if mode == "triangle":
+            for (px, py) in ((cx, cy), (mx, my), l4):
+                d.text(((px * 2 + cx + mx + l4[0] - px) / 3 * 0 + lerp(px, (cx + mx + l4[0]) / 3, 0.28), lerp(py, (cy + my + l4[1]) / 3, 0.28)), "60°", font=F(28, "Bold"), fill=WHITE, anchor="mm")
+    if mode == "wobble":
+        lay = Image.new("RGBA", img.size, (0, 0, 0, 0)); dl = ImageDraw.Draw(lay)
+        base = am - math.radians(60)
+        dl.arc([cx - rr, cy - rr, cx + rr, cy + rr], math.degrees(base - math.radians(13)), math.degrees(base + math.radians(13)), fill=AMB19 + (200,), width=14)
+        img.alpha_composite(lay); d = ImageDraw.Draw(img)
+    paste_c(img, earth_sprite(70, light=(-1, -0.2)), cx, cy)
+    paste_c(img, moon19(30), mx, my)
+    tr = 30 if mode != "companion" else 11
+    paste_c(img, radial(tr * 5, [(0, AMB19 + (110,)), (1, AMB19 + (0,))]), tx, ty)
+    paste_c(img, moon19(tr), tx, ty)
+    d = ImageDraw.Draw(img)
+    d.text((cx, cy + 110), "Earth", font=F(30, "Bold"), fill=WHITE, anchor="mm")
+    d.text((mx - 40, my + 60), "our Moon", font=F(30, "Bold"), fill=LIL19, anchor="rm")
+    d.text((tx - (60 if mode != "companion" else 0), ty - tr - 34), "the twin" if mode != "companion" else "companion", font=F(30, "Bold"), fill=AMB19, anchor="mm")
+    ax = 1240
+    if mode == "triangle":
+        _box19(img, ax, 300, 1840, 760, LIL19); d = ImageDraw.Draw(img)
+        d.text((ax + 40, 360), "SPOT 4 · L4", font=F(50, "ExtraBold"), fill=WHITE, anchor="lm")
+        for i, s in enumerate(["same orbit as the Moon", "60° ahead of it", "384,400 km from Earth", "a perfect triangle"]):
+            d.text((ax + 40, 450 + i * 70), s, font=F(36, "SemiBold"), fill=mix(SPACE, WHITE, ease((t - 0.6 - i * 0.4) / 0.4)), anchor="lm")
+    elif mode == "wobble":
+        _box19(img, ax, 280, 1840, 820, AQUA19); d = ImageDraw.Draw(img)
+        d.text((ax + 40, 340), "Routh's test (1875)", font=F(44, "ExtraBold"), fill=WHITE, anchor="lm")
+        d.text((ax + 40, 410), "masses: Earth 1 · Moon 0.0123 · twin 0.0123", font=F(26, "SemiBold"), fill=DIM, anchor="lm")
+        rows = [("27 × (m₁m₂ + m₂m₃ + m₃m₁)", "0.67"), ("(m₁ + m₂ + m₃)²", "1.05")]
+        for i, (l, r_) in enumerate(rows):
+            aa = ease((t - 0.8 - i * 0.8) / 0.5)
+            d.text((ax + 40, 490 + i * 90), l, font=F(27, "Bold"), fill=mix(SPACE, WHITE, aa), anchor="lm")
+            d.text((ax + 560, 490 + i * 90), r_, font=F(44, "Black"), fill=mix(SPACE, AMB19, aa), anchor="rm")
+        aa = ease((t - 2.6) / 0.5)
+        d.text((ax + 40, 700), "0.67 < 1.05 -> STABLE", font=F(46, "Black"), fill=mix(SPACE, AQUA19, aa), anchor="lm")
+        d.text((ax + 40, 770), "the twin rocks around L4", font=F(28, "SemiBold"), fill=mix(SPACE, DIM, aa), anchor="lm")
+    else:
+        _box19(img, ax, 300, 1840, 760, AMB19); d = ImageDraw.Draw(img)
+        d.text((ax + 40, 360), "The lost companion?", font=F(46, "ExtraBold"), fill=WHITE, anchor="lm")
+        for i, s in enumerate(["≈ 1,200 km wide", "about 1/3 of the Moon's width", "parked at a Trojan point", "Jutzi & Asphaug, Nature 2011"]):
+            d.text((ax + 40, 450 + i * 70), s, font=F(34, "SemiBold"), fill=mix(SPACE, AMB19 if i == 0 else WHITE, ease((t - 0.6 - i * 0.4) / 0.4)), anchor="lm")
+        d.text((cx, cy + rr + 50 if cy + rr + 50 < H - 30 else H - 40), "the Moon drifts outward…", font=F(28, "SemiBold"), fill=DIM, anchor="mm") if t > dur * 0.4 else None
+
+def sc_splat(img, v, t, dur):
+    """mode shred = twin inside the Roche limit breaks into a ring | splat = slow companion pancakes onto the Moon | farside = near vs far side"""
+    mode = v.get("mode", "shred"); d = ImageDraw.Draw(img)
+    if mode == "shred":
+        cx, cy, er = 560, 560, 140; k = er / 6371.0; rro = 18400 * k; ro = 15000 * k
+        for a0 in range(0, 360, 8): d.arc([cx - rro, cy - rro, cx + rro, cy + rro], a0, a0 + 4, fill=RED19, width=3)
+        d.text((cx, cy - rro - 30), "Roche limit · 18,400 km", font=F(30, "Bold"), fill=RED19, anchor="mm")
+        p = easeio((t - 0.6) / max(1.0, dur - 1.5)); rng = random.Random(19)
+        ang0 = -0.4 + t * 0.35; mr = 1737 * k
+        if p < 0.08:
+            paste_c(img, moon19(int(mr)), cx + ro * math.cos(ang0), cy + ro * math.sin(ang0))
+        n = 260
+        lay = Image.new("RGBA", img.size, (0, 0, 0, 0)); dl = ImageDraw.Draw(lay)
+        for i in range(n if p >= 0.08 else 0):
+            u = rng.random(); spread = (u - 0.5) * 2 * math.pi * p ** 1.2
+            rad = ro + rng.gauss(0, 1) * (mr * 0.5 + 18 * p)
+            a_ = ang0 + spread + rng.gauss(0, 0.04)
+            x, y = cx + rad * math.cos(a_), cy + rad * math.sin(a_) * lerp(1, 0.32, p)
+            s_ = rng.uniform(1.5, 5.5) * (1 - 0.4 * p)
+            dl.ellipse([x - s_, y - s_, x + s_, y + s_], fill=(205, 200, 195, 230))
+        img.alpha_composite(lay)
+        paste_c(img, earth_sprite(er, light=(-1, -0.2)), cx, cy)
+        d = ImageDraw.Draw(img)
+        _box19(img, 1180, 330, 1840, 760, RED19); d = ImageDraw.Draw(img)
+        d.text((1220, 390), "SPOT 1 · 15,000 km", font=F(46, "ExtraBold"), fill=WHITE, anchor="lm")
+        for i, s in enumerate(["near side pulled harder", "than the far side", "the twin is torn apart", "-> a ring around Earth"]):
+            d.text((1220, 480 + i * 64), s, font=F(34, "SemiBold"), fill=mix(SPACE, RED19 if i == 2 else WHITE, ease((t - 0.5 - i * 0.6) / 0.4)), anchor="lm")
+        d.text((cx, H - 70), "Earth, Moon and orbit drawn to scale", font=F(26, "SemiBold"), fill=DIM, anchor="mm")
+    elif mode == "splat":
+        mx, my, mr = 1150, 560, 300; cr = mr * 0.345
+        p = easeio((t - 0.3) / max(1.0, dur * 0.55)); q = easeio((t - 0.3 - dur * 0.55) / max(0.8, dur * 0.35))
+        paste_c(img, moon19(mr), mx, my)
+        d = ImageDraw.Draw(img)
+        if q <= 0:
+            x = lerp(200, mx - mr - cr * 0.7, p)
+            paste_c(img, radial(int(cr * 4), [(0, AMB19 + (90,)), (1, AMB19 + (0,))]), x, my)
+            paste_c(img, moon19(int(cr)), x, my)
+            d = ImageDraw.Draw(img)
+            for k2 in range(5): d.line([(x - cr - 30 - k2 * 40, my - 40 + k2 * 20), (x - cr - 80 - k2 * 40, my - 40 + k2 * 20)], fill=AMB19, width=3)
+        else:
+            span = lerp(18, 62, q); thick = lerp(cr * 0.9, mr * 0.13, q)
+            lay = Image.new("RGBA", img.size, (0, 0, 0, 0)); dl = ImageDraw.Draw(lay)
+            pts_o, pts_i = [], []
+            for i in range(41):
+                a_ = math.radians(180 - span + 2 * span * i / 40); bump = thick * (1 - ((i - 20) / 20) ** 2) ** 0.7
+                pts_o.append((mx + (mr + bump) * math.cos(a_), my + (mr + bump) * math.sin(a_)))
+                pts_i.append((mx + (mr - 4) * math.cos(a_), my + (mr - 4) * math.sin(a_)))
+            dl.polygon(pts_o + pts_i[::-1], fill=(214, 196, 168, 255))
+            dl.line(pts_o, fill=AMB19 + (255,), width=4)
+            img.alpha_composite(lay); d = ImageDraw.Draw(img)
+            d.text((mx - mr - 120, my + mr * 0.75), "a pile, not a crater", font=F(34, "Bold"), fill=AMB19, anchor="mm")
+        _box19(img, 80, 820, 760, 1000, AMB19); d = ImageDraw.Draw(img)
+        d.text((120, 870), "impact speed", font=F(32, "Bold"), fill=DIM, anchor="lm")
+        d.text((120, 945), "2–3 km/s", font=F(66, "Black"), fill=AMB19, anchor="lm")
+        d.text((470, 945), "(slow, for space)", font=F(30, "SemiBold"), fill=WHITE, anchor="lm")
+        d.text((W - 60, H - 50), "illustration · after Jutzi & Asphaug 2011", font=F(24, "SemiBold"), fill=DIM, anchor="rm")
+    else:
+        for i, (x, far, lab, sub) in enumerate(((560, False, "NEAR SIDE", "dark lava plains"), (1360, True, "FAR SIDE", "thick, bright highlands"))):
+            a = ease((t - 0.2 - i * 0.9) / 0.6)
+            if a <= 0: continue
+            paste_c(img, moon19(270, far=far), x, 540, a)
+            d = ImageDraw.Draw(img)
+            d.text((x, 160), lab, font=F(52, "ExtraBold"), fill=mix(SPACE, WHITE, a), anchor="mm")
+            d.text((x, 900), sub, font=F(36, "SemiBold"), fill=mix(SPACE, AMB19 if far else LIL19, a), anchor="mm")
+        a = ease((t - 2.5) / 0.6)
+        if a > 0:
+            lay = Image.new("RGBA", img.size, (0, 0, 0, 0)); dl = ImageDraw.Draw(lay)
+            dl.arc([1360 - 300, 240, 1360 + 300, 840], 200, 340, fill=AMB19 + (int(220 * a),), width=10)
+            img.alpha_composite(lay); d = ImageDraw.Draw(img)
+            d.text((1360, 990), "the scar of a second moon?", font=F(36, "Bold"), fill=mix(SPACE, AMB19, a), anchor="mm")
+        d.text((W - 60, H - 40), "code-drawn illustration", font=F(22, "SemiBold"), fill=DIM, anchor="rm")
+
+_traj19 = {}
+def _hill19(r0, days=200, dt=1800.0):
+    if r0 in _traj19: return _traj19[r0]
+    def f(s):
+        x, y, vx, vy = s; r3 = (x * x + y * y) ** 1.5
+        return (vx, vy, 2 * OM19 * vy + 3 * OM19 * OM19 * x - GM19 * x / r3, -2 * OM19 * vx - GM19 * y / r3)
+    s = (r0, 0.0, 0.0, math.sqrt(GM19 / r0) - OM19 * r0); out = [(0.0, r0, 0.0)]; tt = 0.0
+    while tt < days * 86400:
+        k1 = f(s); k2 = f(tuple(s[i] + dt / 2 * k1[i] for i in range(4))); k3 = f(tuple(s[i] + dt / 2 * k2[i] for i in range(4))); k4 = f(tuple(s[i] + dt * k3[i] for i in range(4)))
+        s = tuple(s[i] + dt / 6 * (k1[i] + 2 * k2[i] + 2 * k3[i] + k4[i]) for i in range(4)); tt += dt
+        out.append((tt / 86400, s[0], s[1]))
+        if math.hypot(s[0], s[1]) > 3.4e6: break
+    _traj19[r0] = out
+    return out
+
+def sc_sunsteal(img, v, t, dur):
+    """Hill-problem simulation (Earth + Sun, frame turning with Earth): a twin started on a circular orbit at 1,000,000 km escapes;
+    phase 0 = days 0–75, phase 1 = 75 -> exit; Hill sphere, 0.49 R_H stability edge, Moon orbit"""
+    cx, cy = 900, 560; k = 330 / 1.5e6; d = ImageDraw.Draw(img)
+    for a0 in range(0, 360, 6): d.arc([cx - 330, cy - 330, cx + 330, cy + 330], a0, a0 + 3, fill=(170, 170, 195), width=2)
+    rs = 732000 * k
+    lay = Image.new("RGBA", img.size, (0, 0, 0, 0)); ImageDraw.Draw(lay).ellipse([cx - rs, cy - rs, cx + rs, cy + rs], fill=AQUA19 + (28,), outline=AQUA19 + (160,), width=3); img.alpha_composite(lay)
+    d = ImageDraw.Draw(img); rm = 384400 * k
+    d.ellipse([cx - rm, cy - rm, cx + rm, cy + rm], outline=(90, 90, 130), width=2)
+    paste_c(img, earth_sprite(14, light=(-1, 0)), cx, cy)
+    d = ImageDraw.Draw(img)
+    d.text((cx, cy - 330 - 28), "edge of Earth's pull · 1.5 million km", font=F(26, "Bold"), fill=(190, 190, 210), anchor="mm")
+    d.text((cx, cy - rs + 30), "safe zone ≈ 730,000 km", font=F(24, "Bold"), fill=AQUA19, anchor="mm")
+    d.text((cx + rm * 0.72, cy + rm * 0.72 + 20), "Moon's orbit", font=F(22, "SemiBold"), fill=DIM, anchor="lm")
+    for k2 in range(3):
+        ax = 140 + k2 * 36 - (t * 30) % 36
+        d.polygon([(ax - 18, 560), (ax + 6, 546), (ax + 6, 574)], fill=AMB19)
+    d.text((150, 510), "to the Sun", font=F(30, "Bold"), fill=AMB19, anchor="lm")
+    d.text((150, 610), "150 million km", font=F(24, "SemiBold"), fill=DIM, anchor="lm")
+    tr = _hill19(1.0e6); dend = tr[-1][0]
+    ph = v.get("phase", 0); d0, d1 = (0, 75) if ph == 0 else (75, dend)
+    day = lerp(d0, d1, easeio((t - 0.3) / max(1.0, dur * 0.8)))
+    pts = [(cx + x * k, cy - y * k) for (dd, x, y) in tr if dd <= day]
+    if len(pts) > 1:
+        lay = Image.new("RGBA", img.size, (0, 0, 0, 0)); dl = ImageDraw.Draw(lay)
+        n = len(pts)
+        for i in range(0, n - 1, 2): dl.line([pts[i], pts[min(n - 1, i + 2)]], fill=AMB19 + (int(60 + 195 * i / n),), width=4)
+        img.alpha_composite(lay)
+    hx, hy = pts[-1]
+    paste_c(img, radial(60, [(0, AMB19 + (160,)), (1, AMB19 + (0,))]), hx, hy); paste_c(img, moon19(8), hx, hy)
+    d = ImageDraw.Draw(img)
+    rnow = math.hypot(*[c for c in [tr[min(len(tr) - 1, len(pts) - 1)][1], tr[min(len(tr) - 1, len(pts) - 1)][2]]])
+    _box19(img, 1380, 300, 1860, 640, AMB19); d = ImageDraw.Draw(img)
+    d.text((1420, 350), "DAY", font=F(30, "Bold"), fill=DIM, anchor="lm"); d.text((1420, 410), f"{day:,.0f}", font=F(70, "Black"), fill=WHITE, anchor="lm")
+    d.text((1420, 490), "DISTANCE", font=F(30, "Bold"), fill=DIM, anchor="lm"); d.text((1420, 550), f"{rnow / 1e6:.2f} million km", font=F(48, "Black"), fill=AMB19, anchor="lm")
+    if ph == 1 and day > dend * 0.9: _stamp19(img, "STOLEN BY THE SUN", RED19, 1450, 830, (t - dur * 0.75) / 0.6)
+    d.text((W - 60, H - 40), "our simulation: Earth + Sun, frame turning with Earth", font=F(22, "SemiBold"), fill=DIM, anchor="rm")
+
+def _rock19(d, x, y, s, col, seed):
+    rng = random.Random(seed); pts = []
+    for i in range(12):
+        a_ = 2 * math.pi * i / 12; rr = s * rng.uniform(0.75, 1.1); pts.append((x + rr * math.cos(a_), y + rr * 0.8 * math.sin(a_)))
+    d.polygon(pts, fill=col)
+
+def sc_tangle(img, v, t, dur):
+    """real tiny second moons: phase 0 = 2006 RH120 tangled loops | 1 = size lineup (person, 1.2 m, 3 m, 10 m, bus) | 2 = Kamo'oalewa's
+    quasi-satellite loop in a frame turning with Earth"""
+    ph = v.get("phase", 0); d = ImageDraw.Draw(img)
+    if ph in (0, 1):
+        cx, cy = 620 if ph == 0 else 960, 520 if ph == 0 else 400; S = 300 if ph == 0 else 220
+        paste_c(img, earth_sprite(36 if ph == 0 else 26, light=(-1, -0.2)), cx, cy)
+        d = ImageDraw.Draw(img)
+        u = easeio((t - 0.2) / max(1.0, dur * 0.85)); pts = []
+        for i in range(int(900 * u) + 2):
+            s_ = i / 900 * 26
+            r_ = S * (0.45 + 0.4 * math.sin(0.61 * s_ + 0.5) ** 2 + 0.1 * math.sin(2.3 * s_))
+            a_ = s_ + 0.9 * math.sin(0.33 * s_)
+            pts.append((cx + r_ * math.cos(a_), cy + r_ * 0.8 * math.sin(a_)))
+        lay = Image.new("RGBA", img.size, (0, 0, 0, 0)); dl = ImageDraw.Draw(lay)
+        for i in range(0, len(pts) - 1, 2): dl.line([pts[i], pts[min(len(pts) - 1, i + 2)]], fill=AQUA19 + (int(50 + 180 * i / len(pts)),), width=3)
+        img.alpha_composite(lay)
+        if len(pts) > 1: paste_c(img, radial(40, [(0, AQUA19 + (200,)), (1, AQUA19 + (0,))]), *pts[-1])
+        d = ImageDraw.Draw(img)
+        if ph == 0:
+            _box19(img, 1180, 300, 1840, 760, AQUA19); d = ImageDraw.Draw(img)
+            d.text((1220, 360), "2006 RH120", font=F(52, "ExtraBold"), fill=WHITE, anchor="lm")
+            for i, s in enumerate(["≈ 3 m wide", "caught mid-2006", "looped Earth ≈ 1 year", "then escaped"]):
+                d.text((1220, 450 + i * 70), s, font=F(36, "SemiBold"), fill=mix(SPACE, AQUA19 if i == 0 else WHITE, ease((t - 0.5 - i * 0.6) / 0.4)), anchor="lm")
+            d.text((cx, H - 60), "loops: illustration", font=F(24, "SemiBold"), fill=DIM, anchor="mm")
+        else:
+            base = 960; xs = [260, 560, 860, 1200, 1600]; sc_ = 26
+            d.line([(140, base), (1800, base)], fill=(80, 80, 110), width=3)
+            hp = 1.7 * sc_
+            d.ellipse([xs[0] - 9, base - hp - 4, xs[0] + 9, base - hp + 14], fill=WHITE); d.line([(xs[0], base - hp + 14), (xs[0], base - hp * 0.45)], fill=WHITE, width=5)
+            d.line([(xs[0], base - hp * 0.45), (xs[0] - 9, base)], fill=WHITE, width=5); d.line([(xs[0], base - hp * 0.45), (xs[0] + 9, base)], fill=WHITE, width=5)
+            items = [(xs[1], 1.2, "2020 CD3 · ≈ 1.2 m"), (xs[2], 3, "2006 RH120 · ≈ 3 m"), (xs[3], 10, "2024 PT5 · ≈ 10 m")]
+            for i, (x, m, lab) in enumerate(items):
+                a = ease((t - 0.4 - i * 0.9) / 0.5)
+                if a <= 0: continue
+                s_ = m * sc_ / 2; _rock19(d, x, base - s_ * 0.8, s_, mix(SPACE, (170, 160, 150), a), i + 3)
+                d.text((x, base + 40), lab, font=F(28, "Bold"), fill=mix(SPACE, AQUA19, a), anchor="mm")
+            bx = xs[4]; bl = 12 * sc_
+            d.rounded_rectangle([bx - bl / 2, base - 3.2 * sc_, bx + bl / 2, base - 10], 10, fill=(220, 180, 60))
+            for k2 in range(6): d.rectangle([bx - bl / 2 + 20 + k2 * 48, base - 2.8 * sc_, bx - bl / 2 + 56 + k2 * 48, base - 1.9 * sc_], fill=(60, 80, 110))
+            d.ellipse([bx - bl / 2 + 40, base - 30, bx - bl / 2 + 80, base + 10], fill=(30, 30, 40)); d.ellipse([bx + bl / 2 - 80, base - 30, bx + bl / 2 - 40, base + 10], fill=(30, 30, 40))
+            d.text((xs[0], base + 40), "you · 1.7 m", font=F(28, "Bold"), fill=WHITE, anchor="mm"); d.text((bx, base + 40), "a bus · 12 m", font=F(28, "Bold"), fill=WHITE, anchor="mm")
+            a = ease((t - 3.2) / 0.5)
+            d.text((W / 2, 1045), "2024 PT5's colours match Moon rock (Kareta et al. 2025)", font=F(30, "SemiBold"), fill=mix(SPACE, LIL19, a), anchor="mm")
+    else:
+        cx, cy = 820, 560; d = ImageDraw.Draw(img)
+        paste_c(img, earth_sprite(30, light=(-1, 0)), cx, cy); d = ImageDraw.Draw(img)
+        u = (t * 0.45) % (2 * math.pi); ax_, by_ = 190, 380
+        lay = Image.new("RGBA", img.size, (0, 0, 0, 0)); dl = ImageDraw.Draw(lay)
+        dl.ellipse([cx - ax_, cy - by_, cx + ax_, cy + by_], outline=AMB19 + (170,), width=4); img.alpha_composite(lay)
+        kx, ky = cx + ax_ * math.cos(u), cy - by_ * math.sin(u)
+        paste_c(img, radial(50, [(0, AMB19 + (200,)), (1, AMB19 + (0,))]), kx, ky)
+        d = ImageDraw.Draw(img); _rock19(d, kx, ky, 9, (190, 170, 150), 7)
+        d.text((kx + 30, ky), "Kamo'oalewa", font=F(28, "Bold"), fill=AMB19, anchor="lm")
+        for k2 in range(3):
+            ax = 140 + k2 * 36 - (t * 30) % 36
+            d.polygon([(ax - 18, 560), (ax + 6, 546), (ax + 6, 574)], fill=AMB19)
+        d.text((150, 510), "to the Sun", font=F(30, "Bold"), fill=AMB19, anchor="lm")
+        _box19(img, 1200, 300, 1850, 780, AMB19); d = ImageDraw.Draw(img)
+        d.text((1240, 360), "A QUASI-MOON", font=F(50, "ExtraBold"), fill=WHITE, anchor="lm")
+        for i, s in enumerate(["orbits the Sun, not Earth", "but stays beside us", "seems to loop around Earth", "Tianwen-2 reached it in 2026"]):
+            d.text((1240, 450 + i * 70), s, font=F(34, "SemiBold"), fill=mix(SPACE, AMB19 if i == 3 else WHITE, ease((t - 0.5 - i * 0.6) / 0.4)), anchor="lm")
+        d.text((W - 60, H - 40), "frame turning with Earth · loop shape illustrative", font=F(22, "SemiBold"), fill=DIM, anchor="rm")
 
 
 SC = {k[3:]: f for k, f in globals().items() if k.startswith("sc_")}

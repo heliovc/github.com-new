@@ -54,6 +54,10 @@ vis.type == "tilt" / THEME.hook/outro == "tilt": inclinação do eixo. Planeta c
   plano da órbita, linha tracejada "reto para cima" + arco transferidor que varre até o eixo com contador de graus + eixo fantasma da
   Terra (23,4°); marcador na superfície mostra o sentido da rotação (vis.retro = gira ao contrário); vis.kind = gas | ice | rock | ringed;
   gancho = planeta "?" com o eixo virando até ficar de cabeça para baixo; outro = os 5 em fila, cada um na sua inclinação (rank21).
+vis.type == "pair" / THEME.hook/outro == "pair": a lua do lado do SEU planeta, com o planeta sempre do mesmo tamanho (raio 300 px) e a lua
+  em escala com ele (vis.ratio = diâmetro da lua / diâmetro do planeta); a lua sai de trás do planeta e para ao lado, contador "% da
+  largura" + barra 0–60%; vis.kind = gas | ringed | earth | ice | dwarf, vis.col (planeta), vis.mcol (lua), vis.pname / vis.mname;
+  gancho = planeta escuro com uma lua "?" da metade do tamanho; outro = os 5 pares em fila, planetas iguais (rank22).
 Tudo desenhado por código; narração Kokoro (VOICE, padrão af_heart); legenda grande queimada.
 """
 import sys, os, re, math, json, subprocess, importlib.util, random
@@ -1268,6 +1272,51 @@ def tilt_vis(img, it, th, t, dur):
     text(img, (W - 190, 525), "from straight up", 26, (200, 205, 230), w="SemiBold", a=ease((t - 0.4) / 0.3), stroke=2)
     if v.get("note"): text(img, (W / 2, 1265), v["note"], 38, (235, 235, 245), w="Bold", a=ease((t - 1.4) / 0.4), stroke=3)
 
+# ---- rank22: "pair" — each moon next to its own planet; the planet is always the same size, so the moon's size IS the ratio.
+PA_R = 300
+_pa = {}
+def pa_body(kind, r, col):
+    key = (kind, int(r), tuple(col))
+    if key not in _pa:
+        if kind == "gas": _pa[key] = tl_body("gas", r, col)
+        elif kind == "ringed": _pa[key] = tl_body("ringed", r, col)
+        elif kind == "earth": _pa[key] = R.earth_sprite(max(3, int(r)), glow=None)
+        elif kind == "ice": _pa[key] = tl_body("ice", r, col)
+        elif kind == "moon": _pa[key] = R.moon8(max(4, int(r)))
+        else: _pa[key] = R.planet_sprite(max(3, int(r)), tuple(col), light=(-0.7, -0.5))
+    return _pa[key]
+def pa_pair(img, v, cx, cy, rp, q, t, a=1.0, label=True):
+    """planet of radius rp at (cx, cy); moon slides out to its right by q (0..1)"""
+    rm = rp * v["ratio"]
+    mx = lerp(cx + rp * 0.2, cx + rp + rm + rp * 0.18, q); my = cy + (1 - q) * rp * 0.1
+    if q < 0.5: R.paste_c(img, pa_body(v.get("mkind", "rock"), rm, tuple(v.get("mcol", (190, 185, 180)))), mx, my, a * ease(q * 4))
+    if v["kind"] == "ringed": bd_planet(img, "ringed", tuple(v["col"]), cx, cy, rp, a) if rp > 200 else R.paste_c(img, pa_body("ringed", rp, tuple(v["col"])), cx, cy, a)
+    else: R.paste_c(img, pa_body(v["kind"], rp, tuple(v["col"])), cx, cy, a)
+    if q >= 0.5: R.paste_c(img, pa_body(v.get("mkind", "rock"), rm, tuple(v.get("mcol", (190, 185, 180)))), mx, my, a)
+    return mx, my, rm
+def pa_bar(img, th, items, cur=None, y=1200, a=1.0):
+    d = ImageDraw.Draw(img); x0, x1 = 110, W - 110; mx_ = 0.6
+    d.line([(x0, y), (x1, y)], fill=(150, 160, 200), width=4)
+    for pc in (0, 10, 20, 30, 40, 50, 60):
+        x = lerp(x0, x1, pc / 100 / mx_); d.line([(x, y - 10), (x, y + 10)], fill=(150, 160, 200), width=2)
+        d.text((x, y + 34), f"{pc}%", font=F(26, "SemiBold"), fill=(150, 160, 200), anchor="mm")
+    for o in items:
+        v = o["vis"]; x = lerp(x0, x1, v["ratio"] / mx_); c = tuple(v.get("mcol", th["accent"])) if o is not cur else tuple(th["accent"])
+        d.ellipse([x - 13, y - 13, x + 13, y + 13], fill=c)
+        d.text((x + {5: -22, 4: 0, 3: 22}.get(o["rank"], 0), y - 40 - {5: 0, 4: 30, 3: 0}.get(o["rank"], 0)), f"#{o['rank']}", font=F(30, "Black"), fill=c, anchor="mm")
+def pair_vis(img, it, th, t, dur):
+    v = it["vis"]; acc = tuple(th["accent"]); cx, cy = 400, 790
+    q = easeio((t - 0.4) / max(1.0, dur * 0.45))
+    mx, my, rm = pa_pair(img, v, cx, cy, PA_R, q, t, ease(t / 0.35))
+    d = ImageDraw.Draw(img)
+    d.line([(cx - PA_R, cy + PA_R + 40), (cx + PA_R, cy + PA_R + 40)], fill=tuple(v["col"]), width=5)
+    d.text((cx, cy + PA_R + 78), v.get("pname", ""), font=F(34, "ExtraBold"), fill=tuple(v["col"]), anchor="mm")
+    if q > 0.5:
+        d.line([(mx - rm, my + PA_R + 40), (mx + rm, my + PA_R + 40)], fill=acc, width=5)
+        text(img, (mx, my - rm - 46), v.get("mname", ""), 38, acc, w="ExtraBold", stroke=3)
+    pa_bar(img, th, [o for o in ALL_ITEMS if o["rank"] >= it["rank"]], cur=it, y=1240, a=ease((t - 0.8) / 0.4))
+    if v.get("note"): text(img, (W / 2, 560), v["note"], 36, (235, 235, 245), w="Bold", a=ease((t - 1.6) / 0.4), stroke=3)
+
 def caption_chunks(say, t0, dur):
     words = say.split(); groups, g = [], []
     for w in words:
@@ -1290,6 +1339,18 @@ def draw_caption(img, chunks, gt, y=1585):
 
 def seg_hook(img, sc, th, t, dur):
     col = tuple(th["star_col"]); acc = tuple(th["accent"])
+    if th.get("hook") == "pair":
+        # frame 0: big number + a dark planet with a "?" moon half its width bobbing next to it
+        cx, cy = 400, 900; R.paste_c(img, R.planet_sprite(PA_R, (60, 55, 85), light=(-0.7, -0.5)), cx, cy)
+        rm = PA_R * 0.51; mx = cx + PA_R + rm + 50; my = cy + 14 * math.sin(t * 2.4)
+        d = ImageDraw.Draw(img); d.ellipse([mx - rm, my - rm, mx + rm, my + rm], fill=(40, 36, 60), outline=tuple(th["accent"]), width=6)
+        text(img, (mx, my), "?", 160, tuple(th["accent"]), stroke=4)
+        d.line([(cx - PA_R, cy + PA_R + 40), (cx + PA_R, cy + PA_R + 40)], fill=(160, 150, 200), width=5)
+        d.line([(mx - rm, cy + PA_R + 40), (mx + rm, cy + PA_R + 40)], fill=tuple(th["accent"]), width=5)
+        text(img, (W / 2, 220), sc.get("big", ""), 150, tuple(th["accent"]), stroke=3)
+        text(img, (W / 2, 340), sc["top"].upper(), 52, (255, 255, 255))
+        text(img, (W / 2, 1420), sc["sub"], 46, tuple(th["accent2"]), w="ExtraBold")
+        return
     if th.get("hook") == "tilt":
         # frame 0: the big number + a dark "?" planet whose axis swings back and forth, ending upside down; Earth's 23.4° ghost
         cx, cy = W / 2, 930; d = ImageDraw.Draw(img); d.line([(60, cy), (W - 60, cy)], fill=(150, 160, 200), width=3)
@@ -1590,6 +1651,8 @@ def seg_item(img, it, th, t, dur):
         beads_vis(img, it, th, t, dur)
     if v["type"] == "tilt":
         tilt_vis(img, it, th, t, dur)
+    if v["type"] == "pair":
+        pair_vis(img, it, th, t, dur)
     # number
     p = easeio((t - 0.5) / 1.6)
     num = it["num"]
@@ -1602,6 +1665,21 @@ def seg_item(img, it, th, t, dur):
 
 def seg_outro(img, sc, th, t, dur):
     a = ease(t / 0.5)
+    if th.get("outro") == "pair":
+        # all five pairs in a row: every planet drawn the same size, moons to scale with their own planet
+        for i, o in enumerate(sorted(ALL_ITEMS, key=lambda o: o["rank"])):
+            x = 120 + i * 210; vv = o["vis"]; rp = 52
+            R.paste_c(img, pa_body(vv["kind"] if vv["kind"] != "ringed" else "gas", rp, tuple(vv["col"])), x - 22, 620, a)
+            rm = rp * vv["ratio"]; R.paste_c(img, pa_body(vv.get("mkind", "rock"), max(3, rm), tuple(vv.get("mcol", (190, 185, 180)))), x + rp - 18 + rm, 620 - rp * 0.7, a)
+            text(img, (x, 470), f"#{o['rank']}", 40, tuple(th["accent"]), a=a, stroke=3)
+            text(img, (x, 740), f"{vv['ratio'] * 100:.0f}%" if vv["ratio"] > 0.1 else f"{vv['ratio'] * 100:.1f}%", 40, (255, 255, 255), a=a, stroke=3)
+            text(img, (x, 785), vv.get("mname", ""), 28, tuple(vv.get("mcol", th["accent"])), w="ExtraBold", a=a, stroke=3)
+        if th.get("outro_note"): text(img, (W / 2, 940), th["outro_note"], 44, tuple(th["accent2"]), w="ExtraBold", a=a, stroke=3)
+        text(img, (W / 2, 1080), "WHICH MOON", 96, (255, 255, 255), a=ease((t - 0.3) / 0.5))
+        text(img, (W / 2, 1170), "SHOULD WE MEASURE NEXT?", 56, tuple(th["accent"]), a=ease((t - 0.5) / 0.5))
+        text(img, (W / 2, 1340), "SUBSCRIBE", 100, tuple(th["accent"]), a=ease((t - 0.8) / 0.5))
+        text(img, (W / 2, 1430), "to Cosmic Scale", 50, (255, 255, 255), w="ExtraBold", a=ease((t - 1.0) / 0.5))
+        return
     if th.get("outro") == "tilt":
         # all five in a row, each tilted by its own obliquity, + Earth for reference
         row = sorted(ALL_ITEMS, key=lambda o: o["rank"])

@@ -70,6 +70,10 @@ Visuais (vis.type):
              2D) | row (9,1 Terras no diâmetro médio, contador) | fill (Terras empilhando de baixo para cima, contador até 764 por volume) |
              density (3 potes de 1 litro em balanças: Saturno 0,69, água 1,00, Terra 5,51 kg) | float (tanque gigante: Saturno boiando com
              69% abaixo da linha d'água, Terra afundando; dissolve de volta no hook = loop) (scale19).
+  "olympus": Olympus Mons (Marte, ~600 km de largura) sobre o contorno simplificado do Arizona na MESMA escala (1,4 px/km); vis.mode =
+             hook (vulcão visto de cima, desenhado por código, sobre o Arizona) | mars (Marte com o vulcão na borda + régua 600 km) |
+             flat (perfil EM ESCALA REAL: uma panqueca de 22 km x 600 km, depois exagerado 10× ao lado do Everest) | walk (bonequinho subindo
+             a encosta de ~5%, contador 0 -> 300 km e dias a pé a 30 km/dia) | tail (volta ao hook = loop) (scale20).
 Reaproveita render.py (sprites, fontes) e ranking.py (fundo, texto, legendas).
 """
 import sys, os, math, json, subprocess, importlib.util, random
@@ -1664,6 +1668,81 @@ def _float19(img, th, t, bp):
     text(img, (860, 600), "Earth (enlarged)", 28, (180, 200, 230), w="SemiBold", a=1 - ease((bp - 0.3) / 0.2), stroke=2)
 
 
+# ---- scale20: "olympus" — Olympus Mons over Arizona at one scale
+OM_K = 1.4  # px per km
+AZ20 = [(-114.82, 32.49), (-111.07, 31.33), (-109.05, 31.33), (-109.05, 37.0), (-114.05, 37.0), (-114.05, 36.19), (-114.74, 36.0),
+        (-114.57, 35.2), (-114.65, 35.0), (-114.43, 34.3), (-114.13, 34.27), (-114.43, 34.08), (-114.72, 33.4), (-114.5, 33.03), (-114.72, 32.72)]
+def _az20(cx, cy):
+    lon0, lat0 = -111.93, 34.17; kx = 111.32 * math.cos(math.radians(34.2)); ky = 111.0
+    return [(cx + (lo - lon0) * kx * OM_K, cy - (la - lat0) * ky * OM_K) for lo, la in AZ20]
+_om20 = {}
+def _olympus20(r):
+    """top-down shield volcano: rust disc, gentle radial shading, outer scarp ring, nested summit calderas (code-drawn)"""
+    r = int(r)
+    if r in _om20: return _om20[r]
+    s = 2 * r + 40; yy, xx = np.mgrid[0:s, 0:s].astype(np.float32); nx, ny = (xx - s / 2) / r, (yy - s / 2) / r
+    rr = np.sqrt(nx ** 2 + ny ** 2); h = np.clip(1 - rr, 0, 1) ** 0.8
+    gx, gy = -nx / np.maximum(rr, 1e-3), -ny / np.maximum(rr, 1e-3)
+    shade = 0.75 + 0.35 * np.clip(gx * -0.6 + gy * -0.8, -1, 1) * (rr < 1)
+    rng = np.random.default_rng(20); n = np.zeros((s, s), np.float32)
+    for k in range(4):
+        m = 6 * 2 ** k; lo = Image.fromarray((rng.random((m, m)) * 255).astype(np.uint8)).resize((s, s), Image.BICUBIC)
+        n += (np.asarray(lo, np.float32) / 255 - 0.5) / (1.6 ** k)
+    base = np.array([186, 98, 58], np.float32); top = np.array([214, 150, 105], np.float32)
+    rgb = (base[None, None] * (1 - h[..., None]) + top[None, None] * h[..., None]) * (shade * (1 + 0.25 * n))[..., None]
+    scarp = np.clip(1 - np.abs(rr - 0.97) / 0.04, 0, 1); rgb *= (1 - 0.45 * scarp)[..., None]
+    for (cx, cy, cr) in ((0.02, -0.02, 0.13), (-0.05, 0.03, 0.08), (0.07, 0.05, 0.06)):
+        dd = np.hypot(nx - cx, ny - cy); rgb *= (1 - 0.45 * (dd < cr) - 0.25 * ((dd < cr * 1.12) & (dd >= cr)))[..., None]
+    a = np.clip((1.02 - rr) / 0.04, 0, 1) * 255
+    img = Image.fromarray(np.dstack([np.clip(rgb, 0, 255), a]).astype(np.uint8), "RGBA"); _om20[r] = img
+    return img
+def _hook20(img, th, t, cx=W / 2, cy=930):
+    d = ImageDraw.Draw(img); pts = _az20(cx, cy)
+    d.polygon(pts, fill=(36, 44, 70)); d.line(pts + [pts[0]], fill=tuple(th["accent2"]), width=5)
+    R.paste_c(img, _olympus20(300 * OM_K), cx + 8, cy + 6, 0.8)
+    lay = Image.new("RGBA", img.size, (0, 0, 0, 0)); ImageDraw.Draw(lay).line(pts + [pts[0]], fill=tuple(th["accent2"]) + (255,), width=7); img.alpha_composite(lay)
+    d = ImageDraw.Draw(img)
+    d.text((cx + 300, cy - 470), "ARIZONA", font=F(40, "Black"), fill=tuple(th["accent2"]), anchor="mm")
+    text(img, (W / 2, 1400), "same scale · Olympus Mons, Mars", 40, (235, 220, 210), w="ExtraBold", stroke=3)
+def olympus_vis(img, v, th, t, dur, bp):
+    acc, acc2 = tuple(th["accent"]), tuple(th["accent2"]); mode = v.get("mode", "hook"); d = ImageDraw.Draw(img)
+    if mode == "hook":
+        _hook20(img, th, t)
+    elif mode == "mars":
+        R.paste_c(img, R.planet_sprite(420, (190, 95, 60), light=(-0.7, -0.4)), W / 2, 950)
+        q = 300 / 3389.5 * 420; R.paste_c(img, _olympus20(q), W / 2 - 150, 760, ease(bp * 3))
+        d = ImageDraw.Draw(img); d.ellipse([W / 2 - 150 - q - 10, 760 - q - 10, W / 2 - 150 + q + 10, 760 + q + 10], outline=acc, width=4)
+        text(img, (W / 2 + 120, 640), "Olympus Mons", 46, acc, w="ExtraBold", stroke=3)
+        text(img, (W / 2, 1430), "Mars, 6,779 km wide", 40, (235, 220, 210), w="Bold", stroke=3)
+    elif mode == "flat":
+        x0, x1, base = 90, W - 90, 1000; k = (x1 - x0) / 600.0; ex = lerp(1, 10, easeio((bp - 0.45) / 0.4))
+        pts = [(x0 + i / 60 * (x1 - x0), base - 22 * k * ex * max(0, 1 - abs(i / 60 * 2 - 1)) ** 0.9) for i in range(61)]
+        d.polygon([(x0, base)] + pts + [(x1, base)], fill=(196, 110, 66)); d.line([(40, base), (W - 40, base)], fill=(240, 220, 200), width=3)
+        ew = 30 * k; eh = 8.85 * k * ex; exx = x1 - 60
+        d.polygon([(exx - ew, base), (exx, base - eh), (exx + ew * 0.6, base)], fill=(225, 230, 240))
+        text(img, (W / 2, 700), "TRUE SCALE" if ex < 1.5 else f"heights × {ex:.0f}", 56, acc, stroke=4)
+        text(img, (W / 2, 1110), "22 km tall · 600 km wide", 48, (255, 255, 255), w="ExtraBold", stroke=3)
+        text(img, (exx, base - eh - 40), "Everest", 30, (225, 230, 240), w="Bold", stroke=3, a=ease((bp - 0.5) / 0.2))
+        text(img, (W / 2, 1180), "2.5 Everests high", 44, acc2, w="ExtraBold", stroke=3, a=ease((bp - 0.6) / 0.2))
+    elif mode == "walk":
+        x0, x1, b0 = 80, W - 80, 1180; y_ = lambda x: b0 - (x - x0) / (x1 - x0) * 330
+        d.polygon([(x0, b0 + 200), (x0, b0), (x1, y_(x1)), (x1, b0 + 200)], fill=(176, 96, 58))
+        d.line([(x0, b0), (x1, y_(x1))], fill=(230, 170, 120), width=5)
+        px = lerp(x0 + 40, x1 - 40, bp); py = y_(px); sw = math.sin(t * 9) * 12
+        d.ellipse([px - 12, py - 110, px + 12, py - 86], fill=(255, 255, 255)); d.line([(px, py - 86), (px, py - 40)], fill=(255, 255, 255), width=7)
+        d.line([(px, py - 40), (px - sw, py)], fill=(255, 255, 255), width=7); d.line([(px, py - 40), (px + sw, py)], fill=(255, 255, 255), width=7)
+        km = 300 * bp
+        text(img, (W / 2, 560), f"{km:,.0f} km", 110, acc, stroke=4)
+        text(img, (W / 2, 660), f"day {km / 30:.0f} of walking (30 km a day)", 40, (255, 255, 255), w="ExtraBold", stroke=3)
+        text(img, (W / 2, 1460), "slope drawn steeper than real", 28, (190, 180, 175), w="SemiBold", stroke=2)
+    elif mode == "tail":
+        if bp > 0.6:
+            q = easeio((bp - 0.6) / 0.4); base_ = img.copy(); _hook20(base_, th, t)
+            tmp = img.copy(); R.paste_c(tmp, _olympus20(300 * OM_K), W / 2 + 8, 936); img.paste(Image.blend(tmp, base_, q)); return
+        R.paste_c(img, _olympus20(300 * OM_K), W / 2 + 8, 936)
+        text(img, (W / 2, 1400), "a volcano the size of a state", 44, acc2, w="ExtraBold", stroke=3)
+
+
 def chrome(img, th, gt, total):
     d = ImageDraw.Draw(img)
     d.rectangle([0, 0, int(W * gt / total), 10], fill=tuple(th["accent"]))
@@ -1737,9 +1816,9 @@ def frame(m, durs, gt, chunks, arr):
         hl = v.get("head") or m.BIG
         text(img, (W / 2, 170), hl["num"], 124 if len(hl["num"]) < 12 else 100, tuple(th["accent"]), stroke=4)
         text(img, (W / 2, 280), hl["top"], 52, (255, 255, 255), stroke=3)
-    elif v["type"] in ("jupsun", "andromeda", "redgiant", "sand", "magbubble", "sugarcube", "saturnfloat"):
+    elif v["type"] in ("jupsun", "andromeda", "redgiant", "sand", "magbubble", "sugarcube", "saturnfloat", "olympus"):
         {"jupsun": jupsun_vis, "andromeda": andromeda_vis, "redgiant": redgiant_vis, "sand": globals().get("sand_vis"), "magbubble": globals().get("magbubble_vis"),
-         "sugarcube": globals().get("sugarcube_vis"), "saturnfloat": globals().get("saturnfloat_vis")}[v["type"]](img, v, th, t, d, easeio((t - 0.2) / max(0.8, d * 0.8)))
+         "sugarcube": globals().get("sugarcube_vis"), "saturnfloat": globals().get("saturnfloat_vis"), "olympus": globals().get("olympus_vis")}[v["type"]](img, v, th, t, d, easeio((t - 0.2) / max(0.8, d * 0.8)))
         hl = v.get("head") or m.BIG
         text(img, (W / 2, 170), hl["num"], 124 if len(hl["num"]) < 12 else 100, tuple(th["accent"]), stroke=4)
         text(img, (W / 2, 280), hl["top"], 52, (255, 255, 255), stroke=3)
