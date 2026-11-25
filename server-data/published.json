@@ -2704,7 +2704,10 @@
   "thumb_path": "/opt/canal-publisher/state/thumbs/c5-d05b-cachorro.jpg",
   "thumb_attempts": 0,
   "thumb_error": "miniatura personalizada pede o telefone verificado no canal",
-  "thumb_retry_after": "2026-11-25T20:03:18.729808-03:00"
+  "thumb_retry_after": "2026-11-25T20:03:18.729808-03:00",
+  "comment_attempts": 0,
+  "comment_error": "fixar comentário pede o telefone verificado no canal",
+  "comment_retry_after": "2026-11-26T00:42:35.505489-03:00"
  },
  "ptd-rank21-short": {
   "attempts": 1,
