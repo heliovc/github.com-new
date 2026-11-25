@@ -25,6 +25,8 @@ Ler antes de cada vídeo (plano.md, seção 8). Atualizar depois de produzir e 4
 | 4 | B | rato | mamífero | mecânica do dia a dia · **atual** | lugar proibido | cidade | concreto cinza-quente, lâmpada de sódio laranja, aço, faixa amarelo × preto (flashback 1854 em sépia) | contra-plongée do fundo do poço, cabine descendo | bigodes sentindo o vento que a cabine empurra (ar em verde) | 48,4 s | 136 | agendado 24/11 19:00 |
 | 5 | A | pulga | inseto | escala extrema · **curto** | número | casa | tapete verde-musgo, sol amarelo da manhã, pulga castanho-avermelhada, raio-X violeta | pulga agachada no topo do tapete, arco pontilhado do pulo saindo da tela | luz e sombra (olhos simples: a sombra do cachorro passa, o calor chega) | 36,8 s | 98 | agendado 25/11 12:00 |
 | 5 | B | cachorro | mamífero | mecânica do dia a dia · **atual** | som | cidade | céu de meio-dia, carro amarelo-mostarda em corte, estofado azul-petróleo, motor em raio-X (planta azul) | corte lateral do carro: cachorro de peitoral no banco de trás, capô com 4 cilindros piscando | o ouvido (até 45 mil vibrações/s × 20 mil da pessoa) | 49,3 s | 136 | agendado 25/11 19:00 |
+| 6 | A | morcego | mamífero | escala extrema · **curto** | lugar proibido | natureza | meia-noite azul-marinho, lua creme, árvores índigo, sonar ciano × eco laranja | morcego vindo de frente batendo as asas, arcos de sonar rumo ao mosquito | sonar (o mundo em linhas ciano onde o eco bate, mosquito acende) | 34,3 s | 105 | agendado 26/11 12:00 |
+| 6 | B | sabiá | ave | mecânica do dia a dia · **curto** | queda/perigo | cidade | céu verde-água de fim de tarde, morros verde-escuros, poste de concreto, sabiá oliva e laranja-ferrugem, choque amarelo | sabiá pousando no fio com pulsos amarelos correndo pelo cabo | ultravioleta (descargas violeta nos isoladores e no cabo) | 34,8 s | 94 | agendado 26/11 19:00 |
 
 ## Fontes por vídeo
 **1A — formiga**
@@ -74,21 +76,34 @@ Ler antes de cada vídeo (plano.md, seção 8). Atualizar depois de produzir e 4
 - Conta: 1 explosão por cilindro a cada 2 voltas → 2.000 rpm = ~16,7/s por cilindro, ~67/s em 4 cilindros. Taxa de compressão típica a gasolina ≈ 10:1.
 - Heffner (1983), "Hearing in large and small dogs", Behavioral Neuroscience 97(2): 310–318 — cães ouvem até ~41–47 kHz; pessoas até ~20 kHz.
 
+**6A — morcego (curto)**
+- Elemans, Mead, Jakobsen & Ratcliffe (2011), "Superfast muscles set maximum call rate in echolocating bats", Science 333: 1885–1888 — no bote final, até ~190 chamados por segundo. https://ui.adsabs.harvard.edu/abs/2011Sci...333.1885E
+- Grinnell & Griffin (1958), "The sensitivity of echolocation in bats", Biol. Bull. 114: 10–22 — Myotis lucifugus detecta fios de até 0,28 mm. https://archive.org/download/biostor-8069/biostor-8069.pdf
+- Myotis: 5–14 g; chamados de ~40–80 kHz (ouvido humano até ~20 kHz). Sensor de ré: ultrassom de ~40 kHz, mede o tempo do eco.
+
+**6B — sabiá (curto)**
+- Harvard Natural Sciences Lecture Demonstrations, "Bird on a high-voltage transmission line" — sem diferença de tensão no corpo, não passa corrente. https://sciencedemonstrations.fas.harvard.edu/presentations/bird-high-voltage-transmission-line
+- Physics Van (Univ. of Illinois), "Birds on High Voltage Lines" — perigo ao tocar outro fio. https://van.physics.illinois.edu/ask/listing/1341
+- Ödeen & Håstad (2013), BMC Evol. Biol. 13: 36 — sabiás do gênero Turdus têm visão ultravioleta (tipo UVS). Tyler et al. (2014), Conservation Biology 28: 630–631 — descargas UV (corona) em cabos e isoladores. https://pmc.ncbi.nlm.nih.gov/articles/PMC4232876
+- Rede de distribuição urbana no Brasil: 13,8 kV. Sabiá-laranjeira: ~25 cm, ~70 g.
+
 ## Métricas (48 h após publicar)
 Metas: continuaram assistindo ≥ 70% · % visualizada ≥ 80%.
 
 | Vídeo | Publicado em | Link | Continuaram assistindo | % visualizada | Views 48 h | Inscritos / 1.000 views |
 |---|---|---|---|---|---|---|
-| 1A formiga | 20/11 22:00 | https://youtube.com/shorts/Wcw5EPuTlpg | 54% (21/11 06h) | 62,5% (~59 h, média 0:30) | 1.794 (~59 h) | 2 inscritos (~1,1 / 1.000) |
-| 1B lagartixa | 20/11 23:00 | https://youtube.com/shorts/v88xGAAAzmw | 68% (21/11 06h) | 43,6% (~58 h, média 0:20) | 1.247 (~58 h) | 0 |
-| 2A mosquito (curto) | 22/11 12:00 | https://youtube.com/shorts/_34mq8-rs-Q | — | 42,8% (~21 h, média 0:14) | 1.442 (~21 h) | 1 inscrito (~0,7 / 1.000) |
-| 2B barata (atual) | 22/11 19:00 | https://youtube.com/shorts/RL1mco3U_fw | — | 52,2% (~14 h, média 0:23) | 1.314 (~14 h) | 2 inscritos (~1,5 / 1.000) |
-| 3A krill (curto) | 23/11 12:00 | https://youtube.com/shorts/UdUVK_LYYUQ | — | — | — | — |
-| 3B pombo (atual) | 23/11 19:00 | https://youtube.com/shorts/YFLRYfWb2ZU | — | — | — | — |
+| 1A formiga | 20/11 22:00 | https://youtube.com/shorts/Wcw5EPuTlpg | 54% (21/11 06h) | 62,4% (~83 h, média 0:30) | 1.800 (~83 h) | 2 inscritos (~1,1 / 1.000) |
+| 1B lagartixa | 20/11 23:00 | https://youtube.com/shorts/v88xGAAAzmw | 68% (21/11 06h) | 43,5% (~82 h, média 0:20) | 1.252 (~82 h) | 0 |
+| 2A mosquito (curto) | 22/11 12:00 | https://youtube.com/shorts/_34mq8-rs-Q | — | 42,9% (~45 h, média 0:15) | 1.495 (~45 h) | 1 inscrito (~0,7 / 1.000) |
+| 2B barata (atual) | 22/11 19:00 | https://youtube.com/shorts/RL1mco3U_fw | — | 53,2% (~38 h, média 0:23) | 1.825 (~38 h) | 2 inscritos (~1,1 / 1.000) |
+| 3A krill (curto) | 23/11 11:45 | https://youtube.com/shorts/UdUVK_LYYUQ | — | 74,2% (~21 h, média 0:26) | 2.094 (~21 h) | 9 inscritos (~4,3 / 1.000) |
+| 3B pombo (atual) | 23/11 18:45 | https://youtube.com/shorts/YFLRYfWb2ZU | — | 12,6% (~14 h, média 0:05) | 4 (~14 h) | — |
 | 4A peixe-caracol (curto) | 24/11 12:45 | https://youtube.com/shorts/sSUEHRXF7l8 | — | — | — | — |
 | 4B rato (atual) | 24/11 19:45 | https://youtube.com/shorts/lfVnMg7h9ck | — | — | — | — |
-| 5A pulga (curto) | 25/11 12:00 | — | — | — | — | — |
-| 5B cachorro (atual) | 25/11 19:00 | — | — | — | — | — |
+| 5A pulga (curto) | 25/11 11:30 | https://youtube.com/shorts/vI8lZkXR2TY | — | — | — | — |
+| 5B cachorro (atual) | 25/11 18:30 | https://youtube.com/shorts/TWjyaeNdNaQ | — | — | — | — |
+| 6A morcego (curto) | 26/11 12:00 | — | — | — | — | — |
+| 6B sabiá (curto) | 26/11 19:00 | — | — | — | — | — |
 
 Leitura do Dia 1 (21/11): o YouTube mostrou cada um a ~1,1 mil pessoas e parou de distribuir (1–2 views/h). O gancho funciona; as pessoas saem no meio → teste de duração nos Dias 2–5.
 
@@ -121,3 +136,6 @@ Leitura do Dia 1 (21/11): o YouTube mostrou cada um a ~1,1 mil pessoas e parou d
 - 24/11 (rodada das 06:30) — Dia 5 produzido: 5A pulga no formato CURTO (36,8 s, 98 palavras, 2 passos: espreme e trava a mola de resilina → solta e a mola chuta a perna; 150 G aos ~25 s) e 5B cachorro no formato ATUAL (49,3 s, 136 palavras, 3 passos: puxa e espreme → faísca/explosão gira as rodas → expulsa a fumaça; payoff ~70 explosões/s). Checagem: "100× a altura" virou "80 vezes o meu tamanho" (2 mm → ~17 cm); "40 andares" é a conta para 1,70 m × 80. Visão do Bicho da pulga = luz e sombra (olhos simples, sem olho composto); a do cachorro = o ouvido (até ~45 mil Hz). Cachorro sempre de peitoral preso ao cinto (nada de cabeça para fora da janela). 25/11 é quarta, mas o 1º longo original é só em 02/12.
 - 24/11 — Métricas: arquivo mais recente do robô é de 23/11 09h (sem "continuaram assistindo" na tabela). Mosquito 1.442 views e 42,8% visualizada em ~21 h; barata 1.314 e 52,2% em ~14 h; formiga 1.794 (62,5%); lagartixa 1.247 (43,6%). Ainda sem 48 h para os Dias 2–5; a comparação do teste de duração fica para o Dia 6. O robô agendou peixe e rato às 12:45 e 19:45. Nenhum item c5 com erro. Telefone ainda não verificado.
 - 24/11 — Facebook: a Página "Napeledebicho" ainda não aparece no Buffer → replicação pulada. TikTok segue bloqueado (e desconectado no Buffer). Limpeza: nada a apagar (nenhum Short entrou ainda num longo de compilação).
+- 25/11 (rodada das 06:30) — **Teste de duração decidido (Dia 6): fica o formato CURTO para A e B.** Dados do robô (24/11 09h; "continuaram assistindo" não vem na tabela do robô, só no Studio): curtos — mosquito 42,9% visualizada e krill 74,2% (média 58,6%), 3.589 views, 10 inscritos; atuais — barata 53,2% e pombo 12,6% (o pombo travou em 4 views em 14 h), 1.829 views, 2 inscritos. Peixe e rato ainda sem dados. O krill (curto) é o melhor vídeo do canal em views, % visualizada e inscritos. Reavaliar no Dia 9 com peixe, rato, pulga e cachorro; se o atual virar o jogo, voltar a alternar.
+- 25/11 — Dia 6 produzido, os dois no formato CURTO: 6A morcego (34,3 s, 105 palavras, 2 passos: grita agudo → o eco volta e o tempo do eco dá a distância; 190 gritos/s aos ~21 s; virada = fio de 0,3 mm) e 6B sabiá (34,8 s, 94 palavras, 2 passos: choque precisa de caminho entre tensões diferentes → os dois pés na mesma tensão; virada = gavião de asa aberta em dois fios). Checagem: "sensor de ré" confere (ultrassom, mede o tempo do eco); 190 gritos/s é o máximo medido (Elemans 2011); fio de 0,28 mm (Grinnell & Griffin 1958) virou "0,3 milímetro". Sabiá: o fio de "alta tensão" do poste da rua é a rede de 13,8 kV (por isso o gavião, de asa larga, consegue encostar em dois fios; numa linha de transmissão os fios ficam a metros). Visão do Bicho do sabiá = ultravioleta (Turdus é UVS); as faíscas de corona no cabo/isolador são a hipótese de Tyler et al. 2014 — descrita como "faíscas que você não vê". A descrição do sabiá diz para não chegar perto de fios.
+- 25/11 — Nenhum item c5 com erro no robô. Telefone ainda não verificado (capa e comentário fixado pendentes). Facebook: a Página "Napeledebicho" ainda não aparece no Buffer → replicação pulada. TikTok segue bloqueado (e desconectado no Buffer). Limpeza: nada a apagar (nenhum Short entrou ainda num longo de compilação; o 1º é domingo 29/11).
