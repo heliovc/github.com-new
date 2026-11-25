@@ -2304,7 +2304,7 @@
   "thumb_retry_after": "2026-11-25T22:56:45.798667-03:00",
   "comment_attempts": 0,
   "comment_error": "fixar comentário pede o telefone verificado no canal",
-  "comment_retry_after": "2026-11-25T20:22:10.082528-03:00"
+  "comment_retry_after": "2026-11-26T02:32:34.123329-03:00"
  },
  "c5-d02b-barata": {
   "attempts": 1,
@@ -2509,7 +2509,7 @@
   "thumb_retry_after": "2026-11-25T20:52:37.311921-03:00",
   "comment_attempts": 0,
   "comment_error": "fixar comentário pede o telefone verificado no canal",
-  "comment_retry_after": "2026-11-25T20:23:06.508507-03:00"
+  "comment_retry_after": "2026-11-26T02:33:23.807071-03:00"
  },
  "ptd-rank20-short": {
   "attempts": 1,
