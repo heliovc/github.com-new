@@ -1,7 +1,11 @@
 {
- "last_run": "2026-11-25T16:01:21.524804-03:00",
+ "last_run": "2026-11-25T16:26:58.438189-03:00",
  "pending": 0,
- "post_tasks": 1,
+ "post_tasks": 3,
  "errors": [],
- "published_now": []
+ "published_now": [
+  "cosmic-ep19-long: comment comentário fixado",
+  "cosmic-scale20-short: related vinculado a qYHEPUpMnJw",
+  "cosmic-ep19-short: related vinculado a qYHEPUpMnJw"
+ ]
 }

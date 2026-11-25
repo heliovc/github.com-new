@@ -2759,7 +2759,9 @@
   "title": "What If Earth Had a Second Moon? (2 Moons, Same Tides)",
   "kind": "long",
   "publish_at": "2026-11-25T16:15:00-03:00",
-  "pinned_comment": "Where would YOU park a second Moon: spot 3 (huge in the sky) or spot 4 (same tides)?"
+  "pinned_comment": "Where would YOU park a second Moon: spot 3 (huge in the sky) or spot 4 (same tides)?",
+  "comment_attempts": 1,
+  "comment_done": "2026-11-25T16:23:17.939478-03:00"
  },
  "cosmic-scale20-short": {
   "attempts": 1,
@@ -2775,7 +2777,9 @@
   "kind": "short",
   "publish_at": "2026-11-25T18:15:00-03:00",
   "related_key": "cosmic-ep19-long",
-  "pinned_comment": "What giant should we drop on a map next? Full video: What If Earth Had a Second Moon? (2 Moons, Same Tides)"
+  "pinned_comment": "What giant should we drop on a map next? Full video: What If Earth Had a Second Moon? (2 Moons, Same Tides)",
+  "related_attempts": 1,
+  "related_done": "2026-11-25T16:25:00.515521-03:00"
  },
  "cosmic-ep19-short": {
   "attempts": 1,
@@ -2791,7 +2795,9 @@
   "kind": "short",
   "publish_at": "2026-11-25T20:15:00-03:00",
   "related_key": "cosmic-ep19-long",
-  "pinned_comment": "Would you rather have two Moons or bigger tides? Full video: What If Earth Had a Second Moon? (2 Moons, Same Tides)"
+  "pinned_comment": "Would you rather have two Moons or bigger tides? Full video: What If Earth Had a Second Moon? (2 Moons, Same Tides)",
+  "related_attempts": 1,
+  "related_done": "2026-11-25T16:26:56.200873-03:00"
  },
  "c5-d06a-morcego": {
   "attempts": 1,
