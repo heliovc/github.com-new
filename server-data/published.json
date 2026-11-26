@@ -2823,7 +2823,10 @@
   "thumb_path": "/opt/canal-publisher/state/thumbs/c5-d06a-morcego.jpg",
   "thumb_attempts": 0,
   "thumb_error": "miniatura personalizada pede o telefone verificado no canal",
-  "thumb_retry_after": "2026-11-26T13:52:15.946741-03:00"
+  "thumb_retry_after": "2026-11-26T13:52:15.946741-03:00",
+  "comment_attempts": 0,
+  "comment_error": "fixar comentário pede o telefone verificado no canal",
+  "comment_retry_after": "2026-11-26T18:51:23.673927-03:00"
  },
  "c5-d06b-sabia": {
   "attempts": 1,
@@ -2898,7 +2901,9 @@
   "related_key": "cosmic-ep19-long",
   "pinned_comment": "Earth has 1 moon. How many do you think it would take to change our tides? Full video: What If Earth Had a Second Moon? (2 Moons, Same Tides)",
   "related_attempts": 1,
-  "related_done": "2026-11-26T07:27:09.889189-03:00"
+  "related_done": "2026-11-26T07:27:09.889189-03:00",
+  "comment_attempts": 1,
+  "comment_done": "2026-11-26T12:53:27.377075-03:00"
  },
  "cosmic-scale21-short": {
   "attempts": 1,
