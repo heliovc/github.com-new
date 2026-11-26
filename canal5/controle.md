@@ -27,6 +27,8 @@ Ler antes de cada vídeo (plano.md, seção 8). Atualizar depois de produzir e 4
 | 5 | B | cachorro | mamífero | mecânica do dia a dia · **atual** | som | cidade | céu de meio-dia, carro amarelo-mostarda em corte, estofado azul-petróleo, motor em raio-X (planta azul) | corte lateral do carro: cachorro de peitoral no banco de trás, capô com 4 cilindros piscando | o ouvido (até 45 mil vibrações/s × 20 mil da pessoa) | 49,3 s | 136 | agendado 25/11 19:00 |
 | 6 | A | morcego | mamífero | escala extrema · **curto** | lugar proibido | natureza | meia-noite azul-marinho, lua creme, árvores índigo, sonar ciano × eco laranja | morcego vindo de frente batendo as asas, arcos de sonar rumo ao mosquito | sonar (o mundo em linhas ciano onde o eco bate, mosquito acende) | 34,3 s | 105 | agendado 26/11 12:00 |
 | 6 | B | sabiá | ave | mecânica do dia a dia · **curto** | queda/perigo | cidade | céu verde-água de fim de tarde, morros verde-escuros, poste de concreto, sabiá oliva e laranja-ferrugem, choque amarelo | sabiá pousando no fio com pulsos amarelos correndo pelo cabo | ultravioleta (descargas violeta nos isoladores e no cabo) | 34,8 s | 94 | agendado 26/11 19:00 |
+| 7 | A | elefante | mamífero | escala extrema · **curto** | som | natureza | savana ao amanhecer, céu pêssego e coral, terra vermelha, acácias vinho, tremor do chão em magenta | câmera rasteira: a pata gigante pisa e o chão ondula em anéis magenta | tremor do chão pelas patas (ondas acesas chegando nos pés) | 32,5 s | 98 | agendado 27/11 12:00 |
+| 7 | B | mariposa | inseto | mecânica do dia a dia · **curto** | lugar proibido | casa | varanda à noite, parede verde-oliva, céu ameixa, lâmpada âmbar × LED branco-gelo, ultravioleta violeta | close: a mariposa girando em volta da lâmpada acesa, rastro em espiral | ultravioleta (mundo violeta, flores e asas com desenhos que só aparecem no UV) | 35,9 s | 96 | agendado 27/11 19:00 |
 
 ## Fontes por vídeo
 **1A — formiga**
@@ -87,23 +89,35 @@ Ler antes de cada vídeo (plano.md, seção 8). Atualizar depois de produzir e 4
 - Ödeen & Håstad (2013), BMC Evol. Biol. 13: 36 — sabiás do gênero Turdus têm visão ultravioleta (tipo UVS). Tyler et al. (2014), Conservation Biology 28: 630–631 — descargas UV (corona) em cabos e isoladores. https://pmc.ncbi.nlm.nih.gov/articles/PMC4232876
 - Rede de distribuição urbana no Brasil: 13,8 kV. Sabiá-laranjeira: ~25 cm, ~70 g.
 
+**7A — elefante (curto)**
+- O'Connell-Rodwell (2007), "Keeping an ear to the ground: seismic communication in elephants", Physiology 22: 287–294 — roncos de ~20–40 Hz pelo ar e pelo chão; corpúsculos de Pacini no pé; condução óssea até o ouvido. https://pmc.ncbi.nlm.nih.gov/articles/PMC2375831
+- O'Connell-Rodwell et al. (2007), J. Acoust. Soc. Am.; Stanford Medicine News (30/05/2007) — elefantes distinguiram, só pelo chão, chamados de família × desconhecidos. https://med.stanford.edu/news/all-news/2007/05/caller-id-in-the-wild-african-elephants-communicate-by-ground-vibration-stanford-researcher-finds
+- Günther, O'Connell-Rodwell & Klemperer (2004), J. Theor. Biol. — modelo: sinal sísmico ~2,2 km (pelo ar 1–2 km). https://physicsworld.com/a/elephants-turn-to-seismic-communication/
+
+**7B — mariposa (curto)**
+- Fabian et al. (2024), "Why flying insects gather at artificial light", Nature Communications 15: 689 — insetos viram as costas para o lado mais claro; perto da lâmpada isso vira órbita. https://pmc.ncbi.nlm.nih.gov/articles/PMC10827719
+- U.S. Department of Energy, "LED Lighting" — LED residencial gasta pelo menos 75% menos que a incandescente; a incandescente solta ~90% da energia como calor. https://www.energy.gov/energysaver/led-lighting
+- Filamento de tungstênio ~2.500 °C em uso. Mariposas têm fotorreceptores de ultravioleta, azul e verde (Briscoe & Chittka 2001, Annu. Rev. Entomol.).
+
 ## Métricas (48 h após publicar)
 Metas: continuaram assistindo ≥ 70% · % visualizada ≥ 80%.
 
 | Vídeo | Publicado em | Link | Continuaram assistindo | % visualizada | Views 48 h | Inscritos / 1.000 views |
 |---|---|---|---|---|---|---|
 | 1A formiga | 20/11 22:00 | https://youtube.com/shorts/Wcw5EPuTlpg | 54% (21/11 06h) | 62,4% (~83 h, média 0:30) | 1.800 (~83 h) | 2 inscritos (~1,1 / 1.000) |
-| 1B lagartixa | 20/11 23:00 | https://youtube.com/shorts/v88xGAAAzmw | 68% (21/11 06h) | 43,5% (~82 h, média 0:20) | 1.252 (~82 h) | 0 |
-| 2A mosquito (curto) | 22/11 12:00 | https://youtube.com/shorts/_34mq8-rs-Q | — | 42,9% (~45 h, média 0:15) | 1.495 (~45 h) | 1 inscrito (~0,7 / 1.000) |
-| 2B barata (atual) | 22/11 19:00 | https://youtube.com/shorts/RL1mco3U_fw | — | 53,2% (~38 h, média 0:23) | 1.825 (~38 h) | 2 inscritos (~1,1 / 1.000) |
-| 3A krill (curto) | 23/11 11:45 | https://youtube.com/shorts/UdUVK_LYYUQ | — | 74,2% (~21 h, média 0:26) | 2.094 (~21 h) | 9 inscritos (~4,3 / 1.000) |
-| 3B pombo (atual) | 23/11 18:45 | https://youtube.com/shorts/YFLRYfWb2ZU | — | 12,6% (~14 h, média 0:05) | 4 (~14 h) | — |
-| 4A peixe-caracol (curto) | 24/11 12:45 | https://youtube.com/shorts/sSUEHRXF7l8 | — | — | — | — |
-| 4B rato (atual) | 24/11 19:45 | https://youtube.com/shorts/lfVnMg7h9ck | — | — | — | — |
+| 1B lagartixa | 20/11 23:00 | https://youtube.com/shorts/v88xGAAAzmw | 68% (21/11 06h) | 43,4% (~106 h, média 0:19) | 1.261 (~106 h) | 0 |
+| 2A mosquito (curto) | 22/11 12:00 | https://youtube.com/shorts/_34mq8-rs-Q | — | 42,9% (~69 h, média 0:14) | 1.498 (~69 h) | 1 inscrito (~0,7 / 1.000) |
+| 2B barata (atual) | 22/11 19:00 | https://youtube.com/shorts/RL1mco3U_fw | — | 53,2% (~62 h, média 0:23) | 1.834 (~62 h) | 2 inscritos (~1,1 / 1.000) |
+| 3A krill (curto) | 23/11 11:45 | https://youtube.com/shorts/UdUVK_LYYUQ | — | 74,1% (~45 h, média 0:26) | 2.547 (~45 h) | 9 inscritos (~3,5 / 1.000) |
+| 3B pombo (atual) | 23/11 18:45 | https://youtube.com/shorts/YFLRYfWb2ZU | — | 12,6% (~38 h, média 0:05) | 4 (~38 h, travado) | 0 |
+| 4A peixe-caracol (curto) | 24/11 12:45 | https://youtube.com/shorts/sSUEHRXF7l8 | — | 48,0% (~20 h, média 0:18) | 369 (~20 h) | — |
+| 4B rato (atual) | 24/11 19:45 | https://youtube.com/shorts/lfVnMg7h9ck | — | 46,7% (~13 h, média 0:22) | 1.329 (~13 h) | — |
 | 5A pulga (curto) | 25/11 11:30 | https://youtube.com/shorts/vI8lZkXR2TY | — | — | — | — |
 | 5B cachorro (atual) | 25/11 18:30 | https://youtube.com/shorts/TWjyaeNdNaQ | — | — | — | — |
-| 6A morcego (curto) | 26/11 12:00 | — | — | — | — | — |
-| 6B sabiá (curto) | 26/11 19:00 | — | — | — | — | — |
+| 6A morcego (curto) | 26/11 12:45 | https://youtube.com/shorts/dc-YXJJlzRQ | — | — | — | — |
+| 6B sabiá (curto) | 26/11 19:45 | https://youtube.com/shorts/tM55H1YiTMY | — | — | — | — |
+| 7A elefante (curto) | 27/11 12:00 | — | — | — | — | — |
+| 7B mariposa (curto) | 27/11 19:00 | — | — | — | — | — |
 
 Leitura do Dia 1 (21/11): o YouTube mostrou cada um a ~1,1 mil pessoas e parou de distribuir (1–2 views/h). O gancho funciona; as pessoas saem no meio → teste de duração nos Dias 2–5.
 
@@ -139,3 +153,5 @@ Leitura do Dia 1 (21/11): o YouTube mostrou cada um a ~1,1 mil pessoas e parou d
 - 25/11 (rodada das 06:30) — **Teste de duração decidido (Dia 6): fica o formato CURTO para A e B.** Dados do robô (24/11 09h; "continuaram assistindo" não vem na tabela do robô, só no Studio): curtos — mosquito 42,9% visualizada e krill 74,2% (média 58,6%), 3.589 views, 10 inscritos; atuais — barata 53,2% e pombo 12,6% (o pombo travou em 4 views em 14 h), 1.829 views, 2 inscritos. Peixe e rato ainda sem dados. O krill (curto) é o melhor vídeo do canal em views, % visualizada e inscritos. Reavaliar no Dia 9 com peixe, rato, pulga e cachorro; se o atual virar o jogo, voltar a alternar.
 - 25/11 — Dia 6 produzido, os dois no formato CURTO: 6A morcego (34,3 s, 105 palavras, 2 passos: grita agudo → o eco volta e o tempo do eco dá a distância; 190 gritos/s aos ~21 s; virada = fio de 0,3 mm) e 6B sabiá (34,8 s, 94 palavras, 2 passos: choque precisa de caminho entre tensões diferentes → os dois pés na mesma tensão; virada = gavião de asa aberta em dois fios). Checagem: "sensor de ré" confere (ultrassom, mede o tempo do eco); 190 gritos/s é o máximo medido (Elemans 2011); fio de 0,28 mm (Grinnell & Griffin 1958) virou "0,3 milímetro". Sabiá: o fio de "alta tensão" do poste da rua é a rede de 13,8 kV (por isso o gavião, de asa larga, consegue encostar em dois fios; numa linha de transmissão os fios ficam a metros). Visão do Bicho do sabiá = ultravioleta (Turdus é UVS); as faíscas de corona no cabo/isolador são a hipótese de Tyler et al. 2014 — descrita como "faíscas que você não vê". A descrição do sabiá diz para não chegar perto de fios.
 - 25/11 — Nenhum item c5 com erro no robô. Telefone ainda não verificado (capa e comentário fixado pendentes). Facebook: a Página "Napeledebicho" ainda não aparece no Buffer → replicação pulada. TikTok segue bloqueado (e desconectado no Buffer). Limpeza: nada a apagar (nenhum Short entrou ainda num longo de compilação; o 1º é domingo 29/11).
+- 26/11 (rodada das 06:30) — Dia 7 produzido, os dois no formato CURTO: 7A elefante (32,5 s, 98 palavras, 2 passos: ronco grave balança o ar e o chão → almofada do pé com sensores, tremor sobe pelos ossos até o ouvido; 2 km aos ~22 s; virada = sabe se é da família) e 7B mariposa (35,9 s, 96 palavras, 2 passos: incandescente esquenta o fio a 2.500 °C e 90% vira calor → LED transforma eletricidade em luz direto, 75% menos; virada = ela gira porque vira as costas pro lado mais claro, Fabian et al. 2024). Checagem: "ouvindo pelos pés" confere (corpúsculos de Pacini + condução óssea); a distância pelo chão é de modelo (~2,2 km), por isso "uns 2 quilômetros"; o ronco fica no limite ou abaixo do ouvido humano (~20 Hz). Mariposa: "atraída pela luz" foi trocado pela explicação de 2024 (costas para o claro); "75% menos" e "90% vira calor" são do Departamento de Energia dos EUA. Visão do Bicho do elefante = tremor pelas patas; da mariposa = ultravioleta. A descrição da mariposa sugere apagar a luz de fora quando não precisar.
+- 26/11 — Métricas: arquivo mais recente do robô é de 25/11 09h. Krill 2.547 views e 74,1% visualizada em ~45 h (9 inscritos), segue o melhor; barata 1.834 (53,2%); mosquito 1.498 (42,9%); rato 1.329 (46,7%) em ~13 h; peixe 369 (48,0%) em ~20 h; pombo travado em 4 views. Nenhum item c5 com erro no robô; morcego e sabiá foram agendados pelo robô para 12:45 e 19:45. Telefone ainda não verificado (nenhum c5 com capa ou comentário fixado). Facebook: a Página "Napeledebicho" ainda não aparece no Buffer → replicação pulada. TikTok segue bloqueado (e desconectado no Buffer). Limpeza: nada a apagar (a 1ª compilação é domingo 29/11).

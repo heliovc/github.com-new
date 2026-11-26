@@ -1,0 +1,29 @@
+{
+ "version": 1,
+ "channel_id": "UCO5Fa5_HJxd-aeTiyQcw0Sw",
+ "created_at": "2026-11-26T06:44:05-03:00",
+ "items": [
+  {
+   "key": "c5-d07b-mariposa",
+   "kind": "short",
+   "video": "video.mp4",
+   "title": "E se você fosse uma mariposa na lâmpada? #shorts",
+   "description": "Uma mariposa de 2 centímetros gira em volta da lâmpada a noite inteira. Ela enxerga ultravioleta, uma luz que a gente não vê. A lâmpada incandescente antiga esquenta um fio fininho de tungstênio até uns 2.500 graus: ele brilha de tão quente, mas cerca de 90% da energia vira calor. O LED é diferente: um chip transforma eletricidade em luz direto, gasta uns 75% menos e quase não esquenta. E por que a mariposa gira? Insetos voam com as costas viradas para o lado mais claro, que na natureza é o céu; perto de uma lâmpada, esse truque faz o inseto rodar em volta dela. Apague a luz de fora quando não precisar: ajuda os insetos. Qual aparelho da sua casa você quer ver por dentro?\n\nVisão do Bicho: os olhos da mariposa têm receptores para ultravioleta, azul e verde.\n\nFontes: Fabian et al. (2024), \"Why flying insects gather at artificial light\", Nature Communications; U.S. Department of Energy, \"LED Lighting\" e \"Incandescent lighting\". Narração com voz sintética; roteiro e animação próprios.\n#esevocefosse #mariposa #lampada #comofunciona #curiosidades",
+   "tags": [
+    "mariposa",
+    "lâmpada",
+    "LED",
+    "lâmpada incandescente",
+    "insetos e luz",
+    "e se você fosse",
+    "shorts"
+   ],
+   "publish_at": "2026-11-27T19:00:00-03:00",
+   "if_late": "public_now",
+   "made_for_kids": false,
+   "altered_content": true,
+   "pinned_comment": "Qual aparelho da sua casa você quer ver por dentro?",
+   "thumbnail": "capa.jpg"
+  }
+ ]
+}
