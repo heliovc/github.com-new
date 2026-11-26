@@ -135,6 +135,10 @@ EP18 added scenes: plunge (mode hook = cloud horizon from a cached full-frame la
   Learned: a twin 60° ahead gives the SAME tide height (cos 2θ pattern, phasors 120° apart); 1,375 words + 32 scenes = 8.1 min.
   EP19 promised EP20: shrink the universe until the Sun is a grain of sand, then walk to the edge. ranking.py: vis "pair" (rank22,
   every planet the same size, moon to scale with it). scale_short.py: vis "olympus" (scale20, Olympus Mons over Arizona at one scale).
+2026-11-26 (Shorts-only day): ranking.py vis "swarm" (rank23, each known moon a dot circling its planet; outro = one square per moon).
+  scale_short.py: vis "hexagon" (scale21, Saturn's north-pole hexagon from above, 2 Earths to scale) and "moonmap" (scale22, the Moon on a
+  hand-traced Australia at one scale + surface laid flat). Learned: on a day with 2 Scale Shorts the second file must be scale2.mp4
+  (same folder); moon counts change often -> cite the Minor Planet Center date; NASA/earthsky hosts blocked -> verify via web search.
 """
 import sys, os, re, math, subprocess, importlib.util, json, random, hashlib
 import numpy as np

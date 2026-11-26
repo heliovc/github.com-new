@@ -58,6 +58,10 @@ vis.type == "pair" / THEME.hook/outro == "pair": a lua do lado do SEU planeta, c
   em escala com ele (vis.ratio = diâmetro da lua / diâmetro do planeta); a lua sai de trás do planeta e para ao lado, contador "% da
   largura" + barra 0–60%; vis.kind = gas | ringed | earth | ice | dwarf, vis.col (planeta), vis.mcol (lua), vis.pname / vis.mname;
   gancho = planeta escuro com uma lua "?" da metade do tamanho; outro = os 5 pares em fila, planetas iguais (rank22).
+vis.type == "swarm" / THEME.hook/outro == "swarm": cada lua conhecida = um ponto girando em volta do planeta (órbitas ilustrativas: internas
+  rápidas, externas lentas, algumas inclinadas/ao contrário); os pontos aparecem enquanto o número sobe até vis.n; vis.kind = ringed |
+  jupiter | ice | rock, vis.col, vis.r; vis.names = [(nome, raio relativo)] para poucos pontos rotulados (Marte); gancho = planeta escuro
+  "?" com 285 pontos; outro = um quadradinho por lua, um bloco por planeta + "todos os outros juntos" (rank23).
 Tudo desenhado por código; narração Kokoro (VOICE, padrão af_heart); legenda grande queimada.
 """
 import sys, os, re, math, json, subprocess, importlib.util, random
@@ -1317,6 +1321,58 @@ def pair_vis(img, it, th, t, dur):
     pa_bar(img, th, [o for o in ALL_ITEMS if o["rank"] >= it["rank"]], cur=it, y=1240, a=ease((t - 0.8) / 0.4))
     if v.get("note"): text(img, (W / 2, 560), v["note"], 36, (235, 235, 245), w="Bold", a=ease((t - 1.6) / 0.4), stroke=3)
 
+# ---- rank23: "swarm" — every known moon as a dot circling its planet (orbits illustrative, not to scale: inner moons fast, outer slow,
+# many tilted / backward like the real irregular moons). The dots appear one by one while the big number counts up.
+def sw_orbits(n, seed, r):
+    rng = random.Random(seed); out = []
+    for i in range(n):
+        a = r * (1.35 + 2.0 * rng.random() ** 0.7); e = rng.uniform(0.0, 0.35); tilt = rng.uniform(-0.9, 0.9)
+        ph = rng.uniform(0, 2 * math.pi); sp = (r / a) ** 1.5 * rng.choice([1, 1, 1, -1]) * 1.6
+        out.append((a, e, tilt, ph, sp, rng.uniform(2.5, 5.5)))
+    return out
+def sw_draw(img, cx, cy, orbs, shown, t, col, a=1.0, flat=0.55):
+    lay = Image.new("RGBA", img.size, (0, 0, 0, 0)); d = ImageDraw.Draw(lay)
+    for i, (ra, e, tilt, ph, sp, s) in enumerate(orbs):
+        if i >= shown: break
+        th_ = ph + sp * t; x0 = ra * math.cos(th_); y0 = ra * (1 - e) * math.sin(th_) * flat
+        x = cx + x0 * math.cos(tilt) - y0 * math.sin(tilt); y = cy + x0 * math.sin(tilt) * 0.5 + y0 * math.cos(tilt)
+        d.ellipse([x - s, y - s, x + s, y + s], fill=col + (int(235 * a),))
+    img.alpha_composite(lay)
+def sw_planet(img, v, cx, cy, r, a=1.0):
+    k = v["kind"]
+    if k in ("ringed", "jupiter", "earth"): bd_planet(img, k, tuple(v["col"]), cx, cy, r, a)
+    else: R.paste_c(img, tl_body("ice" if k == "ice" else "rock", r, tuple(v["col"])), cx, cy, a)
+def swarm_vis(img, it, th, t, dur):
+    v = it["vis"]; acc = tuple(th["accent"]); cx, cy = W / 2, 830; r = v.get("r", 150)
+    n = v["n"]; p = easeio((t - 0.5) / 1.6); shown = int(round(n * p))
+    orbs = sw_orbits(n, 23 + n, r)
+    sw_planet(img, v, cx, cy, r, ease(t / 0.35))
+    if v.get("names"):  # few moons: big labelled dots on visible orbits
+        d = ImageDraw.Draw(img)
+        for j, (nm, ra) in enumerate(v["names"]):
+            rr = r * ra; d.ellipse([cx - rr, cy - rr * 0.35, cx + rr, cy + rr * 0.35], outline=(150, 160, 200), width=2)
+            if j < shown:
+                th_ = t * (1.3 if j == 0 else 0.5) + j * 2.0; x = cx + rr * math.cos(th_); y = cy + rr * 0.35 * math.sin(th_)
+                d.ellipse([x - 12, y - 12, x + 12, y + 12], fill=acc); d.text((x, y - 34), nm, font=F(32, "ExtraBold"), fill=acc, anchor="mm")
+    else:
+        sw_draw(img, cx, cy, orbs, shown, t, acc)
+    if v.get("note"): text(img, (W / 2, 1270), v["note"], 36, (235, 235, 245), w="Bold", a=ease((t - 1.6) / 0.4), stroke=3)
+def sw_waffle(img, th, items, t, a=1.0, x0=110, y0=430, step=19, cols=30):
+    """outro: every moon as one square, one block per planet, largest first; + the 'all the others combined' line"""
+    acc = tuple(th["accent"]); y = y0
+    for o in sorted(items, key=lambda o: o["rank"]):
+        v = o["vis"]; n = v["n"]; rows = (n + cols - 1) // cols
+        lay = Image.new("RGBA", img.size, (0, 0, 0, 0)); d = ImageDraw.Draw(lay)
+        q = easeio((t - 0.2 * (o["rank"] - 1)) / 1.2); m = int(n * q)
+        for i in range(m):
+            cx_ = x0 + 170 + (i % cols) * step; cy_ = y + (i // cols) * step
+            d.rectangle([cx_, cy_, cx_ + step - 5, cy_ + step - 5], fill=tuple(v["col"]) + (int(255 * a),))
+        img.alpha_composite(lay)
+        text(img, (x0, y + 8), o["name"], 30, tuple(v["col"]), w="ExtraBold", a=a, stroke=3, anchor="lm")
+        text(img, (x0, y + 42), f"{n}", 34, (255, 255, 255), a=a, stroke=3, anchor="lm")
+        y += max(rows * step, 72) + 28
+    return y
+
 def caption_chunks(say, t0, dur):
     words = say.split(); groups, g = [], []
     for w in words:
@@ -1339,6 +1395,16 @@ def draw_caption(img, chunks, gt, y=1585):
 
 def seg_hook(img, sc, th, t, dur):
     col = tuple(th["star_col"]); acc = tuple(th["accent"])
+    if th.get("hook") == "swarm":
+        # frame 0: the big number + a dark planet with 285 dots already swarming around it, "?" on the planet
+        cx, cy = W / 2, 930; r = 170
+        R.paste_c(img, R.planet_sprite(r, (60, 55, 85), light=(-0.7, -0.5)), cx, cy)
+        sw_draw(img, cx, cy, sw_orbits(285, 23 + 285, r), 285, t + 3.0, tuple(th["accent"]))
+        text(img, (cx, cy), "?", 200, tuple(th["accent"]), stroke=4)
+        text(img, (W / 2, 220), sc.get("big", ""), 170, tuple(th["accent"]), stroke=3)
+        text(img, (W / 2, 345), sc["top"].upper(), 52, (255, 255, 255))
+        text(img, (W / 2, 1430), sc["sub"], 46, tuple(th["accent2"]), w="ExtraBold")
+        return
     if th.get("hook") == "pair":
         # frame 0: big number + a dark planet with a "?" moon half its width bobbing next to it
         cx, cy = 400, 900; R.paste_c(img, R.planet_sprite(PA_R, (60, 55, 85), light=(-0.7, -0.5)), cx, cy)
@@ -1653,6 +1719,8 @@ def seg_item(img, it, th, t, dur):
         tilt_vis(img, it, th, t, dur)
     if v["type"] == "pair":
         pair_vis(img, it, th, t, dur)
+    if v["type"] == "swarm":
+        swarm_vis(img, it, th, t, dur)
     # number
     p = easeio((t - 0.5) / 1.6)
     num = it["num"]
@@ -1665,6 +1733,14 @@ def seg_item(img, it, th, t, dur):
 
 def seg_outro(img, sc, th, t, dur):
     a = ease(t / 0.5)
+    if th.get("outro") == "swarm":
+        y = sw_waffle(img, th, ALL_ITEMS, t, a)
+        others = sum(o["vis"]["n"] for o in ALL_ITEMS if o["rank"] != 1) + 1
+        text(img, (W / 2, y + 40), f"all the other planets combined: {others}", 40, tuple(th["accent2"]), w="ExtraBold", a=ease((t - 0.8) / 0.5), stroke=3)
+        text(img, (W / 2, 1230), "WHICH PLANET", 92, (255, 255, 255), a=ease((t - 0.3) / 0.5))
+        text(img, (W / 2, 1320), "SHOULD WE MEASURE NEXT?", 56, tuple(th["accent"]), a=ease((t - 0.5) / 0.5))
+        text(img, (W / 2, 1450), "SUBSCRIBE to Cosmic Scale", 56, tuple(th["accent"]), a=ease((t - 0.8) / 0.5))
+        return
     if th.get("outro") == "pair":
         # all five pairs in a row: every planet drawn the same size, moons to scale with their own planet
         for i, o in enumerate(sorted(ALL_ITEMS, key=lambda o: o["rank"])):

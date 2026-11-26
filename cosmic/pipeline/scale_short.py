@@ -74,6 +74,14 @@ Visuais (vis.type):
              hook (vulcão visto de cima, desenhado por código, sobre o Arizona) | mars (Marte com o vulcão na borda + régua 600 km) |
              flat (perfil EM ESCALA REAL: uma panqueca de 22 km x 600 km, depois exagerado 10× ao lado do Everest) | walk (bonequinho subindo
              a encosta de ~5%, contador 0 -> 300 km e dias a pé a 30 km/dia) | tail (volta ao hook = loop) (scale20).
+  "hexagon": o hexágono no polo norte de Saturno (NASA/Cassini: ~30.000 km, ventos ~322 km/h) com a Terra em escala; vis.mode = hook
+             (vista polar desenhada por código + 2 Terras lado a lado dentro) | globe (Saturno inteiro visto do polo, com anéis, régua
+             30.000 km) | side (um lado de 15.000 km x a Terra, rastros de vento, contador até 322 km/h) | years (linha do tempo 1981
+             Voyager -> 2006 Cassini -> 2017; a calota muda de azul para dourado) | tail (volta ao hook = loop) (scale21).
+  "moonmap": a Lua (3.474,8 km) EM ESCALA sobre o contorno simplificado da Austrália (quase 4.000 km leste–oeste, desenhado à mão em
+             lon/lat); vis.mode = hook (mapa + Lua translúcida + 2 barras) | ruler (barras 4.000 x 3.475 km com contadores) | edges (a Lua
+             desliza e as duas costas que sobram brilham) | peel (a superfície da Lua como folha plana; 5 Austrálias enchendo, contador
+             até 4,9) | land (barras em milhões de km²: Austrália, África, Lua, Ásia) | tail (= hook, loop) (scale22).
 Reaproveita render.py (sprites, fontes) e ranking.py (fundo, texto, legendas).
 """
 import sys, os, math, json, subprocess, importlib.util, random
@@ -1743,6 +1751,208 @@ def olympus_vis(img, v, th, t, dur, bp):
         text(img, (W / 2, 1400), "a volcano the size of a state", 44, acc2, w="ExtraBold", stroke=3)
 
 
+# ---- scale21: "hexagon" — the six-sided jet stream on Saturn's north pole (NASA/Cassini: ~30,000 km across, winds ~322 km/h), Earth to scale
+HX_KM = 30000.0; SAT_EQ_KM = 60268.0
+_hx21 = {}
+def _satpole21(r, hue=0.0):
+    """Saturn seen from straight above the north pole (code-drawn): banded concentric clouds, darker inner cap whose colour goes
+    blue (hue 0) -> gold (hue 1), small polar vortex, terminator shading. Cached per (r, hue step)."""
+    r = int(r); hk = round(hue, 2); key = (r, hk)
+    if key in _hx21: return _hx21[key]
+    s = 2 * r + 8; yy, xx = np.mgrid[0:s, 0:s].astype(np.float32); nx, ny = (xx - s / 2) / r, (yy - s / 2) / r
+    rr = np.sqrt(nx ** 2 + ny ** 2); ang = np.arctan2(ny, nx)
+    band = 0.5 + 0.5 * np.sin(rr * 38 + 0.6 * np.sin(ang * 3 + rr * 9))
+    outer = np.array([222, 196, 150], np.float32); inner_b = np.array([70, 110, 160], np.float32); inner_g = np.array([200, 160, 90], np.float32)
+    inner = inner_b * (1 - hk) + inner_g * hk
+    cap = np.clip((0.42 - rr) / 0.12, 0, 1)[..., None]
+    rgb = outer[None, None] * (1 - cap) + inner[None, None] * cap
+    rgb = rgb * (0.86 + 0.18 * band)[..., None]
+    shade = np.clip(0.55 + 0.6 * (-nx * 0.5 - ny * 0.3) + 0.4 * (1 - rr ** 2), 0.25, 1.15)
+    rgb *= shade[..., None]
+    vort = np.clip(1 - rr / 0.05, 0, 1); rgb = rgb * (1 - 0.5 * vort[..., None]) + np.array([255, 240, 220]) * 0.5 * vort[..., None] * 0.6
+    a = np.clip((1.0 - rr) * r / 1.5, 0, 1) * 255
+    img = Image.fromarray(np.dstack([np.clip(rgb, 0, 255), a]).astype(np.uint8), "RGBA"); _hx21[key] = img
+    return img
+def _hexpts21(cx, cy, rad, rot=0.0, wob=0.0, t=0.0):
+    pts = []
+    for i in range(6):
+        for j in range(8):  # slightly wavy edges, like the real jet stream
+            u = j / 8; a0 = rot + i * math.pi / 3; a1 = a0 + math.pi / 3
+            x = lerp(math.cos(a0), math.cos(a1), u); y = lerp(math.sin(a0), math.sin(a1), u)
+            k = 1 + wob * math.sin(u * math.pi * 2 + t * 2 + i) * 0.015
+            pts.append((cx + x * rad * k, cy + y * rad * k))
+    return pts
+def _hexdraw21(img, cx, cy, rad, col, t, rot=0.0, width=7, a=1.0, flow=True):
+    pts = _hexpts21(cx, cy, rad, rot, 1.0, t)
+    lay = Image.new("RGBA", img.size, (0, 0, 0, 0)); d = ImageDraw.Draw(lay)
+    d.line(pts + [pts[0]], fill=col + (int(110 * a),), width=width * 3)
+    d.line(pts + [pts[0]], fill=col + (int(255 * a),), width=width)
+    if flow:  # bright dashes racing around the edge = the wind
+        n = len(pts)
+        for k in range(14):
+            p = (t * 0.07 + k / 14) % 1 * n; i0 = int(p); f = p - i0; q0 = pts[i0 % n]; q1 = pts[(i0 + 1) % n]
+            x, y = lerp(q0[0], q1[0], f), lerp(q0[1], q1[1], f)
+            d.ellipse([x - 7, y - 7, x + 7, y + 7], fill=(255, 255, 255, int(230 * a)))
+    lay = lay.filter(ImageFilter.GaussianBlur(0.8)); img.alpha_composite(lay)
+def _hook21(img, th, t, cy=930):
+    k = 820 / HX_KM; rp = SAT_EQ_KM * k  # planet radius ~1650 px: only the polar region shows
+    R.paste_c(img, _satpole21(rp, 0.85), W / 2, cy)
+    rot = t * 0.05; _hexdraw21(img, W / 2, cy, HX_KM / 2 * k, tuple(th["accent"]), t, rot)
+    er = EARTH_KM / 2 * k
+    for sx in (-1, 1): R.paste_c(img, R.earth_sprite(int(er), glow=None), W / 2 + sx * (er + 4), cy)
+    text(img, (W / 2, cy + 470), "2 Earths, to scale", 44, (255, 255, 255), w="ExtraBold", stroke=3)
+def hexagon_vis(img, v, th, t, dur, bp):
+    """vis.mode = hook (polar view: hexagon 30,000 km wide with two Earths side by side inside, TO SCALE) | globe (whole Saturn from above
+    the pole with rings, the hexagon glowing at the top; ruler 30,000 km) | side (one 15,000 km edge vs Earth, wind streaks + counter to
+    322 km/h vs a hurricane) | years (timeline 1981 Voyager -> 2006 Cassini -> 2017; cap colour shifts blue -> gold, NASA 2012–2016) |
+    tail (dissolves back into the hook = loop)"""
+    acc, acc2 = tuple(th["accent"]), tuple(th["accent2"]); mode = v.get("mode", "hook")
+    if mode == "hook":
+        _hook21(img, th, t)
+    elif mode == "globe":
+        r = 330; cx, cy = W / 2, 980
+        lay = Image.new("RGBA", img.size, (0, 0, 0, 0)); d = ImageDraw.Draw(lay)
+        for rr_, c_, w_ in ((r * 2.25, (200, 180, 140, 90), 40), (r * 1.95, (225, 205, 165, 170), 60), (r * 1.6, (210, 190, 150, 130), 40)):
+            d.ellipse([cx - rr_, cy - rr_, cx + rr_, cy + rr_], outline=c_, width=w_)
+        img.alpha_composite(lay)
+        R.paste_c(img, _satpole21(r, 0.85), cx, cy)
+        hr = HX_KM / 2 / SAT_EQ_KM * r * lerp(1, 1.0, bp)
+        _hexdraw21(img, cx, cy, hr, acc, t, t * 0.05, width=5)
+        d = ImageDraw.Draw(img); y0 = cy + r * 2.25 + 20 if False else 1420
+        x0, x1 = cx - hr, cx + hr; q = ease((t - 0.6) / 0.6)
+        d.line([(x0, cy), (lerp(x0, x1, q), cy)], fill=(255, 255, 255), width=4)
+        text(img, (W / 2, cy - r - 230), "Saturn, seen from above its north pole", 38, (235, 225, 205), w="Bold", stroke=3)
+        text(img, (W / 2, cy + 90), "30,000 km", 46, (255, 255, 255), w="ExtraBold", stroke=3, a=q)
+    elif mode == "side":
+        k = 700 / 15000.0; y = 600; x0 = W / 2 - 350; x1 = W / 2 + 350
+        lay = Image.new("RGBA", img.size, (0, 0, 0, 0)); d = ImageDraw.Draw(lay)
+        rng = random.Random(21)
+        for i in range(50):  # wind streaks racing along the edge
+            yy = y + rng.uniform(-50, 50); L = rng.uniform(80, 240); sp = rng.uniform(500, 900)
+            xx = (rng.uniform(0, W + L) + t * sp) % (W + L) - L
+            d.line([(xx, yy), (xx + L, yy)], fill=acc + (int(rng.uniform(60, 200)),), width=rng.choice([3, 4, 6]))
+        img.alpha_composite(lay)
+        d = ImageDraw.Draw(img); d.line([(x0, y), (x1, y)], fill=acc, width=9)
+        for xe in (x0, x1): d.line([(xe, y - 30), (xe, y + 30)], fill=acc, width=6)
+        text(img, (W / 2, y - 80), "one side of the hexagon", 40, acc, w="ExtraBold", stroke=3)
+        er = EARTH_KM / 2 * k; yb = y + 110; d.line([(x0, yb), (x0 + 2 * er, yb)], fill=(150, 205, 255), width=7)
+        for xe in (x0, x0 + 2 * er): d.line([(xe, yb - 22), (xe, yb + 22)], fill=(150, 205, 255), width=5)
+        R.paste_c(img, R.earth_sprite(int(er), glow=None), x0 + er, yb + 40 + er, ease((t - 0.2) / 0.4))
+        text(img, (x0 + 2 * er + 20, yb), "Earth", 36, (160, 210, 255), w="ExtraBold", stroke=3, anchor="lm")
+        kmh = 322 * easeio((t - 0.3) / max(0.8, dur * 0.6))
+        text(img, (W / 2, 1400), f"{kmh:,.0f} km/h winds", 76, (255, 255, 255), stroke=4)
+    elif mode == "years":
+        yr = lerp(1981, 2017, easeio((t - 0.3) / max(0.8, dur * 0.7))); hue = max(0, min(1, (yr - 2009) / 7))
+        cy = 860; k = 560 / HX_KM; R.paste_c(img, _satpole21(SAT_EQ_KM * k, hue), W / 2, cy)
+        _hexdraw21(img, W / 2, cy, HX_KM / 2 * k, acc, t, t * 0.05, width=5)
+        d = ImageDraw.Draw(img); x0, x1, ty = 110, W - 110, 1300
+        d.line([(x0, ty), (x1, ty)], fill=(170, 175, 200), width=4)
+        for y_, lab in ((1981, "Voyager"), (2006, "Cassini"), (2017, "Cassini ends")):
+            x = lerp(x0, x1, (y_ - 1981) / 36); d.ellipse([x - 10, ty - 10, x + 10, ty + 10], fill=acc2)
+            d.text((x, ty + 44), str(y_), font=F(30, "Black"), fill=(235, 235, 245), anchor="mm")
+            d.text((x, ty - 40), lab, font=F(28, "Bold"), fill=acc2, anchor="mm")
+        x = lerp(x0, x1, (yr - 1981) / 36); d.polygon([(x - 16, ty - 70), (x + 16, ty - 70), (x, ty - 50)], fill=(255, 255, 255))
+        text(img, (W / 2, 470), f"{yr:.0f}", 110, (255, 255, 255), stroke=4)
+        text(img, (W / 2, 1420), "still there, decades later", 42, acc, w="ExtraBold", stroke=3, a=ease((t - 1.0) / 0.5))
+    elif mode == "tail":
+        q = easeio((bp - 0.55) / 0.45) if bp > 0.55 else 0.0
+        base_ = img.copy(); _hook21(base_, th, t)
+        img.paste(base_)
+
+
+# ---- scale22: "moonmap" — the Moon (3,474.8 km, NASA) dropped TO SCALE on Australia (almost 4,000 km east to west, Geoscience Australia);
+# surface: Moon 37.9 million km² (NASA) = 4.9 Australias (7.69 million km²); Africa 30.4, Asia 44.6 million km².
+AU22 = [(114.1, -21.8), (116.7, -20.6), (118.9, -20.3), (121.0, -19.5), (122.2, -18.0), (122.9, -16.4), (124.2, -16.3), (125.2, -14.6),
+        (126.9, -13.8), (128.2, -15.0), (129.6, -14.9), (130.2, -12.9), (131.0, -12.2), (132.6, -11.4), (133.4, -11.8), (135.9, -12.2),
+        (136.8, -12.3), (135.9, -13.4), (135.5, -14.7), (137.0, -15.9), (139.3, -17.4), (140.8, -17.4), (141.5, -15.0), (141.6, -12.6),
+        (142.5, -10.7), (143.5, -12.9), (144.4, -14.3), (145.4, -15.0), (146.0, -17.5), (146.3, -19.0), (148.8, -20.3), (150.0, -22.1),
+        (151.5, -24.0), (153.1, -25.5), (153.6, -28.6), (153.0, -31.0), (151.5, -33.5), (150.1, -36.3), (149.9, -37.5), (147.7, -37.9),
+        (146.3, -39.1), (144.9, -37.9), (143.5, -38.8), (141.6, -38.4), (140.0, -37.5), (139.6, -36.2), (138.1, -35.6), (138.5, -34.6),
+        (137.8, -32.9), (137.5, -34.2), (136.0, -34.9), (135.2, -34.5), (134.2, -32.7), (131.2, -31.5), (128.9, -31.7), (126.0, -32.3),
+        (123.7, -33.9), (120.0, -34.0), (117.9, -35.1), (116.0, -34.8), (115.0, -34.3), (115.0, -33.5), (115.7, -32.3), (115.0, -29.5),
+        (114.6, -28.5), (113.2, -26.2), (113.7, -24.5), (113.4, -22.6)]
+TAS22 = [(144.6, -40.7), (148.3, -40.9), (148.2, -42.2), (147.2, -43.5), (146.0, -43.6), (145.2, -42.2)]
+def _au22(cx, cy, kpx, poly=AU22):
+    lon0, lat0 = 133.4, -27.0; kx = 111.32 * math.cos(math.radians(27.4)); ky = 110.9
+    return [(cx + (lo - lon0) * kx * kpx, cy - (la - lat0) * ky * kpx) for lo, la in poly]
+def _map22(img, cx, cy, kpx, col_fill, col_line, a=1.0, w=5):
+    lay = Image.new("RGBA", img.size, (0, 0, 0, 0)); d = ImageDraw.Draw(lay)
+    for poly in (AU22, TAS22):
+        pts = _au22(cx, cy, kpx, poly); d.polygon(pts, fill=col_fill + (int(255 * a),)); d.line(pts + [pts[0]], fill=col_line + (int(255 * a),), width=w)
+    img.alpha_composite(lay)
+_mm22 = {}
+def _moonglass22(r, alpha=0.72):
+    key = (int(r), alpha)
+    if key not in _mm22:
+        m = R.moon8(int(r)); a_ = m.getchannel("A").point(lambda v: int(v * alpha)); m = m.copy(); m.putalpha(a_); _mm22[key] = m
+    return _mm22[key]
+def _hook22(img, th, t, cx=W / 2, cy=900):
+    kpx = 940 / 4000.0
+    _map22(img, cx, cy, kpx, (196, 120, 64), (255, 205, 150))
+    mr = 3474.8 / 2 * kpx; R.paste_c(img, _moonglass22(mr), cx + 12, cy + 30 + 6 * math.sin(t * 2))
+    d = ImageDraw.Draw(img); y = cy + 470
+    xs = _au22(cx, cy, kpx); xmin = min(p[0] for p in xs); xmax = max(p[0] for p in xs)
+    d.line([(xmin, y), (xmax, y)], fill=(255, 205, 150), width=5); d.line([(cx + 12 - mr, y + 34), (cx + 12 + mr, y + 34)], fill=(220, 225, 240), width=5)
+    text(img, (W / 2, y + 90), "same scale", 36, (230, 230, 240), w="Bold", stroke=3)
+def moonmap_vis(img, v, th, t, dur, bp):
+    """vis.mode = hook (Australia, hand-traced simplified outline, with the Moon as a translucent disc TO SCALE on top; two width bars) |
+    ruler (two bars grow: Australia ~4,000 km vs Moon 3,475 km, counters) | edges (the Moon slides across the map; the two coasts that
+    stick out glow) | peel (the Moon's surface peeled into a flat grid; 5 Australia silhouettes fill it, counter 0 -> 4.9) | land (bars in
+    million km²: Australia 7.7 / Africa 30.4 / Moon 37.9 / Asia 44.6) | tail (back to the hook = loop)"""
+    acc, acc2 = tuple(th["accent"]), tuple(th["accent2"]); mode = v.get("mode", "hook"); d = ImageDraw.Draw(img)
+    if mode == "hook":
+        _hook22(img, th, t)
+    elif mode == "ruler":
+        kpx = 900 / 4000.0; x0 = W / 2 - 450; q = easeio((t - 0.3) / max(0.8, dur * 0.6))
+        for i, (lab, km, col) in enumerate((("Australia, coast to coast", 4000, acc), ("the Moon", 3474.8, (220, 225, 240)))):
+            y = 760 + i * 300; L = km * kpx * q
+            d.rounded_rectangle([x0, y, x0 + max(10, L), y + 70], 18, fill=col)
+            text(img, (x0, y - 50), lab, 42, col, w="ExtraBold", stroke=3, anchor="lm")
+            text(img, (x0 + max(10, L) - 10, y + 125), f"{km * q:,.0f} km", 56, (255, 255, 255), stroke=4, anchor="rm")
+        if i == 1: R.paste_c(img, R.moon8(70), x0 + 3474.8 * kpx * q + 90, 1095, ease((q - 0.9) * 10))
+        text(img, (W / 2, 1420), "almost 4,000 km  vs  3,475 km", 40, acc2, w="ExtraBold", stroke=3, a=ease((t - 1.2) / 0.5))
+    elif mode == "edges":
+        kpx = 940 / 4000.0; cx, cy = W / 2, 900
+        _map22(img, cx, cy, kpx, (150, 90, 50), (255, 205, 150))
+        mr = 3474.8 / 2 * kpx; mx = lerp(cx - 260, cx + 12, easeio((t - 0.2) / max(0.8, dur * 0.5)))
+        R.paste_c(img, _moonglass22(mr, 0.9), mx, cy + 30)
+        pts = _au22(cx, cy, kpx); west = min(pts, key=lambda p: p[0]); east = max(pts, key=lambda p: p[0])
+        g = 0.5 + 0.5 * math.sin(t * 6); a = ease((t - dur * 0.55) / 0.4)
+        for p in (west, east):
+            lay = Image.new("RGBA", img.size, (0, 0, 0, 0)); ImageDraw.Draw(lay).ellipse([p[0] - 46, p[1] - 46, p[0] + 46, p[1] + 46], outline=acc + (int(255 * a * (0.6 + 0.4 * g)),), width=8); img.alpha_composite(lay)
+        text(img, (W / 2, 1420), "both coasts stick out", 46, acc, w="ExtraBold", stroke=3, a=a)
+    elif mode == "peel":
+        gx0, gy0, gw, gh = 90, 560, 900, 620  # flat sheet = the Moon's whole surface (area to scale with the 5 maps)
+        lay = Image.new("RGBA", img.size, (0, 0, 0, 0)); dl = ImageDraw.Draw(lay)
+        dl.rectangle([gx0, gy0, gx0 + gw, gy0 + gh], fill=(150, 150, 160, 255), outline=(230, 230, 240, 255), width=4)
+        rng = random.Random(22)
+        for _ in range(70):
+            x = rng.uniform(gx0 + 10, gx0 + gw - 10); y = rng.uniform(gy0 + 10, gy0 + gh - 10); r_ = rng.uniform(4, 22)
+            dl.ellipse([x - r_, y - r_, x + r_, y + r_], fill=(120, 120, 132, 255))
+        img.alpha_composite(lay)
+        kpx = math.sqrt(gw * gh / 37.9e6) * 0.97  # px per km so the sheet area = 37.9 million km²
+        n = 4.93 * easeio((t - 0.4) / max(0.8, dur * 0.65)); cells = [(0, 0), (1, 0), (0, 1), (1, 1), (2, 0.5)]
+        cw, ch = gw / 3, gh / 2
+        for i, (c, r_) in enumerate(cells):
+            f = max(0, min(1, n - i))
+            if f <= 0: continue
+            _map22(img, gx0 + cw * (c + 0.5), gy0 + ch * (r_ + 0.5), kpx * (0.6 + 0.4 * ease(f)), (196, 120, 64), (255, 205, 150), a=ease(f * 2), w=3)
+        text(img, (W / 2, 1300), f"{n:.1f} Australias", 96, acc, stroke=4)
+        text(img, (W / 2, 1400), "the Moon's whole surface, laid flat", 38, (235, 235, 245), w="Bold", stroke=3)
+    elif mode == "land":
+        rows = [("Australia", 7.69, (196, 120, 64)), ("Africa", 30.37, (230, 170, 90)), ("THE MOON", 37.9, (225, 228, 240)), ("Asia", 44.58, (120, 190, 160))]
+        x0, x1 = 120, W - 120; q = easeio((t - 0.3) / max(0.8, dur * 0.6))
+        for i, (lab, v_, col) in enumerate(rows):
+            y = 640 + i * 190; L = (x1 - x0) * v_ / 46 * q
+            d.rounded_rectangle([x0, y, x0 + max(8, L), y + 66], 16, fill=col)
+            text(img, (x0, y - 34), lab, 40, col, w="ExtraBold", stroke=3, anchor="lm")
+            text(img, (x1, y - 34), f"{v_ * q:.1f}", 40, (255, 255, 255), stroke=3, anchor="rm")
+        text(img, (W / 2, 1450), "million km² of land", 38, (235, 235, 245), w="Bold", stroke=3)
+    elif mode == "tail":  # land bars, then cut back to the hook frame for the loop
+        if bp < 0.62: moonmap_vis(img, dict(v, mode="land"), th, t, dur, bp)
+        else: _hook22(img, th, t)
+
+
 def chrome(img, th, gt, total):
     d = ImageDraw.Draw(img)
     d.rectangle([0, 0, int(W * gt / total), 10], fill=tuple(th["accent"]))
@@ -1816,9 +2026,10 @@ def frame(m, durs, gt, chunks, arr):
         hl = v.get("head") or m.BIG
         text(img, (W / 2, 170), hl["num"], 124 if len(hl["num"]) < 12 else 100, tuple(th["accent"]), stroke=4)
         text(img, (W / 2, 280), hl["top"], 52, (255, 255, 255), stroke=3)
-    elif v["type"] in ("jupsun", "andromeda", "redgiant", "sand", "magbubble", "sugarcube", "saturnfloat", "olympus"):
+    elif v["type"] in ("jupsun", "andromeda", "redgiant", "sand", "magbubble", "sugarcube", "saturnfloat", "olympus", "hexagon", "moonmap"):
         {"jupsun": jupsun_vis, "andromeda": andromeda_vis, "redgiant": redgiant_vis, "sand": globals().get("sand_vis"), "magbubble": globals().get("magbubble_vis"),
-         "sugarcube": globals().get("sugarcube_vis"), "saturnfloat": globals().get("saturnfloat_vis"), "olympus": globals().get("olympus_vis")}[v["type"]](img, v, th, t, d, easeio((t - 0.2) / max(0.8, d * 0.8)))
+         "sugarcube": globals().get("sugarcube_vis"), "saturnfloat": globals().get("saturnfloat_vis"), "olympus": globals().get("olympus_vis"),
+         "hexagon": globals().get("hexagon_vis"), "moonmap": globals().get("moonmap_vis")}[v["type"]](img, v, th, t, d, easeio((t - 0.2) / max(0.8, d * 0.8)))
         hl = v.get("head") or m.BIG
         text(img, (W / 2, 170), hl["num"], 124 if len(hl["num"]) < 12 else 100, tuple(th["accent"]), stroke=4)
         text(img, (W / 2, 280), hl["top"], 52, (255, 255, 255), stroke=3)
