@@ -2867,7 +2867,10 @@
   "thumb_path": "/opt/canal-publisher/state/thumbs/c5-d07a-elefante.jpg",
   "thumb_attempts": 0,
   "thumb_error": "miniatura personalizada pede o telefone verificado no canal",
-  "thumb_retry_after": "2026-11-27T14:02:39.275351-03:00"
+  "thumb_retry_after": "2026-11-27T14:02:39.275351-03:00",
+  "comment_attempts": 0,
+  "comment_error": "fixar comentário pede o telefone verificado no canal",
+  "comment_retry_after": "2026-11-27T18:51:51.145506-03:00"
  },
  "c5-d07b-mariposa": {
   "attempts": 1,
