@@ -2889,7 +2889,10 @@
   "thumb_path": "/opt/canal-publisher/state/thumbs/c5-d07b-mariposa.jpg",
   "thumb_attempts": 0,
   "thumb_error": "miniatura personalizada pede o telefone verificado no canal",
-  "thumb_retry_after": "2026-11-27T20:14:15.859923-03:00"
+  "thumb_retry_after": "2026-11-27T20:14:15.859923-03:00",
+  "comment_attempts": 0,
+  "comment_error": "fixar comentário pede o telefone verificado no canal",
+  "comment_retry_after": "2026-11-28T01:52:10.820010-03:00"
  },
  "cosmic-rank23-short": {
   "attempts": 1,
