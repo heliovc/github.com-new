@@ -2987,7 +2987,9 @@
   "related_key": "cosmic-ep17-long",
   "pinned_comment": "How many Earths do you think fit across the whole Sun? Full video: What If We Swapped the Sun for 5 Other Stars? One Puts Earth INSIDE It",
   "related_attempts": 1,
-  "related_done": "2026-11-27T06:41:32.867012-03:00"
+  "related_done": "2026-11-27T06:41:32.867012-03:00",
+  "comment_attempts": 1,
+  "comment_done": "2026-11-27T19:23:06.991317-03:00"
  },
  "cosmic-ep20-long": {
   "attempts": 1,
@@ -3041,7 +3043,7 @@
   "thumb_path": "/opt/canal-publisher/state/thumbs/c5-d08a-beijaflor.jpg",
   "thumb_attempts": 0,
   "thumb_error": "miniatura personalizada pede o telefone verificado no canal",
-  "thumb_retry_after": "2026-11-27T19:11:46.288311-03:00"
+  "thumb_retry_after": "2026-11-28T01:25:06.733579-03:00"
  },
  "c5-d08b-capivara": {
   "attempts": 1,
@@ -3060,6 +3062,6 @@
   "thumb_path": "/opt/canal-publisher/state/thumbs/c5-d08b-capivara.jpg",
   "thumb_attempts": 0,
   "thumb_error": "miniatura personalizada pede o telefone verificado no canal",
-  "thumb_retry_after": "2026-11-27T19:12:33.996324-03:00"
+  "thumb_retry_after": "2026-11-28T01:26:12.319217-03:00"
  }
 }
