@@ -29,6 +29,8 @@ Ler antes de cada vídeo (plano.md, seção 8). Atualizar depois de produzir e 4
 | 6 | B | sabiá | ave | mecânica do dia a dia · **curto** | queda/perigo | cidade | céu verde-água de fim de tarde, morros verde-escuros, poste de concreto, sabiá oliva e laranja-ferrugem, choque amarelo | sabiá pousando no fio com pulsos amarelos correndo pelo cabo | ultravioleta (descargas violeta nos isoladores e no cabo) | 34,8 s | 94 | agendado 26/11 19:00 |
 | 7 | A | elefante | mamífero | escala extrema · **curto** | som | natureza | savana ao amanhecer, céu pêssego e coral, terra vermelha, acácias vinho, tremor do chão em magenta | câmera rasteira: a pata gigante pisa e o chão ondula em anéis magenta | tremor do chão pelas patas (ondas acesas chegando nos pés) | 32,5 s | 98 | agendado 27/11 12:00 |
 | 7 | B | mariposa | inseto | mecânica do dia a dia · **curto** | lugar proibido | casa | varanda à noite, parede verde-oliva, céu ameixa, lâmpada âmbar × LED branco-gelo, ultravioleta violeta | close: a mariposa girando em volta da lâmpada acesa, rastro em espiral | ultravioleta (mundo violeta, flores e asas com desenhos que só aparecem no UV) | 35,9 s | 96 | agendado 27/11 19:00 |
+| 8 | A | beija-flor | ave | escala extrema · **curto** | número | corpo | jardim tropical ao meio-dia, céu turquesa, flores magenta, beija-flor esmeralda com garganta rubi; noite azul-marinho | beija-flor parado no ar na flor, coração piscando no peito e eletrocardiograma correndo | movimento (o mundo vira setas de fluxo em todas as direções; a flor fica parada na mira) | 36,5 s | 99 | agendado 28/11 12:00 |
+| 8 | B | capivara | mamífero | mecânica do dia a dia · **curto** | lugar proibido | cidade | manhã de neblina prata, concreto bege da barragem, rio verde-jade, capivara caramelo; raio-X azul-noite com água verde, corrente amarela, bobinas de cobre | rente à água: só a cabeça da capivara de fora e a parede de 196 m atrás, com régua | periscópio (olhos, orelhas e narinas na mesma linha no topo da cabeça; POV metade fora, metade dentro d'água) | 38,3 s | 108 | agendado 28/11 19:00 |
 
 ## Fontes por vídeo
 **1A — formiga**
@@ -99,25 +101,39 @@ Ler antes de cada vídeo (plano.md, seção 8). Atualizar depois de produzir e 4
 - U.S. Department of Energy, "LED Lighting" — LED residencial gasta pelo menos 75% menos que a incandescente; a incandescente solta ~90% da energia como calor. https://www.energy.gov/energysaver/led-lighting
 - Filamento de tungstênio ~2.500 °C em uso. Mariposas têm fotorreceptores de ultravioleta, azul e verde (Briscoe & Chittka 2001, Annu. Rev. Entomol.).
 
+**8A — beija-flor (curto)**
+- Lasiewski, Weathers & Bernstein (1967), The Auk 84: 34–48 — frequência cardíaca de 1.200–1.260 por minuto no beija-flor-de-garganta-azul; no torpor, dezenas a poucas centenas por minuto (divulgação: 50–180).
+- Wolf, Gonzalez, Bonaccorso & McKechnie (2020), Biology Letters 16: 20200428 — no torpor o corpo esfria até perto da temperatura do ar (metaltail-preto a 3,3 °C). https://www.smithsonianmag.com/smart-news/hummingbirds-andes-go-chilly-extremes-good-nights-sleep-180975767/
+- Gaede, Goller, Lam, Wylie & Altshuler (2017), Current Biology 27(2): 279–285 — neurônios de movimento do beija-flor respondem a todas as direções (voo parado). https://ui.adsabs.harvard.edu/abs/2017CBio...27..279G/abstract
+- Asas ~50–80 batidas/s nas espécies pequenas; coração humano ~60–80/min (1.200 ÷ 70 ≈ 17; 1.200 ÷ 60 = 20/s).
+
+**8B — capivara (curto)**
+- Itaipu Binacional, publicações técnicas — barragem de 196 m, reservatório de 1.350 km², 20 unidades de 700 MW. https://www.itaipu.gov.br/sites/default/files/af_df/1702_022_atualizacao_revista_IB_2017_digital_b.pdf
+- Water Power Magazine, "Final unit inaugurated at Itaipu" — turbinas Francis, queda de projeto 118,4 m, vazão 645 m³/s por unidade (piscina olímpica de 2.500 m³ a cada ~4 s). https://www.waterpowermagazine.com/news/final-unit-inaugurated-at-itaipu/
+- EPE, Balanço Energético Nacional — hidráulica responde por mais da metade da geração elétrica do Brasil. Gerador: rotor com eletroímãs girando dentro de bobinas de cobre (indução).
+- Capivara: ~50–60 cm no ombro; olhos, orelhas e narinas no alto da cabeça (Smithsonian's National Zoo, "Capybara").
+
 ## Métricas (48 h após publicar)
 Metas: continuaram assistindo ≥ 70% · % visualizada ≥ 80%.
 
 | Vídeo | Publicado em | Link | Continuaram assistindo | % visualizada | Views 48 h | Inscritos / 1.000 views |
 |---|---|---|---|---|---|---|
-| 1A formiga | 20/11 22:00 | https://youtube.com/shorts/Wcw5EPuTlpg | 54% (21/11 06h) | 62,4% (~83 h, média 0:30) | 1.800 (~83 h) | 2 inscritos (~1,1 / 1.000) |
+| 1A formiga | 20/11 22:00 | https://youtube.com/shorts/Wcw5EPuTlpg | 54% (21/11 06h) | 62,5% (~131 h, média 0:30) | 1.798 (~131 h) | 2 inscritos (~1,1 / 1.000) |
 | 1B lagartixa | 20/11 23:00 | https://youtube.com/shorts/v88xGAAAzmw | 68% (21/11 06h) | 43,4% (~106 h, média 0:19) | 1.261 (~106 h) | 0 |
-| 2A mosquito (curto) | 22/11 12:00 | https://youtube.com/shorts/_34mq8-rs-Q | — | 42,9% (~69 h, média 0:14) | 1.498 (~69 h) | 1 inscrito (~0,7 / 1.000) |
-| 2B barata (atual) | 22/11 19:00 | https://youtube.com/shorts/RL1mco3U_fw | — | 53,2% (~62 h, média 0:23) | 1.834 (~62 h) | 2 inscritos (~1,1 / 1.000) |
-| 3A krill (curto) | 23/11 11:45 | https://youtube.com/shorts/UdUVK_LYYUQ | — | 74,1% (~45 h, média 0:26) | 2.547 (~45 h) | 9 inscritos (~3,5 / 1.000) |
+| 2A mosquito (curto) | 22/11 12:00 | https://youtube.com/shorts/_34mq8-rs-Q | — | 42,9% (~93 h, média 0:14) | 1.501 (~93 h) | 1 inscrito (~0,7 / 1.000) |
+| 2B barata (atual) | 22/11 19:00 | https://youtube.com/shorts/RL1mco3U_fw | — | 53,2% (~86 h, média 0:23) | 1.840 (~86 h) | 2 inscritos (~1,1 / 1.000) |
+| 3A krill (curto) | 23/11 11:45 | https://youtube.com/shorts/UdUVK_LYYUQ | — | 74,3% (~69 h, média 0:26) | 2.580 (~69 h) | 9 inscritos (~3,5 / 1.000) |
 | 3B pombo (atual) | 23/11 18:45 | https://youtube.com/shorts/YFLRYfWb2ZU | — | 12,6% (~38 h, média 0:05) | 4 (~38 h, travado) | 0 |
-| 4A peixe-caracol (curto) | 24/11 12:45 | https://youtube.com/shorts/sSUEHRXF7l8 | — | 48,0% (~20 h, média 0:18) | 369 (~20 h) | — |
-| 4B rato (atual) | 24/11 19:45 | https://youtube.com/shorts/lfVnMg7h9ck | — | 46,7% (~13 h, média 0:22) | 1.329 (~13 h) | — |
-| 5A pulga (curto) | 25/11 11:30 | https://youtube.com/shorts/vI8lZkXR2TY | — | — | — | — |
-| 5B cachorro (atual) | 25/11 18:30 | https://youtube.com/shorts/TWjyaeNdNaQ | — | — | — | — |
+| 4A peixe-caracol (curto) | 24/11 12:45 | https://youtube.com/shorts/sSUEHRXF7l8 | — | 50,0% (~44 h, média 0:19) | 584 (~44 h) | 0 |
+| 4B rato (atual) | 24/11 19:45 | https://youtube.com/shorts/lfVnMg7h9ck | — | 46,7% (~37 h, média 0:22) | 1.338 (~37 h) | 0 |
+| 5A pulga (curto) | 25/11 11:30 | https://youtube.com/shorts/vI8lZkXR2TY | — | 66,2% (~22 h, média 0:24) | 177 (~22 h) | — |
+| 5B cachorro (atual) | 25/11 18:30 | https://youtube.com/shorts/TWjyaeNdNaQ | — | 33,8% (~15 h, média 0:16) | 1.199 (~15 h) | 3 inscritos (~2,5 / 1.000) |
 | 6A morcego (curto) | 26/11 12:45 | https://youtube.com/shorts/dc-YXJJlzRQ | — | — | — | — |
 | 6B sabiá (curto) | 26/11 19:45 | https://youtube.com/shorts/tM55H1YiTMY | — | — | — | — |
-| 7A elefante (curto) | 27/11 12:00 | — | — | — | — | — |
-| 7B mariposa (curto) | 27/11 19:00 | — | — | — | — | — |
+| 7A elefante (curto) | 27/11 12:45 | https://youtube.com/shorts/nyg1qMX5Bt8 | — | — | — | — |
+| 7B mariposa (curto) | 27/11 19:45 | https://youtube.com/shorts/hfnQs8Uc59s | — | — | — | — |
+| 8A beija-flor (curto) | 28/11 12:00 | — | — | — | — | — |
+| 8B capivara (curto) | 28/11 19:00 | — | — | — | — | — |
 
 Leitura do Dia 1 (21/11): o YouTube mostrou cada um a ~1,1 mil pessoas e parou de distribuir (1–2 views/h). O gancho funciona; as pessoas saem no meio → teste de duração nos Dias 2–5.
 
@@ -155,3 +171,5 @@ Leitura do Dia 1 (21/11): o YouTube mostrou cada um a ~1,1 mil pessoas e parou d
 - 25/11 — Nenhum item c5 com erro no robô. Telefone ainda não verificado (capa e comentário fixado pendentes). Facebook: a Página "Napeledebicho" ainda não aparece no Buffer → replicação pulada. TikTok segue bloqueado (e desconectado no Buffer). Limpeza: nada a apagar (nenhum Short entrou ainda num longo de compilação; o 1º é domingo 29/11).
 - 26/11 (rodada das 06:30) — Dia 7 produzido, os dois no formato CURTO: 7A elefante (32,5 s, 98 palavras, 2 passos: ronco grave balança o ar e o chão → almofada do pé com sensores, tremor sobe pelos ossos até o ouvido; 2 km aos ~22 s; virada = sabe se é da família) e 7B mariposa (35,9 s, 96 palavras, 2 passos: incandescente esquenta o fio a 2.500 °C e 90% vira calor → LED transforma eletricidade em luz direto, 75% menos; virada = ela gira porque vira as costas pro lado mais claro, Fabian et al. 2024). Checagem: "ouvindo pelos pés" confere (corpúsculos de Pacini + condução óssea); a distância pelo chão é de modelo (~2,2 km), por isso "uns 2 quilômetros"; o ronco fica no limite ou abaixo do ouvido humano (~20 Hz). Mariposa: "atraída pela luz" foi trocado pela explicação de 2024 (costas para o claro); "75% menos" e "90% vira calor" são do Departamento de Energia dos EUA. Visão do Bicho do elefante = tremor pelas patas; da mariposa = ultravioleta. A descrição da mariposa sugere apagar a luz de fora quando não precisar.
 - 26/11 — Métricas: arquivo mais recente do robô é de 25/11 09h. Krill 2.547 views e 74,1% visualizada em ~45 h (9 inscritos), segue o melhor; barata 1.834 (53,2%); mosquito 1.498 (42,9%); rato 1.329 (46,7%) em ~13 h; peixe 369 (48,0%) em ~20 h; pombo travado em 4 views. Nenhum item c5 com erro no robô; morcego e sabiá foram agendados pelo robô para 12:45 e 19:45. Telefone ainda não verificado (nenhum c5 com capa ou comentário fixado). Facebook: a Página "Napeledebicho" ainda não aparece no Buffer → replicação pulada. TikTok segue bloqueado (e desconectado no Buffer). Limpeza: nada a apagar (a 1ª compilação é domingo 29/11).
+- 27/11 (rodada das 06:30) — Dia 8 produzido, os dois no formato CURTO: 8A beija-flor (36,5 s, 99 palavras, 2 passos: asas a até 80 batidas/s pedem oxigênio → coração bombeia 20 vezes por segundo (~20 s); virada = à noite entra em torpor, coração cai para ~50/min e o corpo esfria até perto do ar) e 8B capivara (38,3 s, 108 palavras, 2 passos: a água cai mais de 100 m pelo tubo e gira a turbina (1 piscina olímpica a cada 4 s, ~20 s) → a turbina gira o ímã dentro das bobinas de cobre e empurra os elétrons; virada = mais da metade da eletricidade do Brasil vem da água, e a água volta inteira pro rio). Checagem: 1.200 bpm é o máximo medido (beija-flor-de-garganta-azul, Lasiewski 1967); "pode despencar pra 50" é o piso da faixa de torpor; "17 vezes" = 1.200 ÷ 70. Represa = Itaipu (196 m; queda de projeto 118 m → "mais de 100 metros"; 645 m³/s por turbina). O gerador usa eletroímãs no rotor; no roteiro ficou "ímã gigante". Visão do Bicho do beija-flor = movimento (Gaede et al. 2017), escolhida para não repetir o ultravioleta do sabiá e da mariposa; a da capivara = periscópio (olhos, orelhas e narinas no topo da cabeça). A capivara fica sempre no rio, longe das turbinas.
+- 27/11 — Métricas: arquivo mais recente do robô é de 26/11 09h. Krill 2.580 views e 74,3% visualizada (9 inscritos), segue o melhor; barata 1.840 (53,2%); formiga 1.798 (62,5%); mosquito 1.501 (42,9%); rato 1.338 (46,7%); lagartixa 1.262 (43,4%); cachorro 1.199 em ~15 h mas só 33,8% visualizada (3 inscritos); peixe 584 (50,0%); pulga 177 em ~22 h com 66,2%; pombo travado em 4. Curtos seguem à frente dos atuais em % visualizada. Nenhum item c5 com erro no robô; elefante e mariposa saíram 12:45 e 19:45. Telefone ainda não verificado (nenhum c5 com capa ou comentário fixado). Facebook: a Página "Napeledebicho" ainda não aparece no Buffer → replicação pulada. TikTok segue bloqueado (e desconectado no Buffer). Limpeza: nada a apagar (a 1ª compilação é domingo 29/11; a rodada de amanhã faz a compilação e precisa criar `pipeline/compilacao.py`).

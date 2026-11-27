@@ -1,0 +1,316 @@
+{
+ "key": "c5-d08a-beijaflor",
+ "title": "E se você fosse um beija-flor com o coração a 1.200 por minuto?",
+ "animal": "beija-flor",
+ "grupo": "ave",
+ "tipo": "A",
+ "formato": "curto",
+ "gancho": "número",
+ "tema": "corpo",
+ "tts": {
+  "engine": "edge",
+  "voice": "pt-BR-ThalitaMultilingualNeural",
+  "rate": "+0%"
+ },
+ "scene_module": "beijaflor",
+ "accent": [
+  40,
+  220,
+  150
+ ],
+ "hud_series": "E SE VOCÊ FOSSE…",
+ "hud": "VOCÊ: 9 cm · CORAÇÃO: 1.200/min",
+ "music": {
+  "bpm": 132,
+  "root": 62,
+  "prog": [
+   0,
+   4,
+   5,
+   3
+  ],
+  "seed": 89,
+  "inst": "marimba",
+  "density": 0.75
+ },
+ "say_map": {},
+ "beats": [
+  {
+   "scene": "hook",
+   "text": "Eu caibo na sua mão, e meu coração bate 1.200 por *minuto*."
+  },
+  {
+   "scene": "human",
+   "text": "O seu bate uns 70. O meu, 17 vezes mais *rápido*."
+  },
+  {
+   "scene": "vision",
+   "text": "Pra parar no ar, meus olhos sentem qualquer *movimento*."
+  },
+  {
+   "scene": "wings",
+   "text": "Minhas asas batem até 80 vezes por *segundo*."
+  },
+  {
+   "scene": "oxygen",
+   "text": "Esse motor queima energia demais e pede oxigênio sem *parar*."
+  },
+  {
+   "scene": "pump",
+   "text": "Então meu coração bombeia 20 vezes a cada *segundo*."
+  },
+  {
+   "scene": "night",
+   "text": "Mas à noite, sem flor pra comer, eu desligo o *motor*."
+  },
+  {
+   "scene": "torpor",
+   "text": "Meu coração pode despencar pra 50 batidas por *minuto*."
+  },
+  {
+   "scene": "cold",
+   "text": "E meu corpo esfria quase até a temperatura do *ar*."
+  },
+  {
+   "scene": "loop",
+   "text": "De manhã, eu acordo, e o motor liga de *novo*.",
+   "pause_before": 0.3,
+   "payoff": true
+  }
+ ],
+ "scenes": {
+  "hook": {
+   "labels": [
+    {
+     "text": "*1.200* por minuto",
+     "at": "1.200"
+    }
+   ],
+   "sfx": [
+    {
+     "type": "hum",
+     "at": 0,
+     "d": "scene",
+     "f0": 180,
+     "gain": -22
+    },
+    {
+     "type": "whoosh_hi",
+     "at": 0.2,
+     "gain": -13
+    }
+   ]
+  },
+  "human": {
+   "labels": [
+    {
+     "text": "*17×* mais rápido",
+     "at": "17"
+    }
+   ],
+   "sfx_cut": "pop",
+   "sfx": [
+    {
+     "type": "thud",
+     "at": "70",
+     "gain": -12
+    },
+    {
+     "type": "tic",
+     "at": "rápido",
+     "gain": -12
+    }
+   ]
+  },
+  "vision": {
+   "labels": [
+    {
+     "text": "VISÃO DO BICHO · *movimento*",
+     "style": "vision",
+     "at": 0
+    }
+   ],
+   "sfx_cut": "glitch",
+   "sfx": [
+    {
+     "type": "blip_up",
+     "at": "movimento",
+     "gain": -12
+    }
+   ]
+  },
+  "wings": {
+   "labels": [
+    {
+     "text": "*80* batidas por segundo",
+     "at": "80"
+    }
+   ],
+   "sfx_cut": "whoosh",
+   "sfx": [
+    {
+     "type": "hum",
+     "at": 0,
+     "d": "scene",
+     "f0": 80,
+     "gain": -20
+    }
+   ]
+  },
+  "oxygen": {
+   "labels": [
+    {
+     "text": "pede *OXIGÊNIO*",
+     "at": "oxigênio"
+    }
+   ],
+   "sfx_cut": "whoosh_lo",
+   "sfx": [
+    {
+     "type": "hiss",
+     "at": "oxigênio",
+     "d": 1.0,
+     "gain": -20
+    }
+   ]
+  },
+  "pump": {
+   "labels": [
+    {
+     "text": "*20* por segundo",
+     "at": "20"
+    }
+   ],
+   "sfx_cut": "pop",
+   "sfx": [
+    {
+     "type": "steps",
+     "at": 0,
+     "d": "scene",
+     "rate": 20,
+     "gain": -18
+    },
+    {
+     "type": "kick",
+     "at": "segundo",
+     "gain": -10
+    }
+   ]
+  },
+  "night": {
+   "labels": [
+    {
+     "text": "motor *DESLIGADO*",
+     "at": "motor"
+    }
+   ],
+   "sfx_cut": "door",
+   "sfx": [
+    {
+     "type": "wind",
+     "at": 0,
+     "d": "scene",
+     "gain": -28
+    }
+   ]
+  },
+  "torpor": {
+   "labels": [
+    {
+     "text": "*50* por minuto",
+     "at": "50"
+    }
+   ],
+   "sfx_cut": "whoosh_lo",
+   "sfx": [
+    {
+     "type": "thud",
+     "at": "50",
+     "gain": -12
+    }
+   ]
+  },
+  "cold": {
+   "labels": [
+    {
+     "text": "esfria até o *AR*",
+     "at": "esfria"
+    }
+   ],
+   "sfx_cut": "whoosh",
+   "sfx": [
+    {
+     "type": "hiss",
+     "at": "esfria",
+     "d": 1.4,
+     "gain": -24
+    }
+   ]
+  },
+  "loop": {
+   "labels": [
+    {
+     "text": "o motor liga de *NOVO*",
+     "at": "motor"
+    }
+   ],
+   "sfx_cut": "whoosh",
+   "sfx": [
+    {
+     "type": "rise",
+     "at": "acordo",
+     "d": 1.2,
+     "f0": 200,
+     "f1": 900,
+     "gain": -20
+    }
+   ]
+  }
+ },
+ "cover": {
+  "t": 0.5,
+  "focus": [
+   540,
+   1150
+  ],
+  "zoom": 1.0,
+  "at": [
+   520,
+   1180
+  ],
+  "title": [
+   "*UM BEIJA-FLOR*",
+   "PARADO NO AR?"
+  ],
+  "hook": "1.200 BATIDAS/MIN",
+  "sprite_s": 820,
+  "sprite_rot": -6,
+  "you": [
+   640,
+   1010
+  ],
+  "you_side": "right"
+ },
+ "publish": {
+  "title": "E se você fosse um beija-flor com 1.200 batidas por minuto? #shorts",
+  "description": "Um beija-flor cabe na palma da mão, e o coração dele pode bater 1.200 vezes por minuto: uns 17 vezes mais rápido que o de uma pessoa (cerca de 70). Para ficar parado no ar, as asas batem até 80 vezes por segundo nas espécies menores. Esse motor gasta energia demais e pede oxigênio sem parar, então o coração bombeia umas 20 vezes a cada segundo. À noite, sem flor para comer, ele entra em torpor: o coração pode cair para umas 50 batidas por minuto e o corpo esfria quase até a temperatura do ar. De manhã, ele acorda e o motor liga de novo. Qual bicho você quer ser no próximo vídeo?\n\nVisão do Bicho: os neurônios de movimento do beija-flor respondem a movimentos em todas as direções, o que ajuda a ficar parado no ar.\n\nFontes: Lasiewski, Weathers & Bernstein (1967), The Auk; Wolf et al. (2020), Biology Letters; Gaede et al. (2017), Current Biology. Narração com voz sintética; roteiro e animação próprios.\n#esevocefosse #beijaflor #coracao #curiosidades #animais",
+  "tags": [
+   "beija-flor",
+   "coração",
+   "torpor",
+   "batimentos",
+   "aves",
+   "e se você fosse",
+   "shorts"
+  ],
+  "publish_at": "2026-11-28T12:00:00-03:00",
+  "pinned_comment": "Qual bicho você quer ser no próximo vídeo?",
+  "channel_id": "UCO5Fa5_HJxd-aeTiyQcw0Sw"
+ },
+ "sources": [
+  "Lasiewski, Weathers & Bernstein (1967), \"Physiological responses of the giant hummingbird, Patagona gigas\", The Auk 84: 34–48 — tabela comparativa com frequência cardíaca de 1.200–1.260 por minuto no beija-flor-de-garganta-azul (Lampornis clemenciae); no torpor, a frequência cai para dezenas a poucas centenas por minuto (faixa citada em divulgação: 50–180).",
+  "Wolf, Gonzalez, Bonaccorso & McKechnie (2020), \"Hummingbirds in the Andes go to chilly extremes for a good night's sleep\" (Biology Letters 16: 20200428; Smithsonian Magazine) — no torpor o corpo esfria até perto da temperatura do ar; o beija-flor-metaltail-preto chegou a 3,3 °C: https://www.smithsonianmag.com/smart-news/hummingbirds-andes-go-chilly-extremes-good-nights-sleep-180975767/",
+  "Gaede, Goller, Lam, Wylie & Altshuler (2017), \"Neurons responsive to global visual motion have unique tuning properties in hummingbirds\", Current Biology 27(2): 279–285 — neurônios do núcleo de movimento respondem a todas as direções, ligados ao voo parado: https://ui.adsabs.harvard.edu/abs/2017CBio...27..279G/abstract",
+  "Batidas de asa: ~50–80 por segundo nas espécies pequenas. Coração humano em repouso: ~60–80 por minuto (1.200 ÷ 70 ≈ 17; 1.200 ÷ 60 = 20 por segundo)."
+ ]
+}
