@@ -2363,7 +2363,7 @@
   "thumb_path": "/opt/canal-publisher/state/thumbs/c5-d03a-krill.jpg",
   "thumb_attempts": 0,
   "thumb_error": "miniatura personalizada pede o telefone verificado no canal",
-  "thumb_retry_after": "2026-11-27T15:11:52.114493-03:00",
+  "thumb_retry_after": "2026-11-27T21:21:45.643236-03:00",
   "comment_attempts": 0,
   "comment_error": "fixar comentário pede o telefone verificado no canal",
   "comment_retry_after": "2026-11-27T20:21:35.979860-03:00"
@@ -2385,10 +2385,10 @@
   "thumb_path": "/opt/canal-publisher/state/thumbs/c5-d03b-pombo.jpg",
   "thumb_attempts": 0,
   "thumb_error": "miniatura personalizada pede o telefone verificado no canal",
-  "thumb_retry_after": "2026-11-27T15:13:51.394021-03:00",
+  "thumb_retry_after": "2026-11-27T21:23:31.530488-03:00",
   "comment_attempts": 0,
   "comment_error": "fixar comentário pede o telefone verificado no canal",
-  "comment_retry_after": "2026-11-27T15:12:45.391163-03:00"
+  "comment_retry_after": "2026-11-27T21:22:33.164406-03:00"
  },
  "cosmic-rank20-short": {
   "attempts": 1,
@@ -2682,7 +2682,7 @@
   "thumb_path": "/opt/canal-publisher/state/thumbs/c5-d05a-pulga.jpg",
   "thumb_attempts": 0,
   "thumb_error": "miniatura personalizada pede o telefone verificado no canal",
-  "thumb_retry_after": "2026-11-27T15:14:56.645675-03:00",
+  "thumb_retry_after": "2026-11-27T21:24:37.724771-03:00",
   "comment_attempts": 0,
   "comment_error": "fixar comentário pede o telefone verificado no canal",
   "comment_retry_after": "2026-11-27T19:01:34.136122-03:00"
@@ -2704,7 +2704,7 @@
   "thumb_path": "/opt/canal-publisher/state/thumbs/c5-d05b-cachorro.jpg",
   "thumb_attempts": 0,
   "thumb_error": "miniatura personalizada pede o telefone verificado no canal",
-  "thumb_retry_after": "2026-11-27T15:16:24.372326-03:00",
+  "thumb_retry_after": "2026-11-27T21:25:51.041882-03:00",
   "comment_attempts": 0,
   "comment_error": "fixar comentário pede o telefone verificado no canal",
   "comment_retry_after": "2026-11-27T20:12:16.910341-03:00"
