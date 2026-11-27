@@ -3035,7 +3035,7 @@
   "thumb_path": "/opt/canal-publisher/state/thumbs/c5-d08a-beijaflor.jpg",
   "thumb_attempts": 0,
   "thumb_error": "miniatura personalizada pede o telefone verificado no canal",
-  "thumb_retry_after": "2026-11-27T13:09:09.653371-03:00"
+  "thumb_retry_after": "2026-11-27T19:11:46.288311-03:00"
  },
  "c5-d08b-capivara": {
   "attempts": 1,
@@ -3054,6 +3054,6 @@
   "thumb_path": "/opt/canal-publisher/state/thumbs/c5-d08b-capivara.jpg",
   "thumb_attempts": 0,
   "thumb_error": "miniatura personalizada pede o telefone verificado no canal",
-  "thumb_retry_after": "2026-11-27T13:10:18.169565-03:00"
+  "thumb_retry_after": "2026-11-27T19:12:33.996324-03:00"
  }
 }
