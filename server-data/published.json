@@ -2947,5 +2947,41 @@
   "related_done": "2026-11-26T07:30:56.421604-03:00",
   "comment_attempts": 1,
   "comment_done": "2026-11-26T18:53:18.861041-03:00"
+ },
+ "cosmic-rank24-short": {
+  "attempts": 1,
+  "status": "published",
+  "url": "https://youtu.be/gQ0LbNxdwT4",
+  "by": "robo",
+  "visibility": "schedule",
+  "when": "2026-11-27T13:15:00-03:00",
+  "at": "2026-11-27T06:34:44.410567-03:00",
+  "error": null,
+  "channel_id": "UCsYYjUbmq4n3lAKgw2F2IJw",
+  "title": "Top 5 Biggest Dwarf Planets (#1 Is Smaller Than Our Moon) #shorts",
+  "kind": "short",
+  "publish_at": "2026-11-27T13:15:00-03:00",
+  "related_key": "cosmic-ep13-long",
+  "pinned_comment": "Should Pluto be a planet again? Yes or no? Full video: How Long to Reach Every Planet? By Car, Neptune Takes 4,912 Years",
+  "related_attempts": 1,
+  "related_done": "2026-11-27T06:39:38.684212-03:00"
+ },
+ "cosmic-scale23-short": {
+  "attempts": 1,
+  "status": "published",
+  "url": "https://youtu.be/WY82MW8pWR8",
+  "by": "robo",
+  "visibility": "schedule",
+  "when": "2026-11-27T19:15:00-03:00",
+  "at": "2026-11-27T06:38:07.194786-03:00",
+  "error": null,
+  "channel_id": "UCsYYjUbmq4n3lAKgw2F2IJw",
+  "title": "10 Earths Fit Across One Spot on the Sun #shorts",
+  "kind": "short",
+  "publish_at": "2026-11-27T19:15:00-03:00",
+  "related_key": "cosmic-ep17-long",
+  "pinned_comment": "How many Earths do you think fit across the whole Sun? Full video: What If We Swapped the Sun for 5 Other Stars? One Puts Earth INSIDE It",
+  "related_attempts": 1,
+  "related_done": "2026-11-27T06:41:32.867012-03:00"
  }
 }
