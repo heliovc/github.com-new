@@ -2685,7 +2685,7 @@
   "thumb_retry_after": "2026-11-27T09:01:44.726836-03:00",
   "comment_attempts": 0,
   "comment_error": "fixar comentário pede o telefone verificado no canal",
-  "comment_retry_after": "2026-11-27T06:41:56.277876-03:00"
+  "comment_retry_after": "2026-11-27T12:59:33.549827-03:00"
  },
  "c5-d05b-cachorro": {
   "attempts": 1,
@@ -2983,5 +2983,36 @@
   "pinned_comment": "How many Earths do you think fit across the whole Sun? Full video: What If We Swapped the Sun for 5 Other Stars? One Puts Earth INSIDE It",
   "related_attempts": 1,
   "related_done": "2026-11-27T06:41:32.867012-03:00"
+ },
+ "cosmic-ep20-long": {
+  "attempts": 1,
+  "status": "published",
+  "url": "https://youtu.be/u6nfyTvGUuQ",
+  "by": "robo",
+  "visibility": "schedule",
+  "when": "2026-11-27T17:15:00-03:00",
+  "at": "2026-11-27T06:54:07.313140-03:00",
+  "error": null,
+  "channel_id": "UCsYYjUbmq4n3lAKgw2F2IJw",
+  "title": "If the Sun Were a Grain of Sand, the Universe Would Fit Inside Our Solar System",
+  "kind": "long",
+  "publish_at": "2026-11-27T17:15:00-03:00",
+  "pinned_comment": "Which stop on the walk surprised you most: the desk, the snail, the nearest star or the edge?"
+ },
+ "cosmic-ep20-short": {
+  "attempts": 1,
+  "status": "published",
+  "url": "https://youtu.be/q_WLMbZpoAo",
+  "by": "robo",
+  "visibility": "schedule",
+  "when": "2026-11-27T21:15:00-03:00",
+  "at": "2026-11-27T06:57:33.462079-03:00",
+  "error": null,
+  "channel_id": "UCsYYjUbmq4n3lAKgw2F2IJw",
+  "title": "Shrink the Sun to a Grain of Sand and the Universe Fits in Our Solar System #shorts",
+  "kind": "short",
+  "publish_at": "2026-11-27T21:15:00-03:00",
+  "related_key": "cosmic-ep20-long",
+  "pinned_comment": "Did you expect the universe to fit inside our solar system? Full video: If the Sun Were a Grain of Sand, the Universe Would Fit Inside Our Solar System"
  }
 }
