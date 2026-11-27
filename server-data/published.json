@@ -2707,7 +2707,7 @@
   "thumb_retry_after": "2026-11-27T15:16:24.372326-03:00",
   "comment_attempts": 0,
   "comment_error": "fixar comentário pede o telefone verificado no canal",
-  "comment_retry_after": "2026-11-27T14:01:41.323320-03:00"
+  "comment_retry_after": "2026-11-27T20:12:16.910341-03:00"
  },
  "ptd-rank21-short": {
   "attempts": 1,
@@ -2867,7 +2867,7 @@
   "thumb_path": "/opt/canal-publisher/state/thumbs/c5-d07a-elefante.jpg",
   "thumb_attempts": 0,
   "thumb_error": "miniatura personalizada pede o telefone verificado no canal",
-  "thumb_retry_after": "2026-11-27T14:02:39.275351-03:00",
+  "thumb_retry_after": "2026-11-27T20:13:14.048593-03:00",
   "comment_attempts": 0,
   "comment_error": "fixar comentário pede o telefone verificado no canal",
   "comment_retry_after": "2026-11-27T18:51:51.145506-03:00"
@@ -2889,7 +2889,7 @@
   "thumb_path": "/opt/canal-publisher/state/thumbs/c5-d07b-mariposa.jpg",
   "thumb_attempts": 0,
   "thumb_error": "miniatura personalizada pede o telefone verificado no canal",
-  "thumb_retry_after": "2026-11-27T14:03:35.154381-03:00"
+  "thumb_retry_after": "2026-11-27T20:14:15.859923-03:00"
  },
  "cosmic-rank23-short": {
   "attempts": 1,
