@@ -2326,7 +2326,7 @@
   "thumb_retry_after": "2026-11-27T18:06:25.349049-03:00",
   "comment_attempts": 1,
   "comment_error": "fixar comentário pede o telefone verificado no canal",
-  "comment_retry_after": "2026-11-27T17:11:31.195608-03:00"
+  "comment_retry_after": "2026-11-27T23:21:34.415346-03:00"
  },
  "quiet-ep12-long": {
   "attempts": 1,
@@ -3002,7 +3002,9 @@
   "title": "If the Sun Were a Grain of Sand, the Universe Would Fit Inside Our Solar System",
   "kind": "long",
   "publish_at": "2026-11-27T17:15:00-03:00",
-  "pinned_comment": "Which stop on the walk surprised you most: the desk, the snail, the nearest star or the edge?"
+  "pinned_comment": "Which stop on the walk surprised you most: the desk, the snail, the nearest star or the edge?",
+  "comment_attempts": 1,
+  "comment_done": "2026-11-27T17:24:03.314970-03:00"
  },
  "cosmic-ep20-short": {
   "attempts": 1,
@@ -3018,7 +3020,9 @@
   "kind": "short",
   "publish_at": "2026-11-27T21:15:00-03:00",
   "related_key": "cosmic-ep20-long",
-  "pinned_comment": "Did you expect the universe to fit inside our solar system? Full video: If the Sun Were a Grain of Sand, the Universe Would Fit Inside Our Solar System"
+  "pinned_comment": "Did you expect the universe to fit inside our solar system? Full video: If the Sun Were a Grain of Sand, the Universe Would Fit Inside Our Solar System",
+  "related_attempts": 1,
+  "related_done": "2026-11-27T17:26:09.734486-03:00"
  },
  "c5-d08a-beijaflor": {
   "attempts": 1,
