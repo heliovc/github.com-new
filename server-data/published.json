@@ -2506,7 +2506,7 @@
   "thumb_path": "/opt/canal-publisher/state/thumbs/c5-d04b-rato.jpg",
   "thumb_attempts": 1,
   "thumb_error": "miniatura personalizada pede o telefone verificado no canal",
-  "thumb_retry_after": "2026-11-27T03:51:31.899493-03:00",
+  "thumb_retry_after": "2026-11-27T10:01:39.001275-03:00",
   "comment_attempts": 0,
   "comment_error": "fixar comentário pede o telefone verificado no canal",
   "comment_retry_after": "2026-11-27T09:42:23.287212-03:00"
