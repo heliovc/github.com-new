@@ -135,6 +135,20 @@ EP18 added scenes: plunge (mode hook = cloud horizon from a cached full-frame la
   Learned: a twin 60° ahead gives the SAME tide height (cos 2θ pattern, phasors 120° apart); 1,375 words + 32 scenes = 8.1 min.
   EP19 promised EP20: shrink the universe until the Sun is a grain of sand, then walk to the edge. ranking.py: vis "pair" (rank22,
   every planet the same size, moon to scale with it). scale_short.py: vis "olympus" (scale20, Olympus Mons over Arizona at one scale).
+2026-11-27 (Friday) EP20 added scenes: signpost (chapter card: wooden trail post with one plank per stop and its distance at the
+  grain-of-sand scale, v.n active / passed planks dim + tick, odometer counts (log) from the previous stop to v.km + walking time at 5 km/h,
+  dusk hills with a walker), tabletop (macro desk TO SCALE with the 1 mm Sun: earth = cm ruler + Earth speck 10.75 cm away + magnifier with a
+  hair + dashed orbit arc | moon = microscope strip, Earth-Moon 276 µm | jupiter = the room: desk, Jupiter 56 cm, Saturn 1.03 m, Neptune 3.23 m),
+  fieldmap (top-down map with a log zoom v.z0 -> v.z1 metres: house = building + Neptune ring + Voyager 1 18.6 m | oort = town streets + icy
+  shell 215 m - 10.75 km | proxima = 28.9 km; galaxy modes: galaxy (680,000 km Milky Way vs the real Earth-Moon line) | center (Sgr A* 17 mm
+  bead in a magnifier, 184 km) | andromeda (25 galaxy widths + 44 Earth-Moon ticks) | collide (illustrative)), snailrace (light at this scale
+  = 0.215 mm/s: sun = light front crossing 10.75 cm, 8:19 clock | race = record snail 2.75 mm/s vs light | proxima = year counter to 4.24),
+  fitinside (real solar system on a LOG radial scale 0.3 -> 120,000 AU with the Oort band, Voyager 1, and the shrunken observable universe
+  4,227 AU wide as a violet cosmic-web sphere; hook | zoom | real | reveal). Helpers _grain20, _lens20 (clipped magnifier), _woodtex20,
+  _gal20 (cached galaxy resize), _scalebar20. Palette sand beige / trail green / dusk violet. Structure NEW: "the walk" (one fixed scale,
+  five stops on a signpost, odometer + walking clock). Learned: 1,339 words + 33 scenes = 8.07 min; a fresh cloud session needs
+  python3 -m pip install --break-system-packages --ignore-installed pillow numpy before python3 -I works. EP20 promised EP21: how many
+  Earths fit inside the biggest things in the universe. ranking.py: vis "dwarfs" (rank24). scale_short.py: vis "sunspot" (scale23).
 2026-11-26 (Shorts-only day): ranking.py vis "swarm" (rank23, each known moon a dot circling its planet; outro = one square per moon).
   scale_short.py: vis "hexagon" (scale21, Saturn's north-pole hexagon from above, 2 Earths to scale) and "moonmap" (scale22, the Moon on a
   hand-traced Australia at one scale + surface laid flat). Learned: on a day with 2 Scale Shorts the second file must be scale2.mp4
@@ -5362,6 +5376,477 @@ def sc_tangle(img, v, t, dur):
         for i, s in enumerate(["orbits the Sun, not Earth", "but stays beside us", "seems to loop around Earth", "Tianwen-2 reached it in 2026"]):
             d.text((1240, 450 + i * 70), s, font=F(34, "SemiBold"), fill=mix(SPACE, AMB19 if i == 3 else WHITE, ease((t - 0.5 - i * 0.6) / 0.4)), anchor="lm")
         d.text((W - 60, H - 40), "frame turning with Earth · loop shape illustrative", font=F(22, "SemiBold"), fill=DIM, anchor="rm")
+
+
+
+# ---------------- EP20 scenes: signpost, tabletop, fieldmap, snailrace, fitinside ----------------
+SAND20, TRAIL20, DUSK20, WOOD20, ICE20 = (240, 210, 150), (130, 215, 150), (175, 145, 255), (128, 84, 48), (150, 210, 235)
+STOPS20 = [("THE DESK", "18.6 m", 0.0186), ("OORT CLOUD", "10.75 km", 10.75), ("PROXIMA", "28.9 km", 28.9),
+           ("MILKY WAY", "680,000 km", 6.8e5), ("THE EDGE", "316 billion km", 3.16e11)]
+
+def _fmt_km20(km):
+    if km < 1: return f"{km * 1000:,.1f} m"
+    if km < 100: return f"{km:,.2f} km"
+    if km < 1e9: return f"{km:,.0f} km"
+    return f"{km / 1e9:,.0f} billion km"
+
+def _fmt_walk20(km):
+    h = km / 5.0
+    if h < 1 / 60: return f"{h * 3600:.0f} s"
+    if h < 1: return f"{h * 60:.0f} min"
+    if h < 48: return f"{int(h)} h {int((h % 1) * 60):02d} min"
+    y = h / 8766
+    if y < 1: return f"{h / 24:,.0f} days"
+    if y < 1e6: return f"{y:,.1f} years"
+    return f"{y / 1e6:,.1f} million years"
+
+def _grain20(img, x, y, r=7, a=1.0):
+    paste_c(img, radial(int(r * 9) + 4, [(0, (255, 240, 200, int(230 * a))), (0.25, (255, 210, 140, int(110 * a))), (1, (255, 190, 110, 0))]), x, y)
+    lay = Image.new("RGBA", img.size, (0, 0, 0, 0)); ImageDraw.Draw(lay).ellipse([x - r, y - r * 0.85, x + r, y + r * 0.85], fill=SAND20 + (int(255 * a),)); img.alpha_composite(lay)
+
+def _walker20(d, x, y, s, t, col):
+    sw = math.sin(t * 6) * 0.5
+    d.ellipse([x - 6 * s, y - 62 * s, x + 6 * s, y - 50 * s], fill=col)
+    d.line([(x, y - 50 * s), (x, y - 24 * s)], fill=col, width=max(2, int(4 * s)))
+    for k in (-1, 1):
+        d.line([(x, y - 24 * s), (x + k * sw * 14 * s, y)], fill=col, width=max(2, int(4 * s)))
+        d.line([(x, y - 44 * s), (x - k * sw * 12 * s, y - 30 * s)], fill=col, width=max(2, int(3 * s)))
+    d.rectangle([x - 12 * s, y - 48 * s, x - 3 * s, y - 32 * s], fill=col)  # backpack
+
+def sc_signpost(img, v, t, dur):
+    """chapter card: a wooden trail post (left) with one plank per stop and its distance AT THE GRAIN-OF-SAND SCALE; v.n = active stop
+    (passed stops dim with a tick), odometer counts (log) from the previous stop to v.km, walking time at 5 km/h; dusk hills + walker"""
+    a = ease(t / 0.5); n = v.get("n", 0); km = v.get("km", 0)
+    # dusk band + hills
+    lay = Image.new("RGBA", img.size, (0, 0, 0, 0)); dl = ImageDraw.Draw(lay)
+    for i in range(60):
+        y = 760 + i * 5; dl.rectangle([0, y, W, y + 5], fill=mix((60, 40, 90), (16, 12, 30), i / 60) + (int(160 * a),))
+    pts = [(x, 900 - 50 * math.sin(x / 260.0) - 30 * math.sin(x / 97.0 + 1)) for x in range(0, W + 20, 20)]
+    dl.polygon(pts + [(W, H), (0, H)], fill=(14, 18, 24, 255))
+    img.alpha_composite(lay); d = ImageDraw.Draw(img)
+    wx = (W * 0.62 + t * 40) % W; wy = 900 - 50 * math.sin(wx / 260.0) - 30 * math.sin(wx / 97.0 + 1)
+    _walker20(d, wx, wy, 1.0, t, (40, 46, 58))
+    # post
+    px = 380; d.rectangle([px - 18, 150, px + 18, 960], fill=WOOD20); d.rectangle([px - 18, 150, px - 8, 960], fill=(100, 64, 36))
+    _grain20(img, px + 70, 950, 6, a); d = ImageDraw.Draw(img)
+    for i, (name, dist, k) in enumerate(STOPS20):
+        aa = ease((t - 0.15 - i * 0.12) / 0.4)
+        if aa <= 0: continue
+        y = 210 + i * 140; right = (i % 2 == 0); x0 = px - 40 if right else px - 300; x1 = px + 300 if right else px + 40
+        act = (i + 1 == n); done = (i + 1 < n)
+        base = (176, 120, 70) if not done else (92, 70, 52)
+        if act: base = mix(base, SAND20, 0.55 + 0.15 * math.sin(t * 4))
+        tip = [(x1, y), (x1 + 40, y + 45), (x1, y + 90)] if right else [(x0, y), (x0 - 40, y + 45), (x0, y + 90)]
+        lay = Image.new("RGBA", img.size, (0, 0, 0, 0)); dl = ImageDraw.Draw(lay)
+        dl.rectangle([x0, y, x1, y + 90], fill=base + (int(255 * aa),)); dl.polygon(tip, fill=base + (int(255 * aa),))
+        for g in range(3): dl.line([(x0 + 8, y + 22 + g * 24), (x1 - 8, y + 24 + g * 24)], fill=(0, 0, 0, int(28 * aa)), width=2)
+        img.alpha_composite(lay); d = ImageDraw.Draw(img)
+        tc = (40, 24, 12) if not done else (170, 150, 130)
+        cx_ = (x0 + x1) / 2 + (10 if right else -10)
+        d.text((cx_, y + 30), name, font=F(34, "Black"), fill=tc, anchor="mm")
+        d.text((cx_, y + 66), dist, font=F(26, "Bold"), fill=tc, anchor="mm")
+        if done: d.line([(x0 + 14, y + 48), (x0 + 30, y + 66), (x0 + 58, y + 26)], fill=TRAIL20, width=6)
+    # right column
+    alpha_text(img, (820, 210), v.get("title", ""), F(70, "ExtraBold"), WHITE, a, anchor="lm")
+    if v.get("sub"): alpha_text(img, (820, 290), v["sub"], F(36, "SemiBold"), SAND20, ease((t - 0.3) / 0.5), anchor="lm")
+    prev = 0.0
+    for (_, _, k) in STOPS20:
+        if k < km * 0.999: prev = k
+    if prev == 0: prev = km * 0.01 if km > 0 else 0
+    if "km0" in v: prev = v["km0"]
+    q = easeio((t - 0.5) / max(0.8, dur * 0.5))
+    cur = 0 if km <= 0 else math.exp(lerp(math.log(max(prev, 1e-6)), math.log(km), q))
+    lay = Image.new("RGBA", img.size, (0, 0, 0, 0)); dl = ImageDraw.Draw(lay)
+    dl.rounded_rectangle([820, 400, 1780, 700], 26, fill=(10, 14, 24, int(225 * a)), outline=TRAIL20 + (int(160 * a),), width=3)
+    dl.line([(1300, 430), (1300, 670)], fill=(60, 70, 90, int(255 * a)), width=2)
+    img.alpha_composite(lay); d = ImageDraw.Draw(img)
+    d.text((1060, 450), "ODOMETER", font=F(28, "Bold"), fill=mix(SPACE, DIM, a), anchor="mm")
+    d.text((1540, 450), "ON FOOT, NONSTOP", font=F(28, "Bold"), fill=mix(SPACE, DIM, a), anchor="mm")
+    s1 = _fmt_km20(cur) if km > 0 else "0 m"; s2 = _fmt_walk20(cur) if km > 0 else "0 s"
+    d.text((1060, 560), s1, font=F(64 if len(s1) < 12 else 46, "Black"), fill=mix(SPACE, TRAIL20, a), anchor="mm")
+    d.text((1540, 560), s2, font=F(64 if len(s2) < 12 else 46, "Black"), fill=mix(SPACE, SAND20, a), anchor="mm")
+    d.text((1060, 640), "at grain-of-sand scale", font=F(24, "SemiBold"), fill=mix(SPACE, DIM, a), anchor="mm")
+    d.text((1540, 640), "at 5 km/h", font=F(24, "SemiBold"), fill=mix(SPACE, DIM, a), anchor="mm")
+    d.text((W - 60, H - 40), "the Sun = a 1 mm grain · 1 mm = 1,391,400 km", font=F(24, "SemiBold"), fill=DIM, anchor="rm")
+
+_wood20 = None
+def _woodtex20():
+    global _wood20
+    if _wood20 is None:
+        rng = np.random.default_rng(20); yy = np.arange(H)[:, None].astype(np.float32); xx = np.arange(W)[None, :].astype(np.float32)
+        g = np.sin(yy / 9.0 + 2.5 * np.sin(xx / 300.0) + 1.2 * np.sin(xx / 77.0 + yy / 140.0)) * 0.5 + 0.5
+        n = rng.normal(0, 1, (H // 4 + 1, W // 4 + 1)).astype(np.float32); n = np.kron(n, np.ones((4, 4), np.float32))[:H, :W]
+        v = 0.55 + 0.25 * g + 0.04 * n
+        base = np.array([96, 62, 36], np.float32); hi = np.array([150, 104, 64], np.float32)
+        arr = base[None, None, :] + (hi - base)[None, None, :] * np.clip(v, 0, 1)[..., None] - 30
+        _wood20 = Image.fromarray(np.clip(arr, 0, 255).astype(np.uint8), "RGB").convert("RGBA")
+    return _wood20
+
+def _lens20(img, cx, cy, r, draw_fn, ring=SAND20):
+    """circular magnifier: draw_fn(layer, cx, cy, r) paints inside; clipped to the circle"""
+    lay = Image.new("RGBA", img.size, (0, 0, 0, 0)); ImageDraw.Draw(lay).ellipse([cx - r, cy - r, cx + r, cy + r], fill=(10, 10, 16, 255))
+    draw_fn(lay, cx, cy, r)
+    mask = Image.new("L", img.size, 0); ImageDraw.Draw(mask).ellipse([cx - r, cy - r, cx + r, cy + r], fill=255)
+    al = Image.fromarray(np.minimum(np.array(lay.getchannel("A")), np.array(mask))); lay.putalpha(al)
+    img.alpha_composite(lay); d = ImageDraw.Draw(img)
+    d.ellipse([cx - r - 8, cy - r - 8, cx + r + 8, cy + r + 8], outline=(30, 30, 36), width=14); d.ellipse([cx - r - 2, cy - r - 2, cx + r + 2, cy + r + 2], outline=ring, width=4)
+
+def sc_tabletop(img, v, t, dur):
+    """macro desk from above, TO SCALE with the 1 mm Sun. mode earth = grain + Earth speck 10.75 cm away on a cm ruler, magnifier shows the
+    9 µm Earth beside a 80 µm hair, dashed orbit arc (a dinner plate) | moon = microscope strip, Earth + Moon 276 µm apart (5 px/µm) |
+    jupiter = the room: a desk with the grain, Jupiter 56 cm, Saturn 1.03 m, Neptune 3.23 m on the floor"""
+    mode = v.get("mode", "earth"); a = ease(t / 0.5); d = ImageDraw.Draw(img)
+    if mode in ("earth", "moon"):
+        img.alpha_composite(_woodtex20()); d = ImageDraw.Draw(img)
+    if mode == "earth":
+        ppc = 120.0; gx, gy = 230, 620; ex = gx + 10.75 * ppc
+        # orbit arc (radius 10.75 cm) — the whole orbit = a 21.5 cm plate
+        lay = Image.new("RGBA", img.size, (0, 0, 0, 0)); dl = ImageDraw.Draw(lay); R_ = 10.75 * ppc
+        for k in range(0, 360, 3):
+            if k % 6: continue
+            a0 = math.radians(k); a1 = math.radians(k + 3)
+            dl.line([(gx + R_ * math.cos(a0), gy + R_ * math.sin(a0)), (gx + R_ * math.cos(a1), gy + R_ * math.sin(a1))], fill=(255, 240, 210, int(120 * ease((t - 1.2) / 0.6))), width=3)
+        img.alpha_composite(lay)
+        # ruler
+        d = ImageDraw.Draw(img); d.rectangle([gx - 40, 860, gx + 12 * ppc + 40, 960], fill=(232, 222, 190), outline=(90, 80, 60), width=2)
+        for mm_ in range(0, 121):
+            x = gx + mm_ * ppc / 10; L = 34 if mm_ % 10 == 0 else (22 if mm_ % 5 == 0 else 12)
+            d.line([(x, 860), (x, 860 + L)], fill=(40, 34, 26), width=2)
+            if mm_ % 10 == 0: d.text((x, 920), f"{mm_ // 10}", font=F(26, "Bold"), fill=(40, 34, 26), anchor="mm")
+        d.text((gx + 12 * ppc + 20, 940), "cm", font=F(22, "Bold"), fill=(40, 34, 26), anchor="rm")
+        _grain20(img, gx, gy, 6); d = ImageDraw.Draw(img)
+        d.text((gx, gy - 60), "THE SUN", font=F(34, "Black"), fill=SAND20, anchor="mm"); d.text((gx, gy - 26), "1 mm", font=F(26, "Bold"), fill=WHITE, anchor="mm")
+        q = easeio((t - 0.4) / 1.2)
+        d.line([(gx + 14, gy), (gx + 14 + (ex - gx - 28) * q, gy)], fill=(255, 255, 255), width=2)
+        if q > 0.98:
+            d.ellipse([ex - 2, gy - 2, ex + 2, gy + 2], fill=(140, 190, 255))
+            d.text((ex, gy + 40), "EARTH · 10.75 cm", font=F(30, "Black"), fill=(160, 205, 255), anchor="mm")
+        la = ease((t - 1.6) / 0.6)
+        if la > 0:
+            def inside(lay, cx, cy, r):
+                dl = ImageDraw.Draw(lay)
+                dl.rectangle([cx - r, cy - 40, cx + r, cy + 40], fill=(70, 50, 30, 255))  # the hair, ~80 µm at 1 px/µm × 1.0
+                lay.alpha_composite(earth_sprite(5, light=(-1, -0.2), glow=None), (int(cx - 9), int(cy - 150)))
+                dl.text((cx, cy - 190), "Earth · 9 µm", font=F(28, "Bold"), fill=(170, 210, 255, 255), anchor="mm")
+                dl.text((cx, cy), "a human hair · ~80 µm", font=F(26, "Bold"), fill=(235, 220, 200, 255), anchor="mm")
+                dl.line([(cx - 60, cy + 200), (cx + 40, cy + 200)], fill=(255, 255, 255, 255), width=4)
+                dl.text((cx - 10, cy + 230), "100 µm", font=F(22, "Bold"), fill=(255, 255, 255, 255), anchor="mm")
+            lx, ly_ = ex - 80, 330; r = int(250 * la)
+            if r > 20:
+                d.line([(ex, gy - 4), (lx, ly_ + r)], fill=(30, 30, 36), width=6)
+                _lens20(img, lx, ly_, r, inside)
+        alpha_text(img, (80, 120), "Earth's whole orbit = a dinner plate (21.5 cm)", F(36, "Bold"), (255, 240, 210), ease((t - 1.4) / 0.5), anchor="lm")
+    elif mode == "moon":
+        lay = Image.new("RGBA", img.size, (0, 0, 0, 0)); dl = ImageDraw.Draw(lay)
+        dl.rounded_rectangle([90, 250, W - 90, 800], 40, fill=(6, 8, 14, 245), outline=(200, 200, 210, 255), width=6); img.alpha_composite(lay)
+        ppu = 5.0; ex, ey = 250, 525; mx = ex + 276.3 * ppu
+        paste_c(img, earth_sprite(23, light=(-1, -0.2)), ex, ey); paste_c(img, moon8(6), mx, ey + 10 * math.sin(t))
+        d = ImageDraw.Draw(img)
+        q = easeio((t - 0.5) / 1.0)
+        lay = Image.new("RGBA", img.size, (0, 0, 0, 0)); dl = ImageDraw.Draw(lay)
+        dl.rectangle([ex, ey - 120, ex + (mx - ex + 40) * q, ey + 120], fill=TRAIL20 + (int(40 * ease((t - 1.6) / 0.6)),))
+        img.alpha_composite(lay); d = ImageDraw.Draw(img)
+        d.line([(ex + 30, ey + 60), (ex + 30 + (mx - ex - 40) * q, ey + 60)], fill=WHITE, width=3)
+        d.text((ex, ey - 70), "EARTH", font=F(30, "Black"), fill=(160, 205, 255), anchor="mm"); d.text((mx, ey - 50), "MOON", font=F(30, "Black"), fill=(220, 220, 235), anchor="mm")
+        d.text(((ex + mx) / 2, ey + 100), "0.28 mm", font=F(44, "Black"), fill=WHITE, anchor="mm")
+        alpha_text(img, (W / 2, 330), "every astronaut, ever, stayed inside this strip", F(40, "ExtraBold"), TRAIL20, ease((t - 1.8) / 0.5))
+        d.line([(160, 760), (160 + 100 * ppu, 760)], fill=WHITE, width=4); d.text((160 + 50 * ppu, 735), "100 µm", font=F(24, "Bold"), fill=WHITE, anchor="mm")
+        d.text((W - 140, 770), "MICROSCOPE VIEW", font=F(24, "Bold"), fill=DIM, anchor="rm")
+    else:  # jupiter: the room
+        ppc = 4.6; gx, gy = 220, 560
+        lay = Image.new("RGBA", img.size, (0, 0, 0, 0)); dl = ImageDraw.Draw(lay)
+        for i in range(0, W, 92):
+            for j in range(150, H, 92): dl.rectangle([i, j, i + 90, j + 90], fill=(44, 46, 54, int(255 * a)))
+        dl.rectangle([gx - 120, gy - 170, gx + 150 * ppc - 120, gy - 170 + 75 * ppc], fill=(120, 80, 46, int(255 * a)), outline=(70, 46, 26, 255), width=4)
+        img.alpha_composite(lay); d = ImageDraw.Draw(img)
+        d.text((gx - 100, gy - 140), "DESK", font=F(24, "Bold"), fill=(230, 200, 160), anchor="lm")
+        _grain20(img, gx, gy, 5); d = ImageDraw.Draw(img)
+        objs = [("JUPITER", 56, 0.10, (215, 175, 130), "56 cm"), ("SATURN", 103, 0.087, (225, 205, 150), "1.03 m"), ("NEPTUNE", 323, 0.036, (90, 120, 240), "3.23 m")]
+        for i, (nm, cm, mmw, col, lab) in enumerate(objs):
+            aa = ease((t - 0.6 - i * 0.9) / 0.5)
+            if aa <= 0: continue
+            x = gx + cm * ppc
+            d.line([(gx + 10, gy + 60 + i * 26), (x, gy + 60 + i * 26)], fill=mix(SPACE, col, aa * 0.7), width=3)
+            paste_c(img, radial(60, [(0, col + (int(200 * aa),)), (1, col + (0,))]), x, gy); d = ImageDraw.Draw(img)
+            d.ellipse([x - 3, gy - 3, x + 3, gy + 3], fill=col)
+            d.text((x, gy - 70 - (i % 2) * 50), nm, font=F(34, "Black"), fill=mix(SPACE, col, aa), anchor="mm")
+            d.text((x, gy - 36 - (i % 2) * 50), f"{lab} · {mmw:.2f} mm wide", font=F(24, "Bold"), fill=mix(SPACE, WHITE, aa), anchor="mm")
+        d.text((gx, gy + 40), "SUN", font=F(26, "Black"), fill=SAND20, anchor="mm")
+        d.line([(80, 980), (80 + 100 * ppc, 980)], fill=WHITE, width=4); d.text((80 + 50 * ppc, 1010), "1 meter", font=F(24, "Bold"), fill=WHITE, anchor="mm")
+        alpha_text(img, (W / 2, 110), "ONE ROOM: THE WHOLE PLANET FAMILY", F(46, "ExtraBold"), WHITE, a)
+
+_town20 = None
+def _town_pts20():
+    global _town20
+    if _town20 is None:
+        rng = random.Random(20); segs = []
+        for k in range(-30, 31):
+            p0 = k * 200.0
+            segs.append(((p0 + rng.uniform(-40, 40), -6000), (p0 + rng.uniform(-40, 40), 6000)))
+            segs.append(((-6000, p0 + rng.uniform(-40, 40)), (6000, p0 + rng.uniform(-40, 40))))
+        ice = [(math.exp(rng.uniform(math.log(215), math.log(10750))), rng.uniform(0, 2 * math.pi)) for _ in range(1400)]
+        _town20 = (segs, ice)
+    return _town20
+
+_galw20 = {}
+def _gal20(w):
+    w = max(6, int(w))
+    if w not in _galw20:
+        if len(_galw20) > 60: _galw20.clear()
+        g = galaxy_sprite(); _galw20[w] = g.resize((w, int(w * 0.62)), Image.LANCZOS)
+    return _galw20[w]
+
+def _scalebar20(img, ppm, unit_m=1.0, unit="m", x=80, y=1010):
+    target = 280 / ppm; e = 10 ** math.floor(math.log10(target)); nice = max(k * e for k in (1, 2, 5) if k * e <= target)
+    L = nice * ppm; d = ImageDraw.Draw(img)
+    d.line([(x, y), (x + L, y)], fill=WHITE, width=4); d.line([(x, y - 10), (x, y + 10)], fill=WHITE, width=3); d.line([(x + L, y - 10), (x + L, y + 10)], fill=WHITE, width=3)
+    val = nice / unit_m; s = (f"{val:,.0f}" if val >= 1 else f"{val:g}") + f" {unit}"
+    d.text((x + L / 2, y - 26), s, font=F(24, "Bold"), fill=WHITE, anchor="mm")
+
+def sc_fieldmap(img, v, t, dur):
+    """top-down map AT THE GRAIN-OF-SAND SCALE with a log zoom from half-width v.z0 to v.z1 (metres). mode house (building around the grain,
+    Neptune ring 3.23 m, Voyager 1 at 18.6 m) | oort (town streets + icy shell 215 m -> 10.75 km) | proxima (grain left, Proxima 28.9 km
+    and Alpha Cen A/B 29.7 km right). Galaxy modes (km): galaxy (Earth + Moon orbit vs a 680,000 km Milky Way) | center (Sagittarius A*
+    bead 17 mm, 184 km from the grain) | andromeda (two galaxies 25 widths apart + 44 Earth-Moon ticks) | collide (illustrative merger)"""
+    mode = v.get("mode", "house"); a = ease(t / 0.5); q = easeio((t - 0.3) / max(1.0, dur * 0.75))
+    if mode in ("house", "oort", "proxima"):
+        z = math.exp(lerp(math.log(v["z0"]), math.log(v["z1"]), q))
+        if mode == "proxima": ox, oy = 260, 560; ppm = (W - 520) / max(z, 1.0)
+        else: ox, oy = W / 2, 580; ppm = 430 / z
+        lay = Image.new("RGBA", img.size, (0, 0, 0, 0)); dl = ImageDraw.Draw(lay)
+        dl.rectangle([0, 0, W, H], fill=(14, 22, 20, int(200 * a)))
+        segs, ice = _town_pts20()
+        sa = max(0.0, min(1.0, (ppm * 200 - 6) / 30.0)) * (1 if mode != "proxima" else 0.6)
+        if sa > 0 and ppm * 6000 > 40:
+            for (p0, p1) in segs:
+                dl.line([(ox + p0[0] * ppm, oy + p0[1] * ppm), (ox + p1[0] * ppm, oy + p1[1] * ppm)], fill=(60, 80, 70, int(160 * sa * a)), width=2)
+        # Oort shell specks
+        if ppm * 10750 > 30:
+            ia = ease((t - 0.2) / 0.8) if mode == "oort" else 1.0
+            for (r_, th_) in ice:
+                x = ox + r_ * ppm * math.cos(th_ + t * 0.01); y = oy + r_ * ppm * math.sin(th_ + t * 0.01)
+                if -10 < x < W + 10 and -10 < y < H + 10: dl.ellipse([x - 2, y - 2, x + 2, y + 2], fill=ICE20 + (int(150 * ia * a),))
+        img.alpha_composite(lay); d = ImageDraw.Draw(img)
+        # house footprint 12 x 9 m
+        hw, hh = 6 * ppm, 4.5 * ppm
+        if 8 < hw < 4000:
+            d.rectangle([ox - hw, oy - hh, ox + hw, oy + hh], outline=(200, 190, 170), width=3)
+            if hw > 60: d.text((ox - hw + 12, oy - hh + 24), "THE BUILDING", font=F(24, "Bold"), fill=(200, 190, 170), anchor="lm")
+        for (rm, lab, col) in ((0.1075, "Earth's orbit", (120, 170, 255)), (3.23, "Neptune · 3.23 m", (90, 120, 240)), (215, "Oort cloud starts · 215 m", ICE20), (10750, "Oort cloud ends · 10.75 km", ICE20)):
+            rp = rm * ppm
+            if 6 < rp < 2600:
+                d.ellipse([ox - rp, oy - rp, ox + rp, oy + rp], outline=col, width=2)
+                if rp > 40 and oy - rp > 40: d.text((ox, oy - rp - 16), lab, font=F(24, "Bold"), fill=col, anchor="mm")
+        vx = ox + 18.6 * ppm * math.cos(-0.6); vy = oy + 18.6 * ppm * math.sin(-0.6)
+        if 4 < 18.6 * ppm < 3000:
+            d.line([(ox, oy), (vx, vy)], fill=(255, 220, 120), width=2); d.ellipse([vx - 7, vy - 7, vx + 7, vy + 7], fill=(255, 220, 120))
+            d.text((vx + 16, vy - 18), "Voyager 1 · 18.6 m", font=F(28, "Bold"), fill=(255, 220, 120), anchor="lm")
+        _grain20(img, ox, oy, 6); d = ImageDraw.Draw(img)
+        d.text((ox, oy + 34), "SUN", font=F(24, "Black"), fill=SAND20, anchor="mm")
+        if mode == "proxima":
+            for (km_, dy, lab, col) in ((28.9, 0, "PROXIMA · 28.9 km", (255, 140, 110)), (29.7, 70, "ALPHA CEN A + B · 29.7 km", (255, 230, 170))):
+                x = ox + km_ * 1000 * ppm
+                if x < W + 50:
+                    paste_c(img, radial(80, [(0, col + (230,)), (1, col + (0,))]), x, oy + dy); d = ImageDraw.Draw(img)
+                    d.ellipse([x - 5, oy + dy - 5, x + 5, oy + dy + 5], fill=col)
+                    d.text((x - 20, oy + dy + (-46 if dy == 0 else 46)), lab, font=F(30, "Black"), fill=col, anchor="rm")
+            d.line([(ox + 20, oy + 140), (ox + 28.9 * 1000 * ppm - 20, oy + 140)], fill=(120, 130, 160), width=2)
+            d.text(((ox + ox + 28.9 * 1000 * ppm) / 2, oy + 170), "nothing but empty space", font=F(30, "SemiBold"), fill=DIM, anchor="mm")
+        _scalebar20(img, ppm) if ppm < 0.3 or True else None
+        if ppm * 1000 > 280: pass
+        title = {"house": "VOYAGER 1 HASN'T LEFT THE BUILDING", "oort": "THE OORT CLOUD = A TOWN", "proxima": "THE NEAREST STAR"}[mode]
+        alpha_text(img, (W / 2, 80), title, F(48, "ExtraBold"), WHITE, a)
+        return
+    # ----- galaxy modes -----
+    d = ImageDraw.Draw(img)
+    if mode == "galaxy":
+        kpx = 1300 / 680000.0; gx = W / 2 + 120; gy = 560
+        gw = 1300 * easeio((t - 0.6) / 1.5)
+        if gw > 8: paste_c(img, _gal20(gw), gx, gy, a)
+        d = ImageDraw.Draw(img)
+        ex = gx - 650; ey = 930; mx = ex + 384400 * kpx
+        paste_c(img, earth_sprite(9), ex, ey); paste_c(img, moon8(5), mx, ey); d = ImageDraw.Draw(img)
+        d.line([(ex, ey + 30), (mx, ey + 30)], fill=(200, 200, 220), width=3)
+        d.text(((ex + mx) / 2, ey + 60), "real Earth -> Moon · 384,400 km", font=F(26, "Bold"), fill=(200, 200, 220), anchor="mm")
+        if gw > 1000:
+            d.line([(gx - 650, 200), (gx + 650, 200)], fill=DUSK20, width=3)
+            d.text((gx, 170), "THE MILKY WAY at our scale · 680,000 km", font=F(32, "Black"), fill=DUSK20, anchor="mm")
+        alpha_text(img, (60, 1030), "galaxy drawn to the same scale as the real Earth-Moon distance", F(24, "SemiBold"), DIM, a, anchor="lm")
+    elif mode == "center":
+        gx, gy = 640, 560; paste_c(img, _gal20(1000), gx, gy, a); d = ImageDraw.Draw(img)
+        sx, sy = gx + 0.54 * 500, gy + 0.54 * 120
+        d.ellipse([sx - 6, sy - 6, sx + 6, sy + 6], fill=SAND20); d.text((sx + 14, sy + 24), "our grain", font=F(24, "Bold"), fill=SAND20, anchor="lm")
+        qq = easeio((t - 0.4) / 1.2); d.line([(sx, sy), (lerp(sx, gx, qq), lerp(sy, gy, qq))], fill=WHITE, width=3)
+        d.text(((sx + gx) / 2, (sy + gy) / 2 - 30), "184 km", font=F(34, "Black"), fill=WHITE, anchor="mm")
+        la = ease((t - 1.2) / 0.6)
+        if la > 0:
+            def inside(lay, cx, cy, r):
+                dl = ImageDraw.Draw(lay)
+                dl.ellipse([cx - r, cy - r, cx + r, cy + r], fill=(40, 30, 50, 255))
+                for k in range(26): dl.ellipse([cx - 60 - k * 2.4, cy - 60 - k * 2.4, cx + 60 + k * 2.4, cy + 60 + k * 2.4], outline=(255, 170, 90, max(0, 160 - k * 6)), width=2)
+                dl.ellipse([cx - 60, cy - 60, cx + 60, cy + 60], fill=(0, 0, 0, 255))
+                dl.line([(cx - 60, cy + 120), (cx + 60, cy + 120)], fill=(255, 255, 255, 255), width=4)
+                dl.text((cx, cy + 150), "17 mm", font=F(28, "Black"), fill=(255, 255, 255, 255), anchor="mm")
+                dl.text((cx, cy - 120), "SAGITTARIUS A*", font=F(28, "Black"), fill=(255, 200, 140, 255), anchor="mm")
+            d.line([(gx, gy), (1460, 520)], fill=(30, 30, 36), width=6)
+            _lens20(img, 1460, 520, int(270 * la), inside, ring=(255, 170, 90))
+        alpha_text(img, (W / 2, 80), "A BLACK MARBLE, 184 KM AWAY", F(48, "ExtraBold"), WHITE, a)
+    elif mode == "andromeda":
+        mwx, y = 160, 470; w_ = 60; ax = mwx + 25 * w_
+        paste_c(img, _gal20(w_), mwx, y, a); paste_c(img, _gal20(w_ * 1.5), ax, y, ease((t - 0.8) / 0.6)); d = ImageDraw.Draw(img)
+        d.text((mwx, y + 60), "MILKY WAY", font=F(24, "Black"), fill=DUSK20, anchor="mm"); d.text((ax, y + 70), "ANDROMEDA", font=F(24, "Black"), fill=(255, 200, 160), anchor="mm")
+        qq = easeio((t - 0.6) / max(1.0, dur * 0.6)); n = int(44 * qq)
+        for i in range(n):
+            x0 = mwx + i * (ax - mwx) / 44.0; d.line([(x0 + 2, 640), (x0 + (ax - mwx) / 44.0 - 2, 640)], fill=(210, 210, 230), width=8)
+        d.text((W / 2, 700), f"{n} Earth-Moon distances", font=F(36, "Black"), fill=(210, 210, 230), anchor="mm")
+        for i in range(25): d.ellipse([mwx + i * w_ - 3, 380 - 3, mwx + i * w_ + 3, 380 + 3], fill=DUSK20)
+        d.text((W / 2, 340), "25 Milky Way widths", font=F(32, "Black"), fill=DUSK20, anchor="mm")
+        d.text((W / 2, 820), f"{17.0 * qq:,.1f} million km at our scale", font=F(56, "Black"), fill=WHITE, anchor="mm")
+        d.text((W / 2, 890), "about 388 years on foot", font=F(34, "Bold"), fill=SAND20, anchor="mm")
+    elif mode == "collide":
+        qq = easeio(t / max(1.0, dur * 0.8)); sep = lerp(700, 0, qq)
+        g1 = _gal20(520).rotate(lerp(0, 60, qq), expand=True, resample=Image.BICUBIC); g2 = _gal20(620).rotate(lerp(30, -40, qq), expand=True, resample=Image.BICUBIC)
+        paste_c(img, g1, W / 2 - sep / 2, 540, a * lerp(1, 0.75, qq)); paste_c(img, g2, W / 2 + sep / 2, 540, a * lerp(1, 0.75, qq))
+        alpha_text(img, (W / 2, 90), "GALAXIES COLLIDE. STARS SLIDE PAST.", F(46, "ExtraBold"), WHITE, a)
+        alpha_text(img, (W / 2, 960), "Hubble 2012: ~4 billion years  ·  2025 study: ~50% chance in 10 billion", F(30, "Bold"), SAND20, ease((t - 1.0) / 0.5))
+        alpha_text(img, (W / 2, 1020), "illustration", F(22, "SemiBold"), DIM, a)
+
+def _snail20(d, x, y, s, t, col=(200, 170, 120)):
+    d.ellipse([x - 60 * s, y - 10 * s, x + 40 * s, y + 14 * s], fill=(170, 160, 130))
+    d.line([(x + 30 * s, y - 4 * s), (x + 46 * s, y - 34 * s)], fill=(170, 160, 130), width=max(2, int(4 * s)))
+    d.line([(x + 22 * s, y - 4 * s), (x + 32 * s, y - 36 * s)], fill=(170, 160, 130), width=max(2, int(4 * s)))
+    d.ellipse([x - 44 * s, y - 60 * s, x + 16 * s, y], fill=col, outline=(120, 90, 50), width=max(2, int(3 * s)))
+    for k in range(1, 4):
+        rr = 30 * s * k / 4; d.arc([x - 14 * s - rr, y - 30 * s - rr, x - 14 * s + rr, y - 30 * s + rr], 0, 300, fill=(120, 90, 50), width=max(2, int(3 * s)))
+
+def sc_snailrace(img, v, t, dur):
+    """light at the grain-of-sand scale: 0.215 mm/s. mode sun = light front crossing 10.75 cm from the grain to Earth, clock 0 -> 8:19 |
+    race = two lanes on a cm track: record racing snail 2.75 mm/s vs light 0.215 mm/s (both sped up the same) | proxima = a light pulse
+    crawling 28.9 km to Proxima while a year counter runs to 4.24"""
+    mode = v.get("mode", "sun"); a = ease(t / 0.5); d = ImageDraw.Draw(img)
+    if mode == "sun":
+        ppc = 130.0; gx, gy = 260, 520; ex = gx + 10.75 * ppc
+        qq = max(0.0, min(1.0, (t - 0.4) / max(1.0, dur * 0.7)))
+        lay = Image.new("RGBA", img.size, (0, 0, 0, 0)); dl = ImageDraw.Draw(lay)
+        fx = gx + (ex - gx) * qq
+        for k in range(40): dl.rectangle([gx + (fx - gx) * k / 40, gy - 40, gx + (fx - gx) * (k + 1) / 40, gy + 40], fill=(255, 230, 150, int(20 + 60 * k / 40)))
+        dl.rectangle([fx - 4, gy - 50, fx + 4, gy + 50], fill=(255, 245, 200, 255))
+        img.alpha_composite(lay); _grain20(img, gx, gy, 7); d = ImageDraw.Draw(img)
+        d.ellipse([ex - 4, gy - 4, ex + 4, gy + 4], fill=(140, 190, 255)); d.text((ex, gy + 80), "EARTH", font=F(30, "Black"), fill=(160, 205, 255), anchor="mm")
+        d.text((gx, gy + 80), "SUN", font=F(30, "Black"), fill=SAND20, anchor="mm")
+        d.line([(gx, 700), (ex, 700)], fill=WHITE, width=3); d.text(((gx + ex) / 2, 735), "10.75 cm", font=F(32, "Black"), fill=WHITE, anchor="mm")
+        s = 499 * qq; d.text((W / 2, 860), f"{int(s // 60)}:{int(s % 60):02d}", font=F(110, "Black"), fill=(255, 235, 160), anchor="mm")
+        d.text((W / 2, 950), "minutes for light to cross the gap (shown sped up)", font=F(30, "Bold"), fill=DIM, anchor="mm")
+        alpha_text(img, (W / 2, 160), "SUNLIGHT STILL TAKES 8 MINUTES", F(52, "ExtraBold"), WHITE, a)
+    elif mode == "race":
+        x0, x1 = 160, W - 160; ppm_ = (x1 - x0) / 60.0  # 60 mm track
+        sp = 60 / 2.75 / max(1.0, dur * 0.8 - 0.6)  # visual speed-up: the snail finishes at 80% of the scene
+        tt = max(0.0, t - 0.6) * sp
+        sx = x0 + min(60, 2.75 * tt) * ppm_; lx = x0 + min(60, 0.2155 * tt) * ppm_
+        for i, (y, lab, col) in enumerate(((420, "RECORD RACING SNAIL · 2.75 mm/s", (210, 190, 140)), (700, "LIGHT, AT OUR SCALE · 0.215 mm/s", (255, 235, 150)))):
+            d.rectangle([x0, y - 50, x1, y + 50], fill=(18, 22, 34)); d.line([(x1, y - 60), (x1, y + 60)], fill=(255, 255, 255), width=4)
+            for mm_ in range(0, 61, 5):
+                X = x0 + mm_ * ppm_; d.line([(X, y + 50), (X, y + (34 if mm_ % 10 else 24))], fill=(120, 130, 150), width=2)
+            d.text((x0, y - 82), lab, font=F(32, "Black"), fill=col, anchor="lm")
+        _snail20(d, sx, 440, 1.0, t)
+        lay = Image.new("RGBA", img.size, (0, 0, 0, 0)); dl = ImageDraw.Draw(lay)
+        dl.rectangle([x0, 690, lx, 710], fill=(255, 235, 150, 140)); dl.ellipse([lx - 14, 686, lx + 14, 714], fill=(255, 250, 210, 255)); img.alpha_composite(lay)
+        d = ImageDraw.Draw(img)
+        d.text((W / 2, 880), "the snail is 13× faster", font=F(64, "Black"), fill=(210, 190, 140), anchor="mm")
+        d.text((W / 2, 960), "light: 78 cm per hour · both sped up the same", font=F(30, "Bold"), fill=DIM, anchor="mm")
+        alpha_text(img, (W / 2, 160), "LIGHT LOSES TO A SNAIL", F(56, "ExtraBold"), WHITE, a)
+    else:  # proxima
+        x0, x1, y = 200, W - 260, 540; qq = easeio((t - 0.4) / max(1.0, dur * 0.75))
+        d.line([(x0, y), (x1, y)], fill=(80, 90, 120), width=3)
+        _grain20(img, x0, y, 7); paste_c(img, radial(90, [(0, (255, 140, 110, 230)), (1, (255, 140, 110, 0))]), x1, y); d = ImageDraw.Draw(img)
+        d.ellipse([x1 - 6, y - 6, x1 + 6, y + 6], fill=(255, 150, 120))
+        px = lerp(x0, x1, qq); paste_c(img, radial(60, [(0, (255, 250, 210, 255)), (1, (255, 230, 150, 0))]), px, y); d = ImageDraw.Draw(img)
+        d.text((x0, y + 60), "SUN", font=F(28, "Black"), fill=SAND20, anchor="mm"); d.text((x1, y + 60), "PROXIMA", font=F(28, "Black"), fill=(255, 150, 120), anchor="mm")
+        d.text((W / 2, y - 80), "28.9 km at our scale", font=F(32, "Bold"), fill=WHITE, anchor="mm")
+        d.text((W / 2, 780), f"{4.24 * qq:.2f} years", font=F(110, "Black"), fill=(255, 235, 160), anchor="mm")
+        d.text((W / 2, 870), "for light to get there: the same as in real life", font=F(32, "Bold"), fill=DIM, anchor="mm")
+        alpha_text(img, (W / 2, 160), "THE SNAIL'S LONG CRAWL", F(56, "ExtraBold"), WHITE, a)
+
+def _rau20(au, cx_r=470):
+    lo, hi = math.log10(0.3), math.log10(1.2e5)
+    return 40 + cx_r * (math.log10(max(au, 0.3)) - lo) / (hi - lo)
+
+_web20 = None
+def _webdots20():
+    global _web20
+    if _web20 is None:
+        rng = random.Random(2020); pts = []
+        nodes = [(rng.uniform(-1, 1), rng.uniform(-1, 1)) for _ in range(40)]
+        for _ in range(1800):
+            nx, ny = rng.choice(nodes); mx, my = rng.choice(nodes); f = rng.random()
+            x = lerp(nx, mx, f) + rng.gauss(0, 0.03); y = lerp(ny, my, f) + rng.gauss(0, 0.03)
+            if x * x + y * y < 1: pts.append((x, y, rng.random()))
+        _web20 = pts
+    return _web20
+
+def _universe20(img, cx, cy, r, t, a=1.0):
+    lay = Image.new("RGBA", img.size, (0, 0, 0, 0)); dl = ImageDraw.Draw(lay)
+    dl.ellipse([cx - r, cy - r, cx + r, cy + r], fill=(60, 40, 110, int(120 * a)), outline=DUSK20 + (int(255 * a),), width=4)
+    for (x, y, b) in _webdots20():
+        s = 1.2 + b * 1.6; X = cx + x * r * 0.97; Y = cy + y * r * 0.97
+        dl.ellipse([X - s, Y - s, X + s, Y + s], fill=mix((180, 160, 255), (255, 220, 190), b) + (int((140 + 100 * b) * a),))
+    img.alpha_composite(lay)
+    paste_c(img, radial(int(r * 2.6), [(0, DUSK20 + (0,)), (0.74, DUSK20 + (0,)), (0.78, DUSK20 + (int(90 * a),)), (1, DUSK20 + (0,))]), cx, cy)
+
+def sc_fitinside(img, v, t, dur):
+    """the real solar system on a LOG radial scale (0.3 AU -> 120,000 AU): Earth / Jupiter / Neptune orbits, Voyager 1 at 173 AU, the Oort
+    cloud 2,000 -> 100,000 AU as an icy band, and the observable universe at grain-of-sand scale (4,227 AU wide, radius 2,113 AU) as a violet
+    cosmic-web sphere. mode hook (all + headline + grain inset) | zoom (radius counter sweeps out to 2,113 AU) | real (labels in order) | reveal"""
+    mode = v.get("mode", "real"); a = ease(t / 0.5) if mode != "hook" else 1.0
+    cx, cy = (1240, 560) if mode != "zoom" else (W / 2, 560)
+    lay = Image.new("RGBA", img.size, (0, 0, 0, 0)); dl = ImageDraw.Draw(lay)
+    r0, r1 = _rau20(2000), _rau20(1.0e5); rng = random.Random(7)
+    for _ in range(900):
+        rr = lerp(r0, r1, rng.random() ** 0.8); th_ = rng.uniform(0, 2 * math.pi) + t * 0.01
+        x = cx + rr * math.cos(th_); y = cy + rr * math.sin(th_)
+        dl.ellipse([x - 1.6, y - 1.6, x + 1.6, y + 1.6], fill=ICE20 + (int(110 * a),))
+    img.alpha_composite(lay); d = ImageDraw.Draw(img)
+    orbs = [(1, "Earth", (120, 170, 255)), (5.2, "Jupiter", (215, 175, 130)), (30.07, "Neptune", (90, 120, 240))]
+    for i, (au, nm, col) in enumerate(orbs):
+        rp = _rau20(au); d.ellipse([cx - rp, cy - rp, cx + rp, cy + rp], outline=col, width=2)
+    uq = 1.0
+    if mode == "zoom": uq = easeio((t - 0.4) / max(1.0, dur * 0.7))
+    if mode in ("real",): uq = ease((t - dur * 0.5) / 0.8)
+    ur = _rau20(lerp(0.3, 2113, uq)) if mode == "zoom" else _rau20(2113)
+    if uq > 0: _universe20(img, cx, cy, ur, t, a * (uq if mode == "real" else 1.0))
+    d = ImageDraw.Draw(img)
+    for i, (au, nm, col) in enumerate(orbs):
+        rp = _rau20(au); d.text((cx + rp * 0.71 + 6, cy - rp * 0.71 - 10), nm, font=F(22, "Bold"), fill=col, anchor="lm")
+    paste_c(img, sun_sprite(6), cx, cy); d = ImageDraw.Draw(img)
+    vr = _rau20(173); vx, vy = cx - vr * 0.8, cy + vr * 0.6
+    d.ellipse([vx - 6, vy - 6, vx + 6, vy + 6], fill=(255, 220, 120)); d.text((vx - 12, vy + 22), "Voyager 1 · 173 AU", font=F(24, "Bold"), fill=(255, 220, 120), anchor="rm")
+    d.text((cx, cy - r1 - 18), "OORT CLOUD · out to ~100,000 AU", font=F(26, "Bold"), fill=ICE20, anchor="mm")
+    if mode == "zoom":
+        au_now = lerp(0.3, 2113, uq)
+        d.text((W / 2, 1010), f"{au_now:,.0f} × the Earth-Sun distance", font=F(46, "Black"), fill=DUSK20, anchor="mm")
+        d.text((W - 40, 1050), "log scale", font=F(22, "SemiBold"), fill=DIM, anchor="rm")
+        return
+    d.text((cx + ur * 0.0, cy + ur + 30), "THE OBSERVABLE UNIVERSE at grain-of-sand scale · 4,227 AU wide", font=F(26, "Black"), fill=DUSK20, anchor="mm") if uq > 0.5 else None
+    d.text((W - 40, 1050), "distances from the Sun on a log scale", font=F(22, "SemiBold"), fill=DIM, anchor="rm")
+    # left column
+    if mode == "hook":
+        alpha_text(img, (60, 230), "THE SUN = 1 mm", F(76, "Black"), SAND20, 1.0, anchor="lm")
+        alpha_text(img, (60, 360), "THE UNIVERSE", F(96, "Black"), WHITE, 1.0, anchor="lm")
+        alpha_text(img, (60, 470), "FITS IN HERE", F(96, "Black"), DUSK20, 1.0, anchor="lm")
+        _grain20(img, 200, 760, 12); d = ImageDraw.Draw(img)
+        d.ellipse([200 - 70, 760 - 70, 200 + 70, 760 + 70], outline=SAND20, width=3)
+        d.text((300, 760), "a 1 mm grain of sand", font=F(32, "Bold"), fill=SAND20, anchor="lm")
+    elif mode == "real":
+        rows = [("Earth's orbit", "1 AU"), ("Neptune", "30 AU"), ("Voyager 1", "173 AU"), ("the shrunken universe", "4,227 AU wide"), ("Oort cloud", "to ~100,000 AU")]
+        for i, (k, val) in enumerate(rows):
+            aa = ease((t - 0.3 - i * dur * 0.14) / 0.4); y = 260 + i * 120
+            alpha_text(img, (70, y), k, F(36, "Bold"), WHITE, aa, anchor="lm")
+            alpha_text(img, (70, y + 46), val, F(40, "Black"), DUSK20 if i == 3 else SAND20, aa, anchor="lm")
+    else:  # reveal
+        alpha_text(img, (70, 300), "EVERY GALAXY", F(80, "Black"), WHITE, a, anchor="lm")
+        alpha_text(img, (70, 400), "WE CAN SEE", F(80, "Black"), WHITE, a, anchor="lm")
+        alpha_text(img, (70, 520), "inside the Sun's", F(48, "Bold"), SAND20, ease((t - 0.6) / 0.5), anchor="lm")
+        alpha_text(img, (70, 580), "cloud of comets", F(48, "Bold"), ICE20, ease((t - 0.8) / 0.5), anchor="lm")
 
 
 SC = {k[3:]: f for k, f in globals().items() if k.startswith("sc_")}

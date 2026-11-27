@@ -82,6 +82,10 @@ Visuais (vis.type):
              lon/lat); vis.mode = hook (mapa + Lua translúcida + 2 barras) | ruler (barras 4.000 x 3.475 km com contadores) | edges (a Lua
              desliza e as duas costas que sobram brilham) | peel (a superfície da Lua como folha plana; 5 Austrálias enchendo, contador
              até 4,9) | land (barras em milhões de km²: Austrália, África, Lua, Ásia) | tail (= hook, loop) (scale22).
+  "sunspot": a mancha solar AR 12192 (out/2014, ~129.000 km; 900 px) sobre granulação desenhada por código (células de Voronoi), com Terras
+             e Júpiter EM ESCALA; vis.mode = hook (mancha + 10 Terras + régua) | grow (a mancha cresce, contador de km e data) | row (Terras
+             caem uma a uma, contador até 10) | jupiter (disco de Júpiter por cima, 90%) | sun (o Sol inteiro com escurecimento de borda e a
+             mancha em 9% da largura) | tail (sol, depois volta ao hook = loop) (scale23).
 Reaproveita render.py (sprites, fontes) e ranking.py (fundo, texto, legendas).
 """
 import sys, os, math, json, subprocess, importlib.util, random
@@ -1952,6 +1956,104 @@ def moonmap_vis(img, v, th, t, dur, bp):
         if bp < 0.62: moonmap_vis(img, dict(v, mode="land"), th, t, dur, bp)
         else: _hook22(img, th, t)
 
+# ---- scale23: "sunspot" — AR 12192 (Oct 2014, ~129,000 km) on code-drawn granulation, Earths and Jupiter TO SCALE (900 px = 129,000 km)
+_gran23 = {}
+def _granulation23(w, h, seed=23, cell=34):
+    key = (w, h, cell)
+    if key not in _gran23:
+        rng = np.random.default_rng(seed); gw, gh = w // cell + 3, h // cell + 3
+        px = (np.arange(gw)[:, None] + rng.uniform(0.15, 0.85, (gw, gh))) * cell; py = (np.arange(gh)[None, :] + rng.uniform(0.15, 0.85, (gw, gh))) * cell
+        yy, xx = np.mgrid[0:h, 0:w].astype(np.float32); ix = (xx // cell).astype(int); iy = (yy // cell).astype(int)
+        d1 = np.full((h, w), 1e9, np.float32); d2 = np.full((h, w), 1e9, np.float32)
+        for dx in (-1, 0, 1, 2):
+            for dy in (-1, 0, 1, 2):
+                cx = np.clip(ix + dx, 0, gw - 1); cy = np.clip(iy + dy, 0, gh - 1)
+                dd = np.hypot(xx - px[cx, cy], yy - py[cx, cy]); m = dd < d1
+                d2 = np.where(m, d1, np.minimum(d2, dd)); d1 = np.where(m, dd, d1)
+        edge = np.clip((d2 - d1) / (cell * 0.35), 0, 1)
+        v = 0.55 + 0.45 * edge
+        base = np.array([150, 40, 0], np.float32); hi = np.array([255, 168, 56], np.float32)
+        arr = base + (hi - base) * v[..., None]
+        im = Image.fromarray(np.clip(arr, 0, 255).astype(np.uint8), "RGB").convert("RGBA")
+        if w == W:  # full-width band: fade the top and bottom edges into space
+            al = np.clip(np.minimum(np.arange(h), np.arange(h)[::-1]) / 140.0, 0, 1); im.putalpha(Image.fromarray((al[:, None] * 255 * np.ones((1, w))).astype(np.uint8)))
+        _gran23[key] = im
+    return _gran23[key]
+
+def _spot23(img, cx, cy, wpx, q=1.0, t=0.0):
+    """umbra + filamented penumbra, total width wpx × q"""
+    w = wpx * q
+    if w < 4: return
+    lay = Image.new("RGBA", img.size, (0, 0, 0, 0)); d = ImageDraw.Draw(lay); rng = random.Random(1223)
+    pts = []
+    for k in range(48):
+        a = 2 * math.pi * k / 48; rr = w / 2 * (1 + 0.07 * math.sin(3 * a + 1) + 0.05 * math.sin(5 * a)); pts.append((cx + rr * math.cos(a), cy + rr * 0.72 * math.sin(a)))
+    d.polygon(pts, fill=(96, 28, 4, 255))
+    for k in range(220):
+        a = rng.uniform(0, 2 * math.pi); r0 = w * 0.2; r1 = w / 2 * rng.uniform(0.85, 1.05)
+        d.line([(cx + r0 * math.cos(a), cy + r0 * 0.72 * math.sin(a)), (cx + r1 * math.cos(a), cy + r1 * 0.72 * math.sin(a))], fill=(140, 52, 10, 200), width=max(1, int(w / 300)))
+    for (ox, oy, s) in ((-0.06, 0.0, 0.26), (0.12, 0.05, 0.16), (-0.2, -0.06, 0.11)):
+        ux, uy, ur = cx + ox * w, cy + oy * w * 0.72, s * w
+        d.ellipse([ux - ur, uy - ur * 0.75, ux + ur, uy + ur * 0.75], fill=(46, 14, 6, 255))
+    img.alpha_composite(lay.filter(ImageFilter.GaussianBlur(max(1, w / 260))))
+
+def _earthrow23(img, cx, cy, wpx, n, t=0.0, a=1.0):
+    er = wpx / 129000 * 12742 / 2; x0 = cx - wpx / 2 + er
+    for i in range(int(n)):
+        R.paste_c(img, R.earth_sprite(int(er), glow=None), x0 + i * 2 * er, cy, a)
+    return er
+
+def _hook23(img, th, t, cy=930):
+    gr = _granulation23(W, 1000); img.alpha_composite(gr, (0, cy - 500))
+    _spot23(img, W / 2, cy, 900, 1.0, t)
+    _earthrow23(img, W / 2, cy, 900, 10, t)
+    d = ImageDraw.Draw(img); y = cy + 260
+    d.line([(W / 2 - 450, y), (W / 2 + 450, y)], fill=(255, 255, 255), width=5)
+    text(img, (W / 2, y + 50), "≈ 129,000 km", 44, (255, 255, 255), stroke=4)
+
+def sunspot_vis(img, v, th, t, dur, bp):
+    """vis.mode = hook (granulation + spot + 10 Earths) | grow (spot grows over the days, width counter) | row (Earths drop in one by one,
+    counter) | jupiter (Jupiter's disc to scale over the spot) | sun (whole Sun with the spot at 9% of its width) | tail (sun, then the hook)"""
+    acc = tuple(th["accent"]); mode = v.get("mode", "hook"); cy = 930
+    if mode == "hook":
+        _hook23(img, th, t)
+    elif mode == "grow":
+        img.alpha_composite(_granulation23(W, 1000), (0, cy - 500)); q = easeio((t - 0.2) / max(0.8, dur * 0.75))
+        _spot23(img, W / 2, cy, 900, lerp(0.15, 1.0, q), t)
+        text(img, (W / 2, cy + 300), f"{129000 * lerp(0.15, 1.0, q):,.0f} km", 72, (255, 255, 255), stroke=5)
+        text(img, (W / 2, cy + 380), "October 2014", 40, acc, w="ExtraBold", stroke=3)
+    elif mode == "row":
+        img.alpha_composite(_granulation23(W, 1000), (0, cy - 500)); _spot23(img, W / 2, cy, 900, 1.0, t)
+        n = 10 * easeio((t - 0.2) / max(0.8, dur * 0.8))
+        er = _earthrow23(img, W / 2, cy, 900, int(n), t)
+        if n % 1 > 0.05 and n < 10:
+            i = int(n); x = W / 2 - 450 + er + i * 2 * er; yy = lerp(cy - 400, cy, ease((n % 1)))
+            R.paste_c(img, R.earth_sprite(int(er), glow=None), x, yy)
+        text(img, (W / 2, cy + 300), f"{int(n)} EARTHS", 90, acc, stroke=5)
+    elif mode == "jupiter":
+        img.alpha_composite(_granulation23(W, 1000), (0, cy - 500)); _spot23(img, W / 2, cy, 900, 1.0, t)
+        jr = 900 / 129000 * 142984 / 2; a = ease((t - 0.3) / 0.6)
+        R.paste_c(img, R.planet_sprite(int(jr), (215, 175, 130), light=(-0.7, -0.5)), W / 2, cy, a * 0.8)
+        d = ImageDraw.Draw(img); d.ellipse([W / 2 - jr, cy - jr, W / 2 + jr, cy + jr], outline=(255, 255, 255), width=4)
+        text(img, (W / 2, cy + jr + 60), "Jupiter · 142,984 km", 46, (255, 255, 255), stroke=4)
+    elif mode in ("sun", "tail"):
+        if mode == "tail" and bp > 0.6:
+            _hook23(img, th, t); return
+        q = easeio((t - 0.2) / max(0.8, dur * 0.6)); sr = 470
+        lay = Image.new("RGBA", img.size, (0, 0, 0, 0))
+        gr = _granulation23(2 * sr, 2 * sr, cell=9); mask = Image.new("L", gr.size, 0); ImageDraw.Draw(mask).ellipse([0, 0, 2 * sr - 1, 2 * sr - 1], fill=255)
+        yy, xx = np.mgrid[0:2 * sr, 0:2 * sr]; rr = np.sqrt((xx - sr) ** 2 + (yy - sr) ** 2) / sr
+        limb = np.clip(1 - 0.55 * (1 - np.sqrt(np.clip(1 - rr ** 2, 0, 1))), 0, 1)
+        g2 = np.array(gr).astype(np.float32); g2[..., :3] *= limb[..., None]; g2 = Image.fromarray(np.clip(g2, 0, 255).astype(np.uint8), "RGBA"); g2.putalpha(mask)
+        R.paste_c(img, R.radial(int(sr * 2.6), [(0, (255, 170, 60, 140)), (0.75, (255, 140, 40, 60)), (1, (255, 120, 30, 0))]), W / 2, cy)
+        img.alpha_composite(g2, (int(W / 2 - sr), int(cy - sr)))
+        sx, sy = W / 2 - 120, cy + 60
+        _spot23(img, sx, sy, 2 * sr * 129000 / 1391400, 1.0, t)
+        d = ImageDraw.Draw(img); rw = 2 * sr * 0.0927
+        d.ellipse([sx - rw, sy - rw, sx + rw, sy + rw], outline=(255, 255, 255), width=4)
+        text(img, (W / 2, cy + sr + 70), "the whole Sun · 1,391,400 km", 44, (255, 255, 255), stroke=4)
+        if mode == "tail": text(img, (W / 2, cy - sr - 60), "6 X-CLASS FLARES", 64, acc, stroke=5)
+
 
 def chrome(img, th, gt, total):
     d = ImageDraw.Draw(img)
@@ -2026,10 +2128,10 @@ def frame(m, durs, gt, chunks, arr):
         hl = v.get("head") or m.BIG
         text(img, (W / 2, 170), hl["num"], 124 if len(hl["num"]) < 12 else 100, tuple(th["accent"]), stroke=4)
         text(img, (W / 2, 280), hl["top"], 52, (255, 255, 255), stroke=3)
-    elif v["type"] in ("jupsun", "andromeda", "redgiant", "sand", "magbubble", "sugarcube", "saturnfloat", "olympus", "hexagon", "moonmap"):
+    elif v["type"] in ("jupsun", "andromeda", "redgiant", "sand", "magbubble", "sugarcube", "saturnfloat", "olympus", "hexagon", "moonmap", "sunspot"):
         {"jupsun": jupsun_vis, "andromeda": andromeda_vis, "redgiant": redgiant_vis, "sand": globals().get("sand_vis"), "magbubble": globals().get("magbubble_vis"),
          "sugarcube": globals().get("sugarcube_vis"), "saturnfloat": globals().get("saturnfloat_vis"), "olympus": globals().get("olympus_vis"),
-         "hexagon": globals().get("hexagon_vis"), "moonmap": globals().get("moonmap_vis")}[v["type"]](img, v, th, t, d, easeio((t - 0.2) / max(0.8, d * 0.8)))
+         "hexagon": globals().get("hexagon_vis"), "moonmap": globals().get("moonmap_vis"), "sunspot": globals().get("sunspot_vis")}[v["type"]](img, v, th, t, d, easeio((t - 0.2) / max(0.8, d * 0.8)))
         hl = v.get("head") or m.BIG
         text(img, (W / 2, 170), hl["num"], 124 if len(hl["num"]) < 12 else 100, tuple(th["accent"]), stroke=4)
         text(img, (W / 2, 280), hl["top"], 52, (255, 255, 255), stroke=3)

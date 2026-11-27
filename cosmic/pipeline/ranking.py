@@ -62,6 +62,10 @@ vis.type == "swarm" / THEME.hook/outro == "swarm": cada lua conhecida = um ponto
   rápidas, externas lentas, algumas inclinadas/ao contrário); os pontos aparecem enquanto o número sobe até vis.n; vis.kind = ringed |
   jupiter | ice | rock, vis.col, vis.r; vis.names = [(nome, raio relativo)] para poucos pontos rotulados (Marte); gancho = planeta escuro
   "?" com 285 pontos; outro = um quadradinho por lua, um bloco por planeta + "todos os outros juntos" (rank23).
+vis.type == "dwarfs" / THEME.hook/outro == "dwarfs": cada planeta anão oficial EM ESCALA (0,15 px/km) dentro do contorno tracejado da nossa
+  Lua (vis.kind = ceres | makemake | haumea (ovo girando + anel) | eris | pluto (coração), vis.km, vis.col) + faixa em raiz quadrada da
+  distância média ao Sol (vis.au) com "a luz do Sol leva N h"; gancho = mundo escuro "?" do tamanho de Plutão dentro da Lua; outro = os 5 em
+  fila na mesma escala ao lado da Lua (rank24).
 Tudo desenhado por código; narração Kokoro (VOICE, padrão af_heart); legenda grande queimada.
 """
 import sys, os, re, math, json, subprocess, importlib.util, random
@@ -1373,6 +1377,67 @@ def sw_waffle(img, th, items, t, a=1.0, x0=110, y0=430, step=19, cols=30):
         y += max(rows * step, 72) + 28
     return y
 
+# ---- rank24: "dwarfs" — each official dwarf planet TO SCALE inside a dashed outline of our Moon (0.15 px/km) + a square-root strip of
+# its average distance from the Sun with "sunlight takes N h"
+DW_K = 0.15
+DW_STRIP = (110, W - 110, 1150, 70.0)
+_dw = {}
+def dw_body(kind, r, ang=0.0):
+    key = (kind, int(r), round(ang, 1) if kind == "haumea" else 0)
+    if key in _dw: return _dw[key]
+    r = max(4, int(r))
+    if kind == "ceres":
+        im = R.planet_sprite(r, (150, 148, 145), light=(-0.7, -0.5)).copy(); d = ImageDraw.Draw(im); c = im.width / 2
+        for (ox, oy, s) in ((0.25, -0.1, 0.07), (0.32, -0.05, 0.04)): d.ellipse([c + ox * r - s * r, c + oy * r - s * r, c + ox * r + s * r, c + oy * r + s * r], fill=(245, 245, 240, 255))
+        for (ox, oy, s) in ((-0.3, 0.3, 0.16), (0.1, 0.45, 0.1), (-0.5, -0.2, 0.12)): d.ellipse([c + ox * r - s * r, c + oy * r - s * r, c + ox * r + s * r, c + oy * r + s * r], outline=(110, 108, 106, 255), width=2)
+    elif kind == "makemake": im = R.planet_sprite(r, (190, 120, 90), light=(-0.7, -0.5))
+    elif kind == "eris": im = R.planet_sprite(r, (225, 225, 230), light=(-0.7, -0.5))
+    elif kind == "pluto":
+        im = R.planet_sprite(r, (200, 160, 120), light=(-0.7, -0.5)).copy(); d = ImageDraw.Draw(im); c = im.width / 2
+        hx, hy, hs = c + 0.15 * r, c + 0.2 * r, 0.32 * r
+        d.ellipse([hx - hs, hy - hs * 0.9, hx, hy + hs * 0.3], fill=(245, 238, 225, 235)); d.ellipse([hx - hs * 0.2, hy - hs * 0.8, hx + hs * 0.8, hy + hs * 0.3], fill=(245, 238, 225, 235))
+        d.polygon([(hx - hs, hy - hs * 0.1), (hx + hs * 0.75, hy - hs * 0.1), (hx, hy + hs * 1.0)], fill=(245, 238, 225, 235))
+    else:  # haumea: elongated egg, stretched along a rotating axis (ang)
+        sx = 2322 / 1585.0; sy = 1026 / 1585.0 * 1.0
+        base = R.planet_sprite(r, (235, 235, 240), light=(-0.7, -0.5))
+        k = abs(math.cos(ang)); wx = lerp(1704 / 1585.0, sx, k)
+        im = base.resize((max(4, int(base.width * wx)), max(4, int(base.height * 1704 / 1585.0 * 0.9))), Image.LANCZOS)
+    if len(_dw) > 200: _dw.clear()
+    _dw[key] = im; return im
+def dw_x(au):
+    x0, x1, y, mx = DW_STRIP; return lerp(x0, x1, math.sqrt(au / mx))
+def dw_strip(img, th, items, cur=None, prog=1.0, a=1.0):
+    x0, x1, y, mx = DW_STRIP; d = ImageDraw.Draw(img); acc = tuple(th["accent"])
+    d.line([(x0, y), (x0 + (x1 - x0) * prog, y)], fill=(150, 160, 200), width=4)
+    R.paste_c(img, R.sun_sprite(9), x0, y, a); d = ImageDraw.Draw(img)
+    for au, lab in ((1, "Earth"), (30.07, "Neptune")):
+        x = dw_x(au); d.line([(x, y - 12), (x, y + 12)], fill=(150, 160, 200), width=3); d.text((x, y + 36), lab, font=F(24, "SemiBold"), fill=(150, 160, 200), anchor="mm")
+    for o in items:
+        v = o["vis"]; x = dw_x(v["au"]); c = acc if o is cur else tuple(v["col"])
+        d.ellipse([x - 11, y - 11, x + 11, y + 11], fill=c)
+        d.text((x, y - 36 - {4: 30, 1: 60}.get(o["rank"], 0)), f"#{o['rank']}", font=F(28, "Black"), fill=c, anchor="mm")
+    d.text((x1, y + 66), "average distance from the Sun · square-root scale", font=F(24, "SemiBold"), fill=(150, 160, 200), anchor="rm")
+def dw_moon(img, cx, cy, a=1.0):
+    rm = 3474.8 / 2 * DW_K; d = ImageDraw.Draw(img); n = 72
+    for k in range(0, n, 2):
+        a0 = 2 * math.pi * k / n; a1 = 2 * math.pi * (k + 1) / n
+        d.line([(cx + rm * math.cos(a0), cy + rm * math.sin(a0)), (cx + rm * math.cos(a1), cy + rm * math.sin(a1))], fill=(200, 205, 230), width=4)
+    d.text((cx + rm * 0.72 + 10, cy - rm * 0.72 - 14), "our Moon", font=F(30, "Bold"), fill=(200, 205, 230), anchor="lm")
+    return rm
+def dwarfs_vis(img, it, th, t, dur):
+    v = it["vis"]; acc = tuple(th["accent"]); cx, cy = W / 2 - 30, 760
+    dw_moon(img, cx, cy)
+    r = v["km"] / 2 * DW_K * easeio((t - 0.3) / 1.0)
+    if r > 3: R.paste_c(img, dw_body(v["kind"], r, t * 1.6), cx, cy)
+    d = ImageDraw.Draw(img)
+    if v.get("note"): text(img, (W / 2, 470), v["note"], 36, (235, 235, 245), w="Bold", a=ease((t - 1.4) / 0.4), stroke=3)
+    if v["kind"] == "haumea" and r > 20:
+        lay = Image.new("RGBA", img.size, (0, 0, 0, 0)); dl = ImageDraw.Draw(lay)
+        rr = 2287 / 2 * DW_K; dl.ellipse([cx - rr, cy - rr * 0.18, cx + rr, cy + rr * 0.18], outline=(220, 220, 235, 150), width=3); img.alpha_composite(lay)
+    hours = v["au"] * 8.317 / 60
+    dw_strip(img, th, [o for o in ALL_ITEMS if o["rank"] >= it["rank"]], cur=it, prog=1.0, a=ease((t - 0.6) / 0.4))
+    text(img, (W / 2, 1300), f"sunlight takes {hours:.1f} h to get there" if hours >= 1 else f"sunlight takes {hours * 60:.0f} min to get there", 34, tuple(th["accent2"]), w="ExtraBold", a=ease((t - 1.0) / 0.4), stroke=3)
+
 def caption_chunks(say, t0, dur):
     words = say.split(); groups, g = [], []
     for w in words:
@@ -1416,6 +1481,16 @@ def seg_hook(img, sc, th, t, dur):
         text(img, (W / 2, 220), sc.get("big", ""), 150, tuple(th["accent"]), stroke=3)
         text(img, (W / 2, 340), sc["top"].upper(), 52, (255, 255, 255))
         text(img, (W / 2, 1420), sc["sub"], 46, tuple(th["accent2"]), w="ExtraBold")
+        return
+    if th.get("hook") == "dwarfs":
+        # frame 0: big number + our Moon's dashed outline with a dark "?" world inside it (Pluto-sized)
+        cx, cy = W / 2 - 30, 900
+        dw_moon(img, cx, cy); rp = 2377 / 2 * DW_K
+        R.paste_c(img, R.planet_sprite(int(rp), (60, 55, 85), light=(-0.7, -0.5)), cx, cy)
+        text(img, (cx, cy), "?", 170, tuple(th["accent"]), stroke=4)
+        text(img, (W / 2, 220), sc.get("big", ""), 150, tuple(th["accent"]), stroke=3)
+        text(img, (W / 2, 340), sc["top"].upper(), 52, (255, 255, 255))
+        text(img, (W / 2, 1360), sc["sub"], 46, tuple(th["accent2"]), w="ExtraBold")
         return
     if th.get("hook") == "tilt":
         # frame 0: the big number + a dark "?" planet whose axis swings back and forth, ending upside down; Earth's 23.4° ghost
@@ -1721,6 +1796,8 @@ def seg_item(img, it, th, t, dur):
         pair_vis(img, it, th, t, dur)
     if v["type"] == "swarm":
         swarm_vis(img, it, th, t, dur)
+    if v["type"] == "dwarfs":
+        dwarfs_vis(img, it, th, t, dur)
     # number
     p = easeio((t - 0.5) / 1.6)
     num = it["num"]
@@ -1755,6 +1832,21 @@ def seg_outro(img, sc, th, t, dur):
         text(img, (W / 2, 1170), "SHOULD WE MEASURE NEXT?", 56, tuple(th["accent"]), a=ease((t - 0.5) / 0.5))
         text(img, (W / 2, 1340), "SUBSCRIBE", 100, tuple(th["accent"]), a=ease((t - 0.8) / 0.5))
         text(img, (W / 2, 1430), "to Cosmic Scale", 50, (255, 255, 255), w="ExtraBold", a=ease((t - 1.0) / 0.5))
+        return
+    if th.get("outro") == "dwarfs":
+        # all five to scale in a row, largest first, with the Moon's outline for reference
+        x = 40; rm = 3474.8 / 2 * 0.058
+        d = ImageDraw.Draw(img); d.ellipse([x, 640 - rm, x + 2 * rm, 640 + rm], outline=(200, 205, 230), width=3)
+        text(img, (x + rm, 640 + rm + 40), "Moon", 28, (200, 205, 230), w="ExtraBold", a=a, stroke=3); x += 2 * rm + 26
+        for o in sorted(ALL_ITEMS, key=lambda o: o["rank"]):
+            vv = o["vis"]; r_ = vv["km"] / 2 * 0.058; R.paste_c(img, dw_body(vv["kind"], r_, t * 1.6), x + r_, 640, a)
+            text(img, (x + r_, 640 + 140), f"#{o['rank']}", 36, tuple(th["accent"]), a=a, stroke=3)
+            x += 2 * r_ + (26 if vv["kind"] != "haumea" else 48)
+        if th.get("outro_note"): text(img, (W / 2, 900), th["outro_note"], 42, tuple(th["accent2"]), w="ExtraBold", a=ease((t - 0.4) / 0.5), stroke=3)
+        text(img, (W / 2, 1060), "WHICH WORLD", 96, (255, 255, 255), a=ease((t - 0.3) / 0.5))
+        text(img, (W / 2, 1150), "SHOULD WE VISIT NEXT?", 56, tuple(th["accent"]), a=ease((t - 0.5) / 0.5))
+        text(img, (W / 2, 1330), "SUBSCRIBE", 100, tuple(th["accent"]), a=ease((t - 0.8) / 0.5))
+        text(img, (W / 2, 1420), "to Cosmic Scale", 50, (255, 255, 255), w="ExtraBold", a=ease((t - 1.0) / 0.5))
         return
     if th.get("outro") == "tilt":
         # all five in a row, each tilted by its own obliquity, + Earth for reference
