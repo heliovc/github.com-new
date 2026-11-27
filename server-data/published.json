@@ -2079,9 +2079,9 @@
   "comment_attempts": 1,
   "thumb_path": "/opt/canal-publisher/state/thumbs/c5-d01a-formiga.jpg",
   "comment_error": "fixar comentário pede o telefone verificado no canal",
-  "thumb_attempts": 1,
-  "thumb_error": "miniatura personalizada pede o telefone verificado no canal",
-  "comment_retry_after": "2026-11-27T05:41:41.678841-03:00",
+  "thumb_attempts": 2,
+  "thumb_error": "o seletor de arquivo da miniatura não abriu (20261127-055312-erro-thumb-c5-d01a-formiga.png)",
+  "comment_retry_after": "2026-11-27T11:51:51.027282-03:00",
   "thumb_retry_after": "2026-11-27T05:42:31.235146-03:00"
  },
  "c5-d01b-lagartixa": {
@@ -2104,8 +2104,8 @@
   "comment_error": "fixar comentário pede o telefone verificado no canal",
   "thumb_attempts": 1,
   "thumb_error": "miniatura personalizada pede o telefone verificado no canal",
-  "comment_retry_after": "2026-11-27T05:43:16.128679-03:00",
-  "thumb_retry_after": "2026-11-27T05:44:18.715108-03:00"
+  "comment_retry_after": "2026-11-27T11:54:09.581258-03:00",
+  "thumb_retry_after": "2026-11-27T11:55:08.576528-03:00"
  },
  "cosmic-rank18-short": {
   "attempts": 1,
@@ -2301,7 +2301,7 @@
   "thumb_path": "/opt/canal-publisher/state/thumbs/c5-d02a-mosquito.jpg",
   "thumb_attempts": 0,
   "thumb_error": "miniatura personalizada pede o telefone verificado no canal",
-  "thumb_retry_after": "2026-11-27T05:45:26.155013-03:00",
+  "thumb_retry_after": "2026-11-27T11:56:06.229471-03:00",
   "comment_attempts": 0,
   "comment_error": "fixar comentário pede o telefone verificado no canal",
   "comment_retry_after": "2026-11-27T09:41:34.504746-03:00"
@@ -2323,7 +2323,7 @@
   "thumb_path": "/opt/canal-publisher/state/thumbs/c5-d02b-barata.jpg",
   "thumb_attempts": 0,
   "thumb_error": "miniatura personalizada pede o telefone verificado no canal",
-  "thumb_retry_after": "2026-11-27T05:46:37.875479-03:00",
+  "thumb_retry_after": "2026-11-27T11:56:56.618917-03:00",
   "comment_attempts": 1,
   "comment_error": "fixar comentário pede o telefone verificado no canal",
   "comment_retry_after": "2026-11-27T11:02:07.765365-03:00"
