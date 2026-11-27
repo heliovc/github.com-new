@@ -1,7 +1,7 @@
 {
  "version": 1,
  "channel_id": "UCsYYjUbmq4n3lAKgw2F2IJw",
- "created_at": "2026-11-27T06:20:00-03:00",
+ "created_at": "2026-11-27T06:33:13-03:00",
  "items": [
   {
    "key": "cosmic-rank24-short",
@@ -30,6 +30,33 @@
    "altered_content": true
   },
   {
+   "key": "cosmic-ep20-long",
+   "kind": "long",
+   "video": "video.mp4",
+   "title": "If the Sun Were a Grain of Sand, the Universe Would Fit Inside Our Solar System",
+   "description": "Shrink the Sun to a 1 mm grain of sand and keep that one scale. Earth is a speck 11 cm away, the nearest star is a 6-hour walk, the Milky Way is wider than the Moon's orbit, and the whole observable universe would fit inside our own solar system's cloud of comets.\n\nChapters\n0:00 The universe fits here\n0:39 The rule and the trail\n0:50 Stop 1: the desk\n2:00 Light is slower than a snail\n2:28 Stop 2: the Oort cloud\n3:10 Stop 3: the nearest star\n3:59 Stop 4: the Milky Way\n5:38 Stop 5: the edge\n6:27 The universe inside our solar system\n7:05 Flip the scale\n7:30 Recap and what's next\n\nSources\n• NASA Sun Fact Sheet (NSSDC): volumetric mean diameter about 1,391,400 km; mass about 333,000 Earths; mean distance 149.6 million km (1 AU), sunlight takes about 8.3 minutes\n• NASA Earth and Moon Fact Sheets: Earth mean diameter 12,742 km; Moon diameter 3,474.8 km, mean distance 384,400 km; Jupiter equatorial diameter 142,984 km, 5.2 AU; Saturn 9.54 AU, Neptune 30.07 AU\n• NASA/JPL: Voyager 1 reaches one light-day (about 173 AU) from Earth in November 2026, 49 years after launch\n• NASA Science, Oort Cloud: inner edge thought to lie between 2,000 and 5,000 AU from the Sun, outer edge between 10,000 and 100,000 AU\n• ESO / NASA: Proxima Centauri is about 4.24 light-years away, the closest known star to the Sun; Alpha Centauri A and B about 4.37 light-years\n• NASA: the Milky Way is about 100,000 light-years across and holds an estimated 100 to 400 billion stars; Andromeda is about 2.5 million light-years away\n• NASA/STScI (2012), Hubble measurements: Andromeda and the Milky Way are predicted to collide in about 4 billion years; Sawala et al. (2025), Nature Astronomy: about a 50 percent chance of a merger within the next 10 billion years\n• Event Horizon Telescope (2022): Sagittarius A* has about 4 million solar masses and lies about 27,000 light-years away; Schwarzschild radius = 2GM/c² = 2.95 km per solar mass\n• Guinness World Records: the fastest snail on record (1995) covered 13 inches (33 cm) in 2 minutes, about 2.75 mm per second\n• Hublin et al. (2017), Nature: the oldest known Homo sapiens fossils are about 300,000 years old\n• Planck 2018 cosmology: the observable universe is about 46.5 billion light-years in radius (about 93 billion light-years across), the universe is about 13.8 billion years old\n• Own calculations (Python): 1 mm = 1,391,400 km; Earth 9.2 µm at 10.75 cm; Moon 0.28 mm from Earth; Jupiter 0.10 mm at 56 cm; Saturn 1.03 m; Neptune 3.23 m; Voyager 1 18.6 m; Oort cloud 215 m to 10.75 km; 1 light-year = 6.80 km; Earth's orbit 21.5 cm across; Proxima 28.9 km (5.8 h at 5 km/h), Alpha Centauri A/B 29.7 km; Sagittarius A* horizon 23.6 million km across (4.0 million Suns) = 17 mm, 27,000 light-years = 184 km; Milky Way 680,000 km = 1.77 Earth-Moon distances, 15.5 years on foot; Andromeda 17.0 million km = 44 Earth-Moon distances, 388 years on foot; light 0.215 mm/s = 78 cm per hour; edge 316 billion km = 2,113 AU (4,227 AU across, 24 times Voyager 1's distance), 7.2 million years on foot (24 times 300,000 years), 360,000 years at 100 km/h; flipped scale (universe 93 billion light-years = 12,742 km): Milky Way 13.7 m, Sun 0.02 nm (a hydrogen atom is about 0.1 nm across)\n\n—\nCosmic Scale: the universe, measured in a way you can feel.\nSubscribe for a new space video every week.\nVisuals and animations are original. Narration uses a synthetic voice.\n#space #universe #science",
+   "tags": [
+    "scale of the universe",
+    "grain of sand",
+    "observable universe",
+    "size of the universe",
+    "milky way",
+    "proxima centauri",
+    "oort cloud",
+    "voyager 1",
+    "space",
+    "astronomy",
+    "cosmic scale"
+   ],
+   "thumbnail": "thumbnail.jpg",
+   "captions": "legendas.srt",
+   "publish_at": "2026-11-27T17:00:00-03:00",
+   "pinned_comment": "Which stop on the walk surprised you most: the desk, the snail, the nearest star or the edge?",
+   "if_late": "public_now",
+   "made_for_kids": false,
+   "altered_content": true
+  },
+  {
    "key": "cosmic-scale23-short",
    "kind": "short",
    "video": "scale.mp4",
@@ -50,6 +77,29 @@
    "publish_at": "2026-11-27T19:00:00-03:00",
    "related_key": "cosmic-ep17-long",
    "pinned_comment": "How many Earths do you think fit across the whole Sun? Full video: What If We Swapped the Sun for 5 Other Stars? One Puts Earth INSIDE It",
+   "if_late": "public_now",
+   "made_for_kids": false,
+   "altered_content": true
+  },
+  {
+   "key": "cosmic-ep20-short",
+   "kind": "short",
+   "video": "vertical.mp4",
+   "title": "Shrink the Sun to a Grain of Sand and the Universe Fits in Our Solar System #shorts",
+   "description": "At one fixed scale, the Sun = 1 mm. The whole observable universe ends up 4,227 Earth-Sun distances wide.\nFull video: If the Sun Were a Grain of Sand, the Universe Would Fit Inside Our Solar System (on the channel)\n\nSources\n• NASA Sun Fact Sheet (NSSDC): volumetric mean diameter about 1,391,400 km; mass about 333,000 Earths; mean distance 149.6 million km (1 AU), sunlight takes about 8.3 minutes\n• NASA/JPL: Voyager 1 reaches one light-day (about 173 AU) from Earth in November 2026, 49 years after launch\n• NASA Science, Oort Cloud: inner edge thought to lie between 2,000 and 5,000 AU from the Sun, outer edge between 10,000 and 100,000 AU\n• Planck 2018 cosmology: the observable universe is about 46.5 billion light-years in radius (about 93 billion light-years across), the universe is about 13.8 billion years old\n• Own calculations (Python): 1 mm = 1,391,400 km; Earth 9.2 µm at 10.75 cm; Moon 0.28 mm from Earth; Jupiter 0.10 mm at 56 cm; Saturn 1.03 m; Neptune 3.23 m; Voyager 1 18.6 m; Oort cloud 215 m to 10.75 km; 1 light-year = 6.80 km; Earth's orbit 21.5 cm across; Proxima 28.9 km (5.8 h at 5 km/h), Alpha Centauri A/B 29.7 km; Sagittarius A* horizon 23.6 million km across (4.0 million Suns) = 17 mm, 27,000 light-years = 184 km; Milky Way 680,000 km = 1.77 Earth-Moon distances, 15.5 years on foot; Andromeda 17.0 million km = 44 Earth-Moon distances, 388 years on foot; light 0.215 mm/s = 78 cm per hour; edge 316 billion km = 2,113 AU (4,227 AU across, 24 times Voyager 1's distance), 7.2 million years on foot (24 times 300,000 years), 360,000 years at 100 km/h; flipped scale (universe 93 billion light-years = 12,742 km): Milky Way 13.7 m, Sun 0.02 nm (a hydrogen atom is about 0.1 nm across)\n\nVisuals are original. Narration uses a synthetic voice.\n#space #universe #science #shorts",
+   "tags": [
+    "scale of the universe",
+    "grain of sand",
+    "observable universe",
+    "oort cloud",
+    "solar system",
+    "space",
+    "astronomy",
+    "shorts"
+   ],
+   "publish_at": "2026-11-27T21:00:00-03:00",
+   "related_key": "cosmic-ep20-long",
+   "pinned_comment": "Did you expect the universe to fit inside our solar system? Full video: If the Sun Were a Grain of Sand, the Universe Would Fit Inside Our Solar System",
    "if_late": "public_now",
    "made_for_kids": false,
    "altered_content": true
