@@ -2705,8 +2705,8 @@
   "thumb_attempts": 0,
   "thumb_error": "miniatura personalizada pede o telefone verificado no canal",
   "thumb_retry_after": "2026-11-28T03:36:56.474824-03:00",
-  "comment_attempts": 0,
-  "comment_error": "fixar comentário pede o telefone verificado no canal",
+  "comment_attempts": 1,
+  "comment_error": "comentário postado mas não ficou fixado (20261128-023149-erro-comment-c5-d05b-cachorro.png)",
   "comment_retry_after": "2026-11-28T02:21:46.861354-03:00"
  },
  "ptd-rank21-short": {
@@ -2867,7 +2867,7 @@
   "thumb_path": "/opt/canal-publisher/state/thumbs/c5-d07a-elefante.jpg",
   "thumb_attempts": 0,
   "thumb_error": "miniatura personalizada pede o telefone verificado no canal",
-  "thumb_retry_after": "2026-11-28T02:22:48.952885-03:00",
+  "thumb_retry_after": "2026-11-28T08:32:50.685464-03:00",
   "comment_attempts": 0,
   "comment_error": "fixar comentário pede o telefone verificado no canal",
   "comment_retry_after": "2026-11-28T07:11:45.248831-03:00"
@@ -2889,7 +2889,7 @@
   "thumb_path": "/opt/canal-publisher/state/thumbs/c5-d07b-mariposa.jpg",
   "thumb_attempts": 0,
   "thumb_error": "miniatura personalizada pede o telefone verificado no canal",
-  "thumb_retry_after": "2026-11-28T02:23:44.889767-03:00",
+  "thumb_retry_after": "2026-11-28T08:33:49.624510-03:00",
   "comment_attempts": 3,
   "comment_error": "comentário postado mas não ficou fixado (20261128-022128-erro-comment-c5-d07b-mariposa.png)",
   "comment_retry_after": "2026-11-28T01:52:10.820010-03:00"
