@@ -2824,8 +2824,8 @@
   "thumb_attempts": 0,
   "thumb_error": "miniatura personalizada pede o telefone verificado no canal",
   "thumb_retry_after": "2026-11-28T02:52:23.582796-03:00",
-  "comment_attempts": 0,
-  "comment_error": "fixar comentário pede o telefone verificado no canal",
+  "comment_attempts": 1,
+  "comment_error": "comentário postado mas não ficou fixado (20261128-015147-erro-comment-c5-d06a-morcego.png)",
   "comment_retry_after": "2026-11-28T01:42:09.173547-03:00"
  },
  "c5-d06b-sabia": {
