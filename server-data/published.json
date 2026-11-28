@@ -2484,7 +2484,7 @@
   "thumb_path": "/opt/canal-publisher/state/thumbs/c5-d04a-peixe.jpg",
   "thumb_attempts": 0,
   "thumb_error": "miniatura personalizada pede o telefone verificado no canal",
-  "thumb_retry_after": "2026-11-28T10:32:32.352391-03:00",
+  "thumb_retry_after": "2026-11-28T16:42:02.366858-03:00",
   "comment_attempts": 3,
   "comment_error": "comentário postado mas não ficou fixado (20261128-032204-erro-comment-c5-d04a-peixe.png)",
   "comment_retry_after": "2026-11-28T02:51:25.212833-03:00"
