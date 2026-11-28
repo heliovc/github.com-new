@@ -2079,8 +2079,8 @@
   "comment_attempts": 3,
   "thumb_path": "/opt/canal-publisher/state/thumbs/c5-d01a-formiga.jpg",
   "comment_error": "comentário postado mas não ficou fixado (20261128-064200-erro-comment-c5-d01a-formiga.png)",
-  "thumb_attempts": 2,
-  "thumb_error": "miniatura personalizada pede o telefone verificado no canal",
+  "thumb_attempts": 3,
+  "thumb_error": "o seletor de arquivo da miniatura não abriu (20261128-125208-erro-thumb-c5-d01a-formiga.png)",
   "comment_retry_after": "2026-11-28T06:21:50.332189-03:00",
   "thumb_retry_after": "2026-11-28T12:42:53.158251-03:00"
  },
