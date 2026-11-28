@@ -2364,8 +2364,8 @@
   "thumb_attempts": 0,
   "thumb_error": "miniatura personalizada pede o telefone verificado no canal",
   "thumb_retry_after": "2026-11-28T03:32:38.547963-03:00",
-  "comment_attempts": 2,
-  "comment_error": "comentário postado mas não ficou fixado (20261128-025147-erro-comment-c5-d03a-krill.png)",
+  "comment_attempts": 3,
+  "comment_error": "comentário postado mas não ficou fixado (20261128-030203-erro-comment-c5-d03a-krill.png)",
   "comment_retry_after": "2026-11-28T02:31:24.268052-03:00"
  },
  "c5-d03b-pombo": {
@@ -2485,8 +2485,8 @@
   "thumb_attempts": 0,
   "thumb_error": "miniatura personalizada pede o telefone verificado no canal",
   "thumb_retry_after": "2026-11-28T04:21:28.278580-03:00",
-  "comment_attempts": 0,
-  "comment_error": "fixar comentário pede o telefone verificado no canal",
+  "comment_attempts": 1,
+  "comment_error": "comentário postado mas não ficou fixado (20261128-030306-erro-comment-c5-d04a-peixe.png)",
   "comment_retry_after": "2026-11-28T02:51:25.212833-03:00"
  },
  "c5-d04b-rato": {
@@ -2823,7 +2823,7 @@
   "thumb_path": "/opt/canal-publisher/state/thumbs/c5-d06a-morcego.jpg",
   "thumb_attempts": 0,
   "thumb_error": "miniatura personalizada pede o telefone verificado no canal",
-  "thumb_retry_after": "2026-11-28T02:52:23.582796-03:00",
+  "thumb_retry_after": "2026-11-28T09:04:08.524089-03:00",
   "comment_attempts": 3,
   "comment_error": "comentário postado mas não ficou fixado (20261128-021132-erro-comment-c5-d06a-morcego.png)",
   "comment_retry_after": "2026-11-28T01:42:09.173547-03:00"
@@ -2845,9 +2845,9 @@
   "thumb_path": "/opt/canal-publisher/state/thumbs/c5-d06b-sabia.jpg",
   "thumb_attempts": 0,
   "thumb_error": "miniatura personalizada pede o telefone verificado no canal",
-  "thumb_retry_after": "2026-11-28T02:53:23.909403-03:00",
-  "comment_attempts": 2,
-  "comment_error": "comentário postado mas não ficou fixado (20261128-025356-erro-comment-c5-d06b-sabia.png)",
+  "thumb_retry_after": "2026-11-28T09:06:17.699946-03:00",
+  "comment_attempts": 3,
+  "comment_error": "comentário postado mas não ficou fixado (20261128-030510-erro-comment-c5-d06b-sabia.png)",
   "comment_retry_after": "2026-11-28T02:32:07.319874-03:00"
  },
  "c5-d07a-elefante": {
