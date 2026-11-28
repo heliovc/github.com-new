@@ -2823,7 +2823,7 @@
   "thumb_path": "/opt/canal-publisher/state/thumbs/c5-d06a-morcego.jpg",
   "thumb_attempts": 0,
   "thumb_error": "miniatura personalizada pede o telefone verificado no canal",
-  "thumb_retry_after": "2026-11-28T15:11:41.761624-03:00",
+  "thumb_retry_after": "2026-11-28T21:21:49.621515-03:00",
   "comment_attempts": 3,
   "comment_error": "comentário postado mas não ficou fixado (20261128-021132-erro-comment-c5-d06a-morcego.png)",
   "comment_retry_after": "2026-11-28T01:42:09.173547-03:00"
@@ -2845,7 +2845,7 @@
   "thumb_path": "/opt/canal-publisher/state/thumbs/c5-d06b-sabia.jpg",
   "thumb_attempts": 0,
   "thumb_error": "miniatura personalizada pede o telefone verificado no canal",
-  "thumb_retry_after": "2026-11-28T15:12:42.157568-03:00",
+  "thumb_retry_after": "2026-11-28T21:22:57.312334-03:00",
   "comment_attempts": 3,
   "comment_error": "comentário postado mas não ficou fixado (20261128-030510-erro-comment-c5-d06b-sabia.png)",
   "comment_retry_after": "2026-11-28T02:32:07.319874-03:00"
