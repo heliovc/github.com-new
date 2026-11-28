@@ -2364,8 +2364,8 @@
   "thumb_attempts": 0,
   "thumb_error": "miniatura personalizada pede o telefone verificado no canal",
   "thumb_retry_after": "2026-11-28T03:32:38.547963-03:00",
-  "comment_attempts": 1,
-  "comment_error": "comentário postado mas não ficou fixado (20261128-024152-erro-comment-c5-d03a-krill.png)",
+  "comment_attempts": 2,
+  "comment_error": "comentário postado mas não ficou fixado (20261128-025147-erro-comment-c5-d03a-krill.png)",
   "comment_retry_after": "2026-11-28T02:31:24.268052-03:00"
  },
  "c5-d03b-pombo": {
@@ -2705,8 +2705,8 @@
   "thumb_attempts": 0,
   "thumb_error": "miniatura personalizada pede o telefone verificado no canal",
   "thumb_retry_after": "2026-11-28T03:36:56.474824-03:00",
-  "comment_attempts": 2,
-  "comment_error": "comentário postado mas não ficou fixado (20261128-024253-erro-comment-c5-d05b-cachorro.png)",
+  "comment_attempts": 3,
+  "comment_error": "comentário postado mas não ficou fixado (20261128-025250-erro-comment-c5-d05b-cachorro.png)",
   "comment_retry_after": "2026-11-28T02:21:46.861354-03:00"
  },
  "ptd-rank21-short": {
@@ -2846,8 +2846,8 @@
   "thumb_attempts": 0,
   "thumb_error": "miniatura personalizada pede o telefone verificado no canal",
   "thumb_retry_after": "2026-11-28T02:53:23.909403-03:00",
-  "comment_attempts": 1,
-  "comment_error": "comentário postado mas não ficou fixado (20261128-024353-erro-comment-c5-d06b-sabia.png)",
+  "comment_attempts": 2,
+  "comment_error": "comentário postado mas não ficou fixado (20261128-025356-erro-comment-c5-d06b-sabia.png)",
   "comment_retry_after": "2026-11-28T02:32:07.319874-03:00"
  },
  "c5-d07a-elefante": {
