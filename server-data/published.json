@@ -2867,7 +2867,7 @@
   "thumb_path": "/opt/canal-publisher/state/thumbs/c5-d07a-elefante.jpg",
   "thumb_attempts": 0,
   "thumb_error": "miniatura personalizada pede o telefone verificado no canal",
-  "thumb_retry_after": "2026-11-28T14:41:24.404764-03:00",
+  "thumb_retry_after": "2026-11-28T20:51:44.793869-03:00",
   "comment_attempts": 3,
   "comment_error": "comentário postado mas não ficou fixado (20261128-074126-erro-comment-c5-d07a-elefante.png)",
   "comment_retry_after": "2026-11-28T07:11:45.248831-03:00"
@@ -2889,7 +2889,7 @@
   "thumb_path": "/opt/canal-publisher/state/thumbs/c5-d07b-mariposa.jpg",
   "thumb_attempts": 0,
   "thumb_error": "miniatura personalizada pede o telefone verificado no canal",
-  "thumb_retry_after": "2026-11-28T14:42:27.520363-03:00",
+  "thumb_retry_after": "2026-11-28T20:52:43.622523-03:00",
   "comment_attempts": 3,
   "comment_error": "comentário postado mas não ficou fixado (20261128-022128-erro-comment-c5-d07b-mariposa.png)",
   "comment_retry_after": "2026-11-28T01:52:10.820010-03:00"
