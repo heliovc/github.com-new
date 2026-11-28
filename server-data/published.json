@@ -2076,13 +2076,13 @@
   "publish_at": "2026-11-20T22:01:04.392541-03:00",
   "pinned_comment": "Qual animal você quer ser no próximo vídeo?",
   "note": "público em 20/11 (ajuste manual)",
-  "comment_attempts": 2,
+  "comment_attempts": 3,
   "thumb_path": "/opt/canal-publisher/state/thumbs/c5-d01a-formiga.jpg",
-  "comment_error": "comentário postado mas não ficou fixado (20261128-063158-erro-comment-c5-d01a-formiga.png)",
+  "comment_error": "comentário postado mas não ficou fixado (20261128-064200-erro-comment-c5-d01a-formiga.png)",
   "thumb_attempts": 2,
   "thumb_error": "miniatura personalizada pede o telefone verificado no canal",
   "comment_retry_after": "2026-11-28T06:21:50.332189-03:00",
-  "thumb_retry_after": "2026-11-28T06:31:35.002656-03:00"
+  "thumb_retry_after": "2026-11-28T12:42:53.158251-03:00"
  },
  "c5-d01b-lagartixa": {
   "attempts": 1,
@@ -2099,9 +2099,9 @@
   "publish_at": "2026-11-20T22:58:04.316505-03:00",
   "pinned_comment": "Qual eletrodoméstico a gente desmonta no próximo?",
   "note": "público em 20/11 (ajuste manual)",
-  "comment_attempts": 2,
+  "comment_attempts": 3,
   "thumb_path": "/opt/canal-publisher/state/thumbs/c5-d01b-lagartixa.jpg",
-  "comment_error": "comentário postado mas não ficou fixado (20261128-063259-erro-comment-c5-d01b-lagartixa.png)",
+  "comment_error": "comentário postado mas não ficou fixado (20261128-064346-erro-comment-c5-d01b-lagartixa.png)",
   "thumb_attempts": 1,
   "thumb_error": "miniatura personalizada pede o telefone verificado no canal",
   "comment_retry_after": "2026-11-28T06:22:32.629921-03:00",
