@@ -2868,8 +2868,8 @@
   "thumb_attempts": 0,
   "thumb_error": "miniatura personalizada pede o telefone verificado no canal",
   "thumb_retry_after": "2026-11-28T08:32:50.685464-03:00",
-  "comment_attempts": 2,
-  "comment_error": "comentário postado mas não ficou fixado (20261128-073143-erro-comment-c5-d07a-elefante.png)",
+  "comment_attempts": 3,
+  "comment_error": "comentário postado mas não ficou fixado (20261128-074126-erro-comment-c5-d07a-elefante.png)",
   "comment_retry_after": "2026-11-28T07:11:45.248831-03:00"
  },
  "c5-d07b-mariposa": {
@@ -3048,7 +3048,7 @@
   "thumb_path": "/opt/canal-publisher/state/thumbs/c5-d08a-beijaflor.jpg",
   "thumb_attempts": 0,
   "thumb_error": "miniatura personalizada pede o telefone verificado no canal",
-  "thumb_retry_after": "2026-11-28T07:32:48.613031-03:00"
+  "thumb_retry_after": "2026-11-28T13:42:21.516725-03:00"
  },
  "c5-d08b-capivara": {
   "attempts": 1,
@@ -3067,6 +3067,6 @@
   "thumb_path": "/opt/canal-publisher/state/thumbs/c5-d08b-capivara.jpg",
   "thumb_attempts": 0,
   "thumb_error": "miniatura personalizada pede o telefone verificado no canal",
-  "thumb_retry_after": "2026-11-28T07:33:41.433915-03:00"
+  "thumb_retry_after": "2026-11-28T13:43:08.687517-03:00"
  }
 }
