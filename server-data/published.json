@@ -2076,9 +2076,9 @@
   "publish_at": "2026-11-20T22:01:04.392541-03:00",
   "pinned_comment": "Qual animal você quer ser no próximo vídeo?",
   "note": "público em 20/11 (ajuste manual)",
-  "comment_attempts": 1,
+  "comment_attempts": 2,
   "thumb_path": "/opt/canal-publisher/state/thumbs/c5-d01a-formiga.jpg",
-  "comment_error": "fixar comentário pede o telefone verificado no canal",
+  "comment_error": "comentário postado mas não ficou fixado (20261128-063158-erro-comment-c5-d01a-formiga.png)",
   "thumb_attempts": 2,
   "thumb_error": "miniatura personalizada pede o telefone verificado no canal",
   "comment_retry_after": "2026-11-28T06:21:50.332189-03:00",
@@ -2099,13 +2099,13 @@
   "publish_at": "2026-11-20T22:58:04.316505-03:00",
   "pinned_comment": "Qual eletrodoméstico a gente desmonta no próximo?",
   "note": "público em 20/11 (ajuste manual)",
-  "comment_attempts": 1,
+  "comment_attempts": 2,
   "thumb_path": "/opt/canal-publisher/state/thumbs/c5-d01b-lagartixa.jpg",
-  "comment_error": "fixar comentário pede o telefone verificado no canal",
+  "comment_error": "comentário postado mas não ficou fixado (20261128-063259-erro-comment-c5-d01b-lagartixa.png)",
   "thumb_attempts": 1,
   "thumb_error": "miniatura personalizada pede o telefone verificado no canal",
   "comment_retry_after": "2026-11-28T06:22:32.629921-03:00",
-  "thumb_retry_after": "2026-11-28T06:23:32.254530-03:00"
+  "thumb_retry_after": "2026-11-28T12:33:50.111840-03:00"
  },
  "cosmic-rank18-short": {
   "attempts": 1,
@@ -2301,7 +2301,7 @@
   "thumb_path": "/opt/canal-publisher/state/thumbs/c5-d02a-mosquito.jpg",
   "thumb_attempts": 0,
   "thumb_error": "miniatura personalizada pede o telefone verificado no canal",
-  "thumb_retry_after": "2026-11-28T06:24:31.416919-03:00",
+  "thumb_retry_after": "2026-11-28T12:34:42.245831-03:00",
   "comment_attempts": 3,
   "comment_error": "comentário postado mas não ficou fixado (20261128-044132-erro-comment-c5-d02a-mosquito.png)",
   "comment_retry_after": "2026-11-28T04:11:20.051708-03:00"
@@ -2323,7 +2323,7 @@
   "thumb_path": "/opt/canal-publisher/state/thumbs/c5-d02b-barata.jpg",
   "thumb_attempts": 0,
   "thumb_error": "miniatura personalizada pede o telefone verificado no canal",
-  "thumb_retry_after": "2026-11-28T06:25:31.122088-03:00",
+  "thumb_retry_after": "2026-11-28T12:35:39.215897-03:00",
   "comment_attempts": 3,
   "comment_error": "comentário postado mas não ficou fixado (20261128-055116-erro-comment-c5-d02b-barata.png)",
   "comment_retry_after": "2026-11-28T05:31:34.504298-03:00"
