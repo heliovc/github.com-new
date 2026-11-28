@@ -2890,8 +2890,8 @@
   "thumb_attempts": 0,
   "thumb_error": "miniatura personalizada pede o telefone verificado no canal",
   "thumb_retry_after": "2026-11-28T02:23:44.889767-03:00",
-  "comment_attempts": 2,
-  "comment_error": "comentário postado mas não ficou fixado (20261128-021237-erro-comment-c5-d07b-mariposa.png)",
+  "comment_attempts": 3,
+  "comment_error": "comentário postado mas não ficou fixado (20261128-022128-erro-comment-c5-d07b-mariposa.png)",
   "comment_retry_after": "2026-11-28T01:52:10.820010-03:00"
  },
  "cosmic-rank23-short": {
